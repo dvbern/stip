@@ -176,6 +176,7 @@ public class DemoDataApiSpec {
      * 
      *
      * @see #kommentarForm  (required)
+     * @see #ignoreBerechnungErrorsForm  (required)
      * @see #fileUploadMultiPart  (required)
      * return DemoDataListDtoSpec
      */
@@ -223,6 +224,17 @@ public class DemoDataApiSpec {
          */
          public CreateNewDemoDataImportOper kommentarForm(Object... kommentar) {
             reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
+            return this;
+         }
+
+         public static final String IGNORE_BERECHNUNG_ERRORS_FORM = "ignoreBerechnungErrors";
+
+         /**
+         * @param ignoreBerechnungErrors (Boolean)  (required)
+         * @return operation
+         */
+         public CreateNewDemoDataImportOper ignoreBerechnungErrorsForm(Object... ignoreBerechnungErrors) {
+            reqSpec.addFormParam(IGNORE_BERECHNUNG_ERRORS_FORM, ignoreBerechnungErrors);
             return this;
          }
 

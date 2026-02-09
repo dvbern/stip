@@ -9,14 +9,16 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchTrancheTyp } from './gesuchTrancheTyp';
+import { VerfuegungStatus } from './verfuegungStatus';
 
-export interface DemoDataSlim { 
-    id: string;
-    typ: GesuchTrancheTyp;
-    testFall: string;
-    name: string;
-    description: string;
+export interface ApplyDemoDataResponseStipendienanspruch { 
+    success: boolean;
+    statusSoll?: VerfuegungStatus;
+    statusIst?: VerfuegungStatus;
+    betragStipendienSoll?: number;
+    betragStipendienIst?: number;
+    betragDarlehenSoll?: number;
+    betragDarlehenIst?: number;
 }
 
 

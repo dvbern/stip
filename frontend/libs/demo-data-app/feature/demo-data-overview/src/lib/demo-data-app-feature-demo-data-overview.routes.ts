@@ -14,4 +14,8 @@ export const demoDataAppFeatureDemoDataOverviewRoutes: Route[] = [
       { path: '', component: DemoDataAppFeatureDemoDataOverviewComponent },
     ],
   },
+  {
+    path: '**',
+    redirectTo: '',
+  },
 ];

@@ -1034,3 +1034,9 @@ DarlehenStatus:
     - IN_FREIGABE
     - AKZEPTIERT
     - ABGELEHNT
+VerfuegungStatus:
+  enum:
+    - AUSSTEHEND
+    - ANSPRUCH
+    - KEIN_ANSPRUCH
+    - NEGATIV

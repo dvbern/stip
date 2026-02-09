@@ -13,12 +13,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DemoDarlehen_gruendeDarlehen")
+@JsonTypeName("DemoDarlehen_gruende")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
+public class DemoDarlehenGruendeDto  implements Serializable {
   private @Valid Boolean grundNichtBerechtigt;
   private @Valid Boolean grundAusbildungZwoelfJahre;
   private @Valid Boolean grundHoheGebuehren;
@@ -27,7 +27,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenGruendeDarlehenDto grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+  public DemoDarlehenGruendeDto grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
     this.grundNichtBerechtigt = grundNichtBerechtigt;
     return this;
   }
@@ -45,7 +45,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenGruendeDarlehenDto grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+  public DemoDarlehenGruendeDto grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
     this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
     return this;
   }
@@ -63,7 +63,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenGruendeDarlehenDto grundHoheGebuehren(Boolean grundHoheGebuehren) {
+  public DemoDarlehenGruendeDto grundHoheGebuehren(Boolean grundHoheGebuehren) {
     this.grundHoheGebuehren = grundHoheGebuehren;
     return this;
   }
@@ -81,7 +81,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenGruendeDarlehenDto grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
+  public DemoDarlehenGruendeDto grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
     this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
     return this;
   }
@@ -99,7 +99,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenGruendeDarlehenDto grundZweitausbildung(Boolean grundZweitausbildung) {
+  public DemoDarlehenGruendeDto grundZweitausbildung(Boolean grundZweitausbildung) {
     this.grundZweitausbildung = grundZweitausbildung;
     return this;
   }
@@ -124,12 +124,12 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoDarlehenGruendeDarlehenDto demoDarlehenGruendeDarlehen = (DemoDarlehenGruendeDarlehenDto) o;
-    return Objects.equals(this.grundNichtBerechtigt, demoDarlehenGruendeDarlehen.grundNichtBerechtigt) &&
-        Objects.equals(this.grundAusbildungZwoelfJahre, demoDarlehenGruendeDarlehen.grundAusbildungZwoelfJahre) &&
-        Objects.equals(this.grundHoheGebuehren, demoDarlehenGruendeDarlehen.grundHoheGebuehren) &&
-        Objects.equals(this.grundAnschaffungenFuerAusbildung, demoDarlehenGruendeDarlehen.grundAnschaffungenFuerAusbildung) &&
-        Objects.equals(this.grundZweitausbildung, demoDarlehenGruendeDarlehen.grundZweitausbildung);
+    DemoDarlehenGruendeDto demoDarlehenGruende = (DemoDarlehenGruendeDto) o;
+    return Objects.equals(this.grundNichtBerechtigt, demoDarlehenGruende.grundNichtBerechtigt) &&
+        Objects.equals(this.grundAusbildungZwoelfJahre, demoDarlehenGruende.grundAusbildungZwoelfJahre) &&
+        Objects.equals(this.grundHoheGebuehren, demoDarlehenGruende.grundHoheGebuehren) &&
+        Objects.equals(this.grundAnschaffungenFuerAusbildung, demoDarlehenGruende.grundAnschaffungenFuerAusbildung) &&
+        Objects.equals(this.grundZweitausbildung, demoDarlehenGruende.grundZweitausbildung);
   }
 
   @Override
@@ -140,7 +140,7 @@ public class DemoDarlehenGruendeDarlehenDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoDarlehenGruendeDarlehenDto {\n");
+    sb.append("class DemoDarlehenGruendeDto {\n");
     
     sb.append("    grundNichtBerechtigt: ").append(toIndentedString(grundNichtBerechtigt)).append("\n");
     sb.append("    grundAusbildungZwoelfJahre: ").append(toIndentedString(grundAusbildungZwoelfJahre)).append("\n");

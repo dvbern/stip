@@ -117,6 +117,63 @@
           </button>
         }
 
+        @if (demoDataStore.lastDemoDataRun().data; as lastApply) {
+          <dv-shared-ui-info-container
+            [type]="lastApply.stipendienanspruch.success ? 'success' : 'warning'"
+            class="tw:mt-4 tw:flex-col"
+          >
+            <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
+              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                {{ t('shared.form.tranche.status.label.GESUCH') }}:
+              </dt>
+              <dd class="tw:mb-0!">
+                {{ t(`sachbearbeitung-app.gesuch.status.contract.${lastApply.gesuchStatus}`) }}
+              </dd>
+            </dl>
+            <div
+              class="tw:mb-3"
+              [innerHTML]="
+                t(
+                  `demo-data-app.overview.apply-demo-data.info.stipendienanspruch.check.${lastApply.stipendienanspruch.success}`
+                )
+              "
+            ></div>
+            <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2">
+              <span></span>
+              @for (value of sollIst; track value) {
+                <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${value}`) }}</span>
+              }
+              <span class="tw:font-bold">
+                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
+              </span>
+              @for (value of sollIst; track value) {
+                <span class="tw:break-normal">
+                  @let status = lastApply.stipendienanspruch[`status${value}`];
+                  {{ status ? t(`shared.verfuegung.status.${status}`) : '' }}
+                </span>
+              }
+
+              <span class="tw:font-bold">
+                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.betrag') }}:
+              </span>
+              @for (value of sollIst; track value) {
+                <span>
+                  {{ (lastApply.stipendienanspruch[`betragStipendien${value}`] | formatChfNullable) ?? 'N/A' }}
+                </span>
+              }
+
+              <span class="tw:font-bold">
+                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
+              </span>
+              @for (value of sollIst; track value) {
+                <span>
+                  {{ (lastApply.stipendienanspruch[`betragDarlehen${value}`] | formatChfNullable) ?? 'N/A' }}
+                </span>
+              }
+            </div>
+          </dv-shared-ui-info-container>
+        }
+
         @if (demoDataStore.demoDataErrorViewSig(); as error) {
           <div class="tw:mt-4 tw:flex">
             <dv-shared-ui-info-container [type]="'danger'" class="tw:flex-col tw:grow">

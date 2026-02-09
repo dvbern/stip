@@ -22,6 +22,7 @@ export interface DemoPartner {
     coAdresse?: string;
     land: string;
     geburtsdatum: string;
+    alter: number;
     inAusbildung: boolean;
     pensum?: AusbildungsPensum;
 }

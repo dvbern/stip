@@ -9,15 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 
-export interface DemoDataSlim { 
-    id: string;
-    typ: GesuchTrancheTyp;
-    testFall: string;
-    name: string;
-    description: string;
-}
+export type VerfuegungStatus = 'AUSSTEHEND' | 'ANSPRUCH' | 'KEIN_ANSPRUCH' | 'NEGATIV';
 
-
+export const VerfuegungStatus = {
+    AUSSTEHEND: 'AUSSTEHEND' as VerfuegungStatus,
+    ANSPRUCH: 'ANSPRUCH' as VerfuegungStatus,
+    KEIN_ANSPRUCH: 'KEIN_ANSPRUCH' as VerfuegungStatus,
+    NEGATIV: 'NEGATIV' as VerfuegungStatus
+};
 

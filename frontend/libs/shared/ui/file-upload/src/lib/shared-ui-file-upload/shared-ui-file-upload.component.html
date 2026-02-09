@@ -25,9 +25,7 @@
   @let file = latestValueSig();
   @if (file) {
     <div class="tw:flex tw:items-center tw:gap-2">
-      <div>
-        <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
-      </div>
+      <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
       <button
         type="button"
         class="dv-icon-button tw:ml-2 tw:h-auto tw:w-auto tw:self-end flex-shrink-0"

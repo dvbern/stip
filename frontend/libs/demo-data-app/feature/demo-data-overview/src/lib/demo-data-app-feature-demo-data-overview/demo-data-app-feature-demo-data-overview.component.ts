@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   inject,
+  input,
   signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -22,6 +23,7 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
+import { SharedUiFormatChfNullablePipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -47,6 +49,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
     SharedUiMaxLengthDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiFormatChfNullablePipe,
     SharedUiTruncateTooltipDirective,
     DemoDataAppUiAdvTranslocoDirective,
   ],
@@ -60,8 +63,14 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   filterText = new FormControl<string | null>(null);
   selectedFileSig = signal<File | null>(null);
 
+  validateBerechnungSig = input<boolean>(false, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+    alias: 'validateBerechnung',
+  });
+
   private filterTextChangedSig = toSignal(this.filterText.valueChanges);
 
+  sollIst = ['Soll', 'Ist'] as const;
   demoDatasSig = computed(() => {
     const filterText = this.filterTextChangedSig()?.toLowerCase();
     const list = this.demoDataStore.cachedDemoDataListViewSig().data?.demoDatas;
@@ -121,6 +130,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
         if (result) {
           this.demoDataStore.createNewDemoDataImport$({
             fileUpload,
+            ignoreBerechnungErrors: !this.validateBerechnungSig(),
             kommentar: result.kommentar,
             onSuccess: () => {
               this.selectedFileSig.set(null);

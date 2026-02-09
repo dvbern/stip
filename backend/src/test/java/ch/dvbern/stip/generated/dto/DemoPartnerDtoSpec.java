@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -39,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoPartnerDtoSpec.JSON_PROPERTY_CO_ADRESSE,
   DemoPartnerDtoSpec.JSON_PROPERTY_LAND,
   DemoPartnerDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoPartnerDtoSpec.JSON_PROPERTY_ALTER,
   DemoPartnerDtoSpec.JSON_PROPERTY_IN_AUSBILDUNG,
   DemoPartnerDtoSpec.JSON_PROPERTY_PENSUM
 })
@@ -73,7 +73,10 @@ public class DemoPartnerDtoSpec {
   private String land;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
+  private String geburtsdatum;
+
+  public static final String JSON_PROPERTY_ALTER = "alter";
+  private Integer alter;
 
   public static final String JSON_PROPERTY_IN_AUSBILDUNG = "inAusbildung";
   private Boolean inAusbildung;
@@ -318,7 +321,7 @@ public class DemoPartnerDtoSpec {
   }
 
 
-  public DemoPartnerDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DemoPartnerDtoSpec geburtsdatum(String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -332,15 +335,41 @@ public class DemoPartnerDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGeburtsdatum() {
+  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DemoPartnerDtoSpec alter(Integer alter) {
+    
+    this.alter = alter;
+    return this;
+  }
+
+   /**
+   * Get alter
+   * @return alter
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlter() {
+    return alter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
 
@@ -414,13 +443,14 @@ public class DemoPartnerDtoSpec {
         Objects.equals(this.coAdresse, demoPartner.coAdresse) &&
         Objects.equals(this.land, demoPartner.land) &&
         Objects.equals(this.geburtsdatum, demoPartner.geburtsdatum) &&
+        Objects.equals(this.alter, demoPartner.alter) &&
         Objects.equals(this.inAusbildung, demoPartner.inAusbildung) &&
         Objects.equals(this.pensum, demoPartner.pensum);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, geburtsdatum, inAusbildung, pensum);
+    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, geburtsdatum, alter, inAusbildung, pensum);
   }
 
   @Override
@@ -437,6 +467,7 @@ public class DemoPartnerDtoSpec {
     sb.append("    coAdresse: ").append(toIndentedString(coAdresse)).append("\n");
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    inAusbildung: ").append(toIndentedString(inAusbildung)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");
     sb.append("}");
