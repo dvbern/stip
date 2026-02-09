@@ -48,9 +48,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             configService.getCurrentDmnMinorVersion()
         );
 
-        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
-            ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnungTotal();
+        final int berechnungsresultat = stipendien.getBerechnungStipendium();
 
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
 

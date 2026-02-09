@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -113,25 +114,11 @@ public class BerechnungService {
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
             : null;
 
-        List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
-        for (final var gesuchTranche : gesuchTranchen) {
-            final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
-                gesuchTranche,
-                majorVersion,
-                minorVersion
-            );
-
-            final var monthsValid = DateUtil.getMonthsBetween(
-                gesuchTranche.getGueltigkeit().getGueltigAb(),
-                gesuchTranche.getGueltigkeit().getGueltigBis()
-            );
-            for (final var berechnungsresultat : trancheBerechnungsresultate) {
-                berechnungsresultat.setBerechnungAnteilTotal(
-                    berechnungsresultat.getBerechnungAnteilTotal() * monthsValid / 12
-                );
-            }
-            berechnungsresultate.addAll(trancheBerechnungsresultate);
-        }
+        final List<TranchenBerechnungsresultatDto> berechnungsresultate = gesuchTranchen.stream()
+            .flatMap(
+                gesuchTranche -> getBerechnungsresultatFromGesuchTranche(gesuchTranche, majorVersion, minorVersion)
+            )
+            .toList();
 
         int berechnungStipendium = -berechnungsresultate.stream()
             .mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilStipendium)
@@ -142,10 +129,15 @@ public class BerechnungService {
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilTotal).sum();
         if (berechnungTotal < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungTotal = 0;
+            berechnungStipendium = 0;
+            berechnungDarlehen = 0;
         }
 
         Integer berechnungsresultatReduziert =
             actualDuration != null ? berechnungTotal * actualDuration / 12 : null;
+        berechnungStipendium =
+            actualDuration == null ? berechnungStipendium : berechnungStipendium * actualDuration / 12;
+        berechnungDarlehen = actualDuration == null ? berechnungDarlehen : berechnungDarlehen * actualDuration / 12;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
@@ -158,7 +150,7 @@ public class BerechnungService {
         );
     }
 
-    public List<TranchenBerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
+    public Stream<TranchenBerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
         final GesuchTranche gesuchTranche,
         final int majorVersion,
         final int minorVersion
@@ -285,14 +277,18 @@ public class BerechnungService {
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid
                 // percentages.
-                final var berechnung = kinderProzenteNormalized.multiply(
+                final var berechnetStipendien = kinderProzenteNormalized.multiply(
                     BigDecimal.valueOf(stipendienCalculated.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
 
+                final var berechnungAnteilDarlehen = kinderProzenteNormalized.multiply(
+                    BigDecimal.valueOf(stipendienCalculated.getDarlehen())
+                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                ).intValue();
+
                 // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
-                final var berechnungAnteilStipendium = Math.min(0, stipendienCalculated.getStipendien());
-                final var berechnungAnteilDarlehen = stipendienCalculated.getDarlehen();
+                final var berechnungAnteilStipendium = Math.min(0, berechnetStipendien);
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
@@ -317,7 +313,7 @@ public class BerechnungService {
                 );
             }
         }
-        return berechnungsresultatDtoList;
+        return berechnungsresultatDtoList.stream();
     }
 
     public CalculatorRequest getBerechnungRequest(

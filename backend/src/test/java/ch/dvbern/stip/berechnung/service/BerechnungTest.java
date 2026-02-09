@@ -194,7 +194,7 @@ class BerechnungTest {
                 gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
                 1,
                 0
-            );
+            ).toList();
         }
 
         // Assert
@@ -911,7 +911,7 @@ class BerechnungTest {
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             1,
             0
-        );
+        ).toList();
 
         // Assert
         assertThat(berechnungsresultatDtos.size(), is(equalTo(1)));
@@ -1086,7 +1086,7 @@ class BerechnungTest {
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             1,
             0
-        );
+        ).toList();
 
         // Assert
         assertThat(berechnungsresultatDto.size(), is(1));

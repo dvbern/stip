@@ -85,7 +85,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         var darlehen = 0;
 
         if (antragssteller.getMonateTertiaerstufe() > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
-            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the stipendium
+            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
+            // stipendium
             var darlehenUngekuerzt = BigDecimal.valueOf(stipendium)
                 .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100))

@@ -709,9 +709,7 @@ public class VerfuegungPdfService {
     }
 
     public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
-        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
-            ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnungTotal();
+        final int berechnungsresultat = stipendien.getBerechnungStipendium();
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
@@ -761,7 +759,9 @@ public class VerfuegungPdfService {
 
             if (stipendien.getBerechnungDarlehen() > 0) {
                 darlehensVerfuegung =
-                    Optional.ofNullable(darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen()));
+                    Optional.ofNullable(
+                        darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen())
+                    );
             }
 
             final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
