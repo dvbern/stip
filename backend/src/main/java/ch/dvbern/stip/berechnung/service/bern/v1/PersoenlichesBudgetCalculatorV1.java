@@ -128,7 +128,6 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         final var steuern =
             antragssteller.getSteuern() + Objects.requireNonNullElse(antragssteller.getSteuernPartner(), 0);
-        final var steuernPartner = antragssteller.getSteuernPartner();
 
         var fahrkosten = antragssteller.getFahrkosten();
         var fahrkostenPartner = antragssteller.getFahrkostenPartner();
@@ -174,7 +173,6 @@ public class PersoenlichesBudgetCalculatorV1 {
                 medizinischeGrundversorgungTotal,
                 ausbildungskosten,
                 steuern,
-                steuernPartner,
                 fahrkosten,
                 fahrkostenPartner,
                 verpflegung,
