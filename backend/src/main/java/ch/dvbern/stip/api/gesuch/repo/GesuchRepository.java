@@ -63,21 +63,35 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return query.stream();
     }
 
-    public JPAQuery<Gesuch> getFindAlleMeineQuery(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleQuery());
-    }
-
-    public JPAQuery<Gesuch> getFindAlleMeineBearbeitbarQuery(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
-    }
-
     public JPAQuery<Gesuch> getFindAlleQuery() {
-        // TODO KSTIP-1587/ 1590: Implement Status Filter?
         return new JPAQueryFactory(entityManager).selectFrom(Q_GESUCH);
     }
 
+    public JPAQuery<Gesuch> getFindMeineQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleQuery());
+    }
+
+    public JPAQuery<Gesuch> getFindMeineBearbeitbarQuery(final UUID benutzerId) {
+        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery());
+    }
+
+    public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
+        final var query = getFindAlleQuery();
+        return addStatusFilter(
+            query,
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
+            Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
+            Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
+            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+            Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
+            Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
+            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
+            Gesuchstatus.VERFUEGUNG_VERSENDET
+        );
+    }
+
     public JPAQuery<Gesuch> getFindAlleJurBearbeitungQuery() {
-        // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
         return addStatusFilter(
             query,
@@ -86,7 +100,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     }
 
     public JPAQuery<Gesuch> getFindAlleAbklaerungDurchRechstabteilungQuery() {
-        // TODO KSTIP-1587/ 1590: Implement Status Filter?
         final var query = getFindAlleQuery();
         return addStatusFilter(
             query,
@@ -106,27 +119,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public JPAQuery<Gesuch> getFindAlleMeinePendenteQuery(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getFindAllePendenteQuery());
-    }
-
-    public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery() {
-        // TODO KSTIP-1587/ 1590: Implement Status Filter?
-        final var query = getFindAlleQuery();
-        return addStatusFilter(
-            query,
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-            Gesuchstatus.IN_BEARBEITUNG_SB,
-            Gesuchstatus.FEHLENDE_DOKUMENTE,
-            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
-            Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-            Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
-            Gesuchstatus.IN_FREIGABE,
-            Gesuchstatus.VERFUEGT,
-            Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-            Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
-            Gesuchstatus.VERFUEGUNG_VERSENDET,
-            Gesuchstatus.KEIN_STIPENDIENANSPRUCH,
-            Gesuchstatus.STIPENDIENANSPRUCH
-        );
     }
 
     public JPAQuery<Gesuch> getAlleWithDruckbareVerfuegung() {
