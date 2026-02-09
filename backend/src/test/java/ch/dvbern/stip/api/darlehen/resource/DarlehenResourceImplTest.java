@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.resource;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
@@ -81,7 +82,17 @@ public class DarlehenResourceImplTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
+        TestUtil.fillGesuchWithAuszahlung(
+            gesuchApiSpec,
+            dokumentApiSpec,
+            auszahlungApiSpec,
+            gesuch,
+            (updateDtoSpec) -> updateDtoSpec
+                .getGesuchTrancheToWorkWith()
+                .getGesuchFormular()
+                .getPersonInAusbildung()
+                .setGeburtsdatum(LocalDate.now().minusYears(18))
+        );
     }
 
     @Test
