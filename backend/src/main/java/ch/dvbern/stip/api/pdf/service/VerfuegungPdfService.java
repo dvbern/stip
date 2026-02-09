@@ -742,7 +742,7 @@ public class VerfuegungPdfService {
 
         if (!verfuegung.getVerfuegungStatus().isNegativ()) {
             ByteArrayOutputStream berechnungsBlaetter;
-            ByteArrayOutputStream darlehensVerfuegung = new ByteArrayOutputStream();
+            Optional<ByteArrayOutputStream> darlehensVerfuegung = Optional.empty();
 
             createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
             createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
@@ -761,7 +761,7 @@ public class VerfuegungPdfService {
 
             if (stipendien.getBerechnungDarlehen() > 0) {
                 darlehensVerfuegung =
-                    darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen());
+                    Optional.ofNullable(darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen()));
             }
 
             final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
@@ -816,7 +816,7 @@ public class VerfuegungPdfService {
     private ByteArrayOutputStream createVersendeteVerfuegung(
         final ByteArrayOutputStream verfuegungsbrief,
         final ByteArrayOutputStream mergedBerechnungsblaetter,
-        final ByteArrayOutputStream darlehenVerfuegung
+        final Optional<ByteArrayOutputStream> darlehenVerfuegung
     ) {
         final ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -839,12 +839,14 @@ public class VerfuegungPdfService {
                 merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
             }
 
-            try (
-                final PdfDocument darlehen = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(darlehenVerfuegung.toByteArray()))
-                )
-            ) {
-                merger.merge(darlehen, 1, darlehen.getNumberOfPages());
+            if (darlehenVerfuegung.isPresent()) {
+                try (
+                    final PdfDocument darlehen = new PdfDocument(
+                        new PdfReader(new ByteArrayInputStream(darlehenVerfuegung.get().toByteArray()))
+                    )
+                ) {
+                    merger.merge(darlehen, 1, darlehen.getNumberOfPages());
+                }
             }
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);

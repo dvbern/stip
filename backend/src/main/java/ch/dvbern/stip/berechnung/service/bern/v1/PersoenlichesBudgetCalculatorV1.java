@@ -26,6 +26,7 @@ import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.StammdatenV1;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatEinnahmenDto;
@@ -83,14 +84,15 @@ public class PersoenlichesBudgetCalculatorV1 {
         var stipendium = roundHalfUp(total);
         var darlehen = 0;
 
-        if (antragssteller.getMonateTertiaerstufe() > 36) {
+        if (antragssteller.getMonateTertiaerstufe() > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
+            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the stipendium
             var darlehenUngekuerzt = BigDecimal.valueOf(stipendium)
                 .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
             var remainingQuota = Math.max(
                 0,
-                50000 - antragssteller.getBisherigeDarlehen()
+                BerechnungUtil.darlehenLimit - antragssteller.getBisherigeDarlehen()
             );
             darlehen = Math.max(darlehenUngekuerzt, -remainingQuota);
             stipendium -= darlehenUngekuerzt;

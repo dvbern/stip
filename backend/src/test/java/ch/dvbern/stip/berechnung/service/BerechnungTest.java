@@ -36,6 +36,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -53,7 +54,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.util.BerechnungTestUtil;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.ws.rs.NotFoundException;
@@ -71,6 +72,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+// TODO: KSTIP-2590: resolve test issues
+
 @RequiredArgsConstructor
 @Slf4j
 class BerechnungTest {
@@ -78,7 +81,7 @@ class BerechnungTest {
 
     @BeforeEach
     void setUpEach() {
-        berechnungService = BerechnungUtil.getMockBerechnungService();
+        berechnungService = BerechnungTestUtil.getMockBerechnungService();
     }
 
     // @Test
@@ -127,8 +130,8 @@ class BerechnungTest {
     void testBerechnungFaelle(final int fall, final int expectedStipendien) throws JsonProcessingException {
         // Load Fall resources/berechnung/fall_{fall}.json, deserialize to a BerechnungRequestV1
         // and calculate Stipendien for it
-        final var objectMapper = BerechnungUtil.createObjectMapper();
-        final var result = berechnungService.calculateStipendien(BerechnungUtil.getRequest(fall));
+        final var objectMapper = BerechnungTestUtil.createObjectMapper();
+        final var result = berechnungService.calculateStipendien(BerechnungTestUtil.getRequest(fall));
         final var summary = objectMapper.writeValueAsString(result);
         assertThat("Value did not match, debug:\n" + summary, result.getStipendien(), is(expectedStipendien));
     }
@@ -239,6 +242,13 @@ class BerechnungTest {
         gesuch.getGesuchsperiode()
             .setAnzahlWochenLehre(47)
             .setAnzahlWochenSchule(38);
+
+        gesuch.setAusbildung(
+            new Ausbildung()
+                .setFall(
+                    new Fall()
+                )
+        );
 
         gesuchFormular.getPersonInAusbildung()
             .setZivilstand(Zivilstand.LEDIG)

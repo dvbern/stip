@@ -37,7 +37,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.util.BerechnungTestUtil;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -77,7 +77,7 @@ public class BerechnungTestcaseTest {
     @ValueSource(ints = { 1 })
     void testTestcases(final int no) {
         // Arrange
-        final var testcase = BerechnungUtil.getTestcase(no);
+        final var testcase = BerechnungTestUtil.getTestcase(no);
 
         final var gesuchperiode = gesuchsperiodeMapper.toEntity(testcase.gesuchperiode);
         final var gesuch = new Gesuch();

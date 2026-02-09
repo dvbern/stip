@@ -48,7 +48,7 @@ import lombok.experimental.UtilityClass;
 import org.mockito.Mockito;
 
 @UtilityClass
-public class BerechnungUtil {
+public class BerechnungTestUtil {
     public ObjectMapper createObjectMapper() {
         return new ObjectMapper()
             .registerModule(new JavaTimeModule()); // new module, NOT JSR310Module
@@ -57,7 +57,7 @@ public class BerechnungUtil {
     public CalculatorRequest getRequest(final int fall) {
         try {
             final var resource =
-                BerechnungUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
+                BerechnungTestUtil.class.getClassLoader().getResource(String.format("berechnung/fall_%d.json", fall));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
             final var mapper = createObjectMapper();
@@ -71,7 +71,7 @@ public class BerechnungUtil {
     public BerechnungTestcase getTestcase(final int no) {
         try {
             final var resource =
-                BerechnungUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
+                BerechnungTestUtil.class.getClassLoader().getResource(String.format("testcase/testcase_%d.json", no));
             assert resource != null;
             final var inputs = Files.readString(Paths.get(resource.toURI()));
             final var mapper = createObjectMapper()
