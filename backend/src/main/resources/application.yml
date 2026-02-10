@@ -9,7 +9,9 @@ kstip:
   default-tenant: 'bern'
   allowed:
     mimetypes: 'image/tiff,image/jpeg,image/png,application/pdf'
-    testcase-mimetypes: 'application/x-tika-ooxml'
+    testcase-mimetypes:
+      - 'application/x-tika-ooxml'
+      - 'application/zip'
   pre-signed-request:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
