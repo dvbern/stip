@@ -15,6 +15,7 @@ export interface DemoKind {
     nachname: string;
     vorname: string;
     geburtsdatum: string;
+    alter: number;
     wohnsitzAnteilPia: number;
     ausbildungssituation: Ausbildungssituation;
     unterhaltsbeitraege: number;

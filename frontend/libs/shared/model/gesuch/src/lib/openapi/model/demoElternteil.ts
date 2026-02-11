@@ -27,6 +27,7 @@ export interface DemoElternteil {
     identischerZivilrechtlicherWohnsitzOrt?: string;
     wohnkosten?: number;
     geburtsdatum: string;
+    alter: number;
     telefonnummer: string;
     sozialhilfebeitraege: boolean;
     ausweisbFluechtling: boolean;

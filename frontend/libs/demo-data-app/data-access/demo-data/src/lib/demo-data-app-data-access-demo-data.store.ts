@@ -42,8 +42,6 @@ type DemoDataError = SharedModelError & {
   }[];
 };
 
-const AENDERUNG_TEST_FALL_REGEX = /.*(\.\d[02-9])$/;
-
 @Injectable()
 export class DemoDataStore extends signalStore(
   { protectedState: false },
@@ -59,9 +57,7 @@ export class DemoDataStore extends signalStore(
         : {
             ...demoData,
             demoDatas:
-              demoData.demoDatas.filter(
-                (item) => !AENDERUNG_TEST_FALL_REGEX.test(item.testFall),
-              ) ?? [],
+              demoData.demoDatas.filter((item) => item.typ === 'TRANCHE') ?? [],
           };
     });
   });
@@ -156,6 +152,7 @@ export class DemoDataStore extends signalStore(
 
   createNewDemoDataImport$ = rxMethod<{
     fileUpload: File;
+    ignoreBerechnungErrors: boolean;
     kommentar: string;
     onSuccess: () => void;
   }>(
@@ -165,25 +162,30 @@ export class DemoDataStore extends signalStore(
           demoData: cachedPending(state.demoData),
         }));
       }),
-      switchMap(({ fileUpload, kommentar, onSuccess }) =>
-        this.demoDataService
-          .createNewDemoDataImport$({ fileUpload, kommentar })
-          .pipe(
-            handleApiResponse(
-              (demoData) =>
-                patchState(this, (state) => ({
-                  demoData: cachedFailure(state.demoData, demoData.error),
-                })),
-              {
-                onSuccess: () => {
-                  onSuccess();
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey: 'demo-data-app.overview.file-upload.success',
-                  });
+      switchMap(
+        ({ fileUpload, ignoreBerechnungErrors, kommentar, onSuccess }) =>
+          this.demoDataService
+            .createNewDemoDataImport$({
+              fileUpload,
+              ignoreBerechnungErrors,
+              kommentar,
+            })
+            .pipe(
+              handleApiResponse(
+                (demoData) =>
+                  patchState(this, (state) => ({
+                    demoData: cachedFailure(state.demoData, demoData.error),
+                  })),
+                {
+                  onSuccess: () => {
+                    onSuccess();
+                    this.globalNotificationStore.createSuccessNotification({
+                      messageKey: 'demo-data-app.overview.file-upload.success',
+                    });
+                  },
                 },
-              },
+              ),
             ),
-          ),
       ),
     ),
   );

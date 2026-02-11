@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDataSlimDtoSpec.JSON_PROPERTY_ID,
+  DemoDataSlimDtoSpec.JSON_PROPERTY_TYP,
   DemoDataSlimDtoSpec.JSON_PROPERTY_TEST_FALL,
   DemoDataSlimDtoSpec.JSON_PROPERTY_NAME,
   DemoDataSlimDtoSpec.JSON_PROPERTY_DESCRIPTION
@@ -37,6 +39,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoDataSlimDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private String id;
+
+  public static final String JSON_PROPERTY_TYP = "typ";
+  private GesuchTrancheTypDtoSpec typ;
 
   public static final String JSON_PROPERTY_TEST_FALL = "testFall";
   private String testFall;
@@ -73,6 +78,32 @@ public class DemoDataSlimDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(String id) {
     this.id = id;
+  }
+
+
+  public DemoDataSlimDtoSpec typ(GesuchTrancheTypDtoSpec typ) {
+    
+    this.typ = typ;
+    return this;
+  }
+
+   /**
+   * Get typ
+   * @return typ
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchTrancheTypDtoSpec getTyp() {
+    return typ;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTyp(GesuchTrancheTypDtoSpec typ) {
+    this.typ = typ;
   }
 
 
@@ -163,6 +194,7 @@ public class DemoDataSlimDtoSpec {
     }
     DemoDataSlimDtoSpec demoDataSlim = (DemoDataSlimDtoSpec) o;
     return Objects.equals(this.id, demoDataSlim.id) &&
+        Objects.equals(this.typ, demoDataSlim.typ) &&
         Objects.equals(this.testFall, demoDataSlim.testFall) &&
         Objects.equals(this.name, demoDataSlim.name) &&
         Objects.equals(this.description, demoDataSlim.description);
@@ -170,7 +202,7 @@ public class DemoDataSlimDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, testFall, name, description);
+    return Objects.hash(id, typ, testFall, name, description);
   }
 
   @Override
@@ -178,6 +210,7 @@ public class DemoDataSlimDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoDataSlimDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

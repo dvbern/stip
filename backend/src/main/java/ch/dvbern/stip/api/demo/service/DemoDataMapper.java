@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.demo.entity.DemoDataImport;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
+import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -44,11 +45,15 @@ public abstract class DemoDataMapper {
     @Mapping(source = "demoDataList", target = "demoDatas")
     public abstract DemoDataListDto toDto(final DemoDataImport demoDataImport, final List<DemoData> demoDataList);
 
-    @Mapping(source = "id", target = "gesuchId")
-    @Mapping(source = ".", target = "gesuchTrancheId", qualifiedByName = "getCurrentGesuchTrancheId")
-    @Mapping(source = ".", target = "gueltigAb", qualifiedByName = "getStartDate")
-    @Mapping(source = ".", target = "gueltigBis", qualifiedByName = "getEndDate")
-    public abstract ApplyDemoDataResponseDto toDto(final Gesuch gesuch);
+    @Mapping(source = "gesuch.id", target = "gesuchId")
+    @Mapping(source = "gesuch", target = "gesuchTrancheId", qualifiedByName = "getCurrentGesuchTrancheId")
+    @Mapping(source = "gesuch", target = "gueltigAb", qualifiedByName = "getStartDate")
+    @Mapping(source = "gesuch", target = "gueltigBis", qualifiedByName = "getEndDate")
+    @Mapping(source = "stipendienanspruchDto", target = "stipendienanspruch")
+    public abstract ApplyDemoDataResponseDto toDto(
+        final Gesuch gesuch,
+        final ApplyDemoDataResponseStipendienanspruchDto stipendienanspruchDto
+    );
 
     @Named("getCurrentGesuchTrancheId")
     UUID getCurrentGesuchTrancheId(Gesuch gesuch) {

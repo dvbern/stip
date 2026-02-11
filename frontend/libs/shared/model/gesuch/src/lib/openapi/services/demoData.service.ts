@@ -32,6 +32,7 @@ export interface DemoDataServiceApplyDemoDataRequestParams {
 
 export interface DemoDataServiceCreateNewDemoDataImportRequestParams {
     kommentar: string;
+    ignoreBerechnungErrors: boolean;
     fileUpload: Blob;
 }
 
@@ -214,6 +215,10 @@ export class DemoDataService {
         if (kommentar === null || kommentar === undefined) {
             throw new Error('Required parameter kommentar was null or undefined when calling createNewDemoDataImport$.');
         }
+        const ignoreBerechnungErrors = requestParameters.ignoreBerechnungErrors;
+        if (ignoreBerechnungErrors === null || ignoreBerechnungErrors === undefined) {
+            throw new Error('Required parameter ignoreBerechnungErrors was null or undefined when calling createNewDemoDataImport$.');
+        }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createNewDemoDataImport$.');
@@ -242,6 +247,10 @@ export class DemoDataService {
         const kommentar = requestParameters.kommentar;
         if (kommentar === null || kommentar === undefined) {
             throw new Error('Required parameter kommentar was null or undefined when calling createNewDemoDataImport$.');
+        }
+        const ignoreBerechnungErrors = requestParameters.ignoreBerechnungErrors;
+        if (ignoreBerechnungErrors === null || ignoreBerechnungErrors === undefined) {
+            throw new Error('Required parameter ignoreBerechnungErrors was null or undefined when calling createNewDemoDataImport$.');
         }
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
@@ -302,6 +311,9 @@ export class DemoDataService {
 
         if (kommentar !== undefined) {
             localVarFormParams = localVarFormParams.append('kommentar', <any>kommentar) as any || localVarFormParams;
+        }
+        if (ignoreBerechnungErrors !== undefined) {
+            localVarFormParams = localVarFormParams.append('ignoreBerechnungErrors', <any>ignoreBerechnungErrors) as any || localVarFormParams;
         }
         if (fileUpload !== undefined) {
             localVarFormParams = localVarFormParams.append('fileUpload', <any>fileUpload) as any || localVarFormParams;

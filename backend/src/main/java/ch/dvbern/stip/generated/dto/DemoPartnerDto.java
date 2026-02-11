@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.time.LocalDate;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -28,7 +27,8 @@ public class DemoPartnerDto  implements Serializable {
   private @Valid String plz;
   private @Valid String ort;
   private @Valid String land;
-  private @Valid LocalDate geburtsdatum;
+  private @Valid String geburtsdatum;
+  private @Valid Integer alter;
   private @Valid Boolean inAusbildung;
   private @Valid String coAdresse;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
@@ -187,7 +187,7 @@ public class DemoPartnerDto  implements Serializable {
 
   /**
    **/
-  public DemoPartnerDto geburtsdatum(LocalDate geburtsdatum) {
+  public DemoPartnerDto geburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
     return this;
   }
@@ -195,13 +195,32 @@ public class DemoPartnerDto  implements Serializable {
   
   @JsonProperty("geburtsdatum")
   @NotNull
-  public LocalDate getGeburtsdatum() {
+ @Pattern(regexp="^\\d{2}.\\d{2}$")  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
   @JsonProperty("geburtsdatum")
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+  /**
+   **/
+  public DemoPartnerDto alter(Integer alter) {
+    this.alter = alter;
+    return this;
+  }
+
+  
+  @JsonProperty("alter")
+  @NotNull
+  public Integer getAlter() {
+    return alter;
+  }
+
+  @JsonProperty("alter")
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
   /**
@@ -278,6 +297,7 @@ public class DemoPartnerDto  implements Serializable {
         Objects.equals(this.ort, demoPartner.ort) &&
         Objects.equals(this.land, demoPartner.land) &&
         Objects.equals(this.geburtsdatum, demoPartner.geburtsdatum) &&
+        Objects.equals(this.alter, demoPartner.alter) &&
         Objects.equals(this.inAusbildung, demoPartner.inAusbildung) &&
         Objects.equals(this.coAdresse, demoPartner.coAdresse) &&
         Objects.equals(this.pensum, demoPartner.pensum);
@@ -285,7 +305,7 @@ public class DemoPartnerDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, geburtsdatum, inAusbildung, coAdresse, pensum);
+    return Objects.hash(sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, geburtsdatum, alter, inAusbildung, coAdresse, pensum);
   }
 
   @Override
@@ -302,6 +322,7 @@ public class DemoPartnerDto  implements Serializable {
     sb.append("    ort: ").append(toIndentedString(ort)).append("\n");
     sb.append("    land: ").append(toIndentedString(land)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    inAusbildung: ").append(toIndentedString(inAusbildung)).append("\n");
     sb.append("    coAdresse: ").append(toIndentedString(coAdresse)).append("\n");
     sb.append("    pensum: ").append(toIndentedString(pensum)).append("\n");

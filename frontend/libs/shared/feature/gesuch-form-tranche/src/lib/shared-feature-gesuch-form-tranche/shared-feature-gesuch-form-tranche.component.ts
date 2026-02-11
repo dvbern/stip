@@ -2,9 +2,12 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Injector,
   computed,
   effect,
   inject,
+  runInInjectionContext,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -16,15 +19,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterLink } from '@angular/router';
-import {
-  TranslocoPipe,
-  TranslocoService,
-  translateSignal,
-} from '@jsverse/transloco';
+import { TranslocoService, translateSignal } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { addMonths, endOfMonth } from 'date-fns';
 import { filter, firstValueFrom } from 'rxjs';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   SharedDataAccessGesuchEvents,
@@ -39,9 +39,11 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormReadonlyDirective,
@@ -60,6 +62,7 @@ import {
   formatBackendLocalDate,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
+import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
@@ -78,7 +81,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiIfSachbearbeiterDirective,
     SharedUiFormReadonlyDirective,
     SharedUiLoadingComponent,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -89,6 +92,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private dialog = inject(MatDialog);
   private translate = inject(TranslocoService);
   private formBuilder = inject(NonNullableFormBuilder);
+  private injector = inject(Injector);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   private defaultCommentSig = translateSignal(
     'shared.form.tranche.bemerkung.initialgesuch',
   );
@@ -109,6 +114,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       loading || isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
     );
   });
+  isExportingSig = signal(false);
 
   form = this.formBuilder.group({
     status: [''],
@@ -124,6 +130,16 @@ export class SharedFeatureGesuchFormTrancheComponent {
     einreichedatum: [''],
   });
 
+  exportValuesSig = computed<ExportView | undefined>(() => {
+    const { gesuch, tranche, isEditingAenderung, sachbearbeiter, periode } =
+      this.viewSig();
+
+    if (!tranche || !gesuch || !periode || !isDefined(isEditingAenderung)) {
+      return undefined;
+    }
+
+    return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
+  });
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
@@ -217,7 +233,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
           periode?.einreichefrist,
           language,
         ),
-        sachbearbeiter: sachbearbeiter,
+        sachbearbeiter,
         von: formatBackendLocalDate(tranche.gueltigAb, language),
         bis: formatBackendLocalDate(tranche.gueltigBis, language),
         bemerkung: tranche.comment ?? defaultComment,
@@ -345,5 +361,28 @@ export class SharedFeatureGesuchFormTrancheComponent {
         this.router.navigate(routesMap[target]);
       },
     });
+  }
+
+  async exportTranche(exportValues: ExportView) {
+    if (!exportValues) {
+      return;
+    }
+    this.isExportingSig.set(true);
+
+    try {
+      const module = await import('@dv/shared/util-data-access/export-tranche');
+      const exportTrancheService = runInInjectionContext(this.injector, () =>
+        inject(module.SharedExportTrancheService),
+      );
+
+      await exportTrancheService.exportTranche(exportValues);
+    } catch {
+      this.globalNotificationStore.createNotification({
+        type: 'ERROR',
+        messageKey: translatableShared('shared.form.tranche.export.error'),
+      });
+    }
+
+    this.isExportingSig.set(false);
   }
 }

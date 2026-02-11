@@ -72,7 +72,8 @@ public class DemoDataService {
     @Transactional
     public DemoDataListDto createNewDemoDataImport(
         final String kommentar,
-        final FileUpload fileUpload
+        final FileUpload fileUpload,
+        final Boolean ignoreBerechnungErrors
     ) {
         var demoDataImport = new DemoDataImport();
         demoDataImport.setKommentar(kommentar);
@@ -96,7 +97,7 @@ public class DemoDataService {
                 .await()
                 .indefinitely()
                 .close();
-            final var demoDataList = ParseDemoDataService.parseList(fileUpload.uploadedFile());
+            final var demoDataList = ParseDemoDataService.parseList(fileUpload.uploadedFile(), ignoreBerechnungErrors);
             demoDataRepository.deleteAll();
             demoDataRepository.persist(demoDataList);
             demoDataImportRepository.persist(demoDataImport);
@@ -173,6 +174,8 @@ public class DemoDataService {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
-        return demoDataMapper.toDto(gesuch);
+        final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+
+        return demoDataMapper.toDto(gesuch, stipendienanspruchDto);
     }
 }

@@ -195,6 +195,7 @@ module.exports = [
               onlyDependOnLibsWithTags: [
                 'type:assets',
                 'type:data-access',
+                'type:util-data-access',
                 'type:util',
                 'type:util-fn',
                 'type:model',
