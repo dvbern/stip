@@ -5,7 +5,6 @@ import {
   importProvidersFrom,
   inject,
   isDevMode,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -64,7 +63,6 @@ export function provideSharedPatternCore(
     provideSharedPatternAppInitialization(),
     provideSharedAppSettings(compileTimeConfig.appType),
     provideAnimations(),
-    provideZoneChangeDetection({ eventCoalescing: true, runCoalescing: true }),
     provideHttpClient(
       withInterceptors([
         SharedPatternInterceptorDeploymentConfig,
@@ -101,7 +99,7 @@ export function provideSharedPatternCore(
           strictActionImmutability: true,
           strictStateSerializability: true,
           strictActionSerializability: true,
-          strictActionWithinNgZone: true,
+          strictActionWithinNgZone: false,
           strictActionTypeUniqueness: true,
         },
       },
@@ -127,7 +125,7 @@ export function provideSharedPatternCore(
       loader: TranslocoHttpLoader,
     }),
     provideRouterStore(),
-    ...(isDevMode() ? [provideStoreDevtools({ connectInZone: true })] : []),
+    ...(isDevMode() ? [provideStoreDevtools({ connectInZone: false })] : []),
 
     // modules which don't support Angular Standalone APIs yet
     importProvidersFrom([]),

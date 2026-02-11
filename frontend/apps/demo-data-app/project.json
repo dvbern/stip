@@ -18,7 +18,7 @@
       "options": {
         "outputPath": "dist/apps/demo-data-app",
         "browser": "apps/demo-data-app/src/main.ts",
-        "polyfills": ["@angular/localize/init", "zone.js"],
+        "polyfills": ["@angular/localize/init"],
         "tsConfig": "apps/demo-data-app/tsconfig.app.json",
         "assets": [
           {
