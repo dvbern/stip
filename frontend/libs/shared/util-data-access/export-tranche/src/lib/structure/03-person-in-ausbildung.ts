@@ -1,7 +1,8 @@
-import { TranslocoService, isDefined } from '@jsverse/transloco';
+import { TranslocoService } from '@jsverse/transloco';
 import type { Content } from 'pdfmake/interfaces';
 
 import { GesuchTranche } from '@dv/shared/model/gesuch';
+import { isDefined } from '@dv/shared/model/type-util';
 import { niederlassungsStatusConverter } from '@dv/shared/util/gesuch';
 
 import { ExportLand } from '../types';

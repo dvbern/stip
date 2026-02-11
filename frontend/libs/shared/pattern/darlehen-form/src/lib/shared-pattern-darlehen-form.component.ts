@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -74,7 +73,6 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 @Component({
   selector: 'dv-shared-pattern-darlehen-form',
   imports: [
-    CommonModule,
     TranslocoPipe,
     ReactiveFormsModule,
     MatFormFieldModule,

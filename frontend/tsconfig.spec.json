@@ -3,7 +3,9 @@
   "compilerOptions": {
     "strict": true,
     "outDir": "../../../../dist/out-tsc",
-    "target": "es2021",
+    "target": "es2022",
+    "module": "preserve",
+    "moduleResolution": "bundler",
     "types": [
       "vitest/globals",
       "vitest/importMeta",

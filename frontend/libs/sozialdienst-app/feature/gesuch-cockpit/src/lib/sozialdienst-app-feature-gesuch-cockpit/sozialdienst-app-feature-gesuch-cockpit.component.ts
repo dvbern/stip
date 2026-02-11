@@ -1,6 +1,4 @@
 /* eslint-disable @angular-eslint/no-input-rename */
-
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -47,7 +45,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
   imports: [
-    CommonModule,
     RouterLink,
     MatSidenavModule,
     SharedPatternMobileSidenavComponent,

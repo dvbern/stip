@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,7 +27,6 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
   imports: [
-    CommonModule,
     MatCardModule,
     TranslocoPipe,
     MatExpansionModule,
