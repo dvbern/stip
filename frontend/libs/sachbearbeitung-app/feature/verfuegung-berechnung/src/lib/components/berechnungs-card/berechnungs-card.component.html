@@ -89,13 +89,13 @@
             <!-- stipendium -->
             <dv-position
               [titleSig]="t('persoenlich.hinweis.zweiDrittel')"
-              [amountSig]="berechnung.gesetzlichesDarlehenStipendium"
+              [amountSig]="berechnung.gesetzlichesDarlehenStipendium | formatChf"
             ></dv-position>
 
             <!-- darlehen gesetzlich -->
             <dv-position
               [titleSig]="t('persoenlich.hinweis.einDrittel')"
-              [amountSig]="berechnung.gesetzlichesDarlehen"
+              [amountSig]="berechnung.gesetzlichesDarlehen | formatChf"
             ></dv-position>
 
             <!-- Hinweis 1. schwarzarbeitBGSA -->
