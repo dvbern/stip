@@ -149,7 +149,6 @@ class V1StructureTest {
                 "eigenerHaushalt": true,
                 "halbierungElternbeitrag": false,
                 "monateTertiaerstufe": 72,
-                "bisherigeDarlehen": 0,
                 "einkommens": [
                   { "vorname": "a", "value": 6916 },
                   { "vorname": "a", "value": 12916 }
@@ -252,8 +251,7 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
-            BerechnungTestUtil.getPersonenImHaushaltService(),
-            0
+            BerechnungTestUtil.getPersonenImHaushaltService()
         );
         final var mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         final var actual = mapper.writeValueAsString(request);

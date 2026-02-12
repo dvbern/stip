@@ -25,7 +25,6 @@ public interface BerechnungRequestBuilder {
     CalculatorRequest buildRequest(
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
-        final ElternTyp elternTyp,
-        final int bisherigeDarlehen
+        final ElternTyp elternTyp
     );
 }

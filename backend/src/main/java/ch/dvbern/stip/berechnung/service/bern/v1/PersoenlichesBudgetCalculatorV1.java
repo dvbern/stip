@@ -82,22 +82,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         total = budgetTranche;
 
         var stipendium = roundHalfUp(total);
-        var darlehen = 0;
-
-        if (antragssteller.getMonateTertiaerstufe() > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
-            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
-            // stipendium
-            var darlehenUngekuerzt = BigDecimal.valueOf(stipendium)
-                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100))
-                .intValue();
-            var remainingQuota = Math.max(
-                0,
-                BerechnungUtil.darlehenLimit - antragssteller.getBisherigeDarlehen()
-            );
-            darlehen = Math.max(darlehenUngekuerzt, -remainingQuota);
-            stipendium -= darlehenUngekuerzt;
-        }
+        var darlehen = getDarlehen(antragssteller, stipendium);
 
         return new PersoenlichesBudgetresultatDto()
             .vorname(antragssteller.getVorname())
@@ -118,6 +103,20 @@ public class PersoenlichesBudgetCalculatorV1 {
             .kosten(kosten)
             .vornamePartner(antragssteller.getVornamePartner())
             .nachnamePartner(antragssteller.getNachnamePartner());
+    }
+
+    private static int getDarlehen(AntragsstellerV1 antragssteller, int stipendium) {
+        var darlehen = 0;
+
+        if (antragssteller.getMonateTertiaerstufe() > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
+            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
+            // stipendium
+            darlehen = BigDecimal.valueOf(stipendium)
+                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .intValue();
+        }
+        return darlehen;
     }
 
     private PersoenlichesBudgetresultatKostenDto calculateKosten(

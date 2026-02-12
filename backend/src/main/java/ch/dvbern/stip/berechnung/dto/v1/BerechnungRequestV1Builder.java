@@ -37,15 +37,13 @@ public class BerechnungRequestV1Builder implements BerechnungRequestBuilder {
     public CalculatorRequest buildRequest(
         Gesuch gesuch,
         GesuchTranche gesuchTranche,
-        ElternTyp elternTyp,
-        int bisherigeDarlehen
+        ElternTyp elternTyp
     ) {
         return BerechnungRequestV1.createRequest(
             gesuch,
             gesuchTranche,
             elternTyp,
-            personenImHaushaltService,
-            bisherigeDarlehen
+            personenImHaushaltService
         );
     }
 }

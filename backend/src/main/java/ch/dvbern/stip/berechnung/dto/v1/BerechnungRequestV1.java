@@ -97,8 +97,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
         final ElternTyp elternTyp,
-        final PersonenImHaushaltService personenImHaushaltService,
-        final int bisherigeDarlehen
+        final PersonenImHaushaltService personenImHaushaltService
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var personenImHaushaltRequest = personenImHaushaltService.getPersonenImHaushaltRequest(
@@ -198,8 +197,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
 
         final var antragssteller = AntragsstellerV1.buildFromDependants(
             gesuchFormular,
-            piaWohntInElternHaushalt,
-            bisherigeDarlehen
+            piaWohntInElternHaushalt
         );
         final var anzahlMonate = DateUtil.getMonthsBetween(
             gesuchTranche.getGueltigkeit().getGueltigAb(),

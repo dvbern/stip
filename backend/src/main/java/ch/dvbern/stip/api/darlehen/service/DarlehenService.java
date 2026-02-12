@@ -58,6 +58,7 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
@@ -113,7 +114,7 @@ public class DarlehenService {
     private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
-    private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
+    private void createDarlehenBuchhaltungEntry(
         final Fall fall,
         final Dokument dokument,
         final Integer betrag,
@@ -125,15 +126,37 @@ public class DarlehenService {
         darlehenBuchhaltungEntry.setVerfuegung(dokument);
         darlehenBuchhaltungEntry.setBetrag(betrag);
         darlehenBuchhaltungEntryRepository.persist(darlehenBuchhaltungEntry);
-        return darlehenBuchhaltungEntry;
 
     }
 
     public ByteArrayOutputStream createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
+        final boolean isAenderung = gesuch.getAkzeptierteAenderungs().findAny().isPresent();
+        int gesetzlicheDarlehenBisher = 0;
+        if (isAenderung) {
+            gesetzlicheDarlehenBisher = gesetzlichDarlehenRepository.findAllByGesuchId(gesuch.getId())
+                .stream()
+                .mapToInt(GesetzlichDarlehen::getBetrag)
+                .sum();
+        }
+        final Fall fall = gesuch.getAusbildung().getFall();
+        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fall.getId());
+        final int darlehenBisher = darlehenBuchhaltungEntrys.stream()
+            .map(DarlehenBuchhaltungEntry::getBetrag)
+            .filter(Objects::nonNull)
+            .mapToInt(Integer::intValue)
+            .sum();
+        final var remainingQuota = Math.max(
+            0,
+            BerechnungUtil.darlehenLimit - darlehenBisher
+        );
+
+        var darlehenBetrag = Math.max(0, betrag - gesetzlicheDarlehenBisher);
+        darlehenBetrag = Math.min(darlehenBetrag, remainingQuota);
+
         final var gesetzlichDarlehen = new GesetzlichDarlehen();
         gesetzlichDarlehen.setFall(gesuch.getAusbildung().getFall());
         gesetzlichDarlehen.setGesuch(gesuch);
-        gesetzlichDarlehen.setBetrag(betrag);
+        gesetzlichDarlehen.setBetrag(darlehenBetrag);
 
         gesetzlichDarlehenRepository.persistAndFlush(gesetzlichDarlehen);
 
@@ -153,8 +176,14 @@ public class DarlehenService {
         darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
-
         gesetzlichDarlehen.setVerfuegung(darlehensVerfuegung);
+
+        createDarlehenBuchhaltungEntry(
+            gesuch.getAusbildung().getFall(),
+            darlehensVerfuegung,
+            darlehenBetrag,
+            DarlehenBuchhaltungEntryKategorie.GESETZLICH
+        );
 
         mailService.sendDarlehenVerfuegungEmail(
             configService.getDarlehenVerfuegungEmailRecipient(),
@@ -162,13 +191,6 @@ public class DarlehenService {
             out.toByteArray(),
             gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
-        );
-
-        createDarlehenBuchhaltungEntry(
-            gesuch.getAusbildung().getFall(),
-            darlehensVerfuegung,
-            betrag,
-            DarlehenBuchhaltungEntryKategorie.GESETZLICH
         );
 
         return out;

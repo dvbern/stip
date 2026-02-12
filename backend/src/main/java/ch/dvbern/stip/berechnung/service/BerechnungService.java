@@ -28,10 +28,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
-import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -60,7 +57,6 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
-    private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
         final CalculatorRequest berechnungRequest,
@@ -336,15 +332,12 @@ public class BerechnungService {
             );
         }
 
-        final Fall fall = gesuch.getAusbildung().getFall();
-        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fall.getId());
-        final int bisherigeDarlehen = darlehenBuchhaltungEntrys.stream()
-            .map(DarlehenBuchhaltungEntry::getBetrag)
-            .filter(Objects::nonNull)
-            .mapToInt(Integer::intValue)
-            .sum();
-
-        return builder.get().buildRequest(gesuch, gesuchTranche, elternTyp, bisherigeDarlehen);
+        return builder.get()
+            .buildRequest(
+                gesuch,
+                gesuchTranche,
+                elternTyp
+            );
     }
 
     public BerechnungResult calculateStipendien(final CalculatorRequest request) {

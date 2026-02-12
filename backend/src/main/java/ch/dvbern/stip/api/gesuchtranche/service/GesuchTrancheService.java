@@ -621,7 +621,7 @@ public class GesuchTrancheService {
             GesuchTrancheStatus.MANUELLE_AENDERUNG
         );
 
-        final var trancheInDisallowedStates = gesuch.getAenderungen()
+        final var trancheInDisallowedStates = gesuch.getAenderungs()
             .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
             .toList();
 

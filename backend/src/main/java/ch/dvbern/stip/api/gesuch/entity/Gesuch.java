@@ -245,20 +245,15 @@ public class Gesuch extends AbstractMandantEntity {
         );
     }
 
-    public Optional<GesuchTranche> getOldestGesuchTranche() {
-        if (gesuchTranchen.isEmpty()) {
-            return Optional.empty();
-        }
-
-        return gesuchTranchen.stream()
-            .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
-            .min(Comparator.comparing(gesuchTranche -> gesuchTranche.getGueltigkeit().getGueltigAb()));
-    }
-
-    public Stream<GesuchTranche> getAenderungen() {
+    public Stream<GesuchTranche> getAenderungs() {
         return getGesuchTranchen()
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG);
+    }
+
+    public Stream<GesuchTranche> getAkzeptierteAenderungs() {
+        return getAenderungs()
+            .filter(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.AKZEPTIERT);
     }
 
     public Stream<GesuchTranche> getTranchenTranchen() {

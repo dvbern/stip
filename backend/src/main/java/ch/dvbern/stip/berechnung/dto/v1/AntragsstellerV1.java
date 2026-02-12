@@ -67,7 +67,6 @@ public class AntragsstellerV1 {
     boolean eigenerHaushalt;
     boolean halbierungElternbeitrag;
     int monateTertiaerstufe;
-    int bisherigeDarlehen;
 
     // Einkommen
     List<PersonValueItemDto> einkommens;
@@ -97,8 +96,7 @@ public class AntragsstellerV1 {
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,
-        final int piaWohntInElternHaushalt,
-        final int bisherigeDarlehen
+        final int piaWohntInElternHaushalt
     ) {
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
         final var piaName = personInAusbildung.getVorname();
@@ -149,7 +147,6 @@ public class AntragsstellerV1 {
         }
 
         builder.monateTertiaerstufe(monateTertiaerstufe);
-        builder.bisherigeDarlehen(bisherigeDarlehen);
 
         Integer vermoegen = Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0);
         Integer beitraegeGemeindeInstitutionen = Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0);

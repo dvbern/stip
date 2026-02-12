@@ -17,6 +17,9 @@
 
 package ch.dvbern.stip.api.darlehen.repo;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -25,4 +28,7 @@ import lombok.RequiredArgsConstructor;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class GesetzlichDarlehenRepository implements BaseRepository<GesetzlichDarlehen> {
+    public List<GesetzlichDarlehen> findAllByGesuchId(UUID gesuchId) {
+        return list("gesuch.id", gesuchId);
+    }
 }
