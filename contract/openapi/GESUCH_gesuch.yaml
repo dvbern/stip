@@ -1074,6 +1074,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canCreateAenderung
       type: object
       properties:
         nachfristDokumente:
@@ -1094,6 +1095,8 @@ components:
         endDate:
           type: string
           format: date
+        canCreateAenderung:
+          type: boolean
         missingDocuments:
           required:
             - trancheId
@@ -1125,11 +1128,20 @@ components:
           $ref: './components/common.yaml#/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
+      required:
+        - canCreateAusbildungUnterbruchAntrag
+        - isUnterbrochen
       properties:
         gesuchs:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
+        canCreateAusbildungUnterbruchAntrag:
+          type: boolean
+        isUnterbrochen:
+          type: boolean
+        openAusbildungUnterbruchAntragId:
+          $ref: './components/common.yaml#/UUID'
       allOf:
         - $ref: './components/common.yaml#/Ausbildung'
     SbGesucheDashboardColumn:
