@@ -200,11 +200,11 @@ class GesuchTrancheCreateTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getTranchen().size(), is(2));
-        tranche1Id = result.getTranchen().get(0).getId();
-        tranche2Id = result.getTranchen().get(1).getId();
+        assertThat(result.getCurrentTranchen().size(), is(2));
+        tranche1Id = result.getCurrentTranchen().get(0).getId();
+        tranche2Id = result.getCurrentTranchen().get(1).getId();
 
-        trancheToOverwrite = result.getTranchen().get(0);
+        trancheToOverwrite = result.getCurrentTranchen().get(0);
     }
 
     @Test
@@ -232,9 +232,9 @@ class GesuchTrancheCreateTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getTranchen().size(), is(2));
-        tranche1Id = result.getTranchen().get(0).getId();
-        overwrittenTrancheId = result.getTranchen().get(1).getId();
+        assertThat(result.getCurrentTranchen().size(), is(2));
+        tranche1Id = result.getCurrentTranchen().get(0).getId();
+        overwrittenTrancheId = result.getCurrentTranchen().get(1).getId();
     }
 
     @Test
@@ -253,8 +253,8 @@ class GesuchTrancheCreateTest {
 
         // make the formlerly added document (by GS) superflous on tranche 2:
         // therefore, remove & re-add the document
-        removeDocumentSB(tranchen.getTranchen().get(1).getId());
-        final var gesuchUpdateDTO = getAddDocumentDto(tranchen.getTranchen().get(1).getId());
+        removeDocumentSB(tranchen.getCurrentTranchen().get(1).getId());
+        final var gesuchUpdateDTO = getAddDocumentDto(tranchen.getCurrentTranchen().get(1).getId());
 
         gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -266,7 +266,7 @@ class GesuchTrancheCreateTest {
 
         var documentsToUploadOfTranche1 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
-                .gesuchTrancheIdPath(tranchen.getTranchen().get(0).getId())
+                .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(0).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .extract()
@@ -275,7 +275,7 @@ class GesuchTrancheCreateTest {
         assertThat(documentsToUploadOfTranche1.getRequired().size(), is(0));
         var documentsToUploadOfTranche2 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
-                .gesuchTrancheIdPath(tranchen.getTranchen().get(1).getId())
+                .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(1).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .extract()
@@ -285,7 +285,7 @@ class GesuchTrancheCreateTest {
 
         // verify that the superflous document only gets deleted on the correct tranche - not on both...
         var dokumentsOfTranche1 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
-            .gesuchTrancheIdPath(tranchen.getTranchen().get(0).getId())
+            .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -294,7 +294,7 @@ class GesuchTrancheCreateTest {
             .body()
             .as(GesuchDokumentDto[].class);
         var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
-            .gesuchTrancheIdPath(tranchen.getTranchen().get(1).getId())
+            .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(1).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -415,7 +415,7 @@ class GesuchTrancheCreateTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getTranchen().size(), is(2));
+        assertThat(result.getCurrentTranchen().size(), is(2));
     }
 
     @Test

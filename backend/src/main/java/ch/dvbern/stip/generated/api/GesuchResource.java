@@ -11,6 +11,8 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderGsDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderSbDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -171,6 +173,16 @@ public interface GesuchResource {
     @Path("/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/gs/header/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchHeaderGsDto getGesuchHeaderGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/sb/header/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchHeaderSbDto getGesuchHeaderSb(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchId}/info")

@@ -101,7 +101,7 @@ class GesuchJuristischeAbklaerungTest {
             gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuchDtoSpec.getId())
         );
 
-        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getCurrentTranchen(), hasSize(1));
     }
 
     @Test
@@ -114,7 +114,7 @@ class GesuchJuristischeAbklaerungTest {
         );
         assertThat(
             "Gesuch ist in Abklaerung durch Rechtsabteilung",
-            gesuchInfo.getGesuchStatus(),
+            gesuchInfo.getState().getGesuchStatus(),
             is(GesuchstatusDtoSpec.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
         );
         final var ausbildungDto = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();

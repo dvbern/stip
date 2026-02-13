@@ -112,6 +112,8 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderGsDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderSbDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -188,6 +190,7 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
+    private final GesuchStateInfoMapper gesuchStateInfoMapper;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -1299,5 +1302,33 @@ public class GesuchService {
 
         gesuchStatusService.bulkTriggerStateMachineEvent(anspruch, GesuchStatusChangeEvent.STIPENDIENANSPRUCH);
         gesuchStatusService.bulkTriggerStateMachineEvent(keinAnspruch, GesuchStatusChangeEvent.KEIN_STIPENDIENANSPRUCH);
+    }
+
+    @Transactional
+    public GesuchHeaderGsDto getGesuchTrancheHeaderGs(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var currentGesuch = gesuchRepository.requireById(gesuch.getId());
+        final var historizedTranchen = gesuchTrancheService.getHistorizedGesuchTranches(gesuch);
+
+        return new GesuchHeaderGsDto()
+            .stateInfo(gesuchStateInfoMapper.toDto(currentGesuch))
+            .currentTranchen(currentGesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .historized(historizedTranchen);
+    }
+
+    @Transactional
+    public GesuchHeaderSbDto getGesuchTrancheHeaderSb(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
+        final var gesuch = gesuchTranche.getGesuch();
+        final var currentGesuch = gesuchRepository.requireById(gesuch.getId());
+        final var historizedTranchen = gesuchTrancheService.getHistorizedGesuchTranches(gesuch);
+
+        return new GesuchHeaderSbDto()
+            .periodeStart(currentGesuch.getGesuchsperiode().getGesuchsperiodeStart())
+            .periodeEnd(currentGesuch.getGesuchsperiode().getGesuchsperiodeStopp())
+            .stateInfo(gesuchStateInfoMapper.toDto(currentGesuch))
+            .currentTranchen(currentGesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .historized(historizedTranchen);
     }
 }

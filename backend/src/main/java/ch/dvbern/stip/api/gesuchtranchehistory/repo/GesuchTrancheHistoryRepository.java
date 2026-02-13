@@ -179,21 +179,34 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
-    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
-        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
-        // List<GesuchTranche>
+    public List<Pair<GesuchTranche, List<GesuchTranche>>> getAllAkzeptierteAenderungenAndRelatedTranchen(
+        final UUID gesuchId
+    ) {
         @SuppressWarnings("unchecked")
-        final List<GesuchTranche> abgehlenteAenderungList = AuditReaderFactory.get(em)
+        final Stream<GesuchTranche> akzeptierteAenderungs = AuditReaderFactory.get(em)
             .createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, true, true)
             .add(AuditEntity.property("gesuch_id").eq(gesuchId))
             .add(AuditEntity.revisionType().ne(RevisionType.DEL))
             .add(AuditEntity.revisionType().ne(RevisionType.ADD))
             .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.AKZEPTIERT))
             .add(AuditEntity.property("status").hasChanged())
-            .getResultList();
+            .getResultList()
+            .stream();
 
+        return akzeptierteAenderungs.map(
+            aenderung -> Pair.of(
+                aenderung,
+                aenderung.getGesuch().getTranchenTranchen().toList()
+            )
+        ).toList();
+    }
+
+    @Transactional
+    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
+        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
+        // List<GesuchTranche>
         @SuppressWarnings("unchecked")
         final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgehlenteAenderungen = AuditReaderFactory.get(em)
             .createQuery()

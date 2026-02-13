@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.HistorizedTranchenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,143 +24,59 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchTrancheListDto  implements Serializable {
-  private @Valid List<GesuchTrancheSlimDto> tranchen;
-  private @Valid List<GesuchTrancheSlimDto> initialTranchen;
-  private @Valid List<GesuchTrancheSlimDto> aenderungen;
-  private @Valid List<GesuchTrancheSlimDto> abgelehnteAenderungen;
+  private @Valid HistorizedTranchenDto historized;
+  private @Valid List<GesuchTrancheSlimDto> currentTranchen = new ArrayList<>();
 
   /**
    **/
-  public GesuchTrancheListDto tranchen(List<GesuchTrancheSlimDto> tranchen) {
-    this.tranchen = tranchen;
+  public GesuchTrancheListDto historized(HistorizedTranchenDto historized) {
+    this.historized = historized;
     return this;
   }
 
   
-  @JsonProperty("tranchen")
-  public List<GesuchTrancheSlimDto> getTranchen() {
-    return tranchen;
+  @JsonProperty("historized")
+  @NotNull
+  public HistorizedTranchenDto getHistorized() {
+    return historized;
   }
 
-  @JsonProperty("tranchen")
-  public void setTranchen(List<GesuchTrancheSlimDto> tranchen) {
-    this.tranchen = tranchen;
+  @JsonProperty("historized")
+  public void setHistorized(HistorizedTranchenDto historized) {
+    this.historized = historized;
   }
 
-  public GesuchTrancheListDto addTranchenItem(GesuchTrancheSlimDto tranchenItem) {
-    if (this.tranchen == null) {
-      this.tranchen = new ArrayList<>();
-    }
-
-    this.tranchen.add(tranchenItem);
-    return this;
-  }
-
-  public GesuchTrancheListDto removeTranchenItem(GesuchTrancheSlimDto tranchenItem) {
-    if (tranchenItem != null && this.tranchen != null) {
-      this.tranchen.remove(tranchenItem);
-    }
-
-    return this;
-  }
   /**
    **/
-  public GesuchTrancheListDto initialTranchen(List<GesuchTrancheSlimDto> initialTranchen) {
-    this.initialTranchen = initialTranchen;
+  public GesuchTrancheListDto currentTranchen(List<GesuchTrancheSlimDto> currentTranchen) {
+    this.currentTranchen = currentTranchen;
     return this;
   }
 
   
-  @JsonProperty("initialTranchen")
-  public List<GesuchTrancheSlimDto> getInitialTranchen() {
-    return initialTranchen;
+  @JsonProperty("currentTranchen")
+  @NotNull
+  public List<GesuchTrancheSlimDto> getCurrentTranchen() {
+    return currentTranchen;
   }
 
-  @JsonProperty("initialTranchen")
-  public void setInitialTranchen(List<GesuchTrancheSlimDto> initialTranchen) {
-    this.initialTranchen = initialTranchen;
+  @JsonProperty("currentTranchen")
+  public void setCurrentTranchen(List<GesuchTrancheSlimDto> currentTranchen) {
+    this.currentTranchen = currentTranchen;
   }
 
-  public GesuchTrancheListDto addInitialTranchenItem(GesuchTrancheSlimDto initialTranchenItem) {
-    if (this.initialTranchen == null) {
-      this.initialTranchen = new ArrayList<>();
+  public GesuchTrancheListDto addCurrentTranchenItem(GesuchTrancheSlimDto currentTranchenItem) {
+    if (this.currentTranchen == null) {
+      this.currentTranchen = new ArrayList<>();
     }
 
-    this.initialTranchen.add(initialTranchenItem);
+    this.currentTranchen.add(currentTranchenItem);
     return this;
   }
 
-  public GesuchTrancheListDto removeInitialTranchenItem(GesuchTrancheSlimDto initialTranchenItem) {
-    if (initialTranchenItem != null && this.initialTranchen != null) {
-      this.initialTranchen.remove(initialTranchenItem);
-    }
-
-    return this;
-  }
-  /**
-   **/
-  public GesuchTrancheListDto aenderungen(List<GesuchTrancheSlimDto> aenderungen) {
-    this.aenderungen = aenderungen;
-    return this;
-  }
-
-  
-  @JsonProperty("aenderungen")
-  public List<GesuchTrancheSlimDto> getAenderungen() {
-    return aenderungen;
-  }
-
-  @JsonProperty("aenderungen")
-  public void setAenderungen(List<GesuchTrancheSlimDto> aenderungen) {
-    this.aenderungen = aenderungen;
-  }
-
-  public GesuchTrancheListDto addAenderungenItem(GesuchTrancheSlimDto aenderungenItem) {
-    if (this.aenderungen == null) {
-      this.aenderungen = new ArrayList<>();
-    }
-
-    this.aenderungen.add(aenderungenItem);
-    return this;
-  }
-
-  public GesuchTrancheListDto removeAenderungenItem(GesuchTrancheSlimDto aenderungenItem) {
-    if (aenderungenItem != null && this.aenderungen != null) {
-      this.aenderungen.remove(aenderungenItem);
-    }
-
-    return this;
-  }
-  /**
-   **/
-  public GesuchTrancheListDto abgelehnteAenderungen(List<GesuchTrancheSlimDto> abgelehnteAenderungen) {
-    this.abgelehnteAenderungen = abgelehnteAenderungen;
-    return this;
-  }
-
-  
-  @JsonProperty("abgelehnteAenderungen")
-  public List<GesuchTrancheSlimDto> getAbgelehnteAenderungen() {
-    return abgelehnteAenderungen;
-  }
-
-  @JsonProperty("abgelehnteAenderungen")
-  public void setAbgelehnteAenderungen(List<GesuchTrancheSlimDto> abgelehnteAenderungen) {
-    this.abgelehnteAenderungen = abgelehnteAenderungen;
-  }
-
-  public GesuchTrancheListDto addAbgelehnteAenderungenItem(GesuchTrancheSlimDto abgelehnteAenderungenItem) {
-    if (this.abgelehnteAenderungen == null) {
-      this.abgelehnteAenderungen = new ArrayList<>();
-    }
-
-    this.abgelehnteAenderungen.add(abgelehnteAenderungenItem);
-    return this;
-  }
-
-  public GesuchTrancheListDto removeAbgelehnteAenderungenItem(GesuchTrancheSlimDto abgelehnteAenderungenItem) {
-    if (abgelehnteAenderungenItem != null && this.abgelehnteAenderungen != null) {
-      this.abgelehnteAenderungen.remove(abgelehnteAenderungenItem);
+  public GesuchTrancheListDto removeCurrentTranchenItem(GesuchTrancheSlimDto currentTranchenItem) {
+    if (currentTranchenItem != null && this.currentTranchen != null) {
+      this.currentTranchen.remove(currentTranchenItem);
     }
 
     return this;
@@ -174,15 +91,13 @@ public class GesuchTrancheListDto  implements Serializable {
       return false;
     }
     GesuchTrancheListDto gesuchTrancheList = (GesuchTrancheListDto) o;
-    return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen) &&
-        Objects.equals(this.aenderungen, gesuchTrancheList.aenderungen) &&
-        Objects.equals(this.abgelehnteAenderungen, gesuchTrancheList.abgelehnteAenderungen);
+    return Objects.equals(this.historized, gesuchTrancheList.historized) &&
+        Objects.equals(this.currentTranchen, gesuchTrancheList.currentTranchen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranchen, aenderungen, abgelehnteAenderungen);
+    return Objects.hash(historized, currentTranchen);
   }
 
   @Override
@@ -190,10 +105,8 @@ public class GesuchTrancheListDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheListDto {\n");
     
-    sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
-    sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
-    sb.append("    aenderungen: ").append(toIndentedString(aenderungen)).append("\n");
-    sb.append("    abgelehnteAenderungen: ").append(toIndentedString(abgelehnteAenderungen)).append("\n");
+    sb.append("    historized: ").append(toIndentedString(historized)).append("\n");
+    sb.append("    currentTranchen: ").append(toIndentedString(currentTranchen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

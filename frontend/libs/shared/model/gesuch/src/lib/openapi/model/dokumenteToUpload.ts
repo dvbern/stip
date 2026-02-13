@@ -19,7 +19,6 @@ export interface DokumenteToUpload {
     unterschriftenblaetter?: Array<UnterschriftenblattDokumentTyp>;
     sbCanFehlendeDokumenteUebermitteln?: boolean;
     gsCanDokumenteUebermitteln?: boolean;
-    sbCanBearbeitungAbschliessen?: boolean;
     sbCanUploadUnterschriftenblatt?: boolean;
 }
 

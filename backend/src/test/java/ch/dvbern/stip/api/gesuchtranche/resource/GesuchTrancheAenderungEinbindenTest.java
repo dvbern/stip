@@ -403,7 +403,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
+        assertThat(gesuchtranchen.getCurrentTranchen()).hasSize(2);
     }
 
     @Test
@@ -429,7 +429,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Order(16)
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisen()
-            .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
+            .gesuchTrancheIdPath(gesuchtranchen.getCurrentTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -446,7 +446,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(1);
+        assertThat(gesuchtranchen.getCurrentTranchen()).hasSize(1);
     }
 
     @Test
@@ -502,7 +502,7 @@ class GesuchTrancheAenderungEinbindenTest {
             .as(
                 GesuchTrancheListDtoSpec.class
             );
-        assertThat(gesuchtranchen.getTranchen()).hasSize(2);
+        assertThat(gesuchtranchen.getCurrentTranchen()).hasSize(2);
     }
 
     @TestAsFreigabestelle
@@ -510,7 +510,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @Test
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
-            .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
+            .gesuchTrancheIdPath(gesuchtranchen.getCurrentTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -522,14 +522,14 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsSachbearbeiter
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
-            .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
+            .gesuchTrancheIdPath(gesuchtranchen.getCurrentTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
         gesuchWithChanges = gesuchApiSpec.getGesuchSB()
-            .gesuchTrancheIdPath(gesuchtranchen.getTranchen().get(0).getId())
+            .gesuchTrancheIdPath(gesuchtranchen.getCurrentTranchen().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

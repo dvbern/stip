@@ -20,15 +20,14 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRevision,
@@ -36,11 +35,7 @@ import {
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
-import {
-  AenderungCompletionState,
-  GesuchAenderungStore,
-} from '@dv/shared/data-access/gesuch-aenderung';
-import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -66,7 +61,6 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
   imports: [
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatChipsModule,
@@ -76,6 +70,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternAppHeaderPartsDirective,
     SharedUiLoadingComponent,
     SharedUiDarlehenMenuComponent,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,16 +82,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
-  private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
-  private gesuchInfoStore = inject(GesuchInfoStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
   route = inject(ActivatedRoute);
-  gesuchAenderungStore = inject(GesuchAenderungStore);
   darlehenStore = inject(DarlehenStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -106,19 +99,21 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
-  private otherGesuchInfoSourceSig = toSignal(
+  private gesuchUpdatedSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
       filter(isDefined),
     ),
   );
 
-  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
-    this.gesuchIdSig,
-  );
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
+    ),
+  );
+  isInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
     ),
   );
   isAenderungRouteSig = toSignal(
@@ -126,29 +121,49 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
+
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
-      this.gesuchInfoStore.gesuchInfo().data?.canGetBerechnung;
+      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.canGetBerechnung;
 
     return canViewBerechnung;
   });
   isBeschwerdeHaengigSig = computed(() => {
     const beschwerdeHaengig =
-      this.gesuchInfoStore.gesuchInfo().data?.beschwerdeHaengig;
+      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.beschwerdeHaengig;
     return beschwerdeHaengig;
+  });
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
+    this.gesuchIdSig,
+  );
+  historizedSig = computed(() => {
+    const {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+    } = this.gesuchHeaderStore.viewSbSig().historized ?? {};
+    if (
+      !abgelehnteAenderungen?.length &&
+      !akzeptierteAenderungen?.length &&
+      !initial &&
+      !offeneAenderung
+    ) {
+      return null;
+    }
+    return {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+    };
   });
   isLoadingSig = computed(() => {
     return (
-      isPending(this.gesuchInfoStore.gesuchInfo()) ||
+      isPending(this.gesuchHeaderStore.headerSb()) ||
       isPending(this.gesuchStore.lastStatusChange())
     );
   });
-  listedAenderungen: AenderungCompletionState[] = [
-    'open',
-    'completed',
-    'rejected',
-    'initial',
-  ];
 
   isInfosRouteSig = computed(() => {
     const isActive = this.router.isActive('infos', {
@@ -162,38 +177,18 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   constructor() {
     effect(() => {
-      const gesuchId = this.gesuchIdSig();
-      if (gesuchId) {
-        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
-        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
-        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-      }
-    });
-
-    effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
+      this.gesuchUpdatedSig();
       if (gesuchTrancheId) {
-        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
-          gesuchTrancheId,
-        });
-      }
-    });
-
-    effect(() => {
-      const gesuch = this.otherGesuchInfoSourceSig();
-
-      if (gesuch?.id) {
-        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId: gesuch.id });
-        this.einreichenStore.validateSteps$({
-          gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
-        });
+        this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
       }
     });
   }
 
   availableTrancheInteractionSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus =
+      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.gesuchStatus;
 
     if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
@@ -204,23 +199,21 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchInfo = this.gesuchInfoStore.gesuchInfo().data;
-    const gesuchStatus = gesuchInfo?.gesuchStatus;
-
-    const sbCanBearbeitungAbschliessen =
-      this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
     const validations =
       this.einreichenStore.validationViewSig().invalidFormularProps.validations;
 
-    const canTriggerManuellPruefen =
-      this.gesuchInfoStore.gesuchInfo().data?.canTriggerManuellPruefen;
+    const {
+      gesuchStatus,
+      canTriggerManuellPruefen,
+      canBearbeitungAbschliessen,
+    } = this.gesuchHeaderStore.viewSbSig()?.stateInfo ?? {};
 
     if (!gesuchStatus) {
       return {};
     }
 
     const { permissions } = getGesuchPermissions(
-      gesuchInfo,
+      { gesuchStatus },
       this.config.appType,
       rolesMap,
     );
@@ -232,7 +225,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
           permissions,
-          hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
+          hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
       )
@@ -262,15 +255,8 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'STATUS_PRUEFUNG_AUSLOESEN':
       case 'BEREIT_FUER_BEARBEITUNG':
       case 'VERFUEGT':
-        this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
-        break;
       case 'VERSENDET':
-        this.gesuchStore.setStatus$[nextStatus]({
-          gesuchTrancheId,
-          onSuccess: () => {
-            this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-          },
-        });
+        this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
       case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
         SharedUiKommentarDialogComponent.open(this.dialog, {
@@ -379,14 +365,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   createTranche() {
     const id = this.gesuchIdSig();
-    const periode = this.gesuchInfoStore.gesuchInfo().data;
-    if (!id || !periode) return;
+    const { periodeStart, periodeEnd } =
+      this.gesuchHeaderStore.headerSb().data ?? {};
+    if (!id || !periodeStart || !periodeEnd) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createTranche',
       id,
-      minDate: new Date(periode.startDate),
-      maxDate: new Date(periode.endDate),
+      minDate: new Date(periodeStart),
+      maxDate: new Date(periodeEnd),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -48,9 +48,7 @@ export const appRoutes: Route[] = [
         path: 'fehlgeschlagene-zahlungen',
         title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
         loadChildren: () =>
-          import(
-            '@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen'
-          ).then(
+          import('@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen').then(
             (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
           ),
       },

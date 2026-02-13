@@ -373,6 +373,28 @@ Gesuch:
       $ref: '#/LocalDate'
     verfuegt:
       type: boolean
+GesuchStateInfo:
+  required:
+    - gesuchStatus
+    - beschwerdeHaengig
+    - canGetBerechnung
+    - canChangeGesuchsperiode
+    - canTriggerManuellPruefen
+    - canBearbeitungAbschliessen
+  type: object
+  properties:
+    gesuchStatus:
+      $ref: '#/Gesuchstatus'
+    beschwerdeHaengig:
+      type: boolean
+    canGetBerechnung:
+      type: boolean
+    canChangeGesuchsperiode:
+      type: boolean
+    canTriggerManuellPruefen:
+      type: boolean
+    canBearbeitungAbschliessen:
+      type: boolean
 PersoenlicheAngaben:
   required:
     - anrede
@@ -798,22 +820,54 @@ GesuchTranche:
       $ref: '#/GesuchTrancheStatus'
     typ:
       $ref: '#/GesuchTrancheTyp'
-GesuchTrancheList:
+TranchenWithVerfuegung:
+  required:
+    - tranchen
+    - berechnungId
   type: object
   properties:
     tranchen:
       type: array
       items:
         $ref: '#/GesuchTrancheSlim'
-    initialTranchen:
+    berechnungId:
+      $ref: '#/UUID'
+AenderungenWithVerfuegung:
+  required:
+    - aenderung
+  type: object
+  allOf:
+    - $ref: '#/TranchenWithVerfuegung'
+  properties:
+    aenderung:
+      $ref: '#/GesuchTrancheSlim'
+HistorizedTranchen:
+  required:
+    - akzeptierteAenderungen
+    - abgelehnteAenderungen
+  type: object
+  properties:
+    initial:
+      $ref: '#/TranchenWithVerfuegung'
+    offeneAenderung:
+      $ref: '#/GesuchTrancheSlim'
+    akzeptierteAenderungen:
       type: array
       items:
-        $ref: '#/GesuchTrancheSlim'
-    aenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
+        $ref: '#/AenderungenWithVerfuegung'
     abgelehnteAenderungen:
+      type: array
+      items:
+        $ref: '#/GesuchTrancheSlim'
+GesuchTrancheList:
+  required:
+    - historized
+    - currentTranchen
+  type: object
+  properties:
+    historized:
+      $ref: '#/HistorizedTranchen'
+    currentTranchen:
       type: array
       items:
         $ref: '#/GesuchTrancheSlim'

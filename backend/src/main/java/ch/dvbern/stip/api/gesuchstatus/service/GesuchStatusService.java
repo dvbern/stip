@@ -99,6 +99,11 @@ public class GesuchStatusService {
         return Gesuchstatus.SACHBEARBEITER_CAN_TRIGGER_ANSPRUCH_CHECK.contains(gesuch.getGesuchStatus());
     }
 
+    public boolean canBearbeitungAbschliessen(final Gesuch gesuch) {
+        return Gesuchstatus.SACHBEARBEITER_CAN_EDIT.contains(gesuch.getGesuchStatus())
+        && canFire(gesuch, GesuchStatusChangeEvent.IN_FREIGABE);
+    }
+
     public boolean canGetBerechnung(final Gesuch gesuch) {
         boolean canGetBerechnung = gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
         for (var gesuchTranche : gesuch.getGesuchTranchen()) {

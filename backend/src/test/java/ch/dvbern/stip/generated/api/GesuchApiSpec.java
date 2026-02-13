@@ -25,6 +25,8 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderGsDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -107,6 +109,8 @@ public class GesuchApiSpec {
                 getBerechnungForGesuch(),
                 getBerechnungsblattDownloadToken(),
                 getGesuchGS(),
+                getGesuchHeaderGs(),
+                getGesuchHeaderSb(),
                 getGesuchInfo(),
                 getGesuchSB(),
                 getGesucheGs(),
@@ -222,6 +226,14 @@ public class GesuchApiSpec {
 
     public GetGesuchGSOper getGesuchGS() {
         return new GetGesuchGSOper(createReqSpec());
+    }
+
+    public GetGesuchHeaderGsOper getGesuchHeaderGs() {
+        return new GetGesuchHeaderGsOper(createReqSpec());
+    }
+
+    public GetGesuchHeaderSbOper getGesuchHeaderSb() {
+        return new GetGesuchHeaderSbOper(createReqSpec());
     }
 
     public GetGesuchInfoOper getGesuchInfo() {
@@ -2205,6 +2217,152 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetGesuchGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Get the GS Gesuch header information for the given gesuchTranche
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchHeaderGsDtoSpec
+     */
+    public static class GetGesuchHeaderGsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/gs/header/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchHeaderGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/gs/header/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/gs/header/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchHeaderGsDtoSpec
+         */
+        public GesuchHeaderGsDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchHeaderGsDtoSpec> type = new TypeRef<GesuchHeaderGsDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchHeaderGsOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchHeaderGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchHeaderGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Get the SB Gesuch header information for the given gesuchTranche
+     * 
+     *
+     * @see #gesuchTrancheIdPath  (required)
+     * return GesuchHeaderSbDtoSpec
+     */
+    public static class GetGesuchHeaderSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/sb/header/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchHeaderSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/sb/header/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/sb/header/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchHeaderSbDtoSpec
+         */
+        public GesuchHeaderSbDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchHeaderSbDtoSpec> type = new TypeRef<GesuchHeaderSbDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchHeaderSbOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchHeaderSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchHeaderSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

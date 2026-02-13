@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.HistorizedTranchenDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -31,162 +32,78 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GesuchTrancheListDtoSpec
  */
 @JsonPropertyOrder({
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_TRANCHEN,
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_INITIAL_TRANCHEN,
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_AENDERUNGEN,
-  GesuchTrancheListDtoSpec.JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_HISTORIZED,
+  GesuchTrancheListDtoSpec.JSON_PROPERTY_CURRENT_TRANCHEN
 })
 @JsonTypeName("GesuchTrancheList")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchTrancheListDtoSpec {
-  public static final String JSON_PROPERTY_TRANCHEN = "tranchen";
-  private List<GesuchTrancheSlimDtoSpec> tranchen;
+  public static final String JSON_PROPERTY_HISTORIZED = "historized";
+  private HistorizedTranchenDtoSpec historized;
 
-  public static final String JSON_PROPERTY_INITIAL_TRANCHEN = "initialTranchen";
-  private List<GesuchTrancheSlimDtoSpec> initialTranchen;
-
-  public static final String JSON_PROPERTY_AENDERUNGEN = "aenderungen";
-  private List<GesuchTrancheSlimDtoSpec> aenderungen;
-
-  public static final String JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN = "abgelehnteAenderungen";
-  private List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen;
+  public static final String JSON_PROPERTY_CURRENT_TRANCHEN = "currentTranchen";
+  private List<GesuchTrancheSlimDtoSpec> currentTranchen;
 
   public GesuchTrancheListDtoSpec() {
   }
 
-  public GesuchTrancheListDtoSpec tranchen(List<GesuchTrancheSlimDtoSpec> tranchen) {
+  public GesuchTrancheListDtoSpec historized(HistorizedTranchenDtoSpec historized) {
     
-    this.tranchen = tranchen;
-    return this;
-  }
-
-  public GesuchTrancheListDtoSpec addTranchenItem(GesuchTrancheSlimDtoSpec tranchenItem) {
-    if (this.tranchen == null) {
-      this.tranchen = new ArrayList<>();
-    }
-    this.tranchen.add(tranchenItem);
+    this.historized = historized;
     return this;
   }
 
    /**
-   * Get tranchen
-   * @return tranchen
+   * Get historized
+   * @return historized
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_TRANCHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_HISTORIZED)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<GesuchTrancheSlimDtoSpec> getTranchen() {
-    return tranchen;
+  public HistorizedTranchenDtoSpec getHistorized() {
+    return historized;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_TRANCHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setTranchen(List<GesuchTrancheSlimDtoSpec> tranchen) {
-    this.tranchen = tranchen;
+  @JsonProperty(JSON_PROPERTY_HISTORIZED)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHistorized(HistorizedTranchenDtoSpec historized) {
+    this.historized = historized;
   }
 
 
-  public GesuchTrancheListDtoSpec initialTranchen(List<GesuchTrancheSlimDtoSpec> initialTranchen) {
+  public GesuchTrancheListDtoSpec currentTranchen(List<GesuchTrancheSlimDtoSpec> currentTranchen) {
     
-    this.initialTranchen = initialTranchen;
+    this.currentTranchen = currentTranchen;
     return this;
   }
 
-  public GesuchTrancheListDtoSpec addInitialTranchenItem(GesuchTrancheSlimDtoSpec initialTranchenItem) {
-    if (this.initialTranchen == null) {
-      this.initialTranchen = new ArrayList<>();
+  public GesuchTrancheListDtoSpec addCurrentTranchenItem(GesuchTrancheSlimDtoSpec currentTranchenItem) {
+    if (this.currentTranchen == null) {
+      this.currentTranchen = new ArrayList<>();
     }
-    this.initialTranchen.add(initialTranchenItem);
+    this.currentTranchen.add(currentTranchenItem);
     return this;
   }
 
    /**
-   * Get initialTranchen
-   * @return initialTranchen
+   * Get currentTranchen
+   * @return currentTranchen
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<GesuchTrancheSlimDtoSpec> getInitialTranchen() {
-    return initialTranchen;
+  public List<GesuchTrancheSlimDtoSpec> getCurrentTranchen() {
+    return currentTranchen;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_INITIAL_TRANCHEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInitialTranchen(List<GesuchTrancheSlimDtoSpec> initialTranchen) {
-    this.initialTranchen = initialTranchen;
-  }
-
-
-  public GesuchTrancheListDtoSpec aenderungen(List<GesuchTrancheSlimDtoSpec> aenderungen) {
-    
-    this.aenderungen = aenderungen;
-    return this;
-  }
-
-  public GesuchTrancheListDtoSpec addAenderungenItem(GesuchTrancheSlimDtoSpec aenderungenItem) {
-    if (this.aenderungen == null) {
-      this.aenderungen = new ArrayList<>();
-    }
-    this.aenderungen.add(aenderungenItem);
-    return this;
-  }
-
-   /**
-   * Get aenderungen
-   * @return aenderungen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_AENDERUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public List<GesuchTrancheSlimDtoSpec> getAenderungen() {
-    return aenderungen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_AENDERUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAenderungen(List<GesuchTrancheSlimDtoSpec> aenderungen) {
-    this.aenderungen = aenderungen;
-  }
-
-
-  public GesuchTrancheListDtoSpec abgelehnteAenderungen(List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen) {
-    
-    this.abgelehnteAenderungen = abgelehnteAenderungen;
-    return this;
-  }
-
-  public GesuchTrancheListDtoSpec addAbgelehnteAenderungenItem(GesuchTrancheSlimDtoSpec abgelehnteAenderungenItem) {
-    if (this.abgelehnteAenderungen == null) {
-      this.abgelehnteAenderungen = new ArrayList<>();
-    }
-    this.abgelehnteAenderungen.add(abgelehnteAenderungenItem);
-    return this;
-  }
-
-   /**
-   * Get abgelehnteAenderungen
-   * @return abgelehnteAenderungen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public List<GesuchTrancheSlimDtoSpec> getAbgelehnteAenderungen() {
-    return abgelehnteAenderungen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ABGELEHNTE_AENDERUNGEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAbgelehnteAenderungen(List<GesuchTrancheSlimDtoSpec> abgelehnteAenderungen) {
-    this.abgelehnteAenderungen = abgelehnteAenderungen;
+  @JsonProperty(JSON_PROPERTY_CURRENT_TRANCHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCurrentTranchen(List<GesuchTrancheSlimDtoSpec> currentTranchen) {
+    this.currentTranchen = currentTranchen;
   }
 
   @Override
@@ -198,25 +115,21 @@ public class GesuchTrancheListDtoSpec {
       return false;
     }
     GesuchTrancheListDtoSpec gesuchTrancheList = (GesuchTrancheListDtoSpec) o;
-    return Objects.equals(this.tranchen, gesuchTrancheList.tranchen) &&
-        Objects.equals(this.initialTranchen, gesuchTrancheList.initialTranchen) &&
-        Objects.equals(this.aenderungen, gesuchTrancheList.aenderungen) &&
-        Objects.equals(this.abgelehnteAenderungen, gesuchTrancheList.abgelehnteAenderungen);
+    return Objects.equals(this.historized, gesuchTrancheList.historized) &&
+        Objects.equals(this.currentTranchen, gesuchTrancheList.currentTranchen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(tranchen, initialTranchen, aenderungen, abgelehnteAenderungen);
+    return Objects.hash(historized, currentTranchen);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchTrancheListDtoSpec {\n");
-    sb.append("    tranchen: ").append(toIndentedString(tranchen)).append("\n");
-    sb.append("    initialTranchen: ").append(toIndentedString(initialTranchen)).append("\n");
-    sb.append("    aenderungen: ").append(toIndentedString(aenderungen)).append("\n");
-    sb.append("    abgelehnteAenderungen: ").append(toIndentedString(abgelehnteAenderungen)).append("\n");
+    sb.append("    historized: ").append(toIndentedString(historized)).append("\n");
+    sb.append("    currentTranchen: ").append(toIndentedString(currentTranchen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

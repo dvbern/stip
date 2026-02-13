@@ -9,19 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Gesuchstatus } from './gesuchstatus';
+import { GesuchStateInfo } from './gesuchStateInfo';
 
 export interface GesuchInfo { 
     id: string;
     gesuchNummer: string;
-    gesuchStatus: Gesuchstatus;
     startDate: string;
     endDate: string;
-    canGetBerechnung: boolean;
-    beschwerdeHaengig: boolean;
-    canTriggerManuellPruefen: boolean;
-    canChangeGesuchsperiode: boolean;
+    state: GesuchStateInfo;
 }
-
-
 

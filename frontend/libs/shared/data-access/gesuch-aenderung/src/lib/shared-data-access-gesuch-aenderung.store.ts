@@ -1,4 +1,4 @@
-import { Injectable, Signal, computed, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -19,7 +19,6 @@ import {
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
 import { byAppType } from '@dv/shared/model/permission-state';
-import { getRelativeTrancheRoute } from '@dv/shared/model/router';
 import {
   shouldIgnoreBadRequestErrorsIf,
   shouldIgnoreNotFoundErrorsIf,
@@ -52,20 +51,6 @@ export type AenderungChangeState = Extract<
   'MANUELLE_AENDERUNG' | 'AKZEPTIERT' | 'ABGELEHNT'
 >;
 
-export type AenderungCompletionState =
-  | 'open'
-  | 'completed'
-  | 'rejected'
-  | 'initial';
-const aenderungStatusMap = {
-  IN_BEARBEITUNG_GS: null,
-  UEBERPRUEFEN: 'open',
-  FEHLENDE_DOKUMENTE: 'open',
-  ABGELEHNT: null,
-  AKZEPTIERT: 'completed',
-  MANUELLE_AENDERUNG: 'completed',
-} satisfies Record<GesuchTrancheStatus, AenderungCompletionState | null>;
-
 @Injectable({ providedIn: 'root' })
 export class GesuchAenderungStore extends signalStore(
   { protectedState: false },
@@ -76,82 +61,12 @@ export class GesuchAenderungStore extends signalStore(
   private config = inject(SharedModelCompileTimeConfig);
   private router = inject(Router);
 
-  aenderungenViewSig = computed(() => {
-    const tranchenList = this.cachedTranchenList();
-    const initialGesucheList = this.cachedTranchenList();
-    const [aenderungen, abgelehnteAenderungen, initialGesuche] = (
-      [
-        ['aenderung', tranchenList.data?.aenderungen],
-        ['aenderung', tranchenList.data?.abgelehnteAenderungen],
-        ['initial', initialGesucheList.data?.initialTranchen],
-      ] as const
-    ).map(
-      ([route, lists]) =>
-        lists?.map((tranche, index) => ({
-          ...tranche,
-          index,
-          route: getTrancheRoute(route),
-          revision: tranche.revision ?? undefined, // API sends null
-        })) ?? [],
-    );
+  tranchenListViewSig = computed(() => {
     return {
-      loading: isPending(tranchenList),
-      hasAenderungen:
-        aenderungen.length > 0 ||
-        abgelehnteAenderungen.length > 0 ||
-        initialGesuche.length > 0,
-      aenderungen,
-      abgelehnteAenderungen,
-      initialGesuche,
-      byStatus: {
-        open: [],
-        completed: [],
-        ...aenderungen.reduce(
-          (acc, tranche) => {
-            const key = aenderungStatusMap[tranche.status];
-            if (key) {
-              if (!acc[key]) {
-                acc[key] = [];
-              }
-              acc[key].push(tranche);
-            }
-            return acc;
-          },
-          {} as Partial<Record<AenderungCompletionState, typeof aenderungen>>,
-        ),
-        rejected: abgelehnteAenderungen,
-        initial: initialGesuche,
-      },
+      list: this.cachedTranchenList().data,
+      isLoading: isPending(this.cachedTranchenList()),
     };
   });
-
-  tranchenViewSig = computed(() => {
-    const list = this.cachedTranchenList();
-    return {
-      loading: isPending(list),
-      list: list.data?.tranchen?.filter((t) => t.typ === 'TRANCHE') ?? [],
-    };
-  });
-
-  getRelativeTranchenViewSig = (gesuchIdSig: Signal<string | undefined>) => {
-    const relativeRouteSig = getRelativeTrancheRoute(this.router, 'TRANCHE');
-
-    return computed(() => {
-      const gesuchId = gesuchIdSig();
-      const relativeRoute = relativeRouteSig();
-      const listRd = this.tranchenViewSig();
-
-      return {
-        ...listRd,
-        list: listRd.list.map((tranche) => ({
-          ...tranche,
-          url: relativeRoute
-            ? this.router.createUrlTree([...relativeRoute, tranche.id])
-            : ['/', 'gesuch', gesuchId, 'tranche', tranche.id],
-        })),
-      };
-    });
-  };
 
   getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
     pipe(

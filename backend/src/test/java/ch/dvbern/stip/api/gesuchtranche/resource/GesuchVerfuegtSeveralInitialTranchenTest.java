@@ -166,7 +166,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             .extract()
             .body()
             .as(GesuchTrancheListDtoSpec.class);
-        assertThat(tranchen.getInitialTranchen()).hasSize(2);
+        assertThat(tranchen.getHistorized().getInitial().getTranchen()).hasSize(2);
     }
 
     @Test

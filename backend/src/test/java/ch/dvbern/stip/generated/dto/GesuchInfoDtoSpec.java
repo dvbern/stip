@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchStateInfoDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -32,13 +32,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchInfoDtoSpec.JSON_PROPERTY_ID,
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
-  GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_GET_BERECHNUNG,
-  GesuchInfoDtoSpec.JSON_PROPERTY_BESCHWERDE_HAENGIG,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
-  GesuchInfoDtoSpec.JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE
+  GesuchInfoDtoSpec.JSON_PROPERTY_STATE
 })
 @JsonTypeName("GesuchInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,26 +45,14 @@ public class GesuchInfoDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
   private String gesuchNummer;
 
-  public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
-  private GesuchstatusDtoSpec gesuchStatus;
-
   public static final String JSON_PROPERTY_START_DATE = "startDate";
   private LocalDate startDate;
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
 
-  public static final String JSON_PROPERTY_CAN_GET_BERECHNUNG = "canGetBerechnung";
-  private Boolean canGetBerechnung;
-
-  public static final String JSON_PROPERTY_BESCHWERDE_HAENGIG = "beschwerdeHaengig";
-  private Boolean beschwerdeHaengig;
-
-  public static final String JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN = "canTriggerManuellPruefen";
-  private Boolean canTriggerManuellPruefen;
-
-  public static final String JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE = "canChangeGesuchsperiode";
-  private Boolean canChangeGesuchsperiode;
+  public static final String JSON_PROPERTY_STATE = "state";
+  private GesuchStateInfoDtoSpec state;
 
   public GesuchInfoDtoSpec() {
   }
@@ -125,32 +109,6 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  public GesuchInfoDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
-    
-    this.gesuchStatus = gesuchStatus;
-    return this;
-  }
-
-   /**
-   * Get gesuchStatus
-   * @return gesuchStatus
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public GesuchstatusDtoSpec getGesuchStatus() {
-    return gesuchStatus;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
-    this.gesuchStatus = gesuchStatus;
-  }
-
-
   public GesuchInfoDtoSpec startDate(LocalDate startDate) {
     
     this.startDate = startDate;
@@ -203,107 +161,29 @@ public class GesuchInfoDtoSpec {
   }
 
 
-  public GesuchInfoDtoSpec canGetBerechnung(Boolean canGetBerechnung) {
+  public GesuchInfoDtoSpec state(GesuchStateInfoDtoSpec state) {
     
-    this.canGetBerechnung = canGetBerechnung;
+    this.state = state;
     return this;
   }
 
    /**
-   * Get canGetBerechnung
-   * @return canGetBerechnung
+   * Get state
+   * @return state
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_GET_BERECHNUNG)
+  @JsonProperty(JSON_PROPERTY_STATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getCanGetBerechnung() {
-    return canGetBerechnung;
+  public GesuchStateInfoDtoSpec getState() {
+    return state;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_CAN_GET_BERECHNUNG)
+  @JsonProperty(JSON_PROPERTY_STATE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanGetBerechnung(Boolean canGetBerechnung) {
-    this.canGetBerechnung = canGetBerechnung;
-  }
-
-
-  public GesuchInfoDtoSpec beschwerdeHaengig(Boolean beschwerdeHaengig) {
-    
-    this.beschwerdeHaengig = beschwerdeHaengig;
-    return this;
-  }
-
-   /**
-   * Get beschwerdeHaengig
-   * @return beschwerdeHaengig
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getBeschwerdeHaengig() {
-    return beschwerdeHaengig;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BESCHWERDE_HAENGIG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
-    this.beschwerdeHaengig = beschwerdeHaengig;
-  }
-
-
-  public GesuchInfoDtoSpec canTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
-    
-    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
-    return this;
-  }
-
-   /**
-   * Get canTriggerManuellPruefen
-   * @return canTriggerManuellPruefen
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getCanTriggerManuellPruefen() {
-    return canTriggerManuellPruefen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
-    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
-  }
-
-
-  public GesuchInfoDtoSpec canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
-    
-    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
-    return this;
-  }
-
-   /**
-   * Get canChangeGesuchsperiode
-   * @return canChangeGesuchsperiode
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Boolean getCanChangeGesuchsperiode() {
-    return canChangeGesuchsperiode;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
-    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+  public void setState(GesuchStateInfoDtoSpec state) {
+    this.state = state;
   }
 
   @Override
@@ -317,18 +197,14 @@ public class GesuchInfoDtoSpec {
     GesuchInfoDtoSpec gesuchInfo = (GesuchInfoDtoSpec) o;
     return Objects.equals(this.id, gesuchInfo.id) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
-        Objects.equals(this.gesuchStatus, gesuchInfo.gesuchStatus) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
-        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
-        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
-        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
-        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
+        Objects.equals(this.state, gesuchInfo.state);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
+    return Objects.hash(id, gesuchNummer, startDate, endDate, state);
   }
 
   @Override
@@ -337,13 +213,9 @@ public class GesuchInfoDtoSpec {
     sb.append("class GesuchInfoDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
-    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
-    sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
-    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
-    sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
-    sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
+    sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("}");
     return sb.toString();
   }

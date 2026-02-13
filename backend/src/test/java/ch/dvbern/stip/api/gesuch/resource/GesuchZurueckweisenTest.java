@@ -98,7 +98,7 @@ class GesuchZurueckweisenTest {
             gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getCurrentTranchen(), hasSize(1));
     }
 
     @Test
@@ -179,6 +179,6 @@ class GesuchZurueckweisenTest {
             gesuchTrancheApiSpec.getAllTranchenForGesuchSB().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat(message, gesuchTranchen.getTranchen(), hasSize(size));
+        assertThat(message, gesuchTranchen.getCurrentTranchen(), hasSize(size));
     }
 }

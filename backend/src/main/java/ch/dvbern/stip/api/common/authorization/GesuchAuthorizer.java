@@ -243,8 +243,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanBearbeitungAbschliessen(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_FREIGABE);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!gesuchStatusService.canBearbeitungAbschliessen(gesuch)) {
+            forbidden();
+        }
     }
 
     public void assertCanPerformStatusChange(final UUID gesuchId, GesuchStatusChangeEvent gesuchStatusChangeEvent) {

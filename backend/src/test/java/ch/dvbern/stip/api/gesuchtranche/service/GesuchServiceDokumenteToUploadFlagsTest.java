@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -52,7 +51,6 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -287,61 +285,5 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert
         assertThat(dokumenteToUploadDto.getSbCanFehlendeDokumenteUebermitteln(), is(false));
-    }
-
-    @Test
-    void sbCanBearbeitungAbschliessenTest() {
-        /*
-         * all GesuchDokuments must be accepted
-         */
-        // arrange
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
-        when(requiredDokumentService.getSBCanBearbeitungAbschliessen(any())).thenCallRealMethod();
-        Mockito.doNothing().when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        // act
-        var dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(true));
-
-        // arrange
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.ABGELEHNT);
-        // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
-
-        /*
-         * No GesuchDokument should be required
-         */
-        // arrange
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
-
-        /*
-         * also test validation
-         */
-        // arrange
-        Mockito.doThrow(ValidationsException.class).when(gesuchTrancheValidatorService).validateBearbeitungAbschliessen(any());
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        // act
-        dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
-        // assert
-        assertThat(dokumenteToUploadDto.getSbCanBearbeitungAbschliessen(), is(false));
     }
 }

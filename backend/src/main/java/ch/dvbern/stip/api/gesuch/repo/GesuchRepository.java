@@ -210,14 +210,14 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchTranche = QGesuchTranche.gesuchTranche;
         var gesuchFormular = QGesuchFormular.gesuchFormular;
-        var personInAubsilung = QPersonInAusbildung.personInAusbildung;
+        var personInAusbildung = QPersonInAusbildung.personInAusbildung;
 
         return queryFactory.select(Q_GESUCH)
             .distinct()
             .from(gesuchTranche)
             .join(gesuchTranche.gesuchFormular, gesuchFormular)
-            .join(gesuchFormular.personInAusbildung, personInAubsilung)
-            .where(personInAubsilung.sozialversicherungsnummer.eq(svNummer))
+            .join(gesuchFormular.personInAusbildung, personInAusbildung)
+            .where(personInAusbildung.sozialversicherungsnummer.eq(svNummer))
             .stream();
     }
 

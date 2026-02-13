@@ -143,28 +143,37 @@ export class SharedFeatureGesuchFormTrancheComponent {
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
-    if (!currentTranche) {
+    const { list, isLoading } = this.gesuchAenderungStore.tranchenListViewSig();
+
+    if (!currentTranche || isLoading) {
       return '…';
     }
 
+    const { currentTranchen, historized } = list ?? {};
+
     const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
-    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
-    const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
-    const list = {
-      TRANCHE: [tranchen.list],
-      AENDERUNG: [aenderungen.aenderungen, aenderungen.abgelehnteAenderungen],
-      INITIAL: [aenderungen.initialGesuche],
+    const allTranchen = {
+      TRANCHE: [currentTranchen ?? []],
+      AENDERUNG: [
+        historized?.akzeptierteAenderungen?.map((a) => a.aenderung) ?? [],
+        historized?.abgelehnteAenderungen ?? [],
+      ],
+      INITIAL: [historized?.initial?.tranchen ?? []],
     } satisfies Record<GesuchUrlType, unknown>;
     const index = gesuchUrlTyp
       ? findIndexInOneOf(
-          (aenderung) =>
-            aenderung.id === currentTranche.id &&
-            isDefined(aenderung.revision) === isDefined(this.revisionSig()),
-          ...list[gesuchUrlTyp],
+          (tranche) =>
+            tranche.id === currentTranche.id &&
+            isDefined(tranche.revision) === isDefined(this.revisionSig()),
+          ...allTranchen[gesuchUrlTyp],
         )
       : -1;
 
-    return index >= 0 ? index + 1 : '…';
+    const foundIndex = index >= 0 ? index + 1 : null;
+    if (foundIndex) {
+      return foundIndex;
+    }
+    return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
   });
 
   currentGesuchSig = computed(

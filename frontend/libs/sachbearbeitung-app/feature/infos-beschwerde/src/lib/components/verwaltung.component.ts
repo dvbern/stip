@@ -48,7 +48,8 @@ export class VerwaltungComponent {
   );
 
   canCreateEntscheidSig = computed(() => {
-    const gesuchStatus = this.gesuchInfoStore.gesuchInfo.data()?.gesuchStatus;
+    const gesuchStatus =
+      this.gesuchInfoStore.gesuchInfo.data()?.state.gesuchStatus;
     if (!gesuchStatus) {
       return false;
     }
@@ -90,7 +91,7 @@ export class VerwaltungComponent {
   });
 
   entscheidHochladen() {
-    const gesuchId = this.gesuchInfoStore.gesuchInfo().data?.id;
+    const gesuchId = this.gesuchIdSig();
 
     if (!gesuchId) {
       return;
@@ -118,7 +119,7 @@ export class VerwaltungComponent {
   }
 
   setBeschwerdeTo(beschwerdeHaengig: boolean) {
-    const gesuchId = this.gesuchInfoStore.gesuchInfo().data?.id;
+    const gesuchId = this.gesuchIdSig();
 
     if (!gesuchId) {
       return;
