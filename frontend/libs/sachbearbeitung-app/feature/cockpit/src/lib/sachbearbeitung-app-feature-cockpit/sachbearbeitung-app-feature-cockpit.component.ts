@@ -96,7 +96,7 @@ import {
 } from '@dv/shared/util/validator-date';
 
 const DEFAULT_FILTER = {
-  jurist: 'MEINE_JURISTISCHE_ABKLAERUNG',
+  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG',
   other: 'MEINE_BEARBEITBAR',
 } satisfies Record<string, GesuchFilter>;
 
@@ -130,7 +130,7 @@ type DashboardFormFields =
 type QuickFilterGroup =
   | 'GESUCHE'
   | 'BEARBEITBAR'
-  | 'JURISTISCHE_ABKLAERUNG'
+  | 'JURIST'
   | 'DRUCKBAR_VERFUEGUNGEN'
   | 'DRUCKBAR_DATENSCHUTZBRIEFE';
 
@@ -259,60 +259,77 @@ export class SachbearbeitungAppFeatureCockpitComponent
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
 
-  // Exhaustive quick filter configuration
-  private readonly quickFilterConfig = {
-    MEINE_GESUCHE: {
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
-      group: 'GESUCHE',
-    },
-    ALLE_GESUCHE: {
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
-      group: 'GESUCHE',
-    },
-    MEINE_PENDENTE_GESUCHE: {
+  private readonly quickFilterConfig: {
+    filter: GesuchFilter;
+    roles: BenutzerRole[];
+    group: QuickFilterGroup;
+  }[] = [
+    {
+      filter: 'MEINE_GESUCHE',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'GESUCHE',
     },
-    ALLE_PENDENTE_GESUCHE: {
+    {
+      filter: 'ALLE_GESUCHE',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'GESUCHE',
     },
-    MEINE_BEARBEITBAR: {
+    {
+      filter: 'MEINE_PENDENTE_GESUCHE',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'GESUCHE',
+    },
+    {
+      filter: 'ALLE_PENDENTE_GESUCHE',
+      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      group: 'GESUCHE',
+    },
+    {
+      filter: 'MEINE_BEARBEITBAR',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'BEARBEITBAR',
     },
-    ALLE_BEARBEITBAR: {
+    {
+      filter: 'ALLE_BEARBEITBAR',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'BEARBEITBAR',
     },
-    MEINE_JURISTISCHE_ABKLAERUNG: {
-      roles: ['V0_Jurist'],
-      group: 'JURISTISCHE_ABKLAERUNG',
-    },
-    ALLE_JURISTISCHE_ABKLAERUNG: {
-      roles: ['V0_Jurist'],
-      group: 'JURISTISCHE_ABKLAERUNG',
-    },
-    MEINE_DRUCKBAR_VERFUEGUNGEN: {
+    {
+      filter: 'MEINE_DRUCKBAR_VERFUEGUNGEN',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_VERFUEGUNGEN',
     },
-    ALLE_DRUCKBAR_VERFUEGUNGEN: {
+    {
+      filter: 'ALLE_DRUCKBAR_VERFUEGUNGEN',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_VERFUEGUNGEN',
     },
-    MEINE_DRUCKBAR_DATENSCHUTZBRIEFE: {
+    {
+      filter: 'MEINE_DRUCKBAR_DATENSCHUTZBRIEFE',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
-    ALLE_DRUCKBAR_DATENSCHUTZBRIEFE: {
+    {
+      filter: 'ALLE_DRUCKBAR_DATENSCHUTZBRIEFE',
       roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
       group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     },
-  } satisfies Record<
-    GesuchFilter,
-    { roles: BenutzerRole[]; group: QuickFilterGroup }
-  >;
+    {
+      filter: 'ALLE_JURISTISCHE_ABKLAERUNG',
+      roles: ['V0_Jurist'],
+      group: 'JURIST',
+    },
+    {
+      filter: 'ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG',
+      roles: ['V0_Jurist'],
+      group: 'JURIST',
+    },
+    {
+      filter: 'ALLE_GESUCHE',
+      roles: ['V0_Jurist'],
+      group: 'JURIST',
+    },
+  ];
 
   // Signals and computed values for form changes and filtering
   private letzteAktivitaetFromChangedSig = toSignal(
@@ -321,27 +338,28 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
+
   availableQuickFiltersSig = computed<AvailableFilters>(() => {
     const activeRoles = this.permissionStore.rolesMapSig();
 
-    return Object.entries(this.quickFilterConfig)
-      .filter(([, { roles }]) => roles.some((r) => activeRoles?.[r]))
-      .map(([typ, { roles }]) => ({
-        typ: typ as GesuchFilter,
+    const filters = this.quickFilterConfig
+      .filter(({ roles }) => roles.some((r) => activeRoles?.[r]))
+      .map(({ filter, roles, group }) => ({
+        typ: filter,
         roles,
-      }))
-      .reduce((groups, filter) => {
-        const group = this.quickFilterConfig[filter.typ].group;
+        group,
+      }));
 
-        const existingGroup = groups.find((g) => g.group === group);
-        if (existingGroup) {
-          existingGroup.filters.push(filter);
-        } else {
-          groups.push({ group, filters: [filter] });
-        }
+    return filters.reduce((groups, { typ, roles, group }) => {
+      const existingGroup = groups.find((g) => g.group === group);
+      if (existingGroup) {
+        existingGroup.filters.push({ typ, roles });
+      } else {
+        groups.push({ group, filters: [{ typ, roles }] });
+      }
 
-        return groups;
-      }, [] as AvailableFilters);
+      return groups;
+    }, [] as AvailableFilters);
   });
 
   handleQuickFilterClick(filter: GesuchFilter) {

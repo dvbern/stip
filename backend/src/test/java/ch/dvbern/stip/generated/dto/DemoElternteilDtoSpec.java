@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -44,6 +43,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoElternteilDtoSpec.JSON_PROPERTY_IDENTISCHER_ZIVILRECHTLICHER_WOHNSITZ_ORT,
   DemoElternteilDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   DemoElternteilDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoElternteilDtoSpec.JSON_PROPERTY_ALTER,
   DemoElternteilDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
   DemoElternteilDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
   DemoElternteilDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING
@@ -94,7 +94,10 @@ public class DemoElternteilDtoSpec {
   private Integer wohnkosten;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
+  private String geburtsdatum;
+
+  public static final String JSON_PROPERTY_ALTER = "alter";
+  private Integer alter;
 
   public static final String JSON_PROPERTY_TELEFONNUMMER = "telefonnummer";
   private String telefonnummer;
@@ -472,7 +475,7 @@ public class DemoElternteilDtoSpec {
   }
 
 
-  public DemoElternteilDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DemoElternteilDtoSpec geburtsdatum(String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -486,15 +489,41 @@ public class DemoElternteilDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGeburtsdatum() {
+  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DemoElternteilDtoSpec alter(Integer alter) {
+    
+    this.alter = alter;
+    return this;
+  }
+
+   /**
+   * Get alter
+   * @return alter
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlter() {
+    return alter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
 
@@ -599,6 +628,7 @@ public class DemoElternteilDtoSpec {
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoElternteil.identischerZivilrechtlicherWohnsitzOrt) &&
         Objects.equals(this.wohnkosten, demoElternteil.wohnkosten) &&
         Objects.equals(this.geburtsdatum, demoElternteil.geburtsdatum) &&
+        Objects.equals(this.alter, demoElternteil.alter) &&
         Objects.equals(this.telefonnummer, demoElternteil.telefonnummer) &&
         Objects.equals(this.sozialhilfebeitraege, demoElternteil.sozialhilfebeitraege) &&
         Objects.equals(this.ausweisbFluechtling, demoElternteil.ausweisbFluechtling);
@@ -606,7 +636,7 @@ public class DemoElternteilDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, geburtsdatum, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling);
+    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, geburtsdatum, alter, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling);
   }
 
   @Override
@@ -628,6 +658,7 @@ public class DemoElternteilDtoSpec {
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    ausweisbFluechtling: ").append(toIndentedString(ausweisbFluechtling)).append("\n");

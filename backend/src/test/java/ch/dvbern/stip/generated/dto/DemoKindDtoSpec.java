@@ -21,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -32,6 +31,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoKindDtoSpec.JSON_PROPERTY_NACHNAME,
   DemoKindDtoSpec.JSON_PROPERTY_VORNAME,
   DemoKindDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  DemoKindDtoSpec.JSON_PROPERTY_ALTER,
   DemoKindDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA,
   DemoKindDtoSpec.JSON_PROPERTY_AUSBILDUNGSSITUATION,
   DemoKindDtoSpec.JSON_PROPERTY_UNTERHALTSBEITRAEGE,
@@ -50,7 +50,10 @@ public class DemoKindDtoSpec {
   private String vorname;
 
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
-  private LocalDate geburtsdatum;
+  private String geburtsdatum;
+
+  public static final String JSON_PROPERTY_ALTER = "alter";
+  private Integer alter;
 
   public static final String JSON_PROPERTY_WOHNSITZ_ANTEIL_PIA = "wohnsitzAnteilPia";
   private Integer wohnsitzAnteilPia;
@@ -128,7 +131,7 @@ public class DemoKindDtoSpec {
   }
 
 
-  public DemoKindDtoSpec geburtsdatum(LocalDate geburtsdatum) {
+  public DemoKindDtoSpec geburtsdatum(String geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
     return this;
@@ -142,15 +145,41 @@ public class DemoKindDtoSpec {
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public LocalDate getGeburtsdatum() {
+  public String getGeburtsdatum() {
     return geburtsdatum;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GEBURTSDATUM)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGeburtsdatum(LocalDate geburtsdatum) {
+  public void setGeburtsdatum(String geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public DemoKindDtoSpec alter(Integer alter) {
+    
+    this.alter = alter;
+    return this;
+  }
+
+   /**
+   * Get alter
+   * @return alter
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAlter() {
+    return alter;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ALTER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAlter(Integer alter) {
+    this.alter = alter;
   }
 
 
@@ -347,6 +376,7 @@ public class DemoKindDtoSpec {
     return Objects.equals(this.nachname, demoKind.nachname) &&
         Objects.equals(this.vorname, demoKind.vorname) &&
         Objects.equals(this.geburtsdatum, demoKind.geburtsdatum) &&
+        Objects.equals(this.alter, demoKind.alter) &&
         Objects.equals(this.wohnsitzAnteilPia, demoKind.wohnsitzAnteilPia) &&
         Objects.equals(this.ausbildungssituation, demoKind.ausbildungssituation) &&
         Objects.equals(this.unterhaltsbeitraege, demoKind.unterhaltsbeitraege) &&
@@ -358,7 +388,7 @@ public class DemoKindDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, wohnsitzAnteilPia, ausbildungssituation, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzAnteilPia, ausbildungssituation, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
@@ -368,6 +398,7 @@ public class DemoKindDtoSpec {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    wohnsitzAnteilPia: ").append(toIndentedString(wohnsitzAnteilPia)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("    unterhaltsbeitraege: ").append(toIndentedString(unterhaltsbeitraege)).append("\n");

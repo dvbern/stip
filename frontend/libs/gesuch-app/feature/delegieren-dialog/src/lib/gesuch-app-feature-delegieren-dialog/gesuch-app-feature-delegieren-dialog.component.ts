@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -44,7 +43,6 @@ export type DelegierenDialogResult = DelegierungCreate;
 @Component({
   selector: 'dv-gesuch-app-feature-delegieren-dialog',
   imports: [
-    CommonModule,
     TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,

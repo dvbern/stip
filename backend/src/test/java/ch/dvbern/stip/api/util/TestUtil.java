@@ -209,6 +209,17 @@ public class TestUtil {
         fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, getAuszahlungUpdateDtoSpec());
     }
 
+    public static void fillGesuchWithAuszahlung(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final AuszahlungApiSpec auszahlungApiSpec,
+        final GesuchDtoSpec gesuch,
+        final Consumer<GesuchUpdateDtoSpec> additionalChanges
+    ) {
+        fillGesuch(gesuchApiSpec, dokumentApiSpec, gesuch, additionalChanges);
+        fillAuszahlung(gesuch.getFallId(), auszahlungApiSpec, getAuszahlungUpdateDtoSpec());
+    }
+
     public static void fillGesuchNoElterns(
         final GesuchApiSpec gesuchApiSpec,
         final DokumentApiSpec dokumentApiSpec,
@@ -237,6 +248,23 @@ public class TestUtil {
         final GesuchDtoSpec gesuch
     ) {
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        fillGesuch(
+            gesuchApiSpec,
+            fullGesuch,
+            dokumentApiSpec,
+            gesuch
+        );
+    }
+
+    public static void fillGesuch(
+        final GesuchApiSpec gesuchApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final GesuchDtoSpec gesuch,
+        final Consumer<GesuchUpdateDtoSpec> additionalChanges
+    ) {
+        final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
+        additionalChanges.accept(fullGesuch);
         fullGesuch.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
         fillGesuch(
             gesuchApiSpec,

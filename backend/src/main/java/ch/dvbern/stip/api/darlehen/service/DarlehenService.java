@@ -55,6 +55,7 @@ import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
+import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
@@ -322,6 +323,15 @@ public class DarlehenService {
         if (!atLeastOneGesuchEingereicht) {
             return false;
         }
+
+        final var gesuchFormular = gesuchRepository.getLatestGesuchFormularWithPiaForBenutzer(benutzer.getId());
+        if (
+            gesuchFormular.isEmpty()
+            || !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(gesuchFormular.get())
+        ) {
+            return false;
+        }
+
         return true;
     }
 

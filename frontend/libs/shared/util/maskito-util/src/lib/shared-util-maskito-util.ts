@@ -16,7 +16,7 @@ const { plugins, ...numberOptions } = maskitoNumberOptionsGenerator({
   postfix,
   min: 0,
   max: 100,
-  precision: 2,
+  maximumFractionDigits: 2,
 });
 
 export const maskitoPercent = {
@@ -47,7 +47,7 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
 
 export const maskitoYear = maskitoNumberOptionsGenerator({
   min: 0,
-  precision: 0,
+  maximumFractionDigits: 2,
   thousandSeparator: '',
   max: 9999,
 });

@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -25,7 +26,8 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   private @Valid UUID gesuchTrancheId;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
-  private @Valid String gesuchStatus;
+  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+  private @Valid ApplyDemoDataResponseStipendienanspruchDto stipendienanspruch;
 
   /**
    **/
@@ -105,7 +107,7 @@ public class ApplyDemoDataResponseDto  implements Serializable {
 
   /**
    **/
-  public ApplyDemoDataResponseDto gesuchStatus(String gesuchStatus) {
+  public ApplyDemoDataResponseDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
     return this;
   }
@@ -113,13 +115,32 @@ public class ApplyDemoDataResponseDto  implements Serializable {
   
   @JsonProperty("gesuchStatus")
   @NotNull
-  public String getGesuchStatus() {
+  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
     return gesuchStatus;
   }
 
   @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(String gesuchStatus) {
+  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
+  }
+
+  /**
+   **/
+  public ApplyDemoDataResponseDto stipendienanspruch(ApplyDemoDataResponseStipendienanspruchDto stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
+    return this;
+  }
+
+  
+  @JsonProperty("stipendienanspruch")
+  @NotNull
+  public ApplyDemoDataResponseStipendienanspruchDto getStipendienanspruch() {
+    return stipendienanspruch;
+  }
+
+  @JsonProperty("stipendienanspruch")
+  public void setStipendienanspruch(ApplyDemoDataResponseStipendienanspruchDto stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
   }
 
 
@@ -136,12 +157,13 @@ public class ApplyDemoDataResponseDto  implements Serializable {
         Objects.equals(this.gesuchTrancheId, applyDemoDataResponse.gesuchTrancheId) &&
         Objects.equals(this.gueltigAb, applyDemoDataResponse.gueltigAb) &&
         Objects.equals(this.gueltigBis, applyDemoDataResponse.gueltigBis) &&
-        Objects.equals(this.gesuchStatus, applyDemoDataResponse.gesuchStatus);
+        Objects.equals(this.gesuchStatus, applyDemoDataResponse.gesuchStatus) &&
+        Objects.equals(this.stipendienanspruch, applyDemoDataResponse.stipendienanspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, gesuchTrancheId, gueltigAb, gueltigBis, gesuchStatus);
+    return Objects.hash(gesuchId, gesuchTrancheId, gueltigAb, gueltigBis, gesuchStatus, stipendienanspruch);
   }
 
   @Override
@@ -154,6 +176,7 @@ public class ApplyDemoDataResponseDto  implements Serializable {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

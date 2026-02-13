@@ -7,7 +7,7 @@ import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
 
 export function modelTypeFactory(options: NormalizedSchema): LibTypeGenerator {
   return {
-    libGenerator: libraryGenerator,
+    libGenerator: { type: 'library', generator: libraryGenerator },
     libDefaultOptions: {
       bundler: 'none',
       unitTestRunner: 'none',

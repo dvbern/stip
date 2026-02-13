@@ -1,8 +1,9 @@
 import { Schema } from '@nx/angular/src/generators/library/schema';
 import { Tree } from '@nx/devkit';
-import { Generator } from 'nx/src/config/misc-interfaces';
+import { Generator, GeneratorCallback } from 'nx/src/config/misc-interfaces';
 
 import { LibGeneratorSchema } from './schema';
+import { LibraryGeneratorSchema } from '@nx/js/src/generators/library/schema';
 
 export type LibType =
   | 'feature'
@@ -34,7 +35,18 @@ export interface DefaultOptions {
 }
 
 export interface LibTypeGenerator {
-  libGenerator: Generator<Schema>;
+  libGenerator:
+    | {
+        type: 'angular';
+        generator: (tree: Tree, schema: Schema) => Promise<GeneratorCallback>;
+      }
+    | {
+        type: 'library';
+        generator: (
+          tree: Tree,
+          schema: LibraryGeneratorSchema,
+        ) => Promise<GeneratorCallback>;
+      };
   libDefaultOptions: DefaultOptions;
   generators: {
     generator: Generator<Schema>;

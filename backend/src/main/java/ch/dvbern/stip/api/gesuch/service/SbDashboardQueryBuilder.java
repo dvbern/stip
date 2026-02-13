@@ -54,15 +54,15 @@ public class SbDashboardQueryBuilder {
     public JPAQuery<Gesuch> baseQuery(final GetGesucheSBQueryType queryType, final GesuchTrancheTyp trancheType) {
         final var meId = benutzerService.getCurrentBenutzer().getId();
 
-        // TODO KSTIP-2668: Fix these queries
         final var query = switch (queryType) {
             case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
-            case MEINE_BEARBEITBAR -> gesuchRepository.getFindAlleMeineBearbeitbarQuery(meId);
+            case MEINE_BEARBEITBAR -> gesuchRepository.getFindMeineBearbeitbarQuery(meId);
             case ALLE_PENDENTE_GESUCHE -> gesuchRepository.getFindAllePendenteQuery();
             case MEINE_PENDENTE_GESUCHE -> gesuchRepository.getFindAlleMeinePendenteQuery(meId);
             case ALLE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleJurBearbeitungQuery();
-            case MEINE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleMeineJurBearbeitungQuery(meId);
-            case MEINE_GESUCHE -> gesuchRepository.getFindAlleMeineQuery(meId);
+            case ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG -> gesuchRepository
+                .getFindAlleAbklaerungDurchRechstabteilungQuery();
+            case MEINE_GESUCHE -> gesuchRepository.getFindMeineQuery(meId);
             case ALLE_GESUCHE -> gesuchRepository.getFindAlleQuery();
             case ALLE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleWithDruckbareVerfuegung();
             case MEINE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleMeineWithDruckbareVerfuegung(meId);

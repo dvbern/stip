@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDarlehenDto;
+import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -21,10 +21,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DemoDarlehenDto  implements Serializable {
   private @Valid Boolean willDarlehen;
-  private @Valid String betragDarlehen;
-  private @Valid String schulden;
-  private @Valid String anzahlBetreibungen;
-  private @Valid DemoDarlehenGruendeDarlehenDto gruendeDarlehen;
+  private @Valid Integer betragGewuenscht;
+  private @Valid Integer schulden;
+  private @Valid Integer anzahlBetreibungen;
+  private @Valid DemoDarlehenGruendeDto gruende;
 
   /**
    **/
@@ -47,26 +47,26 @@ public class DemoDarlehenDto  implements Serializable {
 
   /**
    **/
-  public DemoDarlehenDto betragDarlehen(String betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  public DemoDarlehenDto betragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
   
-  @JsonProperty("betragDarlehen")
+  @JsonProperty("betragGewuenscht")
   @NotNull
-  public String getBetragDarlehen() {
-    return betragDarlehen;
+  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
   }
 
-  @JsonProperty("betragDarlehen")
-  public void setBetragDarlehen(String betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  @JsonProperty("betragGewuenscht")
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
   /**
    **/
-  public DemoDarlehenDto schulden(String schulden) {
+  public DemoDarlehenDto schulden(Integer schulden) {
     this.schulden = schulden;
     return this;
   }
@@ -74,18 +74,18 @@ public class DemoDarlehenDto  implements Serializable {
   
   @JsonProperty("schulden")
   @NotNull
-  public String getSchulden() {
+  public Integer getSchulden() {
     return schulden;
   }
 
   @JsonProperty("schulden")
-  public void setSchulden(String schulden) {
+  public void setSchulden(Integer schulden) {
     this.schulden = schulden;
   }
 
   /**
    **/
-  public DemoDarlehenDto anzahlBetreibungen(String anzahlBetreibungen) {
+  public DemoDarlehenDto anzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
   }
@@ -93,32 +93,32 @@ public class DemoDarlehenDto  implements Serializable {
   
   @JsonProperty("anzahlBetreibungen")
   @NotNull
-  public String getAnzahlBetreibungen() {
+  public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 
   @JsonProperty("anzahlBetreibungen")
-  public void setAnzahlBetreibungen(String anzahlBetreibungen) {
+  public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
 
   /**
    **/
-  public DemoDarlehenDto gruendeDarlehen(DemoDarlehenGruendeDarlehenDto gruendeDarlehen) {
-    this.gruendeDarlehen = gruendeDarlehen;
+  public DemoDarlehenDto gruende(DemoDarlehenGruendeDto gruende) {
+    this.gruende = gruende;
     return this;
   }
 
   
-  @JsonProperty("gruendeDarlehen")
+  @JsonProperty("gruende")
   @NotNull
-  public DemoDarlehenGruendeDarlehenDto getGruendeDarlehen() {
-    return gruendeDarlehen;
+  public DemoDarlehenGruendeDto getGruende() {
+    return gruende;
   }
 
-  @JsonProperty("gruendeDarlehen")
-  public void setGruendeDarlehen(DemoDarlehenGruendeDarlehenDto gruendeDarlehen) {
-    this.gruendeDarlehen = gruendeDarlehen;
+  @JsonProperty("gruende")
+  public void setGruende(DemoDarlehenGruendeDto gruende) {
+    this.gruende = gruende;
   }
 
 
@@ -132,15 +132,15 @@ public class DemoDarlehenDto  implements Serializable {
     }
     DemoDarlehenDto demoDarlehen = (DemoDarlehenDto) o;
     return Objects.equals(this.willDarlehen, demoDarlehen.willDarlehen) &&
-        Objects.equals(this.betragDarlehen, demoDarlehen.betragDarlehen) &&
+        Objects.equals(this.betragGewuenscht, demoDarlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, demoDarlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, demoDarlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruendeDarlehen, demoDarlehen.gruendeDarlehen);
+        Objects.equals(this.gruende, demoDarlehen.gruende);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(willDarlehen, betragDarlehen, schulden, anzahlBetreibungen, gruendeDarlehen);
+    return Objects.hash(willDarlehen, betragGewuenscht, schulden, anzahlBetreibungen, gruende);
   }
 
   @Override
@@ -149,10 +149,10 @@ public class DemoDarlehenDto  implements Serializable {
     sb.append("class DemoDarlehenDto {\n");
     
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
-    sb.append("    betragDarlehen: ").append(toIndentedString(betragDarlehen)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    gruendeDarlehen: ").append(toIndentedString(gruendeDarlehen)).append("\n");
+    sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("}");
     return sb.toString();
   }

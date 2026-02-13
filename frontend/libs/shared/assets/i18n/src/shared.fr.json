@@ -361,6 +361,7 @@
 
   "gesuch-app.gesuch.status.contract.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "gesuch-app.gesuch.status.contract.EINGEREICHT": "Complètement soumis",
+  "gesuch-app.gesuch.status.contract.ANSPRUCH_PRUEFEN": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.BEREIT_FUER_BEARBEITUNG": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.IN_BEARBEITUNG_SB": "Complètement soumis",
   "gesuch-app.gesuch.status.contract.IN_FREIGABE": "Complètement soumis",
@@ -386,6 +387,11 @@
 
   "shared.gesuch.tranche.typ.AENDERUNG": "Changement",
   "shared.gesuch.tranche.typ.TRANCHE": "Demande",
+
+  "shared.verfuegung.status.AUSSTEHEND": "En attente de décision",
+  "shared.verfuegung.status.ANSPRUCH": "Droit à la bourse",
+  "shared.verfuegung.status.KEIN_ANSPRUCH": "Pas de droit à la bourse",
+  "shared.verfuegung.status.NEGATIV": "Décision négative",
 
   "shared.form.next": "Prochain",
   "shared.form.previous": "Précédent",
@@ -422,9 +428,15 @@
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
 
+  "shared.export.shared.sozialversicherungsnummer": "Numéro AVS",
+  "shared.export.lebenslauf.ausbildungen": "Formations",
+  "shared.export.lebenslauf.taetigkeiten": "Tâches",
+
   "shared.tranche.title": "Aperçu",
   "shared.form.title.suffix.TRANCHE": "Tranche {{ position }} du",
   "shared.form.title.suffix.AENDERUNG": "Changement {{ position }} du",
+  "shared.form.tranche.export": "Exporter",
+  "shared.form.tranche.export.error": "Une erreur s'est produite lors de l'exportation de la tranche",
   "shared.form.tranche.status.label.GESUCH": "Statut de la demande",
   "shared.form.tranche.status.label.TRANCHE": "Statut de la tranche",
   "shared.form.tranche.status.label.AENDERUNG": "Statut du changement",

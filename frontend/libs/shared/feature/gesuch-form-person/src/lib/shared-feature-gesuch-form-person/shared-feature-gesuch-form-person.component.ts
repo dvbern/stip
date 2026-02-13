@@ -84,6 +84,12 @@ import {
   convertTempFormToRealValues,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
+import {
+  AvailableNiederlassungsstatus,
+  BERECHTIGTE_NIEDERLASSUNGSSTATUS,
+  VORLAEUFIG_AUFGENOMMEN_F,
+  niederlassungsStatusConverter,
+} from '@dv/shared/util/gesuch';
 import { sharedUtilValidatorAhv } from '@dv/shared/util/validator-ahv';
 import {
   BEGRUENDUNGSSCHREIBEN_AGE,
@@ -105,38 +111,6 @@ import { sharedUtilValidatorTelefonNummer } from '@dv/shared/util/validator-tele
 import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 import { selectSharedFeatureGesuchFormPersonView } from './shared-feature-gesuch-form-person.selector';
-
-const vorlaeufigAufgenommenF = 'VORLAEUFIG_AUFGENOMMEN_F';
-type VorlaeufigAufgenommenF = typeof vorlaeufigAufgenommenF;
-
-type AllNiederlassungsstatusExceptF = Exclude<
-  Niederlassungsstatus,
-  `${VorlaeufigAufgenommenF}${string}`
->;
-type AvailableNiederlassungsstatus =
-  | AllNiederlassungsstatusExceptF
-  | VorlaeufigAufgenommenF;
-
-type IsNiederlassungsstatusBerechtigt<T extends AvailableNiederlassungsstatus> =
-  // Only B and C are considered as "berechtigt" for the gesuch (KSTIP-1993)
-  // F is also considered as "berechtigt" but only if fluechtlingsstatus is true
-  T extends `${string}_${'B' | 'C'}` ? true : false;
-const berechtigteNiederlassungsstatus = {
-  SAISONARBEITEND_A: false,
-  AUFENTHALTSBEWILLIGUNG_B: true,
-  NIEDERLASSUNGSBEWILLIGUNG_C: true,
-  PARTNER_ERWERBSTAETIG_UND_KIND_CI: false,
-  GRENZGAENGIG_G: false,
-  KURZAUFENTHALT_L: false,
-  ASYLSUCHEND_N: false,
-  SCHUTZBEDUERFTIG_S: false,
-  MELDEPFLICHTIG: false,
-  DIPLOMATISCHE_FUNKTION: false,
-  INTERNATIONALE_FUNKTION: false,
-  NICHT_ZUGETEILT: false,
-} satisfies {
-  [T in AllNiederlassungsstatusExceptF]: IsNiederlassungsstatusBerechtigt<T>;
-};
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form-person',
@@ -203,7 +177,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   updateValidity$ = new Subject<unknown>();
   appSettings = inject(AppSettings);
-  vorlaeufigAufgenommenF = vorlaeufigAufgenommenF;
+  vorlaeufigAufgenommenF = VORLAEUFIG_AUFGENOMMEN_F;
   hiddenFieldsSetSig = signal(new Set<AbstractControl>());
   plzValues?: Plz[];
 
@@ -218,14 +192,14 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       }
 
       if (!fluechtlingsstatus) {
-        return `PERSON_NIEDERLASSUNGSSTATUS_${vorlaeufigAufgenommenF}_OHNE_FLUECHTLINGSSTATUS`;
+        return `PERSON_NIEDERLASSUNGSSTATUS_${VORLAEUFIG_AUFGENOMMEN_F}_OHNE_FLUECHTLINGSSTATUS`;
       }
 
       switch (zustaendigerKanton) {
         case ZustaendigerKanton.BERN:
-          return `PERSON_NIEDERLASSUNGSSTATUS_${vorlaeufigAufgenommenF}_ZUESTAENDIGER_KANTON_MANDANT`;
+          return `PERSON_NIEDERLASSUNGSSTATUS_${VORLAEUFIG_AUFGENOMMEN_F}_ZUESTAENDIGER_KANTON_MANDANT`;
         case ZustaendigerKanton.ANDERER_KANTON:
-          return `PERSON_NIEDERLASSUNGSSTATUS_${vorlaeufigAufgenommenF}_ANDERER_ZUESTAENDIGER_KANTON`;
+          return `PERSON_NIEDERLASSUNGSSTATUS_${VORLAEUFIG_AUFGENOMMEN_F}_ANDERER_ZUESTAENDIGER_KANTON`;
         default:
           return null;
       }
@@ -240,7 +214,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
         DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C,
       [Niederlassungsstatus.PARTNER_ERWERBSTAETIG_UND_KIND_CI]:
         DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_PARTNER_ERWERBSTAETIG_UND_KIND_CI,
-      [vorlaeufigAufgenommenF]: getVorlaeufigAufgenommenF(),
+      [VORLAEUFIG_AUFGENOMMEN_F]: getVorlaeufigAufgenommenF(),
       [Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT]:
         DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT,
       [Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON]:
@@ -680,7 +654,7 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       });
 
       const showFluechtlingsstatus =
-        niederlassungsstatus === vorlaeufigAufgenommenF;
+        niederlassungsstatus === VORLAEUFIG_AUFGENOMMEN_F;
       this.formUtils.setRequired(
         this.form.controls.fluechtlingsstatus,
         showFluechtlingsstatus,
@@ -701,9 +675,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
       if (niederlassungsstatus) {
         const isNiederlassungsstatusBerechtigt =
-          niederlassungsstatus === vorlaeufigAufgenommenF
+          niederlassungsstatus === VORLAEUFIG_AUFGENOMMEN_F
             ? fluechtlingsstatus
-            : berechtigteNiederlassungsstatus[niederlassungsstatus];
+            : BERECHTIGTE_NIEDERLASSUNGSSTATUS[niederlassungsstatus];
         this.showNiederlassungsstatusNichtBerechtigtWarningSig.set(
           !(isNiederlassungsstatusBerechtigt ?? true),
         );
@@ -883,75 +857,14 @@ const createNiederlassungsStatusValues = () => {
   const niederlassungsStatus = Object.values(Niederlassungsstatus);
 
   const filtered: string[] = niederlassungsStatus.filter((status) => {
-    return !status.startsWith(vorlaeufigAufgenommenF);
+    return !status.startsWith(VORLAEUFIG_AUFGENOMMEN_F);
   });
   filtered.splice(
     niederlassungsStatus.indexOf(
       'VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS',
     ),
     0,
-    vorlaeufigAufgenommenF,
+    VORLAEUFIG_AUFGENOMMEN_F,
   );
   return filtered;
-};
-
-type KnownNiederlassungsValues = {
-  niederlassungsstatus: AvailableNiederlassungsstatus | undefined;
-  fluechtlingsstatus: boolean | undefined;
-  zustaendigerKanton: ZustaendigerKanton | undefined;
-};
-
-const niederlassungsStatusConverter = {
-  from: (
-    value: Niederlassungsstatus | undefined,
-  ): KnownNiederlassungsValues => {
-    switch (value) {
-      case 'VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS':
-        return {
-          niederlassungsstatus: vorlaeufigAufgenommenF,
-          fluechtlingsstatus: false,
-          zustaendigerKanton: undefined,
-        };
-      case 'VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON':
-        return {
-          niederlassungsstatus: vorlaeufigAufgenommenF,
-          fluechtlingsstatus: true,
-          zustaendigerKanton: ZustaendigerKanton.ANDERER_KANTON,
-        };
-      case 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT':
-        return {
-          niederlassungsstatus: vorlaeufigAufgenommenF,
-          fluechtlingsstatus: true,
-          zustaendigerKanton: ZustaendigerKanton.BERN,
-        };
-      case undefined:
-        return {
-          niederlassungsstatus: undefined,
-          fluechtlingsstatus: undefined,
-          zustaendigerKanton: undefined,
-        };
-      default:
-        return {
-          niederlassungsstatus: value,
-          fluechtlingsstatus: undefined,
-          zustaendigerKanton: undefined,
-        };
-    }
-  },
-  to: (value: KnownNiederlassungsValues): Niederlassungsstatus | undefined => {
-    if (value.niederlassungsstatus === vorlaeufigAufgenommenF) {
-      if (value.fluechtlingsstatus === false) {
-        return 'VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS';
-      }
-      switch (value.zustaendigerKanton) {
-        case ZustaendigerKanton.BERN:
-          return 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT';
-        case ZustaendigerKanton.ANDERER_KANTON:
-          return 'VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON';
-        default:
-          return undefined;
-      }
-    }
-    return value.niederlassungsstatus;
-  },
 };

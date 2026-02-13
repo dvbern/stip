@@ -18,8 +18,10 @@
 package ch.dvbern.stip.api.demo.service;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +31,7 @@ import java.util.concurrent.CompletableFuture;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungBuilder;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
@@ -49,6 +52,7 @@ import ch.dvbern.stip.api.demo.repo.DemoDataAbschlussRepository;
 import ch.dvbern.stip.api.demo.repo.DemoDataAusbildungsgangRepository;
 import ch.dvbern.stip.api.demo.type.DemoDataDefaults;
 import ch.dvbern.stip.api.demo.util.DemoDataAnonymizerUtil;
+import ch.dvbern.stip.api.demo.util.ParseDemoDataUtil;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.DokumentBuilder;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -88,8 +92,11 @@ import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
+import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
+import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
@@ -127,6 +134,7 @@ public class GenerateDemoDataService {
     private final GesuchFormularRepository gesuchFormularRepository;
     private final GesuchDokumentRepository gesuchDokumentRepository;
     private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final BerechnungService berechnungService;
     private final DokumentRepository dokumentRepository;
 
     private Land getLandIso2(String iso2Code) {
@@ -147,6 +155,12 @@ public class GenerateDemoDataService {
                 e
             );
         }
+    }
+
+    private LocalDate getGeburtsdatum(DemoData demoData, String geburtsdatum, int alter) {
+        final var targetYear =
+            LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter).getYear() - alter;
+        return LocalDate.parse("%s.%d".formatted(geburtsdatum, targetYear), ParseDemoDataUtil.dmyFormatter);
     }
 
     private Zahlungsverbindung getDefaultZahlungsverbindung(DemoDataDto demoDataDto, Adresse adresse) {
@@ -193,28 +207,37 @@ public class GenerateDemoDataService {
         fall.setAuszahlung(auszahlung);
 
         final var ausbildungDto = demoDataDto.getAusbildung();
-        final var ausbildung = AusbildungBuilder.ausbildung()
-            .fall(fall)
-            .gesuchs(new ArrayList<>())
-            .ausbildungsgang(!ausbildungDto.getAusbildungNichtGefunden() ? getAusbildungsgang(ausbildungDto) : null)
-            .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)
-            .alternativeAusbildungsgang(
-                ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsgang() : null
-            )
-            .alternativeAusbildungsstaette(
-                ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsstaette() : null
-            )
-            .fachrichtungBerufsbezeichnung(ausbildungDto.getBerufsbezeichnungFachrichtung())
-            .ausbildungNichtGefunden(ausbildungDto.getAusbildungNichtGefunden())
-            .ausbildungBegin(ausbildungDto.getAusbildungBeginn())
-            .ausbildungEnd(ausbildungDto.getAusbildungEnd())
-            .pensum(Objects.requireNonNullElse(ausbildungDto.getPensum(), DemoDataDefaults.AUSBILDUNG_PENSUM))
-            .ausbildungsort(ausbildungDto.getOrt())
-            .ausbildungsortPLZ(ausbildungDto.getPlz())
-            .isAusbildungAusland(ausbildungDto.getIsAusbildungAusland())
-            .land(null)
-            .status(AusbildungsStatus.AKTIV)
-            .build();
+        // Reuse a existing Ausbildung if it exists and is not completed, otherwise create a new one
+        final var ausbildung = fall.getAusbildungs()
+            .stream()
+            .filter(a -> !a.getStatus().isCompleted())
+            .max(Comparator.comparing(Ausbildung::getAusbildungBegin))
+            .orElseGet(
+                () -> AusbildungBuilder.ausbildung()
+                    .fall(fall)
+                    .gesuchs(new ArrayList<>())
+                    .ausbildungsgang(
+                        !ausbildungDto.getAusbildungNichtGefunden() ? getAusbildungsgang(ausbildungDto) : null
+                    )
+                    .besuchtBMS(DemoDataDefaults.AUSBILDUNG_BESUCHT_BMS)
+                    .alternativeAusbildungsgang(
+                        ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsgang() : null
+                    )
+                    .alternativeAusbildungsstaette(
+                        ausbildungDto.getAusbildungNichtGefunden() ? ausbildungDto.getAusbildungsstaette() : null
+                    )
+                    .fachrichtungBerufsbezeichnung(ausbildungDto.getBerufsbezeichnungFachrichtung())
+                    .ausbildungNichtGefunden(ausbildungDto.getAusbildungNichtGefunden())
+                    .ausbildungBegin(ausbildungDto.getAusbildungBeginn())
+                    .ausbildungEnd(ausbildungDto.getAusbildungEnd())
+                    .pensum(Objects.requireNonNullElse(ausbildungDto.getPensum(), DemoDataDefaults.AUSBILDUNG_PENSUM))
+                    .ausbildungsort(ausbildungDto.getOrt())
+                    .ausbildungsortPLZ(ausbildungDto.getPlz())
+                    .isAusbildungAusland(ausbildungDto.getIsAusbildungAusland())
+                    .land(null)
+                    .status(AusbildungsStatus.AKTIV)
+                    .build()
+            );
         final var pia = DemoPerson.createPersonInAusbildung(
             PersonInAusbildungBuilder.personInAusbildung()
                 .adresse(piaAdresse)
@@ -260,7 +283,7 @@ public class GenerateDemoDataService {
             AbstractPersonBuilder.abstractPerson()
                 .nachname(piaDto.getNachname())
                 .vorname(piaDto.getNachname())
-                .geburtsdatum(piaDto.getGeburtsdatum())
+                .geburtsdatum(getGeburtsdatum(demoData, piaDto.getGeburtsdatum(), piaDto.getAlter()))
         );
         final Set<LebenslaufItem> lebenslaufItems = new HashSet<>();
         for (var lebenslaufItemDto : demoDataDto.getLebenslauf().getAusbildung()) {
@@ -320,7 +343,9 @@ public class GenerateDemoDataService {
                 AbstractPersonBuilder.abstractPerson()
                     .nachname(demoPartnerDto.getNachname())
                     .vorname(demoPartnerDto.getVorname())
-                    .geburtsdatum(demoPartnerDto.getGeburtsdatum())
+                    .geburtsdatum(
+                        getGeburtsdatum(demoData, demoPartnerDto.getGeburtsdatum(), demoPartnerDto.getAlter())
+                    )
             );
         }
         final Set<Kind> kinds = new HashSet<>();
@@ -338,7 +363,7 @@ public class GenerateDemoDataService {
                 AbstractPersonBuilder.abstractPerson()
                     .nachname(kindDto.getNachname())
                     .vorname(kindDto.getVorname())
-                    .geburtsdatum(kindDto.getGeburtsdatum())
+                    .geburtsdatum(getGeburtsdatum(demoData, kindDto.getGeburtsdatum(), kindDto.getAlter()))
             );
             kinds.add(kind);
         }
@@ -460,7 +485,7 @@ public class GenerateDemoDataService {
                     AbstractPersonBuilder.abstractPerson()
                         .nachname(elternDto.getNachname())
                         .vorname(elternDto.getVorname())
-                        .geburtsdatum(elternDto.getGeburtsdatum())
+                        .geburtsdatum(getGeburtsdatum(demoData, elternDto.getGeburtsdatum(), elternDto.getAlter()))
                 )
             );
         }
@@ -545,7 +570,9 @@ public class GenerateDemoDataService {
                     AbstractPersonBuilder.abstractPerson()
                         .nachname(geschwisterDto.getNachname())
                         .vorname(geschwisterDto.getVorname())
-                        .geburtsdatum(geschwisterDto.getGeburtsdatum())
+                        .geburtsdatum(
+                            getGeburtsdatum(demoData, geschwisterDto.getGeburtsdatum(), geschwisterDto.getAlter())
+                        )
                 )
             );
         }
@@ -584,6 +611,50 @@ public class GenerateDemoDataService {
         gesuchRepository.persistAndFlush(gesuch);
 
         return gesuch.getId();
+    }
+
+    public ApplyDemoDataResponseStipendienanspruchDto getStipendienanspruchDto(Gesuch gesuch, DemoData demoData) {
+        final var initialEinreicheDatum = gesuch.getEinreichedatum();
+        // Temporarily set the einreichedatum to the gesuchseingang date from demoData and reset it afterwards
+        if (Objects.isNull(initialEinreicheDatum)) {
+            gesuch.setEinreichedatum(LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter));
+        }
+
+        final var demoDataDto = demoData.parseDemoDataDto();
+        final var berechnungsresultat = berechnungService.getBerechnungsresultatFromGesuch(
+            gesuch,
+            configService.getCurrentDmnMajorVersion(),
+            configService.getCurrentDmnMinorVersion()
+        );
+        final var stipendienanspruchDto = demoDataDto.getStipendienanspruch();
+
+        if (Objects.isNull(initialEinreicheDatum)) {
+            gesuch.setEinreichedatum(null);
+        }
+
+        final var total = berechnungsresultat.getBerechnungTotal();
+        final var stipendienSoll = Objects.requireNonNullElse(
+            stipendienanspruchDto.getBetragStipendienSoll(),
+            stipendienanspruchDto.getBetragStipendienIst()
+        );
+        final var darlehenSoll = Objects.requireNonNullElse(
+            stipendienanspruchDto.getBetragDarlehenSoll(),
+            stipendienanspruchDto.getBetragDarlehenIst()
+        );
+
+        return new ApplyDemoDataResponseStipendienanspruchDto()
+            .success(
+                Objects.equals(
+                    stipendienSoll,
+                    berechnungsresultat.getBerechnungStipendium()
+                )
+            )
+            .statusSoll(stipendienanspruchDto.getStatus())
+            .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)
+            .betragStipendienSoll(stipendienSoll)
+            .betragStipendienIst(berechnungsresultat.getBerechnungStipendium())
+            .betragDarlehenSoll(darlehenSoll)
+            .betragDarlehenIst(berechnungsresultat.getBerechnungDarlehen());
     }
 
     private ElternAbwesenheitsGrund getAbwesenheitsGrund(DemoFamiliensituationDto dto, ElternTyp elternTyp) {

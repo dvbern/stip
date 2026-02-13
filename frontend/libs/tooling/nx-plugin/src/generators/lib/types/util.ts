@@ -7,7 +7,7 @@ import { LibTypeGenerator, NormalizedSchema } from '../generator.interface';
 
 export function utilTypeFactory(options: NormalizedSchema): LibTypeGenerator {
   return {
-    libGenerator: libraryGenerator,
+    libGenerator: { type: 'angular', generator: libraryGenerator },
     libDefaultOptions: {
       skipModule: true,
       flat: true,

@@ -37,13 +37,18 @@
         "outputPath": "dist/apps/sachbearbeitung-app",
         "index": "apps/sachbearbeitung-app/src/index.html",
         "browser": "apps/sachbearbeitung-app/src/main.ts",
-        "polyfills": ["@angular/localize/init", "zone.js"],
+        "polyfills": ["@angular/localize/init"],
         "tsConfig": "apps/sachbearbeitung-app/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
             "input": "libs/sachbearbeitung-app/assets/i18n/src",
             "output": "assets/i18n"
+          },
+          {
+            "glob": "**/*",
+            "input": "libs/shared/assets/fonts",
+            "output": "assets/fonts"
           },
           {
             "glob": "**/*",

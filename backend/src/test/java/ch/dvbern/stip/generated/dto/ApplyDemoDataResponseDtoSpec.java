@@ -15,6 +15,8 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -33,7 +35,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
   ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
-  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_STATUS
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
+  ApplyDemoDataResponseDtoSpec.JSON_PROPERTY_STIPENDIENANSPRUCH
 })
 @JsonTypeName("ApplyDemoDataResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -51,7 +54,10 @@ public class ApplyDemoDataResponseDtoSpec {
   private LocalDate gueltigBis;
 
   public static final String JSON_PROPERTY_GESUCH_STATUS = "gesuchStatus";
-  private String gesuchStatus;
+  private GesuchstatusDtoSpec gesuchStatus;
+
+  public static final String JSON_PROPERTY_STIPENDIENANSPRUCH = "stipendienanspruch";
+  private ApplyDemoDataResponseStipendienanspruchDtoSpec stipendienanspruch;
 
   public ApplyDemoDataResponseDtoSpec() {
   }
@@ -160,7 +166,7 @@ public class ApplyDemoDataResponseDtoSpec {
   }
 
 
-  public ApplyDemoDataResponseDtoSpec gesuchStatus(String gesuchStatus) {
+  public ApplyDemoDataResponseDtoSpec gesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     
     this.gesuchStatus = gesuchStatus;
     return this;
@@ -174,15 +180,41 @@ public class ApplyDemoDataResponseDtoSpec {
   @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getGesuchStatus() {
+  public GesuchstatusDtoSpec getGesuchStatus() {
     return gesuchStatus;
   }
 
 
   @JsonProperty(JSON_PROPERTY_GESUCH_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesuchStatus(String gesuchStatus) {
+  public void setGesuchStatus(GesuchstatusDtoSpec gesuchStatus) {
     this.gesuchStatus = gesuchStatus;
+  }
+
+
+  public ApplyDemoDataResponseDtoSpec stipendienanspruch(ApplyDemoDataResponseStipendienanspruchDtoSpec stipendienanspruch) {
+    
+    this.stipendienanspruch = stipendienanspruch;
+    return this;
+  }
+
+   /**
+   * Get stipendienanspruch
+   * @return stipendienanspruch
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ApplyDemoDataResponseStipendienanspruchDtoSpec getStipendienanspruch() {
+    return stipendienanspruch;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStipendienanspruch(ApplyDemoDataResponseStipendienanspruchDtoSpec stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
   }
 
   @Override
@@ -198,12 +230,13 @@ public class ApplyDemoDataResponseDtoSpec {
         Objects.equals(this.gesuchTrancheId, applyDemoDataResponse.gesuchTrancheId) &&
         Objects.equals(this.gueltigAb, applyDemoDataResponse.gueltigAb) &&
         Objects.equals(this.gueltigBis, applyDemoDataResponse.gueltigBis) &&
-        Objects.equals(this.gesuchStatus, applyDemoDataResponse.gesuchStatus);
+        Objects.equals(this.gesuchStatus, applyDemoDataResponse.gesuchStatus) &&
+        Objects.equals(this.stipendienanspruch, applyDemoDataResponse.stipendienanspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, gesuchTrancheId, gueltigAb, gueltigBis, gesuchStatus);
+    return Objects.hash(gesuchId, gesuchTrancheId, gueltigAb, gueltigBis, gesuchStatus, stipendienanspruch);
   }
 
   @Override
@@ -215,6 +248,7 @@ public class ApplyDemoDataResponseDtoSpec {
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
+    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

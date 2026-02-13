@@ -9,12 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ApplyDemoDataResponseStipendienanspruch } from './applyDemoDataResponseStipendienanspruch';
+import { Gesuchstatus } from './gesuchstatus';
 
 export interface ApplyDemoDataResponse { 
     gesuchId: string;
     gesuchTrancheId: string;
     gueltigAb: string;
     gueltigBis: string;
-    gesuchStatus: string;
+    gesuchStatus: Gesuchstatus;
+    stipendienanspruch: ApplyDemoDataResponseStipendienanspruch;
 }
+
+
 

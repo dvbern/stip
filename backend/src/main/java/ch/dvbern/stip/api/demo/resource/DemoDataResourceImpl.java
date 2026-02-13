@@ -61,11 +61,16 @@ public class DemoDataResourceImpl implements DemoDataResource {
 
     @Override
     @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
-    public DemoDataListDto createNewDemoDataImport(String kommentar, FileUpload fileUpload) {
+    public DemoDataListDto createNewDemoDataImport(
+        String kommentar,
+        Boolean ignoreBerechnungErrors,
+        FileUpload fileUpload
+    ) {
         demoDataAuthorizer.canCreateDemoDataList();
         return demoDataService.createNewDemoDataImport(
             kommentar,
-            fileUpload
+            fileUpload,
+            ignoreBerechnungErrors
         );
     }
 

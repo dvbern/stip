@@ -24,18 +24,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * DemoDarlehenGruendeDarlehenDtoSpec
+ * DemoDarlehenGruendeDtoSpec
  */
 @JsonPropertyOrder({
-  DemoDarlehenGruendeDarlehenDtoSpec.JSON_PROPERTY_GRUND_NICHT_BERECHTIGT,
-  DemoDarlehenGruendeDarlehenDtoSpec.JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE,
-  DemoDarlehenGruendeDarlehenDtoSpec.JSON_PROPERTY_GRUND_HOHE_GEBUEHREN,
-  DemoDarlehenGruendeDarlehenDtoSpec.JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG,
-  DemoDarlehenGruendeDarlehenDtoSpec.JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG
+  DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_NICHT_BERECHTIGT,
+  DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_AUSBILDUNG_ZWOELF_JAHRE,
+  DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_HOHE_GEBUEHREN,
+  DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_ANSCHAFFUNGEN_FUER_AUSBILDUNG,
+  DemoDarlehenGruendeDtoSpec.JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG
 })
-@JsonTypeName("DemoDarlehen_gruendeDarlehen")
+@JsonTypeName("DemoDarlehen_gruende")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class DemoDarlehenGruendeDarlehenDtoSpec {
+public class DemoDarlehenGruendeDtoSpec {
   public static final String JSON_PROPERTY_GRUND_NICHT_BERECHTIGT = "grundNichtBerechtigt";
   private Boolean grundNichtBerechtigt;
 
@@ -51,10 +51,10 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   public static final String JSON_PROPERTY_GRUND_ZWEITAUSBILDUNG = "grundZweitausbildung";
   private Boolean grundZweitausbildung;
 
-  public DemoDarlehenGruendeDarlehenDtoSpec() {
+  public DemoDarlehenGruendeDtoSpec() {
   }
 
-  public DemoDarlehenGruendeDarlehenDtoSpec grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
+  public DemoDarlehenGruendeDtoSpec grundNichtBerechtigt(Boolean grundNichtBerechtigt) {
     
     this.grundNichtBerechtigt = grundNichtBerechtigt;
     return this;
@@ -80,7 +80,7 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   }
 
 
-  public DemoDarlehenGruendeDarlehenDtoSpec grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
+  public DemoDarlehenGruendeDtoSpec grundAusbildungZwoelfJahre(Boolean grundAusbildungZwoelfJahre) {
     
     this.grundAusbildungZwoelfJahre = grundAusbildungZwoelfJahre;
     return this;
@@ -106,7 +106,7 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   }
 
 
-  public DemoDarlehenGruendeDarlehenDtoSpec grundHoheGebuehren(Boolean grundHoheGebuehren) {
+  public DemoDarlehenGruendeDtoSpec grundHoheGebuehren(Boolean grundHoheGebuehren) {
     
     this.grundHoheGebuehren = grundHoheGebuehren;
     return this;
@@ -132,7 +132,7 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   }
 
 
-  public DemoDarlehenGruendeDarlehenDtoSpec grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
+  public DemoDarlehenGruendeDtoSpec grundAnschaffungenFuerAusbildung(Boolean grundAnschaffungenFuerAusbildung) {
     
     this.grundAnschaffungenFuerAusbildung = grundAnschaffungenFuerAusbildung;
     return this;
@@ -158,7 +158,7 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   }
 
 
-  public DemoDarlehenGruendeDarlehenDtoSpec grundZweitausbildung(Boolean grundZweitausbildung) {
+  public DemoDarlehenGruendeDtoSpec grundZweitausbildung(Boolean grundZweitausbildung) {
     
     this.grundZweitausbildung = grundZweitausbildung;
     return this;
@@ -191,12 +191,12 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoDarlehenGruendeDarlehenDtoSpec demoDarlehenGruendeDarlehen = (DemoDarlehenGruendeDarlehenDtoSpec) o;
-    return Objects.equals(this.grundNichtBerechtigt, demoDarlehenGruendeDarlehen.grundNichtBerechtigt) &&
-        Objects.equals(this.grundAusbildungZwoelfJahre, demoDarlehenGruendeDarlehen.grundAusbildungZwoelfJahre) &&
-        Objects.equals(this.grundHoheGebuehren, demoDarlehenGruendeDarlehen.grundHoheGebuehren) &&
-        Objects.equals(this.grundAnschaffungenFuerAusbildung, demoDarlehenGruendeDarlehen.grundAnschaffungenFuerAusbildung) &&
-        Objects.equals(this.grundZweitausbildung, demoDarlehenGruendeDarlehen.grundZweitausbildung);
+    DemoDarlehenGruendeDtoSpec demoDarlehenGruende = (DemoDarlehenGruendeDtoSpec) o;
+    return Objects.equals(this.grundNichtBerechtigt, demoDarlehenGruende.grundNichtBerechtigt) &&
+        Objects.equals(this.grundAusbildungZwoelfJahre, demoDarlehenGruende.grundAusbildungZwoelfJahre) &&
+        Objects.equals(this.grundHoheGebuehren, demoDarlehenGruende.grundHoheGebuehren) &&
+        Objects.equals(this.grundAnschaffungenFuerAusbildung, demoDarlehenGruende.grundAnschaffungenFuerAusbildung) &&
+        Objects.equals(this.grundZweitausbildung, demoDarlehenGruende.grundZweitausbildung);
   }
 
   @Override
@@ -207,7 +207,7 @@ public class DemoDarlehenGruendeDarlehenDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoDarlehenGruendeDarlehenDtoSpec {\n");
+    sb.append("class DemoDarlehenGruendeDtoSpec {\n");
     sb.append("    grundNichtBerechtigt: ").append(toIndentedString(grundNichtBerechtigt)).append("\n");
     sb.append("    grundAusbildungZwoelfJahre: ").append(toIndentedString(grundAusbildungZwoelfJahre)).append("\n");
     sb.append("    grundHoheGebuehren: ").append(toIndentedString(grundHoheGebuehren)).append("\n");

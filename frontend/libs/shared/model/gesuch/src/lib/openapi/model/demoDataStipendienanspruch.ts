@@ -9,9 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VerfuegungStatus } from './verfuegungStatus';
 
 export interface DemoDataStipendienanspruch { 
-    status: string;
-    betrag: number;
+    status: VerfuegungStatus;
+    betragStipendienSoll?: number;
+    betragStipendienIst?: number;
+    betragDarlehenSoll?: number;
+    betragDarlehenIst?: number;
 }
+
+
 

@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDarlehenDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,10 +29,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDarlehenDtoSpec.JSON_PROPERTY_WILL_DARLEHEN,
-  DemoDarlehenDtoSpec.JSON_PROPERTY_BETRAG_DARLEHEN,
+  DemoDarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
   DemoDarlehenDtoSpec.JSON_PROPERTY_SCHULDEN,
   DemoDarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
-  DemoDarlehenDtoSpec.JSON_PROPERTY_GRUENDE_DARLEHEN
+  DemoDarlehenDtoSpec.JSON_PROPERTY_GRUENDE
 })
 @JsonTypeName("DemoDarlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -40,17 +40,17 @@ public class DemoDarlehenDtoSpec {
   public static final String JSON_PROPERTY_WILL_DARLEHEN = "willDarlehen";
   private Boolean willDarlehen;
 
-  public static final String JSON_PROPERTY_BETRAG_DARLEHEN = "betragDarlehen";
-  private String betragDarlehen;
+  public static final String JSON_PROPERTY_BETRAG_GEWUENSCHT = "betragGewuenscht";
+  private Integer betragGewuenscht;
 
   public static final String JSON_PROPERTY_SCHULDEN = "schulden";
-  private String schulden;
+  private Integer schulden;
 
   public static final String JSON_PROPERTY_ANZAHL_BETREIBUNGEN = "anzahlBetreibungen";
-  private String anzahlBetreibungen;
+  private Integer anzahlBetreibungen;
 
-  public static final String JSON_PROPERTY_GRUENDE_DARLEHEN = "gruendeDarlehen";
-  private DemoDarlehenGruendeDarlehenDtoSpec gruendeDarlehen;
+  public static final String JSON_PROPERTY_GRUENDE = "gruende";
+  private DemoDarlehenGruendeDtoSpec gruende;
 
   public DemoDarlehenDtoSpec() {
   }
@@ -81,33 +81,33 @@ public class DemoDarlehenDtoSpec {
   }
 
 
-  public DemoDarlehenDtoSpec betragDarlehen(String betragDarlehen) {
+  public DemoDarlehenDtoSpec betragGewuenscht(Integer betragGewuenscht) {
     
-    this.betragDarlehen = betragDarlehen;
+    this.betragGewuenscht = betragGewuenscht;
     return this;
   }
 
    /**
-   * Get betragDarlehen
-   * @return betragDarlehen
+   * Get betragGewuenscht
+   * @return betragGewuenscht
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getBetragDarlehen() {
-    return betragDarlehen;
+  public Integer getBetragGewuenscht() {
+    return betragGewuenscht;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_BETRAG_GEWUENSCHT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetragDarlehen(String betragDarlehen) {
-    this.betragDarlehen = betragDarlehen;
+  public void setBetragGewuenscht(Integer betragGewuenscht) {
+    this.betragGewuenscht = betragGewuenscht;
   }
 
 
-  public DemoDarlehenDtoSpec schulden(String schulden) {
+  public DemoDarlehenDtoSpec schulden(Integer schulden) {
     
     this.schulden = schulden;
     return this;
@@ -121,19 +121,19 @@ public class DemoDarlehenDtoSpec {
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getSchulden() {
+  public Integer getSchulden() {
     return schulden;
   }
 
 
   @JsonProperty(JSON_PROPERTY_SCHULDEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setSchulden(String schulden) {
+  public void setSchulden(Integer schulden) {
     this.schulden = schulden;
   }
 
 
-  public DemoDarlehenDtoSpec anzahlBetreibungen(String anzahlBetreibungen) {
+  public DemoDarlehenDtoSpec anzahlBetreibungen(Integer anzahlBetreibungen) {
     
     this.anzahlBetreibungen = anzahlBetreibungen;
     return this;
@@ -147,41 +147,41 @@ public class DemoDarlehenDtoSpec {
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getAnzahlBetreibungen() {
+  public Integer getAnzahlBetreibungen() {
     return anzahlBetreibungen;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ANZAHL_BETREIBUNGEN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAnzahlBetreibungen(String anzahlBetreibungen) {
+  public void setAnzahlBetreibungen(Integer anzahlBetreibungen) {
     this.anzahlBetreibungen = anzahlBetreibungen;
   }
 
 
-  public DemoDarlehenDtoSpec gruendeDarlehen(DemoDarlehenGruendeDarlehenDtoSpec gruendeDarlehen) {
+  public DemoDarlehenDtoSpec gruende(DemoDarlehenGruendeDtoSpec gruende) {
     
-    this.gruendeDarlehen = gruendeDarlehen;
+    this.gruende = gruende;
     return this;
   }
 
    /**
-   * Get gruendeDarlehen
-   * @return gruendeDarlehen
+   * Get gruende
+   * @return gruende
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GRUENDE_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_GRUENDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public DemoDarlehenGruendeDarlehenDtoSpec getGruendeDarlehen() {
-    return gruendeDarlehen;
+  public DemoDarlehenGruendeDtoSpec getGruende() {
+    return gruende;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_GRUENDE_DARLEHEN)
+  @JsonProperty(JSON_PROPERTY_GRUENDE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGruendeDarlehen(DemoDarlehenGruendeDarlehenDtoSpec gruendeDarlehen) {
-    this.gruendeDarlehen = gruendeDarlehen;
+  public void setGruende(DemoDarlehenGruendeDtoSpec gruende) {
+    this.gruende = gruende;
   }
 
   @Override
@@ -194,15 +194,15 @@ public class DemoDarlehenDtoSpec {
     }
     DemoDarlehenDtoSpec demoDarlehen = (DemoDarlehenDtoSpec) o;
     return Objects.equals(this.willDarlehen, demoDarlehen.willDarlehen) &&
-        Objects.equals(this.betragDarlehen, demoDarlehen.betragDarlehen) &&
+        Objects.equals(this.betragGewuenscht, demoDarlehen.betragGewuenscht) &&
         Objects.equals(this.schulden, demoDarlehen.schulden) &&
         Objects.equals(this.anzahlBetreibungen, demoDarlehen.anzahlBetreibungen) &&
-        Objects.equals(this.gruendeDarlehen, demoDarlehen.gruendeDarlehen);
+        Objects.equals(this.gruende, demoDarlehen.gruende);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(willDarlehen, betragDarlehen, schulden, anzahlBetreibungen, gruendeDarlehen);
+    return Objects.hash(willDarlehen, betragGewuenscht, schulden, anzahlBetreibungen, gruende);
   }
 
   @Override
@@ -210,10 +210,10 @@ public class DemoDarlehenDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoDarlehenDtoSpec {\n");
     sb.append("    willDarlehen: ").append(toIndentedString(willDarlehen)).append("\n");
-    sb.append("    betragDarlehen: ").append(toIndentedString(betragDarlehen)).append("\n");
+    sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");
     sb.append("    schulden: ").append(toIndentedString(schulden)).append("\n");
     sb.append("    anzahlBetreibungen: ").append(toIndentedString(anzahlBetreibungen)).append("\n");
-    sb.append("    gruendeDarlehen: ").append(toIndentedString(gruendeDarlehen)).append("\n");
+    sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("}");
     return sb.toString();
   }

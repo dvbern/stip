@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.VerfuegungStatusDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,21 +29,33 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_STATUS,
-  DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_BETRAG
+  DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_BETRAG_STIPENDIEN_SOLL,
+  DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_BETRAG_STIPENDIEN_IST,
+  DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_BETRAG_DARLEHEN_SOLL,
+  DemoDataStipendienanspruchDtoSpec.JSON_PROPERTY_BETRAG_DARLEHEN_IST
 })
 @JsonTypeName("DemoData_stipendienanspruch")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DemoDataStipendienanspruchDtoSpec {
   public static final String JSON_PROPERTY_STATUS = "status";
-  private String status;
+  private VerfuegungStatusDtoSpec status;
 
-  public static final String JSON_PROPERTY_BETRAG = "betrag";
-  private Integer betrag;
+  public static final String JSON_PROPERTY_BETRAG_STIPENDIEN_SOLL = "betragStipendienSoll";
+  private Integer betragStipendienSoll;
+
+  public static final String JSON_PROPERTY_BETRAG_STIPENDIEN_IST = "betragStipendienIst";
+  private Integer betragStipendienIst;
+
+  public static final String JSON_PROPERTY_BETRAG_DARLEHEN_SOLL = "betragDarlehenSoll";
+  private Integer betragDarlehenSoll;
+
+  public static final String JSON_PROPERTY_BETRAG_DARLEHEN_IST = "betragDarlehenIst";
+  private Integer betragDarlehenIst;
 
   public DemoDataStipendienanspruchDtoSpec() {
   }
 
-  public DemoDataStipendienanspruchDtoSpec status(String status) {
+  public DemoDataStipendienanspruchDtoSpec status(VerfuegungStatusDtoSpec status) {
     
     this.status = status;
     return this;
@@ -56,41 +69,119 @@ public class DemoDataStipendienanspruchDtoSpec {
   @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getStatus() {
+  public VerfuegungStatusDtoSpec getStatus() {
     return status;
   }
 
 
   @JsonProperty(JSON_PROPERTY_STATUS)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setStatus(String status) {
+  public void setStatus(VerfuegungStatusDtoSpec status) {
     this.status = status;
   }
 
 
-  public DemoDataStipendienanspruchDtoSpec betrag(Integer betrag) {
+  public DemoDataStipendienanspruchDtoSpec betragStipendienSoll(Integer betragStipendienSoll) {
     
-    this.betrag = betrag;
+    this.betragStipendienSoll = betragStipendienSoll;
     return this;
   }
 
    /**
-   * Get betrag
-   * @return betrag
+   * Get betragStipendienSoll
+   * @return betragStipendienSoll
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG_STIPENDIEN_SOLL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Integer getBetrag() {
-    return betrag;
+  public Integer getBetragStipendienSoll() {
+    return betragStipendienSoll;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BETRAG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBetrag(Integer betrag) {
-    this.betrag = betrag;
+  @JsonProperty(JSON_PROPERTY_BETRAG_STIPENDIEN_SOLL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetragStipendienSoll(Integer betragStipendienSoll) {
+    this.betragStipendienSoll = betragStipendienSoll;
+  }
+
+
+  public DemoDataStipendienanspruchDtoSpec betragStipendienIst(Integer betragStipendienIst) {
+    
+    this.betragStipendienIst = betragStipendienIst;
+    return this;
+  }
+
+   /**
+   * Get betragStipendienIst
+   * @return betragStipendienIst
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG_STIPENDIEN_IST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBetragStipendienIst() {
+    return betragStipendienIst;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETRAG_STIPENDIEN_IST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetragStipendienIst(Integer betragStipendienIst) {
+    this.betragStipendienIst = betragStipendienIst;
+  }
+
+
+  public DemoDataStipendienanspruchDtoSpec betragDarlehenSoll(Integer betragDarlehenSoll) {
+    
+    this.betragDarlehenSoll = betragDarlehenSoll;
+    return this;
+  }
+
+   /**
+   * Get betragDarlehenSoll
+   * @return betragDarlehenSoll
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN_SOLL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBetragDarlehenSoll() {
+    return betragDarlehenSoll;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN_SOLL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetragDarlehenSoll(Integer betragDarlehenSoll) {
+    this.betragDarlehenSoll = betragDarlehenSoll;
+  }
+
+
+  public DemoDataStipendienanspruchDtoSpec betragDarlehenIst(Integer betragDarlehenIst) {
+    
+    this.betragDarlehenIst = betragDarlehenIst;
+    return this;
+  }
+
+   /**
+   * Get betragDarlehenIst
+   * @return betragDarlehenIst
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN_IST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBetragDarlehenIst() {
+    return betragDarlehenIst;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BETRAG_DARLEHEN_IST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBetragDarlehenIst(Integer betragDarlehenIst) {
+    this.betragDarlehenIst = betragDarlehenIst;
   }
 
   @Override
@@ -103,12 +194,15 @@ public class DemoDataStipendienanspruchDtoSpec {
     }
     DemoDataStipendienanspruchDtoSpec demoDataStipendienanspruch = (DemoDataStipendienanspruchDtoSpec) o;
     return Objects.equals(this.status, demoDataStipendienanspruch.status) &&
-        Objects.equals(this.betrag, demoDataStipendienanspruch.betrag);
+        Objects.equals(this.betragStipendienSoll, demoDataStipendienanspruch.betragStipendienSoll) &&
+        Objects.equals(this.betragStipendienIst, demoDataStipendienanspruch.betragStipendienIst) &&
+        Objects.equals(this.betragDarlehenSoll, demoDataStipendienanspruch.betragDarlehenSoll) &&
+        Objects.equals(this.betragDarlehenIst, demoDataStipendienanspruch.betragDarlehenIst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, betrag);
+    return Objects.hash(status, betragStipendienSoll, betragStipendienIst, betragDarlehenSoll, betragDarlehenIst);
   }
 
   @Override
@@ -116,7 +210,10 @@ public class DemoDataStipendienanspruchDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoDataStipendienanspruchDtoSpec {\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
+    sb.append("    betragStipendienSoll: ").append(toIndentedString(betragStipendienSoll)).append("\n");
+    sb.append("    betragStipendienIst: ").append(toIndentedString(betragStipendienIst)).append("\n");
+    sb.append("    betragDarlehenSoll: ").append(toIndentedString(betragDarlehenSoll)).append("\n");
+    sb.append("    betragDarlehenIst: ").append(toIndentedString(betragDarlehenIst)).append("\n");
     sb.append("}");
     return sb.toString();
   }
