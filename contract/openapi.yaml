@@ -2053,9 +2053,13 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /ausbildung/unterbruch/{gesuchId}:
+  /ausbildung/unterbruch/{ausbildungId}:
     parameters:
-      - $ref: '#/components/parameters/gesuchId'
+      - name: ausbildungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
     post:
       tags:
         - Ausbildung
@@ -2109,6 +2113,33 @@ paths:
   /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Dokument'
+          description: A list of AusbildungUnterbruchAntrag dokumente
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchAntragDokuments
+      summary: get a list of AusbildungUnterbruchAntrag dokumente
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
     post:
       tags:
         - Ausbildung
