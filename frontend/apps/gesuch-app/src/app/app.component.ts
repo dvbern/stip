@@ -1,12 +1,16 @@
 import { Component, HostBinding, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
+import { SharedPatternGesuchstellerLayoutComponent } from '@dv/shared/pattern/gesuchsteller-layout';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
 
 @Component({
-  imports: [RouterOutlet, GlobalNotificationsComponent],
+  imports: [
+    GlobalNotificationsComponent,
+    SharedPatternGesuchstellerLayoutComponent,
+  ],
   selector: 'dv-root',
   templateUrl: './app.component.html',
 })

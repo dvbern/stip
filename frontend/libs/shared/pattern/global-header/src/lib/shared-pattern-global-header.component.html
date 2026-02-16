@@ -1,16 +1,5 @@
-@let tenant = tenantSig()?.identifier;
-@if (tenant && tenant !== 'bern') {
-  @defer {
-    @switch (tenant) {
-      @case ('dv') {
-        <dv-shared-ui-mandant-styles-dv></dv-shared-ui-mandant-styles-dv>
-      }
-    }
-  }
-}
-
 <!-- HEADER -->
-<header class="border-bottom tw:top-0 z-3 w-100" [class.shadow-sm]="isScroll && !compactHeader">
+<header class="border-bottom tw:fixed tw:top-0 z-3 w-100" [class.shadow-sm]="isScroll && !compactHeader">
   <ng-template #logoOrBackLink>
     @if (backLink) {
       <a
@@ -29,6 +18,7 @@
       }
     }
   </ng-template>
+
   <!-- Small screens Header -->
   <div class="container-md d-lg-none">
     <div class="py-lg-4 d-flex justify-content-between gap-2 py-2">
@@ -36,7 +26,7 @@
 
       <!-- search and burgermenu -->
       <div class="d-flex align-items-center gap-2">
-        <ng-content select="[dvHeaderMobileAddons]"></ng-content>
+        <!-- <ng-content select="[dvHeaderMobileAddons]"></ng-content> -->
 
         <button
           class="dv-icon-button"
@@ -57,12 +47,22 @@
 
       <!-- top left -->
       <div class="d-flex ms-5 flex-grow-1">
-        <ng-content select="[dvHeaderDesktopLeft]"></ng-content>
+        <!-- <ng-content select="[dvHeaderDesktopLeft]"></ng-content> -->
+        @for (item of staticNavItems; track $index) {
+          <a
+            routerLink="{{ item.route }}"
+            class="btn btn-nav fw-normal d-flex align-items-center active px-2 shadow-none"
+            data-testid="header-nav-dashboard"
+          >
+            <i class="material-symbols-rounded me-2 text-white">dashboard</i>
+            <span>{{ item.label }}</span>
+          </a>
+        }
       </div>
 
       <!-- top right -->
       <div class="d-flex justify-content-end align-items-center ms-3 flex-grow-1">
-        <ng-content select="[dvHeaderDesktopRight]"></ng-content>
+        <!-- <ng-content select="[dvHeaderDesktopRight]"></ng-content> -->
 
         <div class="d-flex align-items-center gap-4">
           <button
@@ -90,3 +90,12 @@
     </div>
   </div>
 </header>
+
+<div>
+  @for (item of navigationStore.navigationViewSig(); track $index) {
+    <a [routerLink]="item.route" class="btn btn-link">
+      <span>{{ item.label }}</span>
+    </a>
+  }
+</div>
+<div class="tw:border-b-orange-400 tw:border-b"></div>

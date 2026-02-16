@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
@@ -23,6 +24,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
@@ -54,6 +56,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
   imports: [
+    CommonModule,
     MatSelectModule,
     RouterLink,
     SharedPatternMainLayoutComponent,
@@ -79,6 +82,10 @@ export class GesuchAppFeatureCockpitComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
+
+  route = inject(ActivatedRoute);
+
+  navigationStore = inject(NavigationStore);
 
   fallStore = inject(FallStore);
   darlehenStore = inject(DarlehenStore);
@@ -116,7 +123,7 @@ export class GesuchAppFeatureCockpitComponent {
       const fallId = this.gotNewFallSig();
 
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
+        // this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadDashboard$();
       }
     });
@@ -126,6 +133,17 @@ export class GesuchAppFeatureCockpitComponent {
         this.dashboardStore.loadDashboard$();
       }
     });
+
+    // effect(() => {
+    //   const darlehenView = this.darlehenStore.darlehenGsViewSig();
+
+    //   const items = darlehenView.list.map((darlehen) => ({
+    //     label: `Darlehen`,
+    //     route: ['/darlehen', darlehen.id],
+    //   }));
+
+    //   this.navigationStore.setNavigationItems(items);
+    // });
   }
 
   compareById = compareById;

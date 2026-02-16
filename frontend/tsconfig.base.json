@@ -294,7 +294,10 @@
       "@dv/sozialdienst-app/pattern/administration-layout": ["libs/sozialdienst-app/pattern/administration-layout/src/index.ts"],
       "@dv/sozialdienst-app/pattern/gesuch-step-layout": ["libs/sozialdienst-app/pattern/gesuch-step-layout/src/index.ts"],
       "@dv/sozialdienst-app/ui/adv-transloco-directive": ["libs/sozialdienst-app/ui/adv-transloco-directive/src/index.ts"],
-      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
+      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"],
+      "@dv/shared/pattern/global-header": ["libs/shared/pattern/global-header/src/index.ts"],
+      "@dv/shared/data-access/navigation": ["libs/shared/data-access/navigation/src/index.ts"],
+      "@dv/shared/pattern/gesuchsteller-layout": ["libs/shared/pattern/gesuchsteller-layout/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

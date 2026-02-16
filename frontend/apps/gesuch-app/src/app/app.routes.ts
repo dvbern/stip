@@ -10,7 +10,7 @@ export const appRoutes: Route[] = [
     providers: [DashboardStore],
     children: [
       {
-        path: 'gesuch-app-feature-cockpit',
+        path: 'dashboard',
         title: 'gesuch-app.dashboard.title',
         loadChildren: () =>
           import('@dv/gesuch-app/feature/cockpit').then(
@@ -50,11 +50,11 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'gesuch-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'gesuch-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
 ];
