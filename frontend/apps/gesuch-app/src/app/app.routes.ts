@@ -19,6 +19,13 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'ausbildung-unterbrechen',
+        loadChildren: () =>
+          import('@dv/shared/feature/ausbildung-unterbrechung').then(
+            (m) => m.sharedFeatureAusbildungUnterbrechungRoutes,
+          ),
+      },
+      {
         path: 'gesuch',
         loadComponent: () =>
           import('@dv/gesuch-app/feature/gesuch-form').then(

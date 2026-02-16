@@ -9,12 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchDashboardItem } from './gesuchDashboardItem';
+import { Dokument } from './dokument';
 
-export interface AusbildungDashboardItemAllOf { 
-    gesuchs?: Array<GesuchDashboardItem>;
-    canCreateAusbildungUnterbruchAntrag: boolean;
-    isUnterbrochen: boolean;
-    openAusbildungUnterbruchAntragId?: string;
+export interface AusbildungUnterbruchAntragGS { 
+    id: string;
+    dokumente: Array<Dokument>;
 }
 

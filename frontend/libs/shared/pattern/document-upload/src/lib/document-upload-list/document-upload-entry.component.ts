@@ -18,9 +18,13 @@ import {
   UploadView,
   isUploadable,
 } from '@dv/shared/model/dokument';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
+import {
+  DownloadOptions,
+  SharedUiDownloadButtonDirective,
+} from '@dv/shared/ui/download-button';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
@@ -50,6 +54,27 @@ export class SharedPatternDocumentUploadEntryComponent {
       this.uploadViewSig().isSachbearbeitungApp,
     );
   });
+  downloadOptionsSig = computed<DownloadOptions>(() => {
+    const upload = this.uploadViewSig();
+    const document = this.documentViewSig();
+    switch (upload.dokumentModel.art) {
+      case 'DARLEHEN_DOKUMENT':
+        return { type: 'darlehen', id: document.file.id };
+      case 'SIMPLE':
+        return { type: 'ausbildungUnterbruch', id: document.file.id };
+      case 'CUSTOM_DOKUMENT':
+      case 'GESUCH_DOKUMENT':
+      case 'UNTERSCHRIFTENBLATT':
+        return {
+          type: 'dokument',
+          id: document.file.id,
+          dokumentArt: upload.dokumentModel.art,
+        };
+      default:
+        assertUnreachable(upload.dokumentModel);
+    }
+  });
+
   checkForRemove$ = new EventEmitter<void>();
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();
   @Output() removeUpload: Observable<{ dokumentId: string }>;

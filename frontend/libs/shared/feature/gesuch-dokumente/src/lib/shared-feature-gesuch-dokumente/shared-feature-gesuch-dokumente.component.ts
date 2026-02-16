@@ -251,6 +251,9 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   dokumentAblehnen(document: SharedModelTableDokument) {
+    if (!('gesuchDokument' in document.dokumentOptions.dokument)) {
+      return;
+    }
     const { trancheId: gesuchTrancheId } = this.gesuchViewSig();
     const gesuchDokumentId =
       document.dokumentOptions.dokument.gesuchDokument?.id;

@@ -8,6 +8,7 @@ import {
 import { firstValueFrom, map } from 'rxjs';
 
 import {
+  AusbildungService,
   DarlehenService,
   DatenschutzbriefService,
   DemoDataService,
@@ -19,7 +20,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 
-type DownloadOptions =
+export type DownloadOptions =
   | {
       type: 'datenschutzbrief';
       id: string;
@@ -49,6 +50,10 @@ type DownloadOptions =
   | {
       type: 'demoData';
       id: string;
+    }
+  | {
+      type: 'ausbildungUnterbruch';
+      id: string;
     };
 
 @Directive({
@@ -64,6 +69,7 @@ export class SharedUiDownloadButtonDirective {
   private verfuegungService = inject(VerfuegungService);
   private massendruckService = inject(MassendruckService);
   private demoDataService = inject(DemoDataService);
+  private ausbildungService = inject(AusbildungService);
   private dcmnt = inject(DOCUMENT, { optional: true });
 
   @HostListener('click')
@@ -78,6 +84,7 @@ export class SharedUiDownloadButtonDirective {
         this.verfuegungService,
         this.massendruckService,
         this.demoDataService,
+        this.ausbildungService,
       ),
     ).then((href) => {
       this.dcmnt?.defaultView?.open(href, '_blank');
@@ -94,6 +101,7 @@ const getDownloadObservable$ = (
   verfuegungService: VerfuegungService,
   massendruckService: MassendruckService,
   demoDataService: DemoDataService,
+  ausbildungService: AusbildungService,
 ) => {
   const { type, id } = downloadOptions;
   switch (type) {
@@ -173,6 +181,19 @@ const getDownloadObservable$ = (
         .pipe(
           map(({ token }) =>
             demoDataService.getDemoDataDokumentPath({ token }),
+          ),
+        );
+    }
+    case 'ausbildungUnterbruch': {
+      return ausbildungService
+        .getAusbildungUnterbruchAntragDokumentDownloadToken$({
+          dokumentId: id,
+        })
+        .pipe(
+          map(({ token }) =>
+            ausbildungService.downloadAusbildungUnterbruchAntragDokumentPath({
+              token,
+            }),
           ),
         );
     }

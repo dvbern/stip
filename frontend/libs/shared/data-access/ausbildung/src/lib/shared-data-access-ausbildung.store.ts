@@ -8,7 +8,9 @@ import {
   Ausbildung,
   AusbildungCreateResponse,
   AusbildungService,
+  AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams,
   AusbildungUpdate,
+  Dokument,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
@@ -25,15 +27,19 @@ import {
 
 type AusbildungState = {
   ausbildung: CachedRemoteData<Ausbildung>;
+  ausbildungUnterbrechenResponse: RemoteData<unknown>;
   ausbildungResponse: RemoteData<AusbildungCreateResponse>;
+  ausbildungUnterbruchDokumente: RemoteData<Dokument[]>;
 };
 
 const initialState: AusbildungState = {
   ausbildung: initial(),
+  ausbildungUnterbrechenResponse: initial(),
   ausbildungResponse: initial(),
+  ausbildungUnterbruchDokumente: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AusbildungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
@@ -106,6 +112,116 @@ export class AusbildungStore extends signalStore(
             },
           ),
         ),
+      ),
+    ),
+  );
+
+  getAusbildungUnterbruchDokumente$ = rxMethod<{
+    ausbildungUnterbruchAntragId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbruchDokumente: pending(),
+        }));
+      }),
+      switchMap(({ ausbildungUnterbruchAntragId }) =>
+        this.ausbildungService
+          .getAusbildungUnterbruchAntragDokuments$({
+            ausbildungUnterbruchAntragId,
+          })
+          .pipe(
+            handleApiResponse((response) =>
+              patchState(this, { ausbildungUnterbruchDokumente: response }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createAusbildungUnterbruchAntrag$ = rxMethod<{
+    ausbildungId: string;
+    onSuccess: (id: string) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(({ ausbildungId, onSuccess }) =>
+        this.ausbildungService
+          .createAusbildungUnterbruchAntrag$({ ausbildungId })
+          .pipe(
+            handleApiResponse(
+              (response) =>
+                patchState(this, { ausbildungUnterbrechenResponse: response }),
+              { onSuccess: (unterbruch) => onSuccess(unterbruch.id) },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  deleteAusbildungUnterbruchAntrag$ = rxMethod<{
+    ausbildungUnterbruchAntragId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(({ ausbildungUnterbruchAntragId, onSuccess }) =>
+        this.ausbildungService
+          .deleteAusbildungUnterbruchAntrag$({
+            ausbildungUnterbruchAntragId,
+          })
+          .pipe(
+            handleApiResponse(
+              (response) =>
+                patchState(this, {
+                  ausbildungUnterbrechenResponse: response,
+                }),
+              { onSuccess },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  einreichenAusbildungUnterbruchAntrag$ = rxMethod<
+    AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams & {
+      onSuccess: () => void;
+    }
+  >(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(
+        ({
+          ausbildungUnterbruchAntragId,
+          updateAusbildungUnterbruchAntragGS,
+          onSuccess,
+        }) =>
+          this.ausbildungService
+            .einreichenAusbildungUnterbruchAntrag$({
+              ausbildungUnterbruchAntragId,
+              updateAusbildungUnterbruchAntragGS,
+            })
+            .pipe(
+              handleApiResponse(
+                (response) =>
+                  patchState(this, {
+                    ausbildungUnterbrechenResponse: response,
+                  }),
+                { onSuccess },
+              ),
+            ),
       ),
     ),
   );
