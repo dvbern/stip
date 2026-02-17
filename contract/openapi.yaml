@@ -8319,7 +8319,6 @@ components:
         - gesuchId
         - unterbruchLatestEndDate
         - unterbruchEarliestStartDate
-        - documents
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -8344,10 +8343,6 @@ components:
         unterbruchEarliestStartDate:
           format: date
           type: string
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dokument'
       allOf:
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
     AusbildungsStatus:
