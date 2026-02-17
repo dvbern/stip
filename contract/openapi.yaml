@@ -2116,33 +2116,6 @@ paths:
   /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
-    get:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Dokument'
-          description: A list of AusbildungUnterbruchAntrag dokumente
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAusbildungUnterbruchAntragDokuments
-      summary: get a list of AusbildungUnterbruchAntrag dokumente
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
     post:
       tags:
         - Ausbildung
@@ -2257,6 +2230,29 @@ paths:
   /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+          description: AusbildungUnterbruchAntrag
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchAntragGS
+      summary: get a AusbildungUnterbruchAntrag
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
     delete:
       tags:
         - Ausbildung
@@ -8244,6 +8240,7 @@ components:
       required:
         - id
         - dokuments
+        - canEdit
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -8251,6 +8248,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+        canEdit:
+          type: boolean
     AusbildungUnterbruchAntragDokumentCreate:
       type: object
       required:

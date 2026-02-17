@@ -148,30 +148,6 @@ paths:
   /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
-    get:
-      tags:
-        - Ausbildung
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/Dokument'
-          description: A list of AusbildungUnterbruchAntrag dokumente
-        '400':
-          $ref: './components/responses.yaml#/BadRequest'
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAusbildungUnterbruchAntragDokuments
-      summary: get a list of AusbildungUnterbruchAntrag dokumente
     post:
       tags:
         - Ausbildung
@@ -273,6 +249,26 @@ paths:
   /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+          description: AusbildungUnterbruchAntrag
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAusbildungUnterbruchAntragGS
+      summary: get a AusbildungUnterbruchAntrag
     delete:
       tags:
         - Ausbildung
@@ -420,6 +416,7 @@ components:
       required:
         - id
         - dokuments
+        - canEdit
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -427,6 +424,8 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/Dokument'
+        canEdit:
+          type: boolean
     AusbildungUnterbruchAntragDokumentCreate:
       type: object
       required:
