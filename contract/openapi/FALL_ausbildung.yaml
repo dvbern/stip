@@ -120,6 +120,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createAusbildungUnterbruchAntrag
       summary: Create a new AusbildungUnterbruchAntrag
+  /ausbildung/unterbruch/{gesuchId}/all:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
     get:
       tags:
         - Ausbildung
@@ -483,6 +486,7 @@ components:
         - canAntragAkzeptieren
         - dokuments
         - gesuchId
+        - documents
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -501,6 +505,10 @@ components:
             $ref: './components/common.yaml#/Dokument'
         gesuchId:
           $ref: './components/common.yaml#/UUID'
+        documents:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
       allOf:
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
 

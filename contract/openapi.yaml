@@ -2085,6 +2085,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /ausbildung/unterbruch/{gesuchId}/all:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
     get:
       tags:
         - Ausbildung
@@ -8307,6 +8310,7 @@ components:
         - canAntragAkzeptieren
         - dokuments
         - gesuchId
+        - documents
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -8325,6 +8329,10 @@ components:
             $ref: '#/components/schemas/Dokument'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
       allOf:
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
     AusbildungsStatus:
