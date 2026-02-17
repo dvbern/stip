@@ -35,7 +35,6 @@ import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
@@ -161,9 +160,9 @@ public class AusbildungResourceImpl implements AusbildungResource {
 
     @Override
     @RolesAllowed(AUSBILDUNG_READ)
-    public List<DokumentDto> getAusbildungUnterbruchAntragDokuments(UUID ausbildungUnterbruchAntragId) {
-        ausbildungUnterbruchAntragAuthorizer.canReadDokuments(ausbildungUnterbruchAntragId);
-        return ausbildungUnterbruchAntragService.getDokumentsOfAusbildungUnterbruchAntrag(ausbildungUnterbruchAntragId);
+    public AusbildungUnterbruchAntragGSDto getAusbildungUnterbruchAntragGS(UUID ausbildungUnterbruchAntragId) {
+        ausbildungUnterbruchAntragAuthorizer.gsCanRead(ausbildungUnterbruchAntragId);
+        return ausbildungUnterbruchAntragService.getAusbildungUnterbruchAntrag(ausbildungUnterbruchAntragId);
     }
 
     @Override
@@ -174,6 +173,7 @@ public class AusbildungResourceImpl implements AusbildungResource {
     }
 
     @Override
+    @RolesAllowed(AUSBILDUNG_UPDATE)
     public AusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSB(
         UUID ausbildungUnterbruchAntragId,
         UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto

@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
-import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -54,7 +53,6 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchService = Mockito.mock(GesuchService.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(GesuchUtil.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         gesuchAuthorizer =
             new GesuchAuthorizer(null, gesuchRepository, gesuchStatusService, null, null, gesuchService, null);
     }

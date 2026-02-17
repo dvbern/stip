@@ -58,6 +58,20 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void gsCanRead(final UUID ausbildungUnterbruchAntragId) {
+        final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                antrag.getGesuch().getAusbildung().getFall(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
+    }
+
+    @Transactional
     public void gsCanUpdate(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
         assertAntragIsOfGsAndInBearbeitung(antrag);

@@ -18,7 +18,6 @@ import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
@@ -76,7 +75,7 @@ public class AusbildungApiSpec {
                 einreichenAusbildungUnterbruchAntrag(),
                 getAusbildung(),
                 getAusbildungUnterbruchAntragDokumentDownloadToken(),
-                getAusbildungUnterbruchAntragDokuments(),
+                getAusbildungUnterbruchAntragGS(),
                 getAusbildungUnterbruchAntragsByGesuchId(),
                 updateAusbildung(),
                 updateAusbildungUnterbruchAntragSB()
@@ -119,8 +118,8 @@ public class AusbildungApiSpec {
         return new GetAusbildungUnterbruchAntragDokumentDownloadTokenOper(createReqSpec());
     }
 
-    public GetAusbildungUnterbruchAntragDokumentsOper getAusbildungUnterbruchAntragDokuments() {
-        return new GetAusbildungUnterbruchAntragDokumentsOper(createReqSpec());
+    public GetAusbildungUnterbruchAntragGSOper getAusbildungUnterbruchAntragGS() {
+        return new GetAusbildungUnterbruchAntragGSOper(createReqSpec());
     }
 
     public GetAusbildungUnterbruchAntragsByGesuchIdOper getAusbildungUnterbruchAntragsByGesuchId() {
@@ -793,28 +792,28 @@ public class AusbildungApiSpec {
         }
     }
     /**
-     * get a list of AusbildungUnterbruchAntrag dokumente
+     * get a AusbildungUnterbruchAntrag
      * 
      *
      * @see #ausbildungUnterbruchAntragIdPath  (required)
-     * return List&lt;DokumentDtoSpec&gt;
+     * return AusbildungUnterbruchAntragGSDtoSpec
      */
-    public static class GetAusbildungUnterbruchAntragDokumentsOper implements Oper {
+    public static class GetAusbildungUnterbruchAntragGSOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument";
+        public static final String REQ_URI = "/ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetAusbildungUnterbruchAntragDokumentsOper(RequestSpecBuilder reqSpec) {
+        public GetAusbildungUnterbruchAntragGSOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument
+         * GET /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -825,12 +824,12 @@ public class AusbildungApiSpec {
         }
 
         /**
-         * GET /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument
+         * GET /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}
          * @param handler handler
-         * @return List&lt;DokumentDtoSpec&gt;
+         * @return AusbildungUnterbruchAntragGSDtoSpec
          */
-        public List<DokumentDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<DokumentDtoSpec>> type = new TypeRef<List<DokumentDtoSpec>>(){};
+        public AusbildungUnterbruchAntragGSDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<AusbildungUnterbruchAntragGSDtoSpec> type = new TypeRef<AusbildungUnterbruchAntragGSDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -840,7 +839,7 @@ public class AusbildungApiSpec {
          * @param ausbildungUnterbruchAntragId (UUID)  (required)
          * @return operation
          */
-        public GetAusbildungUnterbruchAntragDokumentsOper ausbildungUnterbruchAntragIdPath(Object ausbildungUnterbruchAntragId) {
+        public GetAusbildungUnterbruchAntragGSOper ausbildungUnterbruchAntragIdPath(Object ausbildungUnterbruchAntragId) {
             reqSpec.addPathParam(AUSBILDUNG_UNTERBRUCH_ANTRAG_ID_PATH, ausbildungUnterbruchAntragId);
             return this;
         }
@@ -850,7 +849,7 @@ public class AusbildungApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetAusbildungUnterbruchAntragDokumentsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetAusbildungUnterbruchAntragGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -860,7 +859,7 @@ public class AusbildungApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetAusbildungUnterbruchAntragDokumentsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetAusbildungUnterbruchAntragGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

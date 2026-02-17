@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_ID,
-  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_DOKUMENTS
+  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_DOKUMENTS,
+  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_CAN_EDIT
 })
 @JsonTypeName("AusbildungUnterbruchAntragGS")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +44,9 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
 
   public static final String JSON_PROPERTY_DOKUMENTS = "dokuments";
   private List<DokumentDtoSpec> dokuments;
+
+  public static final String JSON_PROPERTY_CAN_EDIT = "canEdit";
+  private Boolean canEdit;
 
   public AusbildungUnterbruchAntragGSDtoSpec() {
   }
@@ -106,6 +110,32 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     this.dokuments = dokuments;
   }
 
+
+  public AusbildungUnterbruchAntragGSDtoSpec canEdit(Boolean canEdit) {
+    
+    this.canEdit = canEdit;
+    return this;
+  }
+
+   /**
+   * Get canEdit
+   * @return canEdit
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_EDIT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanEdit() {
+    return canEdit;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_EDIT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanEdit(Boolean canEdit) {
+    this.canEdit = canEdit;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -116,12 +146,13 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     }
     AusbildungUnterbruchAntragGSDtoSpec ausbildungUnterbruchAntragGS = (AusbildungUnterbruchAntragGSDtoSpec) o;
     return Objects.equals(this.id, ausbildungUnterbruchAntragGS.id) &&
-        Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments);
+        Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments) &&
+        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokuments);
+    return Objects.hash(id, dokuments, canEdit);
   }
 
   @Override
@@ -130,6 +161,7 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     sb.append("class AusbildungUnterbruchAntragGSDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
+    sb.append("    canEdit: ").append(toIndentedString(canEdit)).append("\n");
     sb.append("}");
     return sb.toString();
   }

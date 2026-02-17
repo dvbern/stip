@@ -364,7 +364,7 @@ public class GesuchTrancheService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (GesuchUtil.canCreateAenderung(gesuch)) {
+        if (!GesuchUtil.canCreateAenderung(gesuch)) {
             throw new ForbiddenException();
         }
 

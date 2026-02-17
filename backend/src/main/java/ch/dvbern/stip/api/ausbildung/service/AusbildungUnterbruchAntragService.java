@@ -174,6 +174,11 @@ public class AusbildungUnterbruchAntragService {
     }
 
     @Transactional
+    public AusbildungUnterbruchAntragGSDto getAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
+        return ausbildungUnterbruchAntragMapper.toGsDto(requireById(ausbildungUnterbruchAntragId));
+    }
+
+    @Transactional
     public List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(final UUID gesuchId) {
         return ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId)
             .stream()

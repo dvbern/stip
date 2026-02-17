@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class AusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid UUID id;
   private @Valid List<DokumentDto> dokuments = new ArrayList<>();
+  private @Valid Boolean canEdit;
 
   /**
    **/
@@ -81,6 +82,25 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
 
     return this;
   }
+  /**
+   **/
+  public AusbildungUnterbruchAntragGSDto canEdit(Boolean canEdit) {
+    this.canEdit = canEdit;
+    return this;
+  }
+
+  
+  @JsonProperty("canEdit")
+  @NotNull
+  public Boolean getCanEdit() {
+    return canEdit;
+  }
+
+  @JsonProperty("canEdit")
+  public void setCanEdit(Boolean canEdit) {
+    this.canEdit = canEdit;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -92,12 +112,13 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
     }
     AusbildungUnterbruchAntragGSDto ausbildungUnterbruchAntragGS = (AusbildungUnterbruchAntragGSDto) o;
     return Objects.equals(this.id, ausbildungUnterbruchAntragGS.id) &&
-        Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments);
+        Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments) &&
+        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokuments);
+    return Objects.hash(id, dokuments, canEdit);
   }
 
   @Override
@@ -107,6 +128,7 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
+    sb.append("    canEdit: ").append(toIndentedString(canEdit)).append("\n");
     sb.append("}");
     return sb.toString();
   }
