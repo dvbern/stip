@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
@@ -65,7 +66,7 @@ class GesuchAuthorizerCanDeleteTest {
     @BeforeEach
     void setUp() {
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+        when(GesuchUtil.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
 
         UUID currentBenutzerId = UUID.randomUUID();
         benutzerService = Mockito.mock(BenutzerService.class);

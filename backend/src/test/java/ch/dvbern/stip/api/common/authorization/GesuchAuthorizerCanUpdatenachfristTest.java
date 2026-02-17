@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -55,7 +56,7 @@ class GesuchAuthorizerCanUpdatenachfristTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         benutzerService = Mockito.mock(BenutzerService.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+        when(GesuchUtil.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         when(gesuchRepository.requireById(Mockito.any())).thenReturn(gesuch);
         authorizer =
             new GesuchAuthorizer(

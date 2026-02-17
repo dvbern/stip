@@ -2116,8 +2116,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/FileUpload'
-              required: true
+              $ref: '#/components/schemas/AusbildungUnterbruchAntragDokumentCreate'
       responses:
         '201':
           description: Created
@@ -8210,14 +8209,21 @@ components:
       type: object
       required:
         - id
-        - dokumente
+        - dokuments
       properties:
         id:
           $ref: '#/components/schemas/UUID'
-        dokumente:
+        dokuments:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
+    AusbildungUnterbruchAntragDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
     UpdateAusbildungUnterbruchAntragGS:
       type: object
       required:
@@ -8268,6 +8274,7 @@ components:
         - userErstellt
         - kommentarGS
         - canAntragAkzeptieren
+        - dokuments
         - gesuchId
       properties:
         id:
@@ -8281,6 +8288,10 @@ components:
           type: string
         canAntragAkzeptieren:
           type: boolean
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
         gesuchId:
           $ref: '#/components/schemas/UUID'
       allOf:

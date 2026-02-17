@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -221,7 +222,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void gsCanCreateAenderung(final UUID gesuchId) {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN);
+        assertGesuchCanCreateAenderung(gesuchId);
+    }
+
+    private void assertGesuchCanCreateAenderung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (GesuchUtil.canCreateAenderung(gesuch)) {
+            return;
+        }
+        forbidden();
     }
 
     public void canGetGsDashboard() {
@@ -265,7 +274,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     public void assertGesuchIsInOneOfGesuchStatus(final UUID gesuchId, final Set<Gesuchstatus> gesuchStatusSet) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusService.gesuchIsInOneOfGesuchStatus(gesuch, gesuchStatusSet)) {
+        if (GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, gesuchStatusSet)) {
             return;
         }
         forbidden();

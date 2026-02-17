@@ -148,8 +148,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: './components/common.yaml#/FileUpload'
-              required: true
+              $ref: '#/components/schemas/AusbildungUnterbruchAntragDokumentCreate'
       responses:
         '201':
           description: Created
@@ -389,14 +388,21 @@ components:
       type: object
       required:
         - id
-        - dokumente
+        - dokuments
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
-        dokumente:
+        dokuments:
           type: array
           items:
             $ref: './components/common.yaml#/Dokument'
+    AusbildungUnterbruchAntragDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: './components/common.yaml#/FileUpload'
     UpdateAusbildungUnterbruchAntragGS:
       type: object
       required:
@@ -447,6 +453,7 @@ components:
         - userErstellt
         - kommentarGS
         - canAntragAkzeptieren
+        - dokuments
         - gesuchId
       properties:
         id:
@@ -460,6 +467,10 @@ components:
           type: string
         canAntragAkzeptieren:
           type: boolean
+        dokuments:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
         gesuchId:
           $ref: './components/common.yaml#/UUID'
       allOf:

@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -50,7 +51,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     void setUp() {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
+        when(GesuchUtil.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         when(gesuchStatusService.canGetBerechnung(any())).thenCallRealMethod();
         gesuch = new Gesuch()
             .setAusbildung(

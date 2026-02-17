@@ -19,10 +19,12 @@ package ch.dvbern.stip.api.ausbildung.entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
 import ch.dvbern.stip.api.adresse.entity.NotStatelessConstraint;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
@@ -155,6 +157,10 @@ public class Ausbildung extends AbstractMandantEntity {
     @Column(name = "status", nullable = false)
     private AusbildungsStatus status = AusbildungsStatus.AKTIV;
 
+    @NotNull
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "ausbildung")
+    private List<AusbildungUnterbruchAntrag> ausbildungUnterbruchAntrags = new ArrayList<>();
+
     @Transient
     public String getAusbildungsstaetteOrAlternative(final Locale locale) {
         if (isAusbildungNichtGefunden()) {
@@ -175,5 +181,24 @@ public class Ausbildung extends AbstractMandantEntity {
                 ? getAusbildungsgang().getAbschluss().getBezeichnungDe()
                 : getAusbildungsgang().getAbschluss().getBezeichnungFr();
         }
+    }
+
+    @Transient
+    public boolean isUnterbrochen() {
+        return ausbildungUnterbruchAntrags.stream()
+            .filter(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.AKZEPTIERT
+            )
+            .anyMatch(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGueltigkeit().contains(LocalDate.now())
+            );
+    }
+
+    @Transient
+    public Gesuch getLatestGesuch() {
+        return gesuchs.stream()
+            .max(Comparator.comparingInt(value -> value.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr()))
+            .orElseThrow();
     }
 }
