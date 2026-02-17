@@ -417,6 +417,8 @@ components:
         - id
         - dokuments
         - canEdit
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -426,6 +428,12 @@ components:
             $ref: './components/common.yaml#/Dokument'
         canEdit:
           type: boolean
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
     AusbildungUnterbruchAntragDokumentCreate:
       type: object
       required:

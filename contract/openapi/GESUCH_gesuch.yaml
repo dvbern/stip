@@ -1131,8 +1131,6 @@ components:
       required:
         - canCreateAusbildungUnterbruchAntrag
         - isUnterbrochen
-        - unterbruchLatestEndDate
-        - unterbruchEarliestStartDate
       properties:
         gesuchs:
           type: array
@@ -1144,12 +1142,6 @@ components:
           type: boolean
         openAusbildungUnterbruchAntragId:
           $ref: './components/common.yaml#/UUID'
-        unterbruchLatestEndDate:
-          format: date
-          type: string
-        unterbruchEarliestStartDate:
-          format: date
-          type: string
       allOf:
         - $ref: './components/common.yaml#/Ausbildung'
     SbGesucheDashboardColumn:
