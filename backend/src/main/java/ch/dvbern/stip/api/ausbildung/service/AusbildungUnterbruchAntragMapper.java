@@ -17,9 +17,13 @@
 
 package ch.dvbern.stip.api.ausbildung.service;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
@@ -38,7 +42,21 @@ public abstract class AusbildungUnterbruchAntragMapper {
     @Mapping(source = "gueltigkeit.gueltigAb", target = "startDate")
     @Mapping(source = "gueltigkeit.gueltigBis", target = "endDate")
     @Mapping(source = ".", target = "canAntragAkzeptieren", qualifiedByName = "getCanAntragAkzeptieren")
-    abstract AusbildungUnterbruchAntragSBDto toSbDto(AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
+    @Mapping(source = "gesuch", target = "unterbruchLatestEndDate", qualifiedByName = "getUnterbruchLatestEndDate")
+    @Mapping(
+        source = "gesuch", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate"
+    )
+    abstract AusbildungUnterbruchAntragSBDto toSbDto(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
+
+    @Named("getUnterbruchLatestEndDate")
+    protected LocalDate getUnterbruchLatestEndDate(final Gesuch gesuch) {
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigBis();
+    }
+
+    @Named("getUnterbruchEarliestStartDate")
+    protected LocalDate getUnterbruchEarliestStartDate(final Gesuch gesuch) {
+        return DateUtil.getGesuchDateRange(gesuch).getGueltigAb();
+    }
 
     @Named("getCanAntragAkzeptieren")
     protected boolean getCanAntragAkzeptieren(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag) {
@@ -48,14 +66,14 @@ public abstract class AusbildungUnterbruchAntragMapper {
     @Mapping(source = "startDate", target = "gueltigkeit.gueltigAb")
     @Mapping(source = "endDate", target = "gueltigkeit.gueltigBis")
     public abstract AusbildungUnterbruchAntrag partialUpdate(
-        UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto,
-        @MappingTarget AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
+        final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto,
+        @MappingTarget final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
     );
 
     @Mapping(source = "startDate", target = "gueltigkeit.gueltigAb")
     @Mapping(source = "endDate", target = "gueltigkeit.gueltigBis")
     public abstract AusbildungUnterbruchAntrag partialUpdate(
-        UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragGSDto,
-        @MappingTarget AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
+        final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragGSDto,
+        @MappingTarget final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
     );
 }

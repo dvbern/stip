@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +34,8 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid Boolean editable;
   private @Valid Boolean canCreateAusbildungUnterbruchAntrag;
   private @Valid Boolean isUnterbrochen;
+  private @Valid LocalDate unterbruchLatestEndDate;
+  private @Valid LocalDate unterbruchEarliestStartDate;
   private @Valid UUID id;
   private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid Boolean ausbildungNichtGefunden;
@@ -199,6 +202,44 @@ public class AusbildungDashboardItemDto  implements Serializable {
   @JsonProperty("isUnterbrochen")
   public void setIsUnterbrochen(Boolean isUnterbrochen) {
     this.isUnterbrochen = isUnterbrochen;
+  }
+
+  /**
+   **/
+  public AusbildungDashboardItemDto unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchLatestEndDate")
+  @NotNull
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+  @JsonProperty("unterbruchLatestEndDate")
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+  /**
+   **/
+  public AusbildungDashboardItemDto unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchEarliestStartDate")
+  @NotNull
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+  @JsonProperty("unterbruchEarliestStartDate")
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
   /**
@@ -474,6 +515,8 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
         Objects.equals(this.isUnterbrochen, ausbildungDashboardItem.isUnterbrochen) &&
+        Objects.equals(this.unterbruchLatestEndDate, ausbildungDashboardItem.unterbruchLatestEndDate) &&
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungDashboardItem.unterbruchEarliestStartDate) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
@@ -491,7 +534,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs, openAusbildungUnterbruchAntragId);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, unterbruchLatestEndDate, unterbruchEarliestStartDate, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs, openAusbildungUnterbruchAntragId);
   }
 
   @Override
@@ -507,6 +550,8 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    isUnterbrochen: ").append(toIndentedString(isUnterbrochen)).append("\n");
+    sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
+    sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");

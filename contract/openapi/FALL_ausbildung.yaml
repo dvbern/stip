@@ -486,6 +486,8 @@ components:
         - canAntragAkzeptieren
         - dokuments
         - gesuchId
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
         - documents
       properties:
         id:
@@ -505,6 +507,12 @@ components:
             $ref: './components/common.yaml#/Dokument'
         gesuchId:
           $ref: './components/common.yaml#/UUID'
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
         documents:
           type: array
           items:

@@ -18,6 +18,7 @@ import ch.dvbern.stip.generated.dto.AusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
@@ -75,6 +76,7 @@ public class AusbildungApiSpec {
                 einreichenAusbildungUnterbruchAntrag(),
                 getAusbildung(),
                 getAusbildungUnterbruchAntragDokumentDownloadToken(),
+                getAusbildungUnterbruchAntragDokuments(),
                 getAusbildungUnterbruchAntragsByGesuchId(),
                 updateAusbildung(),
                 updateAusbildungUnterbruchAntragSB()
@@ -115,6 +117,10 @@ public class AusbildungApiSpec {
 
     public GetAusbildungUnterbruchAntragDokumentDownloadTokenOper getAusbildungUnterbruchAntragDokumentDownloadToken() {
         return new GetAusbildungUnterbruchAntragDokumentDownloadTokenOper(createReqSpec());
+    }
+
+    public GetAusbildungUnterbruchAntragDokumentsOper getAusbildungUnterbruchAntragDokuments() {
+        return new GetAusbildungUnterbruchAntragDokumentsOper(createReqSpec());
     }
 
     public GetAusbildungUnterbruchAntragsByGesuchIdOper getAusbildungUnterbruchAntragsByGesuchId() {
@@ -215,13 +221,13 @@ public class AusbildungApiSpec {
      * Create a new AusbildungUnterbruchAntrag
      * 
      *
-     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * @see #ausbildungIdPath  (required)
      * return AusbildungUnterbruchAntragGSDtoSpec
      */
     public static class CreateAusbildungUnterbruchAntragOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/ausbildung/unterbruch/{gesuchId}";
+        public static final String REQ_URI = "/ausbildung/unterbruch/{ausbildungId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -233,7 +239,7 @@ public class AusbildungApiSpec {
         }
 
         /**
-         * POST /ausbildung/unterbruch/{gesuchId}
+         * POST /ausbildung/unterbruch/{ausbildungId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -244,7 +250,7 @@ public class AusbildungApiSpec {
         }
 
         /**
-         * POST /ausbildung/unterbruch/{gesuchId}
+         * POST /ausbildung/unterbruch/{ausbildungId}
          * @param handler handler
          * @return AusbildungUnterbruchAntragGSDtoSpec
          */
@@ -253,14 +259,14 @@ public class AusbildungApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String AUSBILDUNG_ID_PATH = "ausbildungId";
 
         /**
-         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @param ausbildungId (UUID)  (required)
          * @return operation
          */
-        public CreateAusbildungUnterbruchAntragOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public CreateAusbildungUnterbruchAntragOper ausbildungIdPath(Object ausbildungId) {
+            reqSpec.addPathParam(AUSBILDUNG_ID_PATH, ausbildungId);
             return this;
         }
 
@@ -787,6 +793,79 @@ public class AusbildungApiSpec {
         }
     }
     /**
+     * get a list of AusbildungUnterbruchAntrag dokumente
+     * 
+     *
+     * @see #ausbildungUnterbruchAntragIdPath  (required)
+     * return List&lt;DokumentDtoSpec&gt;
+     */
+    public static class GetAusbildungUnterbruchAntragDokumentsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAusbildungUnterbruchAntragDokumentsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument
+         * @param handler handler
+         * @return List&lt;DokumentDtoSpec&gt;
+         */
+        public List<DokumentDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DokumentDtoSpec>> type = new TypeRef<List<DokumentDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_ID_PATH = "ausbildungUnterbruchAntragId";
+
+        /**
+         * @param ausbildungUnterbruchAntragId (UUID)  (required)
+         * @return operation
+         */
+        public GetAusbildungUnterbruchAntragDokumentsOper ausbildungUnterbruchAntragIdPath(Object ausbildungUnterbruchAntragId) {
+            reqSpec.addPathParam(AUSBILDUNG_UNTERBRUCH_ANTRAG_ID_PATH, ausbildungUnterbruchAntragId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAusbildungUnterbruchAntragDokumentsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAusbildungUnterbruchAntragDokumentsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
      * 
      *
@@ -796,7 +875,7 @@ public class AusbildungApiSpec {
     public static class GetAusbildungUnterbruchAntragsByGesuchIdOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/ausbildung/unterbruch/{gesuchId}";
+        public static final String REQ_URI = "/ausbildung/unterbruch/{gesuchId}/all";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -808,7 +887,7 @@ public class AusbildungApiSpec {
         }
 
         /**
-         * GET /ausbildung/unterbruch/{gesuchId}
+         * GET /ausbildung/unterbruch/{gesuchId}/all
          * @param handler handler
          * @param <T> type
          * @return type
@@ -819,7 +898,7 @@ public class AusbildungApiSpec {
         }
 
         /**
-         * GET /ausbildung/unterbruch/{gesuchId}
+         * GET /ausbildung/unterbruch/{gesuchId}/all
          * @param handler handler
          * @return List&lt;AusbildungUnterbruchAntragSBDtoSpec&gt;
          */

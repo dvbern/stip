@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.AusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.util.UUID;
@@ -35,9 +36,9 @@ public interface AusbildungResource {
     AusbildungCreateResponseDto createAusbildung(@Valid @NotNull AusbildungUpdateDto ausbildungUpdateDto);
 
     @POST
-    @Path("/unterbruch/{gesuchId}")
+    @Path("/unterbruch/{ausbildungId}")
     @Produces({ "application/json", "text/plain" })
-    AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(@PathParam("gesuchId") UUID gesuchId);
+    AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(@PathParam("ausbildungId") UUID ausbildungId);
 
     @POST
     @Path("/unterbruch/{ausbildungUnterbruchAntragId}/dokument")
@@ -77,7 +78,12 @@ public interface AusbildungResource {
     FileDownloadTokenDto getAusbildungUnterbruchAntragDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
-    @Path("/unterbruch/{gesuchId}")
+    @Path("/unterbruch/{ausbildungUnterbruchAntragId}/dokument")
+    @Produces({ "application/json", "text/plain" })
+    List<DokumentDto> getAusbildungUnterbruchAntragDokuments(@PathParam("ausbildungUnterbruchAntragId") UUID ausbildungUnterbruchAntragId);
+
+    @GET
+    @Path("/unterbruch/{gesuchId}/all")
     @Produces({ "application/json", "text/plain" })
     List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(@PathParam("gesuchId") UUID gesuchId);
 

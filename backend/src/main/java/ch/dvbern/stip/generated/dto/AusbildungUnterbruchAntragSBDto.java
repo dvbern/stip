@@ -37,6 +37,9 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid Boolean canAntragAkzeptieren;
   private @Valid List<DokumentDto> dokuments = new ArrayList<>();
   private @Valid UUID gesuchId;
+  private @Valid LocalDate unterbruchLatestEndDate;
+  private @Valid LocalDate unterbruchEarliestStartDate;
+  private @Valid List<DokumentDto> documents = new ArrayList<>();
 
   /**
    **/
@@ -282,6 +285,79 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     this.gesuchId = gesuchId;
   }
 
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchLatestEndDate")
+  @NotNull
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+  @JsonProperty("unterbruchLatestEndDate")
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchEarliestStartDate")
+  @NotNull
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+  @JsonProperty("unterbruchEarliestStartDate")
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+  }
+
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto documents(List<DokumentDto> documents) {
+    this.documents = documents;
+    return this;
+  }
+
+  
+  @JsonProperty("documents")
+  @NotNull
+  public List<DokumentDto> getDocuments() {
+    return documents;
+  }
+
+  @JsonProperty("documents")
+  public void setDocuments(List<DokumentDto> documents) {
+    this.documents = documents;
+  }
+
+  public AusbildungUnterbruchAntragSBDto addDocumentsItem(DokumentDto documentsItem) {
+    if (this.documents == null) {
+      this.documents = new ArrayList<>();
+    }
+
+    this.documents.add(documentsItem);
+    return this;
+  }
+
+  public AusbildungUnterbruchAntragSBDto removeDocumentsItem(DokumentDto documentsItem) {
+    if (documentsItem != null && this.documents != null) {
+      this.documents.remove(documentsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -303,12 +379,15 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
         Objects.equals(this.kommentarGS, ausbildungUnterbruchAntragSB.kommentarGS) &&
         Objects.equals(this.canAntragAkzeptieren, ausbildungUnterbruchAntragSB.canAntragAkzeptieren) &&
         Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
-        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId);
+        Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
+        Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
+        Objects.equals(this.documents, ausbildungUnterbruchAntragSB.documents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, kommentarSB, startDate, endDate, monateOhneAnspruch, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId);
+    return Objects.hash(status, kommentarSB, startDate, endDate, monateOhneAnspruch, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, documents);
   }
 
   @Override
@@ -328,6 +407,9 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     sb.append("    canAntragAkzeptieren: ").append(toIndentedString(canAntragAkzeptieren)).append("\n");
     sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
+    sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
+    sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
+    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("}");
     return sb.toString();
   }

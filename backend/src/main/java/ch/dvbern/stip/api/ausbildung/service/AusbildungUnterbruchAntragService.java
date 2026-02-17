@@ -30,11 +30,13 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -61,6 +63,7 @@ public class AusbildungUnterbruchAntragService {
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
     private final DokumentDownloadService dokumentDownloadService;
+    private final DokumentMapper dokumentMapper;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
 
@@ -186,6 +189,12 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         return ausbildungUnterbruchAntragMapper
             .toSbDto(ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag));
+    }
+
+    @Transactional
+    public List<DokumentDto> getDokumentsOfAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
+        final var antrag = requireById(ausbildungUnterbruchAntragId);
+        return antrag.getDokuments().stream().map(dokumentMapper::toDto).toList();
     }
 
     public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {

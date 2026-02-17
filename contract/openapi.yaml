@@ -8310,6 +8310,8 @@ components:
         - canAntragAkzeptieren
         - dokuments
         - gesuchId
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
         - documents
       properties:
         id:
@@ -8329,6 +8331,12 @@ components:
             $ref: '#/components/schemas/Dokument'
         gesuchId:
           $ref: '#/components/schemas/UUID'
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
         documents:
           type: array
           items:
@@ -9087,6 +9095,8 @@ components:
       required:
         - canCreateAusbildungUnterbruchAntrag
         - isUnterbrochen
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
       properties:
         gesuchs:
           type: array
@@ -9098,6 +9108,12 @@ components:
           type: boolean
         openAusbildungUnterbruchAntragId:
           $ref: '#/components/schemas/UUID'
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
     SbGesucheDashboardColumn:

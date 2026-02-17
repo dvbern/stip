@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,6 +38,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_IS_UNTERBROCHEN,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
@@ -66,6 +69,12 @@ public class AusbildungDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID = "openAusbildungUnterbruchAntragId";
   private UUID openAusbildungUnterbruchAntragId;
+
+  public static final String JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE = "unterbruchLatestEndDate";
+  private LocalDate unterbruchLatestEndDate;
+
+  public static final String JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE = "unterbruchEarliestStartDate";
+  private LocalDate unterbruchEarliestStartDate;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -221,6 +230,58 @@ public class AusbildungDashboardItemDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setOpenAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
     this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
+  }
+
+
+  public AusbildungDashboardItemDtoSpec unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchLatestEndDate
+   * @return unterbruchLatestEndDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+
+  public AusbildungDashboardItemDtoSpec unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchEarliestStartDate
+   * @return unterbruchEarliestStartDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
 
@@ -600,6 +661,8 @@ public class AusbildungDashboardItemDtoSpec {
         Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
         Objects.equals(this.isUnterbrochen, ausbildungDashboardItem.isUnterbrochen) &&
         Objects.equals(this.openAusbildungUnterbruchAntragId, ausbildungDashboardItem.openAusbildungUnterbruchAntragId) &&
+        Objects.equals(this.unterbruchLatestEndDate, ausbildungDashboardItem.unterbruchLatestEndDate) &&
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungDashboardItem.unterbruchEarliestStartDate) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
@@ -618,7 +681,7 @@ public class AusbildungDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, openAusbildungUnterbruchAntragId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, openAusbildungUnterbruchAntragId, unterbruchLatestEndDate, unterbruchEarliestStartDate, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
   }
 
   @Override
@@ -629,6 +692,8 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    isUnterbrochen: ").append(toIndentedString(isUnterbrochen)).append("\n");
     sb.append("    openAusbildungUnterbruchAntragId: ").append(toIndentedString(openAusbildungUnterbruchAntragId)).append("\n");
+    sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
+    sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
