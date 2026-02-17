@@ -181,21 +181,21 @@ public class GesuchTrancheService {
     @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
         final var gesuchToWorkWith = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
-        final var historizedTranchen = getHistorizedGesuchTranches(gesuchToWorkWith);
+        final var historizedTranches = getHistorizedGesuchTranches(gesuchToWorkWith);
 
         return new GesuchTrancheListDto()
             .currentTranchen(gesuchToWorkWith.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
-            .historized(historizedTranchen);
+            .historized(historizedTranches);
     }
 
     @Transactional
     public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var historizedTranchen = getHistorizedGesuchTranches(gesuch);
+        final var historizedTranches = getHistorizedGesuchTranches(gesuch);
 
         return new GesuchTrancheListDto()
             .currentTranchen(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
-            .historized(historizedTranchen);
+            .historized(historizedTranches);
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(
