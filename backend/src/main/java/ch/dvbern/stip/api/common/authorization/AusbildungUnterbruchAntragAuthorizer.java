@@ -107,26 +107,6 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
         }
     }
 
-    @Transactional
-    public void canReadDokuments(final UUID ausbildungUnterbruchAntragId) {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-        if (isSachbearbeiter(benutzer)) {
-            return;
-        }
-
-        final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
-
-        if (
-            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                antrag.getAusbildung().getFall(),
-                benutzer,
-                sozialdienstService
-            )
-        ) {
-            forbidden();
-        }
-    }
-
     public void sbCanRead() {
         permitAll();
     }

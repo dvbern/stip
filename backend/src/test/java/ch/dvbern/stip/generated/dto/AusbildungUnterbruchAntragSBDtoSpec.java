@@ -43,7 +43,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_GESUCH_ID,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE,
-  AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_DOCUMENTS,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_STATUS,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_KOMMENTAR_S_B,
   AusbildungUnterbruchAntragSBDtoSpec.JSON_PROPERTY_START_DATE,
@@ -79,9 +78,6 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
 
   public static final String JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE = "unterbruchEarliestStartDate";
   private LocalDate unterbruchEarliestStartDate;
-
-  public static final String JSON_PROPERTY_DOCUMENTS = "documents";
-  private List<DokumentDtoSpec> documents;
 
   public static final String JSON_PROPERTY_STATUS = "status";
   private AusbildungUnterbruchAntragStatusDtoSpec status;
@@ -343,40 +339,6 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
   }
 
 
-  public AusbildungUnterbruchAntragSBDtoSpec documents(List<DokumentDtoSpec> documents) {
-    
-    this.documents = documents;
-    return this;
-  }
-
-  public AusbildungUnterbruchAntragSBDtoSpec addDocumentsItem(DokumentDtoSpec documentsItem) {
-    if (this.documents == null) {
-      this.documents = new ArrayList<>();
-    }
-    this.documents.add(documentsItem);
-    return this;
-  }
-
-   /**
-   * Get documents
-   * @return documents
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOCUMENTS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public List<DokumentDtoSpec> getDocuments() {
-    return documents;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_DOCUMENTS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDocuments(List<DokumentDtoSpec> documents) {
-    this.documents = documents;
-  }
-
-
   public AusbildungUnterbruchAntragSBDtoSpec status(AusbildungUnterbruchAntragStatusDtoSpec status) {
     
     this.status = status;
@@ -524,7 +486,6 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
         Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
         Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
         Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
-        Objects.equals(this.documents, ausbildungUnterbruchAntragSB.documents) &&
         Objects.equals(this.status, ausbildungUnterbruchAntragSB.status) &&
         Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
         Objects.equals(this.startDate, ausbildungUnterbruchAntragSB.startDate) &&
@@ -534,7 +495,7 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, documents, status, kommentarSB, startDate, endDate, monateOhneAnspruch);
+    return Objects.hash(id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, status, kommentarSB, startDate, endDate, monateOhneAnspruch);
   }
 
   @Override
@@ -550,7 +511,6 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
     sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
-    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");

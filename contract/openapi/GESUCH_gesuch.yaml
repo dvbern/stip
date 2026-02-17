@@ -1457,6 +1457,9 @@ components:
         verminderteBerechnungMonate:
           description: 'Die Anzahl von Monaten für welche die Berechnung stattfand'
           type: integer
+        monateOhneAnspruch:
+          description: 'Monate um welche der Anspruch reduziert wurde durch einen Unterbruch der Ausbildung'
+          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:

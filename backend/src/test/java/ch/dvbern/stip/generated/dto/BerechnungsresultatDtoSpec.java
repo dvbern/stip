@@ -37,7 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_REDUZIERT,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_MONATE_OHNE_ANSPRUCH
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -62,6 +63,9 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE = "verminderteBerechnungMonate";
   private Integer verminderteBerechnungMonate;
+
+  public static final String JSON_PROPERTY_MONATE_OHNE_ANSPRUCH = "monateOhneAnspruch";
+  private Integer monateOhneAnspruch;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -255,6 +259,32 @@ public class BerechnungsresultatDtoSpec {
     this.verminderteBerechnungMonate = verminderteBerechnungMonate;
   }
 
+
+  public BerechnungsresultatDtoSpec monateOhneAnspruch(Integer monateOhneAnspruch) {
+    
+    this.monateOhneAnspruch = monateOhneAnspruch;
+    return this;
+  }
+
+   /**
+   * Monate um welche der Anspruch reduziert wurde durch einen Unterbruch der Ausbildung
+   * @return monateOhneAnspruch
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getMonateOhneAnspruch() {
+    return monateOhneAnspruch;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
+    this.monateOhneAnspruch = monateOhneAnspruch;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -270,12 +300,13 @@ public class BerechnungsresultatDtoSpec {
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
         Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
-        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
+        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate) &&
+        Objects.equals(this.monateOhneAnspruch, berechnungsresultat.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, berechnungReduziert, tranchenBerechnungsresultate, verminderteBerechnungMonate);
+    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, berechnungReduziert, tranchenBerechnungsresultate, verminderteBerechnungMonate, monateOhneAnspruch);
   }
 
   @Override
@@ -289,6 +320,7 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
+    sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

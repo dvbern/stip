@@ -24,6 +24,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -105,10 +107,6 @@ public class BerechnungService {
             throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
         }
 
-        final var actualDuration = DateUtil.wasEingereichtAfterDueDate(gesuch)
-            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
-            : null;
-
         List<TranchenBerechnungsresultatDto> berechnungsresultate = new ArrayList<>(gesuchTranchen.size());
         for (final var gesuchTranche : gesuchTranchen) {
             final var trancheBerechnungsresultate = getBerechnungsresultatFromGesuchTranche(
@@ -140,8 +138,30 @@ public class BerechnungService {
             berechnungTotal = 0;
         }
 
-        Integer berechnungsresultatReduziert =
-            actualDuration != null ? berechnungTotal * actualDuration / 12 : null;
+        final var monthsLeftAfterReduction = DateUtil.wasEingereichtAfterDueDate(gesuch)
+            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
+            : 0;
+
+        final var monateOhneAnspruch = gesuch.getAusbildung()
+            .getAusbildungUnterbruchAntrags()
+            .stream()
+            .sorted(Comparator.comparing(AusbildungUnterbruchAntrag::getTimestampErstellt))
+            .filter(ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGesuch().getId().equals(gesuch.getId()))
+            .filter(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.AKZEPTIERT
+            )
+            .map(
+                ausbildungUnterbruchAntrag -> Objects
+                    .requireNonNullElse(ausbildungUnterbruchAntrag.getMonateOhneAnspruch(), 0)
+            )
+            .findFirst()
+            .orElse(0);
+
+        final int monateMitAnspruch = Math.max(monthsLeftAfterReduction - monateOhneAnspruch, 0);
+
+        final Integer berechnungsresultatReduziert =
+            monateMitAnspruch > 0 ? berechnungTotal * monateMitAnspruch / 12 : null;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
@@ -150,7 +170,8 @@ public class BerechnungService {
             berechnungDarlehen,
             berechnungsresultate,
             berechnungsresultatReduziert,
-            actualDuration
+            monthsLeftAfterReduction,
+            monateOhneAnspruch
         );
     }
 

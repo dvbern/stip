@@ -33,14 +33,16 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
-import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
-import ch.dvbern.stip.generated.dto.DokumentDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -67,9 +69,10 @@ public class AusbildungUnterbruchAntragService {
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final DokumentMapper dokumentMapper;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
+    private final NotificationService notificationService;
+    private final GesuchStatusService gesuchStatusService;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
 
@@ -175,6 +178,7 @@ public class AusbildungUnterbruchAntragService {
         final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
     ) {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
+        notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         return ausbildungUnterbruchAntragMapper
             .toGsDto(ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragGSDto, antrag));
     }
@@ -198,14 +202,21 @@ public class AusbildungUnterbruchAntragService {
         final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
     ) {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
+        if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(updateAusbildungUnterbruchAntragSBDto.getStatus())) {
+            notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
+            if (
+                updateAusbildungUnterbruchAntragSBDto.getMonateOhneAnspruch() > 0
+                || Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(antrag.getGesuch().getGesuchStatus())
+            ) {
+                gesuchStatusService.triggerStateMachineEvent(
+                    antrag.getGesuch(),
+                    GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH
+                );
+            }
+        }
+
         return ausbildungUnterbruchAntragMapper
             .toSbDto(ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag));
-    }
-
-    @Transactional
-    public List<DokumentDto> getDokumentsOfAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
-        final var antrag = requireById(ausbildungUnterbruchAntragId);
-        return antrag.getDokuments().stream().map(dokumentMapper::toDto).toList();
     }
 
     @Transactional
@@ -221,11 +232,11 @@ public class AusbildungUnterbruchAntragService {
     }
 
     public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
-        final boolean latestGesuchHasNoOpenAenderung =
+        final boolean openAenderungOnLatestGesuchExists =
             GesuchUtil.openAenderungAlreadyExists(ausbildung.getLatestGesuch());
         final boolean openAusbildungUnterbruchAntragExists =
-            !AusbildungUnterbruchAntragUtil.openAusbildungUnterbruchAntragExists(ausbildung);
-        return latestGesuchHasNoOpenAenderung && !openAusbildungUnterbruchAntragExists && !ausbildung.isUnterbrochen();
+            AusbildungUnterbruchAntragUtil.openAusbildungUnterbruchAntragExists(ausbildung);
+        return !openAenderungOnLatestGesuchExists && !openAusbildungUnterbruchAntragExists
+        && !ausbildung.isUnterbrochen();
     }
-
 }

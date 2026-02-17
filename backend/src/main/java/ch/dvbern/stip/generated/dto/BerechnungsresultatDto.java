@@ -32,6 +32,7 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
   private @Valid Integer berechnungReduziert;
   private @Valid Integer verminderteBerechnungMonate;
+  private @Valid Integer monateOhneAnspruch;
 
   /**
    **/
@@ -186,6 +187,25 @@ public class BerechnungsresultatDto  implements Serializable {
     this.verminderteBerechnungMonate = verminderteBerechnungMonate;
   }
 
+  /**
+   * Monate um welche der Anspruch reduziert wurde durch einen Unterbruch der Ausbildung
+   **/
+  public BerechnungsresultatDto monateOhneAnspruch(Integer monateOhneAnspruch) {
+    this.monateOhneAnspruch = monateOhneAnspruch;
+    return this;
+  }
+
+  
+  @JsonProperty("monateOhneAnspruch")
+  public Integer getMonateOhneAnspruch() {
+    return monateOhneAnspruch;
+  }
+
+  @JsonProperty("monateOhneAnspruch")
+  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
+    this.monateOhneAnspruch = monateOhneAnspruch;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -202,12 +222,13 @@ public class BerechnungsresultatDto  implements Serializable {
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
-        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
+        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate) &&
+        Objects.equals(this.monateOhneAnspruch, berechnungsresultat.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, berechnungReduziert, verminderteBerechnungMonate);
+    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, berechnungReduziert, verminderteBerechnungMonate, monateOhneAnspruch);
   }
 
   @Override
@@ -222,6 +243,7 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
+    sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

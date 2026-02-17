@@ -33,4 +33,11 @@ public enum AusbildungUnterbruchAntragStatus {
             EINGEGEBEN
         )
     );
+
+    public static final Set<AusbildungUnterbruchAntragStatus> IS_CLOSED = Collections.unmodifiableSet(
+        EnumSet.of(
+            AKZEPTIERT,
+            ABGELEHNT
+        )
+    );
 }

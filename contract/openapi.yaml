@@ -6531,6 +6531,9 @@ components:
         - DARLEHEN_ZURUECKGEWIESEN
         - DARLEHEN_AKZEPTIERT
         - DARLEHEN_ABGELEHNT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
     LocalDate:
       format: date
       type: string
@@ -9424,6 +9427,11 @@ components:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
         verminderteBerechnungMonate:
           description: Die Anzahl von Monaten für welche die Berechnung stattfand
+          type: integer
+        monateOhneAnspruch:
+          description: >-
+            Monate um welche der Anspruch reduziert wurde durch einen Unterbruch
+            der Ausbildung
           type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)

@@ -39,7 +39,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid LocalDate unterbruchLatestEndDate;
   private @Valid LocalDate unterbruchEarliestStartDate;
-  private @Valid List<DokumentDto> documents = new ArrayList<>();
 
   /**
    **/
@@ -323,41 +322,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
-  /**
-   **/
-  public AusbildungUnterbruchAntragSBDto documents(List<DokumentDto> documents) {
-    this.documents = documents;
-    return this;
-  }
-
-  
-  @JsonProperty("documents")
-  @NotNull
-  public List<DokumentDto> getDocuments() {
-    return documents;
-  }
-
-  @JsonProperty("documents")
-  public void setDocuments(List<DokumentDto> documents) {
-    this.documents = documents;
-  }
-
-  public AusbildungUnterbruchAntragSBDto addDocumentsItem(DokumentDto documentsItem) {
-    if (this.documents == null) {
-      this.documents = new ArrayList<>();
-    }
-
-    this.documents.add(documentsItem);
-    return this;
-  }
-
-  public AusbildungUnterbruchAntragSBDto removeDocumentsItem(DokumentDto documentsItem) {
-    if (documentsItem != null && this.documents != null) {
-      this.documents.remove(documentsItem);
-    }
-
-    return this;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -381,13 +345,12 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
         Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
         Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
         Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
-        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
-        Objects.equals(this.documents, ausbildungUnterbruchAntragSB.documents);
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, kommentarSB, startDate, endDate, monateOhneAnspruch, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, documents);
+    return Objects.hash(status, kommentarSB, startDate, endDate, monateOhneAnspruch, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate);
   }
 
   @Override
@@ -409,7 +372,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
     sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
-    sb.append("    documents: ").append(toIndentedString(documents)).append("\n");
     sb.append("}");
     return sb.toString();
   }
