@@ -28,6 +28,7 @@ import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
+import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -37,7 +38,20 @@ import org.mapstruct.Named;
     config = MappingConfig.class
 )
 public abstract class AusbildungUnterbruchAntragMapper {
-    abstract AusbildungUnterbruchAntragGSDto toGsDto(AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
+    @Inject
+    AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
+
+    @Mapping(source = ".", target = "canEdit", qualifiedByName = "canEdit")
+    @Mapping(source = "gesuch", target = "unterbruchLatestEndDate", qualifiedByName = "getUnterbruchLatestEndDate")
+    @Mapping(
+        source = "gesuch", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate"
+    )
+    abstract AusbildungUnterbruchAntragGSDto toGsDto(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
+
+    @Named("canEdit")
+    protected boolean canEdit(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag) {
+        return ausbildungUnterbruchAntragService.gsCanWrite(ausbildungUnterbruchAntrag);
+    }
 
     @Mapping(source = "gueltigkeit.gueltigAb", target = "startDate")
     @Mapping(source = "gueltigkeit.gueltigBis", target = "endDate")

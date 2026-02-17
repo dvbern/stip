@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Set;
@@ -30,7 +29,6 @@ import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
-import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
@@ -78,23 +76,11 @@ public abstract class AusbildungDashboardItemMapper {
         source = ".", target = "canCreateAusbildungUnterbruchAntrag",
         qualifiedByName = "canCreateAusbildungUnterbruchAntrag"
     )
-    @Mapping(source = ".", target = "unterbruchLatestEndDate", qualifiedByName = "getUnterbruchLatestEndDate")
-    @Mapping(source = ".", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate")
     public abstract AusbildungDashboardItemDto toDto(final Ausbildung ausbildung);
 
     @Named("canCreateAusbildungUnterbruchAntrag")
     protected boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
         return ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(ausbildung);
-    }
-
-    @Named("getUnterbruchLatestEndDate")
-    protected LocalDate getUnterbruchLatestEndDate(final Ausbildung ausbildung) {
-        return DateUtil.getGesuchDateRange(ausbildung.getLatestGesuch()).getGueltigBis();
-    }
-
-    @Named("getUnterbruchEarliestStartDate")
-    protected LocalDate getUnterbruchEarliestStartDate(final Ausbildung ausbildung) {
-        return DateUtil.getGesuchDateRange(ausbildung.getLatestGesuch()).getGueltigAb();
     }
 
     @AfterMapping

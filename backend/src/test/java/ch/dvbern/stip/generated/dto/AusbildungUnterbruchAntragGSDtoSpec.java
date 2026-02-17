@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,7 +35,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_ID,
   AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_DOKUMENTS,
-  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_CAN_EDIT
+  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_CAN_EDIT,
+  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE,
+  AusbildungUnterbruchAntragGSDtoSpec.JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE
 })
 @JsonTypeName("AusbildungUnterbruchAntragGS")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -47,6 +50,12 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_EDIT = "canEdit";
   private Boolean canEdit;
+
+  public static final String JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE = "unterbruchLatestEndDate";
+  private LocalDate unterbruchLatestEndDate;
+
+  public static final String JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE = "unterbruchEarliestStartDate";
+  private LocalDate unterbruchEarliestStartDate;
 
   public AusbildungUnterbruchAntragGSDtoSpec() {
   }
@@ -136,6 +145,58 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     this.canEdit = canEdit;
   }
 
+
+  public AusbildungUnterbruchAntragGSDtoSpec unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchLatestEndDate
+   * @return unterbruchLatestEndDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_LATEST_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+
+  public AusbildungUnterbruchAntragGSDtoSpec unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+   /**
+   * Get unterbruchEarliestStartDate
+   * @return unterbruchEarliestStartDate
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNTERBRUCH_EARLIEST_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -147,12 +208,14 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     AusbildungUnterbruchAntragGSDtoSpec ausbildungUnterbruchAntragGS = (AusbildungUnterbruchAntragGSDtoSpec) o;
     return Objects.equals(this.id, ausbildungUnterbruchAntragGS.id) &&
         Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments) &&
-        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit);
+        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit) &&
+        Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragGS.unterbruchLatestEndDate) &&
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragGS.unterbruchEarliestStartDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokuments, canEdit);
+    return Objects.hash(id, dokuments, canEdit, unterbruchLatestEndDate, unterbruchEarliestStartDate);
   }
 
   @Override
@@ -162,6 +225,8 @@ public class AusbildungUnterbruchAntragGSDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
     sb.append("    canEdit: ").append(toIndentedString(canEdit)).append("\n");
+    sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
+    sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

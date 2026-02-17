@@ -74,13 +74,17 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     @Transactional
     public void gsCanUpdate(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
-        assertAntragIsOfGsAndInBearbeitung(antrag);
+        if (!ausbildungUnterbruchAntragService.gsCanWrite(antrag)) {
+            forbidden();
+        }
     }
 
     @Transactional
     public void gsCanDeleteDokument(final UUID dokumentId) {
         final var antrag = ausbildungUnterbruchAntragService.requireByDokumentId(dokumentId);
-        assertAntragIsOfGsAndInBearbeitung(antrag);
+        if (!ausbildungUnterbruchAntragService.gsCanWrite(antrag)) {
+            forbidden();
+        }
     }
 
     @Transactional
@@ -130,19 +134,6 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     public void sbCanWrite(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
         assertAusbildungUnterbruchAntragIsInState(antrag, AusbildungUnterbruchAntragStatus.EINGEGEBEN);
-    }
-
-    private void assertAntragIsOfGsAndInBearbeitung(final AusbildungUnterbruchAntrag antrag) {
-        assertAusbildungUnterbruchAntragIsInState(antrag, AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS);
-        if (
-            !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                antrag.getGesuch(),
-                benutzerService.getCurrentBenutzer(),
-                sozialdienstService
-            )
-        ) {
-            forbidden();
-        }
     }
 
     private void assertAusbildungUnterbruchAntragIsInState(

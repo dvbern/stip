@@ -23,7 +23,10 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungUnterbruchAntragRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -34,6 +37,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.DokumentDto;
@@ -64,6 +68,8 @@ public class AusbildungUnterbruchAntragService {
     private final DokumentDeleteService dokumentDeleteService;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentMapper dokumentMapper;
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
 
@@ -200,6 +206,18 @@ public class AusbildungUnterbruchAntragService {
     public List<DokumentDto> getDokumentsOfAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         return antrag.getDokuments().stream().map(dokumentMapper::toDto).toList();
+    }
+
+    @Transactional
+    public boolean gsCanWrite(final AusbildungUnterbruchAntrag antrag) {
+        if (antrag.getStatus() != AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
+            return false;
+        }
+        return AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            antrag.getGesuch(),
+            benutzerService.getCurrentBenutzer(),
+            sozialdienstService
+        );
     }
 
     public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {

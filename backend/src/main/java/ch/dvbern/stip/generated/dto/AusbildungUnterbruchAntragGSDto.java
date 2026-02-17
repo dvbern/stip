@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +28,8 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid UUID id;
   private @Valid List<DokumentDto> dokuments = new ArrayList<>();
   private @Valid Boolean canEdit;
+  private @Valid LocalDate unterbruchLatestEndDate;
+  private @Valid LocalDate unterbruchEarliestStartDate;
 
   /**
    **/
@@ -101,6 +104,44 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
     this.canEdit = canEdit;
   }
 
+  /**
+   **/
+  public AusbildungUnterbruchAntragGSDto unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchLatestEndDate")
+  @NotNull
+  public LocalDate getUnterbruchLatestEndDate() {
+    return unterbruchLatestEndDate;
+  }
+
+  @JsonProperty("unterbruchLatestEndDate")
+  public void setUnterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+    this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+  }
+
+  /**
+   **/
+  public AusbildungUnterbruchAntragGSDto unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+    return this;
+  }
+
+  
+  @JsonProperty("unterbruchEarliestStartDate")
+  @NotNull
+  public LocalDate getUnterbruchEarliestStartDate() {
+    return unterbruchEarliestStartDate;
+  }
+
+  @JsonProperty("unterbruchEarliestStartDate")
+  public void setUnterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+    this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -113,12 +154,14 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
     AusbildungUnterbruchAntragGSDto ausbildungUnterbruchAntragGS = (AusbildungUnterbruchAntragGSDto) o;
     return Objects.equals(this.id, ausbildungUnterbruchAntragGS.id) &&
         Objects.equals(this.dokuments, ausbildungUnterbruchAntragGS.dokuments) &&
-        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit);
+        Objects.equals(this.canEdit, ausbildungUnterbruchAntragGS.canEdit) &&
+        Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragGS.unterbruchLatestEndDate) &&
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragGS.unterbruchEarliestStartDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokuments, canEdit);
+    return Objects.hash(id, dokuments, canEdit, unterbruchLatestEndDate, unterbruchEarliestStartDate);
   }
 
   @Override
@@ -129,6 +172,8 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokuments: ").append(toIndentedString(dokuments)).append("\n");
     sb.append("    canEdit: ").append(toIndentedString(canEdit)).append("\n");
+    sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
+    sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }
