@@ -12,7 +12,7 @@
     @if (dashboard) {
       @let fall = dashboard.fall;
       @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
-      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]">
+      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]" [class.busy]="isBusySig()">
         <!-- main column -->
         <div class="tw:flex tw:flex-col tw:gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
@@ -23,6 +23,7 @@
                 (deleteGesuch)="deleteGesuch($event)"
                 (aenderungMelden)="aenderungMelden($event)"
                 (deleteAenderung)="deleteAenderung($event)"
+                (ausbildungUnterbrechen)="ausbildungUnterbrechen($event, ausbildung.openAusbildungUnterbruchAntragId)"
               ></dv-shared-ui-dashboard-ausbildung>
             }
           } @else if (dashboard.canCreateAusbildung) {

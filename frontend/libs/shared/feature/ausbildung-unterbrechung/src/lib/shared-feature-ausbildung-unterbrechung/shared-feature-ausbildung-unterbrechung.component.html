@@ -1,0 +1,94 @@
+<dv-shared-pattern-main-layout *dvTranslocoShared="let t">
+  <div class="tw:relative tw:my-12 tw:justify-between container">
+    <form class="tw:dv-form-grid" [formGroup]="form">
+      <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
+        <span class="text-warning material-symbols-rounded me-3">warning</span>
+        <div class="ms-3">{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
+      </dv-shared-ui-info-container>
+
+      <!-- startDate -->
+      <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+        <mat-label>{{ t('shared.ausbildung-unterbrechen.startDate') }}</mat-label>
+        <input
+          [formControl]="form.controls.startDate"
+          data-testid="form-ausbildung-unterbrechung-startDate"
+          matInput
+          [matDatepicker]="startDatepicker"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="startDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #startDatepicker></mat-datepicker>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- endDate -->
+      <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+        <mat-label>{{ t('shared.ausbildung-unterbrechen.endDate') }}</mat-label>
+        <input
+          [formControl]="form.controls.endDate"
+          data-testid="form-ausbildung-unterbrechung-endDate"
+          matInput
+          [matDatepicker]="endDatepicker"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="endDatepicker"></mat-datepicker-toggle>
+        <mat-datepicker #endDatepicker></mat-datepicker>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- kommentar -->
+      <mat-form-field class="tw:col-span-2 tw:col-start-1" dvSharedUiFormField>
+        <mat-label>{{ t('shared.ausbildung-unterbrechen.kommentar') }}</mat-label>
+        <textarea
+          [formControl]="form.controls.kommentarGS"
+          maxlength="2000"
+          data-testid="form-ausbildung-unterbrechung-kommentar"
+          matInput
+          [dvMaxLength]="'large'"
+          type="text"
+          rows="4"
+        ></textarea>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ t('shared.form.error.required') }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="tw:col-span-2 tw:col-start-1 tw:flex">
+        <label class="tw:flex! tw:items-center tw:gap-6">
+          {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
+          @if (unterbruchDokumenteOptionsSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="tw:shrink"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          } @else {
+            <dv-shared-ui-loading [type]="'icon'" class="tw:w-14 tw:h-14"></dv-shared-ui-loading>
+          }
+        </label>
+      </div>
+      @if (form.touched && isMissingDokumenteSig()) {
+        <mat-error class="tw:block! tw:col-span-2 tw:col-start-1">
+          {{ t('shared.form.darlehen.error.missingDocuments') }}
+        </mat-error>
+      }
+
+      <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
+        <button type="button" (click)="deleteUnterbruch()" class="btn btn-danger" data-testid="button-delete-darlehen">
+          {{ t('shared.cancel') }}
+        </button>
+
+        <button
+          [disabled]="!ausbildungUnterbruchIdSig()"
+          type="button"
+          (click)="unterbruchEinreichen()"
+          class="btn btn-primary"
+          data-testid="button-eingeben-darlehen"
+        >
+          {{ t('shared.ausbildung-unterbrechen.confirm') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</dv-shared-pattern-main-layout>

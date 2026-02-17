@@ -122,8 +122,10 @@ export class SharedPatternDocumentUploadComponent {
     initialDokumente: Dokument[] | undefined,
     dokument: SharedModelGesuchDokument,
   ): void {
-    if (dokument.art === 'DARLEHEN_DOKUMENT') {
-      return;
+    switch (dokument.art) {
+      case 'DARLEHEN_DOKUMENT':
+      case 'SIMPLE':
+        return;
     }
 
     this.einreichStore.validateSteps$({

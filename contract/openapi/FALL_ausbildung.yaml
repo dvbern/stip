@@ -91,9 +91,13 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: updateAusbildung
       summary: Returniert die Ausbildung
-  /ausbildung/unterbruch/{gesuchId}:
+  /ausbildung/unterbruch/{ausbildungId}:
     parameters:
-      - $ref: './components/parameters.yaml#/gesuchId'
+      - name: ausbildungId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
     post:
       tags:
         - Ausbildung
@@ -141,6 +145,30 @@ paths:
   /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
     parameters:
       - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Dokument'
+          description: A list of AusbildungUnterbruchAntrag dokumente
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAusbildungUnterbruchAntragDokuments
+      summary: get a list of AusbildungUnterbruchAntrag dokumente
     post:
       tags:
         - Ausbildung
@@ -475,6 +503,6 @@ components:
           $ref: './components/common.yaml#/UUID'
       allOf:
         - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
-    
+
 security:
   $ref: './components/security.yaml#/security'

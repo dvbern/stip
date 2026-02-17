@@ -10,11 +10,19 @@ export const appRoutes: Route[] = [
     providers: [DashboardStore],
     children: [
       {
-        path: 'gesuch-app-feature-cockpit',
+        path: '',
+        pathMatch: 'full',
         title: 'gesuch-app.dashboard.title',
         loadChildren: () =>
           import('@dv/gesuch-app/feature/cockpit').then(
             (m) => m.gesuchAppFeatureCockpitRoutes,
+          ),
+      },
+      {
+        path: 'ausbildung-unterbrechen',
+        loadChildren: () =>
+          import('@dv/shared/feature/ausbildung-unterbrechung').then(
+            (m) => m.sharedFeatureAusbildungUnterbrechungRoutes,
           ),
       },
       {
@@ -47,14 +55,9 @@ export const appRoutes: Route[] = [
 ];
 
 export const routes: Route[] = [
-  {
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'gesuch-app-feature-cockpit',
-  },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'gesuch-app-feature-cockpit',
+    redirectTo: '',
   },
 ];

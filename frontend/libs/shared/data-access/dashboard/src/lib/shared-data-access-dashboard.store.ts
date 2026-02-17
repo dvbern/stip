@@ -230,11 +230,6 @@ const toGesuchDashboardItemView =
       isErstgesuch,
       canEdit,
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
-      canCreateAenderung:
-        (gesuch.gesuchStatus === 'STIPENDIENANSPRUCH' ||
-          gesuch.gesuchStatus === 'KEIN_STIPENDIENANSPRUCH') &&
-        !gesuch.offeneAenderung &&
-        canCurrentlyEditGesuch,
       canDeleteAenderung:
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
       einreichefristAbgelaufen,

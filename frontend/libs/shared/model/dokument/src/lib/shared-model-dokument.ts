@@ -16,9 +16,9 @@ import {
   DarlehenPermissionMap,
   PermissionMap,
 } from '@dv/shared/model/permission-state';
-import { Extends } from '@dv/shared/model/type-util';
+import { Extends, assertUnreachable } from '@dv/shared/model/type-util';
 
-type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT';
+type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT' | 'SIMPLE';
 
 export type SharedModelStandardGesuchDokument = {
   art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
@@ -54,6 +54,12 @@ export type SharedModelDarlehenDokument = {
   gesuchDokument?: DarlehenDokument;
 };
 
+export type SharedModelSimpleDokument = {
+  art: Extends<AvailableDokumentArt, 'SIMPLE'>;
+  dokumentTyp: 'ausbildungUnterbruch';
+  id: string;
+};
+
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
@@ -82,7 +88,8 @@ export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument
-  | SharedModelDarlehenDokument;
+  | SharedModelDarlehenDokument
+  | SharedModelSimpleDokument;
 
 export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
@@ -181,5 +188,10 @@ export const isUploadable = (
     case 'DARLEHEN_DOKUMENT': {
       return dokumentModel.permissions.canUploadDocuments;
     }
+    case 'SIMPLE': {
+      return true; // TODO: Check how to make readonly
+    }
+    default:
+      assertUnreachable(dokumentModel);
   }
 };
