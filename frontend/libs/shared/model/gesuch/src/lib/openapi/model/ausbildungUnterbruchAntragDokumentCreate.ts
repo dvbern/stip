@@ -9,13 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Dokument } from './dokument';
 
-export interface AusbildungUnterbruchAntragGS { 
-    id: string;
-    dokuments: Array<Dokument>;
-    canEdit: boolean;
-    unterbruchLatestEndDate: string;
-    unterbruchEarliestStartDate: string;
+export interface AusbildungUnterbruchAntragDokumentCreate { 
+    fileUpload: Blob;
 }
 

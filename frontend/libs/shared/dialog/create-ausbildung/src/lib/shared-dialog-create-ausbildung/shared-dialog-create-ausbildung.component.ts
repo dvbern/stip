@@ -35,7 +35,7 @@ export class SharedDialogCreateAusbildungComponent {
       SharedDialogCreateAusbildungComponent,
       CreateAusbildungData
     >(SharedDialogCreateAusbildungComponent, {
-      panelClass: 'dv-create-ausbildung-dialog',
+      panelClass: 'dv-dialog-formular',
       data: { fallId },
     });
   }

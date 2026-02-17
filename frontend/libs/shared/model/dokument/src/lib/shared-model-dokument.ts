@@ -55,6 +55,7 @@ export type SharedModelDarlehenDokument = {
 };
 
 export type SharedModelSimpleDokument = {
+  readonly: boolean;
   art: Extends<AvailableDokumentArt, 'SIMPLE'>;
   dokumentTyp: 'ausbildungUnterbruch';
   id: string;
@@ -95,12 +96,12 @@ export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
   | SharedModelTableCustomDokument;
 
-type DokumentInfoTranslatable = {
+export type DokumentInfoTranslatable = {
   type: 'TRANSLATABLE';
   title: SharedTranslationKey;
   description?: SharedTranslationKey;
 };
-type DokumentInfoText = {
+export type DokumentInfoText = {
   type: 'TEXT';
   title: string;
   description?: string;
@@ -125,10 +126,15 @@ export interface CustomDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoText;
 }
 
+export interface SimpleDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
 export type DokumentOptions =
   | StandardDokumentOptions
   | CustomDokumentOptions
-  | DarlehenDokumentOptions;
+  | DarlehenDokumentOptions
+  | SimpleDokumentOptions;
 
 // Darlehen Dokument
 
@@ -189,7 +195,7 @@ export const isUploadable = (
       return dokumentModel.permissions.canUploadDocuments;
     }
     case 'SIMPLE': {
-      return true; // TODO: Check how to make readonly
+      return !dokumentModel.readonly;
     }
     default:
       assertUnreachable(dokumentModel);

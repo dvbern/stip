@@ -595,6 +595,7 @@ export class UploadStore {
               return this.ausbildungService.createAusbildungUnterbruchAntragDokument$(
                 {
                   ausbildungUnterbruchAntragId: dokument.id,
+                  fileUpload,
                 },
                 ...serviceDefaultParams,
               );

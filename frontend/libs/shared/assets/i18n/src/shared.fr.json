@@ -1048,6 +1048,11 @@
   "shared.role.V0_Freigabestelle": "Service de validation",
   "shared.role.V0_Gesuchsteller": "Requérant",
 
+  "shared.ausbildungUnterbruchAntrag.status.IN_BEARBEITUNG_GS": "En cours de traitement",
+  "shared.ausbildungUnterbruchAntrag.status.EINGEGEBEN": "Demande d'interruption de formation",
+  "shared.ausbildungUnterbruchAntrag.status.AKZEPTIERT": "Interruption de formation acceptée",
+  "shared.ausbildungUnterbruchAntrag.status.ABGELEHNT": "Interruption de formation non acceptée",
+
   "shared.bildungsrichtung.HOEHERE_BERUFSBILDUNG": "Formation professionnelle supérieure",
   "shared.bildungsrichtung.HOCHSCHULE": "Hautes écoles",
   "shared.bildungsrichtung.ALLGEMEINBILDENDE_SCHULE": "École de culture générale",

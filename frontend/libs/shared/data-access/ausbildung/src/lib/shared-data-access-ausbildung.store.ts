@@ -9,8 +9,8 @@ import {
   AusbildungCreateResponse,
   AusbildungService,
   AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams,
+  AusbildungUnterbruchAntragGS,
   AusbildungUpdate,
-  Dokument,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import {
@@ -29,14 +29,14 @@ type AusbildungState = {
   ausbildung: CachedRemoteData<Ausbildung>;
   ausbildungUnterbrechenResponse: RemoteData<unknown>;
   ausbildungResponse: RemoteData<AusbildungCreateResponse>;
-  ausbildungUnterbruchDokumente: RemoteData<Dokument[]>;
+  ausbildungUnterbruch: CachedRemoteData<AusbildungUnterbruchAntragGS>;
 };
 
 const initialState: AusbildungState = {
   ausbildung: initial(),
   ausbildungUnterbrechenResponse: initial(),
   ausbildungResponse: initial(),
-  ausbildungUnterbruchDokumente: initial(),
+  ausbildungUnterbruch: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -55,6 +55,12 @@ export class AusbildungStore extends signalStore(
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
     };
+  });
+
+  ausbildungsUnterbruchViewSig = computed(() => {
+    const ausbildungUnterbruch = fromCachedDataSig(this.ausbildungUnterbruch);
+
+    return { ...ausbildungUnterbruch };
   });
 
   ausbildungCreateErrorResponseViewSig = computed(() => {
@@ -116,23 +122,23 @@ export class AusbildungStore extends signalStore(
     ),
   );
 
-  getAusbildungUnterbruchDokumente$ = rxMethod<{
+  getAusbildungUnterbruch$ = rxMethod<{
     ausbildungUnterbruchAntragId: string;
   }>(
     pipe(
       tap(() => {
-        patchState(this, () => ({
-          ausbildungUnterbruchDokumente: pending(),
+        patchState(this, (state) => ({
+          ausbildungUnterbruch: cachedPending(state.ausbildungUnterbruch),
         }));
       }),
       switchMap(({ ausbildungUnterbruchAntragId }) =>
         this.ausbildungService
-          .getAusbildungUnterbruchAntragDokuments$({
+          .getAusbildungUnterbruchAntragGS$({
             ausbildungUnterbruchAntragId,
           })
           .pipe(
             handleApiResponse((response) =>
-              patchState(this, { ausbildungUnterbruchDokumente: response }),
+              patchState(this, { ausbildungUnterbruch: response }),
             ),
           ),
       ),

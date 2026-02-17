@@ -3,7 +3,10 @@ import { Signal, computed } from '@angular/core';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   CustomDokumentOptions,
+  DokumentInfoTranslatable,
   DokumentOptions,
+  SharedModelSimpleDokument,
+  SimpleDokumentOptions,
   StandardDokumentOptions,
 } from '@dv/shared/model/dokument';
 import {
@@ -502,5 +505,28 @@ export function createCustomDokumentOptions(options: {
       art: 'CUSTOM_DOKUMENT',
     },
     initialDokumente: initialDocuments,
+  };
+}
+
+export function createSimpleDokumentOptions(options: {
+  allowTypes: string;
+  id: string;
+  dokumentTyp: SharedModelSimpleDokument['dokumentTyp'];
+  initialDokumente: Dokument[];
+  info: DokumentInfoTranslatable;
+  readonly: boolean;
+}): SimpleDokumentOptions {
+  const { allowTypes, id, initialDokumente, dokumentTyp, info, readonly } =
+    options;
+  return {
+    allowTypes,
+    dokument: {
+      art: 'SIMPLE',
+      readonly,
+      dokumentTyp,
+      id,
+    },
+    info,
+    initialDokumente,
   };
 }

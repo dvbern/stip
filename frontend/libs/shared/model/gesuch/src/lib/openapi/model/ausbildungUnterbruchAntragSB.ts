@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 import { AusbildungUnterbruchAntragStatus } from './ausbildungUnterbruchAntragStatus';
+import { Dokument } from './dokument';
 
 export interface AusbildungUnterbruchAntragSB { 
     status: AusbildungUnterbruchAntragStatus;
@@ -22,7 +23,10 @@ export interface AusbildungUnterbruchAntragSB {
     userErstellt: string;
     kommentarGS: string;
     canAntragAkzeptieren: boolean;
+    dokuments: Array<Dokument>;
     gesuchId: string;
+    unterbruchLatestEndDate: string;
+    unterbruchEarliestStartDate: string;
 }
 
 

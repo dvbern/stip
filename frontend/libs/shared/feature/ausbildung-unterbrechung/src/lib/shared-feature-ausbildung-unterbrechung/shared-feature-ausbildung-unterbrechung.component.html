@@ -1,6 +1,6 @@
 <dv-shared-pattern-main-layout *dvTranslocoShared="let t">
   <div class="tw:relative tw:my-12 tw:justify-between container">
-    <form class="tw:dv-form-grid" [formGroup]="form">
+    <form class="tw:dv-form-grid" [formGroup]="form" [dvSharedUiFormReadonly]="!viewSig().canEdit">
       <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
         <span class="text-warning material-symbols-rounded me-3">warning</span>
         <div class="ms-3">{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
@@ -13,12 +13,20 @@
           [formControl]="form.controls.startDate"
           data-testid="form-ausbildung-unterbrechung-startDate"
           matInput
+          [min]="viewSig().unterbruchEarliestStartDate"
+          [max]="viewSig().unterbruchLatestEndDate"
           [matDatepicker]="startDatepicker"
         />
         <mat-datepicker-toggle matIconSuffix [for]="startDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #startDatepicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ t('shared.form.error.required') }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
+          {{ t('shared.form.error.minDate', { date: viewSig().unterbruchEarliestStartDate | date: 'dd.MM.yyyy' }) }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
+          {{ t('shared.form.error.maxDate', { date: viewSig().unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
         </mat-error>
       </mat-form-field>
 
@@ -29,12 +37,20 @@
           [formControl]="form.controls.endDate"
           data-testid="form-ausbildung-unterbrechung-endDate"
           matInput
+          [min]="viewSig().unterbruchEarliestStartDate"
+          [max]="viewSig().unterbruchLatestEndDate"
           [matDatepicker]="endDatepicker"
         />
         <mat-datepicker-toggle matIconSuffix [for]="endDatepicker"></mat-datepicker-toggle>
         <mat-datepicker #endDatepicker></mat-datepicker>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ t('shared.form.error.required') }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
+          {{ t('shared.form.error.minDate', { date: viewSig().unterbruchEarliestStartDate | date: 'dd.MM.yyyy' }) }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
+          {{ t('shared.form.error.maxDate', { date: viewSig().unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}
         </mat-error>
       </mat-form-field>
 
@@ -62,13 +78,14 @@
             <dv-shared-pattern-document-upload
               class="tw:shrink"
               [optionsSig]="options"
+              (hasDocuments)="hasMissingDocumentsSig.set(!$event)"
             ></dv-shared-pattern-document-upload>
           } @else {
             <dv-shared-ui-loading [type]="'icon'" class="tw:w-14 tw:h-14"></dv-shared-ui-loading>
           }
         </label>
       </div>
-      @if (form.touched && isMissingDokumenteSig()) {
+      @if (form.touched && hasMissingDocumentsSig()) {
         <mat-error class="tw:block! tw:col-span-2 tw:col-start-1">
           {{ t('shared.form.darlehen.error.missingDocuments') }}
         </mat-error>

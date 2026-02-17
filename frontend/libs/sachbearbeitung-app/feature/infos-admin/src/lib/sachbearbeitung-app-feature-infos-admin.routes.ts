@@ -1,5 +1,6 @@
 import { Route } from '@angular/router';
 
+import { AusbildungAdminStore } from '@dv/sachbearbeitung-app/data-access/ausbildung-admin';
 import { INFO_ADMIN_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
 
 import { SachbearbeitungAppFeatureInfosAdminComponent } from './sachbearbeitung-app-feature-infos-admin/sachbearbeitung-app-feature-infos-admin.component';
@@ -21,6 +22,7 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
       },
       {
         path: 'ausbildung-unterbrechen',
+        providers: [AusbildungAdminStore],
         loadComponent: () =>
           import('./components/ausbildung-unterbrechen.component').then(
             (m) => m.AusbildungUnterbrechenComponent,

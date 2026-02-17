@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Dokument } from './dokument';
 
 export interface AusbildungUnterbruchAntragSBAllOf { 
     id: string;
@@ -16,6 +17,9 @@ export interface AusbildungUnterbruchAntragSBAllOf {
     userErstellt: string;
     kommentarGS: string;
     canAntragAkzeptieren: boolean;
+    dokuments: Array<Dokument>;
     gesuchId: string;
+    unterbruchLatestEndDate: string;
+    unterbruchEarliestStartDate: string;
 }
 

@@ -1042,6 +1042,11 @@
   "shared.form.notizen.notizTyp.GESUCH_NOTIZ": "Notiz",
   "shared.form.notizen.notizTyp.JURISTISCHE_NOTIZ": "Juristische Notiz",
 
+  "shared.ausbildungUnterbruchAntrag.status.IN_BEARBEITUNG_GS": "In Bearbeitung",
+  "shared.ausbildungUnterbruchAntrag.status.EINGEGEBEN": "Anfrage Ausbildungsunterbruch",
+  "shared.ausbildungUnterbruchAntrag.status.AKZEPTIERT": "Ausbildungsunterbruch akzeptiert",
+  "shared.ausbildungUnterbruchAntrag.status.ABGELEHNT": "Ausbildungsunterbruch nicht Akzeptiert",
+
   "shared.role.V0_Sachbearbeiter-Admin": "Admin",
   "shared.role.V0_Jurist": "Jurist",
   "shared.role.V0_Sachbearbeiter": "Sachbearbeiter",

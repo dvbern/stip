@@ -9,6 +9,9 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import { DokumentOptions } from '@dv/shared/model/dokument';
+import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
+import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 type InfoEntry =
   | {
@@ -20,6 +23,11 @@ type InfoEntry =
       type: 'translatedInfo';
       labelKey: SachbearbeitungAppTranslationKey;
       valueKey: SharedTranslationKey | SachbearbeitungAppTranslationKey;
+    }
+  | {
+      type: 'document';
+      labelKey: SharedTranslationKey | SachbearbeitungAppTranslationKey;
+      options: DokumentOptions | null;
     }
   | {
       type: 'spacer';
@@ -46,12 +54,21 @@ const createInfoData = {
     labelKey,
     valueKey,
   }),
+  dokumente: (
+    labelKey: SharedTranslationKey | SachbearbeitungAppTranslationKey,
+    options: DokumentOptions | null,
+  ): InfoEntry => ({ type: 'document', labelKey, options }),
   spacer: (): InfoEntry => ({ type: 'spacer' }),
 };
 
 @Component({
   selector: 'dv-data-info-dialog',
-  imports: [TranslocoPipe, MatCheckboxModule],
+  imports: [
+    TranslocoPipe,
+    MatCheckboxModule,
+    SharedPatternDocumentUploadComponent,
+    SharedUiLoadingComponent,
+  ],
   templateUrl: './data-info-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,4 +1,5 @@
 /* eslint-disable @angular-eslint/no-input-rename */
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +8,7 @@ import {
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import {
   NonNullableFormBuilder,
@@ -23,14 +25,17 @@ import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { DokumentOptions } from '@dv/shared/model/dokument';
-import { SharedPatternDocumentUploadComponent } from '@dv/shared/pattern/document-upload';
+import {
+  SharedPatternDocumentUploadComponent,
+  createSimpleDokumentOptions,
+} from '@dv/shared/pattern/document-upload';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
+  SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -44,6 +49,7 @@ import {
 @Component({
   selector: 'dv-shared-feature-ausbildung-unterbrechung',
   imports: [
+    DatePipe,
     ReactiveFormsModule,
     MatInputModule,
     MatDatepickerModule,
@@ -55,6 +61,7 @@ import {
     SharedUiInfoContainerComponent,
     SharedPatternDocumentUploadComponent,
     SharedUiLoadingComponent,
+    SharedUiFormReadonlyDirective,
   ],
   templateUrl: './shared-feature-ausbildung-unterbrechung.component.html',
   providers: [provideDvDateAdapter()],
@@ -76,9 +83,8 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   ausbildungUnterbruchIdSig = input<string | undefined>(undefined, {
     alias: 'ausbildungUnterbruchId',
   });
-  isMissingDokumenteSig = computed(
-    () => !this.ausbildungStore.ausbildungUnterbruchDokumente().data?.length,
-  );
+  viewSig = this.ausbildungStore.ausbildungsUnterbruchViewSig;
+  hasMissingDocumentsSig = signal(true);
   form = this.formBuilder.group({
     startDate: [<string | undefined>undefined, Validators.required],
     endDate: [<string | undefined>undefined, Validators.required],
@@ -87,27 +93,26 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   unterbruchDokumenteOptionsSig = computed(() => {
     const allowTypes =
       this.config().deploymentConfig?.allowedMimeTypes?.join(',');
-    const ausbildungUnterbruchId = this.ausbildungUnterbruchIdSig();
     const initialDokumente =
-      this.ausbildungStore.ausbildungUnterbruchDokumente().data;
+      this.ausbildungStore.ausbildungsUnterbruchViewSig()?.dokuments;
+    const unterbruch = this.ausbildungStore.ausbildungsUnterbruchViewSig();
 
-    if (!allowTypes || !ausbildungUnterbruchId || !initialDokumente) {
+    if (!unterbruch?.id || !allowTypes || !initialDokumente) {
       return null;
     }
-    return {
+
+    return createSimpleDokumentOptions({
+      dokumentTyp: 'ausbildungUnterbruch',
+      id: unterbruch.id,
       allowTypes,
-      dokument: {
-        art: 'SIMPLE',
-        dokumentTyp: 'ausbildungUnterbruch',
-        id: ausbildungUnterbruchId,
-      },
+      initialDokumente,
       info: {
         type: 'TRANSLATABLE',
         title: 'shared.ausbildung-unterbrechen.dokumente.title',
         description: 'shared.ausbildung-unterbrechen.dokumente.description',
       },
-      initialDokumente,
-    } satisfies DokumentOptions;
+      readonly: !unterbruch.canEdit,
+    });
   });
 
   constructor() {
@@ -116,7 +121,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
       if (!ausbildungUnterbruchAntragId) {
         return;
       }
-      this.ausbildungStore.getAusbildungUnterbruchDokumente$({
+      this.ausbildungStore.getAusbildungUnterbruch$({
         ausbildungUnterbruchAntragId,
       });
     });
@@ -152,14 +157,14 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   }
 
   unterbruchEinreichen() {
-    const isMissingDokumente = this.isMissingDokumenteSig();
+    const hasMissingDocuments = this.hasMissingDocumentsSig();
     const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
     this.form.markAllAsTouched();
     this.formUtils.focusFirstInvalid(this.elementRef);
     if (
       !ausbildungUnterbruchAntragId ||
       this.form.invalid ||
-      isMissingDokumente
+      hasMissingDocuments
     ) {
       return;
     }
