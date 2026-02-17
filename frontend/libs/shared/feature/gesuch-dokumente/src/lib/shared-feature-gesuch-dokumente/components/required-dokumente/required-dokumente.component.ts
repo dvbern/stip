@@ -27,6 +27,7 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentKommentar,
+  GesuchTrancheStatus,
   Gesuchstatus,
   TrancheSetting,
 } from '@dv/shared/model/gesuch';
@@ -50,6 +51,19 @@ import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-f
 import { RemoteData, isPending } from '@dv/shared/util/remote-data';
 
 import { DokumentStatusActionsComponent } from '../dokument-status-actions/dokument-status-actions.component';
+
+const interactionMapGesuch: Partial<Record<Gesuchstatus, boolean | undefined>> =
+  {
+    FEHLENDE_DOKUMENTE: true,
+    BEREIT_FUER_BEARBEITUNG: false,
+    IN_BEARBEITUNG_SB: true,
+  };
+
+const interactionMapAenderung: Partial<
+  Record<GesuchTrancheStatus, boolean | undefined>
+> = {
+  FEHLENDE_DOKUMENTE: true,
+};
 
 @Component({
   selector: 'dv-required-dokumente',
@@ -93,6 +107,7 @@ export class RequiredDokumenteComponent {
     readonly: boolean;
     loading: boolean;
     gesuchStatus?: Gesuchstatus;
+    trancheStatus?: GesuchTrancheStatus;
   }>();
   getGesuchDokumentKommentare = output<SharedModelTableRequiredDokument>();
   dokumentAkzeptieren = output<SharedModelTableDokument>();
@@ -113,19 +128,19 @@ export class RequiredDokumenteComponent {
   expandedRowSig = signal<null | string>(null);
 
   canEditNachfristSig = computed(() => {
-    const { gesuchStatus } = this.dokumenteViewSig();
+    const { gesuchStatus, trancheSetting, trancheStatus } =
+      this.dokumenteViewSig();
+    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
 
-    if (!gesuchStatus) {
+    if (!gesuchUrlTyp || !gesuchStatus || !trancheStatus) {
       return undefined;
     }
 
-    const interactionMap: Partial<Record<Gesuchstatus, boolean | undefined>> = {
-      FEHLENDE_DOKUMENTE: true,
-      BEREIT_FUER_BEARBEITUNG: false,
-      IN_BEARBEITUNG_SB: true,
-    };
+    if (gesuchUrlTyp === 'AENDERUNG') {
+      return interactionMapAenderung[trancheStatus as GesuchTrancheStatus];
+    }
 
-    return interactionMap[gesuchStatus];
+    return interactionMapGesuch[gesuchStatus];
   });
 
   dokumenteDataSourceSig = computed(() => {
