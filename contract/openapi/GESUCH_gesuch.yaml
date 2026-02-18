@@ -1417,13 +1417,16 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
+        - berechnungVorKuerzungUndTeilung
         - berechnungTotal
         - berechnungStipendium
-        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
+          type: integer
+        berechnungVorKuerzungUndTeilung:
+          description: 'Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens'
           type: integer
         berechnungTotal:
           description: 'Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch'
@@ -1561,8 +1564,6 @@ components:
         - eigenerHaushalt
         - budgetTranche
         - anzahlMonate
-        - gesetzlichesDarlehen
-        - gesetzlichesDarlehenStipendium
         - anzahlPersonenImHaushalt
         - einnahmen
         - kosten
