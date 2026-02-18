@@ -8993,6 +8993,10 @@ components:
       required:
         - year
         - berechnungTotal
+        - kuerzungNachEinreichefrist
+        - anzahlMonateEinreichefrist
+        - kuerzungUnterbruch
+        - anzahlMonateUnterbruch
         - berechnungStipendium
         - berechnungDarlehen
         - tranchenBerechnungsresultate
@@ -9004,6 +9008,18 @@ components:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für das
             Gesuch
+          type: integer
+        kuerzungNachEinreichefrist:
+          description: Die Summe nach der Kürzung der verspäteten Eingabe
+          type: integer
+        anzahlMonateEinreichefrist:
+          description: Die Anzahl Monate der verspäteten Eingabe
+          type: integer
+        kuerzungUnterbruch:
+          description: Die Summe nach der Kürzung des Unterbruchs der Ausbildung
+          type: integer
+        anzahlMonateUnterbruch:
+          description: Die Anzahl Monate von dem Unterbruch der Ausbildung
           type: integer
         berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
@@ -9028,8 +9044,6 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - berechnungAnteilTotal
-        - berechnungAnteilStipendium
-        - berechnungAnteilDarlehen
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -9046,12 +9060,6 @@ components:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für
             diese Tranche
-          type: integer
-        berechnungAnteilStipendium:
-          description: Berechneter Stpendiumsanspruch für diese Tranche
-          type: integer
-        berechnungAnteilDarlehen:
-          description: Berechneter Darlehensanspruch für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'
