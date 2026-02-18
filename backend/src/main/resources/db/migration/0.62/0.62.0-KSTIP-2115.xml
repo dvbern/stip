@@ -46,7 +46,7 @@
       </column>
     </createTable>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-506">
+  <changeSet author="jafa (generated)" id="1771412881033-506">
     <createTable tableName="ausbildung_unterbruch_antrag_aud">
       <column name="id" type="UUID">
         <constraints nullable="false"/>
@@ -70,12 +70,12 @@
       <column name="gesuch_id" type="UUID"/>
     </createTable>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-507">
+  <changeSet author="jafa (generated)" id="1771412881033-507">
     <createTable tableName="ausbildungunterbruchantrag_dokument_aud">
       <column name="rev" type="INTEGER">
         <constraints nullable="false"/>
       </column>
-      <column name="dokument_id" type="UUID">
+      <column name="ausbildung_unterbruch_antrag_id" type="UUID">
         <constraints nullable="false"/>
       </column>
       <column name="id" type="UUID">
@@ -84,28 +84,28 @@
       <column name="revtype" type="SMALLINT"/>
     </createTable>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-508">
+  <changeSet author="jafa (generated)" id="1771412881033-508">
     <addColumn tableName="dokument">
-      <column name="dokument_id" type="UUID"/>
+      <column name="ausbildung_unterbruch_antrag_id" type="UUID"/>
     </addColumn>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-509">
+  <changeSet author="jafa (generated)" id="1771412881033-509">
     <addPrimaryKey columnNames="rev, id"
                    constraintName="ausbildung_unterbruch_antrag_audPK"
                    tableName="ausbildung_unterbruch_antrag_aud"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-510">
-    <addPrimaryKey columnNames="dokument_id, rev, id"
+  <changeSet author="jafa (generated)" id="1771412881033-510">
+    <addPrimaryKey columnNames="ausbildung_unterbruch_antrag_id, rev, id"
                    constraintName="ausbildungunterbruchantrag_dokument_audPK"
                    tableName="ausbildungunterbruchantrag_dokument_aud"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-511">
+  <changeSet author="jafa (generated)" id="1771412881033-511">
     <createIndex indexName="IX_ausbildung_unterbruch_antrag_mandant"
                  tableName="ausbildung_unterbruch_antrag">
       <column name="mandant"/>
     </createIndex>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-512">
+  <changeSet author="jafa (generated)" id="1771412881033-512">
     <addForeignKeyConstraint baseColumnNames="rev"
                              baseTableName="ausbildungunterbruchantrag_dokument_aud"
                              constraintName="FK19g9ao1rec060vt3th3bhnghb"
@@ -115,7 +115,7 @@
                              referencedTableName="revinfo"
                              validate="true"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-513">
+  <changeSet author="jafa (generated)" id="1771412881033-513">
     <addForeignKeyConstraint baseColumnNames="ausbildung_id"
                              baseTableName="ausbildung_unterbruch_antrag"
                              constraintName="FK_ausbildung_unterbruch_antrag_ausbildung_id"
@@ -125,8 +125,8 @@
                              referencedTableName="ausbildung"
                              validate="true"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-514">
-    <addForeignKeyConstraint baseColumnNames="dokument_id"
+  <changeSet author="jafa (generated)" id="1771412881033-514">
+    <addForeignKeyConstraint baseColumnNames="ausbildung_unterbruch_antrag_id"
                              baseTableName="dokument"
                              constraintName="FK_ausbildung_unterbruch_antrag_dokument_id"
                              deferrable="false"
@@ -135,7 +135,7 @@
                              referencedTableName="ausbildung_unterbruch_antrag"
                              validate="true"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-515">
+  <changeSet author="jafa (generated)" id="1771412881033-515">
     <addForeignKeyConstraint baseColumnNames="gesuch_id"
                              baseTableName="ausbildung_unterbruch_antrag"
                              constraintName="FK_ausbildung_unterbruch_antrag_gesuch_id"
@@ -145,7 +145,7 @@
                              referencedTableName="gesuch"
                              validate="true"/>
   </changeSet>
-  <changeSet author="jafa (generated)" id="1770813422948-516">
+  <changeSet author="jafa (generated)" id="1771412881033-516">
     <addForeignKeyConstraint baseColumnNames="rev"
                              baseTableName="ausbildung_unterbruch_antrag_aud"
                              constraintName="FKiyny952r3axgukewwq6dv9mxh"

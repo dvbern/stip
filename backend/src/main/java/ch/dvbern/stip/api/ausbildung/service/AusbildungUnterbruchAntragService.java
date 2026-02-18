@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.ausbildung.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
@@ -73,6 +74,7 @@ public class AusbildungUnterbruchAntragService {
     private final SozialdienstService sozialdienstService;
     private final NotificationService notificationService;
     private final GesuchStatusService gesuchStatusService;
+    private final AusbildungService ausbildungService;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
 
@@ -94,8 +96,9 @@ public class AusbildungUnterbruchAntragService {
     }
 
     @Transactional
-    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID gesuchId) {
-        return ausbildungUnterbruchAntragMapper.toGsDto(createAntrag(gesuchService.getGesuchById(gesuchId)));
+    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        return ausbildungUnterbruchAntragMapper.toGsDto(createAntrag(ausbildung.getLatestGesuch()));
     }
 
     private void uploadDokument(
@@ -180,7 +183,7 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         return ausbildungUnterbruchAntragMapper
-            .toGsDto(ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragGSDto, antrag));
+            .toGsDto(ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag));
     }
 
     @Transactional
@@ -201,12 +204,14 @@ public class AusbildungUnterbruchAntragService {
         final UUID ausbildungUnterbruchAntragId,
         final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
     ) {
-        final var antrag = requireById(ausbildungUnterbruchAntragId);
-        if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(updateAusbildungUnterbruchAntragSBDto.getStatus())) {
+        var antrag = requireById(ausbildungUnterbruchAntragId);
+        antrag = ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag);
+        if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(antrag.getStatus())) {
             notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
             if (
-                updateAusbildungUnterbruchAntragSBDto.getMonateOhneAnspruch() > 0
-                || Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(antrag.getGesuch().getGesuchStatus())
+                Objects.nonNull(antrag.getMonateOhneAnspruch())
+                && antrag.getMonateOhneAnspruch() > 0
+                && Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(antrag.getGesuch().getGesuchStatus())
             ) {
                 gesuchStatusService.triggerStateMachineEvent(
                     antrag.getGesuch(),
@@ -216,7 +221,7 @@ public class AusbildungUnterbruchAntragService {
         }
 
         return ausbildungUnterbruchAntragMapper
-            .toSbDto(ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag));
+            .toSbDto(antrag);
     }
 
     @Transactional
@@ -232,11 +237,12 @@ public class AusbildungUnterbruchAntragService {
     }
 
     public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
+        final var gesuch = ausbildung.getLatestGesuch();
         final boolean openAenderungOnLatestGesuchExists =
-            GesuchUtil.openAenderungAlreadyExists(ausbildung.getLatestGesuch());
+            GesuchUtil.openAenderungAlreadyExists(gesuch);
         final boolean openAusbildungUnterbruchAntragExists =
             AusbildungUnterbruchAntragUtil.openAusbildungUnterbruchAntragExists(ausbildung);
         return !openAenderungOnLatestGesuchExists && !openAusbildungUnterbruchAntragExists
-        && !ausbildung.isUnterbrochen();
+        && !ausbildung.isUnterbrochen() && gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS;
     }
 }

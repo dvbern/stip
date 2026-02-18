@@ -79,7 +79,8 @@ public abstract class AusbildungUnterbruchAntragMapper {
 
     @Mapping(source = "startDate", target = "gueltigkeit.gueltigAb")
     @Mapping(source = "endDate", target = "gueltigkeit.gueltigBis")
-    public abstract AusbildungUnterbruchAntrag partialUpdate(
+    @Mapping(target = "status", constant = "EINGEGEBEN")
+    public abstract AusbildungUnterbruchAntrag antragEinreichen(
         final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto,
         @MappingTarget final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
     );

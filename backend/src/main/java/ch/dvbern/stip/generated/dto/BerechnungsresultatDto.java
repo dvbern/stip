@@ -29,8 +29,10 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnungTotal;
   private @Valid Integer berechnungStipendium;
   private @Valid Integer berechnungDarlehen;
+  private @Valid Integer stipendienanspruch;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
   private @Valid Integer berechnungReduziert;
+  private @Valid Integer berechnungUnterbrochen;
   private @Valid Integer verminderteBerechnungMonate;
   private @Valid Integer monateOhneAnspruch;
 
@@ -114,6 +116,26 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
+   * Berechneter Stpendiumsanspruch nach allen Kürzungen
+   **/
+  public BerechnungsresultatDto stipendienanspruch(Integer stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
+    return this;
+  }
+
+  
+  @JsonProperty("stipendienanspruch")
+  @NotNull
+  public Integer getStipendienanspruch() {
+    return stipendienanspruch;
+  }
+
+  @JsonProperty("stipendienanspruch")
+  public void setStipendienanspruch(Integer stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
+  }
+
+  /**
    * Resultate der Berechnung für die Tranchen des Gesuchs
    **/
   public BerechnungsresultatDto tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
@@ -169,6 +191,25 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
+   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen Unterbruch
+   **/
+  public BerechnungsresultatDto berechnungUnterbrochen(Integer berechnungUnterbrochen) {
+    this.berechnungUnterbrochen = berechnungUnterbrochen;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungUnterbrochen")
+  public Integer getBerechnungUnterbrochen() {
+    return berechnungUnterbrochen;
+  }
+
+  @JsonProperty("berechnungUnterbrochen")
+  public void setBerechnungUnterbrochen(Integer berechnungUnterbrochen) {
+    this.berechnungUnterbrochen = berechnungUnterbrochen;
+  }
+
+  /**
    * Die Anzahl von Monaten für welche die Berechnung stattfand
    **/
   public BerechnungsresultatDto verminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
@@ -220,15 +261,17 @@ public class BerechnungsresultatDto  implements Serializable {
         Objects.equals(this.berechnungTotal, berechnungsresultat.berechnungTotal) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
+        Objects.equals(this.stipendienanspruch, berechnungsresultat.stipendienanspruch) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
+        Objects.equals(this.berechnungUnterbrochen, berechnungsresultat.berechnungUnterbrochen) &&
         Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate) &&
         Objects.equals(this.monateOhneAnspruch, berechnungsresultat.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, berechnungReduziert, verminderteBerechnungMonate, monateOhneAnspruch);
+    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, stipendienanspruch, tranchenBerechnungsresultate, berechnungReduziert, berechnungUnterbrochen, verminderteBerechnungMonate, monateOhneAnspruch);
   }
 
   @Override
@@ -240,8 +283,10 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    berechnungTotal: ").append(toIndentedString(berechnungTotal)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
+    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
+    sb.append("    berechnungUnterbrochen: ").append(toIndentedString(berechnungUnterbrochen)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");

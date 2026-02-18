@@ -243,6 +243,10 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.massendruck.datenschutzbriefOrVerfuegung}";
     public static final String VALIDATION_FAMILIENSITUATION_NOT_VERHEIRATET_IF_VERSTECKTER_ELTERNTEIL =
         "{jakarta.validation.constraints.familiensituation.notVerheiratetIfVersteckterElternteil}";
+    public static final String VALIDATION_AUSBILDUNG_UNTERBRUCH_ANTRAG_REQUIRED_FIELDS =
+        "{jakarta.validation.constraints.ausbildungunterbruchantrag.required.message}";
+    public static final String VALIDATION_AUSBILDUNG_UNTERBRUCH_ANTRAG_GUELTIGKEIT =
+        "{jakarta.validation.constraints.ausbildungunterbruchantrag.gueltigkeit.message}";
 
     private ValidationsConstant() {
         throw new IllegalStateException("Validations Constant class");

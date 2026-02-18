@@ -191,7 +191,7 @@ public class Ausbildung extends AbstractMandantEntity {
                     .getStatus() == AusbildungUnterbruchAntragStatus.AKZEPTIERT
             )
             .anyMatch(
-                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGueltigkeit().contains(LocalDate.now())
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGesuch().equals(getLatestGesuch())
             );
     }
 

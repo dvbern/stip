@@ -49,6 +49,8 @@ import org.hibernate.envers.Audited;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LENGTH;
 
+@AusbildungUnterbruchAntragRequiredFieldsConstraint
+@AusbildungUnterbruchAntragGueltigkeitConstraint
 @Audited
 @Entity
 @Table(
@@ -75,7 +77,7 @@ public class AusbildungUnterbruchAntrag extends AbstractMandantEntity {
 
     @OneToMany(orphanRemoval = true)
     @JoinColumn(
-        name = "dokument_id",
+        name = "ausbildung_unterbruch_antrag_id",
         foreignKey = @ForeignKey(name = "FK_ausbildung_unterbruch_antrag_dokument_id")
     )
     private Set<Dokument> dokuments = new LinkedHashSet<>();

@@ -134,13 +134,16 @@ public class BerechnungService {
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilDarlehen).sum();
         int berechnungTotal =
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilTotal).sum();
-        if (berechnungTotal < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
-            berechnungTotal = 0;
+        if (berechnungStipendium < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+            berechnungStipendium = 0;
         }
 
         final var monthsLeftAfterReduction = DateUtil.wasEingereichtAfterDueDate(gesuch)
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
-            : 0;
+            : 12;
+
+        final Integer berechnungsResultatReduziertEinreichen =
+            monthsLeftAfterReduction < 12 ? berechnungStipendium * monthsLeftAfterReduction / 12 : null;
 
         final var monateOhneAnspruch = gesuch.getAusbildung()
             .getAusbildungUnterbruchAntrags()
@@ -158,18 +161,27 @@ public class BerechnungService {
             .findFirst()
             .orElse(0);
 
-        final int monateMitAnspruch = Math.max(monthsLeftAfterReduction - monateOhneAnspruch, 0);
+        final Integer berechnungOhneAnspruch =
+            monateOhneAnspruch > 0
+                ? Objects.requireNonNullElse(berechnungsResultatReduziertEinreichen, berechnungStipendium)
+                * (12 - monateOhneAnspruch) / 12
+                : null;
 
-        final Integer berechnungsresultatReduziert =
-            monateMitAnspruch > 0 ? berechnungTotal * monateMitAnspruch / 12 : null;
+        final Integer stipendienAnspruch =
+            Objects.requireNonNullElse(
+                berechnungOhneAnspruch,
+                Objects.requireNonNullElse(berechnungsResultatReduziertEinreichen, berechnungStipendium)
+            );
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungTotal,
             berechnungStipendium,
             berechnungDarlehen,
+            stipendienAnspruch,
             berechnungsresultate,
-            berechnungsresultatReduziert,
+            berechnungsResultatReduziertEinreichen,
+            berechnungOhneAnspruch,
             monthsLeftAfterReduction,
             monateOhneAnspruch
         );

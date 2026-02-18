@@ -91,9 +91,9 @@ public class AusbildungResourceImpl implements AusbildungResource {
 
     @Override
     @RolesAllowed(AUSBILDUNG_CREATE)
-    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID gesuchId) {
-        ausbildungUnterbruchAntragAuthorizer.gsCanCreate(gesuchId);
-        return ausbildungUnterbruchAntragService.createAusbildungUnterbruchAntrag(gesuchId);
+    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID ausbildungId) {
+        ausbildungUnterbruchAntragAuthorizer.gsCanCreate(ausbildungId);
+        return ausbildungUnterbruchAntragService.createAusbildungUnterbruchAntrag(ausbildungId);
     }
 
     @Blocking

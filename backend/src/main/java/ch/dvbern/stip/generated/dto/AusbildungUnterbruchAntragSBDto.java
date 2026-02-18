@@ -29,7 +29,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid String kommentarSB;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
-  private @Valid Integer monateOhneAnspruch;
   private @Valid UUID id;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid String userErstellt;
@@ -39,6 +38,7 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid LocalDate unterbruchLatestEndDate;
   private @Valid LocalDate unterbruchEarliestStartDate;
+  private @Valid Integer monateOhneAnspruch;
 
   /**
    **/
@@ -114,25 +114,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   @JsonProperty("endDate")
   public void setEndDate(LocalDate endDate) {
     this.endDate = endDate;
-  }
-
-  /**
-   **/
-  public AusbildungUnterbruchAntragSBDto monateOhneAnspruch(Integer monateOhneAnspruch) {
-    this.monateOhneAnspruch = monateOhneAnspruch;
-    return this;
-  }
-
-  
-  @JsonProperty("monateOhneAnspruch")
-  @NotNull
-  public Integer getMonateOhneAnspruch() {
-    return monateOhneAnspruch;
-  }
-
-  @JsonProperty("monateOhneAnspruch")
-  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
-    this.monateOhneAnspruch = monateOhneAnspruch;
   }
 
   /**
@@ -322,6 +303,24 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
   }
 
+  /**
+   **/
+  public AusbildungUnterbruchAntragSBDto monateOhneAnspruch(Integer monateOhneAnspruch) {
+    this.monateOhneAnspruch = monateOhneAnspruch;
+    return this;
+  }
+
+  
+  @JsonProperty("monateOhneAnspruch")
+  public Integer getMonateOhneAnspruch() {
+    return monateOhneAnspruch;
+  }
+
+  @JsonProperty("monateOhneAnspruch")
+  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
+    this.monateOhneAnspruch = monateOhneAnspruch;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -336,7 +335,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
         Objects.equals(this.kommentarSB, ausbildungUnterbruchAntragSB.kommentarSB) &&
         Objects.equals(this.startDate, ausbildungUnterbruchAntragSB.startDate) &&
         Objects.equals(this.endDate, ausbildungUnterbruchAntragSB.endDate) &&
-        Objects.equals(this.monateOhneAnspruch, ausbildungUnterbruchAntragSB.monateOhneAnspruch) &&
         Objects.equals(this.id, ausbildungUnterbruchAntragSB.id) &&
         Objects.equals(this.timestampErstellt, ausbildungUnterbruchAntragSB.timestampErstellt) &&
         Objects.equals(this.userErstellt, ausbildungUnterbruchAntragSB.userErstellt) &&
@@ -345,12 +343,13 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
         Objects.equals(this.dokuments, ausbildungUnterbruchAntragSB.dokuments) &&
         Objects.equals(this.gesuchId, ausbildungUnterbruchAntragSB.gesuchId) &&
         Objects.equals(this.unterbruchLatestEndDate, ausbildungUnterbruchAntragSB.unterbruchLatestEndDate) &&
-        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate);
+        Objects.equals(this.unterbruchEarliestStartDate, ausbildungUnterbruchAntragSB.unterbruchEarliestStartDate) &&
+        Objects.equals(this.monateOhneAnspruch, ausbildungUnterbruchAntragSB.monateOhneAnspruch);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, kommentarSB, startDate, endDate, monateOhneAnspruch, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate);
+    return Objects.hash(status, kommentarSB, startDate, endDate, id, timestampErstellt, userErstellt, kommentarGS, canAntragAkzeptieren, dokuments, gesuchId, unterbruchLatestEndDate, unterbruchEarliestStartDate, monateOhneAnspruch);
   }
 
   @Override
@@ -362,7 +361,6 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     sb.append("    kommentarSB: ").append(toIndentedString(kommentarSB)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
-    sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
@@ -372,6 +370,7 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    unterbruchLatestEndDate: ").append(toIndentedString(unterbruchLatestEndDate)).append("\n");
     sb.append("    unterbruchEarliestStartDate: ").append(toIndentedString(unterbruchEarliestStartDate)).append("\n");
+    sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
     sb.append("}");
     return sb.toString();
   }

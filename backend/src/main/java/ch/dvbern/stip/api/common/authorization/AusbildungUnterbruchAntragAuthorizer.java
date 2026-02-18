@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.common.authorization;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -38,13 +39,14 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final GesuchService gesuchService;
     private final SozialdienstService sozialdienstService;
+    private final AusbildungService ausbildungService;
 
     @Transactional
-    public void gsCanCreate(final UUID gesuchId) {
-        final var gesuch = gesuchService.getGesuchById(gesuchId);
+    public void gsCanCreate(final UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
         if (
             !AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                gesuch,
+                ausbildung,
                 benutzerService.getCurrentBenutzer(),
                 sozialdienstService
             )
@@ -52,7 +54,7 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
             forbidden();
         }
 
-        if (!ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(gesuch.getAusbildung())) {
+        if (!ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(ausbildung)) {
             forbidden();
         }
     }

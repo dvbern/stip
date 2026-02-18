@@ -77,7 +77,7 @@ export class UnterbruchInfoDialogComponent {
   private formUtils = inject(SharedUtilFormService);
   dialogData = inject<AusbildungUnterbruchAntragEntry>(MAT_DIALOG_DATA);
 
-  monatValues = new Array(12).fill(0).map((_, index) => index + 1);
+  monatValues = new Array(13).fill(0).map((_, index) => index);
 
   form = this.formBuilder.group({
     startDate: [<string>this.dialogData.startDate, Validators.required],

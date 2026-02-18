@@ -38,7 +38,8 @@ public class AusbildungUnterbruchAntragUtil {
     public boolean canAusbildungUnterbruchAntragAkzeptieren(
         final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag
     ) {
-        return (GesuchUtil.gesuchAbgeschlossen(ausbildungUnterbruchAntrag.getGesuch())
+        return ausbildungUnterbruchAntrag.getStatus() == AusbildungUnterbruchAntragStatus.EINGEGEBEN
+        && (GesuchUtil.gesuchAbgeschlossen(ausbildungUnterbruchAntrag.getGesuch())
         || GesuchUtil.gesuchIsInStatus(ausbildungUnterbruchAntrag.getGesuch(), Gesuchstatus.IN_BEARBEITUNG_SB))
         && !GesuchUtil.openAenderungAlreadyExists(ausbildungUnterbruchAntrag.getGesuch());
     }

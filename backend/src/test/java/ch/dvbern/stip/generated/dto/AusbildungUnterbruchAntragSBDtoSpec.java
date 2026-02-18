@@ -453,9 +453,9 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
    * Get monateOhneAnspruch
    * @return monateOhneAnspruch
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getMonateOhneAnspruch() {
     return monateOhneAnspruch;
@@ -463,7 +463,7 @@ public class AusbildungUnterbruchAntragSBDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_MONATE_OHNE_ANSPRUCH)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
     this.monateOhneAnspruch = monateOhneAnspruch;
   }

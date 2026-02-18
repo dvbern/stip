@@ -32,7 +32,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
   private @Valid Boolean editable;
   private @Valid Boolean canCreateAusbildungUnterbruchAntrag;
-  private @Valid Boolean isUnterbrochen;
+  private @Valid Boolean hasPendingAusbildungUnterbruchAntrag;
   private @Valid UUID id;
   private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid Boolean ausbildungNichtGefunden;
@@ -184,21 +184,21 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
-  public AusbildungDashboardItemDto isUnterbrochen(Boolean isUnterbrochen) {
-    this.isUnterbrochen = isUnterbrochen;
+  public AusbildungDashboardItemDto hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
     return this;
   }
 
   
-  @JsonProperty("isUnterbrochen")
+  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
   @NotNull
-  public Boolean getIsUnterbrochen() {
-    return isUnterbrochen;
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
   }
 
-  @JsonProperty("isUnterbrochen")
-  public void setIsUnterbrochen(Boolean isUnterbrochen) {
-    this.isUnterbrochen = isUnterbrochen;
+  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
+  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
   /**
@@ -473,7 +473,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.status, ausbildungDashboardItem.status) &&
         Objects.equals(this.editable, ausbildungDashboardItem.editable) &&
         Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
-        Objects.equals(this.isUnterbrochen, ausbildungDashboardItem.isUnterbrochen) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, ausbildungDashboardItem.hasPendingAusbildungUnterbruchAntrag) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildungDashboardItem.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.ausbildungNichtGefunden, ausbildungDashboardItem.ausbildungNichtGefunden) &&
@@ -491,7 +491,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs, openAusbildungUnterbruchAntragId);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs, openAusbildungUnterbruchAntragId);
   }
 
   @Override
@@ -506,7 +506,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
     sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
-    sb.append("    isUnterbrochen: ").append(toIndentedString(isUnterbrochen)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    ausbildungNichtGefunden: ").append(toIndentedString(ausbildungNichtGefunden)).append("\n");

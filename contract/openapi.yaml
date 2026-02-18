@@ -8296,7 +8296,6 @@ components:
         - kommentarSB
         - startDate
         - endDate
-        - monateOhneAnspruch
       properties:
         status:
           $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'
@@ -9400,6 +9399,7 @@ components:
         - berechnungStipendium
         - berechnungDarlehen
         - tranchenBerechnungsresultate
+        - stipendienanspruch
       type: object
       properties:
         year:
@@ -9419,6 +9419,14 @@ components:
           description: >-
             Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug
             wegen zuspäteinreichens
+          type: integer
+        berechnungUnterbrochen:
+          description: >-
+            Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug
+            wegen Unterbruch
+          type: integer
+        stipendienanspruch:
+          description: Berechneter Stpendiumsanspruch nach allen Kürzungen
           type: integer
         tranchenBerechnungsresultate:
           description: Resultate der Berechnung für die Tranchen des Gesuchs

@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_GESUCHS,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG,
-  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_IS_UNTERBROCHEN,
+  AusbildungDashboardItemDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_ID,
   AusbildungDashboardItemDtoSpec.JSON_PROPERTY_FALL_ID,
@@ -61,8 +61,8 @@ public class AusbildungDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_CAN_CREATE_AUSBILDUNG_UNTERBRUCH_ANTRAG = "canCreateAusbildungUnterbruchAntrag";
   private Boolean canCreateAusbildungUnterbruchAntrag;
 
-  public static final String JSON_PROPERTY_IS_UNTERBROCHEN = "isUnterbrochen";
-  private Boolean isUnterbrochen;
+  public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
+  private Boolean hasPendingAusbildungUnterbruchAntrag;
 
   public static final String JSON_PROPERTY_OPEN_AUSBILDUNG_UNTERBRUCH_ANTRAG_ID = "openAusbildungUnterbruchAntragId";
   private UUID openAusbildungUnterbruchAntragId;
@@ -172,29 +172,29 @@ public class AusbildungDashboardItemDtoSpec {
   }
 
 
-  public AusbildungDashboardItemDtoSpec isUnterbrochen(Boolean isUnterbrochen) {
+  public AusbildungDashboardItemDtoSpec hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
     
-    this.isUnterbrochen = isUnterbrochen;
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
     return this;
   }
 
    /**
-   * Get isUnterbrochen
-   * @return isUnterbrochen
+   * Get hasPendingAusbildungUnterbruchAntrag
+   * @return hasPendingAusbildungUnterbruchAntrag
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IS_UNTERBROCHEN)
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getIsUnterbrochen() {
-    return isUnterbrochen;
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_IS_UNTERBROCHEN)
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIsUnterbrochen(Boolean isUnterbrochen) {
-    this.isUnterbrochen = isUnterbrochen;
+  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
 
@@ -598,7 +598,7 @@ public class AusbildungDashboardItemDtoSpec {
     AusbildungDashboardItemDtoSpec ausbildungDashboardItem = (AusbildungDashboardItemDtoSpec) o;
     return Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
         Objects.equals(this.canCreateAusbildungUnterbruchAntrag, ausbildungDashboardItem.canCreateAusbildungUnterbruchAntrag) &&
-        Objects.equals(this.isUnterbrochen, ausbildungDashboardItem.isUnterbrochen) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, ausbildungDashboardItem.hasPendingAusbildungUnterbruchAntrag) &&
         Objects.equals(this.openAusbildungUnterbruchAntragId, ausbildungDashboardItem.openAusbildungUnterbruchAntragId) &&
         Objects.equals(this.id, ausbildungDashboardItem.id) &&
         Objects.equals(this.fallId, ausbildungDashboardItem.fallId) &&
@@ -618,7 +618,7 @@ public class AusbildungDashboardItemDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, isUnterbrochen, openAusbildungUnterbruchAntragId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(gesuchs, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, openAusbildungUnterbruchAntragId, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
   }
 
   @Override
@@ -627,7 +627,7 @@ public class AusbildungDashboardItemDtoSpec {
     sb.append("class AusbildungDashboardItemDtoSpec {\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("    canCreateAusbildungUnterbruchAntrag: ").append(toIndentedString(canCreateAusbildungUnterbruchAntrag)).append("\n");
-    sb.append("    isUnterbrochen: ").append(toIndentedString(isUnterbrochen)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    openAusbildungUnterbruchAntragId: ").append(toIndentedString(openAusbildungUnterbruchAntragId)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");

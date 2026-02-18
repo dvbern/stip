@@ -111,7 +111,6 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
 
   
   @JsonProperty("monateOhneAnspruch")
-  @NotNull
   public Integer getMonateOhneAnspruch() {
     return monateOhneAnspruch;
   }

@@ -36,6 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_STIPENDIUM,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_REDUZIERT,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_UNTERBROCHEN,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_STIPENDIENANSPRUCH,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_MONATE_OHNE_ANSPRUCH
@@ -57,6 +59,12 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_BERECHNUNG_REDUZIERT = "berechnungReduziert";
   private Integer berechnungReduziert;
+
+  public static final String JSON_PROPERTY_BERECHNUNG_UNTERBROCHEN = "berechnungUnterbrochen";
+  private Integer berechnungUnterbrochen;
+
+  public static final String JSON_PROPERTY_STIPENDIENANSPRUCH = "stipendienanspruch";
+  private Integer stipendienanspruch;
 
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
@@ -200,6 +208,58 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
+  public BerechnungsresultatDtoSpec berechnungUnterbrochen(Integer berechnungUnterbrochen) {
+    
+    this.berechnungUnterbrochen = berechnungUnterbrochen;
+    return this;
+  }
+
+   /**
+   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen Unterbruch
+   * @return berechnungUnterbrochen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_UNTERBROCHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getBerechnungUnterbrochen() {
+    return berechnungUnterbrochen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_UNTERBROCHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setBerechnungUnterbrochen(Integer berechnungUnterbrochen) {
+    this.berechnungUnterbrochen = berechnungUnterbrochen;
+  }
+
+
+  public BerechnungsresultatDtoSpec stipendienanspruch(Integer stipendienanspruch) {
+    
+    this.stipendienanspruch = stipendienanspruch;
+    return this;
+  }
+
+   /**
+   * Berechneter Stpendiumsanspruch nach allen Kürzungen
+   * @return stipendienanspruch
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getStipendienanspruch() {
+    return stipendienanspruch;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStipendienanspruch(Integer stipendienanspruch) {
+    this.stipendienanspruch = stipendienanspruch;
+  }
+
+
   public BerechnungsresultatDtoSpec tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate) {
     
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
@@ -299,6 +359,8 @@ public class BerechnungsresultatDtoSpec {
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
         Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
+        Objects.equals(this.berechnungUnterbrochen, berechnungsresultat.berechnungUnterbrochen) &&
+        Objects.equals(this.stipendienanspruch, berechnungsresultat.stipendienanspruch) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate) &&
         Objects.equals(this.monateOhneAnspruch, berechnungsresultat.monateOhneAnspruch);
@@ -306,7 +368,7 @@ public class BerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, berechnungReduziert, tranchenBerechnungsresultate, verminderteBerechnungMonate, monateOhneAnspruch);
+    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, berechnungReduziert, berechnungUnterbrochen, stipendienanspruch, tranchenBerechnungsresultate, verminderteBerechnungMonate, monateOhneAnspruch);
   }
 
   @Override
@@ -318,6 +380,8 @@ public class BerechnungsresultatDtoSpec {
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
     sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
+    sb.append("    berechnungUnterbrochen: ").append(toIndentedString(berechnungUnterbrochen)).append("\n");
+    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");

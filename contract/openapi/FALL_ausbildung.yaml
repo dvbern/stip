@@ -469,7 +469,6 @@ components:
         - kommentarSB
         - startDate
         - endDate
-        - monateOhneAnspruch
       properties:
         status:
           $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'

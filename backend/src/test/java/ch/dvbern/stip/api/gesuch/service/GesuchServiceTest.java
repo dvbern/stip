@@ -1150,7 +1150,7 @@ class GesuchServiceTest {
             .thenReturn(true);
 
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
+            .thenReturn(new BerechnungsresultatDto().stipendienanspruch(0).year(Year.now().getValue()));
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(

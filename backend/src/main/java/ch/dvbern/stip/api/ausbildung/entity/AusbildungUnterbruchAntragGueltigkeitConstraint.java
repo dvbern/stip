@@ -26,14 +26,14 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_UNTERBRUCH_ANTRAG_GUELTIGKEIT;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RequiredFieldsIfAusbildungIsAuslandConstraintValidator.class)
+@Constraint(validatedBy = AusbildungUnterbruchAntragGueltigkeitConstraintValidator.class)
 @Documented
-public @interface RequiredFieldsIfAusbildungIsAuslandConstraint {
-    String message() default VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE;
+public @interface AusbildungUnterbruchAntragGueltigkeitConstraint {
+    String message() default VALIDATION_AUSBILDUNG_UNTERBRUCH_ANTRAG_GUELTIGKEIT;
 
     Class<?>[] groups() default {};
 
