@@ -21,7 +21,9 @@
       {{ t('shared.dashboard.ausbildung.delete') }}
     </button>
   }
-  @if (ausbildung.id && ausbildung.canCreateAusbildungUnterbruchAntrag) {
+  @if (
+    ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
+  ) {
     <button
       type="button"
       class="btn btn-outline-primary tw:ml-3 tw:h-min"
