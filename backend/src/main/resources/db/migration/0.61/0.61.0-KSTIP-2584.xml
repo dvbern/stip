@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="luca.fondo (generated)" id="1770110507598-505">
+      <createTable tableName="gesetzlich_darlehen">
+         <column name="id" type="UUID">
+            <constraints nullable="false"
+                         primaryKey="true"
+                         primaryKeyName="gesetzlich_darlehenPK"/>
+         </column>
+         <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+            <constraints nullable="false"/>
+         </column>
+         <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+            <constraints nullable="false"/>
+         </column>
+         <column name="user_erstellt" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="user_mutiert" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="version" type="BIGINT"/>
+         <column name="mandant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="betrag" type="INTEGER">
+            <constraints nullable="false"/>
+         </column>
+         <column name="fall_id" type="UUID">
+            <constraints nullable="false"/>
+         </column>
+         <column name="gesuch_id" type="UUID">
+            <constraints nullable="false"/>
+         </column>
+         <column name="dokument_id" type="UUID"/>
+      </createTable>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-506">
+      <createTable tableName="gesetzlich_darlehen_aud">
+         <column name="id" type="UUID">
+            <constraints nullable="false"/>
+         </column>
+         <column name="rev" type="INTEGER">
+            <constraints nullable="false"/>
+         </column>
+         <column name="revtype" type="SMALLINT"/>
+         <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+         <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+         <column name="user_erstellt" type="VARCHAR(255)"/>
+         <column name="user_mutiert" type="VARCHAR(255)"/>
+         <column name="mandant" type="VARCHAR(255)"/>
+         <column name="betrag" type="INTEGER"/>
+         <column name="fall_id" type="UUID"/>
+         <column name="gesuch_id" type="UUID"/>
+         <column name="dokument_id" type="UUID"/>
+      </createTable>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-507">
+      <addPrimaryKey columnNames="rev, id"
+                     constraintName="gesetzlich_darlehen_audPK"
+                     tableName="gesetzlich_darlehen_aud"/>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-508">
+      <addUniqueConstraint columnNames="dokument_id"
+                           constraintName="UC_GESETZLICH_DARLEHENDOKUMENT_ID_COL"
+                           tableName="gesetzlich_darlehen"/>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-509">
+      <createIndex indexName="IX_gesetzlich_darlehen_fall_id"
+                   tableName="gesetzlich_darlehen">
+         <column name="fall_id"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-510">
+      <createIndex indexName="IX_gesetzlich_darlehen_gesuch_id"
+                   tableName="gesetzlich_darlehen">
+         <column name="gesuch_id"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-511">
+      <createIndex indexName="IX_gesetzlich_darlehen_mandant"
+                   tableName="gesetzlich_darlehen">
+         <column name="mandant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-512">
+      <addForeignKeyConstraint baseColumnNames="rev"
+                               baseTableName="gesetzlich_darlehen_aud"
+                               constraintName="FK8ulan7kkswvlv6jsqkdsq0pxj"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="rev"
+                               referencedTableName="revinfo"
+                               validate="true"/>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-513">
+      <addForeignKeyConstraint baseColumnNames="dokument_id"
+                               baseTableName="gesetzlich_darlehen"
+                               constraintName="FK94ntoa7n255uevx652w6vd7q7"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="dokument"
+                               validate="true"/>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-514">
+      <addForeignKeyConstraint baseColumnNames="fall_id"
+                               baseTableName="gesetzlich_darlehen"
+                               constraintName="FK_gesetzlich_darlehen_fall_id"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="fall"
+                               validate="true"/>
+   </changeSet>
+   <changeSet author="luca.fondo (generated)" id="1770110507598-515">
+      <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                               baseTableName="gesetzlich_darlehen"
+                               constraintName="FK_gesetzlich_darlehen_gesuch_id"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="gesuch"
+                               validate="true"/>
+   </changeSet>
+</databaseChangeLog>

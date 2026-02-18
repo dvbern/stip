@@ -15,10 +15,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.pdf.service;
+package ch.dvbern.stip.api.common.pdf;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
+import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -85,10 +87,32 @@ public class DarlehensVerfuegungPdfService {
     }
 
     public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final FreiwilligDarlehen darlehen) {
+        return generatePositiveDarlehensVerfuegungPdf(
+            darlehen.getRelatedGesuch(),
+            darlehen.getDarlehenNr(),
+            darlehen.getBetrag(),
+            darlehen.getEingabedatum()
+        );
+    }
+
+    public ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(final GesetzlichDarlehen darlehen) {
+        return generatePositiveDarlehensVerfuegungPdf(
+            darlehen.getGesuch(),
+            darlehen.getDarlehenNr(),
+            darlehen.getBetrag(),
+            darlehen.getGesuch().getEinreichedatum()
+        );
+    }
+
+    private ByteArrayOutputStream generatePositiveDarlehensVerfuegungPdf(
+        final Gesuch gesuch,
+        final String darlehenNr,
+        final Integer betrag,
+        final LocalDate datum
+    ) {
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
         final PdfFont pdfFontItalic = PdfUtils.createFontItalic();
-        final Gesuch gesuch = darlehen.getFall().getLatestGesuch();
         final TL translator = getTranslator(gesuch);
 
         final var out = new ByteArrayOutputStream();
@@ -104,8 +128,10 @@ public class DarlehensVerfuegungPdfService {
 
             if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
                 addPositiveDarlehensVerfuegung(
-                    darlehen,
                     gesuch,
+                    darlehenNr,
+                    betrag,
+                    datum,
                     translator,
                     document,
                     pdfDocument,
@@ -129,8 +155,10 @@ public class DarlehensVerfuegungPdfService {
             }
 
             addPositiveDarlehensVerfuegung(
-                darlehen,
                 gesuch,
+                darlehenNr,
+                betrag,
+                datum,
                 translator,
                 document,
                 pdfDocument,
@@ -148,10 +176,10 @@ public class DarlehensVerfuegungPdfService {
     }
 
     private String getKopieAnSozialdienstString(
-        final FreiwilligDarlehen darlehen,
+        final Gesuch gesuch,
         final TL translator
     ) {
-        if (Objects.isNull(darlehen.getFall().getDelegierung())) {
+        if (Objects.isNull(gesuch.getAusbildung().getFall().getDelegierung())) {
             return "";
         }
 
@@ -161,15 +189,17 @@ public class DarlehensVerfuegungPdfService {
                     " %s",
                     translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
                 ),
-                PdfUtils.getDelegierungKopieAnText(darlehen.getFall().getDelegierung())
+                PdfUtils.getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getDelegierung())
             );
 
         return kopieAnSozialdienst;
     }
 
     private void addPositiveDarlehensVerfuegung(
-        final FreiwilligDarlehen darlehen,
         final Gesuch gesuch,
+        final String darlehenNr,
+        final Integer betrag,
+        final LocalDate datum,
         final TL translator,
         final Document document,
         final PdfDocument pdfDocument,
@@ -190,7 +220,7 @@ public class DarlehensVerfuegungPdfService {
         final var titleZeile2 =
             String.format(
                 translator.translate("stip.darlehen.verfuegung.positiv.title.zeile2"),
-                darlehen.getDarlehenNr()
+                darlehenNr
             );
         document.add(
             PdfUtils.createParagraph(
@@ -216,7 +246,7 @@ public class DarlehensVerfuegungPdfService {
 
         final var text1 = String.format(
             translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
-            DateUtil.formatDate(darlehen.getEingabedatum())
+            DateUtil.formatDate(datum)
         );
         document.add(
             PdfUtils.createParagraph(
@@ -227,7 +257,7 @@ public class DarlehensVerfuegungPdfService {
             )
         );
 
-        addDetailsForDarlehenTable(document, darlehen, translator, pdfFont, pdfFontBold);
+        addDetailsForDarlehenTable(document, gesuch, betrag, translator, pdfFont, pdfFontBold);
 
         document.add(
             PdfUtils.createParagraph(
@@ -254,7 +284,7 @@ public class DarlehensVerfuegungPdfService {
 
         PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
 
-        String kopieAnSozialdienst = getKopieAnSozialdienstString(darlehen, translator);
+        String kopieAnSozialdienst = getKopieAnSozialdienstString(gesuch, translator);
 
         document.add(
             PdfUtils.createParagraph(
@@ -570,7 +600,7 @@ public class DarlehensVerfuegungPdfService {
 
         PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
 
-        String kopieAnSozialdienst = getKopieAnSozialdienstString(darlehen, translator);
+        String kopieAnSozialdienst = getKopieAnSozialdienstString(gesuch, translator);
 
         document.add(
             PdfUtils.createParagraph(
@@ -589,7 +619,8 @@ public class DarlehensVerfuegungPdfService {
 
     private void addDetailsForDarlehenTable(
         Document document,
-        final FreiwilligDarlehen darlehen,
+        final Gesuch gesuch,
+        final Integer betrag,
         final TL translator,
         final PdfFont pdfFont,
         final PdfFont pdfFontBold
@@ -598,7 +629,7 @@ public class DarlehensVerfuegungPdfService {
         darlehenParagraph.setFont(pdfFontBold);
         darlehenParagraph.add(
             new Text(
-                String.format("CHF %s.-", PdfUtils.formatNumber(Objects.requireNonNullElse(darlehen.getBetrag(), 0)))
+                String.format("CHF %s.-", PdfUtils.formatNumber(Objects.requireNonNullElse(betrag, 0)))
             ).setTextAlignment(TextAlignment.CENTER).setHorizontalAlignment(HorizontalAlignment.CENTER)
         );
         darlehenParagraph.setHorizontalAlignment(HorizontalAlignment.CENTER).setTextAlignment(TextAlignment.CENTER);
@@ -621,8 +652,7 @@ public class DarlehensVerfuegungPdfService {
         );
 
         final var geburtsdatum = DateUtil.formatDate(
-            darlehen.getFall()
-                .getLatestGesuch()
+            gesuch
                 .getLatestGesuchTranche()
                 .getGesuchFormular()
                 .getPersonInAusbildung()
@@ -649,8 +679,7 @@ public class DarlehensVerfuegungPdfService {
             ).setPadding(1).setTextAlignment(TextAlignment.LEFT)
         );
 
-        final var heimatort = darlehen.getFall()
-            .getLatestGesuch()
+        final var heimatort = gesuch
             .getLatestGesuchTranche()
             .getGesuchFormular()
             .getPersonInAusbildung()
@@ -677,7 +706,7 @@ public class DarlehensVerfuegungPdfService {
         );
 
         final var gueltigBis = DateUtil
-            .formatDate(DateUtil.getGesuchDateRange(darlehen.getFall().getLatestGesuch()).getGueltigBis());
+            .formatDate(DateUtil.getGesuchDateRange(gesuch).getGueltigBis());
 
         calculationTable.addCell(
             PdfUtils.createCell(
