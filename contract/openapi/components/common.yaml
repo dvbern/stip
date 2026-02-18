@@ -333,6 +333,7 @@ Gesuch:
     - fallId
     - fallNummer
     - ausbildungId
+    - openAusbildungUnterbruchAntragId
     - gesuchsperiode
     - gesuchStatus
     - gesuchNummer
@@ -347,6 +348,8 @@ Gesuch:
     fallNummer:
       type: string
     ausbildungId:
+      $ref: '#/UUID'
+    openAusbildungUnterbruchAntragId:
       $ref: '#/UUID'
     gesuchsperiode:
       $ref: '#/Gesuchsperiode'
