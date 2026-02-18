@@ -53,21 +53,24 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
+      berechnungVorKuerzungUndTeilung: number;
       kuerzungNachEinreichefrist?: number;
       anzahlMonateEinreichefrist?: number;
       kuerzungUnterbruch?: number;
       anzahlMonateUnterbruch?: number;
       berechnungStipendium: number;
-      berechnungDarlehen: number;
+      berechnungDarlehen?: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
     } = {
       year: berechnungRd.data?.year ?? 0,
+      berechnungVorKuerzungUndTeilung:
+        berechnungRd.data?.berechnungVorKuerzungUndTeilung ?? 0,
       kuerzungNachEinreichefrist: berechnungRd.data?.kuerzungNachEinreichefrist,
       anzahlMonateEinreichefrist: berechnungRd.data?.anzahlMonateEinreichefrist,
       kuerzungUnterbruch: berechnungRd.data?.kuerzungUnterbruch,
       anzahlMonateUnterbruch: berechnungRd.data?.anzahlMonateUnterbruch,
       berechnungStipendium: berechnungRd.data?.berechnungStipendium ?? 0,
-      berechnungDarlehen: berechnungRd.data?.berechnungDarlehen ?? 0,
+      berechnungDarlehen: berechnungRd.data?.berechnungDarlehen,
       berechnungsresultate: {},
     };
 

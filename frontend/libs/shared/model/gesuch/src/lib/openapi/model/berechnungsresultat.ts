@@ -17,25 +17,29 @@ import { TranchenBerechnungsresultat } from './tranchenBerechnungsresultat';
 export interface Berechnungsresultat { 
     year: number;
     /**
+     * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens
+     */
+    berechnungVorKuerzungUndTeilung: number;
+    /**
      * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
      */
     berechnungTotal: number;
     /**
      * Die Summe nach der Kürzung der verspäteten Eingabe
      */
-    kuerzungNachEinreichefrist: number;
+    kuerzungNachEinreichefrist?: number;
     /**
      * Die Anzahl Monate der verspäteten Eingabe
      */
-    anzahlMonateEinreichefrist: number;
+    anzahlMonateEinreichefrist?: number;
     /**
      * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
      */
-    kuerzungUnterbruch: number;
+    kuerzungUnterbruch?: number;
     /**
      * Die Anzahl Monate von dem Unterbruch der Ausbildung
      */
-    anzahlMonateUnterbruch: number;
+    anzahlMonateUnterbruch?: number;
     /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
@@ -43,7 +47,7 @@ export interface Berechnungsresultat {
     /**
      * Berechneter Darlehensanspruch für das Gesuch
      */
-    berechnungDarlehen: number;
+    berechnungDarlehen?: number;
     /**
      * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
      */

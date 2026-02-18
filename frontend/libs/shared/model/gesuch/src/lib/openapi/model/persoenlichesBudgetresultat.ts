@@ -32,8 +32,8 @@ export interface PersoenlichesBudgetresultat {
     eigenerHaushalt: boolean;
     budgetTranche: number;
     anzahlMonate: number;
-    gesetzlichesDarlehen: number;
-    gesetzlichesDarlehenStipendium: number;
+    gesetzlichesDarlehen?: number;
+    gesetzlichesDarlehenStipendium?: number;
     anzahlPersonenImHaushalt: number;
     einnahmen: PersoenlichesBudgetresultatEinnahmen;
     kosten: PersoenlichesBudgetresultatKosten;
