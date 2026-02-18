@@ -83,7 +83,7 @@ public class PersoenlichesBudgetCalculatorV1 {
 
         var stipendium = roundHalfUp(total);
         var darlehen = getDarlehen(antragssteller, stipendium);
-        var darlehenStipeandium = roundHalfUp(BigDecimal.valueOf((stipendium / 3) * 2));
+        var darlehenStipeandium = roundHalfUp(BigDecimal.valueOf(stipendium - darlehen));
 
         return new PersoenlichesBudgetresultatDto()
             .vorname(antragssteller.getVorname())
