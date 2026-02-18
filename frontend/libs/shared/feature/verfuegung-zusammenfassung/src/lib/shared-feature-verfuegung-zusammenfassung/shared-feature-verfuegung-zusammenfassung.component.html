@@ -81,13 +81,8 @@
               <div class="d-flex justify-content-between fs-5">
                 <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium') }}</div>
                 <div>
-                  {{ teilBerechnung.berechnungAnteilStipendium | formatChf: false }}
+                  {{ teilBerechnung.berechnungAnteilTotal | formatChf: false }}
                 </div>
-              </div>
-
-              <div class="d-flex justify-content-between fs-5">
-                <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen') }}</div>
-                <div>{{ teilBerechnung.berechnungAnteilDarlehen | formatChf: false }}</div>
               </div>
             </div>
           }
@@ -97,6 +92,34 @@
       <div class="border-bottom mt-4 border-1"></div>
 
       <mat-card-footer class="px-3 py-4">
+        @if (zusammenfassung.kuerzungNachEinreichefrist || zusammenfassung.kuerzungNachEinreichefrist === 0) {
+          <div class="d-flex justify-content-between fs-5 mb-3">
+            <div>
+              {{
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.nachEinreichefrist', {
+                  anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
+                })
+              }}
+            </div>
+            <div>
+              {{ zusammenfassung.kuerzungNachEinreichefrist | formatChf }}
+            </div>
+          </div>
+        }
+        @if (zusammenfassung.kuerzungUnterbruch || zusammenfassung.kuerzungUnterbruch === 0) {
+          <div class="d-flex justify-content-between fs-5 mb-3">
+            <div>
+              {{
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.unterbruch', {
+                  anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
+                })
+              }}
+            </div>
+            <div>
+              {{ zusammenfassung.kuerzungUnterbruch | formatChf }}
+            </div>
+          </div>
+        }
         <div class="d-flex justify-content-between fs-4 h4 mb-3">
           <div>
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium') }}

@@ -109,6 +109,7 @@
     "@eslint/js": "~9.39.2",
     "@jsdevtools/coverage-istanbul-loader": "^3.0.5",
     "@jsverse/transloco": "^8.2.1",
+    "@jsverse/transloco-messageformat": "^8.2.1",
     "@keycloak/keycloak-admin-client": "^26.5.2",
     "@ngrx/eslint-plugin": "21.0.1",
     "@nx/angular": "22.4.4",

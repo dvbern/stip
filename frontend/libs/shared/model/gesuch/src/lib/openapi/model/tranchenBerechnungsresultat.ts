@@ -21,14 +21,6 @@ export interface TranchenBerechnungsresultat {
      * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
      */
     berechnungAnteilTotal: number;
-    /**
-     * Berechneter Stpendiumsanspruch für diese Tranche
-     */
-    berechnungAnteilStipendium: number;
-    /**
-     * Berechneter Darlehensanspruch für diese Tranche
-     */
-    berechnungAnteilDarlehen: number;
     gueltigAb: string;
     gueltigBis: string;
     ausbildungAb: string;

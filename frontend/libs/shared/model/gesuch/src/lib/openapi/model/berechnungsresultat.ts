@@ -21,6 +21,22 @@ export interface Berechnungsresultat {
      */
     berechnungTotal: number;
     /**
+     * Die Summe nach der Kürzung der verspäteten Eingabe
+     */
+    kuerzungNachEinreichefrist: number;
+    /**
+     * Die Anzahl Monate der verspäteten Eingabe
+     */
+    anzahlMonateEinreichefrist: number;
+    /**
+     * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
+     */
+    kuerzungUnterbruch: number;
+    /**
+     * Die Anzahl Monate von dem Unterbruch der Ausbildung
+     */
+    anzahlMonateUnterbruch: number;
+    /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
     berechnungStipendium: number;

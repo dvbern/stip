@@ -795,6 +795,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Calcul {{ index }}{{ type }} pour la tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Part de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Part du prêt",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.nachEinreichefrist": "Réduction pour dépôt tardif ({{ anzahlMonate }} mois)",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.unterbruch": "Réduction pour interruption ({{ anzahlMonate }} mois)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Montant total du prêt",
 
@@ -829,8 +831,8 @@
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Dernière activité",
   "sachbearbeitung-app.cockpit.table.typ": "Type",
 
-  "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{{ anzahl }} lettres de protection des données à imprimer",
-  "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{{ anzahl }} décisions à imprimer",
+  "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{anzahl, plural, one {1 lettre} other {# lettres}} de protection des données à imprimer",
+  "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 décision} other {# décisions}} à imprimer",
 
   "sachbearbeitung-app.gesuch-form.title": "Demande",
 

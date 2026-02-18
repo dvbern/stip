@@ -246,8 +246,7 @@
   "shared.dashboard.gesuch.delete.dialog.message": "Wollen sie wirklich das Gesuch löschen? Sie werden alle Daten verlieren.",
   "shared.dashboard.gesuch.uploadMissingDocuments": "Dokumente hochladen",
   "shared.dashboard.gesuch.status.title": "Status",
-  "shared.dashboard.gesuch.status.missingDocument": "1 Dokument fehlt",
-  "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} Dokumente fehlen",
+  "shared.dashboard.gesuch.status.missingDocuments": "{count, plural, one {1 Dokument} other {# Dokumente}} fehlen",
   "shared.dashboard.gesuch.delegieren.success": "Das Gesuch wurde erfolgreich delegiert",
 
   "shared.dashboard.aenderung.title": "Änderung",
