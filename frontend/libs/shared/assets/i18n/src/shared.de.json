@@ -267,6 +267,7 @@
   "shared.nachrichten.text": "Nachricht",
   "shared.nachrichten.sender": "Absender",
   "shared.nachrichten.date": "Datum",
+  "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
   "shared.nachrichten.type.GESUCH_EINGEREICHT": "Gesuch eingereicht",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Fehlende Dokumente wurden übermittelt",
@@ -277,7 +278,6 @@
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Frist für Dokumente geändert",
   "shared.nachrichten.type.NEUE_VERFUEGUNG": "Neue Verfügung",
   "shared.nachrichten.type.FAILED_AUSZAHLUNG": "Auszahlung fehlgeschlagen",
-  "shared.nachrichten.noNotifications": "Keine Benachrichtigungen vorhanden",
   "shared.nachrichten.type.DELEGIERUNG_ANGENOMMEN": "Delegierung Angenommen",
   "shared.nachrichten.type.DELEGIERUNG_ABGELEHNT": "Delegierung Abgelehnt",
   "shared.nachrichten.type.DELEGIERUNG_AUFGELOEST": "Delegierung aufgelöst",
@@ -285,6 +285,9 @@
   "shared.nachrichten.type.DARLEHEN_ZURUECKGEWIESEN": "Darlehen zurückgewiesen",
   "shared.nachrichten.type.DARLEHEN_AKZEPTIERT": "Darlehen akzeptiert",
   "shared.nachrichten.type.DARLEHEN_ABGELEHNT": "Darlehen abgelehnt",
+  "shared.nachrichten.type.AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT": "Anfrage für Unterbruch der Ausbildung",
+  "shared.nachrichten.type.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT": "Unterbruch der Ausbildung wurde Akzeptiert",
+  "shared.nachrichten.type.AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT": "Unterbruch der Ausbildung wurde Abgelehnt",
 
   "shared.admin.sozialdienst.sozialdienstErstellt": "Sozialdienst wurde erfolgreich erstellt",
   "shared.admin.sozialdienst.sozialdienstGeloescht": "Sozialdienst wurde erfolgreich gelöscht",
@@ -320,6 +323,7 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Abgelehnt",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
+  "shared.gesuch.status.unterbruchAnfrage": "Anfrage Ausbildungsunterbruch",
   "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
