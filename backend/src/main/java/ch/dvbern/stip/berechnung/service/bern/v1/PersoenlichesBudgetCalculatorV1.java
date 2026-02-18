@@ -119,8 +119,9 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         var ausbildungskosten = antragssteller.getAusbildungskosten();
+        var ausbildungskostenTotal = ausbildungskosten;
         if (antragssteller.isVerheiratetKonkubinat()) {
-            ausbildungskosten = roundHalfUp(
+            ausbildungskostenTotal = roundHalfUp(
                 BigDecimal.valueOf(ausbildungskosten)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
@@ -130,15 +131,17 @@ public class PersoenlichesBudgetCalculatorV1 {
             antragssteller.getSteuern() + Objects.requireNonNullElse(antragssteller.getSteuernPartner(), 0);
 
         var fahrkosten = antragssteller.getFahrkosten();
+        var fahrkostenTotal = fahrkosten;
         var fahrkostenPartner = antragssteller.getFahrkostenPartner();
+        var fahrkostenPartnerTotal = fahrkostenPartner;
 
         if (antragssteller.isVerheiratetKonkubinat()) {
-            fahrkosten = roundHalfUp(
+            fahrkostenTotal = roundHalfUp(
                 BigDecimal.valueOf(fahrkosten)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
 
-            fahrkostenPartner = roundHalfUp(
+            fahrkostenPartnerTotal = roundHalfUp(
                 BigDecimal.valueOf(fahrkostenPartner)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
@@ -171,10 +174,10 @@ public class PersoenlichesBudgetCalculatorV1 {
             + InputUtils.sumNullables(
                 wohnkosten,
                 medizinischeGrundversorgungTotal,
-                ausbildungskosten,
+                ausbildungskostenTotal,
                 steuern,
-                fahrkosten,
-                fahrkostenPartner,
+                fahrkostenTotal,
+                fahrkostenPartnerTotal,
                 verpflegung,
                 verpflegungPartner,
                 fremdbetreuung,
@@ -185,13 +188,16 @@ public class PersoenlichesBudgetCalculatorV1 {
         return new PersoenlichesBudgetresultatKostenDto()
             .total(ausgaben)
             .ausbildungskosten(ausbildungskosten)
+            .ausbildungskostenTotal(ausbildungskostenTotal)
             .fahrkosten(fahrkosten)
+            .fahrkostenTotal(fahrkostenTotal)
             .verpflegungskosten(verpflegung)
             .grundbedarf(grundbedarf)
             .wohnkosten(wohnkosten)
             .medizinischeGrundversorgung(medizinischeGrundversorgungs)
             .medizinischeGrundversorgungTotal(medizinischeGrundversorgungTotal)
             .fahrkostenPartner(fahrkostenPartner)
+            .fahrkostenPartnerTotal(fahrkostenPartnerTotal)
             .verpflegungPartner(verpflegungPartner)
             .betreuungskostenKinder(fremdbetreuung)
             .kantonsGemeindesteuern(steuern)
