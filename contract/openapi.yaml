@@ -9099,7 +9099,7 @@ components:
       type: object
       required:
         - canCreateAusbildungUnterbruchAntrag
-        - isUnterbrochen
+        - hasPendingAusbildungUnterbruchAntrag
       properties:
         gesuchs:
           type: array
@@ -9107,7 +9107,7 @@ components:
             $ref: '#/components/schemas/GesuchDashboardItem'
         canCreateAusbildungUnterbruchAntrag:
           type: boolean
-        isUnterbrochen:
+        hasPendingAusbildungUnterbruchAntrag:
           type: boolean
         openAusbildungUnterbruchAntragId:
           $ref: '#/components/schemas/UUID'
@@ -10475,7 +10475,7 @@ components:
         - fallId
         - fallNummer
         - ausbildungId
-        - openAusbildungUnterbruchAntragId
+        - hasPendingAusbildungUnterbruchAntrag
         - gesuchsperiode
         - gesuchStatus
         - gesuchNummer
@@ -10491,8 +10491,8 @@ components:
           type: string
         ausbildungId:
           $ref: '#/components/schemas/UUID'
-        openAusbildungUnterbruchAntragId:
-          $ref: '#/components/schemas/UUID'
+        hasPendingAusbildungUnterbruchAntrag:
+          type: boolean
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:

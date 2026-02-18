@@ -1130,7 +1130,7 @@ components:
       type: object
       required:
         - canCreateAusbildungUnterbruchAntrag
-        - isUnterbrochen
+        - hasPendingAusbildungUnterbruchAntrag
       properties:
         gesuchs:
           type: array
@@ -1138,7 +1138,7 @@ components:
             $ref: '#/components/schemas/GesuchDashboardItem'
         canCreateAusbildungUnterbruchAntrag:
           type: boolean
-        isUnterbrochen:
+        hasPendingAusbildungUnterbruchAntrag:
           type: boolean
         openAusbildungUnterbruchAntragId:
           $ref: './components/common.yaml#/UUID'
