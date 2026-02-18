@@ -55,7 +55,7 @@ export interface AusbildungDashboardItem {
     editable: boolean;
     gesuchs?: Array<GesuchDashboardItem>;
     canCreateAusbildungUnterbruchAntrag: boolean;
-    isUnterbrochen: boolean;
+    hasPendingAusbildungUnterbruchAntrag: boolean;
     openAusbildungUnterbruchAntragId?: string;
 }
 

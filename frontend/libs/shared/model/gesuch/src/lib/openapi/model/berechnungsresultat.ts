@@ -40,5 +40,9 @@ export interface Berechnungsresultat {
      * Die Anzahl von Monaten für welche die Berechnung stattfand
      */
     verminderteBerechnungMonate?: number;
+    /**
+     * Monate um welche der Anspruch reduziert wurde durch einen Unterbruch der Ausbildung
+     */
+    monateOhneAnspruch?: number;
 }
 

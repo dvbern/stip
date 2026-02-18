@@ -24,7 +24,9 @@
         @if (gesuch.isActive) {
           <dt class="tw:font-bold">{{ 'shared.dashboard.gesuch.status.title' | transloco }}</dt>
           <dd class="tw:!mb-6">
-            @if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
+            @if (gesuch.hasPendingAusbildungUnterbruchAntrag) {
+              {{ 'shared.gesuch.status.unterbruchAnfrage' | transloco }}
+            } @else if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
               @if (count > 1) {
                 {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
               } @else {
