@@ -244,6 +244,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         var gesuch = gesuchRepository.requireById(gesuchId);
         if (!Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(gesuch.getGesuchStatus())) {
             assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST);
+            return;
         }
 
         var aenderungen = gesuch.getAenderungen()
