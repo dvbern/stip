@@ -1,0 +1,19 @@
+<ng-container *dvTranslocoShared="let t">
+  @if (darlehenSig()?.verfuegung; as verfuegung) {
+    <button
+      type="button"
+      class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+      [dvDownloadButton]="{
+        type: 'darlehen',
+        id: verfuegung.id,
+      }"
+    >
+      <span class="tw:truncate tw:!text-sm/none" [matTooltip]="verfuegung.filename">{{
+        t('shared.form.darlehen.verfuegung')
+      }}</span>
+      <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
+    </button>
+  } @else {
+    <span class="tw:text-gray-400">-</span>
+  }
+</ng-container>
