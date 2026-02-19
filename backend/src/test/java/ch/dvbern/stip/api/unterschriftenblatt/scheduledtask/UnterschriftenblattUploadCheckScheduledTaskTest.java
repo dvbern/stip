@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.service.seeding.GesuchTestSeeding;
@@ -112,6 +113,7 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
         abschluss.setBezeichnungDe("test");
         abschluss.setBezeichnungFr("test");
         abschluss.setAusbildungskategorie(Ausbildungskategorie.BERUFS_UND_HOEHERE_FACHSCHULE);
+        abschluss.setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II);
         var ausbildungsgang = new Ausbildungsgang();
         ausbildungsgang.setAbschluss(abschluss);
         ausbildung.setAusbildungsgang(ausbildungsgang);
