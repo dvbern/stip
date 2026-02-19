@@ -122,7 +122,8 @@ public class ParseDemoEnumUtil {
                 case INTERNATIONALE_FUNKTION -> List.of("internationale Funktionäre");
                 case NICHT_ZUGETEILT -> List.of("nicht zugeteilt");
                 // Handled seperately using specific values
-                case VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT, VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON -> null;
+                case VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT, VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON -> List
+                    .of();
             }
         ).orElseThrow(() -> invalidValue(cell));
     }
