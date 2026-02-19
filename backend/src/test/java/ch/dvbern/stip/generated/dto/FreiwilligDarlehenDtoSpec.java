@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenStatusDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumentDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -45,7 +46,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_ANZAHL_BETREIBUNGEN,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_GRUENDE,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_IS_DELEGIERT,
-  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_VERFUEGUNG
 })
 @JsonTypeName("FreiwilligDarlehen")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -88,6 +90,9 @@ public class FreiwilligDarlehenDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private String timestampErstellt;
+
+  public static final String JSON_PROPERTY_VERFUEGUNG = "verfuegung";
+  private DokumentDtoSpec verfuegung;
 
   public FreiwilligDarlehenDtoSpec() {
   }
@@ -441,6 +446,32 @@ public class FreiwilligDarlehenDtoSpec {
     this.timestampErstellt = timestampErstellt;
   }
 
+
+  public FreiwilligDarlehenDtoSpec verfuegung(DokumentDtoSpec verfuegung) {
+    
+    this.verfuegung = verfuegung;
+    return this;
+  }
+
+   /**
+   * Get verfuegung
+   * @return verfuegung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VERFUEGUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DokumentDtoSpec getVerfuegung() {
+    return verfuegung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VERFUEGUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVerfuegung(DokumentDtoSpec verfuegung) {
+    this.verfuegung = verfuegung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -462,12 +493,13 @@ public class FreiwilligDarlehenDtoSpec {
         Objects.equals(this.anzahlBetreibungen, freiwilligDarlehen.anzahlBetreibungen) &&
         Objects.equals(this.gruende, freiwilligDarlehen.gruende) &&
         Objects.equals(this.isDelegiert, freiwilligDarlehen.isDelegiert) &&
-        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt);
+        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt) &&
+        Objects.equals(this.verfuegung, freiwilligDarlehen.verfuegung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
   }
 
   @Override
@@ -487,6 +519,7 @@ public class FreiwilligDarlehenDtoSpec {
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("    isDelegiert: ").append(toIndentedString(isDelegiert)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    verfuegung: ").append(toIndentedString(verfuegung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

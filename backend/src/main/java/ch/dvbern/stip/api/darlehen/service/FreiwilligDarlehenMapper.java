@@ -31,11 +31,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
-@Mapper(config = MappingConfig.class, uses = FreiwilligDarlehenDokumentMapper.class)
+@Mapper(config = MappingConfig.class, uses = { FreiwilligDarlehenDokumentMapper.class })
 public abstract class FreiwilligDarlehenMapper {
     @Mapping(source = "fall.id", target = "fallId")
     @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
     @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
+    @Mapping(source = "darlehenBuchhaltungEntry.verfuegung", target = "verfuegung")
     public abstract FreiwilligDarlehenDto toDto(FreiwilligDarlehen freiwilligDarlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
