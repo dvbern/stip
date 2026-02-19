@@ -58,6 +58,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -249,7 +250,7 @@ public class DarlehenResourceImplTest {
     @Test
     @TestAsGesuchsteller
     @Order(11)
-    void darlehenEingebenAgian() {
+    void darlehenEingebenAgain() {
         darlehenApiSpec.freiwilligDarlehenEingeben()
             .darlehenIdPath(darlehen.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -296,6 +297,52 @@ public class DarlehenResourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(14)
+    void hasDarlehenBuchhaltungEntry() {
+        final var acceptedDarlehen = darlehenApiSpec.getFreiwilligDarlehenSb()
+            .darlehenIdPath(darlehen.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FreiwilligDarlehenDtoSpec.class);
+
+        assertNotNull(acceptedDarlehen.getVerfuegung());
+
+        final var darlehenBuchhaltungOverview = darlehenApiSpec.getDarlehenBuchhaltungEntrys()
+            .gesuchIdPath(gesuch.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DarlehenBuchhaltungOverviewDtoSpec.class);
+
+        assertEquals(1, darlehenBuchhaltungOverview.getDarlehenBuchhaltungEntrys().size());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(15)
+    void gsAlsoHasDarlehenBuchhaltungEntry() {
+        final var acceptedDarlehen = darlehenApiSpec.getFreiwilligDarlehenGs()
+            .darlehenIdPath(darlehen.getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FreiwilligDarlehenDtoSpec.class);
+
+        assertNotNull(acceptedDarlehen.getVerfuegung());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(16)
     void createManuellDarlehenBuchhaltungEntry() {
         final var dto = new DarlehenBuchhaltungSaldokorrekturDtoSpec();
         dto.setBetrag(123);
@@ -321,8 +368,8 @@ public class DarlehenResourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
-    void getDarlehenBuchhatlungOverview() {
+    @Order(17)
+    void getDarlehenBuchhaltungOverview() {
         var darlehenBuchhaltungOverviewDtoSpec = darlehenApiSpec.getDarlehenBuchhaltungEntrys()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
