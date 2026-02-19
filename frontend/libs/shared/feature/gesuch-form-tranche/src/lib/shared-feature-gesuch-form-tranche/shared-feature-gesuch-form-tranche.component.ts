@@ -95,7 +95,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private injector = inject(Injector);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private defaultCommentSig = translateSignal(
-    'shared.form.tranche.bemerkung.initialgesuch',
+    translatableShared('shared.form.tranche.bemerkung.initialgesuch'),
   );
 
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;

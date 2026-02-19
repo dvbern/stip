@@ -136,7 +136,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
             requiredDocs.add(DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG);
         }
 
-        if (plzService.isInBern(pia.getAdresse()) && parentsLiveAbroad(formular)) {
+        if (plzService.isInBern(pia.getHeimatortPLZ()) && parentsLiveAbroad(formular)) {
             requiredDocs.add(DokumentTyp.PERSON_AUSWEIS);
         }
 
