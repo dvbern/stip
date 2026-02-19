@@ -199,7 +199,7 @@ class BerechnungTest {
 
         // Assert
         for (final var berechnungsresultatDto : tranchenBerechnungsresultatDtos) {
-            assertThat(berechnungsresultatDto.getBerechnungAnteilTotal(), is(not(nullValue())));
+            assertThat(berechnungsresultatDto.getTotal(), is(not(nullValue())));
         }
     }
 
@@ -450,7 +450,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(10432)));
+        assertThat(berechnungsresultatDto.getBerechnungVorKuerzungUndTeilung(), is(equalTo(10432)));
 
         // Arrange
         gesuch.getGesuchsperiode()
@@ -464,7 +464,7 @@ class BerechnungTest {
         final var berechnungsresultatDtoWG2Pers = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoWG2Pers.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoWG2Pers.getBerechnungTotal(), is(equalTo(7678)));
+        assertThat(berechnungsresultatDtoWG2Pers.getBerechnungVorKuerzungUndTeilung(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(false);
@@ -476,7 +476,7 @@ class BerechnungTest {
             berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoAlternativeWohnform.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnungTotal(), is(equalTo(7678)));
+        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnungVorKuerzungUndTeilung(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(true);
@@ -487,8 +487,8 @@ class BerechnungTest {
             berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(
-            berechnungsresultatDtoWgWohnend1Pers.getBerechnungTotal(),
-            is(equalTo(berechnungsresultatDtoAlternativeWohnform.getBerechnungTotal()))
+            berechnungsresultatDtoWgWohnend1Pers.getBerechnungVorKuerzungUndTeilung(),
+            is(equalTo(berechnungsresultatDtoAlternativeWohnform.getBerechnungVorKuerzungUndTeilung()))
         );
     }
 
@@ -612,7 +612,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(0)));
+        assertThat(berechnungsresultatDto.getBerechnungVorKuerzungUndTeilung(), is(equalTo(0)));
     }
 
     // @Test
@@ -1090,6 +1090,6 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.size(), is(1));
-        assertThat(berechnungsresultatDto.get(0).getBerechnungAnteilTotal(), is(equalTo(-27179)));
+        assertThat(berechnungsresultatDto.get(0).getTotal(), is(equalTo(-27179)));
     }
 }

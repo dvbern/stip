@@ -8993,7 +8993,6 @@ components:
       required:
         - year
         - berechnungVorKuerzungUndTeilung
-        - berechnungTotal
         - berechnungStipendium
         - tranchenBerechnungsresultate
       type: object
@@ -9005,18 +9004,13 @@ components:
             Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
             Kürzungen und Teilung des Gesetzlichen Darlehens
           type: integer
-        berechnungTotal:
-          description: >-
-            Die Summe der berechneten Stpendiums- und Darlehensansprüche für das
-            Gesuch
-          type: integer
-        kuerzungNachEinreichefrist:
+        totalNachKuerzungNachEinreichefrist:
           description: Die Summe nach der Kürzung der verspäteten Eingabe
           type: integer
         anzahlMonateEinreichefrist:
           description: Die Anzahl Monate der verspäteten Eingabe
           type: integer
-        kuerzungUnterbruch:
+        totalNachKuerzungUnterbruch:
           description: Die Summe nach der Kürzung des Unterbruchs der Ausbildung
           type: integer
         anzahlMonateUnterbruch:
@@ -9028,23 +9022,15 @@ components:
         berechnungDarlehen:
           description: Berechneter Darlehensanspruch für das Gesuch
           type: integer
-        berechnungReduziert:
-          description: >-
-            Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug
-            wegen zuspäteinreichens
-          type: integer
         tranchenBerechnungsresultate:
           description: Resultate der Berechnung für die Tranchen des Gesuchs
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
-        verminderteBerechnungMonate:
-          description: Die Anzahl von Monaten für welche die Berechnung stattfand
-          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnungAnteilTotal
+        - total
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -9057,7 +9043,7 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnungAnteilTotal:
+        total:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für
             diese Tranche
@@ -9180,10 +9166,6 @@ components:
         budgetTranche:
           type: integer
         anzahlMonate:
-          type: integer
-        gesetzlichesDarlehen:
-          type: integer
-        gesetzlichesDarlehenStipendium:
           type: integer
         anzahlPersonenImHaushalt:
           type: integer

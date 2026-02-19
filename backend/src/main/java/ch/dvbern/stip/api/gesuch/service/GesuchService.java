@@ -599,7 +599,7 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getBerechnungTotal() <= 0) {
+        if (stipendien.getBerechnungStipendium() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {

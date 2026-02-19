@@ -51,8 +51,7 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
             calculatePersoenlichesBudgetresult(model, familienbudgets.get(0), familienbudgets.get(1));
 
         return new BerechnungResult(
-            persoenlichesBudget.getGesetzlichesDarlehenStipendium(),
-            persoenlichesBudget.getGesetzlichesDarlehen(),
+            persoenlichesBudget.getTotal(),
             familienbudgets.stream().flatMap(Optional::stream).toList(),
             persoenlichesBudget
         );
