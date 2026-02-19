@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -37,6 +38,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungPdfService verfuegungPdfService;
     private final VerfuegungService verfuegungService;
+    private final DarlehenService darlehenService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -46,9 +48,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             configService.getCurrentDmnMinorVersion()
         );
 
-        final int berechnungsresultat = stipendien.getBerechnungReduziert() != null
-            ? stipendien.getBerechnungReduziert()
-            : stipendien.getBerechnungTotal();
+        final int berechnungsresultat = stipendien.getBerechnungStipendium();
 
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
 

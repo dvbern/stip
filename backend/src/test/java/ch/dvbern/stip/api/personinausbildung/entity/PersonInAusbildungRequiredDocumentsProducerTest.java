@@ -208,10 +208,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular.setPersonInAusbildung(
             createNewPia()
                 .setSozialhilfebeitraege(false)
-                .setAdresse(
-                    new Adresse()
-                        .setPlz("3011")
-                )
+                .setHeimatortPLZ("3011")
         )
             .setElterns(new HashSet<>() {
                 {

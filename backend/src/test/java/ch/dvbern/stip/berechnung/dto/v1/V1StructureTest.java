@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.util.BerechnungTestUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.ws.rs.NotFoundException;
@@ -148,6 +148,7 @@ class V1StructureTest {
                 "lehre": false,
                 "eigenerHaushalt": true,
                 "halbierungElternbeitrag": false,
+                "monateTertiaerstufe": 72,
                 "einkommens": [
                   { "vorname": "a", "value": 6916 },
                   { "vorname": "a", "value": 12916 }
@@ -250,7 +251,7 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
-            BerechnungUtil.getPersonenImHaushaltService()
+            BerechnungTestUtil.getPersonenImHaushaltService()
         );
         final var mapper = new ObjectMapper().registerModule(new JavaTimeModule());
         final var actual = mapper.writeValueAsString(request);

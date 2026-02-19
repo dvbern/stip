@@ -21,12 +21,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;
@@ -186,6 +188,37 @@ public class MailService {
         mailer.send(mail);
     }
 
+    public void sendDarlehenVerfuegungEmail(
+        String to,
+        String filename,
+        byte[] verfuegung,
+        PersonInAusbildung pia,
+        Sachbearbeiter sachbearbeiter
+    ) {
+        Templates
+            .darlehenVerfuegungCreated(
+                pia.getVorname(),
+                pia.getNachname(),
+                sachbearbeiter.getVorname(),
+                sachbearbeiter.getNachname(),
+                sachbearbeiter.getFunktionDe(),
+                sachbearbeiter.getTelefonnummer(),
+                sachbearbeiter.getEmail()
+            )
+            .to(to)
+            .subject("Darlehensverfuegung zum Fall " + pia.getFullName())
+            .addAttachment(
+                filename,
+                verfuegung,
+                "application/pdf"
+            )
+            .send()
+            .onFailure()
+            .invoke(this::handleFailure)
+            .subscribe()
+            .asCompletionStage();
+    }
+
     private void handleFailure(final Throwable failure) {
         LOG.error("Failed to send email", failure);
     }
@@ -207,5 +240,15 @@ public class MailService {
         private static native MailTemplateInstance standardNotificationFr(String name, String vorname);
 
         public static native MailTemplateInstance benutzerWelcome(String name, String vorname, String link);
+
+        public static native MailTemplateInstance darlehenVerfuegungCreated(
+            String vorname,
+            String name,
+            String vornameSB,
+            String nachnameSB,
+            String rolleSB,
+            String telSB,
+            String emailSB
+        );
     }
 }

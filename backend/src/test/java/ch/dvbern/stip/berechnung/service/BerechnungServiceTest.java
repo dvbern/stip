@@ -28,9 +28,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.util.TestUtil;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,12 +37,6 @@ import static org.hamcrest.Matchers.is;
 
 @Slf4j
 class BerechnungServiceTest {
-    private BerechnungService berechnungService;
-
-    @BeforeEach
-    void setUpEach() {
-        berechnungService = BerechnungUtil.getMockBerechnungService();
-    }
 
     @Test
     void wasEingereichtAfterDueDateFalseTest() {

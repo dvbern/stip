@@ -15,16 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.berechnung.util;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import lombok.experimental.UtilityClass;
 
-public interface BerechnungRequestBuilder {
-    CalculatorRequest buildRequest(
-        final Gesuch gesuch,
-        final GesuchTranche gesuchTranche,
-        final ElternTyp elternTyp
-    );
+@UtilityClass
+public class BerechnungUtil {
+    public int monthLimitAusbildungTertiaerstufe = 36;
+    public int darlehenLimit = 50000;
 }

@@ -1149,8 +1149,13 @@ class GesuchServiceTest {
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(any()))
             .thenReturn(true);
 
+        final var berechnungsResultatDto = new BerechnungsresultatDto();
+        berechnungsResultatDto.setBerechnungTotal(0);
+        berechnungsResultatDto.setBerechnungStipendium(0);
+        berechnungsResultatDto.setBerechnungDarlehen(0);
+        berechnungsResultatDto.setYear(Year.now().getValue());
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
+            .thenReturn(berechnungsResultatDto);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
