@@ -248,7 +248,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
 
         var aenderungen = gesuch.getAenderungen()
-            .filter(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
+            .filter(gesuchTranche ->  GesuchTrancheStatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST.contains(gesuchTranche.getStatus()))
             .toList();
 
         if (aenderungen.isEmpty()) {
