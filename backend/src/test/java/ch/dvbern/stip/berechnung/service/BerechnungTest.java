@@ -440,7 +440,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(10432)));
+        assertThat(berechnungsresultatDto.getStipendienanspruch(), is(equalTo(10432)));
 
         // Arrange
         gesuch.getGesuchsperiode()
@@ -454,7 +454,7 @@ class BerechnungTest {
         final var berechnungsresultatDtoWG2Pers = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoWG2Pers.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoWG2Pers.getBerechnungTotal(), is(equalTo(7678)));
+        assertThat(berechnungsresultatDtoWG2Pers.getStipendienanspruch(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(false);
@@ -466,7 +466,7 @@ class BerechnungTest {
             berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(berechnungsresultatDtoAlternativeWohnform.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDtoAlternativeWohnform.getBerechnungTotal(), is(equalTo(7678)));
+        assertThat(berechnungsresultatDtoAlternativeWohnform.getStipendienanspruch(), is(equalTo(7678)));
 
         // Arrange
         gesuchFormular.getEinnahmenKosten().setWgWohnend(true);
@@ -477,8 +477,8 @@ class BerechnungTest {
             berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
         // Assert
         assertThat(
-            berechnungsresultatDtoWgWohnend1Pers.getBerechnungTotal(),
-            is(equalTo(berechnungsresultatDtoAlternativeWohnform.getBerechnungTotal()))
+            berechnungsresultatDtoWgWohnend1Pers.getStipendienanspruch(),
+            is(equalTo(berechnungsresultatDtoAlternativeWohnform.getStipendienanspruch()))
         );
     }
 
@@ -602,7 +602,7 @@ class BerechnungTest {
 
         // Assert
         assertThat(berechnungsresultatDto.getTranchenBerechnungsresultate().size(), is(1));
-        assertThat(berechnungsresultatDto.getBerechnungTotal(), is(equalTo(0)));
+        assertThat(berechnungsresultatDto.getStipendienanspruch(), is(equalTo(0)));
     }
 
     @Test

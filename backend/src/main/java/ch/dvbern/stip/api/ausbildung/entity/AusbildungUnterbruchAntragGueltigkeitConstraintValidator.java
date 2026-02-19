@@ -32,7 +32,7 @@ public class AusbildungUnterbruchAntragGueltigkeitConstraintValidator
         ConstraintValidatorContext constraintValidatorContext
     ) {
         final var gesuch = ausbildungUnterbruchAntrag.getGesuch();
-        if (Objects.isNull(gesuch)) {
+        if (Objects.isNull(gesuch) || Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit())) {
             return true;
         }
 

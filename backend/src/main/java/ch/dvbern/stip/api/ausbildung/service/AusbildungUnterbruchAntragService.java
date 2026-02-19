@@ -236,6 +236,20 @@ public class AusbildungUnterbruchAntragService {
         );
     }
 
+    @Transactional
+    public void deleteAllByGesuchId(final UUID gesuchId) {
+        final var antrags = ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId);
+        antrags.stream()
+            .forEach(
+                ausbildungUnterbruchAntrag -> {
+                    final var dokuments = ausbildungUnterbruchAntrag.getDokuments();
+                    ausbildungUnterbruchAntrag.getDokuments().remove(dokuments);
+                    dokuments.forEach(dokumentRepository::delete);
+                    ausbildungUnterbruchAntragRepository.delete(ausbildungUnterbruchAntrag);
+                }
+            );
+    }
+
     public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
         final var gesuch = ausbildung.getLatestGesuch();
         final boolean openAenderungOnLatestGesuchExists =

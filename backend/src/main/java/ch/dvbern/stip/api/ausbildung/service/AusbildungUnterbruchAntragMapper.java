@@ -60,6 +60,7 @@ public abstract class AusbildungUnterbruchAntragMapper {
     @Mapping(
         source = "gesuch", target = "unterbruchEarliestStartDate", qualifiedByName = "getUnterbruchEarliestStartDate"
     )
+    @Mapping(source = "gesuch.id", target = "gesuchId")
     abstract AusbildungUnterbruchAntragSBDto toSbDto(final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag);
 
     @Named("getUnterbruchLatestEndDate")

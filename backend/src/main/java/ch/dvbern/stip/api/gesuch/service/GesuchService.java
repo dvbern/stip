@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -188,6 +189,7 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
+    private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -519,6 +521,7 @@ public class GesuchService {
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
+        ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();

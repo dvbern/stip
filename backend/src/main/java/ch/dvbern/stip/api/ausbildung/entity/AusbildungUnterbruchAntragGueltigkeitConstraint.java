@@ -30,8 +30,8 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AusbildungUnterbruchAntragGueltigkeitConstraintValidator.class)
 @Documented
+@Constraint(validatedBy = AusbildungUnterbruchAntragGueltigkeitConstraintValidator.class)
 public @interface AusbildungUnterbruchAntragGueltigkeitConstraint {
     String message() default VALIDATION_AUSBILDUNG_UNTERBRUCH_ANTRAG_GUELTIGKEIT;
 
