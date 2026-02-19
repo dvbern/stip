@@ -1,7 +1,8 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { TranslocoService } from '@jsverse/transloco';
+import { TranslocoService, translateSignal } from '@jsverse/transloco';
 import { lastValueFrom } from 'rxjs';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   AusbildungsstaetteService,
@@ -40,6 +41,9 @@ export class SharedExportTrancheService {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
   private steuerdatenService = inject(SteuerdatenService);
   private landLookupService = inject(LandLookupService);
+  private defaultCommentSig = translateSignal(
+    translatableShared('shared.form.tranche.bemerkung.initialgesuch'),
+  );
 
   async exportTranche(view: ExportView) {
     const { tranche, gesuch } = view;
@@ -72,7 +76,12 @@ export class SharedExportTrancheService {
         pageSize: PAGE_SIZE,
         pageMargins: MARGINS_PAGE,
         content: [
-          getUebersicht(this.translate, this.config, view),
+          getUebersicht(
+            this.translate,
+            this.defaultCommentSig(),
+            this.config,
+            view,
+          ),
           getAusbildung(this.translate, tranche),
           getPersonInAusbildung(this.translate, tranche, laender),
           getLebenslaufItems(this.translate, tranche, abschluesse),
@@ -85,7 +94,7 @@ export class SharedExportTrancheService {
           ),
           getEinnahmenKosten(
             this.translate,
-            tranche.gesuchFormular?.einnahmenKosten,
+            tranche.gesuchFormular?.einnahmenKostenPartner,
             'partner',
           ),
           getFamiliensituation(this.translate, tranche),
