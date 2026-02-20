@@ -35,7 +35,7 @@ import { PositionComponent } from '../position/position.component';
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kosten.ausbildungskosten | formatChfPositive"
+        [amountSig]="kosten.ausbildungskostenTotal | formatChfPositive"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -51,7 +51,7 @@ import { PositionComponent } from '../position/position.component';
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kosten.fahrkosten | formatChfPositive"
+        [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
       >
       </dv-position>
 
@@ -123,7 +123,7 @@ import { PositionComponent } from '../position/position.component';
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kosten.fahrkostenPartner | formatChfPositive"
+        [amountSig]="kosten.fahrkostenPartnerTotal | formatChfPositive"
       >
       </dv-position>
 

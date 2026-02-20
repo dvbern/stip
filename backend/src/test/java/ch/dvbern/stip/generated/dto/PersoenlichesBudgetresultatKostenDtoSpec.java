@@ -33,13 +33,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNGSKOSTEN,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_GRUNDBEDARF,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_KANTONS_GEMEINDESTEUERN,
@@ -55,8 +58,14 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN = "ausbildungskosten";
   private Integer ausbildungskosten;
 
+  public static final String JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL = "ausbildungskostenTotal";
+  private Integer ausbildungskostenTotal;
+
   public static final String JSON_PROPERTY_FAHRKOSTEN = "fahrkosten";
   private Integer fahrkosten;
+
+  public static final String JSON_PROPERTY_FAHRKOSTEN_TOTAL = "fahrkostenTotal";
+  private Integer fahrkostenTotal;
 
   public static final String JSON_PROPERTY_VERPFLEGUNGSKOSTEN = "verpflegungskosten";
   private Integer verpflegungskosten;
@@ -75,6 +84,9 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER = "fahrkostenPartner";
   private Integer fahrkostenPartner;
+
+  public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL = "fahrkostenPartnerTotal";
+  private Integer fahrkostenPartnerTotal;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
   private Integer verpflegungPartner;
@@ -146,6 +158,32 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
+  public PersoenlichesBudgetresultatKostenDtoSpec ausbildungskostenTotal(Integer ausbildungskostenTotal) {
+    
+    this.ausbildungskostenTotal = ausbildungskostenTotal;
+    return this;
+  }
+
+   /**
+   * Get ausbildungskostenTotal
+   * @return ausbildungskostenTotal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getAusbildungskostenTotal() {
+    return ausbildungskostenTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_AUSBILDUNGSKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAusbildungskostenTotal(Integer ausbildungskostenTotal) {
+    this.ausbildungskostenTotal = ausbildungskostenTotal;
+  }
+
+
   public PersoenlichesBudgetresultatKostenDtoSpec fahrkosten(Integer fahrkosten) {
     
     this.fahrkosten = fahrkosten;
@@ -169,6 +207,32 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
+  }
+
+
+  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenTotal(Integer fahrkostenTotal) {
+    
+    this.fahrkostenTotal = fahrkostenTotal;
+    return this;
+  }
+
+   /**
+   * Get fahrkostenTotal
+   * @return fahrkostenTotal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFahrkostenTotal() {
+    return fahrkostenTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFahrkostenTotal(Integer fahrkostenTotal) {
+    this.fahrkostenTotal = fahrkostenTotal;
   }
 
 
@@ -336,6 +400,32 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
+  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
+    
+    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
+    return this;
+  }
+
+   /**
+   * Get fahrkostenPartnerTotal
+   * @return fahrkostenPartnerTotal
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getFahrkostenPartnerTotal() {
+    return fahrkostenPartnerTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setFahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
+    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
+  }
+
+
   public PersoenlichesBudgetresultatKostenDtoSpec verpflegungPartner(Integer verpflegungPartner) {
     
     this.verpflegungPartner = verpflegungPartner;
@@ -476,13 +566,16 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     PersoenlichesBudgetresultatKostenDtoSpec persoenlichesBudgetresultatKosten = (PersoenlichesBudgetresultatKostenDtoSpec) o;
     return Objects.equals(this.total, persoenlichesBudgetresultatKosten.total) &&
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultatKosten.ausbildungskosten) &&
+        Objects.equals(this.ausbildungskostenTotal, persoenlichesBudgetresultatKosten.ausbildungskostenTotal) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultatKosten.fahrkosten) &&
+        Objects.equals(this.fahrkostenTotal, persoenlichesBudgetresultatKosten.fahrkostenTotal) &&
         Objects.equals(this.verpflegungskosten, persoenlichesBudgetresultatKosten.verpflegungskosten) &&
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultatKosten.grundbedarf) &&
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
+        Objects.equals(this.fahrkostenPartnerTotal, persoenlichesBudgetresultatKosten.fahrkostenPartnerTotal) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
         Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
@@ -492,7 +585,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, fahrkostenPartnerTotal, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -501,13 +594,16 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     sb.append("class PersoenlichesBudgetresultatKostenDtoSpec {\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
+    sb.append("    ausbildungskostenTotal: ").append(toIndentedString(ausbildungskostenTotal)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
+    sb.append("    fahrkostenTotal: ").append(toIndentedString(fahrkostenTotal)).append("\n");
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
+    sb.append("    fahrkostenPartnerTotal: ").append(toIndentedString(fahrkostenPartnerTotal)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
