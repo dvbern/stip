@@ -13,6 +13,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
+  AbstractControl,
   FormControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -354,6 +355,29 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       this.form,
     );
     const controls = this.form.controls;
+    controls.ausbildungNichtGefunden.addValidators(
+      (control: AbstractControl<boolean>) => {
+        const { invalidFormularProps } =
+          this.einreichenStore.validationViewSig();
+        if (
+          !control.value ||
+          !this.isEditableSig() ||
+          !invalidFormularProps.specialValidationErrors?.length
+        ) {
+          return null;
+        }
+        const isInvalid = this.formUtils.isFieldInvalid(
+          this.form,
+          'ausbildungNichtGefunden',
+          {
+            specialValidationErrors:
+              invalidFormularProps.specialValidationErrors,
+          },
+        );
+        const errors = isInvalid ? { requiredOff: true } : null;
+        return errors;
+      },
+    );
 
     // abhaengige Validierung zuruecksetzen on valueChanges
     effect(() => {
@@ -471,32 +495,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     });
 
     effect(() => {
-      const readonly = !this.isEditableSig();
-      const { invalidFormularProps } = this.einreichenStore.validationViewSig();
-      const nichtGefunden = this.ausbildungNichtGefundenChangedSig();
+      this.isEditableSig();
+      this.einreichenStore.validationViewSig();
 
-      if (!readonly && nichtGefunden) {
-        const { errors } = this.form.controls.ausbildungNichtGefunden;
-        if (errors) {
-          delete errors['requiredOff'];
-          this.form.controls.ausbildungNichtGefunden.setErrors(errors);
-        }
-        this.formUtils.invalidateControlIfValidationFails(
-          this.form,
-          ['ausbildungNichtGefunden', 'ausbildungsstaetteId'],
-          {
-            specialValidationErrors:
-              invalidFormularProps.specialValidationErrors,
-            beforeInvalidate: () => {
-              untracked(() => {
-                this.form.controls.ausbildungNichtGefunden.setErrors({
-                  requiredOff: true,
-                });
-              });
-            },
-          },
-        );
-      }
+      this.form.controls.ausbildungNichtGefunden.updateValueAndValidity();
     });
 
     const isAusbildungAuslandSig = toSignal(
