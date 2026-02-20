@@ -85,15 +85,13 @@ public class PersoenlichesBudgetCalculatorV1 {
             .nachname(antragssteller.getNachname())
             .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
             .geburtsdatum(antragssteller.getGeburtsdatum())
-            .total(roundHalfUp(total)) // TODO Remove
+            .total(roundHalfUp(total))
             .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
             .fehlbetrag(roundHalfUp(fehlbetrag))
             .proKopfTeilung(proKopfTeilung)
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .budgetTranche(roundHalfUp(budgetTranche))
             .anzahlMonate(anzahlMonate)
-            .gesetzlichesDarlehen(0) // TODO KSTIP-2584: will be definable once gesetztliche Darlehen are defined
-            .gesetzlichesDarlehenStipendium(0) // TODO KSTIP-2584: same as above
             .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
             .einnahmen(einnahmen)
             .kosten(kosten)

@@ -43,8 +43,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EIGENER_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_BUDGET_TRANCHE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GESETZLICHES_DARLEHEN,
-  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_GESETZLICHES_DARLEHEN_STIPENDIUM,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_KOSTEN
@@ -90,12 +88,6 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_ANZAHL_MONATE = "anzahlMonate";
   private Integer anzahlMonate;
-
-  public static final String JSON_PROPERTY_GESETZLICHES_DARLEHEN = "gesetzlichesDarlehen";
-  private Integer gesetzlichesDarlehen;
-
-  public static final String JSON_PROPERTY_GESETZLICHES_DARLEHEN_STIPENDIUM = "gesetzlichesDarlehenStipendium";
-  private Integer gesetzlichesDarlehenStipendium;
 
   public static final String JSON_PROPERTY_ANZAHL_PERSONEN_IM_HAUSHALT = "anzahlPersonenImHaushalt";
   private Integer anzahlPersonenImHaushalt;
@@ -447,58 +439,6 @@ public class PersoenlichesBudgetresultatDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatDtoSpec gesetzlichesDarlehen(Integer gesetzlichesDarlehen) {
-    
-    this.gesetzlichesDarlehen = gesetzlichesDarlehen;
-    return this;
-  }
-
-   /**
-   * Get gesetzlichesDarlehen
-   * @return gesetzlichesDarlehen
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESETZLICHES_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getGesetzlichesDarlehen() {
-    return gesetzlichesDarlehen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESETZLICHES_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesetzlichesDarlehen(Integer gesetzlichesDarlehen) {
-    this.gesetzlichesDarlehen = gesetzlichesDarlehen;
-  }
-
-
-  public PersoenlichesBudgetresultatDtoSpec gesetzlichesDarlehenStipendium(Integer gesetzlichesDarlehenStipendium) {
-    
-    this.gesetzlichesDarlehenStipendium = gesetzlichesDarlehenStipendium;
-    return this;
-  }
-
-   /**
-   * Get gesetzlichesDarlehenStipendium
-   * @return gesetzlichesDarlehenStipendium
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_GESETZLICHES_DARLEHEN_STIPENDIUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getGesetzlichesDarlehenStipendium() {
-    return gesetzlichesDarlehenStipendium;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_GESETZLICHES_DARLEHEN_STIPENDIUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setGesetzlichesDarlehenStipendium(Integer gesetzlichesDarlehenStipendium) {
-    this.gesetzlichesDarlehenStipendium = gesetzlichesDarlehenStipendium;
-  }
-
-
   public PersoenlichesBudgetresultatDtoSpec anzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
     
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
@@ -598,8 +538,6 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.budgetTranche, persoenlichesBudgetresultat.budgetTranche) &&
         Objects.equals(this.anzahlMonate, persoenlichesBudgetresultat.anzahlMonate) &&
-        Objects.equals(this.gesetzlichesDarlehen, persoenlichesBudgetresultat.gesetzlichesDarlehen) &&
-        Objects.equals(this.gesetzlichesDarlehenStipendium, persoenlichesBudgetresultat.gesetzlichesDarlehenStipendium) &&
         Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
         Objects.equals(this.einnahmen, persoenlichesBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, persoenlichesBudgetresultat.kosten);
@@ -607,7 +545,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, gesetzlichesDarlehen, gesetzlichesDarlehenStipendium, anzahlPersonenImHaushalt, einnahmen, kosten);
+    return Objects.hash(vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten);
   }
 
   @Override
@@ -627,8 +565,6 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
-    sb.append("    gesetzlichesDarlehen: ").append(toIndentedString(gesetzlichesDarlehen)).append("\n");
-    sb.append("    gesetzlichesDarlehenStipendium: ").append(toIndentedString(gesetzlichesDarlehenStipendium)).append("\n");
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
     sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");

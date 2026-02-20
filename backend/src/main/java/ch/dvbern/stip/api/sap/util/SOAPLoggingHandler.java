@@ -18,19 +18,10 @@
 package ch.dvbern.stip.api.sap.util;
 
 import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Set;
 import javax.xml.namespace.QName;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
-import jakarta.ws.rs.InternalServerErrorException;
 import jakarta.xml.soap.SOAPMessage;
 import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.handler.soap.SOAPHandler;
@@ -63,24 +54,6 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
         // do Nothing
     }
 
-    private static String prettyPrint(OutputStream xml) {
-        try {
-            Source xmlInput = new StreamSource(new StringReader(xml.toString()));
-            StringWriter stringWriter = new StringWriter();
-            StreamResult xmlOutput = new StreamResult(stringWriter);
-
-            TransformerFactory transformerFactory = TransformerFactory.newDefaultInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.transform(xmlInput, xmlOutput);
-
-            return xmlOutput.getWriter().toString();
-        } catch (Exception e) {
-            throw new InternalServerErrorException("Error pretty printing XML", e);
-        }
-    }
-
     /*
      * Check the MESSAGE_OUTBOUND_PROPERTY in the context
      * to see if this is an outgoing or incoming message.
@@ -101,7 +74,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             final var outstream = new ByteArrayOutputStream();
             message.writeTo(outstream);
-            loggingFunction.accept(prettyPrint(outstream));
+            loggingFunction.accept(outstream.toString(StandardCharsets.UTF_8).replaceAll("\\R", ""));
             loggingFunction.accept(""); // just to add a newline
         } catch (Exception e) {
             LOG.error("Exception in handler: " + e);

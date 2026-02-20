@@ -17,7 +17,7 @@ export interface AusbildungUnterbruchAntragSB {
     kommentarSB: string;
     startDate: string;
     endDate: string;
-    monateOhneAnspruch: number;
+    monateOhneAnspruch?: number;
     id: string;
     timestampErstellt: string;
     userErstellt: string;

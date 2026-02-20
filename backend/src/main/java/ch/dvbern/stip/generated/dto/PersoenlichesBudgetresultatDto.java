@@ -35,8 +35,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Boolean eigenerHaushalt;
   private @Valid Integer budgetTranche;
   private @Valid Integer anzahlMonate;
-  private @Valid Integer gesetzlichesDarlehen;
-  private @Valid Integer gesetzlichesDarlehenStipendium;
   private @Valid Integer anzahlPersonenImHaushalt;
   private @Valid PersoenlichesBudgetresultatEinnahmenDto einnahmen;
   private @Valid PersoenlichesBudgetresultatKostenDto kosten;
@@ -255,44 +253,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatDto gesetzlichesDarlehen(Integer gesetzlichesDarlehen) {
-    this.gesetzlichesDarlehen = gesetzlichesDarlehen;
-    return this;
-  }
-
-  
-  @JsonProperty("gesetzlichesDarlehen")
-  @NotNull
-  public Integer getGesetzlichesDarlehen() {
-    return gesetzlichesDarlehen;
-  }
-
-  @JsonProperty("gesetzlichesDarlehen")
-  public void setGesetzlichesDarlehen(Integer gesetzlichesDarlehen) {
-    this.gesetzlichesDarlehen = gesetzlichesDarlehen;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatDto gesetzlichesDarlehenStipendium(Integer gesetzlichesDarlehenStipendium) {
-    this.gesetzlichesDarlehenStipendium = gesetzlichesDarlehenStipendium;
-    return this;
-  }
-
-  
-  @JsonProperty("gesetzlichesDarlehenStipendium")
-  @NotNull
-  public Integer getGesetzlichesDarlehenStipendium() {
-    return gesetzlichesDarlehenStipendium;
-  }
-
-  @JsonProperty("gesetzlichesDarlehenStipendium")
-  public void setGesetzlichesDarlehenStipendium(Integer gesetzlichesDarlehenStipendium) {
-    this.gesetzlichesDarlehenStipendium = gesetzlichesDarlehenStipendium;
-  }
-
-  /**
-   **/
   public PersoenlichesBudgetresultatDto anzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
     this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
     return this;
@@ -405,8 +365,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.budgetTranche, persoenlichesBudgetresultat.budgetTranche) &&
         Objects.equals(this.anzahlMonate, persoenlichesBudgetresultat.anzahlMonate) &&
-        Objects.equals(this.gesetzlichesDarlehen, persoenlichesBudgetresultat.gesetzlichesDarlehen) &&
-        Objects.equals(this.gesetzlichesDarlehenStipendium, persoenlichesBudgetresultat.gesetzlichesDarlehenStipendium) &&
         Objects.equals(this.anzahlPersonenImHaushalt, persoenlichesBudgetresultat.anzahlPersonenImHaushalt) &&
         Objects.equals(this.einnahmen, persoenlichesBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, persoenlichesBudgetresultat.kosten) &&
@@ -416,7 +374,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, gesetzlichesDarlehen, gesetzlichesDarlehenStipendium, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner);
+    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner);
   }
 
   @Override
@@ -435,8 +393,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
-    sb.append("    gesetzlichesDarlehen: ").append(toIndentedString(gesetzlichesDarlehen)).append("\n");
-    sb.append("    gesetzlichesDarlehenStipendium: ").append(toIndentedString(gesetzlichesDarlehenStipendium)).append("\n");
     sb.append("    anzahlPersonenImHaushalt: ").append(toIndentedString(anzahlPersonenImHaushalt)).append("\n");
     sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");

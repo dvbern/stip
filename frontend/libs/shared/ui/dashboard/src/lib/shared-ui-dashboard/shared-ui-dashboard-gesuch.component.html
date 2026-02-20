@@ -27,11 +27,7 @@
             @if (gesuch.hasPendingAusbildungUnterbruchAntrag) {
               {{ 'shared.gesuch.status.unterbruchAnfrage' | transloco }}
             } @else if (gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS' && gesuch.missingDocuments?.count; as count) {
-              @if (count > 1) {
-                {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
-              } @else {
-                {{ 'shared.dashboard.gesuch.status.missingDocument' | transloco }}
-              }
+              {{ 'shared.dashboard.gesuch.status.missingDocuments' | transloco: { count } }}
             } @else {
               {{ 'gesuch-app.gesuch.status.contract.' + gesuch.gesuchStatus | transloco }}
             }

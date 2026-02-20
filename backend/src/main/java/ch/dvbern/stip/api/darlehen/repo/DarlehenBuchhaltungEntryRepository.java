@@ -42,7 +42,8 @@ public class DarlehenBuchhaltungEntryRepository implements BaseRepository<Darleh
             .selectFrom(darlehenBuchhaltungEntry)
             .where(darlehenBuchhaltungEntry.fall.id.eq(fallId))
             .stream()
-            .toList();
+            .toList()
+            .reversed();
     }
 
     public Optional<DarlehenBuchhaltungEntry> getByVerfuegungDokumentId(final UUID verfuegungDokumentId) {

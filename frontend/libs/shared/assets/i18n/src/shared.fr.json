@@ -247,8 +247,7 @@
   "shared.dashboard.gesuch.delete.dialog.message": "Voulez-vous vraiment supprimer la demande? Vous perdrez toutes les données.",
   "shared.dashboard.gesuch.uploadMissingDocuments": "Télécharger des documents",
   "shared.dashboard.gesuch.status.title": "Statut",
-  "shared.dashboard.gesuch.status.missingDocument": "1 document manquant",
-  "shared.dashboard.gesuch.status.missingDocuments": "{{ count }} documents manquants",
+  "shared.dashboard.gesuch.status.missingDocuments": "{count, plural, one {1 document} other {# documents}} manquants",
   "shared.dashboard.gesuch.delegieren.success": "La demande a été déléguée avec succès au service social",
 
   "shared.dashboard.aenderung.title": "Changement",

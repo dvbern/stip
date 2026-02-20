@@ -26,15 +26,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer year;
-  private @Valid Integer berechnungTotal;
+  private @Valid Integer berechnungVorKuerzungUndTeilung;
   private @Valid Integer berechnungStipendium;
-  private @Valid Integer berechnungDarlehen;
-  private @Valid Integer stipendienanspruch;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
-  private @Valid Integer berechnungReduziert;
-  private @Valid Integer berechnungUnterbrochen;
-  private @Valid Integer verminderteBerechnungMonate;
-  private @Valid Integer monateOhneAnspruch;
+  private @Valid Integer totalNachKuerzungNachEinreichefrist;
+  private @Valid Integer anzahlMonateEinreichefrist;
+  private @Valid Integer totalNachKuerzungUnterbruch;
+  private @Valid Integer anzahlMonateUnterbruch;
+  private @Valid Integer berechnungDarlehen;
 
   /**
    **/
@@ -56,23 +55,23 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
   /**
-   * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
+   * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens
    **/
-  public BerechnungsresultatDto berechnungTotal(Integer berechnungTotal) {
-    this.berechnungTotal = berechnungTotal;
+  public BerechnungsresultatDto berechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+    this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
     return this;
   }
 
   
-  @JsonProperty("berechnungTotal")
+  @JsonProperty("berechnungVorKuerzungUndTeilung")
   @NotNull
-  public Integer getBerechnungTotal() {
-    return berechnungTotal;
+  public Integer getBerechnungVorKuerzungUndTeilung() {
+    return berechnungVorKuerzungUndTeilung;
   }
 
-  @JsonProperty("berechnungTotal")
-  public void setBerechnungTotal(Integer berechnungTotal) {
-    this.berechnungTotal = berechnungTotal;
+  @JsonProperty("berechnungVorKuerzungUndTeilung")
+  public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+    this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
   }
 
   /**
@@ -93,46 +92,6 @@ public class BerechnungsresultatDto  implements Serializable {
   @JsonProperty("berechnungStipendium")
   public void setBerechnungStipendium(Integer berechnungStipendium) {
     this.berechnungStipendium = berechnungStipendium;
-  }
-
-  /**
-   * Berechneter Darlehensanspruch für das Gesuch
-   **/
-  public BerechnungsresultatDto berechnungDarlehen(Integer berechnungDarlehen) {
-    this.berechnungDarlehen = berechnungDarlehen;
-    return this;
-  }
-
-  
-  @JsonProperty("berechnungDarlehen")
-  @NotNull
-  public Integer getBerechnungDarlehen() {
-    return berechnungDarlehen;
-  }
-
-  @JsonProperty("berechnungDarlehen")
-  public void setBerechnungDarlehen(Integer berechnungDarlehen) {
-    this.berechnungDarlehen = berechnungDarlehen;
-  }
-
-  /**
-   * Berechneter Stpendiumsanspruch nach allen Kürzungen
-   **/
-  public BerechnungsresultatDto stipendienanspruch(Integer stipendienanspruch) {
-    this.stipendienanspruch = stipendienanspruch;
-    return this;
-  }
-
-  
-  @JsonProperty("stipendienanspruch")
-  @NotNull
-  public Integer getStipendienanspruch() {
-    return stipendienanspruch;
-  }
-
-  @JsonProperty("stipendienanspruch")
-  public void setStipendienanspruch(Integer stipendienanspruch) {
-    this.stipendienanspruch = stipendienanspruch;
   }
 
   /**
@@ -172,79 +131,98 @@ public class BerechnungsresultatDto  implements Serializable {
     return this;
   }
   /**
-   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
+   * Die Summe nach der Kürzung der verspäteten Eingabe
    **/
-  public BerechnungsresultatDto berechnungReduziert(Integer berechnungReduziert) {
-    this.berechnungReduziert = berechnungReduziert;
+  public BerechnungsresultatDto totalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
     return this;
   }
 
   
-  @JsonProperty("berechnungReduziert")
-  public Integer getBerechnungReduziert() {
-    return berechnungReduziert;
+  @JsonProperty("totalNachKuerzungNachEinreichefrist")
+  public Integer getTotalNachKuerzungNachEinreichefrist() {
+    return totalNachKuerzungNachEinreichefrist;
   }
 
-  @JsonProperty("berechnungReduziert")
-  public void setBerechnungReduziert(Integer berechnungReduziert) {
-    this.berechnungReduziert = berechnungReduziert;
+  @JsonProperty("totalNachKuerzungNachEinreichefrist")
+  public void setTotalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
   }
 
   /**
-   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen Unterbruch
+   * Die Anzahl Monate der verspäteten Eingabe
    **/
-  public BerechnungsresultatDto berechnungUnterbrochen(Integer berechnungUnterbrochen) {
-    this.berechnungUnterbrochen = berechnungUnterbrochen;
+  public BerechnungsresultatDto anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
     return this;
   }
 
   
-  @JsonProperty("berechnungUnterbrochen")
-  public Integer getBerechnungUnterbrochen() {
-    return berechnungUnterbrochen;
+  @JsonProperty("anzahlMonateEinreichefrist")
+  public Integer getAnzahlMonateEinreichefrist() {
+    return anzahlMonateEinreichefrist;
   }
 
-  @JsonProperty("berechnungUnterbrochen")
-  public void setBerechnungUnterbrochen(Integer berechnungUnterbrochen) {
-    this.berechnungUnterbrochen = berechnungUnterbrochen;
+  @JsonProperty("anzahlMonateEinreichefrist")
+  public void setAnzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
   }
 
   /**
-   * Die Anzahl von Monaten für welche die Berechnung stattfand
+   * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
    **/
-  public BerechnungsresultatDto verminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
-    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
+  public BerechnungsresultatDto totalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+    this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
     return this;
   }
 
   
-  @JsonProperty("verminderteBerechnungMonate")
-  public Integer getVerminderteBerechnungMonate() {
-    return verminderteBerechnungMonate;
+  @JsonProperty("totalNachKuerzungUnterbruch")
+  public Integer getTotalNachKuerzungUnterbruch() {
+    return totalNachKuerzungUnterbruch;
   }
 
-  @JsonProperty("verminderteBerechnungMonate")
-  public void setVerminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
-    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
+  @JsonProperty("totalNachKuerzungUnterbruch")
+  public void setTotalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+    this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
   }
 
   /**
-   * Monate um welche der Anspruch reduziert wurde durch einen Unterbruch der Ausbildung
+   * Die Anzahl Monate von dem Unterbruch der Ausbildung
    **/
-  public BerechnungsresultatDto monateOhneAnspruch(Integer monateOhneAnspruch) {
-    this.monateOhneAnspruch = monateOhneAnspruch;
+  public BerechnungsresultatDto anzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+    this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
     return this;
   }
 
   
-  @JsonProperty("monateOhneAnspruch")
-  public Integer getMonateOhneAnspruch() {
-    return monateOhneAnspruch;
+  @JsonProperty("anzahlMonateUnterbruch")
+  public Integer getAnzahlMonateUnterbruch() {
+    return anzahlMonateUnterbruch;
   }
 
-  @JsonProperty("monateOhneAnspruch")
-  public void setMonateOhneAnspruch(Integer monateOhneAnspruch) {
-    this.monateOhneAnspruch = monateOhneAnspruch;
+  @JsonProperty("anzahlMonateUnterbruch")
+  public void setAnzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+    this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
+  }
+
+  /**
+   * Berechneter Darlehensanspruch für das Gesuch
+   **/
+  public BerechnungsresultatDto berechnungDarlehen(Integer berechnungDarlehen) {
+    this.berechnungDarlehen = berechnungDarlehen;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungDarlehen")
+  public Integer getBerechnungDarlehen() {
+    return berechnungDarlehen;
+  }
+
+  @JsonProperty("berechnungDarlehen")
+  public void setBerechnungDarlehen(Integer berechnungDarlehen) {
+    this.berechnungDarlehen = berechnungDarlehen;
   }
 
 
@@ -258,20 +236,19 @@ public class BerechnungsresultatDto  implements Serializable {
     }
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
-        Objects.equals(this.berechnungTotal, berechnungsresultat.berechnungTotal) &&
+        Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
-        Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
-        Objects.equals(this.stipendienanspruch, berechnungsresultat.stipendienanspruch) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
-        Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
-        Objects.equals(this.berechnungUnterbrochen, berechnungsresultat.berechnungUnterbrochen) &&
-        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate) &&
-        Objects.equals(this.monateOhneAnspruch, berechnungsresultat.monateOhneAnspruch);
+        Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
+        Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
+        Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
+        Objects.equals(this.anzahlMonateUnterbruch, berechnungsresultat.anzahlMonateUnterbruch) &&
+        Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, stipendienanspruch, tranchenBerechnungsresultate, berechnungReduziert, berechnungUnterbrochen, verminderteBerechnungMonate, monateOhneAnspruch);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungStipendium, tranchenBerechnungsresultate, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
   }
 
   @Override
@@ -280,15 +257,14 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("class BerechnungsresultatDto {\n");
     
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
-    sb.append("    berechnungTotal: ").append(toIndentedString(berechnungTotal)).append("\n");
+    sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
-    sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
-    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
-    sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
-    sb.append("    berechnungUnterbrochen: ").append(toIndentedString(berechnungUnterbrochen)).append("\n");
-    sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
-    sb.append("    monateOhneAnspruch: ").append(toIndentedString(monateOhneAnspruch)).append("\n");
+    sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
+    sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");
+    sb.append("    anzahlMonateUnterbruch: ").append(toIndentedString(anzahlMonateUnterbruch)).append("\n");
+    sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

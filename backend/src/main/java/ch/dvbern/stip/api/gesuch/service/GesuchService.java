@@ -602,7 +602,7 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getStipendienanspruch() <= 0) {
+        if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {

@@ -633,8 +633,7 @@ public class GenerateDemoDataService {
             gesuch.setEinreichedatum(null);
         }
 
-        // TODO KSTIP-3118: ensure correct values are used!?
-        final var total = berechnungsresultat.getBerechnungTotal();
+        final var total = berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
         final var stipendienSoll = Objects.requireNonNullElse(
             stipendienanspruchDto.getBetragStipendienSoll(),
             stipendienanspruchDto.getBetragStipendienIst()

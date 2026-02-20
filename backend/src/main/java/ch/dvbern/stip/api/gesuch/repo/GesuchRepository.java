@@ -87,7 +87,9 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
             Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
             Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
-            Gesuchstatus.VERFUEGUNG_VERSENDET
+            Gesuchstatus.VERFUEGUNG_VERSENDET,
+            Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
+            Gesuchstatus.VERFUEGUNG_VERSANDBEREIT
         );
     }
 

@@ -1149,8 +1149,13 @@ class GesuchServiceTest {
         when(unterschriftenblattService.requiredUnterschriftenblaetterExistOrWasAlreadyVerfuegtOnceBefore(any()))
             .thenReturn(true);
 
+        final var berechnungsResultatDto = new BerechnungsresultatDto();
+        berechnungsResultatDto.setBerechnungVorKuerzungUndTeilung(0);
+        berechnungsResultatDto.setBerechnungStipendium(0);
+        berechnungsResultatDto.setBerechnungDarlehen(0);
+        berechnungsResultatDto.setYear(Year.now().getValue());
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().stipendienanspruch(0).year(Year.now().getValue()));
+            .thenReturn(berechnungsResultatDto);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
         assertEquals(
@@ -1187,8 +1192,11 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         doNothing().when(gesuchValidatorService).validateGesuchForTransition(any(), any());
 
+        final var berechnungsresultat = new BerechnungsresultatDto();
+        berechnungsresultat.setBerechnungStipendium(0);
+        berechnungsresultat.setYear(Year.now().getValue());
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
+            .thenReturn(berechnungsresultat);
 
         var verfuegung = new Verfuegung();
         verfuegung.setTimestampErstellt(LocalDateTime.now());
@@ -1892,8 +1900,11 @@ class GesuchServiceTest {
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheHistoryService.getLatestTranche(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
+        final var berechnungsresultat = new BerechnungsresultatDto();
+        berechnungsresultat.setBerechnungStipendium(0);
+        berechnungsresultat.setYear(Year.now().getValue());
         when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
-            .thenReturn(new BerechnungsresultatDto().berechnungTotal(0).year(Year.now().getValue()));
+            .thenReturn(berechnungsresultat);
 
         gesuchFormular
             .getFamiliensituation()

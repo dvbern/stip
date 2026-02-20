@@ -80,24 +80,6 @@
               [amountSig]="berechnung.budgetTranche | formatChf"
             ></dv-position>
 
-            <!-- information studierende -->
-            <div class="tw:mt-6 tw:font-semibold tw:text-lg">
-              {{ t('persoenlich.informationStudierende') }}
-              <span class="tw:text-xs tw:align-text-top">3)</span>
-            </div>
-
-            <!-- stipendium -->
-            <dv-position
-              [titleSig]="t('persoenlich.hinweis.zweiDrittel')"
-              [amountSig]="berechnung.gesetzlichesDarlehenStipendium"
-            ></dv-position>
-
-            <!-- darlehen gesetzlich -->
-            <dv-position
-              [titleSig]="t('persoenlich.hinweis.einDrittel')"
-              [amountSig]="berechnung.gesetzlichesDarlehen"
-            ></dv-position>
-
             <!-- Hinweis 1. schwarzarbeitBGSA -->
             <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.schwarzarbeitBGSA') }}

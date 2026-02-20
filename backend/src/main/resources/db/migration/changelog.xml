@@ -25,6 +25,7 @@
 
   <!-- <editor-fold desc="v0.61" defaultstate="collapsed" -->
   <include file="/db/migration/0.61/0.61.0-KSTIP-2939.xml" />
+  <include file="/db/migration/0.61/0.61.0-KSTIP-2584.xml" />
   <!--  </editor-fold> -->
 
   <!-- <editor-fold desc="v0.62" defaultstate="collapsed" -->

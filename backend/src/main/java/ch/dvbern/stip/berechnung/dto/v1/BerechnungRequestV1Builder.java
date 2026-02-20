@@ -34,7 +34,16 @@ public class BerechnungRequestV1Builder implements BerechnungRequestBuilder {
     private final PersonenImHaushaltService personenImHaushaltService;
 
     @Override
-    public CalculatorRequest buildRequest(Gesuch gesuch, GesuchTranche gesuchTranche, ElternTyp elternTyp) {
-        return BerechnungRequestV1.createRequest(gesuch, gesuchTranche, elternTyp, personenImHaushaltService);
+    public CalculatorRequest buildRequest(
+        Gesuch gesuch,
+        GesuchTranche gesuchTranche,
+        ElternTyp elternTyp
+    ) {
+        return BerechnungRequestV1.createRequest(
+            gesuch,
+            gesuchTranche,
+            elternTyp,
+            personenImHaushaltService
+        );
     }
 }

@@ -52,7 +52,6 @@ public class StipendienCalculatorV1 implements StipendienCalculator {
 
         return new BerechnungResult(
             persoenlichesBudget.getTotal(),
-            0, // TODO KSTIP-2584: add correct value once it is calculated
             familienbudgets.stream().flatMap(Optional::stream).toList(),
             persoenlichesBudget
         );

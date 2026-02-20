@@ -30,9 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class TranchenBerechnungsresultatDto  implements Serializable {
-  private @Valid Integer berechnungAnteilTotal;
-  private @Valid Integer berechnungAnteilStipendium;
-  private @Valid Integer berechnungAnteilDarlehen;
+  private @Valid Integer total;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid String ausbildungAb;
@@ -47,61 +45,21 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   /**
    * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
    **/
-  public TranchenBerechnungsresultatDto berechnungAnteilTotal(Integer berechnungAnteilTotal) {
-    this.berechnungAnteilTotal = berechnungAnteilTotal;
+  public TranchenBerechnungsresultatDto total(Integer total) {
+    this.total = total;
     return this;
   }
 
   
-  @JsonProperty("berechnungAnteilTotal")
+  @JsonProperty("total")
   @NotNull
-  public Integer getBerechnungAnteilTotal() {
-    return berechnungAnteilTotal;
+  public Integer getTotal() {
+    return total;
   }
 
-  @JsonProperty("berechnungAnteilTotal")
-  public void setBerechnungAnteilTotal(Integer berechnungAnteilTotal) {
-    this.berechnungAnteilTotal = berechnungAnteilTotal;
-  }
-
-  /**
-   * Berechneter Stpendiumsanspruch für diese Tranche
-   **/
-  public TranchenBerechnungsresultatDto berechnungAnteilStipendium(Integer berechnungAnteilStipendium) {
-    this.berechnungAnteilStipendium = berechnungAnteilStipendium;
-    return this;
-  }
-
-  
-  @JsonProperty("berechnungAnteilStipendium")
-  @NotNull
-  public Integer getBerechnungAnteilStipendium() {
-    return berechnungAnteilStipendium;
-  }
-
-  @JsonProperty("berechnungAnteilStipendium")
-  public void setBerechnungAnteilStipendium(Integer berechnungAnteilStipendium) {
-    this.berechnungAnteilStipendium = berechnungAnteilStipendium;
-  }
-
-  /**
-   * Berechneter Darlehensanspruch für diese Tranche
-   **/
-  public TranchenBerechnungsresultatDto berechnungAnteilDarlehen(Integer berechnungAnteilDarlehen) {
-    this.berechnungAnteilDarlehen = berechnungAnteilDarlehen;
-    return this;
-  }
-
-  
-  @JsonProperty("berechnungAnteilDarlehen")
-  @NotNull
-  public Integer getBerechnungAnteilDarlehen() {
-    return berechnungAnteilDarlehen;
-  }
-
-  @JsonProperty("berechnungAnteilDarlehen")
-  public void setBerechnungAnteilDarlehen(Integer berechnungAnteilDarlehen) {
-    this.berechnungAnteilDarlehen = berechnungAnteilDarlehen;
+  @JsonProperty("total")
+  public void setTotal(Integer total) {
+    this.total = total;
   }
 
   /**
@@ -322,9 +280,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
       return false;
     }
     TranchenBerechnungsresultatDto tranchenBerechnungsresultat = (TranchenBerechnungsresultatDto) o;
-    return Objects.equals(this.berechnungAnteilTotal, tranchenBerechnungsresultat.berechnungAnteilTotal) &&
-        Objects.equals(this.berechnungAnteilStipendium, tranchenBerechnungsresultat.berechnungAnteilStipendium) &&
-        Objects.equals(this.berechnungAnteilDarlehen, tranchenBerechnungsresultat.berechnungAnteilDarlehen) &&
+    return Objects.equals(this.total, tranchenBerechnungsresultat.total) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
@@ -339,7 +295,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(total, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
@@ -347,9 +303,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDto {\n");
     
-    sb.append("    berechnungAnteilTotal: ").append(toIndentedString(berechnungAnteilTotal)).append("\n");
-    sb.append("    berechnungAnteilStipendium: ").append(toIndentedString(berechnungAnteilStipendium)).append("\n");
-    sb.append("    berechnungAnteilDarlehen: ").append(toIndentedString(berechnungAnteilDarlehen)).append("\n");
+    sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");

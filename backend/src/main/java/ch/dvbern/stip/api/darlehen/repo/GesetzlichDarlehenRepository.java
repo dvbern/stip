@@ -15,16 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.berechnung.dto;
+package ch.dvbern.stip.api.darlehen.repo;
 
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import java.util.List;
+import java.util.UUID;
 
-public interface BerechnungRequestBuilder {
-    CalculatorRequest buildRequest(
-        final Gesuch gesuch,
-        final GesuchTranche gesuchTranche,
-        final ElternTyp elternTyp
-    );
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+public class GesetzlichDarlehenRepository implements BaseRepository<GesetzlichDarlehen> {
+    public List<GesetzlichDarlehen> findAllByGesuchId(UUID gesuchId) {
+        return list("gesuch.id", gesuchId);
+    }
 }

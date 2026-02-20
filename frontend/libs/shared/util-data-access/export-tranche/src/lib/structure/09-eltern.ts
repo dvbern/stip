@@ -1,7 +1,7 @@
 import { TranslocoService } from '@jsverse/transloco';
 import type { Content } from 'pdfmake/interfaces';
 
-import { GesuchTranche } from '@dv/shared/model/gesuch';
+import { ElternTyp, GesuchTranche } from '@dv/shared/model/gesuch';
 
 import { ExportLand } from '../types';
 import { getSection, getTable, getTitle, getValueList } from './generic';
@@ -74,6 +74,16 @@ export const getEltern = (
           ],
           (key) => `shared.form.${key}`,
         ),
+        [
+          {
+            text: _t(
+              t,
+              `shared.form.eltern.ausweisbFluechtling.${elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater'}.label`,
+            ),
+            bold: true,
+          },
+          getBoolean(t, elternteil.ausweisbFluechtling),
+        ],
       ]),
     ]),
   ];
