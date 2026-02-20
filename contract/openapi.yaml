@@ -6489,6 +6489,27 @@ components:
         - HOHE_GEBUEHREN
         - ANSCHAFFUNGEN_FUER_AUSBILDUNG
         - ZWEITAUSBILDUNG
+    Dokument:
+      required:
+        - id
+        - filename
+        - filepath
+        - filesize
+        - objectId
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: string
+        timestampErstellt:
+          type: string
+        objectId:
+          type: string
     FreiwilligDarlehen:
       type: object
       required:
@@ -6526,33 +6547,14 @@ components:
           type: boolean
         timestampErstellt:
           type: string
+        verfuegung:
+          $ref: '#/components/schemas/Dokument'
     FileDownloadToken:
       required:
         - token
       type: object
       properties:
         token:
-          type: string
-    Dokument:
-      required:
-        - id
-        - filename
-        - filepath
-        - filesize
-        - objectId
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        filename:
-          type: string
-        filepath:
-          type: string
-        filesize:
-          type: string
-        timestampErstellt:
-          type: string
-        objectId:
           type: string
     FileUpload:
       format: binary

@@ -944,6 +944,7 @@
 
   "shared.darlehen.title": "Darlehen",
   "shared.form.darlehen.title": "Darlehensantrag",
+  "shared.form.darlehen.verfuegung": "Darlehensverfügung",
   "shared.form.darlehen.darlehenGewaehren.label": "Darlehen gewähren",
   "shared.form.darlehen.darlehenGewaehren.true": "Ja",
   "shared.form.darlehen.darlehenGewaehren.false": "Nein",
