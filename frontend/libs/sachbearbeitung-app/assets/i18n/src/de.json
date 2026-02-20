@@ -796,8 +796,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Anteil an Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Anteil an Darlehen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Total Betrag ohne Kürzungen",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.nachEinreichefrist": "Kürzung wegen verspäteter Einreichung ({anzahlMonate, plural, one {1 Monat} other {# Monate}})",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.unterbruch": "Kürzung wegen Unterbruch ({anzahlMonate, plural, one {1 Monat} other {# Monate}})",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist": "Kürzung wegen verspäteten Einreichen ({{anzahlMonate}}/12 Monate)",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Kürzung wegen Unterbruch ({{anzahlMonate}}/12 Monate)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Total Betrag Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
 

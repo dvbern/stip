@@ -21,13 +21,9 @@ export interface Berechnungsresultat {
      */
     berechnungVorKuerzungUndTeilung: number;
     /**
-     * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
-     */
-    berechnungTotal: number;
-    /**
      * Die Summe nach der Kürzung der verspäteten Eingabe
      */
-    kuerzungNachEinreichefrist?: number;
+    totalNachKuerzungNachEinreichefrist?: number;
     /**
      * Die Anzahl Monate der verspäteten Eingabe
      */
@@ -35,7 +31,7 @@ export interface Berechnungsresultat {
     /**
      * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
      */
-    kuerzungUnterbruch?: number;
+    totalNachKuerzungUnterbruch?: number;
     /**
      * Die Anzahl Monate von dem Unterbruch der Ausbildung
      */
@@ -49,16 +45,8 @@ export interface Berechnungsresultat {
      */
     berechnungDarlehen?: number;
     /**
-     * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
-     */
-    berechnungReduziert?: number;
-    /**
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
-    /**
-     * Die Anzahl von Monaten für welche die Berechnung stattfand
-     */
-    verminderteBerechnungMonate?: number;
 }
 

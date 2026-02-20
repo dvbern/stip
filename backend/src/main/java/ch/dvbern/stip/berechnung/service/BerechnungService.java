@@ -139,7 +139,7 @@ public class BerechnungService {
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
 
         final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
-        final var berechnungStipendium = totalVorTeilungDarlehen - berechnungDarlehen;
+        final var berechnungStipendium = totalVorTeilungDarlehen - Objects.requireNonNullElse(berechnungDarlehen, 0);
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
@@ -154,7 +154,7 @@ public class BerechnungService {
         );
     }
 
-    private static int getDarlehen(Gesuch gesuch, int stipendium) {
+    private static Integer getDarlehen(Gesuch gesuch, int stipendium) {
         int monateTertiaerstufe = 0;
 
         for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {
@@ -175,7 +175,7 @@ public class BerechnungService {
             );
         }
 
-        var darlehen = 0;
+        Integer darlehen = null;
 
         if (monateTertiaerstufe > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
             // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the

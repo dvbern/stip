@@ -81,7 +81,7 @@
               <div class="d-flex justify-content-between fs-5">
                 <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium') }}</div>
                 <div>
-                  {{ teilBerechnung.berechnungAnteilTotal | formatChf: false }}
+                  {{ teilBerechnung.total | formatChf: false }}
                 </div>
               </div>
             </div>
@@ -93,8 +93,10 @@
 
       <mat-card-footer class="px-3 py-4">
         @let hasKuerzungenNachEinreichefrist =
-          zusammenfassung.kuerzungNachEinreichefrist || zusammenfassung.kuerzungNachEinreichefrist === 0;
-        @let hasKuerzungenUnterbruch = zusammenfassung.kuerzungUnterbruch || zusammenfassung.kuerzungUnterbruch === 0;
+          zusammenfassung.totalNachKuerzungNachEinreichefrist ||
+          zusammenfassung.totalNachKuerzungNachEinreichefrist === 0;
+        @let hasKuerzungenUnterbruch =
+          zusammenfassung.totalNachKuerzungUnterbruch || zusammenfassung.totalNachKuerzungUnterbruch === 0;
 
         @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
           <div class="d-flex justify-content-between fs-4 h4 mb-3">
@@ -110,13 +112,13 @@
           <div class="d-flex justify-content-between fs-5 mb-3">
             <div>
               {{
-                t('sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.nachEinreichefrist', {
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist', {
                   anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
                 })
               }}
             </div>
             <div>
-              {{ zusammenfassung.kuerzungNachEinreichefrist | formatChf }}
+              {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
             </div>
           </div>
         }
@@ -124,13 +126,13 @@
           <div class="d-flex justify-content-between fs-5 mb-3">
             <div>
               {{
-                t('sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.unterbruch', {
+                t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch', {
                   anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
                 })
               }}
             </div>
             <div>
-              {{ zusammenfassung.kuerzungUnterbruch | formatChf }}
+              {{ zusammenfassung.totalNachKuerzungUnterbruch | formatChf }}
             </div>
           </div>
         }

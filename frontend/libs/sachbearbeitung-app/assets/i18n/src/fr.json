@@ -796,8 +796,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Part de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Part du prêt",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Montant total sans réductions",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.nachEinreichefrist": "Réduction pour dépôt tardif ({{ anzahlMonate }} mois)",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.kuerzungen.unterbruch": "Réduction pour interruption ({{ anzahlMonate }} mois)",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist": "Réduction pour dépôt tardif ({{anzahlMonate}}/12 mois)",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Réduction pour cause d'interruption ({{anzahlMonate}}/12 mois)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Montant total du prêt",
 
