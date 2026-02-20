@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ɵEmptyOutletComponent } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { SharedFeatureAuszahlungComponent } from '@dv/shared/feature/auszahlung';
@@ -13,6 +13,7 @@ import { SharedUiAuszahlungComponent } from '@dv/shared/ui/auszahlung';
     TranslocoDirective,
     SharedPatternMainLayoutComponent,
     SharedUiAuszahlungComponent,
+    ɵEmptyOutletComponent,
   ],
   templateUrl: './gesuch-app-feature-auszahlung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

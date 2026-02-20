@@ -40,18 +40,9 @@ export class SharedFeatureDarlehenFeatureComponent {
   private formUtils = inject(SharedUtilFormService);
   hasUnsavedChanges = false;
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
-  fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
 
   constructor() {
     this.formUtils.registerFormForUnsavedCheck(this);
-
-    effect(() => {
-      const fallId = this.fallIdSig();
-
-      if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
-      }
-    });
 
     effect(() => {
       const darlehenId = this.darlehenIdSig();

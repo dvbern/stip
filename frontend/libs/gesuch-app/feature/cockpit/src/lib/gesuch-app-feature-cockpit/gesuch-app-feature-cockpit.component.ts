@@ -123,7 +123,6 @@ export class GesuchAppFeatureCockpitComponent {
       const fallId = this.gotNewFallSig();
 
       if (fallId) {
-        // this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadDashboard$();
       }
     });
@@ -133,17 +132,6 @@ export class GesuchAppFeatureCockpitComponent {
         this.dashboardStore.loadDashboard$();
       }
     });
-
-    // effect(() => {
-    //   const darlehenView = this.darlehenStore.darlehenGsViewSig();
-
-    //   const items = darlehenView.list.map((darlehen) => ({
-    //     label: `Darlehen`,
-    //     route: ['/darlehen', darlehen.id],
-    //   }));
-
-    //   this.navigationStore.setNavigationItems(items);
-    // });
   }
 
   compareById = compareById;

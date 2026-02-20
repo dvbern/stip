@@ -1,4 +1,4 @@
-<dv-shared-pattern-main-layout *transloco="let t">
+<ng-container *transloco="let t">
   <div class="tw:relative tw:my-12 tw:justify-between container">
     <h1 class="tw:!mb-8">
       {{ t('shared.darlehen.title') }}
@@ -8,42 +8,4 @@
       (darlehenDeletedSig)="redirectToHome()"
     ></dv-shared-pattern-darlehen-form>
   </div>
-
-  <!-- MOBILE NAV -->
-  <div dvHeaderMobileAddons></div>
-  <div dvMobileNavContent></div>
-
-  <!-- DESKTOP HEADER (LEFT) -->
-  <div dvHeaderDesktopLeft class="tw:flex tw:grow tw:items-center tw:gap-4">
-    <a
-      [routerLink]="['/']"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="header-nav-dashboard"
-    >
-      <i class="material-symbols-rounded me-2 text-white">dashboard</i>
-      <span>{{ t('shared.menu.dashboard') }}</span>
-    </a>
-
-    @let fallId = fallIdSig();
-    <a
-      [routerLink]="['/auszahlung', fallId]"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="header-nav-auszahlung"
-      [class.disabled]="!fallId"
-    >
-      <i class="material-symbols-rounded me-2 text-white">account_balance_wallet</i>
-      <span>{{ t('shared.menu.auszahlung') }}</span>
-    </a>
-
-    @let view = darlehenStore.darlehenGsViewSig();
-    <dv-shared-ui-darlehen-menu
-      [darlehenListSig]="view.list"
-      [canCreateDarlehenSig]="view.canCreateDarlehen"
-      [idTypeSig]="['fall', fallId]"
-      (createDarlehen)="darlehenStore.createDarlehen$($event)"
-    ></dv-shared-ui-darlehen-menu>
-  </div>
-
-  <!-- DESKTOP HEADER (RIGHT) -->
-  <div dvHeaderDesktopRight class="d-flex align-items-center gap-4"></div>
-</dv-shared-pattern-main-layout>
+</ng-container>

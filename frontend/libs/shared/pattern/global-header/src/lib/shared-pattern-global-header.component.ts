@@ -14,7 +14,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -24,7 +24,7 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
-import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
@@ -37,6 +37,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
     CommonModule,
     TranslocoPipe,
     RouterLink,
+    RouterLinkActive,
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
@@ -58,7 +59,7 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
 
-  @Input() staticNavItems?: { label: string; route: string[] }[];
+  @Input() staticNavItems?: NavItem[];
 
   private oauthService = inject(OAuthService);
   @Output() openSidenav = new EventEmitter<void>();
@@ -68,6 +69,16 @@ export class SharedPatternGlobalHeaderComponent {
   private tenantCacheService = inject(SharedUtilTenantConfigService);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
   protected breakpointObserver = inject(BreakpointObserver);
+
+  itemsSig = computed(() => {
+    const dynamicItems = this.navigationStore.navigationViewSig();
+
+    if (dynamicItems.length) {
+      return dynamicItems;
+    }
+
+    return this.staticNavItems ?? [];
+  });
 
   languageSig = this.store.selectSignal(selectLanguage);
   navigationStore = inject(NavigationStore);
