@@ -10,8 +10,11 @@
     <!-- MAIN CONTENT -->
     <main class="page-body">
       <div class="h-100 pt-lg-4 px-lg-4 tw:overflow-hidden container mb-5">
-        <h1 class="tw:!mb-8">
+        <h1 class="tw:flex tw:!mb-8 tw:justify-between tw:items-center tw:w-1/2">
           {{ 'shared.darlehen.title' | transloco }}
+          <dv-shared-ui-darlehen-verfuegung-download
+            [darlehenSig]="darlehenStore.cachedDarlehen().data"
+          ></dv-shared-ui-darlehen-verfuegung-download>
         </h1>
         <dv-shared-pattern-darlehen-form
           (darlehenUpdatedSig)="reloadDarlehenList()"

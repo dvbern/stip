@@ -6771,6 +6771,27 @@ components:
         - HOHE_GEBUEHREN
         - ANSCHAFFUNGEN_FUER_AUSBILDUNG
         - ZWEITAUSBILDUNG
+    Dokument:
+      required:
+        - id
+        - filename
+        - filepath
+        - filesize
+        - objectId
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        filename:
+          type: string
+        filepath:
+          type: string
+        filesize:
+          type: string
+        timestampErstellt:
+          type: string
+        objectId:
+          type: string
     FreiwilligDarlehen:
       type: object
       required:
@@ -6808,33 +6829,14 @@ components:
           type: boolean
         timestampErstellt:
           type: string
+        verfuegung:
+          $ref: '#/components/schemas/Dokument'
     FileDownloadToken:
       required:
         - token
       type: object
       properties:
         token:
-          type: string
-    Dokument:
-      required:
-        - id
-        - filename
-        - filepath
-        - filesize
-        - objectId
-      type: object
-      properties:
-        id:
-          $ref: '#/components/schemas/UUID'
-        filename:
-          type: string
-        filepath:
-          type: string
-        filesize:
-          type: string
-        timestampErstellt:
-          type: string
-        objectId:
           type: string
     FileUpload:
       format: binary
@@ -9675,7 +9677,9 @@ components:
       required:
         - total
         - ausbildungskosten
+        - ausbildungskostenTotal
         - fahrkosten
+        - fahrkostenTotal
         - verpflegungskosten
         - grundbedarf
         - wohnkosten
@@ -9691,7 +9695,11 @@ components:
           type: integer
         ausbildungskosten:
           type: integer
+        ausbildungskostenTotal:
+          type: integer
         fahrkosten:
+          type: integer
+        fahrkostenTotal:
           type: integer
         verpflegungskosten:
           type: integer
@@ -9706,6 +9714,8 @@ components:
         medizinischeGrundversorgungTotal:
           type: integer
         fahrkostenPartner:
+          type: integer
+        fahrkostenPartnerTotal:
           type: integer
         verpflegungPartner:
           type: integer

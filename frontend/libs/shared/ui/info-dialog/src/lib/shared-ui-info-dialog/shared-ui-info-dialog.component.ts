@@ -2,9 +2,13 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { TranslocoHashMap } from '@dv/shared/model/type-util';
+
 export interface InfoDialogData {
   titleKey: string;
+  titleParams?: TranslocoHashMap;
   messageKey: string;
+  messageParams?: TranslocoHashMap;
 }
 
 @Component({

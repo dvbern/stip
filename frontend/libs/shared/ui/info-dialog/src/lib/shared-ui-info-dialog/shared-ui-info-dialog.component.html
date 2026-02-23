@@ -9,9 +9,9 @@
   </button>
   <h1 class="title tw:!mb-4 tw:flex tw:!text-lg tw:xl:pr-5">
     <span class="text-info material-symbols-rounded me-2">info</span>
-    {{ dialogData.titleKey | transloco }}
+    {{ dialogData.titleKey | transloco: dialogData.titleParams }}
   </h1>
-  <p class="content" [innerHTML]="dialogData.messageKey | transloco"></p>
+  <p class="content" [innerHTML]="dialogData.messageKey | transloco: dialogData.messageParams"></p>
   <button (click)="close()" type="button" class="btn btn-outline-primary tw:mt-auto tw:self-center">
     {{ 'shared.close' | transloco }}
   </button>

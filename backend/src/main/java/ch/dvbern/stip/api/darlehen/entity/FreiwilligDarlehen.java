@@ -28,16 +28,19 @@ import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Min;
@@ -63,6 +66,15 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Getter
 @Setter
 public class FreiwilligDarlehen extends AbstractMandantEntity {
+    @Nullable
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(
+        name = "darlehen_buchhaltung_entry_id",
+        foreignKey = @ForeignKey(name = "FK_freiwillig_darlehen_darlehen_buchhaltung_entry_id"),
+        nullable = true
+    )
+    private DarlehenBuchhaltungEntry darlehenBuchhaltungEntry;
+
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "fall_id", nullable = false)

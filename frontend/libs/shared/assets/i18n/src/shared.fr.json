@@ -963,6 +963,7 @@
 
   "shared.darlehen.title": "Prêt",
   "shared.form.darlehen.title": "Demande de prêt",
+  "shared.form.darlehen.verfuegung": "Décision de prêt",
   "shared.form.darlehen.darlehenGewaehren.label": "Accorder un prêt",
   "shared.form.darlehen.darlehenGewaehren.true": "Oui",
   "shared.form.darlehen.darlehenGewaehren.false": "Non",

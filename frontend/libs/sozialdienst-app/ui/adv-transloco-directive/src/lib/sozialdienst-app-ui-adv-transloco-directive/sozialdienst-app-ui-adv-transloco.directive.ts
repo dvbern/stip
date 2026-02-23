@@ -2,13 +2,12 @@ import { Directive } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import { TranslocoHashMap } from '@dv/shared/model/type-util';
 import { SozialdienstAppTranslationKey } from '@dv/sozialdienst-app/assets/i18n';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type HashMap<T = any> = Record<string, T>;
 type TranslateFn<
   T extends SozialdienstAppTranslationKey | SharedTranslationKey,
-> = (key: T, params?: HashMap) => string;
+> = (key: T, params?: TranslocoHashMap) => string;
 interface ViewContext {
   $implicit: TranslateFn<SozialdienstAppTranslationKey | SharedTranslationKey>;
   currentLang: string;
