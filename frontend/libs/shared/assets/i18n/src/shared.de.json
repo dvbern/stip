@@ -322,6 +322,12 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Abgelehnt",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingereicht",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Akzeptiert",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
+
   "shared.gesuch.status.unterbruchAnfrage": "Anfrage Ausbildungsunterbruch",
   "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",

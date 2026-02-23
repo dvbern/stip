@@ -593,6 +593,7 @@
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Kommentar",
   "sachbearbeitung-app.infos.protokoll.table.typ.GESUCH": "Gesuch",
   "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Änderung",
+  "sachbearbeitung-app.infos.protokoll.table.typ.AUSBILDUNG_UNTERBRUCH_ANTRAG": "Ausbildungsunterbruchantrag",
 
   "sachbearbeitung-app.infos.notizen.description": "Eine Übersicht aller Notizen",
   "sachbearbeitung-app.infos.notizen.title": "Notizen",

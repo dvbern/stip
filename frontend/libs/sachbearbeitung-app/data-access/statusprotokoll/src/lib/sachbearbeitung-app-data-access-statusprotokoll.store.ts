@@ -27,6 +27,7 @@ const initialState: StatusprotokollState = {
 const typMap = {
   AENDERUNG: 'tranche',
   GESUCH: 'contract',
+  AUSBILDUNG_UNTERBRUCH_ANTRAG: 'ausbildungunterbruchantrag',
 } satisfies Record<StatusprotokollEntryTyp, string>;
 
 @Injectable()

@@ -42,6 +42,8 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
 import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
 import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
@@ -75,8 +77,10 @@ public class AusbildungUnterbruchAntragService {
     private final NotificationService notificationService;
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungService ausbildungService;
+    private final StatusprotokollService statusprotokollService;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
+    public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED = "DELETED";
 
     public AusbildungUnterbruchAntrag requireById(final UUID ausbildungUnterbruchAntragId) {
         return ausbildungUnterbruchAntragRepository.requireById(ausbildungUnterbruchAntragId);
@@ -87,11 +91,37 @@ public class AusbildungUnterbruchAntragService {
     }
 
     @Transactional
+    public void createStatusprotokollEntry(
+        final AusbildungUnterbruchAntrag antrag,
+        final String statusTo,
+        final String statusFrom,
+        final String comment
+    ) {
+        statusprotokollService.createStatusprotokoll(
+            statusTo,
+            statusFrom,
+            StatusprotokollEntryTyp.AUSBILDUNG_UNTERBRUCH_ANTRAG,
+            comment,
+            antrag.getGesuch()
+        );
+    }
+
+    @Transactional
+    public void createStatusprotokollEntry(
+        final AusbildungUnterbruchAntrag antrag,
+        final String statusFrom,
+        final String comment
+    ) {
+        createStatusprotokollEntry(antrag, antrag.getStatus().toString(), statusFrom, comment);
+    }
+
+    @Transactional
     public AusbildungUnterbruchAntrag createAntrag(final Gesuch gesuch) {
         final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag = new AusbildungUnterbruchAntrag();
         ausbildungUnterbruchAntrag.setGesuch(gesuch);
         ausbildungUnterbruchAntrag.setAusbildung(gesuch.getAusbildung());
         ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
+        createStatusprotokollEntry(ausbildungUnterbruchAntrag, null, ausbildungUnterbruchAntrag.getKommentarGS());
         return ausbildungUnterbruchAntrag;
     }
 
@@ -142,6 +172,12 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         final List<String> objectIds =
             antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
+        createStatusprotokollEntry(
+            antrag,
+            AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED,
+            antrag.getStatus().toString(),
+            antrag.getKommentarGS()
+        );
         ausbildungUnterbruchAntragRepository.delete(antrag);
         dokumentDeleteService.executeDeleteDokumentsFromS3(s3, configService.getBucketName(), objectIds);
     }
@@ -182,6 +218,12 @@ public class AusbildungUnterbruchAntragService {
     ) {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
+        createStatusprotokollEntry(
+            antrag,
+            AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
+            antrag.getStatus().toString(),
+            antrag.getKommentarGS()
+        );
         return ausbildungUnterbruchAntragMapper
             .toGsDto(ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag));
     }
@@ -205,7 +247,9 @@ public class AusbildungUnterbruchAntragService {
         final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
     ) {
         var antrag = requireById(ausbildungUnterbruchAntragId);
+        final var statusFrom = antrag.getStatus();
         antrag = ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag);
+        createStatusprotokollEntry(antrag, statusFrom.toString(), antrag.getKommentarSB());
         if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(antrag.getStatus())) {
             notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
             if (

@@ -322,6 +322,12 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Refusé",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Documents manquants",
 
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Créé",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Soumis",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Supprimé",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Accepté",
+  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Refusé",
+
   "shared.gesuch.status.unterbruchAnfrage": "Demande d'interruption de formation",
   "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "En cours de vérification",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "En traitement par le requérant",
