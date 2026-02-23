@@ -59,7 +59,8 @@ public class UserConsentRepository implements BaseRepository<UserConsent> {
                 userConsent.benutzer.id.eq(userId)
                     .and(userConsent.consentGiven.isTrue())
                     .and(userConsent.timestampErstellt.goe(cutoff))
-            ).fetchFirst();
+            )
+            .fetchFirst();
 
     }
 }

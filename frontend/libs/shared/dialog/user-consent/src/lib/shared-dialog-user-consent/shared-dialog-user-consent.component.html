@@ -9,12 +9,10 @@
   </button>
 
   <h1 class="tw:!text-3xl">
-    {{ 'shared.user-consent.dialog.title' | transloco }}
+    {{ 'shared.user.consent.dialog.title' | transloco }}
   </h1>
 
-  <p class="tw:mt-4">
-    {{ 'shared.user-consent.dialog.message' | transloco }}
-  </p>
+  <div class="tw:mt-4" [innerHTML]="'shared.user.consent.dialog.text' | transloco"></div>
 
   <div class="tw:mt-5 tw:flex tw:justify-between">
     <button type="button" class="btn btn-secondary" (click)="cancel()">
@@ -22,7 +20,7 @@
     </button>
     <!-- is type button on purpose -->
     <button type="button" class="btn btn-primary tw:ml-2" (click)="accept()">
-      {{ 'shared.accept' | transloco }}
+      {{ 'shared.user.consent.dialog.accept' | transloco }}
     </button>
   </div>
 </section>

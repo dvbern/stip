@@ -25,7 +25,6 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
-
 @RequestScoped
 @RequiredArgsConstructor
 public class UserConsentService {

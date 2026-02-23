@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.userconsent.resource;
 
+import ch.dvbern.stip.api.common.authorization.UserConsentAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.userconsent.service.UserConsentService;
 import ch.dvbern.stip.generated.api.UserConsentResource;
@@ -37,16 +38,19 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_UPDATE;
 public class UserConsentResourceImpl implements UserConsentResource {
 
     private final UserConsentService userConsentService;
+    private final UserConsentAuthorizer userConsentAuthorizer;
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
     public UserConsentDto getUserConsent() {
+        userConsentAuthorizer.canRead();
         return userConsentService.getUserConsent();
     }
 
     @Override
     @RolesAllowed(GS_GESUCH_UPDATE)
     public UserConsentDto createUserConsent(@Valid @NotNull CreateUserConsentDto createUserConsentDto) {
+        userConsentAuthorizer.canCreate();
         return userConsentService.createUserConsent(createUserConsentDto.getConsentGiven());
     }
 }

@@ -24,6 +24,7 @@ export class SharedDialogUserConsentComponent {
       SharedDialogUserConsentComponent,
       {
         panelClass: 'dv-user-consent-dialog',
+        width: '800px',
       },
     );
   }
