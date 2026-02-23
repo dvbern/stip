@@ -727,13 +727,14 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag.info": "Revenus moins coûts",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.proKopfTeilung": "Répartition par tête pour le calcul avec un(e) partenaire",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget valable pour {{ anzahlMonate }} mois et donne droit à",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Information pour les étudiants (niveau tertiaire) - Répartition à partir de la 4e année d'études",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Répartition à partir de la 4e année d'études pour les étudiants du degré tertiaire",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Bourse : 2/3 du déficit",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Prêt : 1/3 du déficit",
 
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Revenus selon la procédure de décompte simplifiée (Loi fédérale contre le travail au noir)",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Les plafonds reconnus donnant droit à une bourse se trouvent dans l'appendice (Annexe 1) ou sur www.be.ch/ausbildungsbeitraege > Bases légales > Plafonds reconnus donnant droit à une bourse",
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst": "3) Le revenu propre maximal autorisé sur le revenu d'activité avec l'octroi du prêt correspond à l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}. Le revenu propre maximal autorisé sur le revenu d'activité sans octroi du prêt correspond au prêt + l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}.",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Revenu propre sur le revenu professionnel",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info": "Le revenu propre maximal autorisé sur le revenu d'activité avec l'octroi du prêt correspond à l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}. Le revenu propre maximal autorisé sur le revenu d'activité sans octroi du prêt correspond au prêt + l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}.",
 
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Revenu",

@@ -4,6 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
 import {
+  BerechnungsStammdaten,
   Berechnungsresultat,
   GesuchService,
   TranchenBerechnungsresultat,
@@ -61,6 +62,7 @@ export class BerechnungStore extends signalStore(
       berechnungStipendium: number;
       berechnungDarlehen?: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
+      stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
       berechnungVorKuerzungUndTeilung:
@@ -74,6 +76,9 @@ export class BerechnungStore extends signalStore(
       berechnungStipendium: berechnungRd.data?.berechnungStipendium ?? 0,
       berechnungDarlehen: berechnungRd.data?.berechnungDarlehen,
       berechnungsresultate: {},
+      stammdaten:
+        berechnungRd.data?.tranchenBerechnungsresultate[0]
+          ?.berechnungsStammdaten,
     };
 
     const byTrancheId = berechnungRd.data
