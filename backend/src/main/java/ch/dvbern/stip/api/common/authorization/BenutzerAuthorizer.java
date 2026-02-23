@@ -55,4 +55,8 @@ public class BenutzerAuthorizer extends BaseAuthorizer {
     public void canDeleteSachbearbeiter() {
         permitAll();
     }
+
+    public void canUpdateNutzungsbedingungen() {
+        permitAll();
+    }
 }

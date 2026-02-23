@@ -63,6 +63,23 @@ export const sharedDataAccessBenutzersFeature = createFeature({
         rolesMap,
       }),
     ),
+
+    on(
+      SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenSuccess,
+      (state, { benutzer }): State => ({
+        ...state,
+        currentBenutzerRd: success(benutzer),
+        lastFetchTs: new Date().getTime(),
+      }),
+    ),
+
+    on(
+      SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenFailure,
+      (state, { error }): State => ({
+        ...state,
+        currentBenutzerRd: failure(error),
+      }),
+    ),
   ),
 });
 

@@ -13,7 +13,10 @@ import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
-import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -127,36 +130,26 @@ export class GesuchAppFeatureCockpitComponent {
         this.dashboardStore.loadDashboard$();
       }
     });
-
-    // effect(() => {
-    //   const dashboard = this.dashboardStore.dashboardViewSig();
-
-    //   if (dashboard?.canCreateAusbildung) {
-    //     this.userConsentStore.getUserConsent$();
-    //   }
-    // });
   }
 
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    const userHasGivenConsent = true; // TODO: replace with actual consent check: this.userConsentStore.userConsentSig()?.consentGiven
+    const nutzungsbedingungenAkzeptiert =
+      this.benutzerSig()?.nutzungsbedingungenAkzeptiert;
+    const benutzerId = this.benutzerSig()?.id;
 
-    if (!userHasGivenConsent) {
+    if (!nutzungsbedingungenAkzeptiert) {
       SharedDialogNutzungsbedingungenComponent.open(this.dialog)
         .afterClosed()
-        .subscribe((consentGiven) => {
-          if (consentGiven) {
-            // this.userConsentStore.createUserConsent$({
-            //   req: { createUserConsent: { consentGiven: true } },
-            //   onSuccess: () => {
-            //     SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
-            //       .afterClosed()
-            //       .subscribe(() => {
-            //         this.dashboardStore.loadDashboard$();
-            //       });
-            //   },
-            // });
+        .subscribe((result) => {
+          if (result && benutzerId) {
+            this.store.dispatch(
+              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungen({
+                akzeptiert: true,
+                benutzerId,
+              }),
+            );
           }
         });
     } else {

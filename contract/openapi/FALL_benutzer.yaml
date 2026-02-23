@@ -55,6 +55,42 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: prepareCurrentBenutzer
       summary: Get or create and update current benutzer
+  /benutzer/nutzungsbedingungen/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                akzeptiert:
+                  type: boolean
+        required: true
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: current Benutzer with updated NutzungsbedingungenAkzeptiert field
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: updateNutzungsbedingungen
+      summary: Update if the user has accepted the Nutzungsbedingungen
   /benutzer/sachbearbeiter:
     get:
       tags:

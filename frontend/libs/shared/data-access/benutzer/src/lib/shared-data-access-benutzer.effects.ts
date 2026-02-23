@@ -48,8 +48,52 @@ export const loadCurrentBenutzer = createEffect(
   { functional: true },
 );
 
+export const updateNutzungsbedingungen = createEffect(
+  (
+    store = inject(Store),
+    events$ = inject(Actions),
+    benutzerService = inject(BenutzerService),
+  ) => {
+    return events$.pipe(
+      ofType(SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungen),
+      tap(() =>
+        store.dispatch(
+          SharedDataAccessBenutzerApiEvents.setCurrentBenutzerPending(),
+        ),
+      ),
+      exhaustMap(({ akzeptiert, benutzerId }) =>
+        benutzerService
+          .updateNutzungsbedingungen$({
+            benutzerId,
+            updateNutzungsbedingungenRequest: { akzeptiert },
+          })
+          .pipe(
+            map((benutzer) =>
+              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenSuccess(
+                {
+                  benutzer,
+                },
+              ),
+            ),
+            catchError((error) => [
+              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenFailure(
+                {
+                  error: sharedUtilFnErrorTransformer(error),
+                },
+              ),
+            ]),
+          ),
+      ),
+    );
+  },
+  { functional: true },
+);
+
 // add effects here
-export const sharedDataAccessBenutzerEffects = { loadCurrentBenutzer };
+export const sharedDataAccessBenutzerEffects = {
+  loadCurrentBenutzer,
+  updateNutzungsbedingungen,
+};
 
 const hasStaleCache = (lastFetchTs: number | null) =>
   lastFetchTs === null || Date.now() - lastFetchTs > THREE_MINUTES;

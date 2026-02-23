@@ -21,12 +21,13 @@ export class SharedDialogNutzungsbedingungenComponent {
   }
 
   static open(matDialog: MatDialog) {
-    return matDialog.open<SharedDialogNutzungsbedingungenComponent>(
+    return matDialog.open<
       SharedDialogNutzungsbedingungenComponent,
-      {
-        panelClass: 'dv-user-consent-dialog',
-        width: '800px',
-      },
-    );
+      never,
+      boolean
+    >(SharedDialogNutzungsbedingungenComponent, {
+      panelClass: 'dv-user-consent-dialog',
+      width: '800px',
+    });
   }
 }

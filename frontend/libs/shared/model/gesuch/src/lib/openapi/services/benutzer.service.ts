@@ -23,6 +23,7 @@ import { Sachbearbeiter } from '../model/sachbearbeiter';
 import { SachbearbeiterUpdate } from '../model/sachbearbeiterUpdate';
 import { SachbearbeiterZuordnungStammdaten } from '../model/sachbearbeiterZuordnungStammdaten';
 import { SachbearbeiterZuordnungStammdatenList } from '../model/sachbearbeiterZuordnungStammdatenList';
+import { UpdateNutzungsbedingungenRequest } from '../model/updateNutzungsbedingungenRequest';
 import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -56,6 +57,11 @@ export interface BenutzerServiceGetSachbearbeiterForManagementRequestParams {
 
 export interface BenutzerServiceGetSachbearbeiterStammdatenRequestParams {
     benutzerId: string;
+}
+
+export interface BenutzerServiceUpdateNutzungsbedingungenRequestParams {
+    benutzerId: string;
+    updateNutzungsbedingungenRequest: UpdateNutzungsbedingungenRequest;
 }
 
 export interface BenutzerServiceUpdateSachbearbeiterRequestParams {
@@ -1007,6 +1013,113 @@ export class BenutzerService {
         return this.httpClient.request<Benutzer>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public updateNutzungsbedingungenPath = (requestParameters: BenutzerServiceUpdateNutzungsbedingungenRequestParams) => {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling updateNutzungsbedingungen$.');
+        }
+        const updateNutzungsbedingungenRequest = requestParameters.updateNutzungsbedingungenRequest;
+        if (updateNutzungsbedingungenRequest === null || updateNutzungsbedingungenRequest === undefined) {
+            throw new Error('Required parameter updateNutzungsbedingungenRequest was null or undefined when calling updateNutzungsbedingungen$.');
+        }
+        let path = `/api/v1/benutzer/nutzungsbedingungen/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Update if the user has accepted the Nutzungsbedingungen
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateNutzungsbedingungen$(requestParameters: BenutzerServiceUpdateNutzungsbedingungenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Benutzer>;
+     public updateNutzungsbedingungen$(requestParameters: BenutzerServiceUpdateNutzungsbedingungenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Benutzer>>;
+     public updateNutzungsbedingungen$(requestParameters: BenutzerServiceUpdateNutzungsbedingungenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Benutzer>>;
+     public updateNutzungsbedingungen$(requestParameters: BenutzerServiceUpdateNutzungsbedingungenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling updateNutzungsbedingungen$.');
+        }
+        const updateNutzungsbedingungenRequest = requestParameters.updateNutzungsbedingungenRequest;
+        if (updateNutzungsbedingungenRequest === null || updateNutzungsbedingungenRequest === undefined) {
+            throw new Error('Required parameter updateNutzungsbedingungenRequest was null or undefined when calling updateNutzungsbedingungen$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/benutzer/nutzungsbedingungen/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Benutzer>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateNutzungsbedingungenRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
