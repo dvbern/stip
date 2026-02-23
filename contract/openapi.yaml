@@ -8994,18 +8994,29 @@ components:
       description: Resultat der Berechnung (gesamtes Gesuch)
       required:
         - year
-        - berechnungTotal
+        - berechnungVorKuerzungUndTeilung
         - berechnungStipendium
-        - berechnungDarlehen
         - tranchenBerechnungsresultate
       type: object
       properties:
         year:
           type: integer
-        berechnungTotal:
+        berechnungVorKuerzungUndTeilung:
           description: >-
-            Die Summe der berechneten Stpendiums- und Darlehensansprüche für das
-            Gesuch
+            Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
+            Kürzungen und Teilung des Gesetzlichen Darlehens
+          type: integer
+        totalNachKuerzungNachEinreichefrist:
+          description: Die Summe nach der Kürzung der verspäteten Eingabe
+          type: integer
+        anzahlMonateEinreichefrist:
+          description: Die Anzahl Monate der verspäteten Eingabe
+          type: integer
+        totalNachKuerzungUnterbruch:
+          description: Die Summe nach der Kürzung des Unterbruchs der Ausbildung
+          type: integer
+        anzahlMonateUnterbruch:
+          description: Die Anzahl Monate von dem Unterbruch der Ausbildung
           type: integer
         berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
@@ -9013,25 +9024,15 @@ components:
         berechnungDarlehen:
           description: Berechneter Darlehensanspruch für das Gesuch
           type: integer
-        berechnungReduziert:
-          description: >-
-            Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug
-            wegen zuspäteinreichens
-          type: integer
         tranchenBerechnungsresultate:
           description: Resultate der Berechnung für die Tranchen des Gesuchs
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
-        verminderteBerechnungMonate:
-          description: Die Anzahl von Monaten für welche die Berechnung stattfand
-          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
-        - berechnungAnteilTotal
-        - berechnungAnteilStipendium
-        - berechnungAnteilDarlehen
+        - total
         - gueltigAb
         - gueltigBis
         - ausbildungAb
@@ -9044,16 +9045,10 @@ components:
         - familienBudgetresultate
       type: object
       properties:
-        berechnungAnteilTotal:
+        total:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für
             diese Tranche
-          type: integer
-        berechnungAnteilStipendium:
-          description: Berechneter Stpendiumsanspruch für diese Tranche
-          type: integer
-        berechnungAnteilDarlehen:
-          description: Berechneter Darlehensanspruch für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'
@@ -9142,8 +9137,6 @@ components:
         - eigenerHaushalt
         - budgetTranche
         - anzahlMonate
-        - gesetzlichesDarlehen
-        - gesetzlichesDarlehenStipendium
         - anzahlPersonenImHaushalt
         - einnahmen
         - kosten
@@ -9175,10 +9168,6 @@ components:
         budgetTranche:
           type: integer
         anzahlMonate:
-          type: integer
-        gesetzlichesDarlehen:
-          type: integer
-        gesetzlichesDarlehenStipendium:
           type: integer
         anzahlPersonenImHaushalt:
           type: integer

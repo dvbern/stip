@@ -40,6 +40,7 @@ import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -106,44 +107,85 @@ public class BerechnungService {
             throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
         }
 
-        final var actualDuration = DateUtil.wasEingereichtAfterDueDate(gesuch)
-            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
-            : null;
-
         final List<TranchenBerechnungsresultatDto> berechnungsresultate = gesuchTranchen.stream()
             .flatMap(
                 gesuchTranche -> getBerechnungsresultatFromGesuchTranche(gesuchTranche, majorVersion, minorVersion)
             )
             .toList();
 
-        int berechnungStipendium = -berechnungsresultate.stream()
-            .mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilStipendium)
-            .sum();
-        int berechnungDarlehen =
-            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilDarlehen).sum();
-        int berechnungTotal =
-            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getBerechnungAnteilTotal).sum();
-        if (berechnungTotal < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
-            berechnungTotal = 0;
-            berechnungStipendium = 0;
-            berechnungDarlehen = 0;
+        int berechnungVorKuerzungUndTeilung =
+            -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getTotal).sum();
+        if (berechnungVorKuerzungUndTeilung < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+            berechnungVorKuerzungUndTeilung = 0;
         }
 
-        Integer berechnungsresultatReduziert =
-            actualDuration != null ? berechnungTotal * actualDuration / 12 : null;
-        berechnungStipendium =
-            actualDuration == null ? berechnungStipendium : berechnungStipendium * actualDuration / 12;
-        berechnungDarlehen = actualDuration == null ? berechnungDarlehen : berechnungDarlehen * actualDuration / 12;
+        final var monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
+            ? DateUtil.getStipendiumDurationRoundDown(gesuch)
+            : 12;
+
+        final var totalNachKuerzungNachEinreichefrist =
+            monateUebrigNachEinreichefrist < 12 ? berechnungVorKuerzungUndTeilung * monateUebrigNachEinreichefrist / 12
+                : null;
+
+        final var totalVorKuerzungUnterbruch =
+            Objects.requireNonNullElse(totalNachKuerzungNachEinreichefrist, berechnungVorKuerzungUndTeilung);
+
+        final var anzahlMonateUnterbruch = 0;
+
+        final var totalNachKuerzungUnterbruch =
+            anzahlMonateUnterbruch > 0 ? totalVorKuerzungUnterbruch * (12 - anzahlMonateUnterbruch) / 12 : null;
+
+        final var totalVorTeilungDarlehen =
+            Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
+
+        final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
+        final var berechnungStipendium = totalVorTeilungDarlehen - Objects.requireNonNullElse(berechnungDarlehen, 0);
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
-            berechnungTotal,
+            berechnungVorKuerzungUndTeilung,
             berechnungStipendium,
-            berechnungDarlehen,
             berechnungsresultate,
-            berechnungsresultatReduziert,
-            actualDuration
+            totalNachKuerzungNachEinreichefrist,
+            12 - monateUebrigNachEinreichefrist,
+            totalNachKuerzungUnterbruch,
+            anzahlMonateUnterbruch,
+            berechnungDarlehen
         );
+    }
+
+    private static Integer getDarlehen(Gesuch gesuch, int stipendium) {
+        int monateTertiaerstufe = 0;
+
+        for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {
+            if (
+                item.isAusbildung()
+                && item.getAbschluss().getBildungskategorie().isTertiaerstufe()
+            ) {
+                monateTertiaerstufe += DateUtil.getMonthsBetween(item.getVon(), item.getBis());
+            }
+        }
+
+        final var ausbildung = gesuch.getAusbildung();
+
+        if (ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            monateTertiaerstufe += DateUtil.getMonthsBetween(
+                ausbildung.getAusbildungBegin(),
+                ausbildung.getAusbildungEnd()
+            );
+        }
+
+        Integer darlehen = null;
+
+        if (monateTertiaerstufe > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
+            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
+            // stipendium
+            darlehen = BigDecimal.valueOf(stipendium)
+                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100))
+                .intValue();
+        }
+        return darlehen;
     }
 
     public Stream<TranchenBerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
@@ -227,14 +269,11 @@ public class BerechnungService {
                 }
 
                 // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
-                final var berechnungAnteilStipendium = Math.min(0, stipendienCalculated.getStipendien());
-                final var berechnungAnteilDarlehen = stipendienCalculated.getDarlehen();
+                final var total = Math.min(0, stipendienCalculated.getStipendien());
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        berechnungAnteilStipendium + berechnungAnteilDarlehen,
-                        berechnungAnteilStipendium,
-                        berechnungAnteilDarlehen,
+                        total,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
@@ -273,24 +312,17 @@ public class BerechnungService {
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid
                 // percentages.
-                final var berechnetStipendien = kinderProzenteNormalized.multiply(
+                var berechnetStipendien = kinderProzenteNormalized.multiply(
                     BigDecimal.valueOf(stipendienCalculated.getStipendien())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
 
-                final var berechnungAnteilDarlehen = kinderProzenteNormalized.multiply(
-                    BigDecimal.valueOf(stipendienCalculated.getDarlehen())
-                        .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-                ).intValue();
-
                 // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
-                final var berechnungAnteilStipendium = Math.min(0, berechnetStipendien);
+                berechnetStipendien = Math.min(0, berechnetStipendien);
 
                 berechnungsresultatDtoList.add(
                     new TranchenBerechnungsresultatDto(
-                        berechnungAnteilStipendium + berechnungAnteilDarlehen,
-                        berechnungAnteilStipendium,
-                        berechnungAnteilDarlehen,
+                        berechnetStipendien,
                         gesuchTranche.getGueltigkeit().getGueltigAb(),
                         gesuchTranche.getGueltigkeit().getGueltigBis(),
                         DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),

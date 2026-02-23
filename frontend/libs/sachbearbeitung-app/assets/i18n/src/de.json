@@ -726,14 +726,15 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag": "Fehlbetrag",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.proKopfTeilung": "Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget gültig für {{ anzahlMonate }} Monate und ergibt einen Anspruch von",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Information für Studierende (Tertiärstufe) - Aufteilung ab dem 4. Studienjahr",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget gültig für {anzahlMonate, plural, one {1 Monat} other {# Monate}} und ergibt einen Anspruch von",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Aufteilung ab dem 4. Studienjahr für Studierende der Tertiärstufe",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Stipendium: 2/3 des Fehlbetrags",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Darlehen: 1/3 des Fehlbetrags",
 
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte",
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst": "3) Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen mit Bezug des Darlehens entspricht dem Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}. Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen ohne Bezug des Darlehens entspricht dem Darlehen + Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}.",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Eigenverdienst auf dem Erwerbseinkommen",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info": "Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen mit Bezug des Darlehens entspricht dem Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}. Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen ohne Bezug des Darlehens entspricht dem Darlehen + Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}.",
 
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Einnahmen",
@@ -795,6 +796,9 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Anteil an Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Anteil an Darlehen",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Total Betrag ohne Kürzungen",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist": "Kürzung wegen verspäteten Einreichen ({{anzahlMonate}}/12 Monate)",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Kürzung wegen Unterbruch ({{anzahlMonate}}/12 Monate)",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Total Betrag Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
 
@@ -830,8 +834,8 @@
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
   "sachbearbeitung-app.cockpit.table.typ": "Typ",
 
-  "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{{ anzahl }} Datenschutzbriefe drucken",
-  "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{{ anzahl }} Verfügungen drucken",
+  "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{anzahl, plural, one {1 Datenschutzbrief} other {# Datenschutzbriefe}} drucken",
+  "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 Verfügung} other {# Verfügungen }} drucken",
 
   "sachbearbeitung-app.gesuch-form.title": "Gesuch",
 

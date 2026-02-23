@@ -4,6 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
 import {
+  BerechnungsStammdaten,
   Berechnungsresultat,
   GesuchService,
   TranchenBerechnungsresultat,
@@ -53,14 +54,31 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
+      berechnungVorKuerzungUndTeilung: number;
+      totalNachKuerzungNachEinreichefrist?: number;
+      anzahlMonateEinreichefrist?: number;
+      totalNachKuerzungUnterbruch?: number;
+      anzahlMonateUnterbruch?: number;
       berechnungStipendium: number;
-      berechnungDarlehen: number;
+      berechnungDarlehen?: number;
       berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
+      stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
+      berechnungVorKuerzungUndTeilung:
+        berechnungRd.data?.berechnungVorKuerzungUndTeilung ?? 0,
+      totalNachKuerzungNachEinreichefrist:
+        berechnungRd.data?.totalNachKuerzungNachEinreichefrist,
+      anzahlMonateEinreichefrist: berechnungRd.data?.anzahlMonateEinreichefrist,
+      totalNachKuerzungUnterbruch:
+        berechnungRd.data?.totalNachKuerzungUnterbruch,
+      anzahlMonateUnterbruch: berechnungRd.data?.anzahlMonateUnterbruch,
       berechnungStipendium: berechnungRd.data?.berechnungStipendium ?? 0,
-      berechnungDarlehen: berechnungRd.data?.berechnungDarlehen ?? 0,
+      berechnungDarlehen: berechnungRd.data?.berechnungDarlehen,
       berechnungsresultate: {},
+      stammdaten:
+        berechnungRd.data?.tranchenBerechnungsresultate[0]
+          ?.berechnungsStammdaten,
     };
 
     const byTrancheId = berechnungRd.data

@@ -26,7 +26,6 @@ import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.dto.v1.AntragsstellerV1;
 import ch.dvbern.stip.berechnung.dto.v1.BerechnungRequestV1.InputPersoenlichesbudgetV1;
 import ch.dvbern.stip.berechnung.dto.v1.StammdatenV1;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatEinnahmenDto;
@@ -81,43 +80,23 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
         total = budgetTranche;
 
-        var stipendium = roundHalfUp(total);
-        var darlehen = getDarlehen(antragssteller, stipendium);
-        var darlehenStipeandium = roundHalfUp(BigDecimal.valueOf(stipendium - darlehen));
-
         return new PersoenlichesBudgetresultatDto()
             .vorname(antragssteller.getVorname())
             .nachname(antragssteller.getNachname())
             .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
             .geburtsdatum(antragssteller.getGeburtsdatum())
-            .total(roundHalfUp(total)) // TODO Remove
+            .total(roundHalfUp(total))
             .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
             .fehlbetrag(roundHalfUp(fehlbetrag))
             .proKopfTeilung(proKopfTeilung)
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .budgetTranche(roundHalfUp(budgetTranche))
             .anzahlMonate(anzahlMonate)
-            .gesetzlichesDarlehen(darlehen)
-            .gesetzlichesDarlehenStipendium(darlehenStipeandium)
             .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
             .einnahmen(einnahmen)
             .kosten(kosten)
             .vornamePartner(antragssteller.getVornamePartner())
             .nachnamePartner(antragssteller.getNachnamePartner());
-    }
-
-    private static int getDarlehen(AntragsstellerV1 antragssteller, int stipendium) {
-        var darlehen = 0;
-
-        if (antragssteller.getMonateTertiaerstufe() > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
-            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
-            // stipendium
-            darlehen = BigDecimal.valueOf(stipendium)
-                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100))
-                .intValue();
-        }
-        return darlehen;
     }
 
     private PersoenlichesBudgetresultatKostenDto calculateKosten(
