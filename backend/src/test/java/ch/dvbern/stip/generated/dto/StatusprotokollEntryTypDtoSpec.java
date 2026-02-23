@@ -28,7 +28,9 @@ public enum StatusprotokollEntryTypDtoSpec {
   
   GESUCH("GESUCH"),
   
-  AENDERUNG("AENDERUNG");
+  AENDERUNG("AENDERUNG"),
+  
+  FREIWILLIG_DARLEHEN("FREIWILLIG_DARLEHEN");
 
   private String value;
 

@@ -1387,6 +1387,7 @@ components:
       enum:
         - GESUCH
         - AENDERUNG
+        - FREIWILLIG_DARLEHEN
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object

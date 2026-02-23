@@ -593,6 +593,7 @@
   "sachbearbeitung-app.infos.protokoll.table.kommentar": "Commentaire",
   "sachbearbeitung-app.infos.protokoll.table.typ.GESUCH": "Demande",
   "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Modification",
+  "sachbearbeitung-app.infos.protokoll.table.typ.FREIWILLIG_DARLEHEN": "Prêt volontaire",
 
   "sachbearbeitung-app.infos.notizen.description": "Un aperçu de toutes les notes",
   "sachbearbeitung-app.infos.notizen.title": "Notes",

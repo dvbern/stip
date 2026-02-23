@@ -19,5 +19,6 @@ package ch.dvbern.stip.api.statusprotokoll.type;
 
 public enum StatusprotokollEntryTyp {
     GESUCH,
-    AENDERUNG
+    AENDERUNG,
+    FREIWILLIG_DARLEHEN
 }

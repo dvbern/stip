@@ -318,6 +318,14 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Refusé",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Documents manquants",
 
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.null.to.IN_BEARBEITUNG_GS": "Créé",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_BEARBEITUNG_GS.to.null": "Supprimé",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_FREIGABE.to.ABGELEHNT": "Refusé",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_FREIGABE.to.AKZEPTIERT": "Accepté",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Saisi",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Rejeté",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Libéré",
+
   "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "En cours de vérification",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
