@@ -114,6 +114,9 @@ public class ApiClient {
     public TenantApiSpec tenant() {
         return TenantApiSpec.tenant(config.reqSpecSupplier);
     }
+    public UserConsentApiSpec userConsent() {
+        return UserConsentApiSpec.userConsent(config.reqSpecSupplier);
+    }
     public ValidationApiSpec validation() {
         return ValidationApiSpec.validation(config.reqSpecSupplier);
     }
