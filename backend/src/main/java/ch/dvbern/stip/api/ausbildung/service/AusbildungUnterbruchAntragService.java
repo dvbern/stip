@@ -36,7 +36,6 @@ import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -64,7 +63,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class AusbildungUnterbruchAntragService {
     private final AusbildungUnterbruchAntragRepository ausbildungUnterbruchAntragRepository;
     private final AusbildungUnterbruchAntragMapper ausbildungUnterbruchAntragMapper;
-    private final GesuchService gesuchService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3;
     private final ConfigService configService;

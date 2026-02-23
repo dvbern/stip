@@ -115,7 +115,7 @@ public class DarlehenService {
     private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
-    private void createDarlehenBuchhaltungEntry(
+    private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
         final Fall fall,
         final Dokument dokument,
         final Integer betrag,
@@ -128,6 +128,7 @@ public class DarlehenService {
         darlehenBuchhaltungEntry.setBetrag(betrag);
         darlehenBuchhaltungEntryRepository.persist(darlehenBuchhaltungEntry);
 
+        return darlehenBuchhaltungEntry;
     }
 
     public ByteArrayOutputStream createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
@@ -224,12 +225,13 @@ public class DarlehenService {
             darlehen.getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
         );
 
-        createDarlehenBuchhaltungEntry(
+        final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
             darlehen.getFall(),
             darlehensVerfuegung,
             darlehen.getBetrag(),
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
         );
+        darlehen.setDarlehenBuchhaltungEntry(darlehenBuchhaltungEntry);
     }
 
     @Transactional
@@ -251,12 +253,13 @@ public class DarlehenService {
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
 
-        createDarlehenBuchhaltungEntry(
+        final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
             darlehen.getFall(),
             darlehensVerfuegung,
             null,
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
         );
+        darlehen.setDarlehenBuchhaltungEntry(darlehenBuchhaltungEntry);
     }
 
     @Transactional

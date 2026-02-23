@@ -97,9 +97,10 @@
           zusammenfassung.totalNachKuerzungNachEinreichefrist === 0;
         @let hasKuerzungenUnterbruch =
           zusammenfassung.totalNachKuerzungUnterbruch || zusammenfassung.totalNachKuerzungUnterbruch === 0;
+        @let hasDarlehen = zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0;
 
         @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
-          <div class="d-flex justify-content-between fs-4 h4 mb-3">
+          <div class="d-flex justify-content-between fs-5 mb-3">
             <div>
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung') }}
             </div>
@@ -136,6 +137,33 @@
             </div>
           </div>
         }
+        @if (hasDarlehen) {
+          <div class="tw:flex tw:items-center fs-5 tw:mb-2 tw:mt-8">
+            <div>
+              {{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende') }}
+            </div>
+
+            <button
+              type="button"
+              (click)="eigenverdienstInfoDialog.toggle()"
+              class="dv-icon-button dv-icon-button-md text-info"
+              [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+            >
+              <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+            </button>
+            <div
+              dvSharedUiInfoDialog
+              [forceDialogPosition]="true"
+              [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+              [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
+              [dialogMessageParams]="{
+                einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
+              }"
+              #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
+              class="d-none"
+            ></div>
+          </div>
+        }
         <div class="d-flex justify-content-between fs-4 h4">
           <div>
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium') }}
@@ -144,8 +172,8 @@
             {{ zusammenfassung.berechnungStipendium | formatChf }}
           </div>
         </div>
-        @if (zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0) {
-          <div class="d-flex justify-content-between fs-4 h4 mt-3">
+        @if (hasDarlehen) {
+          <div class="tw:flex tw:justify-between fs-4 h4 mt-3">
             <div>
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen') }}
             </div>

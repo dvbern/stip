@@ -1704,7 +1704,9 @@ components:
       required:
         - total
         - ausbildungskosten
+        - ausbildungskostenTotal
         - fahrkosten
+        - fahrkostenTotal
         - verpflegungskosten
         - grundbedarf
         - wohnkosten
@@ -1720,7 +1722,11 @@ components:
           type: integer
         ausbildungskosten:
           type: integer
+        ausbildungskostenTotal:
+          type: integer
         fahrkosten:
+          type: integer
+        fahrkostenTotal:
           type: integer
         verpflegungskosten:
           type: integer
@@ -1735,6 +1741,8 @@ components:
         medizinischeGrundversorgungTotal:
           type: integer
         fahrkostenPartner:
+          type: integer
+        fahrkostenPartnerTotal:
           type: integer
         verpflegungPartner:
           type: integer

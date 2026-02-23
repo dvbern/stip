@@ -17,13 +17,16 @@ import { PersonValueItem } from './personValueItem';
 export interface PersoenlichesBudgetresultatKosten { 
     total: number;
     ausbildungskosten: number;
+    ausbildungskostenTotal: number;
     fahrkosten: number;
+    fahrkostenTotal: number;
     verpflegungskosten: number;
     grundbedarf: number;
     wohnkosten: number;
     medizinischeGrundversorgung: Array<PersonValueItem>;
     medizinischeGrundversorgungTotal: number;
     fahrkostenPartner?: number;
+    fahrkostenPartnerTotal?: number;
     verpflegungPartner?: number;
     betreuungskostenKinder: number;
     kantonsGemeindesteuern: number;

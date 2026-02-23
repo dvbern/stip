@@ -305,7 +305,7 @@ export class UploadStore {
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );
-              case 'SIMPLE':
+              case 'GENERIC_DOKUMENT':
                 return EMPTY;
               default:
                 assertUnreachable(dokument);
@@ -380,7 +380,7 @@ export class UploadStore {
                 return this.documentService.deleteUnterschriftenblattDokument$(
                   ...deleteCallParams,
                 );
-              case 'SIMPLE':
+              case 'GENERIC_DOKUMENT':
                 switch (action.dokument.dokumentTyp) {
                   case 'ausbildungUnterbruch':
                     return this.ausbildungService.deleteAusbildungUnterbruchAntragDokument$(
@@ -589,7 +589,7 @@ export class UploadStore {
             },
             ...serviceDefaultParams,
           );
-        case 'SIMPLE': {
+        case 'GENERIC_DOKUMENT': {
           switch (dokument.dokumentTyp) {
             case 'ausbildungUnterbruch':
               return this.ausbildungService.createAusbildungUnterbruchAntragDokument$(

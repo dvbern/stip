@@ -15,6 +15,7 @@ import {
 } from '@angular/material/dialog';
 import { Subscription, fromEvent, throttleTime } from 'rxjs';
 
+import { TranslocoHashMap } from '@dv/shared/model/type-util';
 import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 
 import {
@@ -29,7 +30,9 @@ import {
 })
 export class SharedUiInfoDialogDirective implements OnDestroy {
   @Input({ required: true }) dialogTitleKey = '';
+  @Input() dialogTitleParams?: TranslocoHashMap;
   @Input({ required: true }) dialogMessageKey = '';
+  @Input() dialogMessageParams?: TranslocoHashMap;
   @Input() forceDialogPosition = false;
 
   containerRef = inject(ViewContainerRef);
@@ -69,7 +72,9 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {
         titleKey: this.dialogTitleKey,
+        titleParams: this.dialogTitleParams,
         messageKey: this.dialogMessageKey,
+        messageParams: this.dialogMessageParams,
       },
       id: 'info-dialog',
     };

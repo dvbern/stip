@@ -89,15 +89,6 @@
             <div class="tw:text-gray-500 tw:text-sm">
               {{ t('hinweis.hoechstwerte') }}
             </div>
-
-            <!-- Hinweis 3. Eigenverdienst -->
-            <div class="tw:text-gray-500 tw:text-sm">
-              {{
-                t('hinweis.eigenverdienst', {
-                  einkommensfreibetrag: stammdatenSig().einkommensfreibetrag | formatChf,
-                })
-              }}
-            </div>
           </div>
         }
         @case ('familien') {

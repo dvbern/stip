@@ -60,7 +60,7 @@ export class SharedPatternDocumentUploadEntryComponent {
     switch (upload.dokumentModel.art) {
       case 'DARLEHEN_DOKUMENT':
         return { type: 'darlehen', id: document.file.id };
-      case 'SIMPLE':
+      case 'GENERIC_DOKUMENT':
         return { type: 'ausbildungUnterbruch', id: document.file.id };
       case 'CUSTOM_DOKUMENT':
       case 'GESUCH_DOKUMENT':

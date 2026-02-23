@@ -42,6 +42,16 @@
         </td>
       </ng-container>
 
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>
+          {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.status') }}
+        </th>
+        <td mat-cell *dvMatCellDef="let unterbruch; dataSource: gesuchUnterbrechenSig()" class="tw:whitespace-nowrap">
+          {{ t(`shared.ausbildungUnterbruchAntrag.status.${unterbruch.status}`) }}
+        </td>
+      </ng-container>
+
       <!-- Kommentar -->
       <ng-container matColumnDef="kommentar">
         <th class="tw:min-w-80" mat-header-cell *matHeaderCellDef>

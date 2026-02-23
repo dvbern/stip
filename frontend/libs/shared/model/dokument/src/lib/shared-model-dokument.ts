@@ -18,7 +18,10 @@ import {
 } from '@dv/shared/model/permission-state';
 import { Extends, assertUnreachable } from '@dv/shared/model/type-util';
 
-type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT' | 'SIMPLE';
+type AvailableDokumentArt =
+  | DokumentArt
+  | 'DARLEHEN_DOKUMENT'
+  | 'GENERIC_DOKUMENT';
 
 export type SharedModelStandardGesuchDokument = {
   art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
@@ -54,9 +57,9 @@ export type SharedModelDarlehenDokument = {
   gesuchDokument?: DarlehenDokument;
 };
 
-export type SharedModelSimpleDokument = {
+export type SharedModelGenericDokument = {
   readonly: boolean;
-  art: Extends<AvailableDokumentArt, 'SIMPLE'>;
+  art: Extends<AvailableDokumentArt, 'GENERIC_DOKUMENT'>;
   dokumentTyp: 'ausbildungUnterbruch';
   id: string;
 };
@@ -90,7 +93,7 @@ export type SharedModelGesuchDokument =
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument
   | SharedModelDarlehenDokument
-  | SharedModelSimpleDokument;
+  | SharedModelGenericDokument;
 
 export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
@@ -126,7 +129,7 @@ export interface CustomDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoText;
 }
 
-export interface SimpleDokumentOptions extends BaseDocumentOptions {
+export interface GenericDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoTranslatable;
 }
 
@@ -134,7 +137,7 @@ export type DokumentOptions =
   | StandardDokumentOptions
   | CustomDokumentOptions
   | DarlehenDokumentOptions
-  | SimpleDokumentOptions;
+  | GenericDokumentOptions;
 
 // Darlehen Dokument
 
@@ -194,7 +197,7 @@ export const isUploadable = (
     case 'DARLEHEN_DOKUMENT': {
       return dokumentModel.permissions.canUploadDocuments;
     }
-    case 'SIMPLE': {
+    case 'GENERIC_DOKUMENT': {
       return !dokumentModel.readonly;
     }
     default:

@@ -46,7 +46,7 @@ public class CreatePermutationUtil {
             Arguments.of(
                 applyNew.apply(10),
                 applyOld.apply(null),
-                expected
+                null
             ),
             Arguments.of(
                 applyNew.apply(null),
@@ -66,7 +66,7 @@ public class CreatePermutationUtil {
             Arguments.of(
                 applyNew.apply(10),
                 applyOld.apply(0),
-                expected
+                null
             ),
             Arguments.of(
                 applyNew.apply(0),

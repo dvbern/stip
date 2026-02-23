@@ -1026,6 +1026,8 @@ FreiwilligDarlehen:
       type: boolean
     timestampErstellt:
       type: string
+    verfuegung:
+      $ref: '#/Dokument'
 DarlehenGrund:
   enum:
     - NICHT_BERECHTIGT

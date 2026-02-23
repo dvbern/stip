@@ -78,7 +78,7 @@ export class AusbildungUnterbrechenComponent {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'id' });
 
-  gesuchTableColumns = ['timestamp', 'user', 'kommentar', 'actions'];
+  gesuchTableColumns = ['timestamp', 'user', 'status', 'kommentar', 'actions'];
 
   gesuchUnterbrechenSig = computed(() => {
     return new MatTableDataSource(this.unterbruchListSig());

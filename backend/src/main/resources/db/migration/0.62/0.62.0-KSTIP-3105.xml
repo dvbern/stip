@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="philipp.schaerer (generated)" id="1771503262944-517">
+      <addColumn tableName="freiwillig_darlehen">
+         <column name="darlehen_buchhaltung_entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1771503262944-518">
+      <addColumn tableName="freiwillig_darlehen_aud">
+         <column name="darlehen_buchhaltung_entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1771503262944-519">
+      <addUniqueConstraint columnNames="darlehen_buchhaltung_entry_id"
+                           constraintName="UC_FREIWILLIG_DARLEHENDARLEHEN_BUCHHALTUNG_ENTRY_ID_COL"
+                           tableName="freiwillig_darlehen"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1771503262944-520">
+      <addForeignKeyConstraint baseColumnNames="darlehen_buchhaltung_entry_id"
+                               baseTableName="freiwillig_darlehen"
+                               constraintName="FK_freiwillig_darlehen_darlehen_buchhaltung_entry_id"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="darlehen_buchhaltung_entry"
+                               validate="true"/>
+   </changeSet>
+</databaseChangeLog>

@@ -27,7 +27,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer total;
   private @Valid Integer ausbildungskosten;
+  private @Valid Integer ausbildungskostenTotal;
   private @Valid Integer fahrkosten;
+  private @Valid Integer fahrkostenTotal;
   private @Valid Integer verpflegungskosten;
   private @Valid Integer grundbedarf;
   private @Valid Integer wohnkosten;
@@ -38,6 +40,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer bundessteuern;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
+  private @Valid Integer fahrkostenPartnerTotal;
   private @Valid Integer verpflegungPartner;
 
   /**
@@ -80,6 +83,25 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
+  public PersoenlichesBudgetresultatKostenDto ausbildungskostenTotal(Integer ausbildungskostenTotal) {
+    this.ausbildungskostenTotal = ausbildungskostenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("ausbildungskostenTotal")
+  @NotNull
+  public Integer getAusbildungskostenTotal() {
+    return ausbildungskostenTotal;
+  }
+
+  @JsonProperty("ausbildungskostenTotal")
+  public void setAusbildungskostenTotal(Integer ausbildungskostenTotal) {
+    this.ausbildungskostenTotal = ausbildungskostenTotal;
+  }
+
+  /**
+   **/
   public PersoenlichesBudgetresultatKostenDto fahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
     return this;
@@ -95,6 +117,25 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   @JsonProperty("fahrkosten")
   public void setFahrkosten(Integer fahrkosten) {
     this.fahrkosten = fahrkosten;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatKostenDto fahrkostenTotal(Integer fahrkostenTotal) {
+    this.fahrkostenTotal = fahrkostenTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("fahrkostenTotal")
+  @NotNull
+  public Integer getFahrkostenTotal() {
+    return fahrkostenTotal;
+  }
+
+  @JsonProperty("fahrkostenTotal")
+  public void setFahrkostenTotal(Integer fahrkostenTotal) {
+    this.fahrkostenTotal = fahrkostenTotal;
   }
 
   /**
@@ -304,6 +345,24 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
+  public PersoenlichesBudgetresultatKostenDto fahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
+    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("fahrkostenPartnerTotal")
+  public Integer getFahrkostenPartnerTotal() {
+    return fahrkostenPartnerTotal;
+  }
+
+  @JsonProperty("fahrkostenPartnerTotal")
+  public void setFahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
+    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
+  }
+
+  /**
+   **/
   public PersoenlichesBudgetresultatKostenDto verpflegungPartner(Integer verpflegungPartner) {
     this.verpflegungPartner = verpflegungPartner;
     return this;
@@ -332,7 +391,9 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     PersoenlichesBudgetresultatKostenDto persoenlichesBudgetresultatKosten = (PersoenlichesBudgetresultatKostenDto) o;
     return Objects.equals(this.total, persoenlichesBudgetresultatKosten.total) &&
         Objects.equals(this.ausbildungskosten, persoenlichesBudgetresultatKosten.ausbildungskosten) &&
+        Objects.equals(this.ausbildungskostenTotal, persoenlichesBudgetresultatKosten.ausbildungskostenTotal) &&
         Objects.equals(this.fahrkosten, persoenlichesBudgetresultatKosten.fahrkosten) &&
+        Objects.equals(this.fahrkostenTotal, persoenlichesBudgetresultatKosten.fahrkostenTotal) &&
         Objects.equals(this.verpflegungskosten, persoenlichesBudgetresultatKosten.verpflegungskosten) &&
         Objects.equals(this.grundbedarf, persoenlichesBudgetresultatKosten.grundbedarf) &&
         Objects.equals(this.wohnkosten, persoenlichesBudgetresultatKosten.wohnkosten) &&
@@ -343,12 +404,13 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
+        Objects.equals(this.fahrkostenPartnerTotal, persoenlichesBudgetresultatKosten.fahrkostenPartnerTotal) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, fahrkosten, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, fahrkostenPartnerTotal, verpflegungPartner);
   }
 
   @Override
@@ -358,7 +420,9 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    ausbildungskosten: ").append(toIndentedString(ausbildungskosten)).append("\n");
+    sb.append("    ausbildungskostenTotal: ").append(toIndentedString(ausbildungskostenTotal)).append("\n");
     sb.append("    fahrkosten: ").append(toIndentedString(fahrkosten)).append("\n");
+    sb.append("    fahrkostenTotal: ").append(toIndentedString(fahrkostenTotal)).append("\n");
     sb.append("    verpflegungskosten: ").append(toIndentedString(verpflegungskosten)).append("\n");
     sb.append("    grundbedarf: ").append(toIndentedString(grundbedarf)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
@@ -369,6 +433,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
+    sb.append("    fahrkostenPartnerTotal: ").append(toIndentedString(fahrkostenPartnerTotal)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("}");
     return sb.toString();
