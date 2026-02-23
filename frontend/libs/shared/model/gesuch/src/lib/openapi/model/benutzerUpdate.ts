@@ -15,5 +15,6 @@ export interface BenutzerUpdate {
     vorname: string;
     nachname: string;
     benutzereinstellungen?: BenutzereinstellungenUpdate;
+    nutzungsbedingungenAkzeptiert?: boolean;
 }
 

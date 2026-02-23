@@ -3,12 +3,13 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
-  selector: 'dv-shared-dialog-user-consent',
+  selector: 'dv-shared-dialog-nutzungsbedingungen',
   imports: [TranslocoPipe],
-  templateUrl: './shared-dialog-user-consent.component.html',
+  templateUrl: './shared-dialog-nutzungsbedingungen.component.html',
+  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedDialogUserConsentComponent {
+export class SharedDialogNutzungsbedingungenComponent {
   private dialogRef = inject(MatDialogRef);
 
   cancel() {
@@ -20,8 +21,8 @@ export class SharedDialogUserConsentComponent {
   }
 
   static open(matDialog: MatDialog) {
-    return matDialog.open<SharedDialogUserConsentComponent>(
-      SharedDialogUserConsentComponent,
+    return matDialog.open<SharedDialogNutzungsbedingungenComponent>(
+      SharedDialogNutzungsbedingungenComponent,
       {
         panelClass: 'dv-user-consent-dialog',
         width: '800px',

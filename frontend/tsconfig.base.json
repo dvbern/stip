@@ -109,14 +109,12 @@
       "@dv/shared/data-access/notification": ["libs/shared/data-access/notification/src/index.ts"],
       "@dv/shared/data-access/plz-ort": ["libs/shared/data-access/plz-ort/src/index.ts"],
       "@dv/shared/data-access/sozialdienst": ["libs/shared/data-access/sozialdienst/src/index.ts"],
-      "@dv/shared/data-access/user-consent": ["libs/shared/data-access/user-consent/src/index.ts"],
       "@dv/shared/data-access/versteckte-eltern": ["libs/shared/data-access/versteckte-eltern/src/index.ts"],
       "@dv/shared/dialog/change-gesuchsperiode": ["libs/shared/dialog/change-gesuchsperiode/src/index.ts"],
       "@dv/shared/dialog/create-ausbildung": ["libs/shared/dialog/create-ausbildung/src/index.ts"],
       "@dv/shared/dialog/edit-dokumenten-nachfrist": ["libs/shared/dialog/edit-dokumenten-nachfrist/src/index.ts"],
       "@dv/shared/dialog/einreichedatum-aendern": ["libs/shared/dialog/einreichedatum-aendern/src/index.ts"],
       "@dv/shared/dialog/tranche-erstellen": ["libs/shared/dialog/tranche-erstellen/src/index.ts"],
-      "@dv/shared/dialog/user-consent": ["libs/shared/dialog/user-consent/src/index.ts"],
       "@dv/shared/event/gesuch-dokumente": ["libs/shared/event/gesuch-dokumente/src/index.ts"],
       "@dv/shared/event/gesuch-form-abschluss": ["libs/shared/event/gesuch-form-abschluss/src/index.ts"],
       "@dv/shared/event/gesuch-form-auszahlung": ["libs/shared/event/gesuch-form-auszahlung/src/index.ts"],
@@ -296,7 +294,8 @@
       "@dv/sozialdienst-app/pattern/administration-layout": ["libs/sozialdienst-app/pattern/administration-layout/src/index.ts"],
       "@dv/sozialdienst-app/pattern/gesuch-step-layout": ["libs/sozialdienst-app/pattern/gesuch-step-layout/src/index.ts"],
       "@dv/sozialdienst-app/ui/adv-transloco-directive": ["libs/sozialdienst-app/ui/adv-transloco-directive/src/index.ts"],
-      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
+      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"],
+      "@dv/shared/dialog/nutzungsbedingungen": ["libs/shared/dialog/nutzungsbedingungen/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

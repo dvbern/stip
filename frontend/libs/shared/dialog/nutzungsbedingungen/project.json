@@ -1,7 +1,7 @@
 {
-  "name": "shared-dialog-user-consent",
+  "name": "shared-dialog-nutzungsbedingungen",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/dialog/user-consent/src",
+  "sourceRoot": "libs/shared/dialog/nutzungsbedingungen/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:dialog", "scope:shared"],
@@ -9,7 +9,7 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/dialog/user-consent/tsconfig.lib.json"
+        "tsConfig": "libs/shared/dialog/nutzungsbedingungen/tsconfig.lib.json"
       }
     }
   }

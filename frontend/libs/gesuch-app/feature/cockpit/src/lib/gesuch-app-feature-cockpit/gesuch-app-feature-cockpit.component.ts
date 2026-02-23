@@ -24,10 +24,9 @@ import {
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
-import { UserConsentStore } from '@dv/shared/data-access/user-consent';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
-import { SharedDialogUserConsentComponent } from '@dv/shared/dialog/user-consent';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import {
@@ -83,7 +82,6 @@ export class GesuchAppFeatureCockpitComponent {
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
-  userConsentStore = inject(UserConsentStore);
   darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
@@ -130,36 +128,35 @@ export class GesuchAppFeatureCockpitComponent {
       }
     });
 
-    effect(() => {
-      const dashboard = this.dashboardStore.dashboardViewSig();
+    // effect(() => {
+    //   const dashboard = this.dashboardStore.dashboardViewSig();
 
-      if (dashboard?.canCreateAusbildung) {
-        this.userConsentStore.getUserConsent$();
-      }
-    });
+    //   if (dashboard?.canCreateAusbildung) {
+    //     this.userConsentStore.getUserConsent$();
+    //   }
+    // });
   }
 
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    const userHasGivenConsent =
-      this.userConsentStore.userConsentViewSig().userHasGivenConsent;
+    const userHasGivenConsent = true; // TODO: replace with actual consent check: this.userConsentStore.userConsentSig()?.consentGiven
 
     if (!userHasGivenConsent) {
-      SharedDialogUserConsentComponent.open(this.dialog)
+      SharedDialogNutzungsbedingungenComponent.open(this.dialog)
         .afterClosed()
         .subscribe((consentGiven) => {
           if (consentGiven) {
-            this.userConsentStore.createUserConsent$({
-              req: { createUserConsent: { consentGiven: true } },
-              onSuccess: () => {
-                SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
-                  .afterClosed()
-                  .subscribe(() => {
-                    this.dashboardStore.loadDashboard$();
-                  });
-              },
-            });
+            // this.userConsentStore.createUserConsent$({
+            //   req: { createUserConsent: { consentGiven: true } },
+            //   onSuccess: () => {
+            //     SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+            //       .afterClosed()
+            //       .subscribe(() => {
+            //         this.dashboardStore.loadDashboard$();
+            //       });
+            //   },
+            // });
           }
         });
     } else {

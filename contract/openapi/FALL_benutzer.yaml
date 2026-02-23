@@ -339,6 +339,8 @@ components:
           type: string
         benutzereinstellungen:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:

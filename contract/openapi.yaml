@@ -67,8 +67,6 @@ tags:
     x-displayName: Gesuchsperiode
   - name: Land
     x-displayName: Land
-  - name: UserConsent
-    x-displayName: UserConsent
 paths:
   /config/deployment:
     get:
@@ -6066,47 +6064,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /userconsent:
-    get:
-      tags:
-        - UserConsent
-      summary: Get user consent by user ID
-      operationId: getUserConsent
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserConsent'
-        '404':
-          description: User consent not found
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-    post:
-      tags:
-        - UserConsent
-      summary: Create user consent
-      operationId: createUserConsent
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateUserConsent'
-      responses:
-        '200':
-          description: Successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/UserConsent'
-        '400':
-          description: Invalid input
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
 components:
   securitySchemes:
     auth-uat-bern:
@@ -8239,6 +8196,8 @@ components:
           type: string
         benutzereinstellungen:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -10794,24 +10753,6 @@ components:
           type: string
         enKurzform:
           type: string
-    CreateUserConsent:
-      type: object
-      properties:
-        consentGiven:
-          type: boolean
-      required:
-        - consentGiven
-    UserConsent:
-      type: object
-      properties:
-        consentGiven:
-          type: boolean
-        timestampErstellt:
-          type: string
-          format: date-time
-      required:
-        - consentGiven
-        - timestampErstellt
   responses:
     Unauthorized:
       content:

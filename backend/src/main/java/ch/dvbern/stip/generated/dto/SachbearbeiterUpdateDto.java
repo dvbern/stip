@@ -31,6 +31,7 @@ public class SachbearbeiterUpdateDto  implements Serializable {
   private @Valid String funktionFr;
   private @Valid List<String> sachbearbeiterRollen = new ArrayList<>();
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid String redirectUri;
 
   /**
@@ -202,6 +203,24 @@ public class SachbearbeiterUpdateDto  implements Serializable {
 
   /**
    **/
+  public SachbearbeiterUpdateDto nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+  
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
+  /**
+   **/
   public SachbearbeiterUpdateDto redirectUri(String redirectUri) {
     this.redirectUri = redirectUri;
     return this;
@@ -236,12 +255,13 @@ public class SachbearbeiterUpdateDto  implements Serializable {
         Objects.equals(this.funktionFr, sachbearbeiterUpdate.funktionFr) &&
         Objects.equals(this.sachbearbeiterRollen, sachbearbeiterUpdate.sachbearbeiterRollen) &&
         Objects.equals(this.benutzereinstellungen, sachbearbeiterUpdate.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiterUpdate.nutzungsbedingungenAkzeptiert) &&
         Objects.equals(this.redirectUri, sachbearbeiterUpdate.redirectUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, benutzereinstellungen, redirectUri);
+    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, benutzereinstellungen, nutzungsbedingungenAkzeptiert, redirectUri);
   }
 
   @Override
@@ -257,6 +277,7 @@ public class SachbearbeiterUpdateDto  implements Serializable {
     sb.append("    funktionFr: ").append(toIndentedString(funktionFr)).append("\n");
     sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();
