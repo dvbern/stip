@@ -90,6 +90,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     endDate: [<string | undefined>undefined, Validators.required],
     kommentarGS: [<string | undefined>undefined, Validators.required],
   });
+  formWasSubmittedSig = signal(false);
   unterbruchDokumenteOptionsSig = computed(() => {
     const allowTypes =
       this.config().deploymentConfig?.allowedMimeTypes?.join(',');
@@ -116,6 +117,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   });
 
   constructor() {
+    this.formUtils.registerFormForUnsavedCheck(this);
     effect(() => {
       const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
       if (!ausbildungUnterbruchAntragId) {
@@ -157,6 +159,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
   }
 
   unterbruchEinreichen() {
+    this.formWasSubmittedSig.set(true);
     const hasMissingDocuments = this.hasMissingDocumentsSig();
     const ausbildungUnterbruchAntragId = this.ausbildungUnterbruchIdSig();
     this.form.markAllAsTouched();
@@ -185,6 +188,7 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
 
   private navigateBack() {
     const fallId = this.fallIdSig();
+    this.form.markAsPristine();
     this.router.navigate(fallId ? ['/fall', fallId] : ['/']);
   }
 }

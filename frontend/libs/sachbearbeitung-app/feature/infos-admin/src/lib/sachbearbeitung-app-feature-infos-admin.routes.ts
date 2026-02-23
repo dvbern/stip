@@ -38,7 +38,7 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: 'ausbildung-abschliessen',
+        redirectTo: 'ausbildung-unterbrechen',
       },
     ],
   },

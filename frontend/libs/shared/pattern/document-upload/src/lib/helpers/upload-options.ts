@@ -5,8 +5,8 @@ import {
   CustomDokumentOptions,
   DokumentInfoTranslatable,
   DokumentOptions,
-  SharedModelSimpleDokument,
-  SimpleDokumentOptions,
+  GenericDokumentOptions,
+  SharedModelGenericDokument,
   StandardDokumentOptions,
 } from '@dv/shared/model/dokument';
 import {
@@ -511,17 +511,17 @@ export function createCustomDokumentOptions(options: {
 export function createSimpleDokumentOptions(options: {
   allowTypes: string;
   id: string;
-  dokumentTyp: SharedModelSimpleDokument['dokumentTyp'];
+  dokumentTyp: SharedModelGenericDokument['dokumentTyp'];
   initialDokumente: Dokument[];
   info: DokumentInfoTranslatable;
   readonly: boolean;
-}): SimpleDokumentOptions {
+}): GenericDokumentOptions {
   const { allowTypes, id, initialDokumente, dokumentTyp, info, readonly } =
     options;
   return {
     allowTypes,
     dokument: {
-      art: 'SIMPLE',
+      art: 'GENERIC_DOKUMENT',
       readonly,
       dokumentTyp,
       id,

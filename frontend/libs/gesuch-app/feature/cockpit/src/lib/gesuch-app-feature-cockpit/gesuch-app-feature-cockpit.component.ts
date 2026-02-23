@@ -106,7 +106,7 @@ export class GesuchAppFeatureCockpitComponent {
     );
   });
 
-  isBusySig = computed(() => {
+  isUnterbruchOrAenderungPendingSig = computed(() => {
     const ausbildungUnterbruchPending = isPending(
       this.ausbildungStore.ausbildungUnterbrechenResponse(),
     );

@@ -16,22 +16,28 @@
       }}
     </p>
   </div>
-  @if (ausbildung.canDelete) {
-    <button type="button" class="btn btn-outline-primary tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">
-      {{ t('shared.dashboard.ausbildung.delete') }}
-    </button>
-  }
-  @if (
-    ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
-  ) {
-    <button
-      type="button"
-      class="btn btn-outline-primary tw:ml-3 tw:h-min"
-      (click)="ausbildungUnterbrechen.emit(ausbildung.id)"
-    >
-      {{ t('shared.dashboard.ausbildung.unterbruch') }}
-    </button>
-  }
+  <div class="tw:flex tw:flex-col tw:gap-2">
+    @if (ausbildung.canDelete) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw:ml-3 tw:h-min"
+        (click)="deleteAusbildung.emit(ausbildung)"
+      >
+        {{ t('shared.dashboard.ausbildung.delete') }}
+      </button>
+    }
+    @if (
+      ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
+    ) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw:ml-3 tw:h-min"
+        (click)="ausbildungUnterbrechen.emit(ausbildung.id)"
+      >
+        {{ t('shared.dashboard.ausbildung.unterbruch') }}
+      </button>
+    }
+  </div>
 </div>
 
 <div class="tw:flex tw:flex-col tw:gap-6">

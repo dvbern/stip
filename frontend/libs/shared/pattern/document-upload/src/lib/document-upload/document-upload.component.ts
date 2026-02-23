@@ -133,7 +133,7 @@ export class SharedPatternDocumentUploadComponent {
   ): void {
     switch (dokument.art) {
       case 'DARLEHEN_DOKUMENT':
-      case 'SIMPLE':
+      case 'GENERIC_DOKUMENT':
         return;
     }
 

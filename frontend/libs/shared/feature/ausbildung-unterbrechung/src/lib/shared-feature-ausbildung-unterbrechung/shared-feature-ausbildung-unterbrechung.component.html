@@ -85,7 +85,7 @@
           }
         </label>
       </div>
-      @if (form.touched && hasMissingDocumentsSig()) {
+      @if (form.touched && formWasSubmittedSig() && hasMissingDocumentsSig()) {
         <mat-error class="tw:block! tw:col-span-2 tw:col-start-1">
           {{ t('shared.form.darlehen.error.missingDocuments') }}
         </mat-error>
