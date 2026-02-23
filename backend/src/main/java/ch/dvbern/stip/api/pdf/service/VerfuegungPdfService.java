@@ -723,7 +723,7 @@ public class VerfuegungPdfService {
             );
         } else {
             List<Anhangs> anhangs = new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER));
-            if (stipendien.getBerechnungDarlehen() > 0) {
+            if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
                 anhangs.add(Anhangs.DARLEHENS_VERFUEGUNG);
             }
             verfuegungsBrief = createVerfuegungMitAnspruchPdf(
@@ -757,7 +757,7 @@ public class VerfuegungPdfService {
 
             berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
 
-            if (stipendien.getBerechnungDarlehen() > 0) {
+            if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
                 darlehensVerfuegung =
                     Optional.ofNullable(
                         darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen())
