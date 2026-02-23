@@ -330,7 +330,7 @@ public class AusbildungUnterbruchAntragResourceTest {
             .body()
             .as(BerechnungsresultatDtoSpec.class);
 
-        assertThat(berechnung.getAnzahlMonateEinreichefrist(), is(3));
+        assertThat(berechnung.getAnzahlMonateUnterbruch(), is(3));
     }
 
     @Test
