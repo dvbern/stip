@@ -35,6 +35,7 @@ import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -67,7 +68,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Setter
 public class FreiwilligDarlehen extends AbstractMandantEntity {
     @Nullable
-    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
         name = "darlehen_buchhaltung_entry_id",
         foreignKey = @ForeignKey(name = "FK_freiwillig_darlehen_darlehen_buchhaltung_entry_id"),
@@ -76,12 +77,12 @@ public class FreiwilligDarlehen extends AbstractMandantEntity {
     private DarlehenBuchhaltungEntry darlehenBuchhaltungEntry;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "fall_id", nullable = false)
     private Fall fall;
 
     @NotNull
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_id", nullable = false)
     private Gesuch relatedGesuch;
 
