@@ -41,12 +41,13 @@
   </div>
 
   <!-- create a recursive template of the block below -->
+  <!-- todo: move into component for typesafety? -->
   <!-- Recursive template for navigation items -->
   <ng-template #navItems let-items="items">
     @for (item of items; track item.id) {
-      @if (!item.visible) {
-        @switch (item.type) {
-          @case ('menu') {
+      @switch (item.type) {
+        @case ('menu') {
+          @if (item.children.length) {
             <button
               type="button"
               class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
@@ -66,47 +67,47 @@
               </div>
             </mat-menu>
           }
-          @case ('link') {
-            <a
-              [routerLink]="item.route"
-              routerLinkActive="active"
-              [queryParams]="item.queryParams"
-              class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-              [attr.data-testid]="item.testId"
-              [class.active]="item.active"
-            >
+        }
+        @case ('link') {
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [queryParams]="item.queryParams"
+            class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+            [attr.data-testid]="item.testId"
+            [class.active]="item.active"
+          >
+            @if (item.icon) {
+              <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
+            }
+            <span>{{ item.label }}</span>
+          </a>
+        }
+        @case ('action') {
+          <button
+            type="button"
+            class="btn tw:font-normal tw:shadow-none!"
+            [attr.data-testid]="item.testId"
+            (click)="item.action()"
+            [disabled]="item.disabled"
+          >
+            <div class="tw:flex tw:items-center tw:gap-2">
               @if (item.icon) {
-                <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
+                <i class="material-symbols-rounded">{{ item.icon }}</i>
               }
               <span>{{ item.label }}</span>
-            </a>
-          }
-          @case ('action') {
-            <button
-              type="button"
-              class="btn tw:font-normal tw:shadow-none!"
-              [attr.data-testid]="item.testId"
-              (click)="item.action()"
-              [disabled]="item.disabled"
-            >
-              <div class="tw:flex tw:items-center tw:gap-2">
-                @if (item.icon) {
-                  <i class="material-symbols-rounded">{{ item.icon }}</i>
-                }
-                <span>{{ item.label }}</span>
-              </div>
-            </button>
-          }
-          @case ('separator') {
-            @if (item.label) {
-              <div class="d-flex align-items-center text-muted small gap-2">
-                <hr class="flex-grow-1 tw:m-0!" />
-                {{ item.label }}
-                <hr class="flex-grow-1 tw:m-0!" />
-              </div>
-            } @else {
+            </div>
+          </button>
+        }
+        @case ('separator') {
+          @if (item.label) {
+            <div class="d-flex align-items-center text-muted small gap-2">
               <hr class="flex-grow-1 tw:m-0!" />
-            }
+              {{ item.label }}
+              <hr class="flex-grow-1 tw:m-0!" />
+            </div>
+          } @else {
+            <hr class="flex-grow-1 tw:m-0!" />
           }
         }
       }

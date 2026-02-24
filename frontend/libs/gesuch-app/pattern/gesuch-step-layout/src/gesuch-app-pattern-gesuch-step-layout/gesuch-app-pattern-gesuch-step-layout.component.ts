@@ -1,8 +1,11 @@
+import { CdkPortal, PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  OnDestroy,
+  ViewChild,
   computed,
   effect,
   inject,
@@ -28,6 +31,7 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
@@ -54,19 +58,33 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternAppHeaderPartsDirective,
     GesuchAppUiAdvTranslocoDirective,
     RouterLink,
+    PortalModule,
   ],
   templateUrl: './gesuch-app-pattern-gesuch-step-layout.component.html',
   styleUrls: ['./gesuch-app-pattern-gesuch-step-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SharedUtilHeaderService],
 })
-export class GesuchAppPatternGesuchStepLayoutComponent {
+export class GesuchAppPatternGesuchStepLayoutComponent
+  implements OnDestroy, AfterViewInit
+{
   stepSig = input<GesuchFormStep | undefined>(undefined, {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'step',
   });
 
-  navClicked = new EventEmitter<{ value: boolean }>();
+  // navClicked = new EventEmitter<{ value: boolean }>();
+  private navigationStore = inject(NavigationStore);
+
+  @ViewChild(CdkPortal)
+  portalContent: CdkPortal | null = null;
+
+  ngAfterViewInit(): void {
+    this.navigationStore.setPortal(this.portalContent);
+  }
+  ngOnDestroy() {
+    this.portalContent?.detach();
+  }
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);

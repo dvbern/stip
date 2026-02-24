@@ -69,6 +69,7 @@ export class SharedPatternGlobalHeaderComponent {
   private tenantCacheService = inject(SharedUtilTenantConfigService);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
   protected breakpointObserver = inject(BreakpointObserver);
+  navigationStore = inject(NavigationStore);
 
   itemsSig = computed(() => {
     const dynamicItems = this.navigationStore.navigationViewSig();
@@ -81,7 +82,6 @@ export class SharedPatternGlobalHeaderComponent {
   });
 
   languageSig = this.store.selectSignal(selectLanguage);
-  navigationStore = inject(NavigationStore);
   tenantSig = this.tenantCacheService.tenantInfoSig;
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();

@@ -5,12 +5,10 @@ import {
   computed,
   effect,
   inject,
-  input,
   untracked,
-  viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -63,10 +61,6 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
   template: `<mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" position="end">
       <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
-        <ng-content
-          select="[dvMobileNavContent]"
-          ngProjectAs="[dvMobileNavContent]"
-        ></ng-content>
       </dv-shared-pattern-mobile-sidenav>
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
@@ -85,11 +79,6 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternGesuchstellerLayoutComponent {
-  private sidenavSig = viewChild.required(MatSidenav);
-  // todo: refactor
-  // eslint-disable-next-line @angular-eslint/no-input-rename
-  closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
-
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
@@ -123,12 +112,6 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
   constructor() {
     this.fallStore.loadCurrentFall$();
-
-    effect(() => {
-      if (this.closeMenuSig()?.value) {
-        this.sidenavSig().close();
-      }
-    });
 
     effect(() => {
       const fallId = this.fallStore.currentFallViewSig()?.id;

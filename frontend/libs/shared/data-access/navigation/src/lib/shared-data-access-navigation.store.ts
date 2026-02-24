@@ -1,4 +1,9 @@
-import { Injectable, computed } from '@angular/core';
+import {
+  ComponentPortal,
+  DomPortal,
+  TemplatePortal,
+} from '@angular/cdk/portal';
+import { Injectable, computed, signal } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
 interface NavItemBase {
@@ -6,7 +11,6 @@ interface NavItemBase {
   label: string;
   icon?: string;
   active?: boolean | undefined;
-  visible?: boolean | undefined;
   testId?: string;
 }
 
@@ -38,20 +42,31 @@ export type NavItem =
   | NavItemSeparator;
 
 type NavigationState = {
-  navigationitems: NavItem[];
+  navigationItems: NavItem[];
 };
 
 const initialState: NavigationState = {
-  navigationitems: [],
+  navigationItems: [],
 };
+
+export type Portal<T = unknown> =
+  | TemplatePortal
+  | ComponentPortal<T>
+  | DomPortal;
 
 @Injectable({ providedIn: 'root' })
 export class NavigationStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
-  setNavigationItems = (navigationitems: NavItem[]) =>
-    patchState(this, { navigationitems });
+  setNavigationItems = (navigationItems: NavItem[]) =>
+    patchState(this, { navigationItems });
 
-  navigationViewSig = computed(() => this.navigationitems());
+  navigationViewSig = computed(() => this.navigationItems());
+
+  portalSig = signal<Portal | null>(null);
+
+  setPortal = (portal: Portal | null) => {
+    this.portalSig.set(portal);
+  };
 }

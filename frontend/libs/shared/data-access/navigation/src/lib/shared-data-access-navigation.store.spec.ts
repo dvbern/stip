@@ -18,10 +18,6 @@ describe('NavigationStore', () => {
   });
 
   it('has a initial remote data state', () => {
-    expect(store.navigation()).toEqual({
-      type: 'initial',
-      data: undefined,
-      error: undefined,
-    });
+    expect(store.navigationItems()).toEqual([]);
   });
 });
