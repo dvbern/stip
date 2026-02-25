@@ -247,7 +247,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
 
-        var aenderungen = gesuch.getAenderungen()
+        var aenderungen = gesuch.getAenderungs()
             .filter(
                 gesuchTranche -> GesuchTrancheStatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST
                     .contains(gesuchTranche.getStatus())
