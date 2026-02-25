@@ -96,7 +96,7 @@ export const getPersonInAusbildung = (
               ? getLandName(t, laender, personInAusbildung.nationalitaetId)
               : '',
           ],
-          ['shared.address.zipcode.label', adresse.plz],
+          ['shared.address.zipcode.label', personInAusbildung.heimatortPLZ],
           ['person.origin.label', personInAusbildung.heimatort],
           [
             'person.niederlassungsstatus.label',

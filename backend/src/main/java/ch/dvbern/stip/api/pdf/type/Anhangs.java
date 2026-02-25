@@ -22,7 +22,8 @@ import lombok.Getter;
 @Getter
 public enum Anhangs {
     RECHTSMITTELBELEHRUNG("stip.pdf.rechtsmittelbelehrung.title"),
-    BERECHNUNGSBLAETTER("stip.pdf.anhangs.berechnungsblaetter");
+    BERECHNUNGSBLAETTER("stip.pdf.anhangs.berechnungsblaetter"),
+    DARLEHENS_VERFUEGUNG("stip.pdf.anhangs.darlehensVerfuegung");
 
     private final String translationKey;
 

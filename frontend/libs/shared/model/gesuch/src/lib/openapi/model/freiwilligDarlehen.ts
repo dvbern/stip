@@ -11,6 +11,7 @@
  */
 import { DarlehenStatus } from './darlehenStatus';
 import { DarlehenGrund } from './darlehenGrund';
+import { Dokument } from './dokument';
 
 export interface FreiwilligDarlehen { 
     id: string;
@@ -26,6 +27,7 @@ export interface FreiwilligDarlehen {
     gruende?: Array<DarlehenGrund>;
     isDelegiert?: boolean;
     timestampErstellt?: string;
+    verfuegung?: Dokument;
 }
 
 

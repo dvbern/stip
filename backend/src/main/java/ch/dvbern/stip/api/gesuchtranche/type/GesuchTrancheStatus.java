@@ -51,6 +51,10 @@ public enum GesuchTrancheStatus {
         )
     );
 
+    public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
+        EnumSet.of(UEBERPRUEFEN, FEHLENDE_DOKUMENTE)
+    );
+
     public static final Set<GesuchTrancheStatus> GESUCHSTELLER_CAN_MODIFY_DOKUMENT = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_GS,

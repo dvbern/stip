@@ -126,6 +126,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       readonly,
       loading,
       gesuchStatus: gesuch?.gesuchStatus,
+      trancheStatus: gesuch?.gesuchTrancheToWorkWith.status,
     };
   });
 

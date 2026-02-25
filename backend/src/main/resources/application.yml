@@ -12,6 +12,9 @@ kstip:
     testcase-mimetypes:
       - 'application/x-tika-ooxml'
       - 'application/zip'
+  darlehen:
+    verfuegung-email:
+      recipient: 'ausbildungsdarlehen@mailbucket.dvbern.ch'
   pre-signed-request:
     issuer: 'https://stip.kibon.ch'
     expires-in-minutes: 1
@@ -95,8 +98,8 @@ kstip:
         - 'dv'
 
 quarkus:
-#  live-reload:
-#    instrumentation: true
+  #  live-reload:
+  #    instrumentation: true
   hibernate-validator:
     method-validation:
       # Seems to be an issue with hibernate-validator < 9.0
@@ -164,13 +167,13 @@ quarkus:
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
-#      sql: true
+    #      sql: true
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'
     mapping:
       format:
-        global: "ignore"
+        global: 'ignore'
   default-locale: 'de'
   security:
     jaxrs:
@@ -190,34 +193,33 @@ quarkus:
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
-# For the generation of the classes fot the NESKO SOAP interface
-#  cxf:
-#    codegen:
-#      wsdl2java:
-#        sap-BusinessPartnerCreate-params:
-#          includes: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
-#          wsdl-location: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
-#        sap-BusinessPartnerRead-params:
-#          includes: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
-#          wsdl-location: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
-#        sap-BusinessPartnerSearch-params:
-#          includes: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
-#          wsdl-location: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
-#        sap-BusinessPartnerChange-params:
-#          includes: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
-#          wsdl-location: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
-#        sap-GetImportStatus-params:
-#          includes: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
-#          wsdl-location: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
-#        sap-VendorPostingCreate-params:
-#          includes: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
-#          wsdl-location: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
-#        nesko-params:
-#          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
-#          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
-#          bindings:
-#            - 'src/main/resources/wsdl/nesko/binding.xml'
-
+  # For the generation of the classes fot the NESKO SOAP interface
+  #  cxf:
+  #    codegen:
+  #      wsdl2java:
+  #        sap-BusinessPartnerCreate-params:
+  #          includes: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
+  #          wsdl-location: 'wsdl/businesspartner/SST-009-BusinessPartnerCreate.wsdl'
+  #        sap-BusinessPartnerRead-params:
+  #          includes: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
+  #          wsdl-location: 'wsdl/businesspartner/SST-010-BusinessPartnerRead.wsdl'
+  #        sap-BusinessPartnerSearch-params:
+  #          includes: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
+  #          wsdl-location: 'wsdl/businesspartner/SST-074-BusinessPartnerSearch.wsdl'
+  #        sap-BusinessPartnerChange-params:
+  #          includes: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
+  #          wsdl-location: 'wsdl/businesspartner/SST-077-BusinessPartnerChange.wsdl'
+  #        sap-GetImportStatus-params:
+  #          includes: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
+  #          wsdl-location: 'wsdl/importstatus/SST-073-GetImportStatus.wsdl'
+  #        sap-VendorPostingCreate-params:
+  #          includes: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
+  #          wsdl-location: 'wsdl/vendorposting/SST-003-VendorPostingCreate.wsdl'
+  #        nesko-params:
+  #          includes: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+  #          wsdl-location: 'wsdl/nesko/StipendienAuskunftService.wsdl'
+  #          bindings:
+  #            - 'src/main/resources/wsdl/nesko/binding.xml'
 
   rest-client:
     GeoCollection-api:
@@ -229,7 +231,7 @@ quarkus:
   mp:
     jwt:
       verify:
-        issuer: "NONE"
+        issuer: 'NONE'
   quarkus:
     log:
       sentry:
@@ -281,7 +283,7 @@ quarkus:
   mp:
     jwt:
       verify:
-        issuer: "NONE"
+        issuer: 'NONE'
   quarkus:
     http:
       test-port: 0
@@ -317,8 +319,8 @@ quarkus:
       admin-client:
         server-url: ${keycloak.url}
         grant-type: password
-        username: "test"
-        password: "test"
+        username: 'test'
+        password: 'test'
     quartz:
       clustered: false
     liquibase:

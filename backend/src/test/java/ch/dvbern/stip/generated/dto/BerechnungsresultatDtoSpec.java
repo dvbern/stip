@@ -32,12 +32,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_TOTAL,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_STIPENDIUM,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_DARLEHEN,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_REDUZIERT,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -45,8 +47,20 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_YEAR = "year";
   private Integer year;
 
-  public static final String JSON_PROPERTY_BERECHNUNG_TOTAL = "berechnungTotal";
-  private Integer berechnungTotal;
+  public static final String JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG = "berechnungVorKuerzungUndTeilung";
+  private Integer berechnungVorKuerzungUndTeilung;
+
+  public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
+  private Integer totalNachKuerzungNachEinreichefrist;
+
+  public static final String JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST = "anzahlMonateEinreichefrist";
+  private Integer anzahlMonateEinreichefrist;
+
+  public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH = "totalNachKuerzungUnterbruch";
+  private Integer totalNachKuerzungUnterbruch;
+
+  public static final String JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH = "anzahlMonateUnterbruch";
+  private Integer anzahlMonateUnterbruch;
 
   public static final String JSON_PROPERTY_BERECHNUNG_STIPENDIUM = "berechnungStipendium";
   private Integer berechnungStipendium;
@@ -54,14 +68,8 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_BERECHNUNG_DARLEHEN = "berechnungDarlehen";
   private Integer berechnungDarlehen;
 
-  public static final String JSON_PROPERTY_BERECHNUNG_REDUZIERT = "berechnungReduziert";
-  private Integer berechnungReduziert;
-
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
-
-  public static final String JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE = "verminderteBerechnungMonate";
-  private Integer verminderteBerechnungMonate;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -92,29 +100,133 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
-  public BerechnungsresultatDtoSpec berechnungTotal(Integer berechnungTotal) {
+  public BerechnungsresultatDtoSpec berechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
     
-    this.berechnungTotal = berechnungTotal;
+    this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
     return this;
   }
 
    /**
-   * Die Summe der berechneten Stpendiums- und Darlehensansprüche für das Gesuch
-   * @return berechnungTotal
+   * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens
+   * @return berechnungVorKuerzungUndTeilung
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_TOTAL)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getBerechnungTotal() {
-    return berechnungTotal;
+  public Integer getBerechnungVorKuerzungUndTeilung() {
+    return berechnungVorKuerzungUndTeilung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_TOTAL)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungTotal(Integer berechnungTotal) {
-    this.berechnungTotal = berechnungTotal;
+  public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+    this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
+  }
+
+
+  public BerechnungsresultatDtoSpec totalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+    
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+    return this;
+  }
+
+   /**
+   * Die Summe nach der Kürzung der verspäteten Eingabe
+   * @return totalNachKuerzungNachEinreichefrist
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalNachKuerzungNachEinreichefrist() {
+    return totalNachKuerzungNachEinreichefrist;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+    this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+  }
+
+
+  public BerechnungsresultatDtoSpec anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+    
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
+    return this;
+  }
+
+   /**
+   * Die Anzahl Monate der verspäteten Eingabe
+   * @return anzahlMonateEinreichefrist
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAnzahlMonateEinreichefrist() {
+    return anzahlMonateEinreichefrist;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+    this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
+  }
+
+
+  public BerechnungsresultatDtoSpec totalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+    
+    this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
+    return this;
+  }
+
+   /**
+   * Die Summe nach der Kürzung des Unterbruchs der Ausbildung
+   * @return totalNachKuerzungUnterbruch
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalNachKuerzungUnterbruch() {
+    return totalNachKuerzungUnterbruch;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+    this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
+  }
+
+
+  public BerechnungsresultatDtoSpec anzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+    
+    this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
+    return this;
+  }
+
+   /**
+   * Die Anzahl Monate von dem Unterbruch der Ausbildung
+   * @return anzahlMonateUnterbruch
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getAnzahlMonateUnterbruch() {
+    return anzahlMonateUnterbruch;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAnzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+    this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
   }
 
 
@@ -154,9 +266,9 @@ public class BerechnungsresultatDtoSpec {
    * Berechneter Darlehensanspruch für das Gesuch
    * @return berechnungDarlehen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BERECHNUNG_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getBerechnungDarlehen() {
     return berechnungDarlehen;
@@ -164,35 +276,9 @@ public class BerechnungsresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BERECHNUNG_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBerechnungDarlehen(Integer berechnungDarlehen) {
     this.berechnungDarlehen = berechnungDarlehen;
-  }
-
-
-  public BerechnungsresultatDtoSpec berechnungReduziert(Integer berechnungReduziert) {
-    
-    this.berechnungReduziert = berechnungReduziert;
-    return this;
-  }
-
-   /**
-   * Berechneter Stpendiumsanspruch für das Gesuch nach allfälligem abzug wegen zuspäteinreichens
-   * @return berechnungReduziert
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_REDUZIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getBerechnungReduziert() {
-    return berechnungReduziert;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_REDUZIERT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungReduziert(Integer berechnungReduziert) {
-    this.berechnungReduziert = berechnungReduziert;
   }
 
 
@@ -229,32 +315,6 @@ public class BerechnungsresultatDtoSpec {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
-
-  public BerechnungsresultatDtoSpec verminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
-    
-    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
-    return this;
-  }
-
-   /**
-   * Die Anzahl von Monaten für welche die Berechnung stattfand
-   * @return verminderteBerechnungMonate
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getVerminderteBerechnungMonate() {
-    return verminderteBerechnungMonate;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VERMINDERTE_BERECHNUNG_MONATE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVerminderteBerechnungMonate(Integer verminderteBerechnungMonate) {
-    this.verminderteBerechnungMonate = verminderteBerechnungMonate;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -265,17 +325,19 @@ public class BerechnungsresultatDtoSpec {
     }
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
-        Objects.equals(this.berechnungTotal, berechnungsresultat.berechnungTotal) &&
+        Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
+        Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
+        Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
+        Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
+        Objects.equals(this.anzahlMonateUnterbruch, berechnungsresultat.anzahlMonateUnterbruch) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
-        Objects.equals(this.berechnungReduziert, berechnungsresultat.berechnungReduziert) &&
-        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
-        Objects.equals(this.verminderteBerechnungMonate, berechnungsresultat.verminderteBerechnungMonate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungTotal, berechnungStipendium, berechnungDarlehen, berechnungReduziert, tranchenBerechnungsresultate, verminderteBerechnungMonate);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate);
   }
 
   @Override
@@ -283,12 +345,14 @@ public class BerechnungsresultatDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
-    sb.append("    berechnungTotal: ").append(toIndentedString(berechnungTotal)).append("\n");
+    sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
+    sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
+    sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
+    sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");
+    sb.append("    anzahlMonateUnterbruch: ").append(toIndentedString(anzahlMonateUnterbruch)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
-    sb.append("    berechnungReduziert: ").append(toIndentedString(berechnungReduziert)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
-    sb.append("    verminderteBerechnungMonate: ").append(toIndentedString(verminderteBerechnungMonate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

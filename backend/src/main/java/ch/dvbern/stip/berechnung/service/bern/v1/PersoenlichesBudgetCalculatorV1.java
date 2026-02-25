@@ -85,15 +85,13 @@ public class PersoenlichesBudgetCalculatorV1 {
             .nachname(antragssteller.getNachname())
             .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
             .geburtsdatum(antragssteller.getGeburtsdatum())
-            .total(roundHalfUp(total)) // TODO Remove
+            .total(roundHalfUp(total))
             .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
             .fehlbetrag(roundHalfUp(fehlbetrag))
             .proKopfTeilung(proKopfTeilung)
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .budgetTranche(roundHalfUp(budgetTranche))
             .anzahlMonate(anzahlMonate)
-            .gesetzlichesDarlehen(0) // TODO KSTIP-2584: will be definable once gesetztliche Darlehen are defined
-            .gesetzlichesDarlehenStipendium(0) // TODO KSTIP-2584: same as above
             .anzahlPersonenImHaushalt(antragssteller.getAnzahlPersonenImHaushalt())
             .einnahmen(einnahmen)
             .kosten(kosten)
@@ -119,8 +117,9 @@ public class PersoenlichesBudgetCalculatorV1 {
         }
 
         var ausbildungskosten = antragssteller.getAusbildungskosten();
+        var ausbildungskostenTotal = ausbildungskosten;
         if (antragssteller.isVerheiratetKonkubinat()) {
-            ausbildungskosten = roundHalfUp(
+            ausbildungskostenTotal = roundHalfUp(
                 BigDecimal.valueOf(ausbildungskosten)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
@@ -130,15 +129,17 @@ public class PersoenlichesBudgetCalculatorV1 {
             antragssteller.getSteuern() + Objects.requireNonNullElse(antragssteller.getSteuernPartner(), 0);
 
         var fahrkosten = antragssteller.getFahrkosten();
+        var fahrkostenTotal = fahrkosten;
         var fahrkostenPartner = antragssteller.getFahrkostenPartner();
+        var fahrkostenPartnerTotal = fahrkostenPartner;
 
         if (antragssteller.isVerheiratetKonkubinat()) {
-            fahrkosten = roundHalfUp(
+            fahrkostenTotal = roundHalfUp(
                 BigDecimal.valueOf(fahrkosten)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
 
-            fahrkostenPartner = roundHalfUp(
+            fahrkostenPartnerTotal = roundHalfUp(
                 BigDecimal.valueOf(fahrkostenPartner)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
@@ -171,10 +172,10 @@ public class PersoenlichesBudgetCalculatorV1 {
             + InputUtils.sumNullables(
                 wohnkosten,
                 medizinischeGrundversorgungTotal,
-                ausbildungskosten,
+                ausbildungskostenTotal,
                 steuern,
-                fahrkosten,
-                fahrkostenPartner,
+                fahrkostenTotal,
+                fahrkostenPartnerTotal,
                 verpflegung,
                 verpflegungPartner,
                 fremdbetreuung,
@@ -185,13 +186,16 @@ public class PersoenlichesBudgetCalculatorV1 {
         return new PersoenlichesBudgetresultatKostenDto()
             .total(ausgaben)
             .ausbildungskosten(ausbildungskosten)
+            .ausbildungskostenTotal(ausbildungskostenTotal)
             .fahrkosten(fahrkosten)
+            .fahrkostenTotal(fahrkostenTotal)
             .verpflegungskosten(verpflegung)
             .grundbedarf(grundbedarf)
             .wohnkosten(wohnkosten)
             .medizinischeGrundversorgung(medizinischeGrundversorgungs)
             .medizinischeGrundversorgungTotal(medizinischeGrundversorgungTotal)
             .fahrkostenPartner(fahrkostenPartner)
+            .fahrkostenPartnerTotal(fahrkostenPartnerTotal)
             .verpflegungPartner(verpflegungPartner)
             .betreuungskostenKinder(fremdbetreuung)
             .kantonsGemeindesteuern(steuern)

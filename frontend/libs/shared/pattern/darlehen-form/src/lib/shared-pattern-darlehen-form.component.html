@@ -75,9 +75,11 @@
       </div>
 
       <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
-        <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
-          <span>{{ 'shared.cancel' | transloco }}</span>
-        </a>
+        @if (darlehenPermissionsSig()?.canWriteSb) {
+          <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
+            <span>{{ 'shared.cancel' | transloco }}</span>
+          </a>
+        }
 
         @if (darlehenPermissionsSig()?.canFreigeben) {
           <!-- darlehen Freigeben -->

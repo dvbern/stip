@@ -195,7 +195,10 @@ public class BerechnungRequestV1 implements CalculatorRequest {
             );
         }
 
-        final var antragssteller = AntragsstellerV1.buildFromDependants(gesuchFormular, piaWohntInElternHaushalt);
+        final var antragssteller = AntragsstellerV1.buildFromDependants(
+            gesuchFormular,
+            piaWohntInElternHaushalt
+        );
         final var anzahlMonate = DateUtil.getMonthsBetween(
             gesuchTranche.getGueltigkeit().getGueltigAb(),
             gesuchTranche.getGueltigkeit().getGueltigBis()

@@ -282,9 +282,9 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
 
   heimatortDocumentOptionsSig = this.createUploadOptionsSig((view) => {
     const eltern = view().gesuchFormular?.elterns;
-    const plz = this.plzChangedSig();
+    const heimatortPlz = this.heimatortPlzChangedSig();
     const laender = this.landStore.landListViewSig();
-    const kanton = this.plzStore.getKantonByPlz(plz);
+    const kanton = this.plzStore.getKantonByPlz(heimatortPlz);
     const elternNichtSchweizer = eltern?.some((e) => {
       return (
         laender?.find((l) => l.id === e.adresse.landId)?.laendercodeBfs !==
@@ -399,8 +399,8 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   private geburtstagChangedSig = toSignal(
     this.form.controls.geburtsdatum.valueChanges,
   );
-  private plzChangedSig = toSignal(
-    this.form.controls.adresse.controls.plzOrt.controls.plz.valueChanges,
+  private heimatortPlzChangedSig = toSignal(
+    this.form.controls.heimatortPlzOrt.controls.plz.valueChanges,
   );
   private nationalitaetIdChangedSig = toSignal(
     this.form.controls.nationalitaetId.valueChanges,

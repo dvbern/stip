@@ -66,6 +66,7 @@ public class AntragsstellerV1 {
     boolean lehre;
     boolean eigenerHaushalt;
     boolean halbierungElternbeitrag;
+    int monateTertiaerstufe;
 
     // Einkommen
     List<PersonValueItemDto> einkommens;
@@ -127,6 +128,25 @@ public class AntragsstellerV1 {
             .tertiaerstufe(
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()
             );
+
+        int monateTertiaerstufe = 0;
+        for (var item : gesuchFormular.getLebenslaufItems()) {
+            if (
+                item.isAusbildung()
+                && item.getAbschluss().getBildungskategorie().isTertiaerstufe()
+            ) {
+                monateTertiaerstufe += DateUtil.getMonthsBetween(item.getVon(), item.getBis());
+            }
+        }
+
+        if (ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            monateTertiaerstufe += DateUtil.getMonthsBetween(
+                ausbildung.getAusbildungBegin(),
+                ausbildung.getAusbildungEnd()
+            );
+        }
+
+        builder.monateTertiaerstufe(monateTertiaerstufe);
 
         Integer vermoegen = Objects.requireNonNullElse(einnahmenKosten.getVermoegen(), 0);
         Integer beitraegeGemeindeInstitutionen = Objects.requireNonNullElse(einnahmenKosten.getBeitraege(), 0);

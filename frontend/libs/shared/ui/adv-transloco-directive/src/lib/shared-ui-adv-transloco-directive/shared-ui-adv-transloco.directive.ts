@@ -2,12 +2,11 @@ import { Directive } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import { TranslocoHashMap } from '@dv/shared/model/type-util';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type HashMap<T = any> = Record<string, T>;
 type TranslateFn<T extends SharedTranslationKey> = (
   key: T,
-  params?: HashMap,
+  params?: TranslocoHashMap,
 ) => string;
 interface ViewContext {
   $implicit: TranslateFn<SharedTranslationKey>;

@@ -16,6 +16,7 @@ import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
+import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
@@ -27,6 +28,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
     SharedPatternMainLayoutComponent,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenMenuComponent,
+    SharedUiDarlehenVerfuegungDownloadComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

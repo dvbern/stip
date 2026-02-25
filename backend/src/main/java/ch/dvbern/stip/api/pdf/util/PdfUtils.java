@@ -510,7 +510,6 @@ public class PdfUtils {
                 sachbearbeiterBenutzer.getFunktion(locale)
             )
         );
-        signatureTable.setMarginBottom(SPACING_MEDIUM);
         document.add(signatureTable);
 
         anhangs.forEach(anhang -> {

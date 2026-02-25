@@ -187,9 +187,17 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     private void canGetDarlehenVerfuegung(UUID verfuegungDokumentId) {
-        darlehenBuchhaltungEntryRepository.getByVerfuegungDokumentId(verfuegungDokumentId).orElseThrow();
+        final var entry =
+            darlehenBuchhaltungEntryRepository.getByVerfuegungDokumentId(verfuegungDokumentId).orElseThrow();
         final var benutzer = benutzerService.getCurrentBenutzer();
-        if (!isSachbearbeiter(benutzer)) {
+
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                entry.getFall(),
+                benutzer,
+                sozialdienstService
+            ) && !isSbOrFreigabestelleOrJurist(benutzer)
+        ) {
             forbidden();
         }
     }

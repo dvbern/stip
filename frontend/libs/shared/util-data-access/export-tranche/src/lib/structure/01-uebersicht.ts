@@ -14,6 +14,7 @@ import { _t, formatDate, getFullname } from '../utils/helpers';
 
 export const getUebersicht = (
   t: TranslocoService,
+  defaultComment: string,
   config: SharedModelCompileTimeConfig,
   view: ExportView,
 ): Content => {
@@ -48,7 +49,7 @@ export const getUebersicht = (
             'einreichefrist.label',
             periode ? formatDate(periode.einreichefrist) : '',
           ],
-          ['bemerkung.label', tranche.comment],
+          ['bemerkung.label', tranche.comment ?? defaultComment],
           ['sachbearbeiter.label', sachbearbeiter],
         ],
         (key) => `shared.form.tranche.${key}`,

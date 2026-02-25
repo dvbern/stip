@@ -16,6 +16,7 @@ import {
   withRouterConfig,
 } from '@angular/router';
 import { provideTransloco } from '@jsverse/transloco';
+import { provideTranslocoMessageformat } from '@jsverse/transloco-messageformat';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { Store, provideState, provideStore } from '@ngrx/store';
@@ -124,6 +125,7 @@ export function provideSharedPatternCore(
       },
       loader: TranslocoHttpLoader,
     }),
+    provideTranslocoMessageformat({ locales: ['de-CH', 'fr-CH'] }),
     provideRouterStore(),
     ...(isDevMode() ? [provideStoreDevtools({ connectInZone: false })] : []),
 

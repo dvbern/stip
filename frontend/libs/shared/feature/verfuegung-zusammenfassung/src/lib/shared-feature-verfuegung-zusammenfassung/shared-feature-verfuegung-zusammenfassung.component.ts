@@ -15,6 +15,7 @@ import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
@@ -28,6 +29,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
+    SharedUiInfoDialogDirective,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',

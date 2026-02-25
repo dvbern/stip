@@ -632,7 +632,7 @@ public class GenerateDemoDataService {
             gesuch.setEinreichedatum(null);
         }
 
-        final var total = berechnungsresultat.getBerechnungTotal();
+        final var total = berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
         final var stipendienSoll = Objects.requireNonNullElse(
             stipendienanspruchDto.getBetragStipendienSoll(),
             stipendienanspruchDto.getBetragStipendienIst()

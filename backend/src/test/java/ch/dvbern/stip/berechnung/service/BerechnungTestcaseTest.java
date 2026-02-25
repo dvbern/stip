@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -36,7 +37,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenMapper;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.util.BerechnungTestUtil;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -63,17 +64,20 @@ public class BerechnungTestcaseTest {
     SteuerdatenMapper steuerdatenMapper;
     @InjectMock
     LandService landService;
+    @InjectMock
+    DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
 
     @BeforeEach
     void setup() {
         Mockito.when(landService.requireLandById(Mockito.any())).thenReturn(new Land());
+        Mockito.when(darlehenBuchhaltungEntryRepository.getByFallId(Mockito.any())).thenReturn(List.of());
     }
 
     @ParameterizedTest
     @ValueSource(ints = { 1 })
     void testTestcases(final int no) {
         // Arrange
-        final var testcase = BerechnungUtil.getTestcase(no);
+        final var testcase = BerechnungTestUtil.getTestcase(no);
 
         final var gesuchperiode = gesuchsperiodeMapper.toEntity(testcase.gesuchperiode);
         final var gesuch = new Gesuch();

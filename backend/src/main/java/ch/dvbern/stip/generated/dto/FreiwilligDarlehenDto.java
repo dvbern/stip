@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
   private @Valid Boolean isDelegiert;
   private @Valid String timestampErstellt;
+  private @Valid DokumentDto verfuegung;
 
   /**
    **/
@@ -292,6 +294,24 @@ public class FreiwilligDarlehenDto  implements Serializable {
     this.timestampErstellt = timestampErstellt;
   }
 
+  /**
+   **/
+  public FreiwilligDarlehenDto verfuegung(DokumentDto verfuegung) {
+    this.verfuegung = verfuegung;
+    return this;
+  }
+
+  
+  @JsonProperty("verfuegung")
+  public DokumentDto getVerfuegung() {
+    return verfuegung;
+  }
+
+  @JsonProperty("verfuegung")
+  public void setVerfuegung(DokumentDto verfuegung) {
+    this.verfuegung = verfuegung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -314,12 +334,13 @@ public class FreiwilligDarlehenDto  implements Serializable {
         Objects.equals(this.anzahlBetreibungen, freiwilligDarlehen.anzahlBetreibungen) &&
         Objects.equals(this.gruende, freiwilligDarlehen.gruende) &&
         Objects.equals(this.isDelegiert, freiwilligDarlehen.isDelegiert) &&
-        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt);
+        Objects.equals(this.timestampErstellt, freiwilligDarlehen.timestampErstellt) &&
+        Objects.equals(this.verfuegung, freiwilligDarlehen.verfuegung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
   }
 
   @Override
@@ -340,6 +361,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
     sb.append("    gruende: ").append(toIndentedString(gruende)).append("\n");
     sb.append("    isDelegiert: ").append(toIndentedString(isDelegiert)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    verfuegung: ").append(toIndentedString(verfuegung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

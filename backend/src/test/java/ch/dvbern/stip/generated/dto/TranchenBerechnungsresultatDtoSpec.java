@@ -36,9 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Resultat der Berechnung (eine Tranche)
  */
 @JsonPropertyOrder({
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_ANTEIL_TOTAL,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_ANTEIL_STIPENDIUM,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_ANTEIL_DARLEHEN,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_AB,
@@ -53,14 +51,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
-  public static final String JSON_PROPERTY_BERECHNUNG_ANTEIL_TOTAL = "berechnungAnteilTotal";
-  private Integer berechnungAnteilTotal;
-
-  public static final String JSON_PROPERTY_BERECHNUNG_ANTEIL_STIPENDIUM = "berechnungAnteilStipendium";
-  private Integer berechnungAnteilStipendium;
-
-  public static final String JSON_PROPERTY_BERECHNUNG_ANTEIL_DARLEHEN = "berechnungAnteilDarlehen";
-  private Integer berechnungAnteilDarlehen;
+  public static final String JSON_PROPERTY_TOTAL = "total";
+  private Integer total;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
   private LocalDate gueltigAb;
@@ -95,81 +87,29 @@ public class TranchenBerechnungsresultatDtoSpec {
   public TranchenBerechnungsresultatDtoSpec() {
   }
 
-  public TranchenBerechnungsresultatDtoSpec berechnungAnteilTotal(Integer berechnungAnteilTotal) {
+  public TranchenBerechnungsresultatDtoSpec total(Integer total) {
     
-    this.berechnungAnteilTotal = berechnungAnteilTotal;
+    this.total = total;
     return this;
   }
 
    /**
    * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
-   * @return berechnungAnteilTotal
+   * @return total
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_TOTAL)
+  @JsonProperty(JSON_PROPERTY_TOTAL)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getBerechnungAnteilTotal() {
-    return berechnungAnteilTotal;
+  public Integer getTotal() {
+    return total;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_TOTAL)
+  @JsonProperty(JSON_PROPERTY_TOTAL)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungAnteilTotal(Integer berechnungAnteilTotal) {
-    this.berechnungAnteilTotal = berechnungAnteilTotal;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec berechnungAnteilStipendium(Integer berechnungAnteilStipendium) {
-    
-    this.berechnungAnteilStipendium = berechnungAnteilStipendium;
-    return this;
-  }
-
-   /**
-   * Berechneter Stpendiumsanspruch für diese Tranche
-   * @return berechnungAnteilStipendium
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_STIPENDIUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getBerechnungAnteilStipendium() {
-    return berechnungAnteilStipendium;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_STIPENDIUM)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungAnteilStipendium(Integer berechnungAnteilStipendium) {
-    this.berechnungAnteilStipendium = berechnungAnteilStipendium;
-  }
-
-
-  public TranchenBerechnungsresultatDtoSpec berechnungAnteilDarlehen(Integer berechnungAnteilDarlehen) {
-    
-    this.berechnungAnteilDarlehen = berechnungAnteilDarlehen;
-    return this;
-  }
-
-   /**
-   * Berechneter Darlehensanspruch für diese Tranche
-   * @return berechnungAnteilDarlehen
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getBerechnungAnteilDarlehen() {
-    return berechnungAnteilDarlehen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BERECHNUNG_ANTEIL_DARLEHEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBerechnungAnteilDarlehen(Integer berechnungAnteilDarlehen) {
-    this.berechnungAnteilDarlehen = berechnungAnteilDarlehen;
+  public void setTotal(Integer total) {
+    this.total = total;
   }
 
 
@@ -449,9 +389,7 @@ public class TranchenBerechnungsresultatDtoSpec {
       return false;
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
-    return Objects.equals(this.berechnungAnteilTotal, tranchenBerechnungsresultat.berechnungAnteilTotal) &&
-        Objects.equals(this.berechnungAnteilStipendium, tranchenBerechnungsresultat.berechnungAnteilStipendium) &&
-        Objects.equals(this.berechnungAnteilDarlehen, tranchenBerechnungsresultat.berechnungAnteilDarlehen) &&
+    return Objects.equals(this.total, tranchenBerechnungsresultat.total) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
@@ -466,16 +404,14 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(berechnungAnteilTotal, berechnungAnteilStipendium, berechnungAnteilDarlehen, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(total, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
-    sb.append("    berechnungAnteilTotal: ").append(toIndentedString(berechnungAnteilTotal)).append("\n");
-    sb.append("    berechnungAnteilStipendium: ").append(toIndentedString(berechnungAnteilStipendium)).append("\n");
-    sb.append("    berechnungAnteilDarlehen: ").append(toIndentedString(berechnungAnteilDarlehen)).append("\n");
+    sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");

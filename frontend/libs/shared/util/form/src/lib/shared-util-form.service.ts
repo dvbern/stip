@@ -299,6 +299,31 @@ export class SharedUtilFormService {
     });
   }
 
+  isFieldInvalid<T extends FormGroup>(
+    form: T,
+    affectedField: KeysOfForm<T>,
+    opts?: {
+      validatorFn?: (value: unknown) => boolean;
+      specialValidationErrors?: SpecialValidationError[];
+    },
+  ) {
+    const { specialValidationErrors, validatorFn } = opts ?? {};
+    if (!specialValidationErrors || specialValidationErrors.length === 0) {
+      return false;
+    }
+
+    return specialValidationErrors.some((error) => {
+      const field = error.field;
+      if (field in form.controls && field === affectedField) {
+        const control = form.get(field);
+        const isInvalid = validatorFn ? !validatorFn(control?.value) : true;
+
+        return isInvalid;
+      }
+      return false;
+    });
+  }
+
   invalidateControlIfValidationFails<T extends FormGroup>(
     form: T,
     affectedFields: KeysOfForm<T>[],
@@ -311,15 +336,9 @@ export class SharedUtilFormService {
        * in case there are multiple controls with the same field name, for example in an array as geschwister.
        */
       validatorFn?: (value: unknown) => boolean;
-      beforeInvalidate?: () => void;
     },
   ) {
-    const {
-      shouldReset,
-      specialValidationErrors,
-      validatorFn,
-      beforeInvalidate,
-    } = opts ?? {};
+    const { shouldReset, specialValidationErrors, validatorFn } = opts ?? {};
     if (!specialValidationErrors || specialValidationErrors.length === 0) {
       return;
     }
@@ -335,7 +354,6 @@ export class SharedUtilFormService {
           const isInvalid = validatorFn ? !validatorFn(control?.value) : true;
 
           if (isInvalid) {
-            beforeInvalidate?.();
             if (shouldReset) {
               control?.reset();
             }

@@ -95,6 +95,10 @@ public class ConfigService {
     @ConfigProperty(name = "kstip.default-tenant")
     String defaultTenant;
 
+    @Getter
+    @ConfigProperty(name = "kstip.darlehen.verfuegung-email.recipient")
+    String darlehenVerfuegungEmailRecipient;
+
     public DeploymentConfigDto getDeploymentConfiguration() {
         return new DeploymentConfigDto()
             .version(version)
