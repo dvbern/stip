@@ -15,7 +15,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
@@ -35,13 +35,13 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
   selector: 'dv-shared-pattern-global-header',
   imports: [
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
     SharedUiMandantStylesDvComponent,
+    TranslocoDirective,
   ],
   templateUrl: './shared-pattern-global-header.component.html',
   styles: `

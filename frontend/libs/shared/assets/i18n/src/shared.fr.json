@@ -54,6 +54,7 @@
   "shared.header.tranchenAuswahl": "Demande",
   "shared.header.aenderungen": "Modifications",
   "shared.header.darlehen": "Prêts",
+  "shared.header.darlehen.create": "Demander un prêt",
   "shared.header.tranche.item": "Tranche {{ index }} du {{ date }}",
   "shared.header.aenderung.item": "Modification du {{ date }}",
   "shared.header.aenderungen.item": "Modification {{ index }} du {{ date }}",
@@ -258,7 +259,6 @@
   "shared.dashboard.aenderung.delete": "Supprimer le changement",
   "shared.dashboard.aenderung.delete.dialog.title": "Supprimer le changement",
   "shared.dashboard.aenderung.delete.dialog.message": "Voulez-vous vraiment supprimer le changement? Vous perdrez toutes les données",
-  "shared.dashboard.darlehen.create": "Demander un prêt",
 
   "shared.nachrichten.title": "Messages",
   "shared.nachricht.title": "Message",

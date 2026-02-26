@@ -6,9 +6,14 @@ import {
 import { Injectable, computed, signal } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
+export type TranslateLabel = {
+  key: string;
+  context?: Record<string, string | number>;
+};
+
 interface NavItemBase {
   id: string;
-  label: string;
+  label?: TranslateLabel;
   icon?: string;
   active?: boolean | undefined;
   testId?: string;

@@ -1,5 +1,9 @@
 <!-- HEADER -->
-<header class="border-bottom tw:fixed tw:top-0 z-3 w-100" [class.shadow-sm]="isScroll && !compactHeader">
+<header
+  class="border-bottom tw:fixed tw:top-0 z-3 w-100"
+  [class.shadow-sm]="isScroll && !compactHeader"
+  *transloco="let t"
+>
   <ng-template #logoOrBackLink>
     @if (backLink) {
       <a
@@ -13,7 +17,7 @@
     } @else {
       @if (logoSig(); as logo) {
         <a class="first-entry" routerLink="/">
-          <img [src]="logo.src" [alt]="'shared.logo.tenant' | transloco: logo" class="tw:h-[60px] tw:max-w-[135px]" />
+          <img [src]="logo.src" [alt]="t('shared.logo.tenant', { logo })" class="tw:h-[60px] tw:max-w-[135px]" />
         </a>
       }
     }
@@ -28,12 +32,7 @@
       <div class="d-flex align-items-center gap-2">
         <!-- <ng-content select="[dvHeaderMobileAddons]"></ng-content> -->
 
-        <button
-          class="dv-icon-button"
-          type="button"
-          [attr.aria-label]="'shared.menu' | transloco"
-          (click)="openSidenav.emit()"
-        >
+        <button class="dv-icon-button" type="button" [attr.aria-label]="t('shared.menu')" (click)="openSidenav.emit()">
           <span class="material-symbols-rounded">menu</span>
         </button>
       </div>
@@ -58,7 +57,7 @@
               @if (item.icon) {
                 <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
               }
-              <span>{{ item.label }}</span>
+              <span>{{ t(item.label.key, item.label.context) }}</span>
               <i class="material-symbols-rounded ms-2">expand_more</i>
             </button>
             <mat-menu #itemMenu="matMenu" class="header-menu-panel mt-2 rounded tw:gap-4">
@@ -80,7 +79,7 @@
             @if (item.icon) {
               <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
             }
-            <span>{{ item.label }}</span>
+            <span>{{ t(item.label.key, item.label.context) }}</span>
           </a>
         }
         @case ('action') {
@@ -95,7 +94,7 @@
               @if (item.icon) {
                 <i class="material-symbols-rounded">{{ item.icon }}</i>
               }
-              <span>{{ item.label }}</span>
+              <span>{{ t(item.label.key, item.label.context) }}</span>
             </div>
           </button>
         }
@@ -103,7 +102,7 @@
           @if (item.label) {
             <div class="d-flex align-items-center text-muted small gap-2">
               <hr class="flex-grow-1 tw:m-0!" />
-              {{ item.label }}
+              {{ t(item.label.key, item.label.context) }}
               <hr class="flex-grow-1 tw:m-0!" />
             </div>
           } @else {
@@ -126,8 +125,6 @@
 
       <!-- top right -->
       <div class="d-flex justify-content-end align-items-center ms-3 flex-grow-1">
-        <!-- <ng-content select="[dvHeaderDesktopRight]"></ng-content> -->
-
         <div class="d-flex align-items-center gap-4">
           <button
             type="button"

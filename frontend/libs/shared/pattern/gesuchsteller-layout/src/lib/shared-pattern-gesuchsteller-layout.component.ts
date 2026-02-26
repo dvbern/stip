@@ -30,7 +30,7 @@ const gsBaseMenuItems: NavItem[] = [
     type: 'link',
     id: 'dashboard',
     icon: 'dashboard',
-    label: 'Dashboard',
+    label: { key: 'gesuch-app.dashboard.title' },
     route: ['/dashboard'],
   },
 ];
@@ -106,7 +106,6 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
   private isDarlehenRouteSig = computed(() => {
     const params = this.allRouteParamsSig();
-    console.log('Current route params:', params);
     return params?.['darlehenId'] ? true : false;
   });
 
@@ -143,15 +142,21 @@ export class SharedPatternGesuchstellerLayoutComponent {
             items.push({
               type: 'separator',
               id: `separator-${status}`,
-              label: status.toUpperCase(),
+              label: {
+                key: 'shared.header.darlehen.complete-states.' + status,
+              },
             });
 
             items.push(
               ...darlehen.map((darlehen) => ({
                 type: 'link' as const,
                 id: darlehen.id,
-                // todo: translate
-                label: `Darlehen vom ${format(darlehen.timestampErstellt!, 'dd.MM.yyyy')}`,
+                label: {
+                  key: 'shared.header.darlehen.item',
+                  context: {
+                    date: format(darlehen.timestampErstellt!, 'dd.MM.yyyy'),
+                  },
+                },
                 route: ['/darlehen', darlehen.id, 'fall', fallId],
               })),
             );
@@ -165,18 +170,21 @@ export class SharedPatternGesuchstellerLayoutComponent {
         type: 'menu',
         icon: 'account_balance',
         id: 'darlehen',
-        label: 'Darlehen',
+        label: { key: 'shared.header.darlehen' },
         children: darlehnen.canCreateDarlehen
           ? darlehenMenuItems.concat([
-              {
-                type: 'separator',
-                id: 'separator-create',
-                label: '',
-              },
+              ...(darlehenMenuItems.length > 0
+                ? [
+                    {
+                      type: 'separator' as const,
+                      id: 'separator-create',
+                    },
+                  ]
+                : []),
               {
                 type: 'action',
                 id: 'create-darlehen',
-                label: 'Neues Darlehen',
+                label: { key: 'shared.header.darlehen.create' },
                 icon: 'add',
                 action: () =>
                   this.darlehenStore.createDarlehen$({
@@ -192,7 +200,7 @@ export class SharedPatternGesuchstellerLayoutComponent {
         type: 'link',
         icon: 'payments',
         id: 'auszahlungen',
-        label: 'Auszahlung',
+        label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
       };
 
@@ -206,11 +214,12 @@ export class SharedPatternGesuchstellerLayoutComponent {
     });
   }
 
+  // todo: really needed?
   staticNavItems: NavItem[] = [
     {
       type: 'link',
       id: 'dashboard',
-      label: 'Dashboard',
+      label: { key: 'gesuch-app.dashboard.title' },
       icon: 'dashboard',
       route: ['/dashboard'],
     },
