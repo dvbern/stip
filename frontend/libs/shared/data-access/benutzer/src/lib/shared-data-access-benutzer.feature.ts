@@ -65,7 +65,7 @@ export const sharedDataAccessBenutzersFeature = createFeature({
     ),
 
     on(
-      SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenSuccess,
+      SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptierenSuccess,
       (state, { benutzer }): State => ({
         ...state,
         currentBenutzerRd: success(benutzer),
@@ -74,7 +74,7 @@ export const sharedDataAccessBenutzersFeature = createFeature({
     ),
 
     on(
-      SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenFailure,
+      SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptierenFailure,
       (state, { error }): State => ({
         ...state,
         currentBenutzerRd: failure(error),

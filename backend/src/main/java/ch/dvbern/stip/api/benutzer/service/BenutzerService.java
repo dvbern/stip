@@ -44,7 +44,6 @@ import ch.dvbern.stip.generated.dto.BenutzerDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
-import ch.dvbern.stip.generated.dto.UpdateNutzungsbedingungenRequestDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.security.identity.SecurityIdentity;
 import jakarta.enterprise.context.RequestScoped;
@@ -232,9 +231,8 @@ public class BenutzerService {
     }
 
     @Transactional
-    public BenutzerDto updateNutzungsbedingungen(
-        UUID benutzerId,
-        UpdateNutzungsbedingungenRequestDto updateNutzungsbedingungenRequestDto
+    public BenutzerDto nutzungsbedingungenAkzeptieren(
+        UUID benutzerId
     ) {
         final var benutzer = benutzerRepository.findById(benutzerId);
 
@@ -242,7 +240,7 @@ public class BenutzerService {
             throw new NotFoundException("Benutzer not found");
         }
 
-        benutzer.setNutzungsbedingungenAkzeptiert(updateNutzungsbedingungenRequestDto.getAkzeptiert());
+        benutzer.setNutzungsbedingungenAkzeptiert(true);
 
         benutzerRepository.persistAndFlush(benutzer);
 

@@ -140,13 +140,15 @@ export class GesuchAppFeatureCockpitComponent {
     const benutzerId = this.benutzerSig()?.id;
 
     if (!nutzungsbedingungenAkzeptiert) {
-      SharedDialogNutzungsbedingungenComponent.open(this.dialog)
+      SharedDialogNutzungsbedingungenComponent.open(
+        this.dialog,
+        nutzungsbedingungenAkzeptiert ?? false,
+      )
         .afterClosed()
         .subscribe((result) => {
           if (result && benutzerId) {
             this.store.dispatch(
-              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungen({
-                akzeptiert: true,
+              SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
                 benutzerId,
               }),
             );

@@ -56,7 +56,7 @@ public class BenutzerAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void canUpdateNutzungsbedingungen() {
+    public void canAkzeptierenNutzungsbedingungen() {
         permitAll();
     }
 }

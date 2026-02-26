@@ -2186,23 +2186,14 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /benutzer/nutzungsbedingungen/{benutzerId}:
+  /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}:
     parameters:
       - name: benutzerId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
-    patch:
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                akzeptiert:
-                  type: boolean
-        required: true
+    post:
       tags:
         - Benutzer
       responses:
@@ -2211,7 +2202,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Benutzer'
-          description: current Benutzer with updated NutzungsbedingungenAkzeptiert field
+          description: Current Benutzer with accepted Nutzungsbedingungen
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -2220,8 +2211,8 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateNutzungsbedingungen
-      summary: Update if the user has accepted the Nutzungsbedingungen
+      operationId: nutzungsbedingungenAkzeptieren
+      summary: Accept the Nutzungsbedingungen for the current Benutzer
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []

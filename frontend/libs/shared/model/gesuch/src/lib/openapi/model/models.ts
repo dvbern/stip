@@ -261,7 +261,6 @@ export * from './tenantInfo';
 export * from './tranchenBerechnungsresultat';
 export * from './unterschriftenblattDokument';
 export * from './unterschriftenblattDokumentTyp';
-export * from './updateNutzungsbedingungenRequest';
 export * from './validationMessage';
 export * from './validationReport';
 export * from './verfuegung';

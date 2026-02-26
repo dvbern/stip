@@ -1,16 +1,25 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { TranslocoPipe } from '@jsverse/transloco';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
+
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
+
+export type NutzungsbedingungenDialogData = {
+  nutzungsbedingungenAkzeptiert: boolean;
+};
 
 @Component({
   selector: 'dv-shared-dialog-nutzungsbedingungen',
-  imports: [TranslocoPipe],
+  imports: [SharedUiAdvTranslocoDirective],
   templateUrl: './shared-dialog-nutzungsbedingungen.component.html',
-  styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedDialogNutzungsbedingungenComponent {
   private dialogRef = inject(MatDialogRef);
+  dialogData = inject<NutzungsbedingungenDialogData>(MAT_DIALOG_DATA);
 
   cancel() {
     this.dialogRef.close(false);
@@ -20,14 +29,15 @@ export class SharedDialogNutzungsbedingungenComponent {
     this.dialogRef.close(true);
   }
 
-  static open(matDialog: MatDialog) {
+  static open(matDialog: MatDialog, nutzungsbedingungenAkzeptiert: boolean) {
     return matDialog.open<
       SharedDialogNutzungsbedingungenComponent,
-      never,
+      NutzungsbedingungenDialogData,
       boolean
     >(SharedDialogNutzungsbedingungenComponent, {
       panelClass: 'dv-user-consent-dialog',
       width: '800px',
+      data: { nutzungsbedingungenAkzeptiert },
     });
   }
 }

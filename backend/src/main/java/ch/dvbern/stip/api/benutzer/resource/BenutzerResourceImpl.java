@@ -32,7 +32,6 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
-import ch.dvbern.stip.generated.dto.UpdateNutzungsbedingungenRequestDto;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -148,11 +147,8 @@ public class BenutzerResourceImpl implements BenutzerResource {
 
     @Override
     @PermitAll
-    public BenutzerDto updateNutzungsbedingungen(
-        UUID benutzerId,
-        UpdateNutzungsbedingungenRequestDto updateNutzungsbedingungenRequestDto
-    ) {
-        benutzerAuthorizer.canUpdateNutzungsbedingungen();
-        return benutzerService.updateNutzungsbedingungen(benutzerId, updateNutzungsbedingungenRequestDto);
+    public BenutzerDto nutzungsbedingungenAkzeptieren(UUID benutzerId) {
+        benutzerAuthorizer.canAkzeptierenNutzungsbedingungen();
+        return benutzerService.nutzungsbedingungenAkzeptieren(benutzerId);
     }
 }

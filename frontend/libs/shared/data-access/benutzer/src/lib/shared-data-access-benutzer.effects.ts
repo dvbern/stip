@@ -48,35 +48,34 @@ export const loadCurrentBenutzer = createEffect(
   { functional: true },
 );
 
-export const updateNutzungsbedingungen = createEffect(
+export const nutzungsbedingungenAkzeptieren = createEffect(
   (
     store = inject(Store),
     events$ = inject(Actions),
     benutzerService = inject(BenutzerService),
   ) => {
     return events$.pipe(
-      ofType(SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungen),
+      ofType(SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren),
       tap(() =>
         store.dispatch(
           SharedDataAccessBenutzerApiEvents.setCurrentBenutzerPending(),
         ),
       ),
-      exhaustMap(({ akzeptiert, benutzerId }) =>
+      exhaustMap(({ benutzerId }) =>
         benutzerService
-          .updateNutzungsbedingungen$({
+          .nutzungsbedingungenAkzeptieren$({
             benutzerId,
-            updateNutzungsbedingungenRequest: { akzeptiert },
           })
           .pipe(
             map((benutzer) =>
-              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenSuccess(
+              SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptierenSuccess(
                 {
                   benutzer,
                 },
               ),
             ),
             catchError((error) => [
-              SharedDataAccessBenutzerApiEvents.updateNutzungsbedingungenFailure(
+              SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptierenFailure(
                 {
                   error: sharedUtilFnErrorTransformer(error),
                 },
@@ -92,7 +91,7 @@ export const updateNutzungsbedingungen = createEffect(
 // add effects here
 export const sharedDataAccessBenutzerEffects = {
   loadCurrentBenutzer,
-  updateNutzungsbedingungen,
+  updateNutzungsbedingungen: nutzungsbedingungenAkzeptieren,
 };
 
 const hasStaleCache = (lastFetchTs: number | null) =>

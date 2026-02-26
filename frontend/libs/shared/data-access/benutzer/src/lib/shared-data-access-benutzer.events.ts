@@ -14,11 +14,10 @@ export const SharedDataAccessBenutzerApiEvents = createActionGroup({
     setRolesMap: props<{ rolesMap: RolesMap }>(),
 
     // nutzungsbedingungen
-    updateNutzungsbedingungen: props<{
-      akzeptiert: boolean;
+    nutzungsbedingungenAkzeptieren: props<{
       benutzerId: string;
     }>(),
-    updateNutzungsbedingungenSuccess: props<{ benutzer: Benutzer }>(),
-    updateNutzungsbedingungenFailure: props<{ error: SharedModelError }>(),
+    nutzungsbedingungenAkzeptierenSuccess: props<{ benutzer: Benutzer }>(),
+    nutzungsbedingungenAkzeptierenFailure: props<{ error: SharedModelError }>(),
   },
 });

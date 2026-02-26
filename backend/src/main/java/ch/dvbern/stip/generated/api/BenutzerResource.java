@@ -6,7 +6,6 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterUpdateDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import java.util.UUID;
-import ch.dvbern.stip.generated.dto.UpdateNutzungsbedingungenRequestDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
 
 import jakarta.ws.rs.*;
@@ -74,16 +73,15 @@ public interface BenutzerResource {
     @Produces({ "application/json", "text/plain" })
     List<SachbearbeiterDto> getSachbearbeitersForManagement();
 
+    @POST
+    @Path("/nutzungsbedingungenAkzeptieren/{benutzerId}")
+    @Produces({ "application/json", "text/plain" })
+    BenutzerDto nutzungsbedingungenAkzeptieren(@PathParam("benutzerId") UUID benutzerId);
+
     @GET
     @Path("/prepare/me")
     @Produces({ "application/json", "text/plain" })
     BenutzerDto prepareCurrentBenutzer();
-
-    @PATCH
-    @Path("/nutzungsbedingungen/{benutzerId}")
-    @Consumes({ "application/json" })
-    @Produces({ "application/json", "text/plain" })
-    BenutzerDto updateNutzungsbedingungen(@PathParam("benutzerId") UUID benutzerId,@Valid @NotNull UpdateNutzungsbedingungenRequestDto updateNutzungsbedingungenRequestDto);
 
     @PATCH
     @Path("/sachbearbeiter/{sachbearbeiterId}")
