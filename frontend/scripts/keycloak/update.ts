@@ -1,7 +1,9 @@
 import 'dotenv/config';
 
 import { join } from 'node:path';
+import c from 'chalk';
 
+import { confirm } from '@inquirer/prompts';
 import KcAdminClient from '@keycloak/keycloak-admin-client';
 import RoleRepresentation from '@keycloak/keycloak-admin-client/lib/defs/roleRepresentation';
 // eslint-disable-next-line import/order
@@ -31,7 +33,9 @@ import {
   isDefinedRoleOrPermission,
   isRoleOrPermission,
   known,
+  unique,
 } from './types';
+import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation';
 config({ path: join(__dirname, '../../.env') });
 
 const URL_ENV = 'KEYCLOAK_ADMIN_URL';
@@ -44,6 +48,13 @@ const env = process.env;
 
 const program = new Command();
 program.name('update-keycloak');
+program.configureHelp({
+  styleCommandText: (str) => c.cyan(str),
+  styleOptionText: (str) =>
+    c.green(str.replace(/(\<[^>].*>)/, c.dim(c.italic('$1')))),
+  styleOptionDescription: (str) =>
+    str.replace(/(\(choices: [^\)].*\))/, '\n' + c.dim('$1')),
+});
 
 program.exitOverride((err) => {
   if (
@@ -68,7 +79,7 @@ const syncRolesCommand = program
   .addOption(envOption)
   .addHelpText(
     'before',
-    `Syncs roles and permissions in Keycloak using roles-map.ts as a reference.
+    `${c.bold('Syncs')} roles and permissions in Keycloak using roles-map.ts as a reference.
 This script will create missing roles and permissions, and repair composite roles if needed.
 `,
   )
@@ -77,46 +88,57 @@ This script will create missing roles and permissions, and repair composite role
     `
 
 Example call:
-  $ npm run sync-roles -- -e DEV
+  ${c.dim(c.blue('$'))} ${c.bold('npm run sync-roles --')} -e ${c.bold('DEV')}
 `,
   );
 const addUsersCommand = program
   .command('add-users')
+  .alias('update-users')
   .addOption(envOption)
   .addOption(
-    program
-      .createOption(
-        '-u, --user <user>',
-        `the user to add and its first and last name, comma separated. example: "username,FirstName,LastName[,email]"
-- If no email is provided, a default email will be generated based on the username (stip-{username}@mailbucket.dvbern.ch).`,
-      )
-      .makeOptionMandatory(true),
+    program.createOption(
+      '-u, --user <user>',
+      `the user to add and its first and last name, comma separated. example: "${c.blue('username')},${c.green('FirstName')},${c.cyan('LastName')}[,${c.yellow('email')}]"
+- If ${c.bold('no')} email is provided, a ${c.bold('default email')} will be generated based on the username: ${c.bold('stip-{username}@mailbucket.dvbern.ch')}`,
+    ),
+  )
+  .addOption(
+    program.createOption(
+      '-w, --userWildcard <username>',
+      `the wildcard username matcher. Example: "-gs"`,
+    ),
   )
   .addOption(
     program
       .createOption(
         '-r, --roles <roles...>',
-        'roles to assign to the user, comma separated',
+        'roles to assign to the user, space separated. Example: "V0_Gesuchsteller V0_Sachbearbeiter"',
       )
-      .choices(ROLES)
+      .choices([
+        ...ROLES,
+        ...unique(known.envs.flatMap((env) => ENV_SPECIAL_PERMISSIONS[env])),
+      ])
       .makeOptionMandatory(true),
   )
   .addOption(
     program
       .createOption(
         '--realm realm',
-        `realm to add users to, default is "${known.realms[0]}"`,
+        `realm to add users to, default is "${c.bold(known.realms[0])}"`,
       )
       .choices(known.realms)
       .default(known.realms[0]),
   )
   .addHelpText(
     'before',
-    `Adds users to Keycloak with the specified roles.
+    `1. ${c.bold('Adds')} users to Keycloak with the specified roles.
 This script will create users if they do not exist and assign the specified roles.
-Or update the roles of existing users.
 
-The password will be taken from the environment variable \`${ADD_USER_PASSWORD_ENV}\`.
+2. ${c.bold('Updates')} the roles of existing users.
+
+3. Or ${c.bold('bulk Updates')} the roles of existing users by given wildcard.
+
+- The password will be taken from the environment variable ${c.bold(ADD_USER_PASSWORD_ENV)}.
 `,
   )
   .addHelpText(
@@ -124,13 +146,23 @@ The password will be taken from the environment variable \`${ADD_USER_PASSWORD_E
     `
 
 Example call:
-  $ npm run add-users -- -e DEV -u "stip-scph-gs-2,Philipp,GS 2,philipp.schaerer+gs-2@dvbern.ch" -r V0_Gesuchsteller
-  $ npm run add-users -- -e DEV -u "stip-scph-gs-1,Philipp,GS 1"         -r V0_Gesuchsteller
-  $ npm run add-users -- -e DEV -u "stip-scph-sb-1,Philipp,SB 1"         -r V0_Sachbearbeiter
-  $ npm run add-users -- -e DEV -u "stip-scph-frei-1,Philipp,Freigabe 1" -r V0_Freigabestelle
-  $ npm run add-users -- -e DEV -u "stip-scph-admin-1,Philipp,Admin 1"   -r V0_Sachbearbeiter-Admin V0_Sachbearbeiter
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-2')},${c.green('Philipp')},${c.cyan('GS 2')},${c.yellow('philipp.schaerer+gs-2@dvbern.ch')}" -r ${c.bold('V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-1')},${c.green('Philipp')},${c.cyan('GS 1')}"                                 -r ${c.bold('V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-sb-1')},${c.green('Philipp')},${c.cyan('SB 1')}"                                 -r ${c.bold('V0_Sachbearbeiter')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-frei-1')},${c.green('Philipp')},${c.cyan('Freigabe 1')}"                         -r ${c.bold('V0_Freigabestelle')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-admin-1')},${c.green('Philipp')},${c.cyan('Admin 1')}"                           -r ${c.bold('V0_Sachbearbeiter-Admin V0_Sachbearbeiter')}
+
+  ${c.dim('# or')}
+
+  ${c.dim(c.blue('$'))} ${c.bold('npm run update-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-admin-1')}" -r ${c.bold('V0_Sachbearbeiter-Admin V0_Freigabestelle')}
+
+  ${c.dim('# or')}
+
+  ${c.dim(c.blue('$'))} ${c.bold('npm run update-users --')} -e ${c.bold('DEV')} -w "${c.bold('-gs')}" -r ${c.bold('V0_Sachbearbeiter-Admin V0_Sachbearbeiter')}
 `,
   );
+
+const showError = (text: string) => c.redBright(`[ERROR] ${text}`);
 
 /**
  * Initialize the Keycloak admin client.
@@ -148,7 +180,7 @@ async function initKc(target: KnownEnv) {
     .filter(([, env]) => !env)
     .map(([env]) => env);
   if (missingEnvs.length > 0) {
-    console.error('Missing environment variables:', missingEnvs);
+    console.error(showError('Missing environment variables:'), missingEnvs);
     console.error('Please check your .env file\n');
     process.exit(1);
   }
@@ -346,97 +378,18 @@ const runForRealms = async <R>(fn: (realm: string) => Promise<R>) => {
   return results;
 };
 
-syncRolesCommand.action(async () => {
-  try {
-    const results = (
-      await runForRealms((realm) => syncRoles(realm as KnownRealm))
-    ).filter(isDefined);
-    if (results.length > 0) {
-      console.info('Results:', results);
-    }
-
-    console.info('All roles and permissions are up to date');
-  } catch (error) {
-    if (error instanceof Error && error.name === 'ExitPromptError') {
-      console.warn('User cancelled the operation');
-    } else {
-      console.error('Error adding role:', error);
-    }
-  }
-});
-addUsersCommand.action(async () => {
-  const {
-    env: targetEnv,
-    user: userInfo,
-    roles: rawRoles,
-    realm,
-  } = addUsersCommand.opts() as {
-    env: KnownEnv;
-    user: string;
-    roles: CurrentRole[];
-    realm: KnownRealm;
-  };
-
-  if (!userInfo || !rawRoles) {
-    addUsersCommand.addHelpText('after', 'Invalid user format');
-    addUsersCommand.help({ error: true });
-  }
-  const [username, firstName, lastName, email] = userInfo.split(',');
-  const roles = rawRoles.map((r) => r.trim());
-
-  if (!username || !roles || roles.length === 0) {
-    addUsersCommand.addHelpText(
-      'after',
-      'Please provide a username and at least one role',
-    );
-    addUsersCommand.help({ error: true });
-  }
-
-  const kcAdminClient = await initKc(targetEnv);
-  const ADD_USER_PASSWORD = env[ADD_USER_PASSWORD_ENV];
-  if (!ADD_USER_PASSWORD) {
-    addUsersCommand.addHelpText(
-      'after',
-      `Please set the environment variable ${ADD_USER_PASSWORD_ENV} to the password for the new user`,
-    );
-    addUsersCommand.help({ error: true });
-  }
-
-  const foundUsers = await kcAdminClient.users.find({
-    username,
-    realm,
-  });
-
-  let userId: string | undefined;
-  if (foundUsers.length < 1) {
-    console.info(`User ${username} not found, creating...`);
-    const newUser = await kcAdminClient.users.create({
-      realm,
-      username,
-      email: email ?? `stip-${username}@mailbucket.dvbern.ch`,
-      enabled: true,
-      emailVerified: true,
-      firstName,
-      lastName,
-      credentials: [
-        {
-          type: 'password',
-          value: ADD_USER_PASSWORD,
-          temporary: false,
-        },
-      ],
-    });
-    userId = newUser.id;
-  } else {
-    console.info(`User ${username} found, updating...`);
-    userId = foundUsers[0].id;
-  }
-
+const updateUser = async (
+  kcAdminClient: KcAdminClient,
+  realm: string,
+  roles: string[],
+  user: UserRepresentation,
+) => {
+  const userId = user.id;
+  const username = user.username;
   if (!userId) {
-    console.error(`User ${username} not found or created`);
-    process.exit(1);
+    console.error(showError(`User ${username} has no ID, cannot update roles`));
+    return;
   }
-
   const userRoles = await kcAdminClient.users.listRealmRoleMappings({
     id: userId,
     realm,
@@ -473,5 +426,152 @@ addUsersCommand.action(async () => {
   } else {
     console.info(`User ${username} already has all roles`);
   }
+};
+
+syncRolesCommand.action(async () => {
+  syncRolesCommand.addHelpText('beforeAll', '\n\n');
+  try {
+    const results = (
+      await runForRealms((realm) => syncRoles(realm as KnownRealm))
+    ).filter(isDefined);
+    if (results.length > 0) {
+      console.info('Results:', results);
+    }
+
+    console.info('All roles and permissions are up to date');
+  } catch (error) {
+    if (error instanceof Error && error.name === 'ExitPromptError') {
+      console.warn('User cancelled the operation');
+    } else {
+      console.error(showError('Error adding role:'), error);
+    }
+  }
 });
+addUsersCommand.action(async () => {
+  addUsersCommand.addHelpText('beforeAll', '\n\n');
+  const {
+    env: targetEnv,
+    user: userInfo,
+    userWildcard,
+    roles: rawRoles,
+    realm,
+  } = addUsersCommand.opts() as {
+    env: KnownEnv;
+    user?: string;
+    userWildcard?: string;
+    roles: CurrentRole[];
+    realm: KnownRealm;
+  };
+
+  if (!userInfo && !userWildcard) {
+    addUsersCommand.addHelpText('after', showError('Invalid user format'));
+    addUsersCommand.help({ error: true });
+  }
+  const [username, firstName, lastName, email] = userInfo?.split(',') ?? [];
+  const allowedRolesAndPermissions = [
+    ...ROLES,
+    ...ENV_SPECIAL_PERMISSIONS[targetEnv],
+  ] as string[];
+  const roles = rawRoles
+    .map((r) => r.trim())
+    .filter((role) => allowedRolesAndPermissions.includes(role));
+
+  if (!roles || roles.length === 0) {
+    addUsersCommand.addHelpText(
+      'after',
+      showError('Please provide a username and at least one role'),
+    );
+    addUsersCommand.help({ error: true });
+  } else if (userWildcard === undefined && !userInfo) {
+    addUsersCommand.addHelpText(
+      'after',
+      showError(
+        'Please provide at least one user to add, using the --user option or the --users option.',
+      ),
+    );
+    addUsersCommand.help({ error: true });
+  }
+
+  const kcAdminClient = await initKc(targetEnv);
+  const ADD_USER_PASSWORD = env[ADD_USER_PASSWORD_ENV];
+  if (!ADD_USER_PASSWORD) {
+    addUsersCommand.addHelpText(
+      'after',
+      showError(
+        `Please set the environment variable ${ADD_USER_PASSWORD_ENV} to the password for the new user`,
+      ),
+    );
+    addUsersCommand.help({ error: true });
+  }
+
+  let usersToUpdate: UserRepresentation[] = [];
+  if (username) {
+    const existingUser = (
+      await kcAdminClient.users.find({
+        username,
+        realm,
+      })
+    )?.[0];
+
+    if (!existingUser?.id) {
+      console.info(`User ${username} not found, creating...`);
+      if (!lastName || lastName.includes('@')) {
+        addUsersCommand.addHelpText(
+          'after',
+          showError('Please provide a firstName, lastName and email'),
+        );
+        addUsersCommand.help({ error: true });
+      }
+      const newUser = await kcAdminClient.users.create({
+        realm,
+        username,
+        email: email ?? `stip-${username}@mailbucket.dvbern.ch`,
+        enabled: true,
+        emailVerified: true,
+        firstName,
+        lastName,
+        credentials: [
+          {
+            type: 'password',
+            value: ADD_USER_PASSWORD,
+            temporary: false,
+          },
+        ],
+      });
+      usersToUpdate = [newUser];
+    } else {
+      console.info(`User ${username} found, updating...`);
+      usersToUpdate = [existingUser];
+    }
+  } else if (userWildcard) {
+    usersToUpdate =
+      (await kcAdminClient.users.find({
+        username: userWildcard,
+        realm,
+        max: 1000,
+      })) ?? [];
+    if (usersToUpdate.length > 0) {
+      console.info(
+        `Found ${usersToUpdate.length} users to update:`,
+        usersToUpdate.map((u) => u.username),
+      );
+    }
+  }
+  if (!usersToUpdate?.length) {
+    console.error(showError('No users created/found'));
+    process.exit(1);
+  }
+  if (
+    !(await confirm({
+      message: 'Are you sure you want to make these changes?',
+    }))
+  ) {
+    console.info('Cancelling user updates...');
+    return;
+  }
+  for (const user of usersToUpdate) {
+    await updateUser(kcAdminClient, realm, roles, user);
+  }
+});
+
 program.parse(process.argv);

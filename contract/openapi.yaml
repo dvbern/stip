@@ -9367,6 +9367,7 @@ components:
       enum:
         - GESUCH
         - AENDERUNG
+        - FREIWILLIG_DARLEHEN
         - AUSBILDUNG_UNTERBRUCH_ANTRAG
     StatusprotokollEntry:
       description: Eintrag von dem Statusprotokoll

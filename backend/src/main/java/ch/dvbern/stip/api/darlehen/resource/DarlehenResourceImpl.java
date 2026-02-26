@@ -78,14 +78,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenGs(darlehenId);
-        return darlehenService.getDarlehen(darlehenId);
+        return darlehenService.getFreiwilligDarlehen(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getDarlehen(darlehenId);
+        return darlehenService.getFreiwilligDarlehen(darlehenId);
     }
 
     @Override
@@ -106,7 +106,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         SortOrder sortOrder
     ) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getDarlehenDashboardSb(
+        return darlehenService.getFreiwilligDarlehenDashboardSb(
             getFreiwilligDarlehenSbQueryType,
             page,
             pageSize,
@@ -127,42 +127,42 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public FreiwilligDarlehenDto createFreiwilligDarlehen(UUID fallId) {
         darlehenAuthorizer.canCreateDarlehen(fallId);
-        return darlehenService.createDarlehen(fallId);
+        return darlehenService.createFrewilligDarlehen(fallId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAblehen(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
-        return darlehenService.darlehenAblehnen(darlehenId);
+        return darlehenService.freiwilligDarlehenAblehnen(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
-        return darlehenService.darlehenAkzeptieren(darlehenId);
+        return darlehenService.freiwilligDarlehenAkzeptieren(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_GS)
     public FreiwilligDarlehenDto freiwilligDarlehenEingeben(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenEingeben(darlehenId);
-        return darlehenService.darlehenEingeben(darlehenId);
+        return darlehenService.freiwilligDarlehenEingeben(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public FreiwilligDarlehenDto freiwilligDarlehenFreigeben(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenFreigeben(darlehenId);
-        return darlehenService.darlehenFreigeben(darlehenId);
+        return darlehenService.freiwilligDarlehenFreigeben(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
     public FreiwilligDarlehenDto freiwilligDarlehenZurueckweisen(UUID darlehenId, KommentarDto kommentar) {
         darlehenAuthorizer.canDarlehenZurueckweisen(darlehenId);
-        return darlehenService.darlehenZurueckweisen(darlehenId, kommentar);
+        return darlehenService.freiwilligDarlehenZurueckweisen(darlehenId, kommentar);
     }
 
     @Override
@@ -172,14 +172,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
         FreiwilligDarlehenUpdateGsDto darlehenUpdateGsDto
     ) {
         darlehenAuthorizer.canDarlehenUpdateGs(darlehenId);
-        return darlehenService.darlehenUpdateGs(darlehenId, darlehenUpdateGsDto);
+        return darlehenService.freiwilligDarlehenUpdateGs(darlehenId, darlehenUpdateGsDto);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_DELETE)
     public void deleteFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenUpdateGs(darlehenId);
-        darlehenService.deleteDarlehen(darlehenId);
+        darlehenService.deleteFreiwilligDarlehen(darlehenId);
     }
 
     @Override
@@ -211,7 +211,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         FileUpload fileUpload
     ) {
         darlehenAuthorizer.canCreateDarlehenDokument(darlehenId);
-        return darlehenService.uploadDarlehenDokument(darlehenId, dokumentTyp, fileUpload);
+        return darlehenService.uploadFreiwilligDarlehenDokument(darlehenId, dokumentTyp, fileUpload);
     }
 
     @Override
@@ -238,7 +238,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getDarlehenAllSb(gesuchId);
+        return darlehenService.getFreiwilligDarlehenAllSb(gesuchId);
     }
 
     @Override
@@ -252,7 +252,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(UUID fallId) {
         darlehenAuthorizer.canGetDarlehenByFallId(fallId);
-        return darlehenService.getDarlehenAllGs(fallId);
+        return darlehenService.getFreiwilligDarlehenAllGs(fallId);
     }
 
     @Override

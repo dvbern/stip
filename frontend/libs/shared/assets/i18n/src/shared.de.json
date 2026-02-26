@@ -322,6 +322,14 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Abgelehnt",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_FREIGABE.to.ABGELEHNT": "Abgelehnt",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_FREIGABE.to.AKZEPTIERT": "Akzeptiert",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingegeben",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Zurückgewiesen",
+  "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Freigegeben",
+
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingereicht",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
