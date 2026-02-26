@@ -47,7 +47,10 @@
                 <tr data-testid="geschwister-row">
                   @if (asGeschwister(geschwisterRaw); as geschwister) {
                     <td class="position-relative">
-                      @if (view.listChanges | dvZuvorListContains: $index) {
+                      @if (
+                        view.listChanges?.hasChangesByIdentifier?.[geschwister.entryId] ||
+                        view.listChanges?.newEntriesByIdentifier?.[geschwister.entryId]
+                      ) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
                       <i class="material-symbols-rounded align-middle" aria-hidden="true">done</i>
@@ -61,7 +64,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister, $index)"
+                          (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.edit' | transloco"
                         >
                           <i class="material-symbols-rounded">edit</i>
@@ -82,7 +85,7 @@
                         <button
                           type="button"
                           class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister, $index)"
+                          (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.view' | transloco"
                         >
                           <i class="material-symbols-rounded">visibility</i>

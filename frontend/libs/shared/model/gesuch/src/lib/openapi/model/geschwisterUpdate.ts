@@ -13,6 +13,7 @@ import { Ausbildungssituation } from './ausbildungssituation';
 import { Wohnsitz } from './wohnsitz';
 
 export interface GeschwisterUpdate { 
+    entryId: string;
     vorname: string;
     /**
      * dd.MM.yyyy

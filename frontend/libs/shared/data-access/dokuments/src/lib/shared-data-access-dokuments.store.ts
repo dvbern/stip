@@ -157,13 +157,25 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       loading: isPending(this.dokuments()),
-      requiredDocumentTypes:
-        fromCachedDataSig(this.documentsToUpload)?.required?.filter(
+      requiredDocumentTypes: [
+        ...(fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
           // them out
           (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
-        ) ?? [],
+        ) ?? []),
+        ...(fromCachedDataSig(this.documentsToUpload)
+          ?.requiredRefs?.filter(
+            (required) =>
+              !dokuments.some(
+                (d) =>
+                  d.entryId &&
+                  d.dokumentTyp === required.dokumentTyp &&
+                  d.entryId === required.entryId,
+              ),
+          )
+          .map((d) => d.dokumentTyp) ?? []),
+      ],
     };
   });
 

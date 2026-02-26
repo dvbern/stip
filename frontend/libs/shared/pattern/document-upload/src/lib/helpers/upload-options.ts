@@ -305,6 +305,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
 export function createUploadOptionsFactory<
   T extends Signal<{
     trancheId: string | undefined;
+    entryId?: string;
     allowTypes: string | undefined;
     permissions: PermissionMap;
   }>,
@@ -333,9 +334,7 @@ export function createUploadOptionsFactory<
     options?: { initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
-      const permissions = view().permissions;
-      const trancheId = view().trancheId;
-      const allowTypes = view().allowTypes;
+      const { permissions, trancheId, allowTypes, entryId } = view();
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {
@@ -349,6 +348,7 @@ export function createUploadOptionsFactory<
             dokument: {
               permissions,
               trancheId,
+              entryId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },

@@ -122,6 +122,7 @@ export class UploadStore {
   private getRequiredGesuchDokumenteByAppType(params: {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    entryId?: string;
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
@@ -178,6 +179,7 @@ export class UploadStore {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
             dokumentTyp: dokument.dokumentTyp,
+            entryId: dokument.entryId,
           },
           ...serviceDefaultParams,
         ),
@@ -187,6 +189,7 @@ export class UploadStore {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
             dokumentTyp: dokument.dokumentTyp,
+            entryId: dokument.entryId,
           },
           ...serviceDefaultParams,
         ),
@@ -252,6 +255,7 @@ export class UploadStore {
                 return this.getRequiredGesuchDokumenteByAppType({
                   dokumentTyp: dokument.dokumentTyp,
                   gesuchTrancheId: dokument.trancheId,
+                  entryId: dokument.entryId,
                 }).pipe(
                   map(
                     ({ value }) =>

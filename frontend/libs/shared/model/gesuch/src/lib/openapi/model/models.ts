@@ -129,6 +129,7 @@ export * from './gesuchDashboardItemMissingDocuments';
 export * from './gesuchDokument';
 export * from './gesuchDokumentAblehnenRequest';
 export * from './gesuchDokumentKommentar';
+export * from './gesuchDokumentRef';
 export * from './gesuchFormular';
 export * from './gesuchFormularUpdate';
 export * from './gesuchInfo';

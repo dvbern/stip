@@ -4,9 +4,9 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
   OnChanges,
   Output,
+  computed,
   inject,
   input,
 } from '@angular/core';
@@ -106,15 +106,28 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   private einreichenStore = inject(EinreichenStore);
   private formUtils = inject(SharedUtilFormService);
 
-  @Input({ required: true }) kind!: Partial<KindUpdate>;
+  kindSig = input.required<Partial<KindUpdate>>();
   changesSig = input<Partial<KindUpdate>>({});
   @Output() saveTriggered = new EventEmitter<KindUpdate>();
   @Output() closeTriggered = new EventEmitter<void>();
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+  private entryIdSig = computed(() => {
+    const kind = this.kindSig();
+
+    return kind.id && kind.entryId ? kind.entryId : self.crypto.randomUUID();
+  });
   languageSig = this.store.selectSignal(selectLanguage);
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+  private storeViewSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchsView,
+  );
+  viewSig = computed(() => {
+    const view = this.storeViewSig();
+    const entryId = this.entryIdSig();
+
+    return { ...view, entryId };
+  });
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject();
   maskitoNumber = maskitoNumber;
@@ -219,19 +232,19 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   }
 
   ngOnChanges() {
+    const kind = this.kindSig();
     this.form.patchValue({
-      ...this.kind,
+      ...kind,
       geburtsdatum: parseBackendLocalDateAndPrint(
-        this.kind.geburtsdatum,
+        kind.geburtsdatum,
         this.languageSig(),
       ),
-      wohnsitzAnteilPia: this.kind.wohnsitzAnteilPia?.toString(),
-      unterhaltsbeitraege: this.kind.unterhaltsbeitraege?.toString(),
-      kinderUndAusbildungszulagen:
-        this.kind.kinderUndAusbildungszulagen?.toString(),
-      renten: this.kind.renten?.toString(),
-      ergaenzungsleistungen: this.kind.ergaenzungsleistungen?.toString(),
-      andereEinnahmen: this.kind.andereEinnahmen?.toString(),
+      wohnsitzAnteilPia: kind.wohnsitzAnteilPia?.toString(),
+      unterhaltsbeitraege: kind.unterhaltsbeitraege?.toString(),
+      kinderUndAusbildungszulagen: kind.kinderUndAusbildungszulagen?.toString(),
+      renten: kind.renten?.toString(),
+      ergaenzungsleistungen: kind.ergaenzungsleistungen?.toString(),
+      andereEinnahmen: kind.andereEinnahmen?.toString(),
     });
   }
 
@@ -244,6 +257,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       'wohnsitzAnteilPia',
     ]);
 
+    const kind = this.kindSig();
     const geburtsdatum = parseStringAndPrintForBackendLocalDate(
       formValues.geburtsdatum,
       this.languageSig(),
@@ -252,7 +266,8 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
         ...formValues,
-        id: this.kind?.id,
+        id: kind?.id,
+        entryId: this.entryIdSig(),
         geburtsdatum,
         wohnsitzAnteilPia: percentStringToNumber(formValues.wohnsitzAnteilPia),
         unterhaltsbeitraege: fromFormatedNumber(formValues.unterhaltsbeitraege),

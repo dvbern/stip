@@ -12,6 +12,7 @@
 import { Ausbildungssituation } from './ausbildungssituation';
 
 export interface KindUpdate { 
+    entryId: string;
     vorname: string;
     /**
      * dd.MM.yyyy
