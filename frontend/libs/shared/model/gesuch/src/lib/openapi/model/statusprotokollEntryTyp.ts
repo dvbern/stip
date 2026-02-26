@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 
-export type StatusprotokollEntryTyp = 'GESUCH' | 'AENDERUNG';
+export type StatusprotokollEntryTyp = 'GESUCH' | 'AENDERUNG' | 'FREIWILLIG_DARLEHEN';
 
 export const StatusprotokollEntryTyp = {
     GESUCH: 'GESUCH' as StatusprotokollEntryTyp,
-    AENDERUNG: 'AENDERUNG' as StatusprotokollEntryTyp
+    AENDERUNG: 'AENDERUNG' as StatusprotokollEntryTyp,
+    FREIWILLIG_DARLEHEN: 'FREIWILLIG_DARLEHEN' as StatusprotokollEntryTyp
 };
 
