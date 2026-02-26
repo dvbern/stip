@@ -553,6 +553,10 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/DokumentTyp'
+        requiredRefs:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchDokumentRef'
         unterschriftenblaetter:
           type: array
           items:
