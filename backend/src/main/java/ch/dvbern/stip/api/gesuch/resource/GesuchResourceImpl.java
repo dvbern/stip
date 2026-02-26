@@ -191,7 +191,7 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Blocking
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public Uni<Response> createBeschwerdeEntscheid(
         UUID gesuchId,
         String kommentar,
@@ -208,7 +208,7 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed(SB_GESUCH_UPDATE)
+    @RolesAllowed({ SB_GESUCH_UPDATE, JURIST_GESUCH_UPDATE })
     public BeschwerdeVerlaufEntryDto createBeschwerdeVerlaufEntry(
         UUID gesuchId,
         BeschwerdeVerlaufEntryCreateDto beschwerdeVerlaufEntryCreateDto

@@ -31,12 +31,15 @@ import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @ApplicationScoped
 @RequiredArgsConstructor
 @Authorizer
@@ -238,7 +241,22 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdateNachfrist(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST);
+        var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(gesuch.getGesuchStatus())) {
+            assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST);
+            return;
+        }
+
+        var aenderungen = gesuch.getAenderungs()
+            .filter(
+                gesuchTranche -> GesuchTrancheStatus.SACHBEARBEITER_CAN_UPDATE_NACHFRIST
+                    .contains(gesuchTranche.getStatus())
+            )
+            .toList();
+
+        if (aenderungen.isEmpty()) {
+            forbidden();
+        }
     }
 
     @Transactional
