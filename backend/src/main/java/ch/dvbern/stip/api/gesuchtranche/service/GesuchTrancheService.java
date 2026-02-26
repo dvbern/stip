@@ -91,6 +91,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -225,8 +226,9 @@ public class GesuchTrancheService {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
         final var required = getRequiredDokumentTypes(gesuchTranche);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
-        var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, List.of(), customRequired);
+        var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, requiredRefs, List.of(), customRequired);
         return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
     }
 
@@ -234,10 +236,12 @@ public class GesuchTrancheService {
     public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
         final var required = getRequiredDokumentTypes(gesuchTranche);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
-        var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, unterschriftenblaetter, customRequired);
+        var dokumenteToUploadDto =
+            dokumenteToUploadMapper.toDto(required, requiredRefs, unterschriftenblaetter, customRequired);
         return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
     }
 
@@ -260,6 +264,10 @@ public class GesuchTrancheService {
 
     public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
         return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    }
+
+    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefs(final GesuchTranche gesuchTranche) {
+        return requiredDokumentService.getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular());
     }
 
     @Transactional

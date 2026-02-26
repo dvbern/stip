@@ -18,10 +18,12 @@
 package ch.dvbern.stip.api.geschwister.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,22 +31,25 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class GeschwisterRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class GeschwisterRequiredListDocumentsProducer implements RequiredListDocumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var geschwister = formular.getGeschwisters();
-        if (geschwister == null) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDocuments(GesuchFormular formular) {
+        final var geschwisters = formular.getGeschwisters();
+        if (Objects.isNull(geschwisters)) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
+        final var requiredDocs = new HashSet<Pair<DokumentTyp, UUID>>();
 
-        if (
-            formular.getGeschwisters()
-                .stream()
-                .anyMatch(x -> x.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG)
-        ) {
-            requiredDocs.add(DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
+        for (var geschwister : geschwisters) {
+            if (geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG) {
+                requiredDocs.add(
+                    Pair.of(
+                        DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,
+                        geschwister.getEntryId()
+                    )
+                );
+            }
         }
 
         return ImmutablePair.of("geschwisters", requiredDocs);

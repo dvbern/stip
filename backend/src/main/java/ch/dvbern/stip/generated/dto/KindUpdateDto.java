@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class KindUpdateDto  implements Serializable {
+  private @Valid UUID entryId;
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
@@ -32,6 +33,25 @@ public class KindUpdateDto  implements Serializable {
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer andereEinnahmen;
+
+  /**
+   **/
+  public KindUpdateDto entryId(UUID entryId) {
+    this.entryId = entryId;
+    return this;
+  }
+
+  
+  @JsonProperty("entryId")
+  @NotNull
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+  @JsonProperty("entryId")
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
 
   /**
    **/
@@ -247,7 +267,8 @@ public class KindUpdateDto  implements Serializable {
       return false;
     }
     KindUpdateDto kindUpdate = (KindUpdateDto) o;
-    return Objects.equals(this.vorname, kindUpdate.vorname) &&
+    return Objects.equals(this.entryId, kindUpdate.entryId) &&
+        Objects.equals(this.vorname, kindUpdate.vorname) &&
         Objects.equals(this.geburtsdatum, kindUpdate.geburtsdatum) &&
         Objects.equals(this.ausbildungssituation, kindUpdate.ausbildungssituation) &&
         Objects.equals(this.wohnsitzAnteilPia, kindUpdate.wohnsitzAnteilPia) &&
@@ -262,7 +283,7 @@ public class KindUpdateDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
@@ -270,6 +291,7 @@ public class KindUpdateDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class KindUpdateDto {\n");
     
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");

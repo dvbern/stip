@@ -138,6 +138,7 @@ public class GesuchDokumentService {
     public Uni<Response> getUploadDokumentUni(
         final DokumentTyp dokumentTyp,
         final UUID gesuchTrancheId,
+        final UUID entryId,
         final FileUpload fileUpload
     ) {
         return dokumentUploadService.validateScanUploadDokument(
@@ -150,11 +151,12 @@ public class GesuchDokumentService {
                 uploadDokument(
                     gesuchTrancheId,
                     dokumentTyp,
+                    entryId,
                     fileUpload,
                     objectId
                 );
 
-                synchroniseGesuchDokumente(gesuchTrancheId, dokumentTyp);
+                synchroniseGesuchDokumente(gesuchTrancheId, dokumentTyp, entryId);
             },
             throwable -> LOG.error(throwable.getMessage())
         );
@@ -164,6 +166,7 @@ public class GesuchDokumentService {
     public void uploadDokument(
         final UUID gesuchTrancheId,
         final DokumentTyp dokumentTyp,
+        final UUID entryId,
         final FileUpload fileUpload,
         final String objectId
     ) {
@@ -172,8 +175,8 @@ public class GesuchDokumentService {
             .orElseThrow(NotFoundException::new);
 
         final var gesuchDokument = gesuchDokumentRepository
-            .findByGesuchTrancheAndDokumentTyp(gesuchTranche.getId(), dokumentTyp)
-            .orElseGet(() -> createGesuchDokument(gesuchTranche, dokumentTyp));
+            .findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(gesuchTranche.getId(), dokumentTyp, entryId)
+            .orElseGet(() -> createGesuchDokument(gesuchTranche, dokumentTyp, entryId));
 
         final var dokument = new Dokument()
             .setFilename(fileUpload.fileName())
@@ -253,13 +256,17 @@ public class GesuchDokumentService {
     @Transactional
     public NullableGesuchDokumentDto findGesuchDokumentForTypGS(
         final UUID gesuchTrancheId,
-        final DokumentTyp dokumentTyp
+        final DokumentTyp dokumentTyp,
+        final UUID entryId
     ) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
         final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
             .stream()
-            .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+            .filter(
+                gDok -> gDok.getDokumentTyp() == dokumentTyp
+                && (Objects.isNull(gDok.getEntryId()) && Objects.isNull(entryId) || gDok.getEntryId().equals(entryId))
+            )
             .findFirst();
         final var dto = gesuchDokumentOpt.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
@@ -268,10 +275,12 @@ public class GesuchDokumentService {
     @Transactional
     public NullableGesuchDokumentDto findGesuchDokumentForTypSB(
         final UUID gesuchTrancheId,
-        final DokumentTyp dokumentTyp
+        final DokumentTyp dokumentTyp,
+        final UUID entryId
     ) {
         final var gesuchDokument =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
+            gesuchDokumentRepository
+                .findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(gesuchTrancheId, dokumentTyp, entryId);
         final var dto = gesuchDokument.map(gesuchDokumentMapper::toDto).orElse(null);
         return new NullableGesuchDokumentDto(dto);
     }
@@ -589,9 +598,13 @@ public class GesuchDokumentService {
         }
     }
 
-    private GesuchDokument createGesuchDokument(final GesuchTranche gesuchTranche, final DokumentTyp dokumentTyp) {
+    private GesuchDokument createGesuchDokument(
+        final GesuchTranche gesuchTranche,
+        final DokumentTyp dokumentTyp,
+        final UUID entryId
+    ) {
         GesuchDokument gesuchDokument =
-            new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp);
+            new GesuchDokument().setGesuchTranche(gesuchTranche).setDokumentTyp(dokumentTyp).setEntryId(entryId);
         gesuchDokumentRepository.persist(gesuchDokument);
         return gesuchDokument;
     }
@@ -608,7 +621,11 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void synchroniseGesuchDokumente(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+    public void synchroniseGesuchDokumente(
+        final UUID gesuchTrancheId,
+        final DokumentTyp dokumentTyp,
+        final UUID entryId
+    ) {
         if (!isDokumentOfJahreswert(dokumentTyp)) {
             // No synchronisation is needed if not a Dokument on a Jahreswert field
             return;
@@ -625,9 +642,10 @@ public class GesuchDokumentService {
             .filter(gesuchTranche -> !gesuchTranche.getId().equals(sourceTranche.getId()))
             .toList();
 
-        final var sourceGesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(
+        final var sourceGesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(
             gesuchTrancheId,
-            dokumentTyp
+            dokumentTyp,
+            entryId
         );
 
         for (final var targetTranche : targetTranchen) {

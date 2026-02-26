@@ -52,7 +52,11 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream().toList();
     }
 
-    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentTyp(UUID gesuchTrancheId, DokumentTyp dokumentTyp) {
+    public Optional<GesuchDokument> findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(
+        UUID gesuchTrancheId,
+        DokumentTyp dokumentTyp,
+        UUID entryId
+    ) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var gesuchDokument = QGesuchDokument.gesuchDokument;
         var query = queryFactory
@@ -60,6 +64,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .where(
                 gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
                     .and(gesuchDokument.dokumentTyp.eq(dokumentTyp))
+                    .and(Objects.isNull(entryId) ? gesuchDokument.entryId.isNull() : gesuchDokument.entryId.eq(entryId))
             );
         return query.stream().findFirst();
     }

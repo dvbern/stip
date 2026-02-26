@@ -20,10 +20,13 @@ package ch.dvbern.stip.api.dokument.util;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -32,10 +35,13 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.tuple.Pair;
 
 @UtilityClass
 public class RequiredDokumentUtil {
-    public List<DokumentTyp> getExistingGesuchDokumentTypesWithoutAttachedDokumente(final GesuchFormular formular) {
+    private Stream<GesuchDokument> getExistingGesuchDokumentBaseWithoutAttachedDokumenteStream(
+        final GesuchFormular formular
+    ) {
         return formular
             .getTranche()
             .getGesuchDokuments()
@@ -43,22 +49,34 @@ public class RequiredDokumentUtil {
             .filter(
                 dokument -> !dokument.getDokumente().isEmpty()
                 && Objects.nonNull(dokument.getDokumentTyp())
-            )
+            );
+    }
+
+    public List<DokumentTyp> getExistingGesuchDokumentTypesWithoutAttachedDokumente(final GesuchFormular formular) {
+        return getExistingGesuchDokumentBaseWithoutAttachedDokumenteStream(formular)
             .map(GesuchDokument::getDokumentTyp)
             .toList();
     }
 
-    public List<DokumentTyp> getExistingGesuchDokumentTypes(final GesuchFormular formular) {
+    public List<Pair<DokumentTyp, UUID>> getExistingGesuchDokumentRefsWithoutAttachedDokumente(
+        final GesuchFormular formular
+    ) {
+        return getExistingGesuchDokumentBaseWithoutAttachedDokumenteStream(formular)
+            .map(GesuchDokument::getReference)
+            .toList();
+    }
+
+    public List<Pair<DokumentTyp, UUID>> getExistingGesuchDokumentTypes(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments()
             .stream()
-            .map(GesuchDokument::getDokumentTyp)
-            .filter(Objects::nonNull)
+            .filter(gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp()))
+            .map(GesuchDokument::getReference)
             .toList();
     }
 
-    public Set<DokumentTyp> getAusstehendeDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
+    private Stream<GesuchDokument> getAusstehendeDokumentStreamWithNoFilesAttached(final GesuchFormular formular) {
         return formular
             .getTranche()
             .getGesuchDokuments()
@@ -66,8 +84,17 @@ public class RequiredDokumentUtil {
             .filter(
                 gesuchDokument -> !gesuchDokument.getStatus().equals(GesuchDokumentStatus.AKZEPTIERT)
                 && Objects.isNull(gesuchDokument.getCustomDokumentTyp()) && gesuchDokument.getDokumente().isEmpty()
-            )
-            .map(GesuchDokument::getDokumentTyp)
+            );
+    }
+
+    public Set<DokumentTyp> getAusstehendeDokumentTypesWithNoFilesAttached(final GesuchFormular formular) {
+        return getAusstehendeDokumentStreamWithNoFilesAttached(formular).map(GesuchDokument::getDokumentTyp)
+            .collect(Collectors.toSet());
+    }
+
+    public Set<Pair<DokumentTyp, UUID>> getAusstehendeDokumentRefsWithNoFilesAttached(final GesuchFormular formular) {
+        return getAusstehendeDokumentStreamWithNoFilesAttached(formular)
+            .map(GesuchDokument::getReference)
             .collect(Collectors.toSet());
     }
 
@@ -78,6 +105,19 @@ public class RequiredDokumentUtil {
         return requiredDocumentProducers
             .stream()
             .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
+            .flatMap(
+                dokumentTypPair -> dokumentTypPair.getRight().stream()
+            )
+            .collect(Collectors.toSet());
+    }
+
+    public Set<Pair<DokumentTyp, UUID>> getRequiredListDokumentRefsForGesuch(
+        final GesuchFormular formular,
+        final Instance<RequiredListDocumentsProducer> requiredDocumentProducers
+    ) {
+        return requiredDocumentProducers
+            .stream()
+            .map(producer -> producer.getRequiredDocuments(formular))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )

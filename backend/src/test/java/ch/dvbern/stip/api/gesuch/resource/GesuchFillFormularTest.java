@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecMod
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.entities.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -64,6 +65,7 @@ import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -110,6 +112,8 @@ class GesuchFillFormularTest {
     private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
+    @Inject
+    DokumentGenerator dokumentGenerator;
 
     @Test
     @TestAsGesuchsteller
@@ -349,10 +353,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(17)
     void addDokumente() {
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(gesuchTrancheId);
 
         validatePage(false);
     }

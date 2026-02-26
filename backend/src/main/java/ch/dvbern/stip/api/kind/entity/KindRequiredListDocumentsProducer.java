@@ -19,8 +19,9 @@ package ch.dvbern.stip.api.kind.entity;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -30,34 +31,33 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class KindRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class KindRequiredListDocumentsProducer implements RequiredListDocumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDocuments(GesuchFormular formular) {
         final var kinds = formular.getKinds();
         if (kinds == null) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
-        kinds.forEach(kind -> {
+        final var requiredDocs = new HashSet<Pair<DokumentTyp, UUID>>();
+        for (var kind : kinds) {
             if (kind.getUnterhaltsbeitraege() != null) {
-                requiredDocs.add(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ALIMENTENVERORDUNG, kind.getEntryId()));
             }
 
             if (greaterThanZero(kind.getErgaenzungsleistungen())) {
-                requiredDocs.add(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN);
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN, kind.getEntryId()));
             }
             if (greaterThanZero(kind.getKinderUndAusbildungszulagen())) {
-                requiredDocs.add(DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN);
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN, kind.getEntryId()));
             }
             if (greaterThanZero(kind.getRenten())) {
-                requiredDocs.add(DokumentTyp.KINDER_RENTEN);
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_RENTEN, kind.getEntryId()));
             }
             if (greaterThanZero(kind.getAndereEinnahmen())) {
-                requiredDocs.add(DokumentTyp.KINDER_ANDERE_EINNAHMEN);
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ANDERE_EINNAHMEN, kind.getEntryId()));
             }
         }
-        );
 
         return ImmutablePair.of("kinds", requiredDocs);
     }

@@ -18,14 +18,15 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.enterprise.inject.Instance;
@@ -43,6 +44,8 @@ public class DocumentsRequiredConstraintValidator
     private static final String PAGENAME = "dokuments";
     @Inject
     Instance<RequiredDocumentsProducer> producers;
+    @Inject
+    Instance<RequiredListDocumentsProducer> listProducers;
 
     @Inject
     Instance<RequiredCustomDocumentsProducer> customProducers;
@@ -50,38 +53,59 @@ public class DocumentsRequiredConstraintValidator
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
         final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
+        final var requiredListDocs =
+            listProducers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
 
-        final var existingDokumenteOfType = getExistingRequiredDokumentTypes(formular);
-        // when a required doc is not existing in existingDokumenteOfType, it is still missing...
-        var filtered = requiredDocs.stream()
+        final var existingDokuments = getExistingRequiredGesuchDokuments(formular);
+        final var existingDokumentTypMap = existingDokuments.stream()
+            .filter(d -> Objects.nonNull(d.getDokumentTyp()) && Objects.isNull(d.getEntryId()))
+            .collect(Collectors.toUnmodifiableMap(GesuchDokument::getDokumentTyp, Function.identity(), (a, b) -> a));
+        final var existingDokumentRefMap = existingDokuments.stream()
+            .filter(d -> Objects.nonNull(d.getDokumentTyp()) && Objects.nonNull(d.getEntryId()))
+            .collect(Collectors.toUnmodifiableMap(GesuchDokument::getReference, Function.identity(), (a, b) -> a));
+
+        // when a required doc is not existing in existingDokuments, it is still missing...
+        final var missingGesuchDokuments = requiredDocs.stream()
             .filter(
-                doc -> doc.getRight().stream().anyMatch(dokumentTyp -> !existingDokumenteOfType.contains(dokumentTyp))
+                doc -> doc.getRight().stream().anyMatch(d -> !existingDokumentTypMap.containsKey(d))
             )
             .map(Pair::getLeft)
             .toList();
-        Set<String> allFiltered = new HashSet<>(filtered);
+
+        // same for list dokuments like kinds and geschwisters
+        final var missingListGesuchDokuments = requiredListDocs.stream()
+            .filter(
+                doc -> doc.getRight().stream().anyMatch(d -> !existingDokumentRefMap.containsKey(d))
+            )
+            .map(Pair::getLeft)
+            .toList();
 
         // add an entry (pointing to the documents page) for each missing custom document,
         // so that the GS is informed about which he is required to upload
-        final var customFiltered =
+        final var missingCustomDokuments =
             DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
-        customFiltered.forEach(missingCustomDok -> allFiltered.add(PAGENAME));
+
+        final Set<String> allMissingDokuments = new HashSet<>(missingGesuchDokuments);
+        allMissingDokuments.addAll(missingListGesuchDokuments);
+        if (!missingCustomDokuments.isEmpty()) {
+            allMissingDokuments.add(PAGENAME);
+        }
 
         if (
-            !allFiltered.isEmpty()
+            !allMissingDokuments.isEmpty()
         ) {
             return GesuchValidatorUtil.addProperties(
                 context,
                 VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
-                allFiltered
+                allMissingDokuments
             );
         }
 
         return true;
     }
 
-    private Set<DokumentTyp> getExistingRequiredDokumentTypes(GesuchFormular formular) {
-        final Function<String, Set<DokumentTyp>> logAndReturn = path -> {
+    private Set<GesuchDokument> getExistingRequiredGesuchDokuments(GesuchFormular formular) {
+        final Function<String, Set<GesuchDokument>> logAndReturn = path -> {
             LOG.error(
                 "If this happens in testing it's OK: {} on GesuchFormular with id '{}' is null",
                 path,
@@ -109,7 +133,6 @@ public class DocumentsRequiredConstraintValidator
             .filter(
                 gesuchDokument -> !gesuchDokument.getDokumente().isEmpty()
             )
-            .map(GesuchDokument::getDokumentTyp)
             .collect(Collectors.toSet());
     }
 }

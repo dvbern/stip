@@ -27,13 +27,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class GeschwisterRequiredDocumentsProducerTest {
-    private GeschwisterRequiredDocumentsProducer producer;
+    private GeschwisterRequiredListDocumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new GeschwisterRequiredDocumentsProducer();
+        producer = new GeschwisterRequiredListDocumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -46,6 +46,6 @@ class GeschwisterRequiredDocumentsProducerTest {
         });
 
         final var requiredDocs = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
+        RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
     }
 }

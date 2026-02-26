@@ -40,6 +40,7 @@ public class GesuchDokumentCopyUtil {
 
             copy.setGesuchTranche(targetTranche);
             copy.setDokumentTyp(original.getDokumentTyp());
+            copy.setEntryId(original.getEntryId());
             if (original.getCustomDokumentTyp() != null) {
                 copy.setCustomDokumentTyp(copyCustomDokumentTyp(original.getCustomDokumentTyp(), copy));
             }
@@ -74,6 +75,7 @@ public class GesuchDokumentCopyUtil {
         target.setDokumentTyp(source.getDokumentTyp());
         target.setGesuchTranche(targetTranche);
         target.setDokumentTyp(source.getDokumentTyp());
+        target.setEntryId(source.getEntryId());
         target.setStatus(source.getStatus());
         if (source.getCustomDokumentTyp() != null) {
             target.setCustomDokumentTyp(copyCustomDokumentTyp(source.getCustomDokumentTyp(), target));

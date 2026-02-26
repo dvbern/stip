@@ -71,6 +71,7 @@ class GesuchFormularServiceTest {
     void setup() {
         when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
         when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentServiceMock.getRequiredDokumentRefsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);

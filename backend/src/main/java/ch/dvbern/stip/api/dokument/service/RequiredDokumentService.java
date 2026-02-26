@@ -20,12 +20,14 @@ package ch.dvbern.stip.api.dokument.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -40,11 +42,13 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class RequiredDokumentService {
     private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
+    private final Instance<RequiredListDocumentsProducer> requiredListDocumentProducers;
     private final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers;
     private final SozialdienstService sozialdienstService;
 
@@ -143,14 +147,28 @@ public class RequiredDokumentService {
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
         final var tranche = gesuchDokument.getGesuchTranche();
-        final var requiredNormalDocuments = RequiredDokumentUtil
-            .getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular(), requiredDocumentProducers);
-        final var requiredCustomDocuments = getRequiredCustomDokumentsForGesuchFormular(tranche);
-        if (Objects.isNull(gesuchDokument.getCustomDokumentTyp())) {
-            return requiredNormalDocuments.contains(gesuchDokument.getDokumentTyp());
+        final var isListDokument = Objects.isNull(gesuchDokument.getEntryId());
+        final var isCustomDokument = Objects.isNull(gesuchDokument.getCustomDokumentTyp());
+
+        if (isListDokument) {
+            final var requiredListDocuments = RequiredDokumentUtil
+                .getRequiredListDokumentRefsForGesuch(tranche.getGesuchFormular(), requiredListDocumentProducers);
+
+            return requiredListDocuments.stream()
+                .anyMatch(
+                    pair -> gesuchDokument.getDokumentTyp().equals(pair.getLeft())
+                    && gesuchDokument.getEntryId().equals(pair.getRight())
+                );
         }
 
-        return requiredCustomDocuments.contains(gesuchDokument.getCustomDokumentTyp());
+        if (isCustomDokument) {
+            final var requiredCustomDocuments = getRequiredCustomDokumentsForGesuchFormular(tranche);
+            return requiredCustomDocuments.contains(gesuchDokument.getCustomDokumentTyp());
+        }
+
+        final var requiredNormalDocuments = RequiredDokumentUtil
+            .getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular(), requiredDocumentProducers);
+        return requiredNormalDocuments.contains(gesuchDokument.getDokumentTyp());
     }
 
     public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
@@ -172,6 +190,29 @@ public class RequiredDokumentService {
             .filter(
                 requiredDokumentType -> !uploadedDocumentTypes.contains(requiredDokumentType)
                 || ausstehendWithMissingFiles.contains(requiredDokumentType)
+            )
+            .toList();
+    }
+
+    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefsForGesuchFormular(final GesuchFormular formular) {
+        final var uploadedDocumentRefs = new HashSet<>(
+            RequiredDokumentUtil.getExistingGesuchDokumentRefsWithoutAttachedDokumente(formular)
+        );
+
+        final var requiredListByProducers =
+            RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(formular, requiredListDocumentProducers);
+        final var ausstehendWithMissingFiles =
+            RequiredDokumentUtil.getAusstehendeDokumentRefsWithNoFilesAttached(formular);
+
+        // check if :
+        // * for each producer entry, there is an uploaded GesuchDokument
+        // * there is no empty GesuchDokument listed in the producer
+        // if opposite, this GesuchDokument is listed as still required
+        return requiredListByProducers
+            .stream()
+            .filter(
+                pair -> !uploadedDocumentRefs.contains(pair)
+                || ausstehendWithMissingFiles.contains(pair)
             )
             .toList();
     }
@@ -200,26 +241,29 @@ public class RequiredDokumentService {
     }
 
     public List<GesuchDokument> getSuperfluousDokumentsForGesuch(final GesuchFormular formular) {
-        final var existingDokumentTypes = RequiredDokumentUtil.getExistingGesuchDokumentTypes(formular);
+        final var existingDokumentRefs = RequiredDokumentUtil.getExistingGesuchDokumentTypes(formular);
 
         final var requiredDokumentTypesHashSet = new HashSet<>(
             RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDocumentProducers)
         );
+        final var requiredDokumentRefHashSet = new HashSet<>(
+            RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(formular, requiredListDocumentProducers)
+        );
 
-        final var superfluousDokumentTypes = existingDokumentTypes
+        final var superfluousDokumentTypesSet = existingDokumentRefs
             .stream()
             .filter(
-                existingDokumentType -> !requiredDokumentTypesHashSet.contains(existingDokumentType)
+                existingDokumentRef -> !requiredDokumentTypesHashSet.contains(existingDokumentRef.getLeft())
+                && !requiredDokumentRefHashSet.contains(existingDokumentRef)
             )
-            .toList();
-        final var superfluousDokumentTypesHashSet = new HashSet<>(superfluousDokumentTypes);
+            .collect(Collectors.toSet());
 
         return formular
             .getTranche()
             .getGesuchDokuments()
             .stream()
             .filter(
-                existingDokument -> superfluousDokumentTypesHashSet.contains(existingDokument.getDokumentTyp())
+                existingDokument -> superfluousDokumentTypesSet.contains(existingDokument.getReference())
             )
             .toList();
     }

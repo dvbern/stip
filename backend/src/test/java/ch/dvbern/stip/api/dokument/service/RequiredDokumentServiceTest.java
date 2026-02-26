@@ -62,7 +62,7 @@ class RequiredDokumentServiceTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
 
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, sozialdienstService
+            new MockInstance(List.of(new MockDocumentProducer())), null, null, sozialdienstService
         );
 
         // setup gs benutzer
@@ -92,7 +92,7 @@ class RequiredDokumentServiceTest {
         when(sozialdienstService.isCurrentBenutzerMitarbeiterOfSozialdienst(Mockito.any())).thenReturn(true);
 
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, sozialdienstService
+            new MockInstance(List.of(new MockDocumentProducer())), null, null, sozialdienstService
         );
 
         // setup soz-ma benutzer
@@ -119,7 +119,7 @@ class RequiredDokumentServiceTest {
     @Test
     void getRequiredDokumentsForGesuchFormularTest() {
         final var service = new RequiredDokumentService(
-            new MockInstance(List.of(new MockDocumentProducer())), null, null
+            new MockInstance(List.of(new MockDocumentProducer())), null, null, null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -130,7 +130,7 @@ class RequiredDokumentServiceTest {
     void getEmptyListTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockEmptyDocumentProducer())),
-            null, null
+            null, null, null
         );
         final var requiredDocuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
 
@@ -141,7 +141,7 @@ class RequiredDokumentServiceTest {
     void oneExistingTest() {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())),
-            null, null
+            null, null, null
         );
         final var requiredDocuments = service
             .getRequiredDokumentsForGesuchFormular(

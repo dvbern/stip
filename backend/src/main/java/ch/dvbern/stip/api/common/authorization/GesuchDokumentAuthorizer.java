@@ -78,11 +78,12 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         forbidden();
     }
 
-    public void canGsUploadDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+    public void canGsUploadDokument(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp, final UUID entryId) {
         assertGsCanModifyDokumentOfTranche(gesuchTrancheId);
 
         final var dokumentOpt =
-            gesuchDokumentRepository.findByGesuchTrancheAndDokumentTyp(gesuchTrancheId, dokumentTyp);
+            gesuchDokumentRepository
+                .findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(gesuchTrancheId, dokumentTyp, entryId);
         if (dokumentOpt.isEmpty()) {
             return;
         }

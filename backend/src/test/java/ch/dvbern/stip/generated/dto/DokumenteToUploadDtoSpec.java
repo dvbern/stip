@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DokumenteToUploadDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYPS,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_REQUIRED,
+  DokumenteToUploadDtoSpec.JSON_PROPERTY_REQUIRED_REFS,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN,
@@ -49,6 +51,9 @@ public class DokumenteToUploadDtoSpec {
 
   public static final String JSON_PROPERTY_REQUIRED = "required";
   private List<DokumentTypDtoSpec> required;
+
+  public static final String JSON_PROPERTY_REQUIRED_REFS = "requiredRefs";
+  private List<GesuchDokumentRefDtoSpec> requiredRefs;
 
   public static final String JSON_PROPERTY_UNTERSCHRIFTENBLAETTER = "unterschriftenblaetter";
   private List<UnterschriftenblattDokumentTypDtoSpec> unterschriftenblaetter;
@@ -133,6 +138,40 @@ public class DokumenteToUploadDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setRequired(List<DokumentTypDtoSpec> required) {
     this.required = required;
+  }
+
+
+  public DokumenteToUploadDtoSpec requiredRefs(List<GesuchDokumentRefDtoSpec> requiredRefs) {
+    
+    this.requiredRefs = requiredRefs;
+    return this;
+  }
+
+  public DokumenteToUploadDtoSpec addRequiredRefsItem(GesuchDokumentRefDtoSpec requiredRefsItem) {
+    if (this.requiredRefs == null) {
+      this.requiredRefs = new ArrayList<>();
+    }
+    this.requiredRefs.add(requiredRefsItem);
+    return this;
+  }
+
+   /**
+   * Get requiredRefs
+   * @return requiredRefs
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_REQUIRED_REFS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<GesuchDokumentRefDtoSpec> getRequiredRefs() {
+    return requiredRefs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_REQUIRED_REFS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setRequiredRefs(List<GesuchDokumentRefDtoSpec> requiredRefs) {
+    this.requiredRefs = requiredRefs;
   }
 
 
@@ -284,6 +323,7 @@ public class DokumenteToUploadDtoSpec {
     DokumenteToUploadDtoSpec dokumenteToUpload = (DokumenteToUploadDtoSpec) o;
     return Objects.equals(this.customDokumentTyps, dokumenteToUpload.customDokumentTyps) &&
         Objects.equals(this.required, dokumenteToUpload.required) &&
+        Objects.equals(this.requiredRefs, dokumenteToUpload.requiredRefs) &&
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter) &&
         Objects.equals(this.sbCanFehlendeDokumenteUebermitteln, dokumenteToUpload.sbCanFehlendeDokumenteUebermitteln) &&
         Objects.equals(this.gsCanDokumenteUebermitteln, dokumenteToUpload.gsCanDokumenteUebermitteln) &&
@@ -293,7 +333,7 @@ public class DokumenteToUploadDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(customDokumentTyps, required, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen, sbCanUploadUnterschriftenblatt);
+    return Objects.hash(customDokumentTyps, required, requiredRefs, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen, sbCanUploadUnterschriftenblatt);
   }
 
   @Override
@@ -302,6 +342,7 @@ public class DokumenteToUploadDtoSpec {
     sb.append("class DokumenteToUploadDtoSpec {\n");
     sb.append("    customDokumentTyps: ").append(toIndentedString(customDokumentTyps)).append("\n");
     sb.append("    required: ").append(toIndentedString(required)).append("\n");
+    sb.append("    requiredRefs: ").append(toIndentedString(requiredRefs)).append("\n");
     sb.append("    unterschriftenblaetter: ").append(toIndentedString(unterschriftenblaetter)).append("\n");
     sb.append("    sbCanFehlendeDokumenteUebermitteln: ").append(toIndentedString(sbCanFehlendeDokumenteUebermitteln)).append("\n");
     sb.append("    gsCanDokumenteUebermitteln: ").append(toIndentedString(gsCanDokumenteUebermitteln)).append("\n");
