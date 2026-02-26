@@ -47,6 +47,23 @@
         ></dv-shared-pattern-document-upload>
       </div>
     </dd>
+
+    @if (!dialogData.canAntragAkzeptieren) {
+      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+        {{ t('shared.ausbildung-unterbrechen.startDate') }}
+      </dt>
+      <dd class="tw:font-normal">{{ dialogData.startDate | date: 'dd.MM.yyyy' }}</dd>
+
+      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+        {{ t('shared.ausbildung-unterbrechen.endDate') }}
+      </dt>
+      <dd class="tw:font-normal">{{ dialogData.endDate | date: 'dd.MM.yyyy' }}</dd>
+
+      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+        {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.anzahlMonate') }}
+      </dt>
+      <dd class="tw:font-normal">{{ dialogData.monateOhneAnspruch }}</dd>
+    }
   </dl>
 
   @if (dialogData.canAntragAkzeptieren) {

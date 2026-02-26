@@ -110,13 +110,32 @@
           </div>
         }
         @if (hasKuerzungenNachEinreichefrist) {
-          <div class="d-flex justify-content-between fs-5 mb-3">
-            <div>
-              {{
-                t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist', {
+          <div class="tw:flex tw:justify-between fs-5 mb-3">
+            <div class="tw:flex tw:items-center">
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist') }}
+
+              <button
+                type="button"
+                (click)="einreichefristInfoDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info"
+                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+              >
+                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [forceDialogPosition]="true"
+                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title'"
+                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info'"
+                [dialogMessageParams]="{
                   anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
-                })
-              }}
+                  betrag:
+                    (zusammenfassung.berechnungVorKuerzungUndTeilung ?? 0) -
+                      (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChf,
+                }"
+                #einreichefristInfoDialog="dvSharedUiInfoDialog"
+                class="d-none"
+              ></div>
             </div>
             <div>
               {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
@@ -124,13 +143,32 @@
           </div>
         }
         @if (hasKuerzungenUnterbruch) {
-          <div class="d-flex justify-content-between fs-5 mb-3">
-            <div>
-              {{
-                t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch', {
+          <div class="tw:flex tw:justify-between fs-5 mb-3">
+            <div class="tw:flex tw:items-center">
+              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch') }}
+
+              <button
+                type="button"
+                (click)="unterbruchInfoDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md text-info"
+                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+              >
+                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [forceDialogPosition]="true"
+                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
+                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
+                [dialogMessageParams]="{
                   anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
-                })
-              }}
+                  betrag:
+                    (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) -
+                      (zusammenfassung.totalNachKuerzungUnterbruch ?? 0) | formatChf,
+                }"
+                #unterbruchInfoDialog="dvSharedUiInfoDialog"
+                class="d-none"
+              ></div>
             </div>
             <div>
               {{ zusammenfassung.totalNachKuerzungUnterbruch | formatChf }}
