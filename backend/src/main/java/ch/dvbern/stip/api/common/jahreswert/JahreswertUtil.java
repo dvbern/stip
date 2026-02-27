@@ -60,7 +60,12 @@ public class JahreswertUtil {
 
         final var einnahmenKostenPartner = gesuchFormular.getEinnahmenKostenPartner();
         final var targetEinnahmenPartner = targetTranchen.stream()
-            .filter(trancheTranche -> trancheTranche.getGesuchFormular().getPersonInAusbildung().getZivilstand().hasPartnerschaft())
+            .filter(
+                trancheTranche -> trancheTranche.getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .getZivilstand()
+                    .hasPartnerschaft()
+            )
             .map(targetTranche -> targetTranche.getGesuchFormular().getEinnahmenKostenPartner())
             .toList();
         EinnahmenKostenJahreswertUtil.synchroniseJahresfelder(
