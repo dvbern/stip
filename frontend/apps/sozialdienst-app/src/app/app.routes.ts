@@ -19,7 +19,7 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'fall/:id',
+        path: 'fall/:fallId',
         loadComponent: () =>
           import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
             (m) => m.SozialdienstAppFeatureGesuchCockpitComponent,
@@ -50,14 +50,14 @@ export const appRoutes: Route[] = [
       {
         path: 'administration',
         canActivate: [hasBenutzer, hasRoles(['V0_Sozialdienst-Admin'])],
-        title: 'sachbearbeitung-app.admin.title',
+        title: 'sozialdienst-app.admin.title',
         loadComponent: () =>
           import('@dv/sozialdienst-app/feature/administration').then(
-            (m) => m.SachbearbeitungAppFeatureAdministrationComponent,
+            (m) => m.SozialdienstAppFeatureAdministrationComponent,
           ),
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/administration').then(
-            (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
+            (m) => m.sozialdienstAppFeatureAdministrationRoutes,
           ),
       },
       {

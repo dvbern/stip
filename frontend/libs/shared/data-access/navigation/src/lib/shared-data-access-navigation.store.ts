@@ -4,6 +4,7 @@ import {
   TemplatePortal,
 } from '@angular/cdk/portal';
 import { Injectable, computed, signal } from '@angular/core';
+import { UrlTree } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
 export type TranslateLabel = {
@@ -21,7 +22,7 @@ interface NavItemBase {
 
 export interface NavItemLink extends NavItemBase {
   type: 'link';
-  route: string[];
+  route: UrlTree | (string | undefined)[];
   queryParams?: Record<string, string>;
 }
 

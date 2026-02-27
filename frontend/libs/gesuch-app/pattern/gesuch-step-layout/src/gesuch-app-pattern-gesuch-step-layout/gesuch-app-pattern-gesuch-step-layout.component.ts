@@ -96,17 +96,14 @@ export class GesuchAppPatternGesuchStepLayoutComponent
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  languageSig = this.store.selectSignal(selectLanguage);
+
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
-    this.gesuchIdSig,
-  );
-  fallIdSig = computed(() => {
-    const { cache } = this.cacheViewSig();
-    return cache.gesuch?.fallId;
-  });
+  // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
+  //   this.gesuchIdSig,
+  // );
+
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedFeatureAuszahlungComponent } from '@dv/shared/feature/auszahlung';
 import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
@@ -15,6 +15,7 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
     SharedPatternMainLayoutComponent,
     SharedUiAuszahlungComponent,
     SharedUiHasRolesDirective,
+    TranslocoDirective,
   ],
   templateUrl: './sozialdienst-app-feature-auszahlung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

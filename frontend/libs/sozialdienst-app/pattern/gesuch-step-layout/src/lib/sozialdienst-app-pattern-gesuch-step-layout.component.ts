@@ -16,6 +16,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs';
 
+import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRouteId,
@@ -44,6 +45,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
+// todo: this is pretty much the same as the gesuch-app-pattern-gesuch-step-layout.component. Maybe we can merge them and make the sozialdienst specific parts optional?
 @Component({
   selector: 'dv-sozialdienst-app-pattern-gesuch-step-layout',
   imports: [
@@ -59,6 +61,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiProgressBarComponent,
     SharedUiIconChipComponent,
     SharedUiHasRolesDirective,
+    GesuchAppUiAdvTranslocoDirective,
   ],
   templateUrl: './sozialdienst-app-pattern-gesuch-step-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

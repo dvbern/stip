@@ -5,6 +5,7 @@ import {
   computed,
   effect,
   inject,
+  input,
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -20,6 +21,7 @@ import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
@@ -28,10 +30,18 @@ import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-s
 const gsBaseMenuItems: NavItem[] = [
   {
     type: 'link',
-    id: 'dashboard',
-    icon: 'dashboard',
-    label: { key: 'gesuch-app.dashboard.title' },
-    route: ['/dashboard'],
+    id: 'antraege',
+    label: { key: 'sozialdienst-app.header.antraege' },
+    icon: 'list',
+    route: ['/'],
+  },
+  // todo: hasRoles V0_Sozialdienst-Admin
+  {
+    type: 'link',
+    id: 'administration',
+    label: { key: 'sozialdienst-app.header.administration' },
+    icon: 'settings',
+    route: ['/administration'],
   },
 ];
 
@@ -51,12 +61,12 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
 ];
 
 /**
- * This is the main layout for the gesuchsteller app.
- * todo: move into gesuch-app?
- * todo: make the template reusable, since it is mostly the same for all apps?
+ * This is the new main layout for the sozialdienst app.
+ * This will also change once we have the new design to what SB is going to be.
+ * todo: eventaully rename?
  */
 @Component({
-  selector: 'dv-shared-pattern-gesuchsteller-layout',
+  selector: 'dv-sozialdienst-app-pattern-sozialdiest-layout',
   imports: [
     MatSidenavModule,
     RouterOutlet,
@@ -82,11 +92,15 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
   </mat-sidenav-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedPatternGesuchstellerLayoutComponent {
+export class SozialdienstAppPatternSozialdiestLayoutComponent {
+  // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Auszahlung, Administration
+  // todo: plus gesuch menu if on gesuch route!
+
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -108,6 +122,8 @@ export class SharedPatternGesuchstellerLayoutComponent {
     ),
   );
 
+  // fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
+
   private isDarlehenRouteSig = computed(() => {
     const params = this.allRouteParamsSig();
     return params?.['darlehenId'] ? true : false;
@@ -115,14 +131,19 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
   private gesuchIdSig = computed(() => {
     const params = this.allRouteParamsSig();
-    return params?.['gesuchId'];
+    return params?.['id']; // todo: change route to more descriptive
+  });
+
+  private fallIdSig = computed(() => {
+    const params = this.allRouteParamsSig();
+    return params?.['fallId'];
   });
 
   constructor() {
     this.fallStore.loadCurrentFall$();
 
     effect(() => {
-      const fallId = this.fallStore.currentFallViewSig()?.id;
+      const fallId = this.fallIdSig();
 
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
@@ -132,8 +153,47 @@ export class SharedPatternGesuchstellerLayoutComponent {
     // naviation items effect
     effect(() => {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? ''; // check if really ok!
+      const fallId = untracked(this.fallIdSig) ?? ''; // check if really ok with untracked and fallback!
+      const gesuchId = this.gesuchIdSig();
       const isDarlehenRoute = this.isDarlehenRouteSig();
+
+      const gesuchNav: NavItem[] = [];
+
+      // todo: finish this.... URLltree route format not working!
+      // todo: what's with the getRelativeTrancheRoute?
+      if (gesuchId) {
+        const tranchen =
+          this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
+
+        if (tranchen.length > 1) {
+          gesuchNav.push({
+            type: 'menu',
+            id: 'gesuch',
+            label: { key: 'sozialdienst-app.header.gesuch' },
+            icon: 'description',
+            children: tranchen.map((tranche, index) => ({
+              type: 'link' as const,
+              id: tranche.id,
+              label: {
+                key: 'shared.header.tranche.item',
+                context: {
+                  date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
+                  index: index + 1,
+                },
+              },
+              route: [gesuchId, 'tranche', tranche.id],
+            })),
+          });
+        } else if (tranchen.length === 1) {
+          gesuchNav.push({
+            type: 'link',
+            id: 'gesuch',
+            label: { key: 'sozialdienst-app.header.gesuch' },
+            icon: 'description',
+            route: [gesuchId, 'tranche', tranchen[0].id],
+          });
+        }
+      }
 
       // todo: put into lib
       const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
@@ -216,6 +276,7 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
       const navItems: NavItem[] = [
         ...gsBaseMenuItems,
+        ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
       ];
@@ -226,12 +287,27 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
   // todo: really needed?
   staticNavItems: NavItem[] = [
+    // {
+    //   type: 'link',
+    //   id: 'dashboard',
+    //   label: { key: 'sozialdienst-app.dashboard.title' },
+    //   icon: 'dashboard',
+    //   route: ['/dashboard'],
+    // },
     {
       type: 'link',
-      id: 'dashboard',
-      label: { key: 'gesuch-app.dashboard.title' },
-      icon: 'dashboard',
-      route: ['/dashboard'],
+      id: 'antraege',
+      label: { key: 'sozialdienst-app.header.antraege' },
+      icon: 'list',
+      route: ['/'],
+    },
+    // todo: hasRoles V0_Sozialdienst-Admin
+    {
+      type: 'link',
+      id: 'administration',
+      label: { key: 'sozialdienst-app.header.administration' },
+      icon: 'settings',
+      route: ['/administration'],
     },
   ];
 }

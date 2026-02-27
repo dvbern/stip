@@ -5,6 +5,7 @@ import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 
 import { SozialdienstAppFeatureAuszahlungComponent } from './sozialdienst-app-feature-auszahlung/sozialdienst-app-feature-auszahlung.component';
 
+// todo: is same as very other!
 export const sozialdienstAppFeatureAuszahlungRoutes: Route[] = [
   {
     path: '',

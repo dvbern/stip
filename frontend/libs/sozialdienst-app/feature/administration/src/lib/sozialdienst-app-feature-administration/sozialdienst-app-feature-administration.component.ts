@@ -13,6 +13,6 @@ import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/soziald
   templateUrl: './sozialdienst-app-feature-administration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureAdministrationComponent {
+export class SozialdienstAppFeatureAdministrationComponent {
   option?: AdminOption;
 }

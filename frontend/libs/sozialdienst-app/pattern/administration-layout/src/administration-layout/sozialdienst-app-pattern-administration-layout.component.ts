@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
 import {
@@ -34,6 +34,7 @@ import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiHasRolesDirective,
+    TranslocoDirective,
   ],
   templateUrl:
     './sozialdienst-app-pattern-administration-layout.component.html',

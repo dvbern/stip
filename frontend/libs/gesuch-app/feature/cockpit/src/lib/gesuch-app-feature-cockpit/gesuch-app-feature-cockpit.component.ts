@@ -88,7 +88,7 @@ export class GesuchAppFeatureCockpitComponent {
   navigationStore = inject(NavigationStore);
 
   fallStore = inject(FallStore);
-  darlehenStore = inject(DarlehenStore);
+  // darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   globalNotificationStore = inject(GlobalNotificationStore);
