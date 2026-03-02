@@ -37,11 +37,14 @@ import {
 } from '@dv/shared/ui/select-search';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { CachedRemoteData } from '@dv/shared/util/remote-data';
 
 type CreateAbschlussData = {
   existingAusbildungsgaenge: AusbildungsgangSlim[];
-  ausbildungsstaetten: (AusbildungsstaetteSlim & LookupType)[];
-  abschluesse: (AbschlussSlim & LookupType)[];
+  ausbildungsstaetten: CachedRemoteData<
+    (AusbildungsstaetteSlim & LookupType)[]
+  >;
+  abschluesse: CachedRemoteData<(AbschlussSlim & LookupType)[]>;
   language: Language;
 };
 
@@ -91,7 +94,7 @@ export class CreateAusbildungsgangDialogComponent {
   abschlussIdChangedSig = toSignal(this.form.controls.abschlussId.valueChanges);
   selectedAusbildungsstaetteSig = computed(() => {
     const ausbildungsstaetteId = this.ausbildungsstaetteIdChangedSig();
-    const ausbildungsstaette = this.dialogData.ausbildungsstaetten.find(
+    const ausbildungsstaette = this.dialogData.ausbildungsstaetten.data?.find(
       (a) => a.id === ausbildungsstaetteId,
     );
 
@@ -99,7 +102,7 @@ export class CreateAusbildungsgangDialogComponent {
   });
   selectedAbschlussSig = computed(() => {
     const abschlussId = this.abschlussIdChangedSig();
-    const abschluss = this.dialogData.abschluesse.find(
+    const abschluss = this.dialogData.abschluesse.data?.find(
       (a) => a.id === abschlussId,
     );
 

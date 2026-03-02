@@ -13,6 +13,7 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  mapCachedData,
 } from '@dv/shared/util/remote-data';
 
 type AusbildungsstaetteState = {
@@ -35,33 +36,39 @@ export class AusbildungsstaetteStore extends signalStore(
 ) {
   private ausbildungsstaetteService = inject(AusbildungsstaetteService);
 
-  ausbildungsstaetteViewSig = computed(
-    () =>
-      this.ausbildungsstaetten.data()?.map((ausbildungsstaette) => ({
-        ...ausbildungsstaette,
-        testId: ausbildungsstaette.nameDe,
-        // Invalid is set by the component based on depending values
-        disabled: !ausbildungsstaette.aktiv,
-        displayValueDe: ausbildungsstaette.nameDe,
-        displayValueFr: ausbildungsstaette.nameFr,
-      })) ?? [],
+  ausbildungsstaetteViewSig = computed(() =>
+    mapCachedData(
+      this.ausbildungsstaetten(),
+      (rd) =>
+        rd.map((ausbildungsstaette) => ({
+          ...ausbildungsstaette,
+          testId: ausbildungsstaette.nameDe,
+          // Invalid is set by the component based on depending values
+          disabled: !ausbildungsstaette.aktiv,
+          displayValueDe: ausbildungsstaette.nameDe,
+          displayValueFr: ausbildungsstaette.nameFr,
+        })) ?? [],
+    ),
   );
   ausbildungsstaettenWithAusbildungsgaengeViewSig = computed(() =>
-    this.ausbildungsstaetteViewSig().filter(
-      (a) => a.ausbildungsgaenge.length > 0,
+    mapCachedData(this.ausbildungsstaetteViewSig(), (ausbildungsstaette) =>
+      ausbildungsstaette.filter((a) => a.ausbildungsgaenge.length > 0),
     ),
   );
 
-  abschluesseViewSig = computed(
-    () =>
-      this.abschluesse.data()?.map((abschluss) => ({
-        ...abschluss,
-        testId: abschluss.bezeichnungDe,
-        invalid: !abschluss.aktiv,
-        disabled: !abschluss.aktiv,
-        displayValueDe: abschluss.bezeichnungDe,
-        displayValueFr: abschluss.bezeichnungFr,
-      })) ?? [],
+  abschluesseViewSig = computed(() =>
+    mapCachedData(
+      this.abschluesse(),
+      (abschluesse) =>
+        abschluesse.map((abschluss) => ({
+          ...abschluss,
+          testId: abschluss.bezeichnungDe,
+          invalid: !abschluss.aktiv,
+          disabled: !abschluss.aktiv,
+          displayValueDe: abschluss.bezeichnungDe,
+          displayValueFr: abschluss.bezeichnungFr,
+        })) ?? [],
+    ),
   );
 
   loadAusbildungsstaetten$ = rxMethod<void>(
