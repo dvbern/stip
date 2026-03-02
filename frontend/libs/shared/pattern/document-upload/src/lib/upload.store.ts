@@ -124,7 +124,7 @@ export class UploadStore {
   private getRequiredGesuchDokumenteByAppType(params: {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
-    entryId?: string;
+    entryId: string | undefined;
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
@@ -265,6 +265,7 @@ export class UploadStore {
                         art: 'GESUCH_DOKUMENT',
                         gesuchDokument: value,
                         dokumentTyp: dokument.dokumentTyp,
+                        entryId: dokument.entryId,
                         trancheId: dokument.trancheId,
                         permissions: dokument.permissions,
                       }) satisfies SharedModelStandardGesuchDokument,

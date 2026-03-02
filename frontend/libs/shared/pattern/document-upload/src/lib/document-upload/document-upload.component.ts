@@ -161,6 +161,7 @@ export class SharedPatternDocumentUploadComponent {
       this.dokumentsStore.getGesuchDokument$({
         trancheId: dokument.trancheId,
         dokumentTyp: dokument.dokumentTyp,
+        entryId: dokument.entryId,
       });
     }
   }

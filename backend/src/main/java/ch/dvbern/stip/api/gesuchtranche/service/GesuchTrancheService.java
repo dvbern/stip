@@ -249,8 +249,14 @@ public class GesuchTrancheService {
         var allRequired = new ArrayList<String>();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche);
+        final var requiredDokumentRefs = getRequiredDokumentRefs(gesuchTranche);
         final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTranche);
         allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
+        allRequired.addAll(
+            requiredDokumentRefs.stream()
+                .map(d -> "%s_%s".formatted(d.getLeft().toString(), d.getRight().toString()))
+                .toList()
+        );
         allRequired
             .addAll(requiredCustomDokumentTypes.stream().map(CustomDokumentTyp::getType).toList());
         return allRequired;

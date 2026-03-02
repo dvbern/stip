@@ -72,7 +72,6 @@ public class GesuchDokumentCopyUtil {
         final GesuchDokument target,
         final GesuchTranche targetTranche
     ) {
-        target.setDokumentTyp(source.getDokumentTyp());
         target.setGesuchTranche(targetTranche);
         target.setDokumentTyp(source.getDokumentTyp());
         target.setEntryId(source.getEntryId());

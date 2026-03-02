@@ -28,7 +28,7 @@ export type SharedModelStandardGesuchDokument = {
   dokumentTyp: DokumentTyp;
   permissions: PermissionMap;
   trancheId: string;
-  entryId?: string;
+  entryId: string | undefined;
   gesuchDokument?: GesuchDokument;
 };
 

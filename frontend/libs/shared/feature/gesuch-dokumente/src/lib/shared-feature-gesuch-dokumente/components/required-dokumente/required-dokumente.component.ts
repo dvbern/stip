@@ -27,6 +27,7 @@ import {
   Dokumentstatus,
   GesuchDokument,
   GesuchDokumentKommentar,
+  GesuchDokumentRef,
   GesuchTrancheStatus,
   Gesuchstatus,
   TrancheSetting,
@@ -104,6 +105,7 @@ export class RequiredDokumenteComponent {
     dokuments: GesuchDokument[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
+    requiredDocumentRefs: GesuchDokumentRef[];
     readonly: boolean;
     loading: boolean;
     gesuchStatus?: Gesuchstatus;
@@ -154,6 +156,7 @@ export class RequiredDokumenteComponent {
       dokuments,
       kommentare,
       requiredDocumentTypes,
+      requiredDocumentRefs,
     } = this.dokumenteViewSig();
 
     if (!trancheId || !allowTypes) {
@@ -170,6 +173,7 @@ export class RequiredDokumenteComponent {
 
         const dokumentOptions = createGesuchDokumentOptions({
           trancheId,
+          entryId: gesuchDokument.entryId,
           permissions,
           allowTypes,
           dokumentTyp,
@@ -191,27 +195,33 @@ export class RequiredDokumenteComponent {
       },
     );
 
-    const missingDocuments: SharedModelTableRequiredDokument[] =
-      requiredDocumentTypes.map((dokumentTyp) => {
-        const formStep = getFormStepByDocumentType(dokumentTyp);
+    const missingDocuments: SharedModelTableRequiredDokument[] = [
+      ...requiredDocumentTypes.map((dokumentTyp) => ({
+        dokumentTyp,
+        entryId: undefined,
+      })),
+      ...requiredDocumentRefs,
+    ].map(({ dokumentTyp, entryId }) => {
+      const formStep = getFormStepByDocumentType(dokumentTyp);
 
-        const dokumentOptions = createGesuchDokumentOptions({
-          trancheId,
-          permissions,
-          allowTypes,
-          dokumentTyp,
-          initialDocuments: [],
-        });
-
-        return {
-          formStep,
-          dokumentTyp,
-          kommentare: [],
-          kommentarePending: false,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-          dokumentOptions,
-        };
+      const dokumentOptions = createGesuchDokumentOptions({
+        trancheId,
+        entryId,
+        permissions,
+        allowTypes,
+        dokumentTyp,
+        initialDocuments: [],
       });
+
+      return {
+        formStep,
+        dokumentTyp,
+        kommentare: [],
+        kommentarePending: false,
+        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+        dokumentOptions,
+      };
+    });
 
     return new MatTableDataSource<SharedModelTableRequiredDokument>(
       [...uploadedDocuments, ...missingDocuments]

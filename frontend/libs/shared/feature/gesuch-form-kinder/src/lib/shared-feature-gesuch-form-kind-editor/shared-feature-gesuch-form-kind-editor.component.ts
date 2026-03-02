@@ -119,15 +119,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     return kind.id && kind.entryId ? kind.entryId : self.crypto.randomUUID();
   });
   languageSig = this.store.selectSignal(selectLanguage);
-  private storeViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchsView,
-  );
-  viewSig = computed(() => {
-    const view = this.storeViewSig();
-    const entryId = this.entryIdSig();
-
-    return { ...view, entryId };
-  });
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject();
   maskitoNumber = maskitoNumber;
@@ -169,7 +161,10 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   });
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+  private createUploadOptionsSig = createUploadOptionsFactory(
+    this.viewSig,
+    this.entryIdSig,
+  );
 
   unterhalsbetraegeChangeSig = toSignal(
     this.form.controls.unterhaltsbeitraege.valueChanges,

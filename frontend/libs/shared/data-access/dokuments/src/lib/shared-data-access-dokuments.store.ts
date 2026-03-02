@@ -92,19 +92,23 @@ export class DokumentsStore extends signalStore(
   private getGesuchDokumentByAppType$({
     trancheId,
     dokumentTyp,
+    entryId,
   }: {
     trancheId: string;
     dokumentTyp: DokumentTyp;
+    entryId: string | undefined;
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.getGesuchDokumentForTypGS$({
           gesuchTrancheId: trancheId,
+          entryId,
           dokumentTyp,
         }),
       'sachbearbeitung-app': () =>
         this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
+          entryId,
           dokumentTyp,
         }),
       'demo-data-app': () =>
@@ -157,25 +161,23 @@ export class DokumentsStore extends signalStore(
     return {
       dokuments,
       loading: isPending(this.dokuments()),
-      requiredDocumentTypes: [
-        ...(fromCachedDataSig(this.documentsToUpload)?.required?.filter(
+      requiredDocumentTypes:
+        fromCachedDataSig(this.documentsToUpload)?.required?.filter(
           // A document can already be uploaded but later on get rejected. In this case the document list would contain
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
           // them out
           (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
-        ) ?? []),
-        ...(fromCachedDataSig(this.documentsToUpload)
-          ?.requiredRefs?.filter(
-            (required) =>
-              !dokuments.some(
-                (d) =>
-                  d.entryId &&
-                  d.dokumentTyp === required.dokumentTyp &&
-                  d.entryId === required.entryId,
-              ),
-          )
-          .map((d) => d.dokumentTyp) ?? []),
-      ],
+        ) ?? [],
+      requiredDocumentRefs:
+        fromCachedDataSig(this.documentsToUpload)?.requiredRefs?.filter(
+          (required) =>
+            !dokuments.some(
+              (d) =>
+                d.entryId &&
+                d.dokumentTyp === required.dokumentTyp &&
+                d.entryId === required.entryId,
+            ),
+        ) ?? [],
     };
   });
 
@@ -291,6 +293,7 @@ export class DokumentsStore extends signalStore(
   getGesuchDokument$ = rxMethod<{
     trancheId: string;
     dokumentTyp: DokumentTyp;
+    entryId: string | undefined;
   }>(
     pipe(
       tap(() => {
@@ -298,9 +301,10 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, dokumentTyp }) => {
+      switchMap(({ trancheId, entryId, dokumentTyp }) => {
         return this.getGesuchDokumentByAppType$({
           trancheId,
+          entryId,
           dokumentTyp,
         });
       }),

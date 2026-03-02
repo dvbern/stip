@@ -125,20 +125,15 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   protected readonly ausbildungssituationValues =
     Object.values(Ausbildungssituation);
   languageSig = this.store.selectSignal(selectLanguage);
-  private storeViewSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchsView,
-  );
-  viewSig = computed(() => {
-    const view = this.storeViewSig();
-    const entryId = this.entryIdSig();
-
-    return { ...view, entryId };
-  });
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject<unknown>();
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+  private createUploadOptionsSig = createUploadOptionsFactory(
+    this.viewSig,
+    this.entryIdSig,
+  );
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
