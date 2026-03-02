@@ -73,9 +73,7 @@ const RANGE = `${CHAR}- ?(${CHAR})?`;
     './sachbearbeitung-app-feature-administration-buchstaben-zuteilung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
-  implements AfterViewInit
-{
+export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent implements AfterViewInit {
   private elementRef = inject(ElementRef);
   private formBuilder = inject(FormBuilder);
   private formUtils = inject(SharedUtilFormService);

@@ -14,9 +14,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     path: OPTION_SOZIALDIENST.route,
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-sozialdienst'
-      ).then(
+      import('@dv/sachbearbeitung-app/feature/administration-sozialdienst').then(
         (m) => m.sachbearbeitungAppFeatureAdministrationSozialdienstRoutes,
       ),
   },
@@ -24,9 +22,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     path: OPTION_AUSBILDUNGSSTAETTE.route,
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin', 'V0_Jurist'])],
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette'
-      ).then(
+      import('@dv/sachbearbeitung-app/feature/administration-ausbildungsstaette').then(
         (m) =>
           m.sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes,
       ),
@@ -36,9 +32,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_BUCHSTABEN_ZUTEILUNG.titleTranslationKey,
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung'
-      ).then(
+      import('@dv/sachbearbeitung-app/feature/administration-buchstaben-zuteilung').then(
         (m) =>
           m.sachbearbeitungAppFeatureAdministrationBuchstabenZuteilungRoutes,
       ),
@@ -48,18 +42,16 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_GESUCHSPERIODEN.titleTranslationKey,
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-gesuchsperiode'
-      ).then((m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes),
+      import('@dv/sachbearbeitung-app/feature/administration-gesuchsperiode').then(
+        (m) => m.sachbearbeitungAppFeatureGesuchsperiodeRoutes,
+      ),
   },
   {
     path: OPTION_EU_EFTA_LAENDER.route,
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     title: OPTION_EU_EFTA_LAENDER.titleTranslationKey,
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-eu-efta-laender'
-      ).then(
+      import('@dv/sachbearbeitung-app/feature/administration-eu-efta-laender').then(
         (m) => m.sachbearbeitungAppFeatureAdministrationEuEftaLaenderRoutes,
       ),
   },
@@ -67,9 +59,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     path: 'benutzerverwaltung',
     canActivate: [hasRoles(['V0_Sachbearbeiter-Admin'])],
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/administration-benutzerverwaltung'
-      ).then(
+      import('@dv/sachbearbeitung-app/feature/administration-benutzerverwaltung').then(
         (m) =>
           m.sachbearbeitungAppFeatureAdministrationBenutzerverwaltungRoutes,
       ),

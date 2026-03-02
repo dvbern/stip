@@ -20,43 +20,15 @@ package ch.dvbern.stip.api.common.authorization;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
+@Authorizer
 @ApplicationScoped
 @RequiredArgsConstructor
-@Authorizer
-public class BenutzerAuthorizer extends BaseAuthorizer {
-    public void canCreateOrUpdateBuchstabenzuweisung() {
+public class UserConsentAuthorizer extends BaseAuthorizer {
+    public void canCreate() {
         permitAll();
     }
 
-    public void canGetBuchstabenzuweisung() {
-        permitAll();
-    }
-
-    public void canDeleteBenutzer() {
-        permitAll();
-    }
-
-    public void canPrepare() {
-        permitAll();
-    }
-
-    public void canGetSachbearbeiters() {
-        permitAll();
-    }
-
-    public void canCreateSachbearbeiter() {
-        permitAll();
-    }
-
-    public void canUpdateSachbearbeiter() {
-        permitAll();
-    }
-
-    public void canDeleteSachbearbeiter() {
-        permitAll();
-    }
-
-    public void canAkzeptierenNutzungsbedingungen() {
+    public void canRead() {
         permitAll();
     }
 }

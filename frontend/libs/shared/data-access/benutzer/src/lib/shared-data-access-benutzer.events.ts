@@ -12,5 +12,12 @@ export const SharedDataAccessBenutzerApiEvents = createActionGroup({
     currentBenutzerLoadedSuccess: props<{ benutzer: Benutzer }>(),
     currentBenutzerLoadedFailure: props<{ error: SharedModelError }>(),
     setRolesMap: props<{ rolesMap: RolesMap }>(),
+
+    // nutzungsbedingungen
+    nutzungsbedingungenAkzeptieren: props<{
+      benutzerId: string;
+    }>(),
+    nutzungsbedingungenAkzeptierenSuccess: props<{ benutzer: Benutzer }>(),
+    nutzungsbedingungenAkzeptierenFailure: props<{ error: SharedModelError }>(),
   },
 });

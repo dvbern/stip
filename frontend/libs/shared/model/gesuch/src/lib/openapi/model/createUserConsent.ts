@@ -9,12 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { BenutzereinstellungenUpdate } from './benutzereinstellungenUpdate';
 
-export interface BenutzerUpdate { 
-    vorname: string;
-    nachname: string;
-    benutzereinstellungen?: BenutzereinstellungenUpdate;
-    nutzungsbedingungenAkzeptiert?: boolean;
+export interface CreateUserConsent { 
+    consentGiven: boolean;
 }
 

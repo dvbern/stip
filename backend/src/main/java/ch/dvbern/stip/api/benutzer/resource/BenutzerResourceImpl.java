@@ -144,4 +144,11 @@ public class BenutzerResourceImpl implements BenutzerResource {
         benutzerAuthorizer.canDeleteSachbearbeiter();
         sachbearbeiterService.deleteSachbearbeiter(sachbearbeiterId);
     }
+
+    @Override
+    @PermitAll
+    public BenutzerDto nutzungsbedingungenAkzeptieren(UUID benutzerId) {
+        benutzerAuthorizer.canAkzeptierenNutzungsbedingungen();
+        return benutzerService.nutzungsbedingungenAkzeptieren(benutzerId);
+    }
 }

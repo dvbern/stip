@@ -26,6 +26,7 @@ public class BenutzerDto  implements Serializable {
   private @Valid String nachname;
   private @Valid UUID id;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
 
   /**
@@ -105,6 +106,24 @@ public class BenutzerDto  implements Serializable {
 
   /**
    **/
+  public BenutzerDto nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+  
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
+  /**
+   **/
   public BenutzerDto sachbearbeiterZuordnungStammdaten(SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten) {
     this.sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdaten;
     return this;
@@ -135,12 +154,13 @@ public class BenutzerDto  implements Serializable {
         Objects.equals(this.nachname, benutzer.nachname) &&
         Objects.equals(this.id, benutzer.id) &&
         Objects.equals(this.benutzereinstellungen, benutzer.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, benutzer.nutzungsbedingungenAkzeptiert) &&
         Objects.equals(this.sachbearbeiterZuordnungStammdaten, benutzer.sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, id, benutzereinstellungen, sachbearbeiterZuordnungStammdaten);
+    return Objects.hash(vorname, nachname, id, benutzereinstellungen, nutzungsbedingungenAkzeptiert, sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
@@ -152,6 +172,7 @@ public class BenutzerDto  implements Serializable {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("    sachbearbeiterZuordnungStammdaten: ").append(toIndentedString(sachbearbeiterZuordnungStammdaten)).append("\n");
     sb.append("}");
     return sb.toString();

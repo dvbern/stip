@@ -73,6 +73,11 @@ public interface BenutzerResource {
     @Produces({ "application/json", "text/plain" })
     List<SachbearbeiterDto> getSachbearbeitersForManagement();
 
+    @POST
+    @Path("/nutzungsbedingungenAkzeptieren/{benutzerId}")
+    @Produces({ "application/json", "text/plain" })
+    BenutzerDto nutzungsbedingungenAkzeptieren(@PathParam("benutzerId") UUID benutzerId);
+
     @GET
     @Path("/prepare/me")
     @Produces({ "application/json", "text/plain" })

@@ -27,16 +27,16 @@ export const sachbearbeitungAppFeatureAdministrationAusbildungsstaetteRoutes: Ro
         {
           path: 'ausbildungsgang',
           loadComponent: () =>
-            import(
-              './components/ausbildungsgang/ausbildungsgang.component'
-            ).then((m) => m.AusbildungsgangComponent),
+            import('./components/ausbildungsgang/ausbildungsgang.component').then(
+              (m) => m.AusbildungsgangComponent,
+            ),
         },
         {
           path: 'ausbildungsstaette',
           loadComponent: () =>
-            import(
-              './components/ausbildungsstaette/ausbildungsstaette.component'
-            ).then((m) => m.AusbildungsstaetteComponent),
+            import('./components/ausbildungsstaette/ausbildungsstaette.component').then(
+              (m) => m.AusbildungsstaetteComponent,
+            ),
         },
         {
           path: 'abschluss',

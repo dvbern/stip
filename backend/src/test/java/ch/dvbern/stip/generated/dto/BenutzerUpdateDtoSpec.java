@@ -30,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BenutzerUpdateDtoSpec.JSON_PROPERTY_VORNAME,
   BenutzerUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
-  BenutzerUpdateDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN
+  BenutzerUpdateDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN,
+  BenutzerUpdateDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT
 })
 @JsonTypeName("BenutzerUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +44,9 @@ public class BenutzerUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
   private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
+
+  public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   public BenutzerUpdateDtoSpec() {
   }
@@ -124,6 +128,32 @@ public class BenutzerUpdateDtoSpec {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
+
+  public BenutzerUpdateDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+   /**
+   * Get nutzungsbedingungenAkzeptiert
+   * @return nutzungsbedingungenAkzeptiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +165,13 @@ public class BenutzerUpdateDtoSpec {
     BenutzerUpdateDtoSpec benutzerUpdate = (BenutzerUpdateDtoSpec) o;
     return Objects.equals(this.vorname, benutzerUpdate.vorname) &&
         Objects.equals(this.nachname, benutzerUpdate.nachname) &&
-        Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen);
+        Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, benutzerUpdate.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, benutzereinstellungen);
+    return Objects.hash(vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -150,6 +181,7 @@ public class BenutzerUpdateDtoSpec {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

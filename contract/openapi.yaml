@@ -2465,6 +2465,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Current Benutzer with accepted Nutzungsbedingungen
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: nutzungsbedingungenAkzeptieren
+      summary: Accept the Nutzungsbedingungen for the current Benutzer
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /benutzer/sachbearbeiter:
     get:
       tags:
@@ -8587,6 +8617,8 @@ components:
           type: string
         benutzereinstellungen:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:

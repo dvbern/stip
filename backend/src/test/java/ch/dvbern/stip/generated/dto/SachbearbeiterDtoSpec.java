@@ -32,7 +32,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   SachbearbeiterDtoSpec.JSON_PROPERTY_ID,
   SachbearbeiterDtoSpec.JSON_PROPERTY_VORNAME,
   SachbearbeiterDtoSpec.JSON_PROPERTY_NACHNAME,
-  SachbearbeiterDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN
+  SachbearbeiterDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN,
+  SachbearbeiterDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT
 })
 @JsonTypeName("Sachbearbeiter")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -48,6 +49,9 @@ public class SachbearbeiterDtoSpec {
 
   public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
   private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
+
+  public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   public SachbearbeiterDtoSpec() {
   }
@@ -155,6 +159,32 @@ public class SachbearbeiterDtoSpec {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
+
+  public SachbearbeiterDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+   /**
+   * Get nutzungsbedingungenAkzeptiert
+   * @return nutzungsbedingungenAkzeptiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -167,12 +197,13 @@ public class SachbearbeiterDtoSpec {
     return Objects.equals(this.id, sachbearbeiter.id) &&
         Objects.equals(this.vorname, sachbearbeiter.vorname) &&
         Objects.equals(this.nachname, sachbearbeiter.nachname) &&
-        Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen);
+        Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiter.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, vorname, nachname, benutzereinstellungen);
+    return Objects.hash(id, vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -183,6 +214,7 @@ public class SachbearbeiterDtoSpec {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

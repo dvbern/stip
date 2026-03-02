@@ -14,7 +14,10 @@ import { Store } from '@ngrx/store';
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
-import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -26,6 +29,7 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
@@ -144,11 +148,32 @@ export class GesuchAppFeatureCockpitComponent {
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
-      .afterClosed()
-      .subscribe(() => {
-        this.dashboardStore.loadDashboard$();
-      });
+    const nutzungsbedingungenAkzeptiert =
+      this.benutzerSig()?.nutzungsbedingungenAkzeptiert;
+    const benutzerId = this.benutzerSig()?.id;
+
+    if (!nutzungsbedingungenAkzeptiert) {
+      SharedDialogNutzungsbedingungenComponent.open(
+        this.dialog,
+        nutzungsbedingungenAkzeptiert ?? false,
+      )
+        .afterClosed()
+        .subscribe((result) => {
+          if (result && benutzerId) {
+            this.store.dispatch(
+              SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
+                benutzerId,
+              }),
+            );
+          }
+        });
+    } else {
+      SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+        .afterClosed()
+        .subscribe(() => {
+          this.dashboardStore.loadDashboard$();
+        });
+    }
   }
 
   trackByPerioden(
