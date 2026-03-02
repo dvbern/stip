@@ -14,6 +14,7 @@ import {
 } from '@angular/router';
 import { filter, map } from 'rxjs';
 
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
@@ -81,6 +82,30 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
+
+  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
+
+  // todo: also show in header!
+  constructor() {
+    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
+      page: 1,
+      pageSize: 10,
+    });
+  }
+
+  // @if (fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
+  //         <a
+  //           routerLink="/fehlgeschlagene-zahlungen"
+  //           routerLinkActive="active"
+  //           class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
+  //           data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
+  //         >
+  //           <i class="material-symbols-rounded text-white me-2">error_outline</i>
+  //           <span>
+  //             {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
+  //           </span>
+  //         </a>
+  //       }
 
   private allRouteParamsSig = toSignal(
     this.router.events.pipe(

@@ -9,13 +9,12 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -37,11 +36,8 @@ import {
 } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
-import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
-import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -58,16 +54,12 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
   imports: [
     CommonModule,
     MatSelectModule,
-    RouterLink,
-    SharedPatternMainLayoutComponent,
-    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
-    SharedUiDarlehenMenuComponent,
     GesuchAppUiAdvTranslocoDirective,
     MatMenuModule,
   ],

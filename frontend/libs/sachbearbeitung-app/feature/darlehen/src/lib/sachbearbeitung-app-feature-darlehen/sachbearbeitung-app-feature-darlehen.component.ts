@@ -7,24 +7,19 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
-import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
-import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-darlehen',
   imports: [
-    TranslocoPipe,
     MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SachbearbeitungAppPatternGesuchHeaderComponent,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
     TranslocoDirective,

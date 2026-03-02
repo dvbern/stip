@@ -41,7 +41,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { BenutzerRole } from '@dv/shared/model/benutzer';
@@ -172,7 +171,6 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiFilterMenuButtonComponent,
     TranslocoDirective,
   ],

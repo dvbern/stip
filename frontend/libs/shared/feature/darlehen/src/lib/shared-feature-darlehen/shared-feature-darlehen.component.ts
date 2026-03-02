@@ -7,27 +7,22 @@ import {
   input,
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
-import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-shared-feature-darlehen-feature',
   imports: [
-    RouterLink,
     TranslocoDirective,
     MatMenuModule,
-    SharedPatternMainLayoutComponent,
     SharedPatternDarlehenFormComponent,
-    SharedUiDarlehenMenuComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',

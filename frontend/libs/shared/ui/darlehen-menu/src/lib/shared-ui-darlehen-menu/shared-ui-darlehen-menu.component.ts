@@ -26,6 +26,8 @@ const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
   AKZEPTIERT: 'accepted',
 };
 
+// todo: probably going to be removed
+
 @Component({
   selector: 'dv-shared-ui-darlehen-menu',
   imports: [CommonModule, TranslocoPipe, RouterModule, MatMenuModule],

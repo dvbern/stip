@@ -95,6 +95,7 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
 export class SozialdienstAppPatternSozialdiestLayoutComponent {
   // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Auszahlung, Administration
   // todo: plus gesuch menu if on gesuch route!
+  // todo: maybe navitems should be in a store and able to be merged
 
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);

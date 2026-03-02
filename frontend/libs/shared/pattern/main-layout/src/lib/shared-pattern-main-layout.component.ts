@@ -11,6 +11,8 @@ import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
+// todo: remove
+
 @Component({
   selector: 'dv-shared-pattern-main-layout',
   imports: [

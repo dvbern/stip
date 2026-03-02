@@ -1,4 +1,15 @@
 <!-- HEADER -->
+@let tenant = tenantSig()?.identifier;
+@if (tenant && tenant !== 'bern') {
+  @defer {
+    @switch (tenant) {
+      @case ('dv') {
+        <dv-shared-ui-mandant-styles-dv></dv-shared-ui-mandant-styles-dv>
+      }
+    }
+  }
+}
+
 <header
   class="border-bottom tw:fixed tw:top-0 z-3 w-100"
   [class.shadow-sm]="isScroll && !compactHeader"

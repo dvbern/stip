@@ -38,7 +38,6 @@ import {
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -148,7 +147,6 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiFilterMenuButtonComponent,
     TranslocoDirective,
   ],
