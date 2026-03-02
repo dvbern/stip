@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppPatternGesuchHeaderComponent } from '@dv/sachbearbeitung-app/pattern/gesuch-header';
@@ -27,6 +27,7 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
     SachbearbeitungAppPatternGesuchHeaderComponent,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-darlehen.component.html',
   styleUrl: './sachbearbeitung-app-feature-darlehen.component.scss',

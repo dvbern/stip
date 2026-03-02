@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import {
@@ -32,6 +32,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
     SharedPatternMobileSidenavComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-pattern-infos-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
