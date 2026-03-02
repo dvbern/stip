@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
@@ -31,6 +30,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -364,7 +364,7 @@ public class GesuchTrancheService {
     ) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
-        if (openAenderungAlreadyExists(gesuch)) {
+        if (!GesuchUtil.canCreateAenderung(gesuch)) {
             throw new ForbiddenException();
         }
 
@@ -612,20 +612,6 @@ public class GesuchTrancheService {
     public ValidationReportDto einreichenValidierenSB(final UUID trancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         return bearbeitungAbschliessenValidationReport(gesuchTranche);
-    }
-
-    public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
-        final var allowedStates = Set.of(
-            GesuchTrancheStatus.AKZEPTIERT,
-            GesuchTrancheStatus.ABGELEHNT,
-            GesuchTrancheStatus.MANUELLE_AENDERUNG
-        );
-
-        final var trancheInDisallowedStates = gesuch.getAenderungs()
-            .filter(gesuchTranche -> !allowedStates.contains(gesuchTranche.getStatus()))
-            .toList();
-
-        return !trancheInDisallowedStates.isEmpty();
     }
 
     @Transactional

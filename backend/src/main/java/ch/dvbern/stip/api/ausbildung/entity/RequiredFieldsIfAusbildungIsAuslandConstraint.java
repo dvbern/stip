@@ -30,7 +30,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = RequiredFieldsIfAusbildungIsAusland.class)
+@Constraint(validatedBy = RequiredFieldsIfAusbildungIsAuslandConstraintValidator.class)
 @Documented
 public @interface RequiredFieldsIfAusbildungIsAuslandConstraint {
     String message() default VALIDATION_AUSBILDUNGSORT_IF_SWISS_MESSAGE;

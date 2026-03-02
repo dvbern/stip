@@ -1,0 +1,304 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.ausbildung.service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
+import ch.dvbern.stip.api.ausbildung.repo.AusbildungUnterbruchAntragRepository;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
+import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
+import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragGSDto;
+import ch.dvbern.stip.generated.dto.AusbildungUnterbruchAntragSBDto;
+import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragGSDto;
+import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
+import io.quarkiverse.antivirus.runtime.Antivirus;
+import io.smallrye.mutiny.Uni;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.core.Response;
+import lombok.RequiredArgsConstructor;
+import org.jboss.resteasy.reactive.RestMulti;
+import org.jboss.resteasy.reactive.multipart.FileUpload;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+
+@RequestScoped
+@RequiredArgsConstructor
+public class AusbildungUnterbruchAntragService {
+    private final AusbildungUnterbruchAntragRepository ausbildungUnterbruchAntragRepository;
+    private final AusbildungUnterbruchAntragMapper ausbildungUnterbruchAntragMapper;
+    private final DokumentUploadService dokumentUploadService;
+    private final S3AsyncClient s3;
+    private final ConfigService configService;
+    private final Antivirus antivirus;
+    private final DokumentRepository dokumentRepository;
+    private final DokumentDeleteService dokumentDeleteService;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
+    private final NotificationService notificationService;
+    private final GesuchStatusService gesuchStatusService;
+    private final AusbildungService ausbildungService;
+    private final StatusprotokollService statusprotokollService;
+
+    public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
+    public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED = "DELETED";
+
+    public AusbildungUnterbruchAntrag requireById(final UUID ausbildungUnterbruchAntragId) {
+        return ausbildungUnterbruchAntragRepository.requireById(ausbildungUnterbruchAntragId);
+    }
+
+    public AusbildungUnterbruchAntrag requireByDokumentId(final UUID dokumentId) {
+        return ausbildungUnterbruchAntragRepository.requireByDokumentId(dokumentId);
+    }
+
+    @Transactional
+    public void createStatusprotokollEntry(
+        final AusbildungUnterbruchAntrag antrag,
+        final String statusTo,
+        final String statusFrom,
+        final String comment
+    ) {
+        statusprotokollService.createStatusprotokoll(
+            statusTo,
+            statusFrom,
+            StatusprotokollEntryTyp.AUSBILDUNG_UNTERBRUCH_ANTRAG,
+            comment,
+            antrag.getGesuch()
+        );
+    }
+
+    @Transactional
+    public void createStatusprotokollEntry(
+        final AusbildungUnterbruchAntrag antrag,
+        final String statusFrom,
+        final String comment
+    ) {
+        createStatusprotokollEntry(antrag, antrag.getStatus().toString(), statusFrom, comment);
+    }
+
+    @Transactional
+    public AusbildungUnterbruchAntrag createAntrag(final Gesuch gesuch) {
+        final AusbildungUnterbruchAntrag ausbildungUnterbruchAntrag = new AusbildungUnterbruchAntrag();
+        ausbildungUnterbruchAntrag.setGesuch(gesuch);
+        ausbildungUnterbruchAntrag.setAusbildung(gesuch.getAusbildung());
+        ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
+        createStatusprotokollEntry(ausbildungUnterbruchAntrag, null, ausbildungUnterbruchAntrag.getKommentarGS());
+        return ausbildungUnterbruchAntrag;
+    }
+
+    @Transactional
+    public AusbildungUnterbruchAntragGSDto createAusbildungUnterbruchAntrag(UUID ausbildungId) {
+        final var ausbildung = ausbildungService.requireById(ausbildungId);
+        return ausbildungUnterbruchAntragMapper.toGsDto(createAntrag(ausbildung.getLatestGesuch()));
+    }
+
+    private void uploadDokument(
+        final UUID ausbildungUnterbruchAntragId,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        final var ausbildungUnterbruchAntrag = requireById(ausbildungUnterbruchAntragId);
+
+        final var dokument = new Dokument()
+            .setFilename(fileUpload.fileName())
+            .setFilesize(String.valueOf(fileUpload.size()))
+            .setFilepath(AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH)
+            .setObjectId(objectId);
+
+        ausbildungUnterbruchAntrag.getDokuments().add(dokument);
+        dokumentRepository.persistAndFlush(dokument);
+    }
+
+    @Transactional
+    public Uni<Response> uploadAusbildungUnterbruchAntragDokument(
+        final UUID ausbildungUnterbruchAntragId,
+        final FileUpload fileUpload
+    ) {
+        return dokumentUploadService.validateScanUploadDokument(
+            fileUpload,
+            s3,
+            configService,
+            antivirus,
+            AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
+            objectId -> uploadDokument(
+                ausbildungUnterbruchAntragId,
+                fileUpload,
+                objectId
+            )
+        );
+    }
+
+    @Transactional
+    public void deleteAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
+        final var antrag = requireById(ausbildungUnterbruchAntragId);
+        final List<String> objectIds =
+            antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
+        createStatusprotokollEntry(
+            antrag,
+            AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED,
+            antrag.getStatus().toString(),
+            antrag.getKommentarGS()
+        );
+        ausbildungUnterbruchAntragRepository.delete(antrag);
+        dokumentDeleteService.executeDeleteDokumentsFromS3(s3, configService.getBucketName(), objectIds);
+    }
+
+    @Transactional
+    public void deleteAusbildungUnterbruchAntragDokument(final UUID dokumentId) {
+        final var antrag = requireByDokumentId(dokumentId);
+        final var dokument = dokumentRepository.requireById(dokumentId);
+        antrag.getDokuments().remove(dokument);
+        dokumentDeleteService.executeDeleteDokumentFromS3(
+            s3,
+            configService.getBucketName(),
+            getFullPathObjectId(dokument.getObjectId())
+        );
+    }
+
+    @Transactional
+    public RestMulti<Buffer> getDokument(final UUID dokumentId) {
+        final var dokument = dokumentRepository.requireById(dokumentId);
+
+        return dokumentDownloadService.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
+            dokument.getFilename()
+        );
+    }
+
+    private static String getFullPathObjectId(final String objectId) {
+        return AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH + objectId;
+    }
+
+    @Transactional
+    public AusbildungUnterbruchAntragGSDto einreichenAusbildungUnterbruchAntrag(
+        final UUID ausbildungUnterbruchAntragId,
+        final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
+    ) {
+        final var antrag = requireById(ausbildungUnterbruchAntragId);
+        notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
+        createStatusprotokollEntry(
+            antrag,
+            AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
+            antrag.getStatus().toString(),
+            antrag.getKommentarGS()
+        );
+        return ausbildungUnterbruchAntragMapper
+            .toGsDto(ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag));
+    }
+
+    @Transactional
+    public AusbildungUnterbruchAntragGSDto getAusbildungUnterbruchAntrag(final UUID ausbildungUnterbruchAntragId) {
+        return ausbildungUnterbruchAntragMapper.toGsDto(requireById(ausbildungUnterbruchAntragId));
+    }
+
+    @Transactional
+    public List<AusbildungUnterbruchAntragSBDto> getAusbildungUnterbruchAntragsByGesuchId(final UUID gesuchId) {
+        return ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId)
+            .stream()
+            .map(ausbildungUnterbruchAntragMapper::toSbDto)
+            .toList();
+    }
+
+    @Transactional
+    public AusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntrag(
+        final UUID ausbildungUnterbruchAntragId,
+        final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
+    ) {
+        var antrag = requireById(ausbildungUnterbruchAntragId);
+        final var statusFrom = antrag.getStatus();
+        antrag = ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag);
+        createStatusprotokollEntry(antrag, statusFrom.toString(), antrag.getKommentarSB());
+        if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(antrag.getStatus())) {
+            notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
+            if (
+                Objects.nonNull(antrag.getMonateOhneAnspruch())
+                && antrag.getMonateOhneAnspruch() > 0
+                && Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(antrag.getGesuch().getGesuchStatus())
+            ) {
+                gesuchStatusService.triggerStateMachineEvent(
+                    antrag.getGesuch(),
+                    GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH
+                );
+            }
+        }
+
+        return ausbildungUnterbruchAntragMapper
+            .toSbDto(antrag);
+    }
+
+    @Transactional
+    public boolean gsCanWrite(final AusbildungUnterbruchAntrag antrag) {
+        if (antrag.getStatus() != AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
+            return false;
+        }
+        return AuthorizerUtil.canWriteAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+            antrag.getGesuch(),
+            benutzerService.getCurrentBenutzer(),
+            sozialdienstService
+        );
+    }
+
+    @Transactional
+    public void deleteAllByGesuchId(final UUID gesuchId) {
+        final var antrags = ausbildungUnterbruchAntragRepository.getAusbildungUnterbruchAntragsByGesuchId(gesuchId);
+        antrags.stream()
+            .forEach(
+                ausbildungUnterbruchAntrag -> {
+                    final var dokuments = ausbildungUnterbruchAntrag.getDokuments();
+                    ausbildungUnterbruchAntrag.getDokuments().remove(dokuments);
+                    dokuments.forEach(dokumentRepository::delete);
+                    ausbildungUnterbruchAntragRepository.delete(ausbildungUnterbruchAntrag);
+                }
+            );
+    }
+
+    public boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
+        final var gesuch = ausbildung.getLatestGesuch();
+        final boolean openAenderungOnLatestGesuchExists =
+            GesuchUtil.openAenderungAlreadyExists(gesuch);
+        final boolean openAusbildungUnterbruchAntragExists =
+            AusbildungUnterbruchAntragUtil.openAusbildungUnterbruchAntragExists(ausbildung);
+        return !openAenderungOnLatestGesuchExists && !openAusbildungUnterbruchAntragExists
+        && !ausbildung.isUnterbrochen() && gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_GS;
+    }
+}

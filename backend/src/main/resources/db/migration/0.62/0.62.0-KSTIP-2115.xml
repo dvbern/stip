@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1770813422948-505">
+    <createTable tableName="ausbildung_unterbruch_antrag">
+      <column name="id" type="UUID">
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="ausbildung_unterbruch_antragPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gueltig_ab" type="date">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gueltig_bis" type="date">
+        <constraints nullable="false"/>
+      </column>
+      <column name="kommentar_gs" type="VARCHAR(2200)"/>
+      <column name="kommentar_sb" type="VARCHAR(2200)"/>
+      <column name="monate_ohne_anspruch" type="INTEGER"/>
+      <column name="status" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ausbildung_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-506">
+    <createTable tableName="ausbildung_unterbruch_antrag_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="gueltig_ab" type="date"/>
+      <column name="gueltig_bis" type="date"/>
+      <column name="kommentar_gs" type="VARCHAR(2200)"/>
+      <column name="kommentar_sb" type="VARCHAR(2200)"/>
+      <column name="monate_ohne_anspruch" type="INTEGER"/>
+      <column name="status" type="VARCHAR(255)"/>
+      <column name="ausbildung_id" type="UUID"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-507">
+    <createTable tableName="ausbildungunterbruchantrag_dokument_aud">
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="ausbildung_unterbruch_antrag_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-508">
+    <addColumn tableName="dokument">
+      <column name="ausbildung_unterbruch_antrag_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-509">
+    <addPrimaryKey columnNames="rev, id"
+                   constraintName="ausbildung_unterbruch_antrag_audPK"
+                   tableName="ausbildung_unterbruch_antrag_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-510">
+    <addPrimaryKey columnNames="ausbildung_unterbruch_antrag_id, rev, id"
+                   constraintName="ausbildungunterbruchantrag_dokument_audPK"
+                   tableName="ausbildungunterbruchantrag_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-511">
+    <createIndex indexName="IX_ausbildung_unterbruch_antrag_mandant"
+                 tableName="ausbildung_unterbruch_antrag">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-512">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="ausbildungunterbruchantrag_dokument_aud"
+                             constraintName="FK19g9ao1rec060vt3th3bhnghb"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-513">
+    <addForeignKeyConstraint baseColumnNames="ausbildung_id"
+                             baseTableName="ausbildung_unterbruch_antrag"
+                             constraintName="FK_ausbildung_unterbruch_antrag_ausbildung_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="ausbildung"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-514">
+    <addForeignKeyConstraint baseColumnNames="ausbildung_unterbruch_antrag_id"
+                             baseTableName="dokument"
+                             constraintName="FK_ausbildung_unterbruch_antrag_dokument_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="ausbildung_unterbruch_antrag"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-515">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                             baseTableName="ausbildung_unterbruch_antrag"
+                             constraintName="FK_ausbildung_unterbruch_antrag_gesuch_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1771412881033-516">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="ausbildung_unterbruch_antrag_aud"
+                             constraintName="FKiyny952r3axgukewwq6dv9mxh"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"
+                             validate="true"/>
+  </changeSet>
+</databaseChangeLog>

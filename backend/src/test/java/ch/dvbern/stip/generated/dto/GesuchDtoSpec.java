@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_FALL_ID,
   GesuchDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
+  GesuchDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   GesuchDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
@@ -59,6 +60,9 @@ public class GesuchDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
   private UUID ausbildungId;
+
+  public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
+  private Boolean hasPendingAusbildungUnterbruchAntrag;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
@@ -171,6 +175,32 @@ public class GesuchDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusbildungId(UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
+  }
+
+
+  public GesuchDtoSpec hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+    return this;
+  }
+
+   /**
+   * Get hasPendingAusbildungUnterbruchAntrag
+   * @return hasPendingAusbildungUnterbruchAntrag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
 
@@ -471,6 +501,7 @@ public class GesuchDtoSpec {
     return Objects.equals(this.fallId, gesuch.fallId) &&
         Objects.equals(this.fallNummer, gesuch.fallNummer) &&
         Objects.equals(this.ausbildungId, gesuch.ausbildungId) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, gesuch.hasPendingAusbildungUnterbruchAntrag) &&
         Objects.equals(this.gesuchsperiode, gesuch.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuch.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuch.gesuchNummer) &&
@@ -486,7 +517,7 @@ public class GesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -496,6 +527,7 @@ public class GesuchDtoSpec {
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");

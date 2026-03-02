@@ -41,6 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_ID,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_AUSBILDUNG_ID,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCHSPERIODE,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_STATUS,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
@@ -70,6 +71,9 @@ public class GesuchWithChangesDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNG_ID = "ausbildungId";
   private UUID ausbildungId;
+
+  public static final String JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG = "hasPendingAusbildungUnterbruchAntrag";
+  private Boolean hasPendingAusbildungUnterbruchAntrag;
 
   public static final String JSON_PROPERTY_GESUCHSPERIODE = "gesuchsperiode";
   private GesuchsperiodeDtoSpec gesuchsperiode;
@@ -242,6 +246,32 @@ public class GesuchWithChangesDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setAusbildungId(UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
+  }
+
+
+  public GesuchWithChangesDtoSpec hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+    return this;
+  }
+
+   /**
+   * Get hasPendingAusbildungUnterbruchAntrag
+   * @return hasPendingAusbildungUnterbruchAntrag
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAS_PENDING_AUSBILDUNG_UNTERBRUCH_ANTRAG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
 
@@ -544,6 +574,7 @@ public class GesuchWithChangesDtoSpec {
         Objects.equals(this.fallId, gesuchWithChanges.fallId) &&
         Objects.equals(this.fallNummer, gesuchWithChanges.fallNummer) &&
         Objects.equals(this.ausbildungId, gesuchWithChanges.ausbildungId) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, gesuchWithChanges.hasPendingAusbildungUnterbruchAntrag) &&
         Objects.equals(this.gesuchsperiode, gesuchWithChanges.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchWithChanges.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuchWithChanges.gesuchNummer) &&
@@ -559,7 +590,7 @@ public class GesuchWithChangesDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -571,6 +602,7 @@ public class GesuchWithChangesDtoSpec {
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");

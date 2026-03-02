@@ -101,6 +101,11 @@ public class AusbildungService {
     }
 
     @Transactional
+    public Ausbildung requireById(final UUID ausbildungId) {
+        return ausbildungRepository.requireById(ausbildungId);
+    }
+
+    @Transactional
     public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
         var ausbildung = ausbildungRepository.requireById(ausbildungId);
         final var oldAusbildungsGang = ausbildung.getAusbildungsgang();

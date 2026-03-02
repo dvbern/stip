@@ -236,6 +236,7 @@ public class GenerateDemoDataService {
                     .isAusbildungAusland(ausbildungDto.getIsAusbildungAusland())
                     .land(null)
                     .status(AusbildungsStatus.AKTIV)
+                    .ausbildungUnterbruchAntrags(List.of())
                     .build()
             );
         final var pia = DemoPerson.createPersonInAusbildung(

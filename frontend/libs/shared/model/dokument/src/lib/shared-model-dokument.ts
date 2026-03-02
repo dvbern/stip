@@ -16,9 +16,12 @@ import {
   DarlehenPermissionMap,
   PermissionMap,
 } from '@dv/shared/model/permission-state';
-import { Extends } from '@dv/shared/model/type-util';
+import { Extends, assertUnreachable } from '@dv/shared/model/type-util';
 
-type AvailableDokumentArt = DokumentArt | 'DARLEHEN_DOKUMENT';
+type AvailableDokumentArt =
+  | DokumentArt
+  | 'DARLEHEN_DOKUMENT'
+  | 'GENERIC_DOKUMENT';
 
 export type SharedModelStandardGesuchDokument = {
   art: Extends<AvailableDokumentArt, 'GESUCH_DOKUMENT'>;
@@ -54,6 +57,13 @@ export type SharedModelDarlehenDokument = {
   gesuchDokument?: DarlehenDokument;
 };
 
+export type SharedModelGenericDokument = {
+  readonly: boolean;
+  art: Extends<AvailableDokumentArt, 'GENERIC_DOKUMENT'>;
+  dokumentTyp: 'ausbildungUnterbruch';
+  id: string;
+};
+
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
@@ -82,18 +92,19 @@ export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument
-  | SharedModelDarlehenDokument;
+  | SharedModelDarlehenDokument
+  | SharedModelGenericDokument;
 
 export type SharedModelTableDokument =
   | SharedModelTableRequiredDokument
   | SharedModelTableCustomDokument;
 
-type DokumentInfoTranslatable = {
+export type DokumentInfoTranslatable = {
   type: 'TRANSLATABLE';
   title: SharedTranslationKey;
   description?: SharedTranslationKey;
 };
-type DokumentInfoText = {
+export type DokumentInfoText = {
   type: 'TEXT';
   title: string;
   description?: string;
@@ -118,10 +129,15 @@ export interface CustomDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoText;
 }
 
+export interface GenericDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoTranslatable;
+}
+
 export type DokumentOptions =
   | StandardDokumentOptions
   | CustomDokumentOptions
-  | DarlehenDokumentOptions;
+  | DarlehenDokumentOptions
+  | GenericDokumentOptions;
 
 // Darlehen Dokument
 
@@ -181,5 +197,10 @@ export const isUploadable = (
     case 'DARLEHEN_DOKUMENT': {
       return dokumentModel.permissions.canUploadDocuments;
     }
+    case 'GENERIC_DOKUMENT': {
+      return !dokumentModel.readonly;
+    }
+    default:
+      assertUnreachable(dokumentModel);
   }
 };
