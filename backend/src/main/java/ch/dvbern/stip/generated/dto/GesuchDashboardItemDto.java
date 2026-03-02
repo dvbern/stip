@@ -30,6 +30,7 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid UUID currentTrancheId;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
+  private @Valid Boolean canCreateAenderung;
   private @Valid LocalDate nachfristDokumente;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
@@ -150,6 +151,25 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public GesuchDashboardItemDto canCreateAenderung(Boolean canCreateAenderung) {
+    this.canCreateAenderung = canCreateAenderung;
+    return this;
+  }
+
+  
+  @JsonProperty("canCreateAenderung")
+  @NotNull
+  public Boolean getCanCreateAenderung() {
+    return canCreateAenderung;
+  }
+
+  @JsonProperty("canCreateAenderung")
+  public void setCanCreateAenderung(Boolean canCreateAenderung) {
+    this.canCreateAenderung = canCreateAenderung;
+  }
+
+  /**
+   **/
   public GesuchDashboardItemDto nachfristDokumente(LocalDate nachfristDokumente) {
     this.nachfristDokumente = nachfristDokumente;
     return this;
@@ -218,6 +238,7 @@ public class GesuchDashboardItemDto  implements Serializable {
         Objects.equals(this.currentTrancheId, gesuchDashboardItem.currentTrancheId) &&
         Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
         Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
+        Objects.equals(this.canCreateAenderung, gesuchDashboardItem.canCreateAenderung) &&
         Objects.equals(this.nachfristDokumente, gesuchDashboardItem.nachfristDokumente) &&
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
@@ -225,7 +246,7 @@ public class GesuchDashboardItemDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, startDate, endDate, nachfristDokumente, offeneAenderung, missingDocuments);
+    return Objects.hash(gesuchsperiode, gesuchStatus, id, currentTrancheId, startDate, endDate, canCreateAenderung, nachfristDokumente, offeneAenderung, missingDocuments);
   }
 
   @Override
@@ -239,6 +260,7 @@ public class GesuchDashboardItemDto  implements Serializable {
     sb.append("    currentTrancheId: ").append(toIndentedString(currentTrancheId)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    canCreateAenderung: ").append(toIndentedString(canCreateAenderung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");

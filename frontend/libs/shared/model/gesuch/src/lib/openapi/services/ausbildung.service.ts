@@ -20,7 +20,13 @@ import { Observable }                                        from 'rxjs';
 
 import { Ausbildung } from '../model/ausbildung';
 import { AusbildungCreateResponse } from '../model/ausbildungCreateResponse';
+import { AusbildungUnterbruchAntragGS } from '../model/ausbildungUnterbruchAntragGS';
+import { AusbildungUnterbruchAntragSB } from '../model/ausbildungUnterbruchAntragSB';
 import { AusbildungUpdate } from '../model/ausbildungUpdate';
+import { FileDownloadToken } from '../model/fileDownloadToken';
+import { UpdateAusbildungUnterbruchAntragGS } from '../model/updateAusbildungUnterbruchAntragGS';
+import { UpdateAusbildungUnterbruchAntragSB } from '../model/updateAusbildungUnterbruchAntragSB';
+import { ValidationReport } from '../model/validationReport';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -30,13 +36,57 @@ export interface AusbildungServiceCreateAusbildungRequestParams {
     ausbildungUpdate: AusbildungUpdate;
 }
 
+export interface AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams {
+    ausbildungId: string;
+}
+
+export interface AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams {
+    ausbildungUnterbruchAntragId: string;
+    fileUpload: Blob;
+}
+
+export interface AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams {
+    ausbildungUnterbruchAntragId: string;
+}
+
+export interface AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams {
+    dokumentId: string;
+}
+
+export interface AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams {
+    token: string;
+}
+
+export interface AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams {
+    ausbildungUnterbruchAntragId: string;
+    updateAusbildungUnterbruchAntragGS: UpdateAusbildungUnterbruchAntragGS;
+}
+
 export interface AusbildungServiceGetAusbildungRequestParams {
     ausbildungId: string;
+}
+
+export interface AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams {
+    dokumentId: string;
+}
+
+export interface AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams {
+    ausbildungUnterbruchAntragId: string;
+}
+
+export interface AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams {
+    /** Die ID vom Gesuch */
+    gesuchId: string;
 }
 
 export interface AusbildungServiceUpdateAusbildungRequestParams {
     ausbildungId: string;
     ausbildungUpdate: AusbildungUpdate;
+}
+
+export interface AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams {
+    ausbildungUnterbruchAntragId: string;
+    updateAusbildungUnterbruchAntragSB: UpdateAusbildungUnterbruchAntragSB;
 }
 
 
@@ -67,6 +117,19 @@ export class AusbildungService {
         this.encoder = this.configuration.encoder || new CustomHttpParameterCodec();
     }
 
+    /**
+     * @param consumes string[] mime-types
+     * @return true: consumes contains 'multipart/form-data', false: otherwise
+     */
+    private canConsumeForm(consumes: string[]): boolean {
+        const form = 'multipart/form-data';
+        for (const consume of consumes) {
+            if (form === consume) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private addToHttpParams(httpParams: HttpParams, value: any, key?: string): HttpParams {
         if (typeof value === "object" && value instanceof Date === false) {
@@ -202,6 +265,587 @@ export class AusbildungService {
         );
     }
 
+    public createAusbildungUnterbruchAntragPath = (requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams) => {
+        const ausbildungId = requestParameters.ausbildungId;
+        if (ausbildungId === null || ausbildungId === undefined) {
+            throw new Error('Required parameter ausbildungId was null or undefined when calling createAusbildungUnterbruchAntrag$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/${this.configuration.encodeParam({name: "ausbildungId", value: ausbildungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Create a new AusbildungUnterbruchAntrag
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<AusbildungUnterbruchAntragGS>;
+     public createAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<AusbildungUnterbruchAntragGS>>;
+     public createAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<AusbildungUnterbruchAntragGS>>;
+     public createAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungId = requestParameters.ausbildungId;
+        if (ausbildungId === null || ausbildungId === undefined) {
+            throw new Error('Required parameter ausbildungId was null or undefined when calling createAusbildungUnterbruchAntrag$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/${this.configuration.encodeParam({name: "ausbildungId", value: ausbildungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<AusbildungUnterbruchAntragGS>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public createAusbildungUnterbruchAntragDokumentPath = (requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams) => {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling createAusbildungUnterbruchAntragDokument$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createAusbildungUnterbruchAntragDokument$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokument`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Created a AusbildungUnterbruchAntrag Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public createAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public createAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public createAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public createAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceCreateAusbildungUnterbruchAntragDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling createAusbildungUnterbruchAntragDokument$.');
+        }
+        const fileUpload = requestParameters.fileUpload;
+        if (fileUpload === null || fileUpload === undefined) {
+            throw new Error('Required parameter fileUpload was null or undefined when calling createAusbildungUnterbruchAntragDokument$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'multipart/form-data'
+        ];
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        const localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (fileUpload !== undefined) {
+            localVarFormParams = localVarFormParams.append('fileUpload', <any>fileUpload) as any || localVarFormParams;
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokument`;
+        return this.httpClient.request<any>('post', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public deleteAusbildungUnterbruchAntragPath = (requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams) => {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling deleteAusbildungUnterbruchAntrag$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * deletes a AusbildungUnterbruchAntrag
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling deleteAusbildungUnterbruchAntrag$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public deleteAusbildungUnterbruchAntragDokumentPath = (requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteAusbildungUnterbruchAntragDokument$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * deletes a AusbildungUnterbruchAntrag Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public deleteAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any>;
+     public deleteAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
+     public deleteAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
+     public deleteAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDeleteAusbildungUnterbruchAntragDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling deleteAusbildungUnterbruchAntragDokument$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public downloadAusbildungUnterbruchAntragDokumentPath = (requestParameters: AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadAusbildungUnterbruchAntragDokument$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/dokument/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Download AusbildungUnterbruchAntrag Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public downloadAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json' | 'text/plain', context?: HttpContext}): Observable<Blob>;
+     public downloadAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public downloadAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public downloadAusbildungUnterbruchAntragDokument$(requestParameters: AusbildungServiceDownloadAusbildungUnterbruchAntragDokumentRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream' | 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadAusbildungUnterbruchAntragDokument$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>token, 'token');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/octet-stream',
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        const localVarPath = `/ausbildung/unterbruch/dokument/download`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public einreichenAusbildungUnterbruchAntragPath = (requestParameters: AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams) => {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling einreichenAusbildungUnterbruchAntrag$.');
+        }
+        const updateAusbildungUnterbruchAntragGS = requestParameters.updateAusbildungUnterbruchAntragGS;
+        if (updateAusbildungUnterbruchAntragGS === null || updateAusbildungUnterbruchAntragGS === undefined) {
+            throw new Error('Required parameter updateAusbildungUnterbruchAntragGS was null or undefined when calling einreichenAusbildungUnterbruchAntrag$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Reicht einen AusbildungUnterbruchAntrag ein
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public einreichenAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<AusbildungUnterbruchAntragGS>;
+     public einreichenAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<AusbildungUnterbruchAntragGS>>;
+     public einreichenAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<AusbildungUnterbruchAntragGS>>;
+     public einreichenAusbildungUnterbruchAntrag$(requestParameters: AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling einreichenAusbildungUnterbruchAntrag$.');
+        }
+        const updateAusbildungUnterbruchAntragGS = requestParameters.updateAusbildungUnterbruchAntragGS;
+        if (updateAusbildungUnterbruchAntragGS === null || updateAusbildungUnterbruchAntragGS === undefined) {
+            throw new Error('Required parameter updateAusbildungUnterbruchAntragGS was null or undefined when calling einreichenAusbildungUnterbruchAntrag$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<AusbildungUnterbruchAntragGS>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateAusbildungUnterbruchAntragGS,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
     public getAusbildungPath = (requestParameters: AusbildungServiceGetAusbildungRequestParams) => {
         const ausbildungId = requestParameters.ausbildungId;
         if (ausbildungId === null || ausbildungId === undefined) {
@@ -280,6 +924,273 @@ export class AusbildungService {
 
         const localVarPath = `/ausbildung/${this.configuration.encodeParam({name: "ausbildungId", value: ausbildungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Ausbildung>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getAusbildungUnterbruchAntragDokumentDownloadTokenPath = (requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getAusbildungUnterbruchAntragDokumentDownloadToken$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * get Token to downlaod AusbildungUnterbruchAntrag Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAusbildungUnterbruchAntragDokumentDownloadToken$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getAusbildungUnterbruchAntragDokumentDownloadToken$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getAusbildungUnterbruchAntragDokumentDownloadToken$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getAusbildungUnterbruchAntragDokumentDownloadToken$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragDokumentDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getAusbildungUnterbruchAntragDokumentDownloadToken$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getAusbildungUnterbruchAntragGSPath = (requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams) => {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling getAusbildungUnterbruchAntragGS$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * get a AusbildungUnterbruchAntrag
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAusbildungUnterbruchAntragGS$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<AusbildungUnterbruchAntragGS>;
+     public getAusbildungUnterbruchAntragGS$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<AusbildungUnterbruchAntragGS>>;
+     public getAusbildungUnterbruchAntragGS$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<AusbildungUnterbruchAntragGS>>;
+     public getAusbildungUnterbruchAntragGS$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling getAusbildungUnterbruchAntragGS$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/gs/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<AusbildungUnterbruchAntragGS>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getAusbildungUnterbruchAntragsByGesuchIdPath = (requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAusbildungUnterbruchAntragsByGesuchId$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/all`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAusbildungUnterbruchAntragsByGesuchId$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<AusbildungUnterbruchAntragSB>>;
+     public getAusbildungUnterbruchAntragsByGesuchId$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<AusbildungUnterbruchAntragSB>>>;
+     public getAusbildungUnterbruchAntragsByGesuchId$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<AusbildungUnterbruchAntragSB>>>;
+     public getAusbildungUnterbruchAntragsByGesuchId$(requestParameters: AusbildungServiceGetAusbildungUnterbruchAntragsByGesuchIdRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAusbildungUnterbruchAntragsByGesuchId$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/all`;
+        return this.httpClient.request<Array<AusbildungUnterbruchAntragSB>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -389,6 +1300,113 @@ export class AusbildungService {
             {
                 context: localVarHttpContext,
                 body: ausbildungUpdate,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public updateAusbildungUnterbruchAntragSBPath = (requestParameters: AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams) => {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling updateAusbildungUnterbruchAntragSB$.');
+        }
+        const updateAusbildungUnterbruchAntragSB = requestParameters.updateAusbildungUnterbruchAntragSB;
+        if (updateAusbildungUnterbruchAntragSB === null || updateAusbildungUnterbruchAntragSB === undefined) {
+            throw new Error('Required parameter updateAusbildungUnterbruchAntragSB was null or undefined when calling updateAusbildungUnterbruchAntragSB$.');
+        }
+        let path = `/api/v1/ausbildung/unterbruch/sb/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Updated einen AusbildungUnterbruchAntrag
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public updateAusbildungUnterbruchAntragSB$(requestParameters: AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<AusbildungUnterbruchAntragSB>;
+     public updateAusbildungUnterbruchAntragSB$(requestParameters: AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<AusbildungUnterbruchAntragSB>>;
+     public updateAusbildungUnterbruchAntragSB$(requestParameters: AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<AusbildungUnterbruchAntragSB>>;
+     public updateAusbildungUnterbruchAntragSB$(requestParameters: AusbildungServiceUpdateAusbildungUnterbruchAntragSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const ausbildungUnterbruchAntragId = requestParameters.ausbildungUnterbruchAntragId;
+        if (ausbildungUnterbruchAntragId === null || ausbildungUnterbruchAntragId === undefined) {
+            throw new Error('Required parameter ausbildungUnterbruchAntragId was null or undefined when calling updateAusbildungUnterbruchAntragSB$.');
+        }
+        const updateAusbildungUnterbruchAntragSB = requestParameters.updateAusbildungUnterbruchAntragSB;
+        if (updateAusbildungUnterbruchAntragSB === null || updateAusbildungUnterbruchAntragSB === undefined) {
+            throw new Error('Required parameter updateAusbildungUnterbruchAntragSB was null or undefined when calling updateAusbildungUnterbruchAntragSB$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/ausbildung/unterbruch/sb/${this.configuration.encodeParam({name: "ausbildungUnterbruchAntragId", value: ausbildungUnterbruchAntragId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<AusbildungUnterbruchAntragSB>('patch', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateAusbildungUnterbruchAntragSB,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

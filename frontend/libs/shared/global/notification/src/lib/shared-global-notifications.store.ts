@@ -9,9 +9,9 @@ import {
   SharedModelGlobalNotification,
 } from '@dv/shared/model/global-notification';
 
-type MessageOrKey =
-  | Required<Pick<CreateNotification, 'message'>>
-  | Required<Pick<CreateNotification, 'messageKey'>>;
+type MessageOrKey<T extends string = string> =
+  | Required<Pick<CreateNotification<T>, 'message'>>
+  | Required<Pick<CreateNotification<T>, 'messageKey'>>;
 
 const PERMANENT_NOTIFICATIONS: NotificationType[] = ['ERROR_PERMANENT'];
 
@@ -53,7 +53,9 @@ export class GlobalNotificationStore extends signalStore(
   /**
    * Helper function to create a new success notification.
    */
-  createSuccessNotification(notification: MessageOrKey) {
+  createSuccessNotification<T extends string = string>(
+    notification: MessageOrKey<T>,
+  ) {
     return this.createNotification({
       type: 'SUCCESS',
       ...notification,

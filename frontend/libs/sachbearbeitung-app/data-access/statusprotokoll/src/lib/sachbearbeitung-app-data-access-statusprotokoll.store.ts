@@ -28,6 +28,7 @@ const typMap = {
   AENDERUNG: 'tranche',
   GESUCH: 'contract',
   FREIWILLIG_DARLEHEN: 'freiwilligdarlehen',
+  AUSBILDUNG_UNTERBRUCH_ANTRAG: 'ausbildungunterbruchantrag',
 } satisfies Record<StatusprotokollEntryTyp, string>;
 
 @Injectable()

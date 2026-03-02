@@ -18,6 +18,7 @@ export interface Gesuch {
     fallId: string;
     fallNummer: string;
     ausbildungId: string;
+    hasPendingAusbildungUnterbruchAntrag: boolean;
     gesuchsperiode: Gesuchsperiode;
     gesuchStatus: Gesuchstatus;
     gesuchNummer: string;
