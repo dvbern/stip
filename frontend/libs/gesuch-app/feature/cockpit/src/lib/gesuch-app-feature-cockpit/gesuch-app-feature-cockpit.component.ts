@@ -8,11 +8,12 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
+import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import {
   SharedDataAccessBenutzerApiEvents,
   selectSharedDataAccessBenutzer,
@@ -52,6 +53,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+import { isPending } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -82,6 +84,8 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 export class GesuchAppFeatureCockpitComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
+  private ausbildungStore = inject(AusbildungStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   fallStore = inject(FallStore);
@@ -104,6 +108,15 @@ export class GesuchAppFeatureCockpitComponent {
       (sozialdienst) =>
         sozialdienst.aktiv || sozialdienst.id === delegierterSozialdienst?.id,
     );
+  });
+
+  isUnterbruchOrAenderungPendingSig = computed(() => {
+    const ausbildungUnterbruchPending = isPending(
+      this.ausbildungStore.ausbildungUnterbrechenResponse(),
+    );
+    const aenderungPending =
+      this.gesuchAenderungStore.aenderungenViewSig().loading;
+    return ausbildungUnterbruchPending || aenderungPending;
   });
 
   private gotNewFallSig = computed(() => {
@@ -208,6 +221,26 @@ export class GesuchAppFeatureCockpitComponent {
           this.store.dispatch(SharedDataAccessGesuchEvents.reset());
         }
       });
+  }
+
+  ausbildungUnterbrechen(
+    ausbildungId: string,
+    openAusbildungUnterbruchAntragId?: string,
+  ) {
+    if (openAusbildungUnterbruchAntragId) {
+      this.router.navigate([
+        '/',
+        'ausbildung-unterbrechen',
+        openAusbildungUnterbruchAntragId,
+      ]);
+    } else {
+      this.ausbildungStore.createAusbildungUnterbruchAntrag$({
+        ausbildungId,
+        onSuccess: (unterbruchId) => {
+          this.router.navigate(['/', 'ausbildung-unterbrechen', unterbruchId]);
+        },
+      });
+    }
   }
 
   deleteGesuch(gesuchId: string) {

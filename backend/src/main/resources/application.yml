@@ -247,19 +247,26 @@ quarkus:
       endpoint-override: '${STIP_S3_ENDPOINT}'
     swagger-ui:
       oauth2-redirect-url: 'http://localhost:8080/q/swagger-ui/oauth2-redirect.html'
+    tls:
+      bern:
+        trust-store:
+          jks:
+            alias: 'apps-mercury-ocp-dvbern-ch'
+            path: './src/main/resources/development.jks'
+            password: 'changeit'
+      dv:
+        trust-store:
+          jks:
+            alias: 'apps-mercury-ocp-dvbern-ch'
+            path: './src/main/resources/development.jks'
+            password: 'changeit'
     oidc:
       bern:
         tls:
-          trust-store-file-type: 'jks'
-          trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
-          trust-store-file: './src/main/resources/development.jks'
-          trust-store-password: 'changeit'
+          tls-configuration-name: bern
       dv:
         tls:
-          trust-store-file-type: 'jks'
-          trust-store-cert-alias: 'apps-mercury-ocp-dvbern-ch'
-          trust-store-file: './src/main/resources/development.jks'
-          trust-store-password: 'changeit'
+          tls-configuration-name: dv
     smallrye-openapi:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
@@ -270,6 +277,7 @@ quarkus:
         grant-type: password
         username: ${STIP_KEYCLOAK_ADMIN_USER}
         password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+        tls-configuration-name: bern
     quartz:
       clustered: false
     liquibase:

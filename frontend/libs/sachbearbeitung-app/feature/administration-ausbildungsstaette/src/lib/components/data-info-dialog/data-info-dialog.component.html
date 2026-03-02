@@ -27,6 +27,23 @@
             {{ entry.valueKey | transloco }}
           </dd>
         }
+        @case ('document') {
+          <dt class="tw:whitespace-nowrap tw:!font-semibold">
+            {{ entry.labelKey | transloco }}
+          </dt>
+          <dd class="tw:font-normal">
+            @defer {
+              @if (entry.options) {
+                <dv-shared-pattern-document-upload
+                  class="tw:shrink"
+                  [optionsSig]="entry.options"
+                ></dv-shared-pattern-document-upload>
+              } @else {
+                <dv-shared-ui-loading [type]="'icon'" class="tw:w-14 tw:h-14"></dv-shared-ui-loading>
+              }
+            }
+          </dd>
+        }
         @case ('spacer') {
           <div class="tw:col-span-2 tw:mt-4"></div>
         }

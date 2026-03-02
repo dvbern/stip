@@ -1,28 +1,43 @@
 @let ausbildung = ausbildungSig();
-<div class="tw:grid tw:grid-cols-[1fr_auto]">
+<div class="tw:grid tw:grid-cols-[1fr_auto]" *dvTranslocoShared="let t">
   <div>
     <h2 class="tw:!mb-3 tw:flex tw:items-center tw:gap-4 tw:!text-2xl">
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-bg-subtle); color: #81be06e0">
         <i class="material-symbols-rounded tw:text-2xl">school</i>
       </dv-shared-ui-icon-chip>
-      {{ 'shared.dashboard.ausbildung.title' | transloco: ausbildung }}
+      {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
     </h2>
     <p class="tw:!mb-10 tw:ml-4">
       {{
-        'shared.dashboard.ausbildung.description'
-          | transloco
-            : {
-                start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
-                end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
-              }
+        t('shared.dashboard.ausbildung.description', {
+          start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
+          end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
+        })
       }}
     </p>
   </div>
-  @if (ausbildung.canDelete) {
-    <button type="button" class="btn btn-outline-primary tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">
-      {{ 'shared.dashboard.ausbildung.delete' | transloco }}
-    </button>
-  }
+  <div class="tw:flex tw:flex-col tw:gap-2">
+    @if (ausbildung.canDelete) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw:ml-3 tw:h-min"
+        (click)="deleteAusbildung.emit(ausbildung)"
+      >
+        {{ t('shared.dashboard.ausbildung.delete') }}
+      </button>
+    }
+    @if (
+      ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
+    ) {
+      <button
+        type="button"
+        class="btn btn-outline-primary tw:ml-3 tw:h-min"
+        (click)="ausbildungUnterbrechen.emit(ausbildung.id)"
+      >
+        {{ t('shared.dashboard.ausbildung.unterbruch') }}
+      </button>
+    }
+  </div>
 </div>
 
 <div class="tw:flex tw:flex-col tw:gap-6">

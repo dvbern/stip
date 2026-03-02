@@ -12,10 +12,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
+import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
@@ -67,6 +68,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
 
   private store = inject(Store);
+  private router = inject(Router);
+  private ausbildungStore = inject(AusbildungStore);
   private dialog = inject(MatDialog);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
@@ -162,6 +165,36 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
           this.store.dispatch(SharedDataAccessGesuchEvents.reset());
         }
       });
+  }
+
+  ausbildungUnterbrechen(
+    ausbildungId: string,
+    openAusbildungUnterbruchAntragId?: string,
+  ) {
+    const fallId = this.fallIdSig();
+    if (!fallId) {
+      return;
+    }
+    if (openAusbildungUnterbruchAntragId) {
+      this.router.navigate([
+        '/',
+        'ausbildung-unterbrechen',
+        openAusbildungUnterbruchAntragId,
+      ]);
+    } else {
+      this.ausbildungStore.createAusbildungUnterbruchAntrag$({
+        ausbildungId,
+        onSuccess: (unterbruchId) => {
+          this.router.navigate([
+            '/',
+            'ausbildung-unterbrechen',
+            unterbruchId,
+            'fall',
+            fallId,
+          ]);
+        },
+      });
+    }
   }
 
   deleteGesuch(gesuchId: string) {
