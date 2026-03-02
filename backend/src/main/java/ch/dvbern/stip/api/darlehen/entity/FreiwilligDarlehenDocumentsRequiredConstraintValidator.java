@@ -31,7 +31,8 @@ public class FreiwilligDarlehenDocumentsRequiredConstraintValidator
 
     @Override
     public boolean isValid(FreiwilligDarlehen freiwilligDarlehen, ConstraintValidatorContext context) {
-        final var missingDocumentTypes = darlehenService.getRequiredDokumentsForDarlehen(freiwilligDarlehen.getId());
+        final var missingDocumentTypes =
+            darlehenService.getRequiredDokumentsForFreiwilligDarlehen(freiwilligDarlehen.getId());
         final var currentDocumentTypes = freiwilligDarlehen.getDokumente()
             .stream()
             .filter(d -> !d.getDokumente().isEmpty())

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuch.service;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
@@ -60,6 +61,10 @@ public abstract class GesuchMapper {
     @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
     @Mapping(target = "ausbildungId", source = "ausbildung.id")
     @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
+    @Mapping(
+        source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
+        qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
+    )
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
@@ -79,7 +84,22 @@ public abstract class GesuchMapper {
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
     @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
+    @Mapping(
+        source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
+        qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
+    )
     public abstract GesuchWithChangesDto toWithChangesDto(Gesuch gesuch);
+
+    @Named("hasPendingAusbildungUnterbruchAntrag")
+    public boolean hasPendingAusbildungUnterbruchAntrag(final Gesuch gesuch) {
+        return gesuch.getAusbildung()
+            .getAusbildungUnterbruchAntrags()
+            .stream()
+            .anyMatch(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.EINGEGEBEN
+            );
+    }
 
     @Named("getFullNameOfSachbearbeiter")
     String getFullNameOfSachbearbeiter(Gesuch gesuch) {

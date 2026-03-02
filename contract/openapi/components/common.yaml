@@ -345,6 +345,7 @@ Gesuch:
     - fallId
     - fallNummer
     - ausbildungId
+    - hasPendingAusbildungUnterbruchAntrag
     - gesuchsperiode
     - gesuchStatus
     - gesuchNummer
@@ -360,6 +361,8 @@ Gesuch:
       type: string
     ausbildungId:
       $ref: '#/UUID'
+    hasPendingAusbildungUnterbruchAntrag:
+      type: boolean
     gesuchsperiode:
       $ref: '#/Gesuchsperiode'
     gesuchStatus:
@@ -939,6 +942,9 @@ NotificationType:
     - DARLEHEN_ZURUECKGEWIESEN
     - DARLEHEN_AKZEPTIERT
     - DARLEHEN_ABGELEHNT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
 Kommentar:
   type: object
   required:

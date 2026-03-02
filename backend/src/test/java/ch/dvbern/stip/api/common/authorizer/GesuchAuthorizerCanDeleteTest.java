@@ -65,7 +65,6 @@ class GesuchAuthorizerCanDeleteTest {
     @BeforeEach
     void setUp() {
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
 
         UUID currentBenutzerId = UUID.randomUUID();
         benutzerService = Mockito.mock(BenutzerService.class);

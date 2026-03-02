@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -126,7 +127,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // act & assert
-        assertTrue(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertTrue(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller
@@ -136,7 +137,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertFalse(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller
@@ -146,7 +147,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertFalse(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller
@@ -156,7 +157,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.ABGELEHNT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertFalse(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller
@@ -166,7 +167,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.AENDERUNG);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertFalse(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller
@@ -176,7 +177,7 @@ class GesuchTrancheServiceTest {
         gesuch.getGesuchTranchen().get(0).setTyp(GesuchTrancheTyp.TRANCHE);
         gesuch.getGesuchTranchen().get(0).setStatus(GesuchTrancheStatus.AKZEPTIERT);
         // assert
-        assertFalse(gesuchTrancheService.openAenderungAlreadyExists(gesuch));
+        assertFalse(GesuchUtil.openAenderungAlreadyExists(gesuch));
     }
 
     @TestAsGesuchsteller

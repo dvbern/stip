@@ -9,6 +9,7 @@ const gesuch: SharedModelGesuch = {
   fallId: '',
   fallNummer: '',
   ausbildungId: '',
+  hasPendingAusbildungUnterbruchAntrag: false,
   gesuchsperiode: {
     id: '',
     bezeichnungDe: '',

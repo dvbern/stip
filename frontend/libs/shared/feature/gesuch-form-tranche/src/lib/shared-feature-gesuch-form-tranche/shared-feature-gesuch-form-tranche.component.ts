@@ -215,11 +215,16 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const status = isEditingAenderung ? tranche.status : gesuch.gesuchStatus;
       const type = isEditingAenderung ? 'tranche' : 'contract';
       const appPrefix = type === 'contract' ? appType : 'shared';
+      const overridenStatus = gesuch.hasPendingAusbildungUnterbruchAntrag
+        ? this.translate.translate('shared.gesuch.status.unterbruchAnfrage')
+        : null;
 
       this.form.patchValue({
-        status: this.translate.translate(
-          `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
-        ),
+        status:
+          overridenStatus ??
+          this.translate.translate(
+            `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
+          ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
         fallnummer: fallNummer,

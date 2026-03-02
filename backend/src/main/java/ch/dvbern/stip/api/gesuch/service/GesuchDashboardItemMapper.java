@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
@@ -52,11 +53,17 @@ public abstract class GesuchDashboardItemMapper {
     @Mapping(source = "gesuch", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = "gesuch", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = "gesuch.nachfristDokumente", target = "nachfristDokumente")
+    @Mapping(source = "gesuch", target = "canCreateAenderung", qualifiedByName = "canCreateAenderung")
     public abstract GesuchDashboardItemDto toDto(
         final Gesuch gesuch,
         final GesuchTrancheSlimDto offeneAenderung,
         final Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount
     );
+
+    @Named("canCreateAenderung")
+    protected boolean canCreateAenderung(final Gesuch gesuch) {
+        return GesuchUtil.canCreateAenderung(gesuch);
+    }
 
     GesuchDashboardItemMissingDocumentsDto map(
         Optional<ImmutablePair<UUID, Integer>> missingDocumentsTrancheIdAndCount

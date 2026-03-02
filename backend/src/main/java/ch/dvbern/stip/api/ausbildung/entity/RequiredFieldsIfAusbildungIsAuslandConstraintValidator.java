@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.ausbildung.entity;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class RequiredFieldsIfAusbildungIsAusland
+public class RequiredFieldsIfAusbildungIsAuslandConstraintValidator
     implements ConstraintValidator<RequiredFieldsIfAusbildungIsAuslandConstraint, Ausbildung> {
     @Override
     public boolean isValid(Ausbildung ausbildung, ConstraintValidatorContext context) {

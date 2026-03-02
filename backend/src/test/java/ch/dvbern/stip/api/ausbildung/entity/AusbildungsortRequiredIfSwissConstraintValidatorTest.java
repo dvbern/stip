@@ -89,7 +89,7 @@ class AusbildungsortRequiredIfSwissConstraintValidatorTest {
     @ParameterizedTest
     @ArgumentsSource(RequiredFieldsIfAusbildungIsAusland.class)
     void testValidCombinations(TestParameter parameter) {
-        final var validator = new ch.dvbern.stip.api.ausbildung.entity.RequiredFieldsIfAusbildungIsAusland();
+        final var validator = new RequiredFieldsIfAusbildungIsAuslandConstraintValidator();
 
         assertThat(
             parameter.toString(),

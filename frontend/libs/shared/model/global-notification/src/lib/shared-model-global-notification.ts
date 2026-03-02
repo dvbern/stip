@@ -1,14 +1,17 @@
 import { SharedModelError } from '@dv/shared/model/error';
 
-export type Notification = {
+export type Notification<T extends string = string> = {
   id: number;
   type: NotificationType;
   message?: string;
-  messageKey?: string;
+  messageKey?: T;
   content?: SharedModelError;
 };
 
-export type CreateNotification = Omit<Notification, 'id'>;
+export type CreateNotification<T extends string = string> = Omit<
+  Notification<T>,
+  'id'
+>;
 
 export type NotificationType =
   | 'SEVERE'

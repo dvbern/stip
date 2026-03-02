@@ -23,6 +23,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
@@ -426,6 +427,68 @@ public class NotificationService {
         mailService.sendStandardNotificationEmailForGesuch(gesuch);
     }
 
+    public void createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(
+        final AusbildungUnterbruchAntrag antrag
+    ) {
+        final var gesuch = antrag.getGesuch();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final String message = Templates.getAusbildungUnterbruchAntragEingereichtText(
+            sprache,
+            antrag.getGueltigkeit().getGueltigAb(),
+            antrag.getGueltigkeit().getGueltigBis()
+        ).render();
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT)
+            .setFall(gesuch.getAusbildung().getFall())
+            .setNotificationText(message);
+        setAbsender(gesuch, notification);
+        notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+    }
+
+    public void createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(
+        final AusbildungUnterbruchAntrag antrag
+    ) {
+        final var gesuch = antrag.getGesuch();
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+        final String message = switch (antrag.getStatus()) {
+            case AKZEPTIERT -> Templates.getAusbildungUnterbruchAntragAkzeptiertText(
+                sprache,
+                antrag.getGueltigkeit().getGueltigAb(),
+                antrag.getGueltigkeit().getGueltigBis(),
+                antrag.getKommentarSB()
+            ).render();
+            case ABGELEHNT -> Templates.getAusbildungUnterbruchAntragAbgelehntText(
+                sprache,
+                antrag.getGueltigkeit().getGueltigAb(),
+                antrag.getGueltigkeit().getGueltigBis(),
+                antrag.getKommentarSB()
+            ).render();
+            case null, default -> throw new IllegalStateException();
+        };
+        final NotificationType notificationType = switch (antrag.getStatus()) {
+            case AKZEPTIERT -> NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT;
+            case ABGELEHNT -> NotificationType.AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT;
+            case null, default -> throw new IllegalStateException();
+        };
+
+        Notification notification = new Notification()
+            .setNotificationType(notificationType)
+            .setFall(gesuch.getAusbildung().getFall())
+            .setNotificationText(message);
+        setAbsender(gesuch, notification);
+        notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+    }
+
     private void setAbsender(final Gesuch gesuch, Notification notification) {
         final var absender =
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter().getFullName();
@@ -734,15 +797,106 @@ public class NotificationService {
             return neueVerfuegungDE();
         }
 
-        public static native TemplateInstance failedAuszahlungBuchhaltungDe();
+        public static native TemplateInstance failedAuszahlungBuchhaltungDE();
 
-        public static native TemplateInstance failedAuszahlungBuchhaltungFr();
+        public static native TemplateInstance failedAuszahlungBuchhaltungFR();
 
         public static TemplateInstance getFailedAuszahlungBuchhaltungText(final Sprache korrespondenzSprache) {
             if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
-                return failedAuszahlungBuchhaltungDe();
+                return failedAuszahlungBuchhaltungFR();
             }
-            return failedAuszahlungBuchhaltungDe();
+            return failedAuszahlungBuchhaltungDE();
+        }
+
+        public static native TemplateInstance ausbildungUnterbruchAntragEingereichtDE(
+            final String startDate,
+            final String endDate
+        );
+
+        public static native TemplateInstance ausbildungUnterbruchAntragEingereichtFR(
+            final String startDate,
+            final String endDate
+        );
+
+        public static TemplateInstance getAusbildungUnterbruchAntragEingereichtText(
+            final Sprache korrespondenzSprache,
+            final LocalDate startDate,
+            final LocalDate endDate
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return ausbildungUnterbruchAntragEingereichtFR(
+                    DateUtil.formatDate(startDate),
+                    DateUtil.formatDate(endDate)
+                );
+            }
+            return ausbildungUnterbruchAntragEingereichtDE(
+                DateUtil.formatDate(startDate),
+                DateUtil.formatDate(endDate)
+            );
+        }
+
+        public static native TemplateInstance ausbildungUnterbruchAntragAkzeptiertDE(
+            final String startDate,
+            final String endDate,
+            final String kommentarSb
+        );
+
+        public static native TemplateInstance ausbildungUnterbruchAntragAkzeptiertFR(
+            final String startDate,
+            final String endDate,
+            final String kommentarSb
+        );
+
+        public static TemplateInstance getAusbildungUnterbruchAntragAkzeptiertText(
+            final Sprache korrespondenzSprache,
+            final LocalDate startDate,
+            final LocalDate endDate,
+            final String kommentarSb
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return ausbildungUnterbruchAntragAkzeptiertFR(
+                    DateUtil.formatDate(startDate),
+                    DateUtil.formatDate(endDate),
+                    kommentarSb
+                );
+            }
+            return ausbildungUnterbruchAntragAkzeptiertDE(
+                DateUtil.formatDate(startDate),
+                DateUtil.formatDate(endDate),
+                kommentarSb
+            );
+        }
+
+        public static native TemplateInstance ausbildungUnterbruchAntragAbgelehntDE(
+            final String startDate,
+            final String endDate,
+            final String kommentarSb
+        );
+
+        public static native TemplateInstance ausbildungUnterbruchAntragAbgelehntFR(
+            final String startDate,
+            final String endDate,
+            final String kommentarSb
+        );
+
+        public static TemplateInstance getAusbildungUnterbruchAntragAbgelehntText(
+            final Sprache korrespondenzSprache,
+            final LocalDate startDate,
+            final LocalDate endDate,
+            final String kommentarSb
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return ausbildungUnterbruchAntragAbgelehntFR(
+                    DateUtil.formatDate(startDate),
+                    DateUtil.formatDate(endDate),
+                    kommentarSb
+                );
+            }
+            return ausbildungUnterbruchAntragAbgelehntDE(
+                DateUtil.formatDate(startDate),
+                DateUtil.formatDate(endDate),
+                kommentarSb
+            );
         }
     }
 }

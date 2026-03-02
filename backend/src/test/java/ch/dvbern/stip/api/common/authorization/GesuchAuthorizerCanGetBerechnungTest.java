@@ -50,7 +50,6 @@ class GesuchAuthorizerCanGetBerechnungTest {
     void setUp() {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         when(gesuchStatusService.canGetBerechnung(any())).thenCallRealMethod();
         gesuch = new Gesuch()
             .setAusbildung(

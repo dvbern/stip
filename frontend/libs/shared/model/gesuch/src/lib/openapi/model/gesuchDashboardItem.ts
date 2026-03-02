@@ -23,6 +23,7 @@ export interface GesuchDashboardItem {
     offeneAenderung?: GesuchTrancheSlim;
     startDate: string;
     endDate: string;
+    canCreateAenderung: boolean;
     missingDocuments?: GesuchDashboardItemMissingDocuments;
 }
 

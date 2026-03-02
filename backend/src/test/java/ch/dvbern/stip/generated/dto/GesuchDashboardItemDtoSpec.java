@@ -41,6 +41,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_OFFENE_AENDERUNG,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_END_DATE,
+  GesuchDashboardItemDtoSpec.JSON_PROPERTY_CAN_CREATE_AENDERUNG,
   GesuchDashboardItemDtoSpec.JSON_PROPERTY_MISSING_DOCUMENTS
 })
 @JsonTypeName("GesuchDashboardItem")
@@ -69,6 +70,9 @@ public class GesuchDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
+
+  public static final String JSON_PROPERTY_CAN_CREATE_AENDERUNG = "canCreateAenderung";
+  private Boolean canCreateAenderung;
 
   public static final String JSON_PROPERTY_MISSING_DOCUMENTS = "missingDocuments";
   private GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments;
@@ -284,6 +288,32 @@ public class GesuchDashboardItemDtoSpec {
   }
 
 
+  public GesuchDashboardItemDtoSpec canCreateAenderung(Boolean canCreateAenderung) {
+    
+    this.canCreateAenderung = canCreateAenderung;
+    return this;
+  }
+
+   /**
+   * Get canCreateAenderung
+   * @return canCreateAenderung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanCreateAenderung() {
+    return canCreateAenderung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_CREATE_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanCreateAenderung(Boolean canCreateAenderung) {
+    this.canCreateAenderung = canCreateAenderung;
+  }
+
+
   public GesuchDashboardItemDtoSpec missingDocuments(GesuchDashboardItemMissingDocumentsDtoSpec missingDocuments) {
     
     this.missingDocuments = missingDocuments;
@@ -326,12 +356,13 @@ public class GesuchDashboardItemDtoSpec {
         Objects.equals(this.offeneAenderung, gesuchDashboardItem.offeneAenderung) &&
         Objects.equals(this.startDate, gesuchDashboardItem.startDate) &&
         Objects.equals(this.endDate, gesuchDashboardItem.endDate) &&
+        Objects.equals(this.canCreateAenderung, gesuchDashboardItem.canCreateAenderung) &&
         Objects.equals(this.missingDocuments, gesuchDashboardItem.missingDocuments);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachfristDokumente, gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, missingDocuments);
+    return Objects.hash(nachfristDokumente, gesuchsperiode, gesuchStatus, id, currentTrancheId, offeneAenderung, startDate, endDate, canCreateAenderung, missingDocuments);
   }
 
   @Override
@@ -346,6 +377,7 @@ public class GesuchDashboardItemDtoSpec {
     sb.append("    offeneAenderung: ").append(toIndentedString(offeneAenderung)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    canCreateAenderung: ").append(toIndentedString(canCreateAenderung)).append("\n");
     sb.append("    missingDocuments: ").append(toIndentedString(missingDocuments)).append("\n");
     sb.append("}");
     return sb.toString();

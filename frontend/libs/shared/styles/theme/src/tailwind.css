@@ -8,6 +8,9 @@
   ul {
     list-style: initial;
   }
+  .btn {
+    @apply tw:transition-opacity!;
+  }
 }
 
 @theme {

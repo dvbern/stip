@@ -17,18 +17,16 @@
 
 package ch.dvbern.stip.api;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.KeycloakBenutzerService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
 import io.quarkus.test.Mock;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import org.keycloak.admin.client.Keycloak;
 
 @Mock
 @RequestScoped
@@ -42,14 +40,10 @@ public class KeycloakBenutzerServiceMock extends KeycloakBenutzerService {
     @Inject
     public KeycloakBenutzerServiceMock(
     TenantService tenantService,
-    KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue
+    Keycloak keycloak
     ) {
-        super(tenantService, keycloakAdminClientConfigRuntimeValue);
+        super(tenantService, keycloak);
     }
-
-    @Override
-    @PostConstruct
-    public void setup() throws NoSuchAlgorithmException {}
 
     @Override
     public String createKeycloakBenutzer(

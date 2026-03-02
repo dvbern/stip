@@ -23,6 +23,14 @@ body {
   white-space: pre-line;
 }
 
+.busy {
+  .btn {
+    pointer-events: none;
+    filter: none;
+    opacity: $form-check-btn-check-disabled-opacity;
+  }
+}
+
 .btn {
   font-weight: 700;
   box-shadow:

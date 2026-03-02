@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.statemachines.StateMachineUtil;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -100,7 +101,8 @@ public class GesuchStatusService {
     }
 
     public boolean canGetBerechnung(final Gesuch gesuch) {
-        boolean canGetBerechnung = gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
+        boolean canGetBerechnung =
+            GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
         for (var gesuchTranche : gesuch.getGesuchTranchen()) {
             try {
                 ValidatorUtil.validate(
@@ -116,7 +118,7 @@ public class GesuchStatusService {
         return canGetBerechnung;
     }
 
-    public boolean canChangeGesuchsperiode(final Gesuch gesuch) {
+    public static boolean canChangeGesuchsperiode(final Gesuch gesuch) {
         if (!gesuch.isErstgesuch()) {
             return false;
         }
@@ -125,17 +127,13 @@ public class GesuchStatusService {
             return false;
         }
 
-        final var isInStatus = gesuchIsInOneOfGesuchStatus(gesuch, Set.of(Gesuchstatus.IN_BEARBEITUNG_SB));
+        final var isInStatus = GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, Set.of(Gesuchstatus.IN_BEARBEITUNG_SB));
 
         if (isInStatus && !gesuch.isVerfuegt()) {
             return true;
         }
 
         return false;
-    }
-
-    public boolean gesuchIsInOneOfGesuchStatus(final Gesuch gesuch, final Set<Gesuchstatus> gesuchStatusSet) {
-        return gesuchStatusSet.contains(gesuch.getGesuchStatus());
     }
 
     private StateMachine<Gesuchstatus, GesuchStatusChangeEvent> createStateMachine(

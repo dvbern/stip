@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -130,7 +132,21 @@ public class BerechnungService {
         final var totalVorKuerzungUnterbruch =
             Objects.requireNonNullElse(totalNachKuerzungNachEinreichefrist, berechnungVorKuerzungUndTeilung);
 
-        final var anzahlMonateUnterbruch = 0;
+        final var anzahlMonateUnterbruch = gesuch.getAusbildung()
+            .getAusbildungUnterbruchAntrags()
+            .stream()
+            .sorted(Comparator.comparing(AusbildungUnterbruchAntrag::getTimestampErstellt))
+            .filter(ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGesuch().getId().equals(gesuch.getId()))
+            .filter(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.AKZEPTIERT
+            )
+            .map(
+                ausbildungUnterbruchAntrag -> Objects
+                    .requireNonNullElse(ausbildungUnterbruchAntrag.getMonateOhneAnspruch(), 0)
+            )
+            .findFirst()
+            .orElse(0);
 
         final var totalNachKuerzungUnterbruch =
             anzahlMonateUnterbruch > 0 ? totalVorKuerzungUnterbruch * (12 - anzahlMonateUnterbruch) / 12 : null;
