@@ -36,7 +36,7 @@ export class SharedDialogNutzungsbedingungenComponent {
       boolean
     >(SharedDialogNutzungsbedingungenComponent, {
       panelClass: 'dv-user-consent-dialog',
-      width: '800px',
+      width: '1200px',
       data: { nutzungsbedingungenAkzeptiert },
     });
   }
