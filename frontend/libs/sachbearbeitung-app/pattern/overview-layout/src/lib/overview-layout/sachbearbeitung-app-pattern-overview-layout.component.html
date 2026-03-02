@@ -5,10 +5,11 @@
     </dv-shared-pattern-mobile-sidenav>
   </mat-sidenav>
   <mat-sidenav-content class="d-flex flex-column">
+    <!-- todo: not in use anymore -->
     <dv-shared-pattern-app-header (openSidenav)="sidenav.open()">
       <div dvHeaderDesktopLeft class="d-flex gap-3 align-items-center">
         <a
-          routerLink="/sachbearbeitung-app-feature-cockpit"
+          routerLink="/dashboard"
           routerLinkActive="active"
           class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
           data-testid="gesuch-step-nav-antraege"

@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
@@ -32,6 +32,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
+// todo remove!
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-step-layout',
   imports: [
@@ -43,6 +44,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiIconChipComponent,
     SharedUiProgressBarComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
+    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-gesuch-step-layout.component.html',

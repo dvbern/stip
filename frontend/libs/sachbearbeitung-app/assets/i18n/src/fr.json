@@ -806,7 +806,7 @@
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Commentaire",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Télécharger la décision manuelle",
 
-  "sachbearbeitung-app.cockpit.title": "Cockpit",
+  "sachbearbeitung-app.cockpit.title": "Dashboard",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
   "sachbearbeitung-app.cockpit.no-status-filter": "Toutes les demandes",

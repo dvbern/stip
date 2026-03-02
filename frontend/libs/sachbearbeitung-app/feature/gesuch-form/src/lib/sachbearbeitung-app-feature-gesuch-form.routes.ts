@@ -12,8 +12,8 @@ export const sachbearbeitungAppFeatureGesuchFormRoutes: Route[] = [
     },
     title: step.translationKey,
     loadChildren: () =>
-      import(
-        '@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten'
-      ).then((m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes),
+      import('@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten').then(
+        (m) => m.sachbearbeitungAppFeatureGesuchFormSteuerdatenRoutes,
+      ),
   })),
 ];

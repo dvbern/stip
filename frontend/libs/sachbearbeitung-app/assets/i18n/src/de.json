@@ -806,7 +806,7 @@
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Kommentar",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Manuelle Verfügung hochladen",
 
-  "sachbearbeitung-app.cockpit.title": "Cockpit",
+  "sachbearbeitung-app.cockpit.title": "Dashboard",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
   "sachbearbeitung-app.cockpit.no-status-filter": "Alle Gesuche",

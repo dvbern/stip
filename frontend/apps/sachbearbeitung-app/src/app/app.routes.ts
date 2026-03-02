@@ -61,7 +61,7 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'sachbearbeitung-app-feature-cockpit',
+        path: 'dashboard',
         canActivate: [
           hasBenutzer,
           hasRoles(
@@ -69,6 +69,7 @@ export const appRoutes: Route[] = [
             '/administration',
           ),
         ],
+        // todo: chane all cockpit to dashboard, also replace all testids and translation keys
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/cockpit').then(
@@ -145,11 +146,11 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'sachbearbeitung-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'sachbearbeitung-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
 ];

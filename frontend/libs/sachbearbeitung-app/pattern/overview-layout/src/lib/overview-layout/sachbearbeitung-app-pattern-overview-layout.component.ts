@@ -35,6 +35,7 @@ import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 export class SachbearbeitungAppPatternOverviewLayoutComponent {
   @Input() closeMenu: { value: boolean } | null = null;
 
+  // todo: move, component not in use anymore
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
   constructor() {

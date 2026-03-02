@@ -1,85 +1,70 @@
-<mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" position="end">
-    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
-      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
-    </dv-shared-pattern-mobile-sidenav>
-  </mat-sidenav>
-  <mat-sidenav-content class="d-flex flex-column">
-    <dv-sachbearbeitung-app-pattern-gesuch-header (openSidenav)="sidenav.open()">
-    </dv-sachbearbeitung-app-pattern-gesuch-header>
+<!-- todo: mobile nav with portal -->
+<div class="d-flex h-100" *transloco="let t">
+  <ng-template #navigation>
+    <div class="sidenav p-4">
+      @let gesuchId = gesuchIdSig();
+      @for (option of verfuegungOptions; track $index) {
+        <a
+          type="button"
+          class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
+          [attr.data-testid]="'option-nav-' + option.route"
+          [routerLink]="['/', 'verfuegung', gesuchId, option.route]"
+          routerLinkActive="active"
+          (click)="navClicked$.emit()"
+        >
+          <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+          <span class="text-start">
+            {{ option.translationKey | transloco: option.translationOptions }}
+          </span>
+        </a>
+      }
+      <br />
+      @for (option of berechnungenSig(); track $index) {
+        <a
+          type="button"
+          class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
+          [attr.data-testid]="'option-nav-' + option.route"
+          [class.btn-light]="!option.active"
+          [class.shadow-none]="!option.active"
+          [routerLink]="option.fullRoute"
+          routerLinkActive="active"
+          (click)="navClicked$.emit()"
+        >
+          <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+          <span class="text-start">
+            {{ option.translationKey | transloco: option.translationOptions }}
+          </span>
+        </a>
+      }
+    </div>
+  </ng-template>
 
-    <ng-template #navigation>
-      <div class="sidenav p-4">
-        @let gesuchId = gesuchIdSig();
-        @for (option of verfuegungOptions; track $index) {
-          <a
-            type="button"
-            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
-            [attr.data-testid]="'option-nav-' + option.route"
-            [routerLink]="['/', 'verfuegung', gesuchId, option.route]"
-            routerLinkActive="active"
-            (click)="navClicked$.emit()"
-          >
-            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
-            <span class="text-start">
-              {{ option.translationKey | transloco: option.translationOptions }}
-            </span>
-          </a>
-        }
-        <br />
-        @for (option of berechnungenSig(); track $index) {
-          <a
-            type="button"
-            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
-            [attr.data-testid]="'option-nav-' + option.route"
-            [class.btn-light]="!option.active"
-            [class.shadow-none]="!option.active"
-            [routerLink]="option.fullRoute"
-            routerLinkActive="active"
-            (click)="navClicked$.emit()"
-          >
-            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
-            <span class="text-start">
-              {{ option.translationKey | transloco: option.translationOptions }}
-            </span>
-          </a>
-        }
+  <!-- MAIN CONTENT -->
+  <!-- left step nav (Desktop) -->
+  <div class="d-none d-lg-block border-end bg-white">
+    <ng-container *ngTemplateOutlet="navigation"></ng-container>
+  </div>
+  <div class="pt-lg-4 px-lg-4 container mb-5">
+    <!-- step header (mobile) -->
+    <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
+      <ng-container *ngTemplateOutlet="navigation"></ng-container>
+    </div>
+
+    <!-- title (desktop) -->
+    @if (option) {
+      <div class="d-none d-lg-flex justify-content-start align-items-center">
+        <dv-shared-ui-icon-chip class="step-icon me-3">
+          <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
+        </dv-shared-ui-icon-chip>
+
+        <h2 class="fw-bold m-0" data-testid="step-title">
+          {{ option.titleTranslationKey | transloco }}
+        </h2>
       </div>
-    </ng-template>
+    }
 
-    <!-- MAIN CONTENT -->
-    <main class="page-body">
-      <div class="d-flex h-100">
-        <!-- left step nav (Desktop) -->
-        <div class="d-none d-lg-block border-end bg-white">
-          <ng-container *ngTemplateOutlet="navigation"></ng-container>
-        </div>
-        <div class="pt-lg-4 px-lg-4 container mb-5">
-          <!-- step header (mobile) -->
-          <div
-            class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3"
-          >
-            <ng-container *ngTemplateOutlet="navigation"></ng-container>
-          </div>
-
-          <!-- title (desktop) -->
-          @if (option) {
-            <div class="d-none d-lg-flex justify-content-start align-items-center">
-              <dv-shared-ui-icon-chip class="step-icon me-3">
-                <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
-              </dv-shared-ui-icon-chip>
-
-              <h2 class="fw-bold m-0" data-testid="step-title">
-                {{ option.titleTranslationKey | transloco }}
-              </h2>
-            </div>
-          }
-
-          <div>
-            <ng-content></ng-content>
-          </div>
-        </div>
-      </div>
-    </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <div>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>

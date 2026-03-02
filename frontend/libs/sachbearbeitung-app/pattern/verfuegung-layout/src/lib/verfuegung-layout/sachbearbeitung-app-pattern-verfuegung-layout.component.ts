@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 // import type { VerfuegungOption } from '@dv/sachbearbeitung-app/model/verfuegung';
@@ -41,6 +41,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternMobileSidenavComponent,
     SharedUiIconChipComponent,
     SachbearbeitungAppPatternGesuchHeaderComponent,
+    TranslocoDirective,
   ],
   styleUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.scss',
   templateUrl: './sachbearbeitung-app-pattern-verfuegung-layout.component.html',

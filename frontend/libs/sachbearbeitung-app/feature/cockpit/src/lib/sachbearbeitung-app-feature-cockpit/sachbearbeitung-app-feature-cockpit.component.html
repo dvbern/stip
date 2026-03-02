@@ -1,4 +1,4 @@
-<dv-sachbearbeitung-app-pattern-overview-layout>
+<ng-container *transloco="let t">
   <div class="container">
     <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
       @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
@@ -434,5 +434,6 @@
       </div>
     </div>
   </div>
+
   <dv-shared-ui-version-text [version]="versionSig()" class="text-muted"></dv-shared-ui-version-text>
-</dv-sachbearbeitung-app-pattern-overview-layout>
+</ng-container>

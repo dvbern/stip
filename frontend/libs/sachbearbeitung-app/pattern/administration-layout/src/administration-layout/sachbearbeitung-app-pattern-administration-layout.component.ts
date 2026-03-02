@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { AdminOptions } from '@dv/sachbearbeitung-app/model/administration';
@@ -35,6 +35,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiHasRolesDirective,
+    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-pattern-administration-layout.component.html',
