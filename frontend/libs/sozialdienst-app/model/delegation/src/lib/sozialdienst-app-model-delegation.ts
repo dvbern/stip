@@ -58,12 +58,9 @@ export type SozCockpitFilterInputs = Record<
   InputSignal<string | undefined>
 >;
 
-export interface SozCockpitBaseFilterInputs
-  extends SortAndPageInputs<SozDashboardColumn> {
+export interface SozCockpitBaseFilterInputs extends SortAndPageInputs<SozDashboardColumn> {
   show: InputSignal<GetDelegierungSozQueryType | undefined>;
 }
 
 export interface SozCockitComponentInputs
-  extends SozCockpitFilterInputs,
-    SozCockpitBaseFilterInputs,
-    StatusFilter {}
+  extends SozCockpitFilterInputs, SozCockpitBaseFilterInputs, StatusFilter {}

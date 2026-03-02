@@ -15,17 +15,22 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
@@ -63,6 +68,7 @@ export class SharedPatternAppHeaderComponent {
   private cd = inject(ChangeDetectorRef);
   private tenantCacheService = inject(SharedUtilTenantConfigService);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
+  private dialog = inject(MatDialog);
 
   languageSig = this.store.selectSignal(selectLanguage);
   benutzerNameSig = computed(() => {
@@ -103,5 +109,29 @@ export class SharedPatternAppHeaderComponent {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
+  }
+
+  showNutzungsbedingungen() {
+    const benutzer = this.benutzerSig();
+    const nutzungsbedingungenAkzeptiert =
+      benutzer?.nutzungsbedingungenAkzeptiert;
+    const benutzerId = benutzer?.id;
+
+    if (!benutzerId) return;
+
+    SharedDialogNutzungsbedingungenComponent.open(
+      this.dialog,
+      nutzungsbedingungenAkzeptiert ?? false,
+    )
+      .afterClosed()
+      .subscribe((result) => {
+        if (result && benutzerId) {
+          this.store.dispatch(
+            SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
+              benutzerId,
+            }),
+          );
+        }
+      });
   }
 }

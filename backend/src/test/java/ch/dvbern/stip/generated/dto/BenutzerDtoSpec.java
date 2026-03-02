@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   BenutzerDtoSpec.JSON_PROPERTY_VORNAME,
   BenutzerDtoSpec.JSON_PROPERTY_NACHNAME,
   BenutzerDtoSpec.JSON_PROPERTY_BENUTZEREINSTELLUNGEN,
+  BenutzerDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT,
   BenutzerDtoSpec.JSON_PROPERTY_ID,
   BenutzerDtoSpec.JSON_PROPERTY_SACHBEARBEITER_ZUORDNUNG_STAMMDATEN
 })
@@ -47,6 +48,9 @@ public class BenutzerDtoSpec {
 
   public static final String JSON_PROPERTY_BENUTZEREINSTELLUNGEN = "benutzereinstellungen";
   private BenutzereinstellungenUpdateDtoSpec benutzereinstellungen;
+
+  public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -135,6 +139,32 @@ public class BenutzerDtoSpec {
   }
 
 
+  public BenutzerDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+   /**
+   * Get nutzungsbedingungenAkzeptiert
+   * @return nutzungsbedingungenAkzeptiert
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
+
   public BenutzerDtoSpec id(UUID id) {
     
     this.id = id;
@@ -198,13 +228,14 @@ public class BenutzerDtoSpec {
     return Objects.equals(this.vorname, benutzer.vorname) &&
         Objects.equals(this.nachname, benutzer.nachname) &&
         Objects.equals(this.benutzereinstellungen, benutzer.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, benutzer.nutzungsbedingungenAkzeptiert) &&
         Objects.equals(this.id, benutzer.id) &&
         Objects.equals(this.sachbearbeiterZuordnungStammdaten, benutzer.sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, benutzereinstellungen, id, sachbearbeiterZuordnungStammdaten);
+    return Objects.hash(vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert, id, sachbearbeiterZuordnungStammdaten);
   }
 
   @Override
@@ -214,6 +245,7 @@ public class BenutzerDtoSpec {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sachbearbeiterZuordnungStammdaten: ").append(toIndentedString(sachbearbeiterZuordnungStammdaten)).append("\n");
     sb.append("}");

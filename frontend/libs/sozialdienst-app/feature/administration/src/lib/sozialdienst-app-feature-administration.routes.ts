@@ -8,9 +8,7 @@ export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
     path: OPTION_SOZIALDIENST_BENUTZER.route,
     canActivate: [hasRoles(['V0_Sozialdienst-Admin'], '/unauthorized')],
     loadChildren: () =>
-      import(
-        '@dv/sozialdienst-app/feature/administration-sozialdienst-benutzer'
-      ).then(
+      import('@dv/sozialdienst-app/feature/administration-sozialdienst-benutzer').then(
         (m) => m.sozialdienstAppFeatureAdministrationSozialdienstBenutzerRoutes,
       ),
   },

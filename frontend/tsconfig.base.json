@@ -296,7 +296,8 @@
       "@dv/sozialdienst-app/pattern/administration-layout": ["libs/sozialdienst-app/pattern/administration-layout/src/index.ts"],
       "@dv/sozialdienst-app/pattern/gesuch-step-layout": ["libs/sozialdienst-app/pattern/gesuch-step-layout/src/index.ts"],
       "@dv/sozialdienst-app/ui/adv-transloco-directive": ["libs/sozialdienst-app/ui/adv-transloco-directive/src/index.ts"],
-      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"]
+      "@dv/tooling/nx-plugin": ["libs/tooling/nx-plugin/src/index.ts"],
+      "@dv/shared/dialog/nutzungsbedingungen": ["libs/shared/dialog/nutzungsbedingungen/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

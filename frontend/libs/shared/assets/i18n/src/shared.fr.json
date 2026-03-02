@@ -5,9 +5,12 @@
   "shared.menu.dashboard": "Dashboard",
   "shared.menu.auszahlung": "Paiement",
   "shared.menu.darlehen": "Prêts",
-  "shared.close": "Close",
-  "shared.cancel": "Cancel",
-  "shared.accept": "Accept",
+  "shared.menu.profile": "Profil",
+  "shared.menu.nutzungsbedingungen": "Conditions d'utilisation",
+  "shared.menu.logout": "Logout",
+  "shared.close": "Fermer",
+  "shared.cancel": "Annuler",
+  "shared.accept": "Accepter",
   "shared.create": "Créer",
   "shared.label.von": "du",
   "shared.label.bis": "au",
@@ -211,6 +214,10 @@
 
   "shared.unauthorized.title": "Accès refusé",
   "shared.unauthorized.text": "Vous n'avez pas l'autorisation de voir cette page.",
+
+  "shared.user.consent.dialog.title": "Conditions d'utilisation kiBon-Stip",
+  "shared.user.consent.dialog.text": "<h3>Conditions d'utilisation pour le traitement et la soumission de demandes de bourses d'études</h3><p>En tant que demandeur, vous devez accepter les conditions d'utilisation suivantes afin de pouvoir traiter et soumettre une demande de bourse d'études en ligne.</p><h4>Gestion du mot de passe personnel :</h4><ul><li>Le mot de passe personnel doit être gardé secret et protégé contre toute utilisation abusive.</li><li>Le mot de passe personnel ne doit pas être communiqué à d'autres personnes.</li></ul><h4>Informations et documents corrects et complets</h4><ul><li>Vous confirmez que vous remplissez la demande de manière véridique et complète.</li><li>Vous confirmez que les documents téléchargés sont inchangés et conformes aux faits.</li><li>L'AAB se réserve le droit de bloquer ou de supprimer un compte utilisateur si des informations délibérément fausses ou mensongères sont fournies.</li><li>L'utilisateur est responsable de toutes les données téléchargées ou transmises.</li><li>Après la clôture de la procédure de demande, les données personnelles sont conservées conformément aux délais légaux de conservation puis supprimées.</li><li>Le traitement des données personnelles s'effectue dans le cadre de la législation applicable en matière de protection des données.</li></ul><h4>Validation de la demande</h4><ul><li>La demande remplie en ligne est considérée comme soumise dès sa validation.</li><li>Vous pouvez à tout moment saisir et signaler des modifications dans l'application (en ligne).</li></ul><h4>Respect des délais</h4><ul><li>Une demande remplie en ligne est soumise dans les délais si le délai de soumission selon l'art. 36 de l'ordonnance du 5 avril 2006 sur les bourses d'études (ABV; BSG 438.312) est respecté. La procédure est régie par les dispositions de la loi du 23 mai 1989 sur la procédure administrative (VRPG; BSG 155.21).</li></ul><h4>Obligation de déclaration</h4><ul><li>Si votre demande est approuvée et que vous recevez des bourses d'études, vous devez ensuite saisir et signaler sans délai dans l'application tout changement par rapport aux informations fournies dans la demande. En cas de violation de cette obligation de déclaration, les bourses d'études peuvent être réclamées en tout ou en partie.</li></ul><h4>Support / Assistance</h4><ul><li>Vous consentez à ce que la demande traitée puisse être consultée par les collaborateurs de la section des bourses d'études (AAB) si vous avez besoin d'aide pour remplir la demande.</li></ul>",
+  "shared.user.consent.dialog.accept": "Accepter",
 
   "shared.dashboard.ausbildung.delete": "Supprimer la formation",
   "shared.dashboard.ausbildung.delete.dialog.title": "Supprimer la formation",

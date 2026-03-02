@@ -58,6 +58,10 @@ export interface BenutzerServiceGetSachbearbeiterStammdatenRequestParams {
     benutzerId: string;
 }
 
+export interface BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams {
+    benutzerId: string;
+}
+
 export interface BenutzerServiceUpdateSachbearbeiterRequestParams {
     sachbearbeiterId: string;
     sachbearbeiterUpdate: SachbearbeiterUpdate;
@@ -925,6 +929,95 @@ export class BenutzerService {
 
         const localVarPath = `/benutzer/sachbearbeiter`;
         return this.httpClient.request<Array<Sachbearbeiter>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public nutzungsbedingungenAkzeptierenPath = (requestParameters: BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams) => {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling nutzungsbedingungenAkzeptieren$.');
+        }
+        let path = `/api/v1/benutzer/nutzungsbedingungenAkzeptieren/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Accept the Nutzungsbedingungen for the current Benutzer
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public nutzungsbedingungenAkzeptieren$(requestParameters: BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Benutzer>;
+     public nutzungsbedingungenAkzeptieren$(requestParameters: BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Benutzer>>;
+     public nutzungsbedingungenAkzeptieren$(requestParameters: BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Benutzer>>;
+     public nutzungsbedingungenAkzeptieren$(requestParameters: BenutzerServiceNutzungsbedingungenAkzeptierenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const benutzerId = requestParameters.benutzerId;
+        if (benutzerId === null || benutzerId === undefined) {
+            throw new Error('Required parameter benutzerId was null or undefined when calling nutzungsbedingungenAkzeptieren$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/benutzer/nutzungsbedingungenAkzeptieren/${this.configuration.encodeParam({name: "benutzerId", value: benutzerId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        return this.httpClient.request<Benutzer>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

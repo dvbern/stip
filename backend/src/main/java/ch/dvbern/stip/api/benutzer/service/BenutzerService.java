@@ -231,6 +231,23 @@ public class BenutzerService {
     }
 
     @Transactional
+    public BenutzerDto nutzungsbedingungenAkzeptieren(
+        UUID benutzerId
+    ) {
+        final var benutzer = benutzerRepository.findById(benutzerId);
+
+        if (benutzer == null) {
+            throw new NotFoundException("Benutzer not found");
+        }
+
+        benutzer.setNutzungsbedingungenAkzeptiert(true);
+
+        benutzerRepository.persistAndFlush(benutzer);
+
+        return benutzerMapper.toDto(benutzer);
+    }
+
+    @Transactional
     public void deleteBenutzer(final String benutzerId) {
         final var benutzer = benutzerRepository.findByKeycloakId(benutzerId).orElseThrow(NotFoundException::new);
         benutzer.getRollen().clear();

@@ -1,0 +1,30 @@
+<section
+  class="tw:relative tw:flex tw:max-h-dvh tw:flex-col tw:overflow-y-auto tw:rounded-lg tw:p-8"
+  *dvTranslocoShared="let t"
+>
+  <button
+    type="button"
+    (click)="cancel()"
+    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
+    [attr.aria-label]="t('shared.close')"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+
+  <h1 class="tw:!text-3xl">
+    {{ t('shared.user.consent.dialog.title') }}
+  </h1>
+
+  <div class="tw:mt-4" [innerHTML]="t('shared.user.consent.dialog.text')"></div>
+
+  <div class="tw:mt-5 tw:flex tw:justify-between">
+    <button type="button" class="btn btn-secondary" (click)="cancel()">
+      {{ t('shared.cancel') }}
+    </button>
+    @if (!dialogData.nutzungsbedingungenAkzeptiert) {
+      <button type="button" class="btn btn-primary tw:ml-2" (click)="accept()">
+        {{ t('shared.user.consent.dialog.accept') }}
+      </button>
+    }
+  </div>
+</section>

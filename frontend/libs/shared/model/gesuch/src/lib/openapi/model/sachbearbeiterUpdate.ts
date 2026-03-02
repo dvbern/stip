@@ -15,6 +15,7 @@ export interface SachbearbeiterUpdate {
     vorname: string;
     nachname: string;
     benutzereinstellungen?: BenutzereinstellungenUpdate;
+    nutzungsbedingungenAkzeptiert?: boolean;
     telefonnummer: string;
     email: string;
     funktionDe: string;

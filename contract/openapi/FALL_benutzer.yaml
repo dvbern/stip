@@ -55,6 +55,33 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: prepareCurrentBenutzer
       summary: Get or create and update current benutzer
+  /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Current Benutzer with accepted Nutzungsbedingungen
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: nutzungsbedingungenAkzeptieren
+      summary: Accept the Nutzungsbedingungen for the current Benutzer
   /benutzer/sachbearbeiter:
     get:
       tags:
@@ -339,6 +366,8 @@ components:
           type: string
         benutzereinstellungen:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:

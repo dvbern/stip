@@ -76,8 +76,20 @@
           </button>
 
           <mat-menu #profileMenu="matMenu" xPosition="before">
-            <button type="button" data-testid="button-profile" mat-menu-item>Profil</button>
-            <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">Logout</button>
+            <button type="button" data-testid="button-profile" mat-menu-item>
+              {{ 'shared.menu.profile' | transloco }}
+            </button>
+            <button
+              type="button"
+              data-testid="button-nutzungsbedingungen"
+              mat-menu-item
+              (click)="showNutzungsbedingungen()"
+            >
+              {{ 'shared.menu.nutzungsbedingungen' | transloco }}
+            </button>
+            <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">
+              {{ 'shared.menu.logout' | transloco }}
+            </button>
             <hr class="my-1" />
             <dv-shared-ui-language-selector
               class="d-flex justify-content-center px-2"
