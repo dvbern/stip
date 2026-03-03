@@ -57,6 +57,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { mapCachedData } from '@dv/shared/util/remote-data';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   createDateDependencyValidator,
@@ -152,13 +153,15 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     const abschlussId = this.abschlussIdSig();
     const abschluesse = this.ausbildungsstatteStore.abschluesseViewSig();
 
-    return abschluesse.find((a) => a.id === abschlussId);
+    return abschluesse.data?.find((a) => a.id === abschlussId);
   });
   abschluesseOptionsSig = computed(() => {
     const selectedAbschlussId = this.abschlussIdSig();
-    return this.ausbildungsstatteStore
-      .abschluesseViewSig()
-      .filter((a) => a.aktiv || a.id === selectedAbschlussId);
+    return mapCachedData(
+      this.ausbildungsstatteStore.abschluesseViewSig(),
+      (abschluesse) =>
+        abschluesse.filter((a) => a.aktiv || a.id === selectedAbschlussId),
+    );
   });
   startChangedSig = toSignal(this.form.controls.von.valueChanges);
   endChangedSig = toSignal(this.form.controls.bis.valueChanges);

@@ -7,6 +7,7 @@ import { TranslocoService } from '@jsverse/transloco';
 
 // eslint-disable-next-line @nx/enforce-module-boundaries
 import { getTranslocoModule } from '@dv/shared/pattern/vitest-test-setup';
+import { success } from '@dv/shared/util/remote-data';
 
 import { SharedUiSelectSearchComponent } from './shared-ui-select-search.component';
 
@@ -72,7 +73,7 @@ describe('SharedUiSelectSearchComponent Unit Test', () => {
 
     // Set up the component inputs
     fixture.componentRef.setInput('labelKeySig', 'label.test.key');
-    fixture.componentRef.setInput('valuesSig', values);
+    fixture.componentRef.setInput('valuesSig', success(values));
     fixture.componentRef.setInput('invalidValueLabelKeySig', 'error.test.key');
     fixture.componentRef.setInput('languageSig', 'de');
     fixture.componentRef.setInput('zuvorValueSig', hintValue);

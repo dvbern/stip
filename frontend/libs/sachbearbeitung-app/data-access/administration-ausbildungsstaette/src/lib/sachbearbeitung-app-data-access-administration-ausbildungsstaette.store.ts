@@ -29,6 +29,7 @@ import {
   cachedPending,
   handleApiResponse,
   initial,
+  mapCachedData,
 } from '@dv/shared/util/remote-data';
 
 type EntityTypes = 'ausbildungsgang' | 'abschluss' | 'ausbildungsstaette';
@@ -64,10 +65,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
   });
 
   abschluesseViewSig = computed(() => {
-    return preparePaginatedData(this.abschluesse.data(), (e) => ({
-      ...e,
-      canArchive: e.aktiv && e.ausbildungskategorie === 'BRUECKENANGEBOT',
-    }));
+    return mapCachedData(this.abschluesse(), (abschluesse) =>
+      preparePaginatedData(abschluesse, (e) => ({
+        ...e,
+        canArchive: e.aktiv && e.ausbildungskategorie === 'BRUECKENANGEBOT',
+      })),
+    );
   });
 
   ausbildungsstaettenViewSig = computed(() => {

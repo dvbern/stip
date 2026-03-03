@@ -72,7 +72,7 @@
                 [language]="languageSig()"
                 [lebenslaufItems]="items"
                 [ausbildung]="ausbildung"
-                [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig()"
+                [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig().data ?? []"
                 (addAusbildungTriggered)="handleAddAusbildung($event)"
                 (addTaetigkeitTriggered)="handleAddTaetigkeit($event)"
                 (editItemTriggered)="handleEditItemId($event, items)"

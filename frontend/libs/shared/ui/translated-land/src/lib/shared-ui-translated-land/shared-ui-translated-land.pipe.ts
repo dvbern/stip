@@ -21,7 +21,7 @@ export class SharedUiTranslatedLandPipe implements PipeTransform {
     return this.laender$.pipe(
       combineLatestWith(this.language$),
       map(([laender, language]) => {
-        const land = laender?.find((l) => l.id === value);
+        const land = laender.data?.find((l) => l.id === value);
         if (land) {
           return land[`${language}Kurzform`] || land['deKurzform']; // Fallback to German if no translation exists
         } else {

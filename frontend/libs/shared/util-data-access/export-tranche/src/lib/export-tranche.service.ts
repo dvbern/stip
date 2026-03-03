@@ -68,7 +68,7 @@ export class SharedExportTrancheService {
         ]);
 
       pdfmake.fonts = getFonts(location.origin);
-      const laender = this.landLookupService.getCachedLandLookup()();
+      const laender = this.landLookupService.getCachedLandLookup()().data ?? [];
 
       const pdf = pdfmake.createPdf({
         header: getPageHeader(this.translate, gesuch, tranche),

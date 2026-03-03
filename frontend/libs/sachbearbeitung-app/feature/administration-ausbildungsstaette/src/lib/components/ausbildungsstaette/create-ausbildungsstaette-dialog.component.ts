@@ -37,10 +37,11 @@ import {
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { CachedRemoteData } from '@dv/shared/util/remote-data';
 
 type CreateAbschlussData = {
-  ausbildungsstaetten: AusbildungsstaetteSlim[];
-  abschluesse: AbschlussSlim[];
+  ausbildungsstaetten: CachedRemoteData<AusbildungsstaetteSlim[]>;
+  abschluesse: CachedRemoteData<AbschlussSlim[]>;
 };
 
 @Component({
@@ -79,7 +80,7 @@ export class CreateAusbildungsstaetteDialogComponent {
       [
         Validators.required,
         uniqueAusbildungsstaetteValidator(
-          this.dialogData.ausbildungsstaetten,
+          this.dialogData.ausbildungsstaetten.data ?? [],
           'nameDe',
         ),
       ],
@@ -89,7 +90,7 @@ export class CreateAusbildungsstaetteDialogComponent {
       [
         Validators.required,
         uniqueAusbildungsstaetteValidator(
-          this.dialogData.ausbildungsstaetten,
+          this.dialogData.ausbildungsstaetten.data ?? [],
           'nameFr',
         ),
       ],
