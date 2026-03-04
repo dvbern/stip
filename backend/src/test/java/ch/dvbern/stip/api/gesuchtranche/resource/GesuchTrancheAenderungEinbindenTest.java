@@ -394,7 +394,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
         assertThat(gesuchHeader.getCurrentTranches()).hasSize(2);
@@ -431,7 +431,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches()).hasSize(1);
     }
@@ -480,7 +480,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches()).hasSize(2);
     }

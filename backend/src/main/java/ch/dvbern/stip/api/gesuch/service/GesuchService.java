@@ -1342,18 +1342,16 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        final var currentGesuch = gesuchRepository.requireById(gesuch.getId());
+    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
         final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
 
         return new GesuchHeaderDto()
-            .gesuchInfo(gesuchMapper.toInfoDto(currentGesuch))
+            .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
             .aenderungs(aenderungs)
-            .currentTranches(currentGesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
             .initial(initialGesuch)
             .versions(versions);
     }

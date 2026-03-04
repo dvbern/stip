@@ -95,7 +95,7 @@ class GesuchZurueckweisenTest {
 
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
 
         assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(1));
@@ -176,7 +176,7 @@ class GesuchZurueckweisenTest {
     private void assertSBTranchenCount(final String message, final int size) {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
         assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(size));

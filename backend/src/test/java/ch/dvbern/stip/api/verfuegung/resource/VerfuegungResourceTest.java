@@ -199,7 +199,7 @@ public class VerfuegungResourceTest {
     @Test
     void getVerfuegungs() {
         final GesuchHeaderDtoSpec header = gesuchApiSpec.getGesuchHeaderSb()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -266,7 +266,7 @@ public class VerfuegungResourceTest {
 
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
@@ -300,7 +300,7 @@ public class VerfuegungResourceTest {
     @Test
     void getVerfuegungsAgain() {
         final GesuchHeaderDtoSpec header = gesuchApiSpec.getGesuchHeaderSb()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

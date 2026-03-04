@@ -255,7 +255,7 @@ class GesuchTrancheAenderungTest {
     void setupnextTest() {
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
 
     }
@@ -296,7 +296,7 @@ class GesuchTrancheAenderungTest {
     void deleteAenderungShouldFailTest() {
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
 
         final var tranche = gesuchHeader.getCurrentTranches()
@@ -333,7 +333,7 @@ class GesuchTrancheAenderungTest {
 
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
 
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
@@ -454,7 +454,7 @@ class GesuchTrancheAenderungTest {
 
         gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
         assertThat(gesuchHeader.getAenderungs().getAbgelehnt().size()).isEqualTo(1);

@@ -2302,13 +2302,13 @@ public class GesuchApiSpec {
      * Get the GS Gesuch header information for the given gesuchTranche
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchIdPath  (required)
      * return GesuchHeaderDtoSpec
      */
     public static class GetGesuchHeaderGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/gs/header/{gesuchTrancheId}";
+        public static final String REQ_URI = "/gesuch/gs/header/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -2320,7 +2320,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/gs/header/{gesuchTrancheId}
+         * GET /gesuch/gs/header/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2331,7 +2331,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/gs/header/{gesuchTrancheId}
+         * GET /gesuch/gs/header/{gesuchId}
          * @param handler handler
          * @return GesuchHeaderDtoSpec
          */
@@ -2340,14 +2340,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetGesuchHeaderGsOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+        public GetGesuchHeaderGsOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
@@ -2375,13 +2375,13 @@ public class GesuchApiSpec {
      * Get the SB Gesuch header information for the given gesuchTranche
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchIdPath  (required)
      * return GesuchHeaderDtoSpec
      */
     public static class GetGesuchHeaderSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/sb/header/{gesuchTrancheId}";
+        public static final String REQ_URI = "/gesuch/sb/header/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -2393,7 +2393,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/sb/header/{gesuchTrancheId}
+         * GET /gesuch/sb/header/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2404,7 +2404,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/sb/header/{gesuchTrancheId}
+         * GET /gesuch/sb/header/{gesuchId}
          * @param handler handler
          * @return GesuchHeaderDtoSpec
          */
@@ -2413,14 +2413,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetGesuchHeaderSbOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+        public GetGesuchHeaderSbOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 

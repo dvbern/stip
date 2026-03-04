@@ -159,7 +159,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     void shouldReturnListOfInitialTranches() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
         assertThat(gesuchHeader.getInitial().getTranchen()).hasSize(2);

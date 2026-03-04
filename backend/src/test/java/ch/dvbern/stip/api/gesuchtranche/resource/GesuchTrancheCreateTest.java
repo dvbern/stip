@@ -193,7 +193,7 @@ class GesuchTrancheCreateTest {
     void getTranchen() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
         tranche1Id = gesuchHeader.getCurrentTranches().get(0).getId();
@@ -220,7 +220,7 @@ class GesuchTrancheCreateTest {
         // verify that the tranche has been overwritten
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
         tranche1Id = gesuchHeader.getCurrentTranches().get(0).getId();
@@ -233,7 +233,7 @@ class GesuchTrancheCreateTest {
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
         // make the formlerly added document (by GS) superflous on tranche 2:
@@ -393,7 +393,7 @@ class GesuchTrancheCreateTest {
         // so the total count of (visible) tranchen should be 1 instead of 2
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
     }

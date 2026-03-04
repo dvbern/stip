@@ -98,7 +98,7 @@ class GesuchJuristischeAbklaerungTest {
 
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuchDtoSpec.getId())
         );
 
         assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(1));

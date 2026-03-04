@@ -179,14 +179,14 @@ public interface GesuchResource {
     GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/gs/header/{gesuchTrancheId}")
+    @Path("/gs/header/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchHeaderDto getGesuchHeaderGs(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchHeaderDto getGesuchHeaderGs(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/sb/header/{gesuchTrancheId}")
+    @Path("/sb/header/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchHeaderDto getGesuchHeaderSb(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchHeaderDto getGesuchHeaderSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/info")

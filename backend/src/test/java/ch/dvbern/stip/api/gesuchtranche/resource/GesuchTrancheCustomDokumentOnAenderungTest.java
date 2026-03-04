@@ -261,7 +261,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     void createCustomDokumentTypOnAenderungShouldSucceed() {
         final var gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
-            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         final var aenderung = gesuchHeader.getAenderungs().getOffen();
 

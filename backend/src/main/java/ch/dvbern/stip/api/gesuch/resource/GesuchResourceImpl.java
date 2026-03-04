@@ -459,19 +459,16 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
-        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-
+    public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchId) {
         gesuchAuthorizer.gsCanRead(gesuchId);
-        return gesuchService.getGesuchTrancheHeader(gesuchTrancheId);
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchTrancheId) {
+    public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchId) {
         gesuchAuthorizer.sbOrJuristCanRead();
-        return gesuchService.getGesuchTrancheHeader(gesuchTrancheId);
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
     }
 
     @Override
