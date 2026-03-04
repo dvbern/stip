@@ -190,7 +190,6 @@ public class GesuchDokumentKommentarService {
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
         if (gesuchDokumentKommentarDto != null) {
             gesuchDokument.addGesuchKommentar(kommentar);
-            kommentar.setGesuchDokumentStatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
     }

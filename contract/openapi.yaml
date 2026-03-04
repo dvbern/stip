@@ -8819,8 +8819,6 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
-        dokumentStatus:
-          $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:

@@ -23,6 +23,12 @@
          <column name="entry_id" type="UUID"/>
       </addColumn>
    </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772620238964-529">
+     <dropColumn columnName="gesuch_dokument_status" tableName="gesuch_dokument_kommentar"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772620238964-530">
+     <dropColumn columnName="gesuch_dokument_status" tableName="gesuch_dokument_kommentar_aud"/>
+   </changeSet>
    <changeSet author="philipp.schaerer (generated)" id="1772025200890-523">
       <addColumn tableName="kind">
          <column name="entry_id" type="UUID"/>

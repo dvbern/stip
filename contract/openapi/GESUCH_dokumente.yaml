@@ -617,8 +617,6 @@ components:
           $ref: './components/common.yaml#/UUID'
         gesuchDokumentId:
           $ref: './components/common.yaml#/UUID'
-        dokumentStatus:
-          $ref: './components/common.yaml#/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:

@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Dokumentstatus } from './dokumentstatus';
 
 /**
  * Kommentar zu einem (abgelehnten) GesuchDokument
@@ -17,11 +16,8 @@ import { Dokumentstatus } from './dokumentstatus';
 export interface GesuchDokumentKommentar { 
     gesuchTrancheId: string;
     gesuchDokumentId: string;
-    dokumentStatus?: Dokumentstatus;
     kommentar?: string;
     user_erstellt?: string;
     timestampErstellt?: string;
 }
-
-
 
