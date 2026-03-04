@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.dokument.entity.QGesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -153,12 +154,34 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
         return query.stream().findAny().isPresent();
     }
 
-    public Stream<GesuchDokument> findByDokumentTyps(final UUID trancheId, final List<DokumentTyp> dokumentTyps) {
+    public Stream<GesuchDokument> findByDokumentRefs(
+        final UUID trancheId,
+        final List<GesuchDokumentRefDto> dokumentRefs
+    ) {
         final var gesuchDokument = QGesuchDokument.gesuchDokument;
+        final var dokumentTyps = dokumentRefs.stream()
+            .filter(ref -> Objects.isNull(ref.getEntryId()))
+            .map(GesuchDokumentRefDto::getDokumentTyp)
+            .toList();
+        final var dokumentRefsWithEntryId =
+            dokumentRefs.stream().filter(ref -> Objects.nonNull(ref.getEntryId())).toList();
 
         return new JPAQueryFactory(entityManager)
             .selectFrom(gesuchDokument)
-            .where(gesuchDokument.dokumentTyp.in(dokumentTyps).and(gesuchDokument.gesuchTranche.id.eq(trancheId)))
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(trancheId),
+                // Match normal Dokument refs
+                gesuchDokument.dokumentTyp.in(dokumentTyps)
+                    .or(
+                        // Or Dokument Refs for lists with entryIds
+                        gesuchDokument.dokumentTyp
+                            .in(dokumentRefsWithEntryId.stream().map(GesuchDokumentRefDto::getDokumentTyp).toList())
+                            .and(
+                                gesuchDokument.entryId
+                                    .in(dokumentRefsWithEntryId.stream().map(GesuchDokumentRefDto::getEntryId).toList())
+                            )
+                    )
+            )
             .stream();
     }
 }

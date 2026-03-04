@@ -230,7 +230,14 @@ export class RequiredDokumenteComponent {
             stepsFlow,
             a.formStep,
             b.formStep,
-            () => a.dokumentTyp.localeCompare(b.dokumentTyp),
+            () => {
+              const compared = a.dokumentTyp.localeCompare(b.dokumentTyp);
+              return compared === 0
+                ? (a.gesuchDokument?.entryId?.localeCompare(
+                    b.gesuchDokument?.entryId ?? '',
+                  ) ?? 0)
+                : compared;
+            },
           ),
         )
         .map((dokument) => ({

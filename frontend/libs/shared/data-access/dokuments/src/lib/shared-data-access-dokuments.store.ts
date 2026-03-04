@@ -618,6 +618,11 @@ export class DokumentsStore extends signalStore(
     onSuccess: () => void;
   }>(
     pipe(
+      tap(() => {
+        patchState(this, () => ({
+          dokuments: cachedPending(this.dokuments()),
+        }));
+      }),
       switchMap(({ trancheId, trancheTyp, onSuccess }) => {
         const serviceMap$ = {
           TRANCHE: () =>

@@ -27,10 +27,10 @@ import org.junit.jupiter.params.provider.Arguments;
 
 @UtilityClass
 public class CreatePermutationUtil {
-    public <TUpdate, TEntity> Stream<Arguments> createIntegerPermutations(
+    public <TUpdate, TEntity, TType> Stream<Arguments> createIntegerPermutations(
         final Function<Integer, TUpdate> applyNew,
         final Function<Integer, TEntity> applyOld,
-        final DokumentTyp expected
+        final TType expected
     ) {
         return Stream.of(
             Arguments.of(

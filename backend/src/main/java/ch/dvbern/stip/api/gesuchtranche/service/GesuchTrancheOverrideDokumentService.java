@@ -69,7 +69,10 @@ public class GesuchTrancheOverrideDokumentService {
                     AbstractEntity::getId,
                     tranche -> tranche.getGesuchDokuments()
                         .stream()
-                        .filter(gesuchDokument -> jahreswertDokumentTyps.contains(gesuchDokument.getDokumentTyp()))
+                        .filter(
+                            gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp())
+                            && jahreswertDokumentTyps.contains(gesuchDokument.getDokumentTyp())
+                        )
                         .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument))
                 )
             );

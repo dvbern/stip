@@ -47,6 +47,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -454,8 +455,8 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void deleteDokumenteForTranche(final UUID trancheId, final List<DokumentTyp> dokumentTyps) {
-        final var gesuchDokumente = gesuchDokumentRepository.findByDokumentTyps(trancheId, dokumentTyps).toList();
+    public void deleteDokumenteForTranche(final UUID trancheId, final List<GesuchDokumentRefDto> dokumentRefs) {
+        final var gesuchDokumente = gesuchDokumentRepository.findByDokumentRefs(trancheId, dokumentRefs).toList();
         final var dokumente = gesuchDokumente.stream()
             .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
             .toList();

@@ -26,12 +26,13 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.partner.entity.Partner;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
+import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -45,20 +46,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class DeleteChangedDocumentsUtilTest {
     @Test
     void getDocumentsForPartnerDoesNotFailWithNull() {
-        final var newPartner = new PartnerUpdateDto();
-        final var oldParnter = new Partner();
+        final var newEKPartner = new EinnahmenKostenUpdateDto();
+        final var oldEKPartner = new EinnahmenKosten();
 
         // Both null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForPartner(null, null));
+        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, null));
 
         // Old null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForPartner(newPartner, null));
+        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, null));
 
         // New null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForPartner(null, oldParnter));
+        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, oldEKPartner));
 
         // Neither is null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForPartner(newPartner, oldParnter));
+        assertDoesNotThrow(
+            () -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner)
+        );
     }
 
     @Test
@@ -88,7 +91,7 @@ class DeleteChangedDocumentsUtilTest {
         final var documentsToDelete = DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(null, oldFormular);
 
         // Assert
-        assertEquals(documentsToDelete.size(), 0);
+        assertEquals(0, documentsToDelete.size());
     }
 
     @ParameterizedTest
@@ -108,12 +111,13 @@ class DeleteChangedDocumentsUtilTest {
     @ParameterizedTest
     @ArgumentsSource(GetDocumentsForPartnerArgumentsProvider.class)
     void getDocumentsForPartnerTest(
-        final PartnerUpdateDto newPartner,
-        final Partner oldPartner,
+        final EinnahmenKostenUpdateDto newEKPartner,
+        final EinnahmenKosten oldEKPartner,
         final DokumentTyp expected
     ) {
         // Act
-        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForPartner(newPartner, oldPartner);
+        final var actual =
+            DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner);
 
         // Assert
         assertExpectedResult(actual, expected);
@@ -148,11 +152,38 @@ class DeleteChangedDocumentsUtilTest {
             assertEquals(0, actual.size());
         } else {
             assertThat(actual.size(), Matchers.greaterThanOrEqualTo(1));
-            assertThat(actual.contains(expected), Matchers.is(true));
+            assertThat(
+                actual.stream().map(GesuchDokumentRefDto::getDokumentTyp).toList().contains(expected),
+                Matchers.is(true)
+            );
         }
     }
 
-    void assertExpectedResult(final List<DokumentTyp> actual, final DokumentTyp expected) {
+    @ParameterizedTest
+    @ArgumentsSource(GetDocumentsForKindArgumentsProvider.class)
+    void getDocumentsForKindTest(
+        final KindUpdateDto newKind,
+        final Kind oldKind,
+        final GesuchDokumentRefDto expected
+    ) {
+        // Act
+        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForKind(newKind, oldKind);
+
+        // Assert
+        assertExpectedResult(actual, expected);
+    }
+
+    void assertExpectedResult(final List<GesuchDokumentRefDto> actual, final DokumentTyp expected) {
+        if (expected == null) {
+            assertEquals(0, actual.size());
+        } else {
+            assertEquals(1, actual.size());
+            final var found = actual.getFirst();
+            assertEquals(expected, found.getDokumentTyp());
+        }
+    }
+
+    void assertExpectedResult(final List<GesuchDokumentRefDto> actual, final GesuchDokumentRefDto expected) {
         if (expected == null) {
             assertEquals(0, actual.size());
         } else {
