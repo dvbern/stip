@@ -157,9 +157,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       initial,
       offeneAenderung,
       // TODO: Temporary solution until Header is changed
-      versions: this.gesuchHeaderStore
-        .viewSig()
-        .versions?.sort((a, b) => a.timestamp.localeCompare(b.timestamp)),
+      versions: this.gesuchHeaderStore.viewSig().versions,
     };
   });
   isLoadingSig = computed(() => {
@@ -181,10 +179,10 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   constructor() {
     effect(() => {
-      const gesuchTrancheId = this.gesuchTrancheIdSig();
+      const gesuchId = this.gesuchIdSig();
       this.gesuchUpdatedSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeader$({ gesuchTrancheId });
+      if (gesuchId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
   }
@@ -368,13 +366,13 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   createTranche() {
-    const id = this.gesuchIdSig();
+    const gesuchId = this.gesuchIdSig();
     const { gesuchInfo } = this.gesuchHeaderStore.header().data ?? {};
-    if (!id || !gesuchInfo) return;
+    if (!gesuchId || !gesuchInfo) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createTranche',
-      id,
+      gesuchId,
       minDate: new Date(gesuchInfo.startDate),
       maxDate: new Date(gesuchInfo.endDate),
     })

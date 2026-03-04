@@ -171,14 +171,16 @@
             <a
               [routerLink]="['/', 'verfuegung', gesuchId]"
               [queryParams]="{ verfuegungId: version.berechnungId }"
+              [routerLinkActive]="'active'"
               class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
               data-testid="aenderungen-nav-menu-item"
               mat-menu-item
             >
               <span>
                 Version
+                {{ (versions?.length ?? 0) - $index }}
+                -
                 {{ version.timestamp | date: 'dd.MM.yyyy' }}
-                {{ $index + 1 }}
               </span>
             </a>
           }

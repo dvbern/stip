@@ -183,6 +183,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
         this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }
@@ -252,7 +253,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
-        this.gesuchHeaderStore.loadHeader$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });
@@ -283,6 +283,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   updateAenderungVonBis(gesuch: SharedModelGesuch) {
     const {
+      id: gesuchId,
       gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis, gesuchFormular },
       gesuchsperiode: { gesuchsperiodeStart },
     } = gesuch;
@@ -296,7 +297,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'updateAenderungVonBis',
-      id: id,
+      trancheId: id,
+      gesuchId,
       minDate: new Date(gesuchsperiodeStart),
       maxDate,
       currentGueligAb: new Date(gueltigAb),

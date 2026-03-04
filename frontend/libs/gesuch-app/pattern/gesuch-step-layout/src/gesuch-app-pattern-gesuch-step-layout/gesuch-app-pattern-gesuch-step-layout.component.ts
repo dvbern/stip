@@ -125,9 +125,9 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
     effect(() => {
-      const gesuchTrancheId = this.trancheIdSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeader$({ gesuchTrancheId });
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
   }

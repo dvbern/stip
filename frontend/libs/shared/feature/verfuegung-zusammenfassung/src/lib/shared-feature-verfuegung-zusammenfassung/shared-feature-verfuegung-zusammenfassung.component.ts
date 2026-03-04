@@ -55,6 +55,8 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
       if (!gesuchId) {
         return;
       }
+
+      this.gesuchHeaderStore.loadHeader$({ gesuchId });
       if (verfuegungId) {
         this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
       } else {

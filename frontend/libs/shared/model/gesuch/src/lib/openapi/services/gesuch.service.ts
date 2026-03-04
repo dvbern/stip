@@ -172,11 +172,11 @@ export interface GesuchServiceGetGesuchGSRequestParams {
 }
 
 export interface GesuchServiceGetGesuchHeaderGsRequestParams {
-    gesuchTrancheId: string;
+    gesuchId: string;
 }
 
 export interface GesuchServiceGetGesuchHeaderSbRequestParams {
-    gesuchTrancheId: string;
+    gesuchId: string;
 }
 
 export interface GesuchServiceGetGesuchInfoRequestParams {
@@ -2796,11 +2796,11 @@ export class GesuchService {
     }
 
     public getGesuchHeaderGsPath = (requestParameters: GesuchServiceGetGesuchHeaderGsRequestParams) => {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchHeaderGs$.');
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getGesuchHeaderGs$.');
         }
-        let path = `/api/v1/gesuch/gs/header/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/gesuch/gs/header/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -2821,9 +2821,9 @@ export class GesuchService {
      public getGesuchHeaderGs$(requestParameters: GesuchServiceGetGesuchHeaderGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchHeader>>;
      public getGesuchHeaderGs$(requestParameters: GesuchServiceGetGesuchHeaderGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchHeader>>;
      public getGesuchHeaderGs$(requestParameters: GesuchServiceGetGesuchHeaderGsRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchHeaderGs$.');
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getGesuchHeaderGs$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2871,7 +2871,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/gs/header/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/gs/header/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GesuchHeader>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -2885,11 +2885,11 @@ export class GesuchService {
     }
 
     public getGesuchHeaderSbPath = (requestParameters: GesuchServiceGetGesuchHeaderSbRequestParams) => {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchHeaderSb$.');
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getGesuchHeaderSb$.');
         }
-        let path = `/api/v1/gesuch/sb/header/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/gesuch/sb/header/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -2910,9 +2910,9 @@ export class GesuchService {
      public getGesuchHeaderSb$(requestParameters: GesuchServiceGetGesuchHeaderSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchHeader>>;
      public getGesuchHeaderSb$(requestParameters: GesuchServiceGetGesuchHeaderSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchHeader>>;
      public getGesuchHeaderSb$(requestParameters: GesuchServiceGetGesuchHeaderSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchTrancheId = requestParameters.gesuchTrancheId;
-        if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchHeaderSb$.');
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getGesuchHeaderSb$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -2960,7 +2960,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/sb/header/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/gesuch/sb/header/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<GesuchHeader>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

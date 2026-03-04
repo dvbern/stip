@@ -49,25 +49,25 @@ export class GesuchHeaderStore extends signalStore(
     this.router,
   );
 
-  loadHeader$ = rxMethod<{ gesuchTrancheId: string }>(
+  loadHeader$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
           header: cachedPending(state.header),
         }));
       }),
-      exhaustMap(({ gesuchTrancheId }) => {
+      exhaustMap(({ gesuchId }) => {
         switch (this.config.appType) {
           case 'gesuch-app': {
             return this.gesuchService
-              .getGesuchHeaderGs$({ gesuchTrancheId })
+              .getGesuchHeaderGs$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
               );
           }
           case 'sachbearbeitung-app': {
             return this.gesuchService
-              .getGesuchHeaderSb$({ gesuchTrancheId })
+              .getGesuchHeaderSb$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
               );
