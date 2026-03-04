@@ -7,7 +7,7 @@
           <a
             type="button"
             class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
-            [routerLink]="['/', infosRoute, option.route, gesuchIdSig()]"
+            [routerLink]="['/gesuch', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
           >

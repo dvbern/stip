@@ -4,6 +4,7 @@ import { AdminOption } from '@dv/shared/model/router';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 import { SozialdienstAppPatternAdministrationLayoutComponent } from '@dv/sozialdienst-app/pattern/administration-layout';
 
+// todo: remove the Admin Layout component
 @Component({
   selector: 'dv-sozialdienst-app-feature-administration',
   imports: [

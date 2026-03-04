@@ -1,7 +1,8 @@
 <!-- todo: mobile navigation with portal? -->
 <ng-container *transloco="let t">
   <div class="d-flex h-100">
-    <ng-template #navigation>
+    <ng-template #navigation
+      >o
       <div class="sidenav p-4">
         @for (option of options; track $index) {
           @let isActive = route.isActive(option.route, false);

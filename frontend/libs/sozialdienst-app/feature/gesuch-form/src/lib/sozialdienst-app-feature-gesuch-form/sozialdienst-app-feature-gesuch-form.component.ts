@@ -9,8 +9,6 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';

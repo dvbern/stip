@@ -1,36 +1,27 @@
-import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
   Component,
+  DOCUMENT,
   DestroyRef,
-  EventEmitter,
-  Output,
+  Signal,
   computed,
   effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { MatChipsModule } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
+import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRevision,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -39,17 +30,12 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { aenderungRoutes, getTrancheRoute } from '@dv/shared/model/gesuch';
+import { GesuchHeaderSb } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
-import {
-  SharedPatternAppHeaderComponent,
-  SharedPatternAppHeaderPartsDirective,
-} from '@dv/shared/pattern/app-header';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
+import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
@@ -57,49 +43,45 @@ import {
 } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 
-// todo: remove this it is unused, after other implementations are done
+// const ALL_TABS = ['formular', 'verfuegung'] as const;
 
 @Component({
-  selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
   imports: [
-    CommonModule,
+    RouterOutlet,
     RouterLink,
-    RouterLinkActive,
-    MatChipsModule,
+    MatTabsModule,
+    TranslocoPipe,
     MatMenuModule,
     MatTooltipModule,
-    SharedPatternAppHeaderComponent,
-    SharedPatternAppHeaderPartsDirective,
-    SharedUiLoadingComponent,
-    SharedUiDarlehenMenuComponent,
-    SachbearbeitungAppUiAdvTranslocoDirective,
+    SharedPatternGesuchInfoBarComponent,
+    TranslocoDirective, // todo: use the right one
   ],
-  templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
 })
-export class SachbearbeitungAppPatternGesuchHeaderComponent {
-  private store = inject(Store);
+export class SachbearbeitungAppPatternGesuchLayoutComponent {
   private router = inject(Router);
+  private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
+  private store = inject(Store);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private permissionStore = inject(PermissionStore);
+  private einreichenStore = inject(EinreichenStore);
+  private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
-  private einreichenStore = inject(EinreichenStore);
-  private permissionStore = inject(PermissionStore);
   private gesuchStore = inject(GesuchStore);
-  private gesuchHeaderStore = inject(GesuchHeaderStore);
-  private config = inject(SharedModelCompileTimeConfig);
+
+  gesuchIdSig = this.store.selectSignal(selectRouteId); // todo: take from input instead, so no store needed?
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId); // todo: take from input instead, so no store needed?
+
+  gesuchInfoSig = computed(() => {
+    const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
+
+    return cache;
+  });
 
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
-  route = inject(ActivatedRoute);
-  darlehenStore = inject(DarlehenStore);
-
-  @Output() openSidenav = new EventEmitter<void>();
-
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
-
-  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  revisionSig = this.store.selectSignal(selectRevision);
 
   private gesuchUpdatedSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
@@ -108,107 +90,46 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     ),
   );
 
-  isTrancheRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
-    ),
-  );
-  isInitialRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
-    ),
-  );
-  isAenderungRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
-    ),
-  );
-
-  canViewBerechnungSig = computed(() => {
-    const canViewBerechnung =
-      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.canGetBerechnung;
-
-    return canViewBerechnung;
-  });
-  isBeschwerdeHaengigSig = computed(() => {
-    const beschwerdeHaengig =
-      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.beschwerdeHaengig;
-    return beschwerdeHaengig;
-  });
-  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
-    this.gesuchIdSig,
-  );
-  historizedSig = computed(() => {
-    const {
-      abgelehnteAenderungen,
-      akzeptierteAenderungen,
-      initial,
-      offeneAenderung,
-    } = this.gesuchHeaderStore.viewSbSig().historized ?? {};
-    if (
-      !abgelehnteAenderungen?.length &&
-      !akzeptierteAenderungen?.length &&
-      !initial &&
-      !offeneAenderung
-    ) {
-      return null;
-    }
-    return {
-      abgelehnteAenderungen,
-      akzeptierteAenderungen,
-      initial,
-      offeneAenderung,
-    };
-  });
   isLoadingSig = computed(() => {
-    return (
-      isPending(this.gesuchHeaderStore.headerSb()) ||
-      isPending(this.gesuchStore.lastStatusChange())
-    );
+    return isPending(this.gesuchHeaderStore.headerSb());
+    //  ||
+    // isPending(this.gesuchStore.lastStatusChange()) //needed?
   });
 
-  // todo: could this be used in the new navigation setup?
-  isInfosRouteSig = computed(() => {
-    const active = this.router.isActive('infos', {
-      paths: 'subset',
-      fragment: 'ignored',
-      matrixParams: 'ignored',
-      queryParams: 'ignored',
-    });
+  headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
+    this.gesuchHeaderStore.viewSbSig;
 
-    // const active = isActive(
-    //   this.router.createUrlTree(['infos'], { relativeTo: this.route }),
-    //   this.router,
-    //   {
-    //     paths: 'subset',
-    //     fragment: 'ignored',
-    //     matrixParams: 'ignored',
-    //     queryParams: 'ignored',
-    //   },
-    // );
-    return active;
-  });
+  // todo: rework with active
+  activeTabSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.wndw?.location.pathname),
+      startWith(this.wndw?.location.pathname),
+    ),
+  );
 
-  constructor() {
-    effect(() => {
-      const gesuchTrancheId = this.gesuchTrancheIdSig();
-      this.gesuchUpdatedSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
-      }
-    });
-  }
+  tabsSig = computed(() => {
+    const cache = this.gesuchInfoSig();
+    const { stateInfo } = this.headerViewSbSig();
 
-  availableTrancheInteractionSig = computed(() => {
-    const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus =
-      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.gesuchStatus;
+    const activePath = this.activeTabSig();
 
-    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
-      return 'CREATE_TRANCHE';
-    } else {
-      return null;
+    const gesuchTab = {
+      active: activePath?.endsWith('formular'),
+      route: 'formular',
+      name: 'formular',
+    };
+
+    const verfuegungTab = {
+      active: activePath?.endsWith('verfuegung'),
+      route: ['verfuegung', cache?.gesuch?.id],
+      name: 'verfuegung',
+    };
+
+    if (stateInfo?.canGetBerechnung) {
+      return [gesuchTab, verfuegungTab];
     }
+
+    return [gesuchTab];
   });
 
   statusUebergaengeOptionsSig = computed(() => {
@@ -252,6 +173,28 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       isNotEmpty: !!list?.length,
     };
   });
+
+  availableTrancheInteractionSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
+    const gesuchStatus =
+      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.gesuchStatus;
+
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
+      return 'CREATE_TRANCHE';
+    } else {
+      return null;
+    }
+  });
+
+  constructor() {
+    effect(() => {
+      const gesuchTrancheId = this.gesuchTrancheIdSig();
+      this.gesuchUpdatedSig();
+      if (gesuchTrancheId) {
+        this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
+      }
+    });
+  }
 
   setStatusUebergang(
     nextStatus: StatusUebergang,

@@ -32,6 +32,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   ],
   templateUrl: './sachbearbeitung-app-feature-administration.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppFeatureAdministrationComponent {
   // todo: can it be childadmin option?

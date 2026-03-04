@@ -8,7 +8,6 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
@@ -16,10 +15,13 @@ import { filter } from 'rxjs';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRouteId,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -40,7 +42,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedPatternGesuchStepNavComponent,
     SharedUiIconChipComponent,
     SharedUiProgressBarComponent,
-    SharedPatternGesuchInfoBarComponent,
     TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
@@ -57,6 +58,30 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
   private steuerdatenStore = inject(SteuerdatenStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+  // todo: rename to gesuchRouteId (also rename route param?)
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
+
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
+    this.gesuchIdSig,
+  );
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+
+  // private gesuchUpdatedSig = toSignal(
+  //   this.store.select(selectSharedDataAccessGesuchCache).pipe(
+  //     map(({ gesuch }) => gesuch),
+  //     filter(isDefined),
+  //   ),
+  // );
+
+  // gesuchInfoSig = computed(() => {
+  //   const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
+
+  //   return cache;
+  // });
+
+  // headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
+  //   this.gesuchHeaderStore.viewSbSig;
 
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
@@ -97,5 +122,12 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
         this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
       });
+    // effect(() => {
+    //   const gesuchTrancheId = this.gesuchTrancheIdSig();
+    //   this.gesuchUpdatedSig();
+    //   if (gesuchTrancheId) {
+    //     this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
+    //   }
+    // });
   }
 }

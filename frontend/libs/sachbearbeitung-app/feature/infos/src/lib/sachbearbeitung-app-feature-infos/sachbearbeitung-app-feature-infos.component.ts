@@ -6,9 +6,8 @@ import {
   inject,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { TranslocoDirective } from 'node_modules/@jsverse/transloco/lib/transloco.directive';
 
 import {
   INFOS_OPTIONS,
