@@ -83,7 +83,7 @@ class GesuchResourceBeschwerdeVerlaufTest {
             .body()
             .as(GesuchInfoDto.class);
         // assert that flag is false by default
-        assertThat(gesuchInfo.getBeschwerdeHaengig(), is(false));
+        assertThat(gesuchInfo.getState().getBeschwerdeHaengig(), is(false));
     }
 
     @Test
@@ -135,7 +135,7 @@ class GesuchResourceBeschwerdeVerlaufTest {
             .body()
             .as(GesuchInfoDto.class);
         // assert that flag is false by default
-        assertThat(gesuchInfo.getBeschwerdeHaengig(), is(true));
+        assertThat(gesuchInfo.getState().getBeschwerdeHaengig(), is(true));
     }
 
     @Test

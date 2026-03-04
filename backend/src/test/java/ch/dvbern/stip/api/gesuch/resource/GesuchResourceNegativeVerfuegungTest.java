@@ -39,7 +39,7 @@ import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.FallAuszahlungDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
@@ -133,12 +133,12 @@ class GesuchResourceNegativeVerfuegungTest {
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
-        final var gesuchTranchen = TestUtil.executeAndExtract(
-            GesuchTrancheListDtoSpec.class,
-            gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuch.getId())
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
-        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(1));
     }
 
     @Test
@@ -228,11 +228,11 @@ class GesuchResourceNegativeVerfuegungTest {
     }
 
     private void assertSBTranchenCount(final String message, final int size) {
-        final var gesuchTranchen = TestUtil.executeAndExtract(
-            GesuchTrancheListDtoSpec.class,
-            gesuchTrancheApiSpec.getAllTranchenForGesuchSB().gesuchIdPath(gesuch.getId())
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
-        assertThat(message, gesuchTranchen.getTranchen(), hasSize(size));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(size));
     }
 }

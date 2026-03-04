@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
@@ -77,11 +76,11 @@ import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
+import ch.dvbern.stip.generated.dto.GesuchAenderungsDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
@@ -143,51 +142,24 @@ public class GesuchTrancheService {
         return gesuchTranche.getGesuch().getId();
     }
 
-    private GesuchTrancheListDto getAllTranchenAndInitialTrancheForGesuchTranche(
-        List<GesuchTranche> allTranchenList,
-        UUID gesuchId
-    ) {
-        final var allTranchenFromGesuchInStatusVerfuegt =
-            gesuchTrancheHistoryRepository.getAllTranchenWhereGesuchStatusFirstChangedToVerfuegt(gesuchId);
-
-        final var allTrancheTranchen = new ArrayList<GesuchTranche>();
-        allTrancheTranchen.addAll(
-            allTranchenList.stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE)
-                .sorted(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigAb()))
-                .toList()
-        );
-        final var aenderungen = new ArrayList<GesuchTranche>();
-        aenderungen.addAll(
-            allTranchenList.stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .sorted(Comparator.comparing(GesuchTranche::getTimestampMutiert))
-                .toList()
-        );
-
-        final var abgelehnteAenderungen = gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungs(gesuchId);
-
-        return gesuchTrancheMapper.toListDto(
-            allTrancheTranchen,
-            allTranchenFromGesuchInStatusVerfuegt,
-            aenderungen,
-            abgelehnteAenderungen
-        );
-    }
-
     @Transactional
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchGS(final UUID gesuchId) {
-        var gesuchToWorkWith = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
-
-        return getAllTranchenAndInitialTrancheForGesuchTranche(gesuchToWorkWith.getGesuchTranchen(), gesuchId);
-    }
-
-    @Transactional
-    public GesuchTrancheListDto getAllTranchenAndInitalTrancheForGesuchSB(final UUID gesuchId) {
-        return getAllTranchenAndInitialTrancheForGesuchTranche(
-            gesuchTrancheRepository.findForGesuch(gesuchId),
-            gesuchId
-        );
+    public GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
+        final var offeneAenderung =
+            gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
+        final var akzeptierteAenderungs =
+            gesuchTrancheHistoryRepository.getAllAkzeptierteAenderungTranches(gesuch.getId())
+                .stream()
+                .map(gesuchTrancheMapper::toSlimDto)
+                .toList();
+        final var abgelehnteAenderungs =
+            gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungTranches(gesuch.getId())
+                .stream()
+                .map(gesuchTrancheMapper::toSlimDto)
+                .toList();
+        return new GesuchAenderungsDto()
+            .offen(offeneAenderung)
+            .akzeptiert(akzeptierteAenderungs)
+            .abgelehnt(abgelehnteAenderungs);
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(
@@ -208,15 +180,6 @@ public class GesuchTrancheService {
             requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
         );
 
-        dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(
-            requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuch)
-        );
-
-        try {
-            gesuchTrancheValidatorService.validateBearbeitungAbschliessen(gesuch);
-        } catch (ValidationsException ex) {
-            dokumenteToUploadDto.setSbCanBearbeitungAbschliessen(false);
-        }
         return dokumenteToUploadDto;
     }
 

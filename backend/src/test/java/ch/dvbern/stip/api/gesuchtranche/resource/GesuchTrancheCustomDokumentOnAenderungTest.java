@@ -37,7 +37,8 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -76,9 +77,8 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
-    private GesuchTrancheListDtoSpec gesuchtranchen;
     private GesuchDtoSpec gesuch;
-    private GesuchWithChangesDtoSpec gesuchWithChanges;
+    private UUID aenderungId;
     private UUID customDokumentId;
 
     @Test
@@ -169,14 +169,13 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchWithChanges =
-            gesuchApiSpec.getInitialTrancheChanges()
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .extract()
-                .body()
-                .as(GesuchWithChangesDtoSpec.class);
+        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
@@ -211,10 +210,14 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @TestAsGesuchsteller
     @Order(9)
     void createFirstAenderungsantrag() {
-        createAenderungsanstrag()
+        aenderungId = createAenderungsanstrag()
             .then()
             .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchTrancheDtoSpec.class)
+            .getId();
     }
 
     @Test
@@ -244,19 +247,8 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @Order(11)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
     void setupnextTest() {
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        final var aenderung = gesuchtranchen.getAenderungen().getFirst();
-
         gesuchTrancheApiSpec.aenderungEinreichen()
-            .aenderungIdPath(aenderung.getId())
+            .aenderungIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -267,7 +259,11 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @TestAsSachbearbeiter
     @Order(12)
     void createCustomDokumentTypOnAenderungShouldSucceed() {
-        final var aenderung = gesuchtranchen.getAenderungen().getFirst();
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+        );
+        final var aenderung = gesuchHeader.getAenderungs().getOffen();
 
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");

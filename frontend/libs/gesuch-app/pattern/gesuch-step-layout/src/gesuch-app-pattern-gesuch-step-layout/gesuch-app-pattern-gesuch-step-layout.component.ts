@@ -23,7 +23,7 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
@@ -70,10 +70,10 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
 
   router = inject(Router);
-  gesuchAenderungStore = inject(GesuchAenderungStore);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteId);
@@ -82,8 +82,7 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-
-  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
   fallIdSig = computed(() => {
@@ -126,9 +125,9 @@ export class GesuchAppPatternGesuchStepLayoutComponent {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
     effect(() => {
-      const gesuchId = this.gesuchIdSig();
-      if (gesuchId) {
-        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
+      const gesuchTrancheId = this.trancheIdSig();
+      if (gesuchTrancheId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchTrancheId });
       }
     });
   }

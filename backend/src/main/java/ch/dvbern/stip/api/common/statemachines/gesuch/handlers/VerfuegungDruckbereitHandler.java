@@ -56,6 +56,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             latestVerfuegung.setVerfuegungStatus(
                 hasAnspruch ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH
             );
+            latestVerfuegung.setBerechnungJsonData(BerechnungService.serializeBerechnungresultatDto(stipendien));
 
             if (hasAnspruch || !gesuch.isFirstVerfuegung()) {
                 buchhaltungService.createStipendiumBuchhaltungEntry(

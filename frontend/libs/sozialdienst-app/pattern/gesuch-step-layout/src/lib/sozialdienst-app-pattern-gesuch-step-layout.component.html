@@ -30,7 +30,7 @@
         </a>
         @let gesuchId = gesuchIdSig();
         @let trancheId = trancheIdSig();
-        @let tranchen = tranchenSig().list;
+        @let tranchen = tranchenSig();
         @if (gesuchId && trancheId && tranchen.length > 1) {
           <!-- Gesuch -->
           <button

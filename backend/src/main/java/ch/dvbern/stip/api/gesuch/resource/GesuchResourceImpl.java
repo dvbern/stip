@@ -54,6 +54,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -417,6 +418,13 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ, GS_GESUCH_READ })
+    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+        gesuchAuthorizer.canGetBerechnungOfVerfuegung(verfuegungId);
+        return gesuchService.getBerechnungForVerfuegung(verfuegungId);
+    }
+
+    @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
@@ -447,6 +455,23 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchAuthorizer.gsCanRead(gesuchId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchTrancheId) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+
+        gesuchAuthorizer.gsCanRead(gesuchId);
+        return gesuchService.getGesuchTrancheHeader(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchTrancheId) {
+        gesuchAuthorizer.sbOrJuristCanRead();
+        return gesuchService.getGesuchTrancheHeader(gesuchTrancheId);
     }
 
     @Override

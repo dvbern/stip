@@ -32,8 +32,8 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -96,12 +96,12 @@ class GesuchJuristischeAbklaerungTest {
                 .gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
         );
 
-        final var gesuchTranchen = TestUtil.executeAndExtract(
-            GesuchTrancheListDtoSpec.class,
-            gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuchDtoSpec.getId())
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchTrancheIdPath(gesuchDtoSpec.getGesuchTrancheToWorkWith().getId())
         );
 
-        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(1));
     }
 
     @Test
@@ -114,7 +114,7 @@ class GesuchJuristischeAbklaerungTest {
         );
         assertThat(
             "Gesuch ist in Abklaerung durch Rechtsabteilung",
-            gesuchInfo.getGesuchStatus(),
+            gesuchInfo.getState().getGesuchStatus(),
             is(GesuchstatusDtoSpec.ABKLAERUNG_DURCH_RECHSTABTEILUNG)
         );
         final var ausbildungDto = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();

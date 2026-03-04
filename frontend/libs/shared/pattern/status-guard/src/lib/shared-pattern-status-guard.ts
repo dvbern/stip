@@ -31,7 +31,7 @@ export const isAllowedTo =
         }
 
         return gesuchService.getGesuchInfo$({ gesuchId }).pipe(
-          map(({ gesuchStatus }) =>
+          map(({ state: { gesuchStatus } }) =>
             getGesuchPermissions({ gesuchStatus }, config.appType, {
               V0_Gesuchsteller: true,
             }).permissions[`can${capitalized(permission)}`]

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.berechnung.service;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -47,6 +49,8 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +64,18 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
+
+    public static String serializeBerechnungresultatDto(final BerechnungsresultatDto berechnungsresultatDto) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        StringWriter writer = new StringWriter();
+        try {
+            mapper.writeValue(writer, berechnungsresultatDto);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        return writer.toString();
+    }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
         final CalculatorRequest berechnungRequest,

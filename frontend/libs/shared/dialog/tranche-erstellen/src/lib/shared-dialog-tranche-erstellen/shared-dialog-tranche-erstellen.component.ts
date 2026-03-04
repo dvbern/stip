@@ -25,6 +25,7 @@ import { addDays } from 'date-fns';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
@@ -97,6 +98,7 @@ export class SharedDialogTrancheErstellenComponent {
   private dialogRef: MatDialogRef<SharedDialogTrancheErstellenComponent> =
     inject(MatDialogRef);
   dialogData = inject<GesuchTrancheErstellenData>(MAT_DIALOG_DATA);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   store = inject(Store);
   config = inject(SharedModelCompileTimeConfig);
@@ -151,6 +153,9 @@ export class SharedDialogTrancheErstellenComponent {
     const servicePayload = {
       onSuccess: () => {
         this.dialogRef.close(null);
+        this.gesuchHeaderStore.loadHeader$({
+          gesuchTrancheId: this.dialogData.id,
+        });
       },
       onFailure: (error: unknown) => {
         const parsedError = sharedUtilFnErrorTransformer(error);
@@ -194,6 +199,9 @@ export class SharedDialogTrancheErstellenComponent {
           onSuccess: () => {
             this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
             servicePayload.onSuccess();
+            this.gesuchHeaderStore.loadHeader$({
+              gesuchTrancheId: this.dialogData.id,
+            });
           },
           onFailure: servicePayload.onFailure,
         });

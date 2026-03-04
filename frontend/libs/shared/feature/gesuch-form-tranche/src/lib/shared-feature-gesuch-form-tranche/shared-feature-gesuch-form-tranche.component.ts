@@ -34,6 +34,7 @@ import {
   AenderungChangeState,
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
@@ -52,10 +53,7 @@ import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  getLatestGesuchIdFromGesuch$,
-  getLatestTrancheIdFromGesuchOnUpdate$,
-} from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
   dateFromMonthYearString,
@@ -101,6 +99,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchInfoStore = inject(GesuchInfoStore, {
     optional: true,
   });
@@ -143,28 +142,33 @@ export class SharedFeatureGesuchFormTrancheComponent {
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
-    if (!currentTranche) {
+    const { currentTranches, aenderungs, initial, isLoading } =
+      this.gesuchHeaderStore.viewSig();
+
+    if (!currentTranche || isLoading) {
       return '…';
     }
 
     const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
-    const tranchen = this.gesuchAenderungStore.tranchenViewSig();
-    const aenderungen = this.gesuchAenderungStore.aenderungenViewSig();
-    const list = {
-      TRANCHE: [tranchen.list],
-      AENDERUNG: [aenderungen.aenderungen, aenderungen.abgelehnteAenderungen],
-      INITIAL: [aenderungen.initialGesuche],
+    const allTranchen = {
+      TRANCHE: [currentTranches ?? []],
+      AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
+      INITIAL: [initial?.tranchen ?? []],
     } satisfies Record<GesuchUrlType, unknown>;
     const index = gesuchUrlTyp
       ? findIndexInOneOf(
-          (aenderung) =>
-            aenderung.id === currentTranche.id &&
-            isDefined(aenderung.revision) === isDefined(this.revisionSig()),
-          ...list[gesuchUrlTyp],
+          (tranche) =>
+            tranche.id === currentTranche.id &&
+            isDefined(tranche.revision) === isDefined(this.revisionSig()),
+          ...allTranchen[gesuchUrlTyp],
         )
       : -1;
 
-    return index >= 0 ? index + 1 : '…';
+    const foundIndex = index >= 0 ? index + 1 : null;
+    if (foundIndex) {
+      return foundIndex;
+    }
+    return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
   });
 
   currentGesuchSig = computed(
@@ -176,12 +180,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
   );
 
   constructor() {
-    getLatestGesuchIdFromGesuch$(this.viewSig)
-      .pipe(takeUntilDestroyed())
-      .subscribe((gesuchId) => {
-        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-      });
-
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
@@ -254,6 +252,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
+        this.gesuchHeaderStore.loadHeader$({ gesuchTrancheId });
         this.einreichenStore.validateEinreichen$({
           gesuchTrancheId,
         });
