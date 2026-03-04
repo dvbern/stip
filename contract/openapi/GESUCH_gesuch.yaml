@@ -230,9 +230,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  '/gesuch/gs/header/{gesuchTrancheId}':
+  '/gesuch/gs/header/{gesuchId}':
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -257,9 +257,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchHeaderGs
       summary: Get the GS Gesuch header information for the given gesuchTranche
-  '/gesuch/sb/header/{gesuchTrancheId}':
+  '/gesuch/sb/header/{gesuchId}':
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -1500,10 +1500,6 @@ components:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
-    # GesuchHeaderSb:
-    #   type: object
-    #   allOf:
-    #     - $ref: '#/components/schemas/GesuchHeaderGs'
     NachfristAendernRequest:
       type: object
       required:

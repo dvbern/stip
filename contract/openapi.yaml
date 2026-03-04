@@ -3986,9 +3986,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/gs/header/{gesuchTrancheId}:
+  /gesuch/gs/header/{gesuchId}:
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -4016,9 +4016,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/sb/header/{gesuchTrancheId}:
+  /gesuch/sb/header/{gesuchId}:
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
