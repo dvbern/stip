@@ -276,7 +276,10 @@ public class ParseDemoDataService {
                         return new ArrayList<>(List.of(Optional.empty()));
                     }
                     return new ArrayList<>(
-                        List.of(Optional.of(new DemoLebenslaufAusbildungDto().abschluss(ParseDemoDataUtil.parseString(cell))))
+                        List.of(
+                            Optional
+                                .of(new DemoLebenslaufAusbildungDto().abschluss(ParseDemoDataUtil.parseString(cell)))
+                        )
                     );
                 });
             }
