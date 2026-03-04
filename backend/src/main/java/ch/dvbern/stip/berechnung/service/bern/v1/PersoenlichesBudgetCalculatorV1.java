@@ -211,7 +211,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         final StammdatenV1 stammdaten
     ) {
         final var einkommens = antragssteller.getEinkommens();
-        final var einkommenTotal = InputUtils.sumValues(einkommens);
+        var einkommenTotal = InputUtils.sumValues(einkommens);
         final var kinderAusbildungszulagens = antragssteller.getKinderAusbildungszulagens();
         final var kinderAusbildungszulagenTotal = InputUtils.sumValues(kinderAusbildungszulagens);
         final var unterhaltsbeitraeges = antragssteller.getUnterhaltsbeitraeges();
@@ -237,6 +237,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var elternbeitrag2 = familienbudget2.map(budget -> calculateElternbeitrag(antragssteller, budget));
         final var einnahmenBGSAs = antragssteller.getEinnahmenBGSAs();
         final var einnahmenBGSATotal = InputUtils.sumValues(einnahmenBGSAs);;
+
+        if (antragssteller.isTertiaerstufe()) {
+            einkommenTotal = Math.max(0, einkommenTotal - stammdaten.getEinkommensfreibetrag());
+        }
 
         final var einnahmen =
             einkommenTotal
