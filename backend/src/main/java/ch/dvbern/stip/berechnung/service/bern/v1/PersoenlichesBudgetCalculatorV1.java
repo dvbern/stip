@@ -238,10 +238,6 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var einnahmenBGSAs = antragssteller.getEinnahmenBGSAs();
         final var einnahmenBGSATotal = InputUtils.sumValues(einnahmenBGSAs);;
 
-        if (antragssteller.isTertiaerstufe()) {
-            einkommenTotal = Math.max(0, einkommenTotal - stammdaten.getEinkommensfreibetrag());
-        }
-
         final var einnahmen =
             einkommenTotal
             + InputUtils.sumNullables(
