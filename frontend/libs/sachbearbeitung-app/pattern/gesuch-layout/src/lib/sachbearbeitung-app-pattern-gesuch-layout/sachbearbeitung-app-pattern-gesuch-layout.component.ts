@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   Component,
   DOCUMENT,
@@ -8,6 +9,7 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatChip } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -20,8 +22,10 @@ import { filter, map, startWith } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRevision,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -30,11 +34,16 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchHeaderSb } from '@dv/shared/model/gesuch';
+import {
+  GesuchHeaderSb,
+  aenderungRoutes,
+  getTrancheRoute,
+} from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
   StatusUebergaengeMap,
@@ -47,6 +56,7 @@ import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
   imports: [
+    CommonModule,
     RouterOutlet,
     RouterLink,
     MatTabsModule,
@@ -55,6 +65,8 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatTooltipModule,
     SharedPatternGesuchInfoBarComponent,
     TranslocoDirective, // todo: use the right one
+    SharedUiDarlehenMenuComponent,
+    MatChip,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
 })
@@ -70,8 +82,51 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   private dialog = inject(MatDialog);
   private gesuchStore = inject(GesuchStore);
 
+  darlehenStore = inject(DarlehenStore);
   gesuchIdSig = this.store.selectSignal(selectRouteId); // todo: take from input instead, so no store needed?
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId); // todo: take from input instead, so no store needed?
+
+  // todo: change to use signal inputs!
+  isAenderungRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
+    ),
+  );
+  isInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
+    ),
+  );
+  isBeschwerdeHaengigSig = computed(() => {
+    const beschwerdeHaengig =
+      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.beschwerdeHaengig;
+    return beschwerdeHaengig;
+  });
+
+  revisionSig = this.store.selectSignal(selectRevision);
+
+  historizedSig = computed(() => {
+    const {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+    } = this.gesuchHeaderStore.viewSbSig().historized ?? {};
+    if (
+      !abgelehnteAenderungen?.length &&
+      !akzeptierteAenderungen?.length &&
+      !initial &&
+      !offeneAenderung
+    ) {
+      return null;
+    }
+    return {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+    };
+  });
 
   gesuchInfoSig = computed(() => {
     const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
@@ -187,6 +242,14 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   });
 
   constructor() {
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+
+      if (gesuchId) {
+        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
+      }
+    });
+
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
       this.gesuchUpdatedSig();

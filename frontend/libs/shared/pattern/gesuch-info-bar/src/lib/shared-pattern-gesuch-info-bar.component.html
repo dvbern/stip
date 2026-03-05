@@ -20,8 +20,9 @@
   </div>
 
   <!-- navitems:  -->
-  <div>
+  <div class="tw:flex tw:items-center tw:gap-4">
     <!-- infos -->
+    <ng-content></ng-content>
     <a
       [routerLink]="['/gesuch', 'infos', gesuchInfoSig().gesuch?.id]"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
