@@ -1,5 +1,5 @@
 @let view = dokumenteViewSig();
-@let expandedRowId = expandedRowSig();
+@let expandedRow = expandedRowSig();
 @if (view.loading) {
   <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
@@ -47,10 +47,10 @@
             <i
               class="material-symbols-rounded tw:rounded-full tw:bg-(--dv-blue-bg) tw:align-middle tw:text-2xl/none tw:text-white"
             >
-              @if (expandedRowId === dokument.dokumentTyp) {
-                expand_less
-              } @else {
+              @if (expandedRow.type === 'none') {
                 expand_more
+              } @else {
+                expand_less
               }
             </i>
           </button>
@@ -117,17 +117,7 @@
           [attr.colspan]="displayedColumns.length"
           *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()"
         >
-          <div
-            [@detailExpand]="
-              dokument.gesuchDokument?.id
-                ? expandedRowId === dokument.gesuchDokument?.id
-                  ? 'expanded'
-                  : 'collapsed'
-                : expandedRowId === dokument.dokumentTyp
-                  ? 'expanded'
-                  : 'collapsed'
-            "
-          >
+          <div [@detailExpand]="dokument.isExpanded ? 'expanded' : 'collapsed'">
             @if (dokument.kommentarePending) {
               <dv-shared-ui-loading class="tw:pb-2" type="icon"></dv-shared-ui-loading>
             } @else if (dokument.kommentare.length === 0) {
@@ -156,13 +146,11 @@
 
       <tr
         [ngClass]="{
-          'expanded-row': dokument.gesuchDokument?.id
-            ? dokument.gesuchDokument?.id === expandedRowId
-            : dokument.dokumentTyp === expandedRowId,
+          'expanded-row': dokument.isExpanded,
           'tw:!bg-(--dv-yellow-bg-subtle)': !dokument?.gesuchDokument?.id,
         }"
         mat-row
-        *matRowDef="let dokument; columns: displayedColumns"
+        *dvMatRowDef="let dokument; dataSource: dokumenteDataSourceSig(); columns: displayedColumns"
         (click)="expandRow(dokument)"
       ></tr>
       <tr mat-row class="detail-row" *matRowDef="let dokument; columns: detailColumns"></tr>

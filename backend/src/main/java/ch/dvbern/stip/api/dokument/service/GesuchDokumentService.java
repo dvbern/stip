@@ -89,12 +89,19 @@ public class GesuchDokumentService {
     private final DokumentDeleteService dokumentDeleteService;
 
     @Transactional
-    public void setGesuchDokumentOfDokumentTypToAusstehend(final UUID gesuchTrancheId, final DokumentTyp dokumentTyp) {
+    public void setGesuchDokumentOfDokumentTypToAusstehend(
+        final UUID gesuchTrancheId,
+        final DokumentTyp dokumentTyp,
+        final UUID entryId
+    ) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
 
         final var gesuchDokumentOpt = gesuchTranche.getGesuchDokuments()
             .stream()
-            .filter(gDok -> gDok.getDokumentTyp() == dokumentTyp)
+            .filter(
+                gDok -> (Objects.isNull(entryId) || Objects.equals(gDok.getEntryId(), entryId))
+                && gDok.getDokumentTyp() == dokumentTyp
+            )
             .findFirst();
 
         if (gesuchDokumentOpt.isEmpty()) {

@@ -124,7 +124,7 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID entryId
     ) {
         gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
-        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
+        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp, entryId);
         return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, entryId, fileUpload);
     }
 

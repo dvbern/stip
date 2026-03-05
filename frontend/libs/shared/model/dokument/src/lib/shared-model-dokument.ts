@@ -68,6 +68,8 @@ export type SharedModelGenericDokument = {
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
+  entryId: string | undefined;
+  isExpanded: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: StandardDokumentOptions;
   kommentare: GesuchDokumentKommentar[];
