@@ -38,6 +38,7 @@ export const sachbearbeitungAppPatternGesuchLayoutRoutes: Route[] = [
       ),
   },
   {
+    // todo: work with 'formular'?
     path: '',
     title: 'sachbearbeitung-app.gesuch-form.title',
     loadComponent: () =>

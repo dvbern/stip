@@ -7,10 +7,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { MatMenuModule } from '@angular/material/menu';
+import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -23,7 +25,9 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { getTrancheRoute } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -43,6 +47,8 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiIconChipComponent,
     SharedUiProgressBarComponent,
     TranslocoDirective,
+    MatMenuModule,
+    RouterLink,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,6 +61,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   navClicked$ = new EventEmitter();
 
   private store = inject(Store);
+  private router = inject(Router);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
   private steuerdatenStore = inject(SteuerdatenStore);
@@ -66,6 +73,13 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
     this.gesuchIdSig,
   );
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+
+  // todo: do with inputs?
+  isTrancheRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
+    ),
+  );
 
   // private gesuchUpdatedSig = toSignal(
   //   this.store.select(selectSharedDataAccessGesuchCache).pipe(

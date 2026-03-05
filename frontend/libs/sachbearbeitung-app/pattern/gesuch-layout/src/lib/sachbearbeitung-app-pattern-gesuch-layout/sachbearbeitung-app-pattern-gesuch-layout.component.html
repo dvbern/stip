@@ -13,8 +13,8 @@
         [class.active]="gesuchIdSig()"
       >
         <i class="material-symbols-rounded me-2 text-white">history</i>
+        <!-- Versionstitel wird dynamisch, in KSTIP-2856 -->
         <span>{{ t('shared.header.versionen') }}</span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
       </button>
     </div>
 
@@ -242,6 +242,7 @@
       </mat-menu>
     </div>
   </div>
+
   <mat-tab-nav-panel #tabPanel>
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
