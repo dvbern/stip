@@ -27,14 +27,11 @@ import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
-import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
-import jakarta.inject.Inject;
-import jakarta.validation.Validator;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -46,44 +43,50 @@ import org.mapstruct.Named;
         FallMapper.class,
         GesuchsperiodeMapper.class,
         GesuchTrancheMapper.class,
+        GesuchStateInfoMapper.class,
     }
 )
 public abstract class GesuchMapper {
-    @Inject
-    Validator validator;
-
-    @Inject
-    GesuchStatusService gesuchStatusService;
-
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
-    @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
-    @Mapping(target = "fallId", source = "ausbildung.fall.id")
-    @Mapping(target = "fallNummer", source = "ausbildung.fall.fallNummer")
-    @Mapping(target = "ausbildungId", source = "ausbildung.id")
-    @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
+    @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.id", target = "ausbildungId")
+    @Mapping(source = "ausbildung.fall.delegierung", target = "delegierung")
     @Mapping(
-        source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
+        target = "hasPendingAusbildungUnterbruchAntrag",
+        source = ".",
         qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
     )
     public abstract GesuchDto toDto(Gesuch gesuch);
 
+    @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
-    @Mapping(source = ".", target = "canGetBerechnung", qualifiedByName = "getCanGetBerechnung")
-    @Mapping(source = ".", target = "canTriggerManuellPruefen", qualifiedByName = "getCanTriggerManuellPruefen")
-    @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
+    @Mapping(source = ".", target = "state")
+    @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
     public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
 
+    @Named("getPiaVorname")
+    String getPiaVorname(final Gesuch gesuch) {
+        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getVorname();
+    }
+
+    @Named("getPiaNachname")
+    String getPiaNachname(final Gesuch gesuch) {
+        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getNachname();
+    }
+
     @Mapping(source = "ausbildungId", target = "ausbildung.id")
-    // @Mapping(source = "gesuchsperiodeId", target = "gesuchsperiode.id")
     public abstract Gesuch toNewEntity(GesuchCreateDto gesuchCreateDto);
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
-    @Mapping(target = "bearbeiter", source = ".", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getFullNameOfSachbearbeiter")
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
-    @Mapping(target = "delegierung", source = "ausbildung.fall.delegierung")
+    @Mapping(source = "ausbildung.fall.delegierung", target = "delegierung")
     @Mapping(
         source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
         qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
@@ -120,20 +123,4 @@ public abstract class GesuchMapper {
     static LocalDate getEndDate(Gesuch gesuch) {
         return DateUtil.getGesuchDateRange(gesuch).getGueltigBis();
     }
-
-    @Named("getCanTriggerManuellPruefen")
-    boolean getCanTriggerManuellPruefen(Gesuch gesuch) {
-        return gesuchStatusService.getCanTriggerManuellPruefen(gesuch);
-    }
-
-    @Named("getCanGetBerechnung")
-    boolean getCanGetBerechnung(Gesuch gesuch) {
-        return gesuchStatusService.canGetBerechnung(gesuch);
-    }
-
-    @Named("canChangeGesuchsperiode")
-    boolean canChangeGesuchsperiode(Gesuch gesuch) {
-        return gesuchStatusService.canChangeGesuchsperiode(gesuch);
-    }
-
 }

@@ -24,7 +24,6 @@ import { DokumenteToUpload } from '../model/dokumenteToUpload';
 import { Gesuch } from '../model/gesuch';
 import { GesuchDokumentList } from '../model/gesuchDokumentList';
 import { GesuchTranche } from '../model/gesuchTranche';
-import { GesuchTrancheList } from '../model/gesuchTrancheList';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
 import { Kommentar } from '../model/kommentar';
 import { PatchAenderungsInfoRequest } from '../model/patchAenderungsInfoRequest';
@@ -85,14 +84,6 @@ export interface GesuchTrancheServiceGesuchTrancheEinreichenValidierenGSRequestP
 
 export interface GesuchTrancheServiceGesuchTrancheEinreichenValidierenSBRequestParams {
     gesuchTrancheId: string;
-}
-
-export interface GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams {
-    gesuchId: string;
-}
-
-export interface GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams {
-    gesuchId: string;
 }
 
 export interface GesuchTrancheServiceGetDocumentsToUploadGSRequestParams {
@@ -1195,182 +1186,6 @@ export class GesuchTrancheService {
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/einreichen/validieren/sb`;
         return this.httpClient.request<ValidationReport>('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: <any>observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    public getAllTranchenForGesuchGSPath = (requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams) => {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllTranchenForGesuchGS$.');
-        }
-        let path = `/api/v1/gesuchtranche/gs/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-
-        // Query Params
-        let queryParams = new URLSearchParams();
-        const queryParamsString = queryParams.toString();
-        if (queryParamsString) {
-            return `${path}?${queryParamsString}`;
-        }
-        return `${path}`;
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-     public getAllTranchenForGesuchGS$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchTrancheList>;
-     public getAllTranchenForGesuchGS$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchTrancheList>>;
-     public getAllTranchenForGesuchGS$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchTrancheList>>;
-     public getAllTranchenForGesuchGS$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllTranchenForGesuchGS$.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (auth-uat-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        // authentication (auth-dev-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'text/plain'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        const localVarPath = `/gesuchtranche/gs/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<GesuchTrancheList>('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: <any>observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    public getAllTranchenForGesuchSBPath = (requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams) => {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllTranchenForGesuchSB$.');
-        }
-        let path = `/api/v1/gesuchtranche/sb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-
-        // Query Params
-        let queryParams = new URLSearchParams();
-        const queryParamsString = queryParams.toString();
-        if (queryParamsString) {
-            return `${path}?${queryParamsString}`;
-        }
-        return `${path}`;
-    }
-
-    /**
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-     public getAllTranchenForGesuchSB$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchTrancheList>;
-     public getAllTranchenForGesuchSB$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchTrancheList>>;
-     public getAllTranchenForGesuchSB$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchTrancheList>>;
-     public getAllTranchenForGesuchSB$(requestParameters: GesuchTrancheServiceGetAllTranchenForGesuchSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllTranchenForGesuchSB$.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (auth-uat-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        // authentication (auth-dev-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'text/plain'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        const localVarPath = `/gesuchtranche/sb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
-        return this.httpClient.request<GesuchTrancheList>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

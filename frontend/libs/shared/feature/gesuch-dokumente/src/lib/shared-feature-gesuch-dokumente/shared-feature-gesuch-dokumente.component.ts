@@ -211,6 +211,12 @@ export class SharedFeatureGesuchDokumenteComponent {
     return permissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt;
   });
 
+  allDocumentsAcceptedChangedSig = computed(() => {
+    return this.dokumentsStore
+      .dokuments()
+      .data?.every((i) => i.status !== 'AUSSTEHEND');
+  });
+
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(
@@ -232,12 +238,8 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
 
     effect(() => {
-      if (
-        this.config.isSachbearbeitungApp &&
-        this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen
-      ) {
-        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-      }
+      this.allDocumentsAcceptedChangedSig();
+      this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
     });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());

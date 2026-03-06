@@ -148,7 +148,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
             .extract()
             .body()
             .as(GesuchInfoDto.class);
-        assertThat(gesuchInfo.getCanTriggerManuellPruefen(), is(false));
+        assertThat(gesuchInfo.getState().getCanTriggerManuellPruefen(), is(false));
 
         gesuchApiSpec.gesuchManuellPruefenSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -195,7 +195,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
             .extract()
             .body()
             .as(GesuchInfoDto.class);
-        assertThat(gesuchInfo.getCanTriggerManuellPruefen(), is(true));
+        assertThat(gesuchInfo.getState().getCanTriggerManuellPruefen(), is(true));
 
         var gesuchWithChangesDto = gesuchApiSpec.gesuchManuellPruefenSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())

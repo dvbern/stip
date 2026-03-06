@@ -388,6 +388,28 @@ Gesuch:
       $ref: '#/LocalDate'
     verfuegt:
       type: boolean
+GesuchStateInfo:
+  required:
+    - gesuchStatus
+    - beschwerdeHaengig
+    - canGetBerechnung
+    - canChangeGesuchsperiode
+    - canTriggerManuellPruefen
+    - canBearbeitungAbschliessen
+  type: object
+  properties:
+    gesuchStatus:
+      $ref: '#/Gesuchstatus'
+    beschwerdeHaengig:
+      type: boolean
+    canGetBerechnung:
+      type: boolean
+    canChangeGesuchsperiode:
+      type: boolean
+    canTriggerManuellPruefen:
+      type: boolean
+    canBearbeitungAbschliessen:
+      type: boolean
 PersoenlicheAngaben:
   required:
     - anrede
@@ -813,25 +835,6 @@ GesuchTranche:
       $ref: '#/GesuchTrancheStatus'
     typ:
       $ref: '#/GesuchTrancheTyp'
-GesuchTrancheList:
-  type: object
-  properties:
-    tranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    initialTranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    aenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    abgelehnteAenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
 GesuchTrancheSlim:
   type: object
   required:

@@ -40,7 +40,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DokumenteToUploadDtoSpec.JSON_PROPERTY_UNTERSCHRIFTENBLAETTER,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_FEHLENDE_DOKUMENTE_UEBERMITTELN,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN,
-  DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN,
   DokumenteToUploadDtoSpec.JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT
 })
 @JsonTypeName("DokumenteToUpload")
@@ -63,9 +62,6 @@ public class DokumenteToUploadDtoSpec {
 
   public static final String JSON_PROPERTY_GS_CAN_DOKUMENTE_UEBERMITTELN = "gsCanDokumenteUebermitteln";
   private Boolean gsCanDokumenteUebermitteln;
-
-  public static final String JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN = "sbCanBearbeitungAbschliessen";
-  private Boolean sbCanBearbeitungAbschliessen;
 
   public static final String JSON_PROPERTY_SB_CAN_UPLOAD_UNTERSCHRIFTENBLATT = "sbCanUploadUnterschriftenblatt";
   private Boolean sbCanUploadUnterschriftenblatt;
@@ -261,32 +257,6 @@ public class DokumenteToUploadDtoSpec {
   }
 
 
-  public DokumenteToUploadDtoSpec sbCanBearbeitungAbschliessen(Boolean sbCanBearbeitungAbschliessen) {
-    
-    this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
-    return this;
-  }
-
-   /**
-   * Get sbCanBearbeitungAbschliessen
-   * @return sbCanBearbeitungAbschliessen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getSbCanBearbeitungAbschliessen() {
-    return sbCanBearbeitungAbschliessen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_SB_CAN_BEARBEITUNG_ABSCHLIESSEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSbCanBearbeitungAbschliessen(Boolean sbCanBearbeitungAbschliessen) {
-    this.sbCanBearbeitungAbschliessen = sbCanBearbeitungAbschliessen;
-  }
-
-
   public DokumenteToUploadDtoSpec sbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
     
     this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
@@ -327,13 +297,12 @@ public class DokumenteToUploadDtoSpec {
         Objects.equals(this.unterschriftenblaetter, dokumenteToUpload.unterschriftenblaetter) &&
         Objects.equals(this.sbCanFehlendeDokumenteUebermitteln, dokumenteToUpload.sbCanFehlendeDokumenteUebermitteln) &&
         Objects.equals(this.gsCanDokumenteUebermitteln, dokumenteToUpload.gsCanDokumenteUebermitteln) &&
-        Objects.equals(this.sbCanBearbeitungAbschliessen, dokumenteToUpload.sbCanBearbeitungAbschliessen) &&
         Objects.equals(this.sbCanUploadUnterschriftenblatt, dokumenteToUpload.sbCanUploadUnterschriftenblatt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customDokumentTyps, required, requiredRefs, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanBearbeitungAbschliessen, sbCanUploadUnterschriftenblatt);
+    return Objects.hash(customDokumentTyps, required, requiredRefs, unterschriftenblaetter, sbCanFehlendeDokumenteUebermitteln, gsCanDokumenteUebermitteln, sbCanUploadUnterschriftenblatt);
   }
 
   @Override
@@ -346,7 +315,6 @@ public class DokumenteToUploadDtoSpec {
     sb.append("    unterschriftenblaetter: ").append(toIndentedString(unterschriftenblaetter)).append("\n");
     sb.append("    sbCanFehlendeDokumenteUebermitteln: ").append(toIndentedString(sbCanFehlendeDokumenteUebermitteln)).append("\n");
     sb.append("    gsCanDokumenteUebermitteln: ").append(toIndentedString(gsCanDokumenteUebermitteln)).append("\n");
-    sb.append("    sbCanBearbeitungAbschliessen: ").append(toIndentedString(sbCanBearbeitungAbschliessen)).append("\n");
     sb.append("    sbCanUploadUnterschriftenblatt: ").append(toIndentedString(sbCanUploadUnterschriftenblatt)).append("\n");
     sb.append("}");
     return sb.toString();

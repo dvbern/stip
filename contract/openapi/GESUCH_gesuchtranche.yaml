@@ -249,58 +249,6 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: getDocumentsToUploadSB
-  '/gesuchtranche/gs/{gesuchId}':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAllTranchenForGesuchGS
-  '/gesuchtranche/sb/{gesuchId}':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAllTranchenForGesuchSB
   '/gesuchtranche/{aenderungId}/patchAenderungInfo':
     parameters:
       - name: aenderungId
@@ -589,8 +537,6 @@ components:
         sbCanFehlendeDokumenteUebermitteln:
           type: boolean
         gsCanDokumenteUebermitteln:
-          type: boolean
-        sbCanBearbeitungAbschliessen:
           type: boolean
         sbCanUploadUnterschriftenblatt:
           type: boolean

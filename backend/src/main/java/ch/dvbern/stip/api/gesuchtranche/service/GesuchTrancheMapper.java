@@ -29,7 +29,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import jakarta.inject.Inject;
@@ -89,17 +88,6 @@ public abstract class GesuchTrancheMapper {
             .map(pair -> toSlimDto(pair.getLeft()).revision(pair.getRight().getId()))
             .toList();
     }
-
-    @Mapping(target = "tranchen", qualifiedByName = "toSlimDto")
-    @Mapping(target = "initialTranchen", qualifiedByName = "toSlimDto")
-    @Mapping(target = "aenderungen", qualifiedByName = "toSlimDto")
-    @Mapping(target = "abgelehnteAenderungen", qualifiedByName = "toSlimDtoWithRevision")
-    public abstract GesuchTrancheListDto toListDto(
-        List<GesuchTranche> tranchen,
-        List<GesuchTranche> initialTranchen,
-        List<GesuchTranche> aenderungen,
-        List<Pair<GesuchTranche, DefaultRevisionEntity>> abgelehnteAenderungen
-    );
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,

@@ -143,14 +143,10 @@ export class DokumentsStore extends signalStore(
   );
 
   dokumenteCanFlagsSig = computed(() => {
-    const {
-      gsCanDokumenteUebermitteln,
-      sbCanBearbeitungAbschliessen,
-      sbCanFehlendeDokumenteUebermitteln,
-    } = this.documentsToUpload.data() ?? {};
+    const { gsCanDokumenteUebermitteln, sbCanFehlendeDokumenteUebermitteln } =
+      this.documentsToUpload.data() ?? {};
     return {
       gsCanDokumenteUebermitteln,
-      sbCanBearbeitungAbschliessen,
       sbCanFehlendeDokumenteUebermitteln,
     };
   });

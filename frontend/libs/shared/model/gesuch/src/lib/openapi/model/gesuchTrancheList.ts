@@ -9,12 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { HistorizedTranchen } from './historizedTranchen';
 import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
 export interface GesuchTrancheList { 
-    tranchen?: Array<GesuchTrancheSlim>;
-    initialTranchen?: Array<GesuchTrancheSlim>;
-    aenderungen?: Array<GesuchTrancheSlim>;
-    abgelehnteAenderungen?: Array<GesuchTrancheSlim>;
+    historized: HistorizedTranchen;
+    currentTranchen: Array<GesuchTrancheSlim>;
 }
 
