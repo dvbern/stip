@@ -14,6 +14,7 @@
         {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
+      <!-- todo: move to aktionen -->
       @if (exportValuesSig(); as exportValues) {
         <div class="tw:relative">
           @if (isExportingSig()) {

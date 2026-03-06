@@ -195,7 +195,7 @@
         <a
           mat-tab-link
           [routerLink]="[tab.route]"
-          class="btn btn-nav"
+          class="tw:rounded-t-xl tw:border! tw:border-gray-300! tw:border-b-0!"
           [active]="tab.active"
           [class.active]="tab.active"
         >
@@ -210,7 +210,7 @@
       <!-- Aktion Button -->
       <button
         type="button"
-        class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none"
+        class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none tw:border-gray-300!"
         data-testid="sb-gesuch-header-aktion-menu"
         [class.active]="aktionTrigger.menuOpen"
         [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
@@ -270,7 +270,10 @@
     </div>
   </div>
 
-  <mat-tab-nav-panel class="tw:dv-pass-height" #tabPanel>
+  <mat-tab-nav-panel
+    class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-4 tw:rounded-b-xl tw:rounded-tr-xl"
+    #tabPanel
+  >
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
 </ng-container>

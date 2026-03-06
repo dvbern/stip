@@ -5,19 +5,18 @@
   @let twi = currentTrancheWithIndexSig();
   @if (twi) {
     <!-- side menu -->
-    <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto">
+    <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
       <!-- Gesuch -->
-      <div class="tw:border-b tw:border-gray-300 tw:p-4">
+      <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
+        <!-- todo: fix button classes => make tailwind -->
         <button
           type="button"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none tw:border-b tw:border-gray-300"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none tw:border-b tw:border-gray-300 tw:w-full"
           data-testid="sb-gesuch-header-tranche-nav-menu"
           [matMenuTriggerFor]="gesuchMenu"
           [attr.aria-label]="t('shared.header.tranchenAuswahl')"
         >
-          <span
-            class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full tw:max-w-[230px]"
-          >
+          <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
             {{
               t('shared.header.tranche.item', { date: twi.tranche.gueltigAb | date: 'MM.yyyy', index: twi.index + 1 })
             }}
@@ -85,7 +84,7 @@
       </div>
     }
 
-    <div class="mt-4">
+    <div class="mt-4 tw:pb-10">
       <dv-shared-ui-router-outlet-wrapper
         attribute="step"
         (data)="stepSig.set($event)"

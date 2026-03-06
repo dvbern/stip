@@ -332,3 +332,7 @@ $dv-all-colors: (
 form:not(.readonly) .mat-mdc-form-field-required-marker {
   color: var(--dv-red);
 }
+
+.mat-mdc-tab-links {
+  padding-bottom: 0;
+}
