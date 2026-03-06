@@ -5101,9 +5101,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5130,9 +5128,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -10700,6 +10696,35 @@ components:
           required:
             - start
             - comment
+    GesuchDokumentEntry:
+      required:
+        - entryId
+        - name
+        - dokumentTyps
+      type: object
+      properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        dokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+    GesuchDokumentList:
+      required:
+        - entrys
+        - dokuments
+      type: object
+      properties:
+        entrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentEntry'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokument'
     DokumenteToUpload:
       type: object
       properties:

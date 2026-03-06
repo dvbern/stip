@@ -52,6 +52,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -400,17 +401,18 @@ class GesuchFillFormularTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         final var message = String.format(
             "Expected: \n%s\nbut was: \n%s",
             Arrays.toString(expectedDokumentTypes),
-            Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
+            gesuchDokumente.stream().map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
         );
         assertThat(
             message,
             expectedDokumentTypes.length,
-            is(gesuchDokumente.length)
+            is(gesuchDokumente.size())
         );
 
         final var set = EnumSet.noneOf(DokumentTypDtoSpec.class);
@@ -419,7 +421,7 @@ class GesuchFillFormularTest {
         // Checks if all dokument types returned from the API are in the list of expected types
         assertThat(
             message,
-            set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
+            set.containsAll(gesuchDokumente.stream().map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
             is(true)
         );
     }

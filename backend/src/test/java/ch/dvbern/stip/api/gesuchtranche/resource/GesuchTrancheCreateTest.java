@@ -42,7 +42,7 @@ import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
@@ -292,7 +292,8 @@ class GesuchTrancheCreateTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
         var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(tranchen.getTranchen().get(1).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -301,8 +302,9 @@ class GesuchTrancheCreateTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
-        assertThat(dokumentsOfTranche1.length, is(greaterThan(dokumentsOfTranche2.length)));
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+        assertThat(dokumentsOfTranche1.size(), is(greaterThan(dokumentsOfTranche2.size())));
     }
 
     @TestAsFreigabestelleAndSachbearbeiter

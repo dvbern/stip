@@ -19,7 +19,9 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -215,6 +217,13 @@ public class RequiredDokumentService {
                 || ausstehendWithMissingFiles.contains(pair)
             )
             .toList();
+    }
+
+    public Map<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokumentRefMap(final GesuchFormular formular) {
+        return requiredRefDokumentProducers
+            .stream()
+            .map(producer -> producer.getRequiredDokuments(formular))
+            .collect(Collectors.toUnmodifiableMap(Pair::getLeft, Pair::getRight));
     }
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentsForGesuchFormular(final GesuchTranche tranche) {

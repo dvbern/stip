@@ -63,7 +63,14 @@
           {{ t('shared.dokumente.table.documentName') }}
         </th>
         <td mat-cell class="tw:w-full tw:min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
-          <div class="tw:py-3" [innerHTML]="t(dokument.dokumentOptions.info.title)"></div>
+          <div class="tw:py-3">
+            <span [innerHTML]="t(dokument.dokumentOptions.info.title)"></span>
+            @if (dokument.entryName) {
+              <div class="tw:text-gray-500">
+                {{ dokument.entryName }}
+              </div>
+            }
+          </div>
         </td>
       </ng-container>
 

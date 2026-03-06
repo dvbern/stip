@@ -26,6 +26,7 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentEntry,
   GesuchDokumentKommentar,
   GesuchDokumentRef,
   GesuchTrancheStatus,
@@ -122,6 +123,7 @@ export class RequiredDokumenteComponent {
     allowTypes: string | undefined;
     stepsFlow: GesuchFormStep[];
     dokuments: GesuchDokument[];
+    entrys: GesuchDokumentEntry[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
     requiredDocumentRefs: GesuchDokumentRef[];
@@ -173,6 +175,7 @@ export class RequiredDokumenteComponent {
       allowTypes,
       stepsFlow,
       dokuments,
+      entrys,
       kommentare,
       requiredDocumentTypes,
       requiredDocumentRefs,
@@ -192,9 +195,10 @@ export class RequiredDokumenteComponent {
           throw new Error('Document type is missing');
         }
 
+        const entryId = gesuchDokument.entryId;
         const dokumentOptions = createGesuchDokumentOptions({
           trancheId,
-          entryId: gesuchDokument.entryId,
+          entryId,
           permissions,
           allowTypes,
           dokumentTyp,
@@ -206,17 +210,20 @@ export class RequiredDokumenteComponent {
 
         return {
           dokumentTyp,
-          entryId: gesuchDokument.entryId,
+          entryId,
           isExpanded: isExpanded(expandedRow, {
             id: gesuchDokument.id,
             dokumentTyp: dokumentTyp,
-            entryId: gesuchDokument.entryId,
+            entryId,
           }),
           gesuchDokument,
           kommentare: [],
           kommentarePending: false,
           formStep,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+          entryName: entrys.find(
+            (e) =>
+              e.dokumentTyps.includes(dokumentTyp) && e.entryId === entryId,
+          )?.name,
           dokumentOptions,
         };
       },
@@ -244,6 +251,9 @@ export class RequiredDokumenteComponent {
         formStep,
         dokumentTyp,
         entryId,
+        entryName: entrys.find(
+          (e) => e.dokumentTyps.includes(dokumentTyp) && e.entryId === entryId,
+        )?.name,
         isExpanded: isExpanded(expandedRow, { dokumentTyp, entryId }),
         kommentare: [],
         kommentarePending: false,
@@ -259,14 +269,10 @@ export class RequiredDokumenteComponent {
             stepsFlow,
             a.formStep,
             b.formStep,
-            () => {
-              const compared = a.dokumentTyp.localeCompare(b.dokumentTyp);
-              return compared === 0
-                ? (a.gesuchDokument?.entryId?.localeCompare(
-                    b.gesuchDokument?.entryId ?? '',
-                  ) ?? 0)
-                : compared;
-            },
+            () =>
+              a.dokumentTyp.localeCompare(
+                `${b.dokumentTyp}_${b.entryName ?? ''}`,
+              ),
           ),
         )
         .map((dokument) => ({
@@ -308,7 +314,7 @@ export class RequiredDokumenteComponent {
   }
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
-    return item.dokumentTyp;
+    return `${item.dokumentTyp}_${item.entryName}`;
   }
 
   editNachfrist(gesuchId: string, nachfrist: string) {

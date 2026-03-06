@@ -20,6 +20,7 @@ import {
   DokumenteToUpload,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentEntry,
   GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
@@ -50,6 +51,7 @@ type DokumentsState = {
    * Contains all the uploaded required and custom documents
    */
   dokuments: CachedRemoteData<GesuchDokument[]>;
+  entrys: CachedRemoteData<GesuchDokumentEntry[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument | undefined>;
@@ -60,6 +62,7 @@ type DokumentsState = {
 const initialState: DokumentsState = {
   additionalDokumente: initial(),
   dokuments: initial(),
+  entrys: initial(),
   documentsToUpload: initial(),
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
@@ -157,9 +160,11 @@ export class DokumentsStore extends signalStore(
     const dokuments = (this.dokuments().data ?? []).filter(
       (d) => d.dokumentTyp,
     );
+    const entrys = this.entrys().data ?? [];
 
     return {
       dokuments,
+      entrys,
       loading: isPending(this.dokuments()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.required?.filter(
@@ -340,9 +345,10 @@ export class DokumentsStore extends signalStore(
         ]),
       ),
       tapResponse({
-        next: ([dokuments, documentsToUpload]) => {
+        next: ([{ dokuments, entrys }, documentsToUpload]) => {
           patchState(this, () => ({
             // Patch both lists at the same time to avoid unecessary rerenders
+            entrys: success(entrys),
             dokuments: success(dokuments),
             documentsToUpload: success(documentsToUpload),
           }));
@@ -642,8 +648,11 @@ export class DokumentsStore extends signalStore(
           }),
           switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
           tapResponse({
-            next: (dokuments) => {
-              patchState(this, { dokuments: success(dokuments) });
+            next: ({ dokuments, entrys }) => {
+              patchState(this, {
+                dokuments: success(dokuments),
+                entrys: success(entrys),
+              });
               this.globalNotificationStore.createSuccessNotification({
                 messageKey: 'shared.dokumente.uebermitteln.success',
               });

@@ -104,8 +104,13 @@ export class SharedFeatureGesuchDokumenteComponent {
       config: { isSachbearbeitungApp },
       gesuch,
     } = this.gesuchViewSig();
-    const { dokuments, requiredDocumentTypes, requiredDocumentRefs, loading } =
-      this.dokumentsStore.dokumenteViewSig();
+    const {
+      dokuments,
+      entrys,
+      requiredDocumentTypes,
+      requiredDocumentRefs,
+      loading,
+    } = this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
 
     const kommentare = this.dokumentsStore.kommentareViewSig();
@@ -121,6 +126,7 @@ export class SharedFeatureGesuchDokumenteComponent {
       allowTypes,
       stepsFlow,
       dokuments,
+      entrys,
       kommentare,
       requiredDocumentTypes,
       requiredDocumentRefs,

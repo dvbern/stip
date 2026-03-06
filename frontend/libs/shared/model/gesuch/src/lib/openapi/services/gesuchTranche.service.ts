@@ -22,7 +22,7 @@ import { CreateAenderungsantragRequest } from '../model/createAenderungsantragRe
 import { CreateGesuchTrancheRequest } from '../model/createGesuchTrancheRequest';
 import { DokumenteToUpload } from '../model/dokumenteToUpload';
 import { Gesuch } from '../model/gesuch';
-import { GesuchDokument } from '../model/gesuchDokument';
+import { GesuchDokumentList } from '../model/gesuchDokumentList';
 import { GesuchTranche } from '../model/gesuchTranche';
 import { GesuchTrancheList } from '../model/gesuchTrancheList';
 import { GesuchWithChanges } from '../model/gesuchWithChanges';
@@ -1579,9 +1579,9 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokument>>;
-     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokument>>>;
-     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokument>>>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchDokumentList>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchDokumentList>>;
+     public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchDokumentList>>;
      public getGesuchDokumenteGS$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteGSRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
@@ -1634,7 +1634,7 @@ export class GesuchTrancheService {
         }
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente/gs`;
-        return this.httpClient.request<Array<GesuchDokument>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchDokumentList>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,
@@ -1667,9 +1667,9 @@ export class GesuchTrancheService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<GesuchDokument>>;
-     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<GesuchDokument>>>;
-     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<GesuchDokument>>>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchDokumentList>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchDokumentList>>;
+     public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchDokumentList>>;
      public getGesuchDokumenteSB$(requestParameters: GesuchTrancheServiceGetGesuchDokumenteSBRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
@@ -1722,7 +1722,7 @@ export class GesuchTrancheService {
         }
 
         const localVarPath = `/gesuchtranche/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/dokumente/sb`;
-        return this.httpClient.request<Array<GesuchDokument>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<GesuchDokumentList>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

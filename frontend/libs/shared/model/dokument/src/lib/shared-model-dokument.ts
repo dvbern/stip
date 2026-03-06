@@ -69,6 +69,7 @@ export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
   entryId: string | undefined;
+  entryName: string | undefined;
   isExpanded: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: StandardDokumentOptions;
