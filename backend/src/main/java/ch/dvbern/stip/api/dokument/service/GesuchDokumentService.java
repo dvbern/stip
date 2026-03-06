@@ -659,7 +659,12 @@ public class GesuchDokumentService {
         for (final var targetTranche : targetTranchen) {
             final var targetGesuchDokument = targetTranche.getGesuchDokuments()
                 .stream()
-                .filter(gesuchDokument -> gesuchDokument.getDokumentTyp() == dokumentTyp)
+                .filter(
+                    gesuchDokument -> gesuchDokument.getDokumentTyp() == dokumentTyp && Objects.equals(
+                        gesuchDokument.getEntryId(),
+                        entryId
+                    )
+                )
                 .findFirst();
 
             targetGesuchDokument.ifPresent(gesuchDokument -> {

@@ -172,6 +172,7 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
                 gesuchDokument.gesuchTranche.id.eq(trancheId),
                 // Match normal Dokument refs
                 gesuchDokument.dokumentTyp.in(dokumentTyps)
+                    .and(gesuchDokument.entryId.isNull())
                     .or(
                         // Or Dokument Refs for lists with entryIds
                         gesuchDokument.dokumentTyp

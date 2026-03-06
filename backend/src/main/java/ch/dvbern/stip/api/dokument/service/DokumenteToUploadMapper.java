@@ -31,6 +31,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import org.apache.commons.lang3.tuple.Pair;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { CustomDocumentTypMapper.class })
@@ -42,11 +43,9 @@ public abstract class DokumenteToUploadMapper {
         final List<CustomDokumentTyp> customDokumentTyps
     );
 
-    public GesuchDokumentRefDto toDto(final Pair<DokumentTyp, UUID> pair) {
-        return new GesuchDokumentRefDto()
-            .dokumentTyp(pair.getLeft())
-            .entryId(pair.getRight());
-    }
+    @Mapping(source = "left", target = "dokumentTyp")
+    @Mapping(source = "right", target = "entryId")
+    public abstract GesuchDokumentRefDto toDto(final Pair<DokumentTyp, UUID> pair);
 
     @AfterMapping
     protected void setNullToEmptyList(

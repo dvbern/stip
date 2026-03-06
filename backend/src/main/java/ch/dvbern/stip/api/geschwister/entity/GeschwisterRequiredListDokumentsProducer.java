@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,9 +31,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class GeschwisterRequiredListDocumentsProducer implements RequiredListDocumentsProducer {
+public class GeschwisterRequiredListDocumentsProducer implements RequiredRefDokumentsProducer {
     @Override
-    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
         final var geschwisters = formular.getGeschwisters();
         if (Objects.isNull(geschwisters)) {
             return ImmutablePair.of("", Set.of());

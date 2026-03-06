@@ -24,6 +24,6 @@ import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import org.apache.commons.lang3.tuple.Pair;
 
-public interface RequiredListDocumentsProducer {
-    Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDocuments(final GesuchFormular formular);
+public interface RequiredRefDokumentsProducer {
+    Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(final GesuchFormular formular);
 }

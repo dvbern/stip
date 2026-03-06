@@ -23,9 +23,9 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
-import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.util.DokumentValidationUtils;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
@@ -43,18 +43,18 @@ public class DocumentsRequiredConstraintValidator
     implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
     private static final String PAGENAME = "dokuments";
     @Inject
-    Instance<RequiredDocumentsProducer> producers;
+    Instance<RequiredDokumentsProducer> producers;
     @Inject
-    Instance<RequiredListDocumentsProducer> listProducers;
+    Instance<RequiredRefDokumentsProducer> refProducers;
 
     @Inject
-    Instance<RequiredCustomDocumentsProducer> customProducers;
+    Instance<RequiredCustomDokumentsProducer> customProducers;
 
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
-        final var requiredListDocs =
-            listProducers.stream().map(producer -> producer.getRequiredDocuments(formular)).toList();
+        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDokuments(formular)).toList();
+        final var requiredRefDocs =
+            refProducers.stream().map(producer -> producer.getRequiredDokuments(formular)).toList();
 
         final var existingDokuments = getExistingRequiredGesuchDokuments(formular);
         final var existingDokumentTypMap = existingDokuments.stream()
@@ -73,7 +73,7 @@ public class DocumentsRequiredConstraintValidator
             .toList();
 
         // same for list dokuments like kinds and geschwisters
-        final var missingListGesuchDokuments = requiredListDocs.stream()
+        final var missingRefGesuchDokuments = requiredRefDocs.stream()
             .filter(
                 doc -> doc.getRight().stream().anyMatch(d -> !existingDokumentRefMap.containsKey(d))
             )
@@ -86,7 +86,7 @@ public class DocumentsRequiredConstraintValidator
             DokumentValidationUtils.getMissingCustomDocumentTypsByTranche(customProducers, formular.getTranche());
 
         final Set<String> allMissingDokuments = new HashSet<>(missingGesuchDokuments);
-        allMissingDokuments.addAll(missingListGesuchDokuments);
+        allMissingDokuments.addAll(missingRefGesuchDokuments);
         if (!missingCustomDokuments.isEmpty()) {
             allMissingDokuments.add(PAGENAME);
         }

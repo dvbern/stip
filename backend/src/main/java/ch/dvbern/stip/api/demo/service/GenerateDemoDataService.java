@@ -45,8 +45,8 @@ import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
-import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
@@ -128,8 +128,8 @@ public class GenerateDemoDataService {
     private final EntityCopyMapper copyMapper;
     private final ConfigService configService;
 
-    private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
-    private final Instance<RequiredListDocumentsProducer> requiredListDocumentProducers;
+    private final Instance<RequiredDokumentsProducer> requiredDokumentProducers;
+    private final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers;
     private final LandRepository landRepository;
     private final FallRepository fallRepository;
     private final AusbildungRepository ausbildungRepository;
@@ -687,17 +687,17 @@ public class GenerateDemoDataService {
     }
 
     public void createDemoDokumentsForAllRequired(GesuchTranche gesuchTranche) {
-        final var requiredDocuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
+        final var requiredDokuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
             gesuchTranche.getGesuchFormular(),
-            requiredDocumentProducers
+            requiredDokumentProducers
         );
         final var requiredListDocuments = RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(
             gesuchTranche.getGesuchFormular(),
-            requiredListDocumentProducers
+            requiredRefDokumentProducers
         );
 
         final var gesuchDokuments = Stream.concat(
-            requiredDocuments.stream()
+            requiredDokuments.stream()
                 .map(dokumentTyp -> createDemoGesuchDokumentWithoutUpload(dokumentTyp, gesuchTranche)),
             requiredListDocuments.stream()
                 .map(pair -> createDemoGesuchDokumentWithoutUpload(pair.getLeft(), gesuchTranche, pair.getRight()))
