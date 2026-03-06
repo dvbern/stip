@@ -15,12 +15,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
-import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -271,9 +270,9 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
       }
     });
 
+    // todo: adjust info and verfuegung routes, to include trancheId
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
-      this.gesuchUpdatedSig();
       if (gesuchTrancheId) {
         this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
       }

@@ -3,12 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   Output,
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { AdminOptions } from '@dv/sachbearbeitung-app/model/administration';
@@ -23,7 +24,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   imports: [
     SharedUiRouterOutletWrapperComponent,
     CommonModule,
-    TranslocoPipe,
     RouterModule,
     MatSidenavModule,
     SharedUiIconChipComponent,
@@ -35,10 +35,11 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppFeatureAdministrationComponent {
-  // todo: can it be childadmin option?
+  @HostBinding('class') class = 'tw:dv-pass-height';
+
   option?: AdminOption | ChildAdminOption;
 
-  // todo: really needed?
+  // todo: test really needed?
   @Output() navClicked = new EventEmitter<{ value: boolean }>();
 
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);

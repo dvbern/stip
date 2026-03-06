@@ -18,7 +18,7 @@
           >
             <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
             <span class="text-start">
-              {{ option.translationKey | transloco }}
+              {{ t(option.translationKey) }}
             </span>
           </a>
         }
@@ -28,7 +28,7 @@
     <div class="d-none d-lg-block border-end bg-white">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
     </div>
-    <div class="pt-lg-4 px-lg-4 tw:min-w-0 container mb-5">
+    <div class="pt-lg-4 px-lg-4 tw:w-full container tw:dv-pass-height">
       <!-- step header (mobile) -->
       <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
         <ng-container *ngTemplateOutlet="navigation"></ng-container>
@@ -52,7 +52,7 @@
           }
 
           <h2 class="fw-bold d-flex m-0" data-testid="step-title">
-            {{ option.titleTranslationKey | transloco }}
+            {{ t(option.titleTranslationKey) }}
             <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
           </h2>
         </div>
