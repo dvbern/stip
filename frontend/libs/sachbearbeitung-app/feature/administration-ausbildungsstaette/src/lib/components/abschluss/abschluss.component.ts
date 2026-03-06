@@ -153,8 +153,8 @@ export class AbschlussComponent
       loading: isPending(
         this.administrationAusbildungsstaetteStore.abschluesse(),
       ),
-      abschluesse: abschluesse?.entries ?? [],
-      totalEntries: abschluesse?.totalEntries ?? 0,
+      abschluesse: abschluesse.data?.entries ?? [],
+      totalEntries: abschluesse.data?.totalEntries ?? 0,
     };
   });
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [

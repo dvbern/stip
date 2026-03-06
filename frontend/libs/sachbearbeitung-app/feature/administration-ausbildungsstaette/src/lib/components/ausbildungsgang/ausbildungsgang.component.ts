@@ -52,7 +52,7 @@ import {
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-import { isPending } from '@dv/shared/util/remote-data';
+import { isPending, mapCachedData } from '@dv/shared/util/remote-data';
 import {
   getSortAndPageInputs,
   limitPageToNumberOfEntriesEffect,
@@ -287,14 +287,18 @@ export class AusbildungsgangComponent
       existingAusbildungsgaenge:
         this.administrationAusbildungsstaetteStore.allAusbildungsgaenge()
           .data ?? [],
-      ausbildungsstaetten: this.ausbildungsstaetteStore
-        .ausbildungsstaetteViewSig()
-        .filter((item) => item.aktiv),
-      abschluesse: sortListByText(
-        this.ausbildungsstaetteStore
-          .abschluesseViewSig()
-          .filter((item) => item.aktiv),
-        (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
+      ausbildungsstaetten: mapCachedData(
+        this.ausbildungsstaetteStore.ausbildungsstaetteViewSig(),
+        (ausbildungsstaetten) =>
+          ausbildungsstaetten.filter((item) => item.aktiv),
+      ),
+      abschluesse: mapCachedData(
+        this.ausbildungsstaetteStore.abschluesseViewSig(),
+        (abschluesse) =>
+          sortListByText(
+            abschluesse.filter((item) => item.aktiv),
+            (item) => item[`bezeichnung${capitalized(this.currentLangSig())}`],
+          ),
       ),
       language: this.currentLangSig(),
     })

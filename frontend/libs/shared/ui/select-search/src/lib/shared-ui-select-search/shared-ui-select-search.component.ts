@@ -43,6 +43,10 @@ import {
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
 import { TranslatedPropertyPipe } from '@dv/shared/ui/translated-property-pipe';
+import {
+  CachedRemoteData,
+  isPendingWithoutCache,
+} from '@dv/shared/util/remote-data';
 import { sortListByText } from '@dv/shared/util/table';
 
 import { SharedUiSearchOptionLabelDirective } from './select-search-option-label.directive';
@@ -114,7 +118,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
    * The list of values to display in the autocomplete.
    * This should be an array of objects matching {@link T}.
    */
-  valuesSig = input.required<T[]>();
+  valuesSig = input.required<CachedRemoteData<T[]>>();
   /**
    * The label key for the autocomplete input.
    */
@@ -202,7 +206,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     const shouldSort = this.sortByValueSig();
     const displayValue = this.displayValueWithSig();
 
-    let values = this.valuesSig();
+    let values = this.valuesSig().data;
 
     if (!values) {
       return [];
@@ -232,7 +236,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
 
   zuvorHintValueSig = computed(() => {
     const zuvorHintValue = this.zuvorValueSig();
-    const values = this.valuesSig();
+    const values = this.valuesSig().data;
     if (!zuvorHintValue || !values) {
       return undefined;
     }
@@ -266,11 +270,13 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
     // Initialize the values
     effect(() => {
       const valueId = this.latestValueSig();
-      const values = this.valuesSig();
+      const rdValues = this.valuesSig();
 
-      if (!values) {
+      if (isPendingWithoutCache(rdValues)) {
         return;
       }
+
+      const values = rdValues.data;
       if (valueId) {
         this.valueId = valueId;
         const value = values?.find((l) => l.id === valueId);

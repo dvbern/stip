@@ -26,7 +26,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { addYears } from 'date-fns';
@@ -77,6 +77,14 @@ import {
   provideMaterialDefaultOptions,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
+import {
+  CachedRemoteData,
+  failure,
+  isPendingWithoutCache,
+  isSuccess,
+  mapCachedData,
+  pending,
+} from '@dv/shared/util/remote-data';
 import { sortListByText } from '@dv/shared/util/table';
 import {
   createDateDependencyValidator,
@@ -146,6 +154,8 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   private gesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchsView,
   );
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private cachedGesuchViewSig = this.store.selectSignal(
     selectSharedDataAccessGesuchCacheView,
   );
@@ -226,45 +236,52 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   private currentAusbildungsstaetteSig = computed(() => {
     const ausbildungsstaetteId = this.ausbildungsstaetteIdSig();
-    const ausbildungsstaettes =
+    const ausbildungsstaettesRd =
       this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
 
-    return ausbildungsstaettes.find(
-      (ausbildungsstaette) => ausbildungsstaette.id === ausbildungsstaetteId,
+    return mapCachedData(ausbildungsstaettesRd, (ausbildungsstaettes) =>
+      ausbildungsstaettes.find(
+        (ausbildungsstaette) => ausbildungsstaette.id === ausbildungsstaetteId,
+      ),
     );
   });
 
   private currentAusbildungsgangSig = computed(() => {
     const ausbildungsgangId = this.ausbildungsgangIdSig();
-    return this.currentAusbildungsstaetteSig()?.ausbildungsgaenge.find(
+    return this.currentAusbildungsstaetteSig().data?.ausbildungsgaenge.find(
       (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
     );
   });
 
   ausbildungsstaettenOptionsSig = computed(
     () => {
-      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const currentAusbildungsstaetteRd = this.currentAusbildungsstaetteSig();
       const currentAusbildungsgang = this.currentAusbildungsgangSig();
-      const ausbildungsstaetten =
+      const ausbildungsstaettenRd =
         this.ausbildungsstatteStore.ausbildungsstaettenWithAusbildungsgaengeViewSig();
 
-      if (!ausbildungsstaetten) {
-        return [];
+      if (isPendingWithoutCache(currentAusbildungsstaetteRd)) {
+        return pending();
+      }
+      if (!isSuccess(currentAusbildungsstaetteRd)) {
+        return failure(currentAusbildungsstaetteRd.error);
       }
 
-      return ausbildungsstaetten
-        .map((ausbildungsstaette) => ({
-          ...ausbildungsstaette,
-          invalid:
-            !ausbildungsstaette.aktiv &&
-            ausbildungsstaette.id !== currentAusbildungsstaette?.id,
-          disabled: !ausbildungsstaette.aktiv,
-        }))
-        .filter((ausbildungsstaette) =>
-          ausbildungsstaette.ausbildungsgaenge.some(
-            (gang) => gang.aktiv || gang.id === currentAusbildungsgang?.id,
+      return mapCachedData(ausbildungsstaettenRd, (ausbildungsstaetten) =>
+        ausbildungsstaetten
+          .map((ausbildungsstaette) => ({
+            ...ausbildungsstaette,
+            invalid:
+              !ausbildungsstaette.aktiv &&
+              ausbildungsstaette.id !== currentAusbildungsstaetteRd.data?.id,
+            disabled: !ausbildungsstaette.aktiv,
+          }))
+          .filter((ausbildungsstaette) =>
+            ausbildungsstaette.ausbildungsgaenge.some(
+              (gang) => gang.aktiv || gang.id === currentAusbildungsgang?.id,
+            ),
           ),
-        );
+      );
     },
     {
       equal: areObjectsEqual,
@@ -273,7 +290,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
   ausbildungsgangOptionsSig = computed(
     () => {
-      const currentAusbildungsstaette = this.currentAusbildungsstaetteSig();
+      const currentAusbildungsstaetteRd = this.currentAusbildungsstaetteSig();
       const currentAusbildungsgang = this.currentAusbildungsgangSig();
       const ausbildung = {
         ...this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
@@ -281,39 +298,44 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       };
       const language = this.languageSig();
 
-      const ausbildungsgaenge =
-        currentAusbildungsstaette?.ausbildungsgaenge
-          ?.filter(
-            (ausbildungsgang) =>
-              ausbildungsgang.aktiv ||
-              ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
-          )
-          .map((ausbildungsgang) => {
-            // access is partially instant, so no optimization needed here
-            const bildungsrichtungDe = this.transloco.translate(
-              `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
-            );
-            const bildungsrichtungFr = this.transloco.translate(
-              `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
-            );
+      const ausbildungsgaengeRd = mapCachedData(
+        currentAusbildungsstaetteRd,
+        (currentAusbildungsstaette) =>
+          currentAusbildungsstaette?.ausbildungsgaenge
+            ?.filter(
+              (ausbildungsgang) =>
+                ausbildungsgang.aktiv ||
+                ausbildungsgang.id === ausbildung.ausbildungsgang?.id,
+            )
+            .map((ausbildungsgang) => {
+              // access is partially instant, so no optimization needed here
+              const bildungsrichtungDe = this.transloco.translate(
+                `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
+              );
+              const bildungsrichtungFr = this.transloco.translate(
+                `shared.bildungsrichtung.${ausbildungsgang.bildungsrichtung}`,
+              );
 
-            return {
-              ...ausbildungsgang,
-              translatedName: getTranslatableProp(
-                ausbildungsgang,
-                'bezeichnung',
-                language,
-              ),
-              testId: ausbildungsgang.bezeichnungDe,
-              invalid:
-                !ausbildungsgang.aktiv &&
-                ausbildungsgang.id !== currentAusbildungsgang?.id,
-              disabled: !ausbildungsgang.aktiv,
-              displayValueDe: `${ausbildungsgang.bezeichnungDe} - ${bildungsrichtungDe}`,
-              displayValueFr: `${ausbildungsgang.bezeichnungFr} - ${bildungsrichtungFr}`,
-            };
-          }) ?? [];
-      return sortListByText(ausbildungsgaenge, (item) => item.translatedName);
+              return {
+                ...ausbildungsgang,
+                translatedName: getTranslatableProp(
+                  ausbildungsgang,
+                  'bezeichnung',
+                  language,
+                ),
+                testId: ausbildungsgang.bezeichnungDe,
+                invalid:
+                  !ausbildungsgang.aktiv &&
+                  ausbildungsgang.id !== currentAusbildungsgang?.id,
+                disabled: !ausbildungsgang.aktiv,
+                displayValueDe: `${ausbildungsgang.bezeichnungDe} - ${bildungsrichtungDe}`,
+                displayValueFr: `${ausbildungsgang.bezeichnungFr} - ${bildungsrichtungFr}`,
+              };
+            }) ?? [],
+      );
+      return mapCachedData(ausbildungsgaengeRd, (ausbildungsgaenge) =>
+        sortListByText(ausbildungsgaenge, (item) => item.translatedName),
+      );
     },
     {
       equal: areObjectsEqual,
@@ -332,7 +354,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     if (!newAusbildungsgang) return false;
 
     const ausbildungsgange = untracked(this.ausbildungsgangOptionsSig);
-    const gang = ausbildungsgange.find(
+    const gang = ausbildungsgange.data?.find(
       (ausbildungsgang) => ausbildungsgang.id === newAusbildungsgang.id,
     );
 
@@ -476,7 +498,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         });
         const currentAusbildungsgang = ausbildung.ausbildungsgang;
         if (currentAusbildungsgang) {
-          const ausbildungsstaette = ausbildungstaetten.find(
+          const ausbildungsstaette = ausbildungstaetten.data?.find(
             (ausbildungsstaette) =>
               ausbildungsstaette.id ===
               ausbildung.ausbildungsgang?.ausbildungsstaette?.id,
@@ -704,7 +726,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             this.globalNotificationStore.createSuccessNotification({
               messageKey: 'shared.ausbildung.saved.success',
             });
-            this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+            this.router.navigate(['.'], {
+              onSameUrlNavigation: 'reload',
+              relativeTo: this.route,
+            });
           },
         });
         break;
@@ -727,6 +752,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   };
 }
 
-const areObjectsEqual = <T>(a: T, b: T): boolean => {
-  return diff(a, b).length === 0;
+const areObjectsEqual = <T>(
+  a: CachedRemoteData<T>,
+  b: CachedRemoteData<T>,
+): boolean => {
+  return diff(a.data, b.data).length === 0;
 };
