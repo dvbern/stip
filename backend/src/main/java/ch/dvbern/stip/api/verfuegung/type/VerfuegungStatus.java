@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.verfuegung.type;
 
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
+
 public enum VerfuegungStatus {
     AUSSTEHEND,
     ANSPRUCH,
@@ -30,4 +34,12 @@ public enum VerfuegungStatus {
     public boolean isAnspruch() {
         return this == ANSPRUCH;
     }
+
+    public static final Set<VerfuegungStatus> FINAL_STATUS = Collections.unmodifiableSet(
+        EnumSet.of(
+            ANSPRUCH,
+            KEIN_ANSPRUCH,
+            NEGATIV
+        )
+    );
 }

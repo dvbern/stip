@@ -1,4 +1,4 @@
-@let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.beschwerdeHaengig ?? null;
+@let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.state?.beschwerdeHaengig ?? null;
 @if (beschwerdeHaengig !== null) {
   <!-- Beschwerde Hängig -->
   <h3 class="tw:!mb-6">

@@ -86,7 +86,8 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   paginatorSig = viewChild(MatPaginator);
 
   canCreateJurNotizSig = computed(() => {
-    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus =
+      this.gesuchInfoStore.gesuchInfo().data?.state.gesuchStatus;
     const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return false;

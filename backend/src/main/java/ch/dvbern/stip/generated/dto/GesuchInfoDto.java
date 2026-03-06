@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.GesuchStateInfoDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -22,14 +23,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid String fallNummer;
   private @Valid String gesuchNummer;
-  private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
-  private @Valid Boolean canGetBerechnung;
-  private @Valid Boolean beschwerdeHaengig;
-  private @Valid Boolean canTriggerManuellPruefen;
-  private @Valid Boolean canChangeGesuchsperiode;
+  private @Valid GesuchStateInfoDto state;
+  private @Valid String piaVorname;
+  private @Valid String piaNachname;
 
   /**
    **/
@@ -52,6 +52,25 @@ public class GesuchInfoDto  implements Serializable {
 
   /**
    **/
+  public GesuchInfoDto fallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+  
+  @JsonProperty("fallNummer")
+  @NotNull
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+  @JsonProperty("fallNummer")
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+  }
+
+  /**
+   **/
   public GesuchInfoDto gesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
     return this;
@@ -67,25 +86,6 @@ public class GesuchInfoDto  implements Serializable {
   @JsonProperty("gesuchNummer")
   public void setGesuchNummer(String gesuchNummer) {
     this.gesuchNummer = gesuchNummer;
-  }
-
-  /**
-   **/
-  public GesuchInfoDto gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
-    this.gesuchStatus = gesuchStatus;
-    return this;
-  }
-
-  
-  @JsonProperty("gesuchStatus")
-  @NotNull
-  public ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus getGesuchStatus() {
-    return gesuchStatus;
-  }
-
-  @JsonProperty("gesuchStatus")
-  public void setGesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
-    this.gesuchStatus = gesuchStatus;
   }
 
   /**
@@ -128,78 +128,57 @@ public class GesuchInfoDto  implements Serializable {
 
   /**
    **/
-  public GesuchInfoDto canGetBerechnung(Boolean canGetBerechnung) {
-    this.canGetBerechnung = canGetBerechnung;
+  public GesuchInfoDto state(GesuchStateInfoDto state) {
+    this.state = state;
     return this;
   }
 
   
-  @JsonProperty("canGetBerechnung")
+  @JsonProperty("state")
   @NotNull
-  public Boolean getCanGetBerechnung() {
-    return canGetBerechnung;
+  public GesuchStateInfoDto getState() {
+    return state;
   }
 
-  @JsonProperty("canGetBerechnung")
-  public void setCanGetBerechnung(Boolean canGetBerechnung) {
-    this.canGetBerechnung = canGetBerechnung;
+  @JsonProperty("state")
+  public void setState(GesuchStateInfoDto state) {
+    this.state = state;
   }
 
   /**
    **/
-  public GesuchInfoDto beschwerdeHaengig(Boolean beschwerdeHaengig) {
-    this.beschwerdeHaengig = beschwerdeHaengig;
+  public GesuchInfoDto piaVorname(String piaVorname) {
+    this.piaVorname = piaVorname;
     return this;
   }
 
   
-  @JsonProperty("beschwerdeHaengig")
-  @NotNull
-  public Boolean getBeschwerdeHaengig() {
-    return beschwerdeHaengig;
+  @JsonProperty("piaVorname")
+  public String getPiaVorname() {
+    return piaVorname;
   }
 
-  @JsonProperty("beschwerdeHaengig")
-  public void setBeschwerdeHaengig(Boolean beschwerdeHaengig) {
-    this.beschwerdeHaengig = beschwerdeHaengig;
+  @JsonProperty("piaVorname")
+  public void setPiaVorname(String piaVorname) {
+    this.piaVorname = piaVorname;
   }
 
   /**
    **/
-  public GesuchInfoDto canTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
-    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
+  public GesuchInfoDto piaNachname(String piaNachname) {
+    this.piaNachname = piaNachname;
     return this;
   }
 
   
-  @JsonProperty("canTriggerManuellPruefen")
-  @NotNull
-  public Boolean getCanTriggerManuellPruefen() {
-    return canTriggerManuellPruefen;
+  @JsonProperty("piaNachname")
+  public String getPiaNachname() {
+    return piaNachname;
   }
 
-  @JsonProperty("canTriggerManuellPruefen")
-  public void setCanTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
-    this.canTriggerManuellPruefen = canTriggerManuellPruefen;
-  }
-
-  /**
-   **/
-  public GesuchInfoDto canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
-    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
-    return this;
-  }
-
-  
-  @JsonProperty("canChangeGesuchsperiode")
-  @NotNull
-  public Boolean getCanChangeGesuchsperiode() {
-    return canChangeGesuchsperiode;
-  }
-
-  @JsonProperty("canChangeGesuchsperiode")
-  public void setCanChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
-    this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+  @JsonProperty("piaNachname")
+  public void setPiaNachname(String piaNachname) {
+    this.piaNachname = piaNachname;
   }
 
 
@@ -213,19 +192,18 @@ public class GesuchInfoDto  implements Serializable {
     }
     GesuchInfoDto gesuchInfo = (GesuchInfoDto) o;
     return Objects.equals(this.id, gesuchInfo.id) &&
+        Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
-        Objects.equals(this.gesuchStatus, gesuchInfo.gesuchStatus) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
-        Objects.equals(this.canGetBerechnung, gesuchInfo.canGetBerechnung) &&
-        Objects.equals(this.beschwerdeHaengig, gesuchInfo.beschwerdeHaengig) &&
-        Objects.equals(this.canTriggerManuellPruefen, gesuchInfo.canTriggerManuellPruefen) &&
-        Objects.equals(this.canChangeGesuchsperiode, gesuchInfo.canChangeGesuchsperiode);
+        Objects.equals(this.state, gesuchInfo.state) &&
+        Objects.equals(this.piaVorname, gesuchInfo.piaVorname) &&
+        Objects.equals(this.piaNachname, gesuchInfo.piaNachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, gesuchStatus, startDate, endDate, canGetBerechnung, beschwerdeHaengig, canTriggerManuellPruefen, canChangeGesuchsperiode);
+    return Objects.hash(id, fallNummer, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
   }
 
   @Override
@@ -234,14 +212,13 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("class GesuchInfoDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
-    sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
-    sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
-    sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
-    sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
-    sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
+    sb.append("    state: ").append(toIndentedString(state)).append("\n");
+    sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
+    sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

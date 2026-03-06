@@ -187,6 +187,11 @@ public class VerfuegungService {
         verfuegungDokumentRepository.persistAndFlush(dokument);
     }
 
+    @Transactional
+    public Verfuegung requireById(final UUID verfuegungId) {
+        return verfuegungRepository.requireById(verfuegungId);
+    }
+
     private String generateFilename(VerfuegungDokumentTyp typ, String fallNr) {
         final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         // todo KSTIP-2845: also use correct format for darlehensverfuegung
