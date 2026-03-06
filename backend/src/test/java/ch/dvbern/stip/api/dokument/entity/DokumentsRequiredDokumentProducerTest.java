@@ -31,14 +31,14 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-class DokumentsRequiredDocumentProducerTest {
-    private DokumentsRequiredDocumentProducer producer;
+class DokumentsRequiredDokumentProducerTest {
+    private DokumentsRequiredDokumentProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new DokumentsRequiredDocumentProducer();
+        producer = new DokumentsRequiredDokumentProducer();
         formular = new GesuchFormular();
     }
 
@@ -54,7 +54,7 @@ class DokumentsRequiredDocumentProducerTest {
                 )
             );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
     }
 }

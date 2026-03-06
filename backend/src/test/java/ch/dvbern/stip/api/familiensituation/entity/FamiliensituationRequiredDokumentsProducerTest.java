@@ -24,14 +24,14 @@ import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class FamiliensituationRequiredDocumentsProducerTest {
-    private FamiliensituationRequiredDocumentsProducer producer;
+class FamiliensituationRequiredDokumentsProducerTest {
+    private FamiliensituationRequiredDokumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new FamiliensituationRequiredDocumentsProducer();
+        producer = new FamiliensituationRequiredDokumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -43,7 +43,7 @@ class FamiliensituationRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         );
 
@@ -53,7 +53,7 @@ class FamiliensituationRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         );
     }
@@ -67,7 +67,7 @@ class FamiliensituationRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
         );
 
@@ -77,7 +77,7 @@ class FamiliensituationRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
         );
     }
@@ -89,7 +89,7 @@ class FamiliensituationRequiredDocumentsProducerTest {
                 .setGerichtlicheAlimentenregelung(true)
         );
 
-        final var requiredDocuments = producer.getRequiredDocuments(formular);
-        RequiredDocsUtil.requiresOneAndType(requiredDocuments, DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION);
+        final var requiredDokuments = producer.getRequiredDokuments(formular);
+        RequiredDocsUtil.requiresOneAndType(requiredDokuments, DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION);
     }
 }

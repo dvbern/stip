@@ -41,8 +41,8 @@ import org.junit.jupiter.api.Test;
 import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
 
 @QuarkusTest
-class PersonInAusbildungRequiredDocumentsProducerTest {
-    private PersonInAusbildungRequiredDocumentsProducer producer;
+class PersonInAusbildungRequiredDokumentsProducerTest {
+    private PersonInAusbildungRequiredDokumentsProducer producer;
 
     private GesuchFormular formular;
     @Inject
@@ -50,7 +50,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
 
     @BeforeEach
     void setup() {
-        producer = new PersonInAusbildungRequiredDocumentsProducer(plzService);
+        producer = new PersonInAusbildungRequiredDokumentsProducer(plzService);
         formular = new GesuchFormular();
 
         final Ausbildung ausbildung = new Ausbildung();
@@ -62,7 +62,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
     void requiresIfNiederlassungsstatusB() {
         formular.setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B));
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_B
         );
     }
@@ -72,7 +72,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         formular
             .setPersonInAusbildung(createWithNiederlassungsstatus(Niederlassungsstatus.NIEDERLASSUNGSBEWILLIGUNG_C));
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_C
         );
     }
@@ -83,7 +83,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
             createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
         );
     }
@@ -94,7 +94,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
             createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
         );
     }
@@ -105,7 +105,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
             createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
         );
     }
@@ -117,7 +117,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(false)
                 .setVormundschaft(true)
         );
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_KESB_ERNENNUNG);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.PERSON_KESB_ERNENNUNG);
     }
 
     @Test
@@ -127,7 +127,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(false)
                 .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
         );
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_MIETVERTRAG);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.PERSON_MIETVERTRAG);
     }
 
     @Test
@@ -139,7 +139,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setNiederlassungsstatus(Niederlassungsstatus.AUFENTHALTSBEWILLIGUNG_B)
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.assertCount(requiredDocs, 1);
         RequiredDocsUtil.assertTypes(
             requiredDocs,
@@ -155,7 +155,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setSozialhilfebeitraege(true)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_SOZIALHILFEBUDGET
         );
     }
@@ -172,7 +172,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
         );
         formular.setPersonInAusbildung(person);
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         );
     }
@@ -185,7 +185,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setZivilstand(Zivilstand.GESCHIEDEN_GERICHTLICH)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         );
     }
@@ -198,7 +198,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                 .setZivilstand(Zivilstand.AUFGELOESTE_PARTNERSCHAFT)
         );
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         );
     }
@@ -215,7 +215,7 @@ class PersonInAusbildungRequiredDocumentsProducerTest {
                     add(new Eltern().setAdresse(new Adresse().setLand(LandGenerator.initGermany())));
                 }
             });
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.PERSON_AUSWEIS);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.PERSON_AUSWEIS);
     }
 
     private PersonInAusbildung createNewPia() {

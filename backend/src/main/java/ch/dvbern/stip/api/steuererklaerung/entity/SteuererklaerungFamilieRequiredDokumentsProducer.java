@@ -19,28 +19,28 @@ package ch.dvbern.stip.api.steuererklaerung.entity;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungRequiredDocumentsProducerUtil;
+import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungRequiredDokumentsProducerUtil;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class SteuererklaerungVaterRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class SteuererklaerungFamilieRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
         final var steuererklarungen = formular.getSteuererklaerung();
 
         if (steuererklarungen == null || steuererklarungen.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs =
-            SteuererklaerungRequiredDocumentsProducerUtil.getRequiredDocuments(steuererklarungen, SteuerdatenTyp.VATER);
+        final var requiredDocs = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(steuererklarungen, SteuerdatenTyp.FAMILIE);
 
-        return ImmutablePair.of("steuererklaerungVater", requiredDocs);
+        return ImmutablePair.of("steuererklaerungFamilie", requiredDocs);
     }
 }

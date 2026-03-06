@@ -26,8 +26,8 @@ import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class SteuererklaerungRequiredDocumentsProducerUtil {
-    public Set<DokumentTyp> getRequiredDocuments(
+public class SteuererklaerungRequiredDokumentsProducerUtil {
+    public Set<DokumentTyp> getRequiredDokuments(
         Set<Steuererklaerung> steuererklarungen,
         SteuerdatenTyp steuerdatenTyp
     ) {

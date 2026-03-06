@@ -21,8 +21,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.dokument.entity.CustomDocumentsRequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
+import ch.dvbern.stip.api.dokument.entity.CustomDokumentsRequiredDocumentProducer;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
@@ -65,7 +65,7 @@ class GesuchFormularServiceTest {
     @InjectMock
     RequiredDokumentService requiredDokumentServiceMock;
     @InjectMock
-    CustomDocumentsRequiredDocumentProducer customDocumentsRequiredDocumentProducerMock;
+    CustomDokumentsRequiredDocumentProducer customDocumentsRequiredDocumentProducerMock;
 
     @BeforeAll
     void setup() {
@@ -117,7 +117,7 @@ class GesuchFormularServiceTest {
         tranche.setGesuchFormular(gesuchFormular);
 
         /* case there are no required documents */
-        when(customDocumentsRequiredDocumentProducerMock.getRequiredDocuments(any()))
+        when(customDocumentsRequiredDocumentProducerMock.getRequiredDokuments(any()))
             .thenReturn(ImmutablePair.of("", Set.of()));
         when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
@@ -133,7 +133,7 @@ class GesuchFormularServiceTest {
         customDokument.setGesuchTranche(tranche);
         customDokument.setCustomDokumentTyp(customDokumentTyp);
         tranche.setGesuchDokuments(List.of(customDokument));
-        when(customDocumentsRequiredDocumentProducerMock.getRequiredDocuments(any()))
+        when(customDocumentsRequiredDocumentProducerMock.getRequiredDokuments(any()))
             .thenReturn(ImmutablePair.of("dokuments", Set.of(customDokumentTyp)));
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of(customDokumentTyp));

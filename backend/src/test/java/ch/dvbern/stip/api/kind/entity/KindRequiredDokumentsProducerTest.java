@@ -28,14 +28,14 @@ import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
 @Execution(ExecutionMode.CONCURRENT)
-class KindRequiredDocumentsProducerTest {
-    private KindRequiredListDocumentsProducer producer;
+class KindRequiredDokumentsProducerTest {
+    private KindRequiredListDokumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new KindRequiredListDocumentsProducer();
+        producer = new KindRequiredListDokumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -48,7 +48,7 @@ class KindRequiredDocumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ALIMENTENVERORDUNG);
     }
 
@@ -61,7 +61,7 @@ class KindRequiredDocumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN);
     }
 
@@ -74,7 +74,7 @@ class KindRequiredDocumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_RENTEN);
     }
 
@@ -87,7 +87,7 @@ class KindRequiredDocumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN);
     }
 
@@ -100,7 +100,7 @@ class KindRequiredDocumentsProducerTest {
             )
         );
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.KINDER_ANDERE_EINNAHMEN);
     }
 }

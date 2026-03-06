@@ -19,22 +19,22 @@ package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDocumentsProducerUtil.EinnahmenKostenType;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class EinnahmenKostenPersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class EinnahmenKostenPersonInAusbildungRequiredDokumentsProducer implements RequiredDokumentsProducer {
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
         return ImmutablePair.of(
             "einnahmenKosten",
-            EinnahmeKostenRequiredDocumentsProducerUtil.getRequiredDocuments(
+            EinnahmeKostenRequiredDokumentsProducerUtil.getRequiredDokuments(
                 formular,
                 EinnahmenKostenType.PERSON_IN_AUSBILDUNG
             )

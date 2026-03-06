@@ -24,13 +24,13 @@ import java.util.Set;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.steuerdaten.util.RequiredDocumentsProducerUtils;
+import ch.dvbern.stip.api.steuerdaten.util.RequiredDokumentsProducerUtils;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class ElternRequiredDocumentsProducer {
+public class ElternRequiredDokumentsProducer {
     private static final Map<ElternTyp, DokumentTyp> SOZIALHILFEBUDGET_MAP = Map.of(
         ElternTyp.MUTTER,
         DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER,
@@ -67,7 +67,7 @@ public class ElternRequiredDocumentsProducer {
             requiredDocs.add(LOHNABRECHNUNG_VERMOEGEN_MAP.get(elternteil.getElternTyp()));
         }
 
-        if (RequiredDocumentsProducerUtils.greaterThanZero(elternteil.getWohnkosten())) {
+        if (RequiredDokumentsProducerUtils.greaterThanZero(elternteil.getWohnkosten())) {
             if (familiensituation != null && familiensituation.getElternVerheiratetZusammen()) {
                 requiredDocs.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
             } else {

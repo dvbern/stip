@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class EinnahmeKostenRequiredDocumentsProducerUtil {
+public class EinnahmeKostenRequiredDokumentsProducerUtil {
     public enum EinnahmenKostenType {
         PERSON_IN_AUSBILDUNG,
         PARTNER
@@ -123,7 +123,7 @@ public class EinnahmeKostenRequiredDocumentsProducerUtil {
         DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN
     );
 
-    public Set<DokumentTyp> getRequiredDocuments(
+    public Set<DokumentTyp> getRequiredDokuments(
         final GesuchFormular formular,
         final EinnahmenKostenType einnahmenKostenType
     ) {

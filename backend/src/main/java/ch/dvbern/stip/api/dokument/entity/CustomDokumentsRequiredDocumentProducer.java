@@ -18,33 +18,33 @@
 package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDokumentsProducer;
+import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class DokumentsRequiredDocumentProducer implements RequiredDocumentsProducer {
+@RequiredArgsConstructor
+public class CustomDokumentsRequiredDocumentProducer implements RequiredCustomDokumentsProducer {
+    private final CustomDokumentTypService customDokumentTypService;
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        if (formular == null) {
+    public Pair<String, Set<CustomDokumentTyp>> getRequiredDokuments(GesuchTranche tranche) {
+        final var allCustomDokumentTyps = tranche.getGesuchDokuments()
+            .stream()
+            .map(GesuchDokument::getCustomDokumentTyp)
+            .filter(Objects::nonNull)
+            .toList();
+        if (allCustomDokumentTyps.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var requiredDocs = new HashSet<DokumentTyp>();
-
-        final var pia = formular.getPersonInAusbildung();
-        final var kinds = formular.getKinds();
-        if (!kinds.isEmpty() && pia != null && pia.getZivilstand() == Zivilstand.LEDIG) {
-            requiredDocs.add(DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
-        }
-
-        return ImmutablePair.of("dokuments", requiredDocs);
+        return ImmutablePair.of("custom-documents", new HashSet<>(allCustomDokumentTyps));
     }
 }

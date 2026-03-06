@@ -27,13 +27,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @QuarkusTest
-class AusbildungRequiredDocumentsProducerTest {
-    private AusbildungRequiredDocumentsProducer producer;
+class AusbildungRequiredDokumentsProducerTest {
+    private AusbildungRequiredDokumentsProducer producer;
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new AusbildungRequiredDocumentsProducer();
+        producer = new AusbildungRequiredDokumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -42,7 +42,7 @@ class AusbildungRequiredDocumentsProducerTest {
         GesuchTranche tranche = GesuchGenerator.initGesuchTranche();
         formular.setTranche(tranche);
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
         );
     }

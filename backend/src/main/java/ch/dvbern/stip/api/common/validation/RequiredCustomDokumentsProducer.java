@@ -23,6 +23,6 @@ import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import org.apache.commons.lang3.tuple.Pair;
 
-public interface RequiredCustomDocumentsProducer {
-    Pair<String, Set<CustomDokumentTyp>> getRequiredDocuments(final GesuchTranche tranche);
+public interface RequiredCustomDokumentsProducer {
+    Pair<String, Set<CustomDokumentTyp>> getRequiredDokuments(final GesuchTranche tranche);
 }

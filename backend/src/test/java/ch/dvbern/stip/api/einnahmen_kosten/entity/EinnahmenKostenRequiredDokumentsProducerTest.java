@@ -23,14 +23,14 @@ import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class EinnahmenKostenRequiredDocumentsProducerTest {
-    private EinnahmenKostenPersonInAusbildungRequiredDocumentsProducer producer;
+class EinnahmenKostenRequiredDokumentsProducerTest {
+    private EinnahmenKostenPersonInAusbildungRequiredDokumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new EinnahmenKostenPersonInAusbildungRequiredDocumentsProducer();
+        producer = new EinnahmenKostenPersonInAusbildungRequiredDokumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -41,7 +41,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
                 .setNettoerwerbseinkommen(1)
         );
 
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_LOHNABRECHNUNG);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_LOHNABRECHNUNG);
     }
 
     @Test
@@ -51,7 +51,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
                 .setWohnkosten(1)
         );
 
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_MIETVERTRAG);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_MIETVERTRAG);
     }
 
     @Test
@@ -62,7 +62,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.EK_BELEG_OV_ABONNEMENT
         );
     }
@@ -75,7 +75,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         );
     }
@@ -88,7 +88,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN
         );
     }
@@ -101,7 +101,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
         );
     }
@@ -114,7 +114,7 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDocuments(formular),
+            producer.getRequiredDokuments(formular),
             DokumentTyp.EK_BELEG_KINDERZULAGEN
         );
     }
@@ -127,33 +127,33 @@ class EinnahmenKostenRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
+            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
     }
 
     @Test
     void requiresIfVermoegen() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_VERMOEGEN);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_VERMOEGEN);
     }
 
     @Test
     void requiresIfAndereEinnahmen() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setAndereEinnahmen(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
+            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
     }
 
     @Test
     void requiresIfEinnahmenBGSA() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setEinnahmenBGSA(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
+            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
     }
 
     @Test
     void requiresIfTaggelderAHVIV() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setTaggelderAHVIV(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDocuments(formular), DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
+            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
     }
 }

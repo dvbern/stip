@@ -15,29 +15,30 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.util;
+package ch.dvbern.stip.api.ausbildung.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import lombok.experimental.UtilityClass;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-@UtilityClass
-public class RequiredDocumentsTestUtil {
-    public List<Pair<String, Set<DokumentTyp>>> getRequiredDocuments(
-        final GesuchFormular formular,
-        final List<RequiredDocumentsProducer> producers
-    ) {
-        final var requiredTypes = new ArrayList<Pair<String, Set<DokumentTyp>>>();
-        for (final var producer : producers) {
-            requiredTypes.add(producer.getRequiredDocuments(formular));
+@ApplicationScoped
+public class AusbildungRequiredDokumentsProducer implements RequiredDokumentsProducer {
+    @Override
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+        final var ausbildung = formular.getAusbildung();
+        if (ausbildung == null) {
+            return ImmutablePair.of("", Set.of());
         }
 
-        return requiredTypes.stream().filter(pair -> !pair.getRight().isEmpty()).toList();
+        final var requiredDocs = new HashSet<DokumentTyp>();
+        requiredDocs.add(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
+
+        return ImmutablePair.of("ausbildung", requiredDocs);
     }
 }

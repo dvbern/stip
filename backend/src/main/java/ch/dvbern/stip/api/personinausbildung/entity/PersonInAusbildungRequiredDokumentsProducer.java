@@ -24,7 +24,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
@@ -40,7 +40,7 @@ import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDokumentsProducer {
     private final PlzService plzService;
     private static final Map<Niederlassungsstatus, DokumentTyp> niederlassungsstatusMap = new HashMap<>();
     static {
@@ -95,7 +95,7 @@ public class PersonInAusbildungRequiredDocumentsProducer implements RequiredDocu
     }
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
         final var pia = formular.getPersonInAusbildung();
         if (pia == null) {
             return ImmutablePair.of("", Set.of());

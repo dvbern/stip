@@ -26,14 +26,14 @@ import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class GeschwisterRequiredDocumentsProducerTest {
-    private GeschwisterRequiredListDocumentsProducer producer;
+class GeschwisterRequiredDokumentsProducerTest {
+    private GeschwisterRequiredListDokumentsProducer producer;
 
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        producer = new GeschwisterRequiredListDocumentsProducer();
+        producer = new GeschwisterRequiredListDokumentsProducer();
         formular = new GesuchFormular();
     }
 
@@ -45,7 +45,7 @@ class GeschwisterRequiredDocumentsProducerTest {
             }
         });
 
-        final var requiredDocs = producer.getRequiredDocuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
     }
 }

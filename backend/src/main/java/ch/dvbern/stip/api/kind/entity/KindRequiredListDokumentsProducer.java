@@ -21,7 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -31,9 +31,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class KindRequiredListDocumentsProducer implements RequiredListDocumentsProducer {
+public class KindRequiredListDokumentsProducer implements RequiredRefDokumentsProducer {
     @Override
-    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
         final var kinds = formular.getKinds();
         if (kinds == null) {
             return ImmutablePair.of("", Set.of());

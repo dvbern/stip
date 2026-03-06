@@ -24,9 +24,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
-import ch.dvbern.stip.api.common.validation.RequiredListDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -100,11 +100,11 @@ public class RequiredDokumentUtil {
 
     public Set<DokumentTyp> getRequiredDokumentTypesForGesuch(
         final GesuchFormular formular,
-        final Instance<RequiredDocumentsProducer> requiredDocumentProducers
+        final Instance<RequiredDokumentsProducer> requiredDokumentProducers
     ) {
-        return requiredDocumentProducers
+        return requiredDokumentProducers
             .stream()
-            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(formular))
+            .map(requiredDokumentProducer -> requiredDokumentProducer.getRequiredDokuments(formular))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
@@ -113,11 +113,11 @@ public class RequiredDokumentUtil {
 
     public Set<Pair<DokumentTyp, UUID>> getRequiredListDokumentRefsForGesuch(
         final GesuchFormular formular,
-        final Instance<RequiredListDocumentsProducer> requiredDocumentProducers
+        final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers
     ) {
-        return requiredDocumentProducers
+        return requiredRefDokumentProducers
             .stream()
-            .map(producer -> producer.getRequiredDocuments(formular))
+            .map(producer -> producer.getRequiredDokuments(formular))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
@@ -126,11 +126,11 @@ public class RequiredDokumentUtil {
 
     public Set<CustomDokumentTyp> getRequiredCustomDokumentTypesForGesuch(
         final GesuchTranche tranche,
-        final Instance<RequiredCustomDocumentsProducer> requiredCustomDocumentProducers
+        final Instance<RequiredCustomDokumentsProducer> requiredCustomDokumentProducers
     ) {
-        return requiredCustomDocumentProducers
+        return requiredCustomDokumentProducers
             .stream()
-            .map(requiredDocumentProducer -> requiredDocumentProducer.getRequiredDocuments(tranche))
+            .map(requiredDokumentProducer -> requiredDokumentProducer.getRequiredDokuments(tranche))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )

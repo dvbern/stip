@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.familiensituation.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -29,9 +29,9 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class FamiliensituationRequiredDocumentsProducer implements RequiredDocumentsProducer {
+public class FamiliensituationRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
         final var famsit = formular.getFamiliensituation();
         if (famsit == null) {
             return ImmutablePair.of("", Set.of());

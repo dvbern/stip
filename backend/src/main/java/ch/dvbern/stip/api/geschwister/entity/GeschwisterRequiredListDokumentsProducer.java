@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-public class GeschwisterRequiredListDocumentsProducer implements RequiredRefDokumentsProducer {
+public class GeschwisterRequiredListDokumentsProducer implements RequiredRefDokumentsProducer {
     @Override
     public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
         final var geschwisters = formular.getGeschwisters();

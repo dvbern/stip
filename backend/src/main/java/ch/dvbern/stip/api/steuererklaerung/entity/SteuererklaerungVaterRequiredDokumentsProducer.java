@@ -15,35 +15,32 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.eltern.entity;
+package ch.dvbern.stip.api.steuererklaerung.entity;
 
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungRequiredDokumentsProducerUtil;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-public class MutterRequiredDocumentsProducer implements RequiredDocumentsProducer {
-    private final ElternRequiredDocumentsProducer producer;
-
+public class SteuererklaerungVaterRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var eltern = formular.getElterns();
-        if (eltern.isEmpty()) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+        final var steuererklarungen = formular.getSteuererklaerung();
+
+        if (steuererklarungen == null || steuererklarungen.isEmpty()) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var mutter = eltern.stream()
-            .filter(x -> x.getElternTyp() == ElternTyp.MUTTER)
-            .findFirst()
-            .orElse(null);
-        return ImmutablePair.of("elterns", producer.getForElternteil(mutter, formular.getFamiliensituation()));
+        final var requiredDocs =
+            SteuererklaerungRequiredDokumentsProducerUtil.getRequiredDokuments(steuererklarungen, SteuerdatenTyp.VATER);
+
+        return ImmutablePair.of("steuererklaerungVater", requiredDocs);
     }
 }

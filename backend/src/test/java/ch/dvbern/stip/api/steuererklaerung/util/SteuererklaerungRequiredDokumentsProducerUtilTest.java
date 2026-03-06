@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SteuererklaerungRequiredDocumentsProducerUtilTest {
+class SteuererklaerungRequiredDokumentsProducerUtilTest {
     private GesuchFormular formular;
 
     @BeforeEach
@@ -43,8 +43,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
         formular.setSteuererklaerung(
             Set.of(new Steuererklaerung().setSteuererklaerungInBern(false).setSteuerdatenTyp(SteuerdatenTyp.FAMILIE))
         );
-        var requiredDocs = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
+        var requiredDocs = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
         assertTrue(requiredDocs.contains(DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE));
         assertEquals(requiredDocs.size(), 1);
 
@@ -55,8 +55,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
                     .setSteuerdatenTyp(SteuerdatenTyp.FAMILIE)
             )
         );
-        requiredDocs = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
+        requiredDocs = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
 
         assertFalse(requiredDocs.contains(DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE));
         assertEquals(requiredDocs.size(), 0);
@@ -77,8 +77,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
                     .setAndereEinnahmen(0)
             )
         );
-        final var requiredDocs = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
+        final var requiredDocs = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
 
         assertEquals(requiredDocs.size(), 0);
     }
@@ -97,8 +97,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
                     .setAndereEinnahmen(1)
             )
         );
-        final var requiredDocs = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
+        final var requiredDocs = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.FAMILIE);
         assertEquals(requiredDocs.size(), 5);
         assertTrue(requiredDocs.contains(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE));
         assertTrue(requiredDocs.contains(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE));
@@ -129,8 +129,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
                     .setAndereEinnahmen(0)
             )
         );
-        final var requiredDocsMutter = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.MUTTER);
+        final var requiredDocsMutter = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.MUTTER);
         assertEquals(requiredDocsMutter.size(), 2);
         assertFalse(requiredDocsMutter.contains(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER));
         assertFalse(requiredDocsMutter.contains(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER));
@@ -138,8 +138,8 @@ class SteuererklaerungRequiredDocumentsProducerUtilTest {
         assertTrue(requiredDocsMutter.contains(DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER));
         assertTrue(requiredDocsMutter.contains(DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER));
 
-        final var requiredDocsVater = SteuererklaerungRequiredDocumentsProducerUtil
-            .getRequiredDocuments(formular.getSteuererklaerung(), SteuerdatenTyp.VATER);
+        final var requiredDocsVater = SteuererklaerungRequiredDokumentsProducerUtil
+            .getRequiredDokuments(formular.getSteuererklaerung(), SteuerdatenTyp.VATER);
         assertEquals(requiredDocsVater.size(), 2);
         assertTrue(requiredDocsVater.contains(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER));
         assertTrue(requiredDocsVater.contains(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER));

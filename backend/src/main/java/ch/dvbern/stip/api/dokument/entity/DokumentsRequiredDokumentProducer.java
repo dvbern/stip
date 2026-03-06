@@ -15,35 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.eltern.entity;
+package ch.dvbern.stip.api.dokument.entity;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 @ApplicationScoped
-@RequiredArgsConstructor
-public class VaterRequiredDocumentsProducer implements RequiredDocumentsProducer {
-    private final ElternRequiredDocumentsProducer producer;
+public class DokumentsRequiredDokumentProducer implements RequiredDokumentsProducer {
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDocuments(GesuchFormular formular) {
-        final var eltern = formular.getElterns();
-        if (eltern.isEmpty()) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+        if (formular == null) {
             return ImmutablePair.of("", Set.of());
         }
 
-        final var vater = eltern.stream()
-            .filter(x -> x.getElternTyp() == ElternTyp.VATER)
-            .findFirst()
-            .orElse(null);
-        return ImmutablePair.of("elterns", producer.getForElternteil(vater, formular.getFamiliensituation()));
+        final var requiredDocs = new HashSet<DokumentTyp>();
+
+        final var pia = formular.getPersonInAusbildung();
+        final var kinds = formular.getKinds();
+        if (!kinds.isEmpty() && pia != null && pia.getZivilstand() == Zivilstand.LEDIG) {
+            requiredDocs.add(DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
+        }
+
+        return ImmutablePair.of("dokuments", requiredDocs);
     }
 }

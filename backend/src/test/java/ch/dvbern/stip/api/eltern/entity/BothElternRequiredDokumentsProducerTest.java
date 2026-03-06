@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-class BothElternRequiredDocumentsProducerTest {
+class BothElternRequiredDokumentsProducerTest {
 
     @Inject
     RequiredDokumentService requiredDokumentService;
@@ -62,8 +62,8 @@ class BothElternRequiredDocumentsProducerTest {
         tranche.setGesuchDokuments(new ArrayList<>());
         gesuchFormular.setTranche(tranche);
         gesuchFormular.getTranche().setGesuch(new Gesuch());
-        final var requiredDocuments = requiredDokumentService
+        final var requiredDokuments = requiredDokumentService
             .getRequiredDokumentsForGesuchFormular(gesuchFormular);
-        assertEquals(1, requiredDocuments.size());
+        assertEquals(1, requiredDokuments.size());
     }
 }

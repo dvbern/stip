@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.eltern.entity;
 import java.util.List;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.util.RequiredDocumentsTestUtil;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.util.RequiredDokumentsTestUtil;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -30,16 +30,16 @@ import ch.dvbern.stip.api.util.RequiredDocsUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ElternRequiredDocumentsProducerTest {
-    private List<RequiredDocumentsProducer> producers;
+class ElternRequiredDokumentsProducerTest {
+    private List<RequiredDokumentsProducer> producers;
     private GesuchFormular formular;
 
     @BeforeEach
     void setup() {
-        final var elternProducer = new ElternRequiredDocumentsProducer();
+        final var elternProducer = new ElternRequiredDokumentsProducer();
         producers = List.of(
-            new MutterRequiredDocumentsProducer(elternProducer),
-            new VaterRequiredDocumentsProducer(elternProducer)
+            new MutterRequiredDokumentsProducer(elternProducer),
+            new VaterRequiredDokumentsProducer(elternProducer)
         );
         formular = new GesuchFormular();
     }
@@ -54,7 +54,7 @@ class ElternRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_SOZIALHILFEBUDGET_MUTTER
         );
     }
@@ -69,7 +69,7 @@ class ElternRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER
         );
     }
@@ -85,7 +85,7 @@ class ElternRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_MUTTER
         );
     }
@@ -101,7 +101,7 @@ class ElternRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_LOHNABRECHNUNG_VERMOEGEN_VATER
         );
     }
@@ -117,7 +117,7 @@ class ElternRequiredDocumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
         );
     }
@@ -134,7 +134,7 @@ class ElternRequiredDocumentsProducerTest {
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(true));
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE
         );
     }
@@ -151,7 +151,7 @@ class ElternRequiredDocumentsProducerTest {
             .setFamiliensituation(new Familiensituation().setElternVerheiratetZusammen(false));
 
         RequiredDocsUtil.requiresOneOfManyAndType(
-            RequiredDocumentsTestUtil.getRequiredDocuments(formular, producers),
+            RequiredDokumentsTestUtil.getRequiredDokuments(formular, producers),
             DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER
         );
     }
