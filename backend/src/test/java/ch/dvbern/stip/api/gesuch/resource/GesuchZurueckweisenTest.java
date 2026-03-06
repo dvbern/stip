@@ -33,7 +33,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -93,12 +93,12 @@ class GesuchZurueckweisenTest {
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
         );
 
-        final var gesuchTranchen = TestUtil.executeAndExtract(
-            GesuchTrancheListDtoSpec.class,
-            gesuchTrancheApiSpec.getAllTranchenForGesuchGS().gesuchIdPath(gesuch.getId())
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchTranchen.getTranchen(), hasSize(1));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(1));
     }
 
     @Test
@@ -174,11 +174,11 @@ class GesuchZurueckweisenTest {
     }
 
     private void assertSBTranchenCount(final String message, final int size) {
-        final var gesuchTranchen = TestUtil.executeAndExtract(
-            GesuchTrancheListDtoSpec.class,
-            gesuchTrancheApiSpec.getAllTranchenForGesuchSB().gesuchIdPath(gesuch.getId())
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat(message, gesuchTranchen.getTranchen(), hasSize(size));
+        assertThat("Gesuch was eingereicht with != 1 Tranchen", gesuchHeader.getCurrentTranches(), hasSize(size));
     }
 }

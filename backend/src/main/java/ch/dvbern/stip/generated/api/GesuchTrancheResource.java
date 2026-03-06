@@ -6,7 +6,6 @@ import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
@@ -87,16 +86,6 @@ public interface GesuchTrancheResource {
     @Path("/{gesuchTrancheId}/einreichen/validieren/sb")
     @Produces({ "application/json", "text/plain" })
     ValidationReportDto gesuchTrancheEinreichenValidierenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/gs/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchTrancheListDto getAllTranchenForGesuchGS(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/sb/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchTrancheListDto getAllTranchenForGesuchSB(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumenteToUpload/gs")

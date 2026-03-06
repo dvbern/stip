@@ -115,7 +115,9 @@ export class BerechnungStore extends signalStore(
     };
   });
 
-  getBerechnungForGesuch$ = rxMethod<{ gesuchId: string }>(
+  getBerechnungForGesuch$ = rxMethod<{
+    gesuchId: string;
+  }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -125,6 +127,25 @@ export class BerechnungStore extends signalStore(
       exhaustMap(({ gesuchId }) =>
         this.gesuchService
           .getBerechnungForGesuch$({ gesuchId })
+          .pipe(
+            handleApiResponse((berechnung) => patchState(this, { berechnung })),
+          ),
+      ),
+    ),
+  );
+
+  getBerechnungForVerfuegung$ = rxMethod<{
+    verfuegungId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          berechnung: cachedPending(state.berechnung),
+        }));
+      }),
+      exhaustMap(({ verfuegungId }) =>
+        this.gesuchService
+          .getBerechnungForVerfuegung$({ verfuegungId })
           .pipe(
             handleApiResponse((berechnung) => patchState(this, { berechnung })),
           ),

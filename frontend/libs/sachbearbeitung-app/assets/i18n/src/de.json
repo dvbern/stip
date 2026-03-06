@@ -17,6 +17,7 @@
   "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Bearbeitung abschliessen",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Gesuch zurückweisen",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG": "Bereit für Bearbeitung",
+  "sachbearbeitung-app.header.status-uebergang.ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG": "Zurück zu Bereit für Bearbeitung",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN": "Negative Verfügung erstellen",
   "sachbearbeitung-app.header.status-uebergang.STATUS_PRUEFUNG_AUSLOESEN": "Manuelle Anspruchsprüfung",
   "sachbearbeitung-app.header.status-uebergang.VERFUEGT": "Verfügt",
