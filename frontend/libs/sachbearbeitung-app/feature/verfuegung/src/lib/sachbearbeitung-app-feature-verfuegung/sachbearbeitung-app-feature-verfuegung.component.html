@@ -1,5 +1,5 @@
 <!-- todo: mobile nav with portal -->
-<div class="d-flex h-100" *dvTranslocoSb="let t">
+<div class="d-flex h-100" *transloco="let t">
   <ng-template #navigation>
     <div class="sidenav p-4">
       @let gesuchId = gesuchIdSig();
@@ -8,13 +8,13 @@
           type="button"
           class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
           [attr.data-testid]="'option-nav-' + option.route"
-          [routerLink]="['/', 'verfuegung', gesuchId, option.route]"
+          [routerLink]="['/gesuch', 'verfuegung', gesuchId, option.route]"
           routerLinkActive="active"
           (click)="navClicked$.emit()"
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
           <span class="text-start">
-            {{ option.translationKey | transloco: option.translationOptions }}
+            {{ t(option.translationKey, option.translationOptions) }}
           </span>
         </a>
       }
@@ -32,7 +32,7 @@
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
           <span class="text-start">
-            {{ option.translationKey | transloco: option.translationOptions }}
+            {{ t(option.translationKey, option.translationOptions) }}
           </span>
         </a>
       }
@@ -44,7 +44,7 @@
   <div class="d-none d-lg-block border-end bg-white">
     <ng-container *ngTemplateOutlet="navigation"></ng-container>
   </div>
-  <div class="pt-lg-4 px-lg-4 container mb-5">
+  <div class="pt-lg-4 px-lg-4 container tw:bg-white tw:dv-pass-height">
     <!-- step header (mobile) -->
     <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
@@ -58,7 +58,7 @@
         </dv-shared-ui-icon-chip>
 
         <h2 class="fw-bold m-0" data-testid="step-title">
-          {{ option.titleTranslationKey | transloco }}
+          {{ t(option.titleTranslationKey) }}
         </h2>
       </div>
     }

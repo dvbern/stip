@@ -58,7 +58,6 @@ import {
 import { isPending } from '@dv/shared/util/remote-data';
 
 // todo: remove this it is unused, after other implementations are done
-
 @Component({
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
   imports: [

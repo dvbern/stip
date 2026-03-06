@@ -3,13 +3,14 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   computed,
   effect,
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import {
@@ -17,7 +18,6 @@ import {
   VerfuegungOption,
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
-import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
@@ -33,17 +33,18 @@ import { isPending } from '@dv/shared/util/remote-data';
   imports: [
     SharedUiRouterOutletWrapperComponent,
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatSidenavModule,
     SharedUiIconChipComponent,
-    SachbearbeitungAppUiAdvTranslocoDirective,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-verfuegung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureVerfuegungComponent {
+  @HostBinding('class') class = 'tw:dv-pass-height';
+
   option?: VerfuegungOption;
 
   navClicked$ = new EventEmitter();
@@ -95,7 +96,12 @@ export class SachbearbeitungAppFeatureVerfuegungComponent {
         fragment: 'ignored',
         matrixParams: 'ignored',
       }),
-      fullRoute: ['/', 'verfuegung', gesuchId, ...option.route.split('/')],
+      fullRoute: [
+        '/gesuch',
+        'verfuegung',
+        gesuchId,
+        ...option.route.split('/'),
+      ],
     }));
   });
 

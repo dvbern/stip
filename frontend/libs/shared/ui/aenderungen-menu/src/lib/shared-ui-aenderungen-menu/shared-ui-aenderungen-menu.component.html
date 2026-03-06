@@ -1,0 +1,124 @@
+<ng-container *transloco="let t">
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = trancheIdSig();
+
+  <button
+    type="button"
+    class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+    data-testid="sb-gesuch-header-aenderungen-nav-menu"
+    [class.active]="isAenderungRouteSig()"
+    [class.tw:dv-historized]="isAenderungRouteSig()"
+    [disabled]="!historizedSig()"
+    [matMenuTriggerFor]="aenderungenMenu"
+  >
+    <span>{{ t('shared.header.aenderungen') }}</span>
+    <i class="material-symbols-rounded ms-2">expand_more</i>
+  </button>
+  <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
+    <div class="d-flex flex-column gap-2">
+      @if (historizedSig()?.offeneAenderung; as offeneAenderung) {
+        <a
+          [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
+          [queryParams]="{ revision: offeneAenderung.revision }"
+          class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+          data-testid="aenderungen-nav-menu-item"
+          mat-menu-item
+          [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
+        >
+          <span>
+            {{
+              t('shared.header.aenderung.item', {
+                date: offeneAenderung.gueltigAb | date: 'dd.MM.yyyy',
+              })
+            }}
+            -
+            {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+          </span>
+        </a>
+      }
+      @if (historizedSig()?.akzeptierteAenderungen?.length) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ t('shared.header.aenderungen.completed') }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (item of historizedSig()?.akzeptierteAenderungen; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', item.aenderung.id]"
+            [queryParams]="{ revision: item.aenderung.revision }"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === item.aenderung.id"
+          >
+            <span>
+              {{
+                t('shared.header.aenderungen.item', {
+                  date: item.aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ item.aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+      @if (historizedSig()?.abgelehnteAenderungen?.length) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ t('shared.header.aenderungen.rejected') }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (aenderung of historizedSig()?.abgelehnteAenderungen; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [queryParams]="{ revision: aenderung.revision }"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
+          >
+            <span>
+              {{
+                t('shared.header.aenderungen.item', {
+                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+      @if (historizedSig()?.initial; as initialTranchen) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ t('shared.header.aenderungen.initial') }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (inital of initialTranchen.tranchen; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'initial', inital.id]"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === inital.id && isInitialRouteSig()"
+          >
+            <span>
+              {{
+                t('shared.header.initialTranche.multiple', {
+                  date: inital.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ inital.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+    </div>
+  </mat-menu>
+</ng-container>

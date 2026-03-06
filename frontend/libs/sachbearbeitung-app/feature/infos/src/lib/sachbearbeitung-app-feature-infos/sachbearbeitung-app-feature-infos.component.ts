@@ -3,10 +3,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   inject,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import {
@@ -21,11 +22,9 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-infos',
   imports: [
-    TranslocoPipe,
     SharedUiRouterOutletWrapperComponent,
     TranslocoDirective,
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     TranslocoDirective,
@@ -35,6 +34,8 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosComponent {
+  @HostBinding('class') class = 'tw:dv-pass-height';
+
   option?: InfosOptions;
 
   private store = inject(Store);

@@ -12,11 +12,6 @@ import { Router, RouterModule } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
-import {
-  SharedPatternAppHeaderComponent,
-  SharedPatternAppHeaderPartsDirective,
-} from '@dv/shared/pattern/app-header';
-import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
@@ -29,9 +24,6 @@ import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
     TranslocoPipe,
     RouterModule,
     MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiHasRolesDirective,
     TranslocoDirective,

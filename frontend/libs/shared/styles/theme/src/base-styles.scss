@@ -1,4 +1,31 @@
-// add your global styles here
+/*
+Source - https://stackoverflow.com/a/65777114
+Posted by Amaarockz, modified by community. See post 'Timeline' for change history
+Retrieved 2026-03-06, License - CC BY-SA 4.0
+*/
+
+/* Scroll bar stylings */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--dv-gray-100);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--dv-gray-300);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dv-gray-500);
+}
+
 .app-container {
   display: block;
   margin: 0 auto;

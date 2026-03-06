@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
-  DOCUMENT,
   DestroyRef,
   HostBinding,
   Signal,
@@ -21,6 +20,7 @@ import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -45,6 +45,7 @@ import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
+import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import {
@@ -54,31 +55,27 @@ import {
 } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 
-// const ALL_TABS = ['formular', 'verfuegung'] as const;
-
 @Component({
   imports: [
     CommonModule,
     RouterOutlet,
     RouterLink,
     MatTabsModule,
-    TranslocoPipe,
     MatMenuModule,
     MatTooltipModule,
     SharedPatternGesuchInfoBarComponent,
-    TranslocoDirective, // todo: use the right one
     SharedUiDarlehenMenuComponent,
     MatChip,
     SharedPatternAppHeaderPartsDirective,
+    SharedUiAenderungenMenuComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
 })
 export class SachbearbeitungAppPatternGesuchLayoutComponent {
-  // todo: correct header height
   @HostBinding('class') class = 'tw:px-6 tw:dv-pass-height';
 
   private router = inject(Router);
-  private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
   private store = inject(Store);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
@@ -89,10 +86,9 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   private gesuchStore = inject(GesuchStore);
 
   darlehenStore = inject(DarlehenStore);
-  gesuchIdSig = this.store.selectSignal(selectRouteId); // todo: take from input instead, so no store needed?
-  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId); // todo: take from input instead, so no store needed?
+  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  // todo: change to use signal inputs!
   isAenderungRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
@@ -159,37 +155,49 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   );
 
   isLoadingSig = computed(() => {
-    return isPending(this.gesuchHeaderStore.headerSb());
-    //  ||
-    // isPending(this.gesuchStore.lastStatusChange()) //needed?
+    return (
+      isPending(this.gesuchHeaderStore.headerSb()) ||
+      isPending(this.gesuchStore.lastStatusChange())
+    );
   });
 
   headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
     this.gesuchHeaderStore.viewSbSig;
 
-  // todo: rework with active
-  activeTabSig = toSignal(
+  // todo: revisit in KSTIP-2856
+  firstCurrentTranchenIdSig = computed(() => {
+    const data = this.gesuchHeaderStore.headerSb().data;
+
+    return data?.currentTranchen[0]?.id;
+  });
+
+  routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
-      map(() => this.wndw?.location.pathname),
-      startWith(this.wndw?.location.pathname),
+      map(() => this.router.routerState.snapshot.url),
+      startWith(this.router.routerState.snapshot.url),
     ),
   );
 
   tabsSig = computed(() => {
     const cache = this.gesuchInfoSig();
     const { stateInfo } = this.headerViewSbSig();
+    const activePath = this.routeUrlSig();
 
-    const activePath = this.activeTabSig();
-
+    // todo: use correct tranche in KSTIP-2856
     const gesuchTab = {
-      active: activePath?.endsWith('formular'),
-      route: 'formular',
+      active: !activePath?.includes('/verfuegung'),
+      route: [
+        '/gesuch',
+        cache?.gesuch?.id,
+        'tranche',
+        cache?.gesuch?.gesuchTrancheToWorkWith?.id,
+      ],
       name: 'formular',
     };
 
     const verfuegungTab = {
-      active: activePath?.endsWith('verfuegung'),
-      route: ['verfuegung', cache?.gesuch?.id],
+      active: activePath?.includes('/verfuegung'),
+      route: ['/gesuch/verfuegung', cache?.gesuch?.id],
       name: 'verfuegung',
     };
 
