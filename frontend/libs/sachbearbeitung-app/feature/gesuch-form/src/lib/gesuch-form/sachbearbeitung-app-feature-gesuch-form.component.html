@@ -5,7 +5,7 @@
   @let twi = currentTrancheWithIndexSig();
   @if (twi) {
     <!-- side menu -->
-    <div class="d-none d-lg-block border-end tw:bg-white">
+    <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto">
       <!-- Gesuch -->
       <div class="tw:border-b tw:border-gray-300 tw:p-4">
         <button
@@ -53,7 +53,7 @@
     </div>
   }
 
-  <div class="container mb-5 pt-lg-4 px-lg-4 tw:dv-pass-height tw:bg-white">
+  <div class="container pt-lg-4 px-lg-4 tw:dv-pass-height tw:bg-white">
     @if (currentStepSig(); as step) {
       <!-- step header (mobile) -->
       <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
