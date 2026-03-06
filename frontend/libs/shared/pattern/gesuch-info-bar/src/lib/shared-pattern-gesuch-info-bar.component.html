@@ -1,35 +1,6 @@
 <div
-  class="tw:flex tw:items-center tw:justify-between tw: tw:w-full tw:shadow tw:border tw:border-gray-300 tw:rounded-xl tw:p-4 tw:mb-4"
-  *transloco="let t"
+  class="tw:flex tw:items-center tw:justify-between tw: tw:w-full tw:shadow tw:border tw:border-gray-300 tw:rounded-xl tw:p-4"
 >
-  <!-- dashboard link | GesuchNr. Fallid | gesuchstatus -->
-  <div class="tw:flex tw:items-center">
-    <a
-      class="first-entry btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
-      [routerLink]="['/']"
-      data-testid="header-nav-backlink"
-    >
-      <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
-      <!-- <span>{{ t('shared.form.backToDashboard') }}</span> -->
-      <span>Dashboard</span>
-    </a>
-
-    <span>|</span>
-
-    <span>{{ gesuchInfoSig().gesuch?.fallNummer }}</span>
-  </div>
-
-  <!-- navitems:  -->
-  <div class="tw:flex tw:items-center tw:gap-4">
-    <!-- infos -->
-    <ng-content></ng-content>
-    <a
-      [routerLink]="['/gesuch', 'infos', gesuchInfoSig().gesuch?.id]"
-      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-      data-testid="sb-gesuch-header-infos-link"
-    >
-      <i class="material-symbols-rounded me-2 text-white">info</i>
-      <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
-    </a>
-  </div>
+  <ng-content select="[dvGesuchStatusIndication]"></ng-content>
+  <ng-content select="[dvGesuchNavItems]"></ng-content>
 </div>

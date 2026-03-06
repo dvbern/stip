@@ -18,7 +18,7 @@
   <ng-template #logoOrBackLink>
     @if (backLink) {
       <a
-        class="first-entry btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
+        class="btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
         [routerLink]="backLink.path"
         data-testid="header-nav-backlink"
       >
@@ -27,7 +27,7 @@
       </a>
     } @else {
       @if (logoSig(); as logo) {
-        <a class="first-entry" routerLink="/">
+        <a routerLink="/">
           <img [src]="logo.src" [alt]="t('shared.logo.tenant', { logo })" class="tw:h-[60px] tw:max-w-[135px]" />
         </a>
       }

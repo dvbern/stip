@@ -3,162 +3,190 @@
   @let gesuchId = gesuchIdSig();
   @let trancheId = gesuchTrancheIdSig();
 
-  <dv-shared-pattern-gesuch-info-bar [headerSbSig]="headerViewSbSig()" [gesuchInfoSig]="gesuchInfoSig()">
-    <!-- Versionsen Menu Todo: Implement in after merge of Task: KSTIP-2856 -->
-    <div>
-      <button
-        type="button"
-        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-        data-testid="sb-gesuch-header-versionen-nav-menu"
-        [class.active]="gesuchIdSig()"
+  <dv-shared-pattern-gesuch-info-bar>
+    <!-- dashboard link | GesuchNr. Fallid | gesuchstatus, todo: KSTIP-2856 get infor from headersb.gesuchinfo.state -->
+    <div ngProjectAs="[dvGesuchStatusIndication]" class="tw:flex tw:items-center">
+      <a
+        class="btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
+        [routerLink]="['/']"
+        data-testid="header-nav-backlink"
       >
-        <i class="material-symbols-rounded me-2 text-white">history</i>
-        <!-- Versionstitel wird dynamisch, in KSTIP-2856 -->
-        <span>{{ t('shared.header.versionen') }}</span>
-      </button>
-    </div>
-
-    <!-- Änderungen -->
-    <div>
-      <button
-        type="button"
-        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-        data-testid="sb-gesuch-header-aenderungen-nav-menu"
-        [class.active]="isAenderungRouteSig()"
-        [class.tw:dv-historized]="isAenderungRouteSig()"
-        [disabled]="!historizedSig()"
-        [matMenuTriggerFor]="aenderungenMenu"
-      >
-        <i class="material-symbols-rounded me-2 text-white">update</i>
-        <span>{{ t('shared.header.aenderungen') }}</span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
-      </button>
-      <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
-        <div class="d-flex flex-column gap-2">
-          @if (historizedSig()?.offeneAenderung; as offeneAenderung) {
-            <a
-              [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
-              [queryParams]="{ revision: offeneAenderung.revision }"
-              class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-              data-testid="aenderungen-nav-menu-item"
-              mat-menu-item
-              [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
-            >
-              <span>
-                {{
-                  t('shared.header.aenderung.item', {
-                    date: offeneAenderung.gueltigAb | date: 'dd.MM.yyyy',
-                  })
-                }}
-                -
-                {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-              </span>
-            </a>
-          }
-          @if (historizedSig()?.akzeptierteAenderungen?.length) {
-            <div class="d-flex align-items-center text-muted small gap-2">
-              <hr class="flex-grow-1" />
-              {{ t('shared.header.aenderungen.completed') }}
-              <hr class="flex-grow-1" />
-            </div>
-            @for (item of historizedSig()?.akzeptierteAenderungen; track $index) {
-              <a
-                [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', item.aenderung.id]"
-                [queryParams]="{ revision: item.aenderung.revision }"
-                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-                data-testid="aenderungen-nav-menu-item"
-                mat-menu-item
-                [class.active]="trancheId === item.aenderung.id"
-              >
-                <span>
-                  {{
-                    t('shared.header.aenderungen.item', {
-                      date: item.aenderung.gueltigAb | date: 'dd.MM.yyyy',
-                      index: $index + 1,
-                    })
-                  }}
-                  -
-                  {{ item.aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-                </span>
-              </a>
-            }
-          }
-          @if (historizedSig()?.abgelehnteAenderungen?.length) {
-            <div class="d-flex align-items-center text-muted small gap-2">
-              <hr class="flex-grow-1" />
-              {{ t('shared.header.aenderungen.rejected') }}
-              <hr class="flex-grow-1" />
-            </div>
-            @for (aenderung of historizedSig()?.abgelehnteAenderungen; track $index) {
-              <a
-                [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
-                [queryParams]="{ revision: aenderung.revision }"
-                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-                data-testid="aenderungen-nav-menu-item"
-                mat-menu-item
-                [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
-              >
-                <span>
-                  {{
-                    t('shared.header.aenderungen.item', {
-                      date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
-                      index: $index + 1,
-                    })
-                  }}
-                  -
-                  {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-                </span>
-              </a>
-            }
-          }
-          @if (historizedSig()?.initial; as initialTranchen) {
-            <div class="d-flex align-items-center text-muted small gap-2">
-              <hr class="flex-grow-1" />
-              {{ t('shared.header.aenderungen.initial') }}
-              <hr class="flex-grow-1" />
-            </div>
-            @for (inital of initialTranchen.tranchen; track $index) {
-              <a
-                [routerLink]="['/', 'gesuch', gesuchId, 'initial', inital.id]"
-                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-                data-testid="aenderungen-nav-menu-item"
-                mat-menu-item
-                [class.active]="trancheId === inital.id && isInitialRouteSig()"
-              >
-                <span>
-                  {{
-                    t('shared.header.initialTranche.multiple', {
-                      date: inital.gueltigAb | date: 'dd.MM.yyyy',
-                      index: $index + 1,
-                    })
-                  }}
-                  -
-                  {{ inital.gueltigBis | date: 'dd.MM.yyyy' }}
-                </span>
-              </a>
-            }
-          }
-        </div>
-      </mat-menu>
-    </div>
-
-    <!-- Darlehen Menu -->
-    <dv-shared-ui-darlehen-menu
-      [darlehenListSig]="view.list"
-      [canCreateDarlehenSig]="false"
-      [idTypeSig]="['gesuch', gesuchId]"
-    ></dv-shared-ui-darlehen-menu>
-
-    <!-- Beschwerden chip -->
-    @if (isBeschwerdeHaengigSig()) {
-      <div class="tw:w-full tw:grow"></div>
-
-      <div class="tw:text-sm">
-        <mat-chip [color]="'info'" highlighted>
-          {{ t('sachbearbeitung-app.infos.beschwerde.haengig.title') }}
-        </mat-chip>
+        <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
+        <!-- <span>{{ t('shared.form.backToDashboard') }}</span> -->
+        <span>Dashboard</span>
+      </a>
+      <span>|</span>
+      <div class="tw:font-semibold tw:ml-4">
+        <span>{{ gesuchInfoSig().gesuch?.fallNummer }} / </span>
+        <span>{{ gesuchInfoSig().gesuch?.gesuchNummer }} - </span>
+        <span>{{ gesuchstellerNameSig() }}, </span>
+        <span>{{ t('sachbearbeitung-app.gesuch.status.contract.' + headerViewSbSig().stateInfo?.gesuchStatus) }}</span>
       </div>
-    }
+    </div>
+
+    <div ngProjectAs="[dvGesuchNavItems]" class="tw:flex tw:items-center tw:gap-4">
+      <!-- Versionsen Menu Todo: Implement in after merge of Task: KSTIP-2856 -->
+      <div>
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-versionen-nav-menu"
+          [class.active]="gesuchIdSig()"
+        >
+          <!-- Versionstitel wird dynamisch, ggf ein menu, in KSTIP-2856 -->
+          <span>{{ t('shared.header.versionen') }}</span>
+        </button>
+      </div>
+
+      <!-- Änderungen -->
+      <div>
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-aenderungen-nav-menu"
+          [class.active]="isAenderungRouteSig()"
+          [class.tw:dv-historized]="isAenderungRouteSig()"
+          [disabled]="!historizedSig()"
+          [matMenuTriggerFor]="aenderungenMenu"
+        >
+          <span>{{ t('shared.header.aenderungen') }}</span>
+          <i class="material-symbols-rounded ms-2">expand_more</i>
+        </button>
+        <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
+          <div class="d-flex flex-column gap-2">
+            @if (historizedSig()?.offeneAenderung; as offeneAenderung) {
+              <a
+                [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
+                [queryParams]="{ revision: offeneAenderung.revision }"
+                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                data-testid="aenderungen-nav-menu-item"
+                mat-menu-item
+                [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
+              >
+                <span>
+                  {{
+                    t('shared.header.aenderung.item', {
+                      date: offeneAenderung.gueltigAb | date: 'dd.MM.yyyy',
+                    })
+                  }}
+                  -
+                  {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+                </span>
+              </a>
+            }
+            @if (historizedSig()?.akzeptierteAenderungen?.length) {
+              <div class="d-flex align-items-center text-muted small gap-2">
+                <hr class="flex-grow-1" />
+                {{ t('shared.header.aenderungen.completed') }}
+                <hr class="flex-grow-1" />
+              </div>
+              @for (item of historizedSig()?.akzeptierteAenderungen; track $index) {
+                <a
+                  [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', item.aenderung.id]"
+                  [queryParams]="{ revision: item.aenderung.revision }"
+                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  data-testid="aenderungen-nav-menu-item"
+                  mat-menu-item
+                  [class.active]="trancheId === item.aenderung.id"
+                >
+                  <span>
+                    {{
+                      t('shared.header.aenderungen.item', {
+                        date: item.aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                        index: $index + 1,
+                      })
+                    }}
+                    -
+                    {{ item.aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            }
+            @if (historizedSig()?.abgelehnteAenderungen?.length) {
+              <div class="d-flex align-items-center text-muted small gap-2">
+                <hr class="flex-grow-1" />
+                {{ t('shared.header.aenderungen.rejected') }}
+                <hr class="flex-grow-1" />
+              </div>
+              @for (aenderung of historizedSig()?.abgelehnteAenderungen; track $index) {
+                <a
+                  [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+                  [queryParams]="{ revision: aenderung.revision }"
+                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  data-testid="aenderungen-nav-menu-item"
+                  mat-menu-item
+                  [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
+                >
+                  <span>
+                    {{
+                      t('shared.header.aenderungen.item', {
+                        date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                        index: $index + 1,
+                      })
+                    }}
+                    -
+                    {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            }
+            @if (historizedSig()?.initial; as initialTranchen) {
+              <div class="d-flex align-items-center text-muted small gap-2">
+                <hr class="flex-grow-1" />
+                {{ t('shared.header.aenderungen.initial') }}
+                <hr class="flex-grow-1" />
+              </div>
+              @for (inital of initialTranchen.tranchen; track $index) {
+                <a
+                  [routerLink]="['/', 'gesuch', gesuchId, 'initial', inital.id]"
+                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  data-testid="aenderungen-nav-menu-item"
+                  mat-menu-item
+                  [class.active]="trancheId === inital.id && isInitialRouteSig()"
+                >
+                  <span>
+                    {{
+                      t('shared.header.initialTranche.multiple', {
+                        date: inital.gueltigAb | date: 'dd.MM.yyyy',
+                        index: $index + 1,
+                      })
+                    }}
+                    -
+                    {{ inital.gueltigBis | date: 'dd.MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            }
+          </div>
+        </mat-menu>
+      </div>
+
+      <!-- Darlehen Menu -->
+      <dv-shared-ui-darlehen-menu
+        [darlehenListSig]="view.list"
+        [canCreateDarlehenSig]="false"
+        [idTypeSig]="['gesuch', gesuchId]"
+      ></dv-shared-ui-darlehen-menu>
+
+      <!-- info -->
+      <a
+        [routerLink]="['/gesuch', 'infos', gesuchInfoSig().gesuch?.id]"
+        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+        data-testid="sb-gesuch-header-infos-link"
+      >
+        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+      </a>
+
+      <!-- Beschwerden chip -->
+      @if (isBeschwerdeHaengigSig()) {
+        <div class="tw:w-full tw:grow"></div>
+        <div class="tw:text-sm">
+          <mat-chip [color]="'info'" highlighted>
+            {{ t('sachbearbeitung-app.infos.beschwerde.haengig.title') }}
+          </mat-chip>
+        </div>
+      }
+    </div>
   </dv-shared-pattern-gesuch-info-bar>
 
   <div class="tw:flex tw:justify-between">
@@ -189,7 +217,6 @@
         #aktionTrigger="matMenuTrigger"
         [matMenuTriggerFor]="aktionMenu"
       >
-        <i class="material-symbols-rounded me-3">sync_alt</i>
         <span>{{ t('sachbearbeitung-app.header.aktion') }}</span>
         <i class="material-symbols-rounded ms-2">expand_more</i>
       </button>
@@ -243,7 +270,7 @@
     </div>
   </div>
 
-  <mat-tab-nav-panel #tabPanel>
+  <mat-tab-nav-panel class="tw:dv-pass-height" #tabPanel>
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
 </ng-container>

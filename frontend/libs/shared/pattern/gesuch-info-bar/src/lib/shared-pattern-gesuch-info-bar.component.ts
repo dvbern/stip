@@ -1,24 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
-
-import { GesuchHeaderSb, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { Component, HostBinding } from '@angular/core';
 
 @Component({
   selector: 'dv-shared-pattern-gesuch-info-bar',
-  imports: [CommonModule, TranslocoDirective, RouterLink],
+  imports: [],
   templateUrl: './shared-pattern-gesuch-info-bar.component.html',
-  styles: `
-    :host {
-      display: block;
-    }
-  `,
 })
 export class SharedPatternGesuchInfoBarComponent {
-  headerSbSig = input.required<
-    { isLoading: boolean } & Partial<GesuchHeaderSb>
-  >();
-
-  gesuchInfoSig = input.required<{ gesuch: SharedModelGesuch | null }>();
+  @HostBinding('class') class = 'tw:bg-white tw:block tw:my-6';
 }

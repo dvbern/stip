@@ -3,16 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   computed,
   inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router, RouterLink } from '@angular/router';
 import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -25,9 +26,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { getTrancheRoute } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -58,6 +57,8 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   // currentStep?: GesuchFormStep;
   stepSig = signal<GesuchFormStep | undefined>(undefined);
 
+  @HostBinding('class') class = 'tw:dv-pass-height';
+
   navClicked$ = new EventEmitter();
 
   private store = inject(Store);
@@ -75,11 +76,22 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
   // todo: do with inputs?
-  isTrancheRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
-    ),
-  );
+  // isTrancheRouteSig = toSignal(
+  //   urlAfterNavigationEnd(this.router).pipe(
+  //     map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
+  //   ),
+  // );
+
+  // todo: does this have to be calculated like
+  currentTrancheWithIndexSig = computed(() => {
+    const tranchenWithIndex = this.tranchenSig().map((tranche, index) => ({
+      tranche,
+      index,
+    }));
+    const trancheId = this.gesuchTrancheIdSig();
+
+    return tranchenWithIndex.find(({ tranche }) => tranche.id === trancheId);
+  });
 
   // private gesuchUpdatedSig = toSignal(
   //   this.store.select(selectSharedDataAccessGesuchCache).pipe(

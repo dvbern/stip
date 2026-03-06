@@ -3,6 +3,7 @@ import {
   Component,
   DOCUMENT,
   DestroyRef,
+  HostBinding,
   Signal,
   computed,
   effect,
@@ -42,6 +43,7 @@ import {
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
+import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -67,10 +69,14 @@ import { isPending } from '@dv/shared/util/remote-data';
     TranslocoDirective, // todo: use the right one
     SharedUiDarlehenMenuComponent,
     MatChip,
+    SharedPatternAppHeaderPartsDirective,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
 })
 export class SachbearbeitungAppPatternGesuchLayoutComponent {
+  // todo: correct header height
+  @HostBinding('class') class = 'tw:px-6 tw:dv-pass-height';
+
   private router = inject(Router);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
   private store = inject(Store);
@@ -132,6 +138,13 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
     const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
 
     return cache;
+  });
+
+  gesuchstellerNameSig = computed(() => {
+    const pia =
+      this.gesuchInfoSig().gesuch?.gesuchTrancheToWorkWith?.gesuchFormular
+        ?.personInAusbildung;
+    return pia ? `${pia.vorname} ${pia.nachname}` : '';
   });
 
   private deploymentConfigSig = this.store.selectSignal(

@@ -67,7 +67,7 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
-      <main class="page-body">
+      <main class="page-body tw:flex tw:flex-col">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>
