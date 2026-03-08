@@ -14,7 +14,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
@@ -24,11 +24,13 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
-import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
+import { NavItem } from '@dv/shared/model/ui';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
+import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
@@ -36,12 +38,12 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
   imports: [
     CommonModule,
     RouterLink,
-    RouterLinkActive,
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
     SharedUiMandantStylesDvComponent,
     TranslocoDirective,
+    SharedUiNavItemsComponent,
   ],
   templateUrl: './shared-pattern-global-header.component.html',
   styles: `
@@ -71,7 +73,7 @@ export class SharedPatternGlobalHeaderComponent {
   protected breakpointObserver = inject(BreakpointObserver);
   navigationStore = inject(NavigationStore);
 
-  itemsSig = computed(() => {
+  navItemsSig = computed(() => {
     const dynamicItems = this.navigationStore.navigationViewSig();
 
     if (dynamicItems.length) {

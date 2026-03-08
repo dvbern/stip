@@ -12,5 +12,5 @@ import { Component, HostBinding } from '@angular/core';
   `,
 })
 export class SharedPatternGesuchInfoBarComponent {
-  @HostBinding('class') class = 'tw:bg-white tw:block tw:my-6';
+  @HostBinding('class') klass = 'tw:bg-white tw:block tw:my-6';
 }

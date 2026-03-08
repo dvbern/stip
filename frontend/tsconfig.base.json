@@ -297,7 +297,9 @@
       "@dv/gesuch-app/pattern/main-layout": ["libs/gesuch-app/pattern/main-layout/src/index.ts"],
       "@dv/shared/pattern/gesuch-info-bar": ["libs/shared/pattern/gesuch-info-bar/src/index.ts"],
       "@dv/sachbearbeitung-app/pattern/gesuch-layout": ["libs/sachbearbeitung-app/pattern/gesuch-layout/src/index.ts"],
-      "@dv/shared/ui/aenderungen-menu": ["libs/shared/ui/aenderungen-menu/src/index.ts"]
+      "@dv/shared/ui/aenderungen-menu": ["libs/shared/ui/aenderungen-menu/src/index.ts"],
+      "@dv/shared/ui/nav-items": ["libs/shared/ui/nav-items/src/index.ts"],
+      "@dv/shared/model/ui": ["libs/shared/model/ui/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

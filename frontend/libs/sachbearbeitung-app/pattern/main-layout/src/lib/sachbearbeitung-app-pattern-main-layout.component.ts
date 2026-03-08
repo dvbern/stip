@@ -17,8 +17,9 @@ import { filter, map } from 'rxjs';
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
-import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
+import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
@@ -85,6 +86,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
+  // todo: finish!
   // todo: also show in header!
   constructor() {
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({

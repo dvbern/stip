@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  input,
   untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -22,8 +21,9 @@ import { filter, map } from 'rxjs';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
-import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
+import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
@@ -92,7 +92,7 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
   </mat-sidenav-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SozialdienstAppPatternSozialdiestLayoutComponent {
+export class SozialdienstAppPatternMainLayoutComponent {
   // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Auszahlung, Administration
   // todo: plus gesuch menu if on gesuch route!
   // todo: maybe navitems should be in a store and able to be merged

@@ -57,7 +57,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   // currentStep?: GesuchFormStep;
   stepSig = signal<GesuchFormStep | undefined>(undefined);
 
-  @HostBinding('class') class = 'tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height';
 
   navClicked$ = new EventEmitter();
 

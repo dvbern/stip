@@ -9,5 +9,5 @@ import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternBasicLayoutComponent {
-  @HostBinding('class') class = 'tw:flex tw:flex-col';
+  @HostBinding('class') klass = 'tw:flex tw:flex-col';
 }

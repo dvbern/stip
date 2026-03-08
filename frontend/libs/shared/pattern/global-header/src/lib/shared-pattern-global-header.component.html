@@ -50,89 +50,13 @@
     </div>
   </div>
 
-  <!-- create a recursive template of the block below -->
-  <!-- todo: move into component for typesafety? -->
-  <!-- Recursive template for navigation items -->
-  <ng-template #navItems let-items="items">
-    @for (item of items; track item.id) {
-      @switch (item.type) {
-        @case ('menu') {
-          @if (item.children.length) {
-            <button
-              type="button"
-              class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-              [attr.data-testid]="item.testId"
-              [matMenuTriggerFor]="itemMenu"
-              [class.active]="item.active"
-            >
-              @if (item.icon) {
-                <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
-              }
-              <span>{{ t(item.label.key, item.label.context) }}</span>
-              <i class="material-symbols-rounded ms-2">expand_more</i>
-            </button>
-            <mat-menu #itemMenu="matMenu" class="header-menu-panel mt-2 rounded tw:gap-4">
-              <div class="tw:flex tw:flex-col tw:gap-2">
-                <ng-container *ngTemplateOutlet="navItems; context: { items: item.children }"></ng-container>
-              </div>
-            </mat-menu>
-          }
-        }
-        @case ('link') {
-          <a
-            [routerLink]="item.route"
-            routerLinkActive="active"
-            [queryParams]="item.queryParams"
-            class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-            [attr.data-testid]="item.testId"
-            [class.active]="item.active"
-          >
-            @if (item.icon) {
-              <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
-            }
-            <span>{{ t(item.label.key, item.label.context) }}</span>
-          </a>
-        }
-        @case ('action') {
-          <button
-            type="button"
-            class="btn tw:font-normal tw:shadow-none!"
-            [attr.data-testid]="item.testId"
-            (click)="item.action()"
-            [disabled]="item.disabled"
-          >
-            <div class="tw:flex tw:items-center tw:gap-2">
-              @if (item.icon) {
-                <i class="material-symbols-rounded">{{ item.icon }}</i>
-              }
-              <span>{{ t(item.label.key, item.label.context) }}</span>
-            </div>
-          </button>
-        }
-        @case ('separator') {
-          @if (item.label) {
-            <div class="d-flex align-items-center text-muted small gap-2">
-              <hr class="flex-grow-1 tw:m-0!" />
-              {{ t(item.label.key, item.label.context) }}
-              <hr class="flex-grow-1 tw:m-0!" />
-            </div>
-          } @else {
-            <hr class="flex-grow-1 tw:m-0!" />
-          }
-        }
-      }
-    }
-  </ng-template>
-
   <!-- Large screens Header -->
   <div class="d-none d-lg-block">
     <div class="d-flex justify-content-between gap-2 p-4">
       <ng-container *ngTemplateOutlet="logoOrBackLink"></ng-container>
 
       <!-- top left -->
-      <div class="tw:ml-10 tw:flex tw:grow tw:items-center tw:gap-4">
-        <ng-container *ngTemplateOutlet="navItems; context: { items: itemsSig() }"></ng-container>
-      </div>
+      <dv-shared-ui-nav-items [navItemsSig]="navItemsSig()"></dv-shared-ui-nav-items>
 
       <!-- top right -->
       <div class="d-flex justify-content-end align-items-center ms-3 flex-grow-1">

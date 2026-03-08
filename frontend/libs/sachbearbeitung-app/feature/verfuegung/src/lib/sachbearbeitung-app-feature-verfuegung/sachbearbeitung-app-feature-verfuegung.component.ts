@@ -43,7 +43,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureVerfuegungComponent {
-  @HostBinding('class') class = 'tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height';
 
   option?: VerfuegungOption;
 

@@ -72,7 +72,7 @@ import { isPending } from '@dv/shared/util/remote-data';
   templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
 })
 export class SachbearbeitungAppPatternGesuchLayoutComponent {
-  @HostBinding('class') class = 'tw:px-6 tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
 
   private router = inject(Router);
   private store = inject(Store);

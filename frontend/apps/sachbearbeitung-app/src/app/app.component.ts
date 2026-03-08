@@ -1,5 +1,5 @@
 import { Component, HostBinding, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppPatternMainLayoutComponent } from '@dv/sachbearbeitung-app/pattern/main-layout';
@@ -9,7 +9,6 @@ import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notifica
 
 @Component({
   imports: [
-    RouterOutlet,
     GlobalNotificationsComponent,
     SachbearbeitungAppPatternMainLayoutComponent,
   ],

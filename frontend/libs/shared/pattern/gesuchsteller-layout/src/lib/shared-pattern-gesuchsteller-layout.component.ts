@@ -20,8 +20,9 @@ import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
-import { NavItem, NavigationStore } from '@dv/shared/data-access/navigation';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
+import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
@@ -113,6 +114,7 @@ export class SharedPatternGesuchstellerLayoutComponent {
     return params?.['darlehenId'] ? true : false;
   });
 
+  // todo: really needed?
   private gesuchIdSig = computed(() => {
     const params = this.allRouteParamsSig();
     return params?.['gesuchId'];

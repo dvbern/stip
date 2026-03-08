@@ -34,7 +34,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureInfosComponent {
-  @HostBinding('class') class = 'tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height';
 
   option?: InfosOptions;
 

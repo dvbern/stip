@@ -35,7 +35,7 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppFeatureAdministrationComponent {
-  @HostBinding('class') class = 'tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height';
 
   option?: AdminOption | ChildAdminOption;
 

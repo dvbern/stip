@@ -43,14 +43,11 @@ import {
   INPUT_DELAY,
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
-import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
-import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -102,9 +99,6 @@ type DisplayColumns =
     ReactiveFormsModule,
     RouterModule,
     MatPaginatorModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    SharedUiHasRolesDirective,
     SharedUiIconChipComponent,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
