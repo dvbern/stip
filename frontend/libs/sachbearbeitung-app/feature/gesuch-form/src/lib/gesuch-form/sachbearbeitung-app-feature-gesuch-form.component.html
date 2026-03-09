@@ -1,6 +1,5 @@
 <div class="d-flex h-100" *transloco="let t">
   <!-- left step nav (Desktop) -->
-  <!-- Todo: Mobile Nav -->
   @let trancheId = gesuchTrancheIdSig();
   @let twi = currentTrancheWithIndexSig();
   @if (twi) {
@@ -89,4 +88,8 @@
       ></dv-shared-ui-router-outlet-wrapper>
     </div>
   </div>
+
+  <ng-template cdkPortal>
+    <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()"></dv-shared-pattern-gesuch-step-nav>
+  </ng-template>
 </div>

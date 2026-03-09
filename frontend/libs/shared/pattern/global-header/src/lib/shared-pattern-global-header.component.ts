@@ -10,6 +10,7 @@ import {
   Output,
   computed,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,9 +61,8 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
+  staticNavItemsSig = input<NavItem[]>();
 
-  // todo: change syntax and remove unused
-  @Input() staticNavItems?: NavItem[];
   @Output() openSidenav = new EventEmitter<void>();
   @Output() closeSidenav = new EventEmitter<void>();
 
@@ -84,7 +84,7 @@ export class SharedPatternGlobalHeaderComponent {
       return dynamicItems;
     }
 
-    return this.staticNavItems ?? [];
+    return this.staticNavItemsSig ?? [];
   });
 
   benutzerNameSig = computed(() => {

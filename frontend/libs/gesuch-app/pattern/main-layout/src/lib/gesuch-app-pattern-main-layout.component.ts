@@ -59,7 +59,7 @@ const gsBaseMenuItems: NavItem[] = [
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
       <dv-shared-pattern-global-header
-        [staticNavItems]="baseMenuItems"
+        [staticNavItemsSig]="baseMenuItems"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>

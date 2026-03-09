@@ -4,6 +4,7 @@
     <div class="d-none d-lg-block border-end bg-white">
       <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
+
     <div class="container mb-5 pt-lg-4 px-lg-4">
       @if (currentStepSig(); as step) {
         <!-- step header (mobile) -->
@@ -41,4 +42,8 @@
       ></dv-shared-ui-router-outlet-wrapper>
     </div>
   </div>
+
+  <ng-template cdkPortal>
+    <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()"></dv-shared-pattern-gesuch-step-nav>
+  </ng-template>
 </ng-container>

@@ -42,8 +42,8 @@ import {
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
-import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
+import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -65,7 +65,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternGesuchInfoBarComponent,
     SharedUiDarlehenMenuComponent,
     MatChip,
-    SharedPatternAppHeaderPartsDirective,
+    SharedPatternGlobalHeaderPartsDirective,
     SharedUiAenderungenMenuComponent,
     TranslocoDirective,
   ],

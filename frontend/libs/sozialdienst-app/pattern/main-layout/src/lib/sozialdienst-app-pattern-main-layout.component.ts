@@ -23,7 +23,6 @@ import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import {
   NavItem,
   darlehenCompletedStates,
@@ -32,7 +31,7 @@ import {
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
-const gsBaseMenuItems: NavItem[] = [
+const sozialdienstBaseMenuItems: NavItem[] = [
   {
     type: 'link',
     id: 'antraege',
@@ -53,10 +52,9 @@ const gsBaseMenuItems: NavItem[] = [
 /**
  * This is the new main layout for the sozialdienst app.
  * This will also change once we have the new design to what SB is going to be.
- * todo: eventaully rename?
  */
 @Component({
-  selector: 'dv-sozialdienst-app-pattern-sozialdiest-layout',
+  selector: 'dv-sozialdienst-app-pattern-main-layout',
   imports: [
     MatSidenavModule,
     RouterOutlet,
@@ -70,7 +68,7 @@ const gsBaseMenuItems: NavItem[] = [
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
       <dv-shared-pattern-global-header
-        [staticNavItems]="staticNavItems"
+        [staticNavItemsSig]="baseMenuItems"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
@@ -84,15 +82,14 @@ const gsBaseMenuItems: NavItem[] = [
 })
 export class SozialdienstAppPatternMainLayoutComponent {
   // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Auszahlung, Administration
-  // todo: plus gesuch menu if on gesuch route!
-  // todo: maybe navitems should be in a store and able to be merged
-
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+
+  baseMenuItems = sozialdienstBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -149,7 +146,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const rolesMap = this.permissionStore.rolesMapSig();
       const gesuchNav: NavItem[] = [];
 
-      // todo: what's with the getRelativeTrancheRoute?
       if (gesuchId) {
         const tranchen =
           this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
@@ -269,7 +265,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       };
 
       const navItems: NavItem[] = [
-        ...gsBaseMenuItems,
+        ...this.baseMenuItems,
         ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
@@ -284,30 +280,4 @@ export class SozialdienstAppPatternMainLayoutComponent {
       this.navigationStore.setNavigationItems(navItems);
     });
   }
-
-  // todo: really needed?
-  staticNavItems: NavItem[] = [
-    // {
-    //   type: 'link',
-    //   id: 'dashboard',
-    //   label: { key: 'sozialdienst-app.dashboard.title' },
-    //   icon: 'dashboard',
-    //   route: ['/dashboard'],
-    // },
-    {
-      type: 'link',
-      id: 'antraege',
-      label: { key: 'sozialdienst-app.header.antraege' },
-      icon: 'list',
-      route: ['/'],
-    },
-    // todo: hasRoles V0_Sozialdienst-Admin
-    {
-      type: 'link',
-      id: 'administration',
-      label: { key: 'sozialdienst-app.header.administration' },
-      icon: 'settings',
-      route: ['/administration'],
-    },
-  ];
 }

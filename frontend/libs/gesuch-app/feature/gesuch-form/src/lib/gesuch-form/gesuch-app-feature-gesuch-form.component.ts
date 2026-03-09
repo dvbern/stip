@@ -21,7 +21,6 @@ import { filter, map } from 'rxjs';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
@@ -42,6 +41,8 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+
+// todo-before-merge: unify with gesuch-app-feature-gesuch-form component
 
 @Component({
   selector: 'dv-gesuch-app-feature-gesuch-form',
@@ -75,7 +76,6 @@ export class GesuchAppFeatureGesuchFormComponent
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
-  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
@@ -83,7 +83,6 @@ export class GesuchAppFeatureGesuchFormComponent
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   stepSig = signal<GesuchFormStep | undefined>(undefined);
-
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
@@ -126,6 +125,7 @@ export class GesuchAppFeatureGesuchFormComponent
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
+    // todo: move into parent component? and check for Id route there?
     effect(() => {
       const gesuchTrancheId = this.trancheIdSig();
       if (gesuchTrancheId) {

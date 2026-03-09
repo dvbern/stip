@@ -1,9 +1,13 @@
+import { CdkPortal, PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
+  OnDestroy,
+  ViewChild,
   computed,
   effect,
   inject,
@@ -19,11 +23,9 @@ import {
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import {
-  selectRouteGesuchId,
-  selectRouteId,
-} from '@dv/shared/data-access/gesuch';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -41,12 +43,17 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatSidenavModule,
     SharedUiIconChipComponent,
     TranslocoDirective,
+    PortalModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-verfuegung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureVerfuegungComponent {
+export class SachbearbeitungAppFeatureVerfuegungComponent
+  implements AfterViewInit, OnDestroy
+{
   @HostBinding('class') klass = 'tw:dv-pass-height';
+  @ViewChild(CdkPortal)
+  portalContent: CdkPortal | null = null;
 
   option?: VerfuegungOption;
 
@@ -58,6 +65,7 @@ export class SachbearbeitungAppFeatureVerfuegungComponent {
   private gesuchInfoStore = inject(GesuchInfoStore);
   private berechnungStore = inject(BerechnungStore);
   private permissionStore = inject(PermissionStore);
+  private navigationStore = inject(NavigationStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
@@ -107,6 +115,13 @@ export class SachbearbeitungAppFeatureVerfuegungComponent {
       ],
     }));
   });
+
+  ngAfterViewInit(): void {
+    this.navigationStore.setPortal(this.portalContent);
+  }
+  ngOnDestroy() {
+    this.portalContent?.detach();
+  }
 
   constructor() {
     effect(() => {

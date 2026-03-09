@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
-
-// todo: remove on demo-data app as well?
+import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 
 @Component({
   selector: 'dv-shared-pattern-basic-layout',
-  imports: [SharedPatternAppHeaderComponent],
+  imports: [SharedPatternGlobalHeaderComponent],
   templateUrl: './shared-pattern-basic-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

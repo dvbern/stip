@@ -1,9 +1,13 @@
+import { CdkPortal, PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
   HostBinding,
+  OnDestroy,
+  ViewChild,
   computed,
   inject,
   signal,
@@ -25,6 +29,7 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -48,23 +53,27 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     TranslocoDirective,
     MatMenuModule,
     RouterLink,
+    PortalModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SharedUtilHeaderService],
 })
-export class SachbearbeitungAppFeatureGesuchFormComponent {
+export class SachbearbeitungAppFeatureGesuchFormComponent
+  implements AfterViewInit, OnDestroy
+{
   @HostBinding('class') klass = 'tw:dv-pass-height';
-  stepSig = signal<GesuchFormStep | undefined>(undefined);
+  @ViewChild(CdkPortal)
+  portalContent: CdkPortal | null = null;
 
-  // todo: mobile nav
-  // navClicked$ = new EventEmitter();
+  stepSig = signal<GesuchFormStep | undefined>(undefined);
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
   private steuerdatenStore = inject(SteuerdatenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private navigationStore = inject(NavigationStore);
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
@@ -115,6 +124,13 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
     const steps = this.stepsSig();
     return steps.find((step) => step.route === currentStep?.route);
   });
+
+  ngAfterViewInit(): void {
+    this.navigationStore.setPortal(this.portalContent);
+  }
+  ngOnDestroy() {
+    this.portalContent?.detach();
+  }
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)

@@ -1,6 +1,5 @@
-<!-- todo: mobile nav with portal -->
 <div class="d-flex h-100" *transloco="let t">
-  <ng-template #navigation>
+  <ng-template #navigation cdkPortal>
     <div class="sidenav p-4">
       @let gesuchId = gesuchIdSig();
       @for (option of verfuegungOptions; track $index) {

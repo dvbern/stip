@@ -1,8 +1,12 @@
+import { CdkPortal, PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
+  HostBinding,
+  OnDestroy,
+  ViewChild,
   computed,
   effect,
   inject,
@@ -16,8 +20,6 @@ import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRouteGesuchId,
-  selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
@@ -25,6 +27,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { Language } from '@dv/shared/model/language';
@@ -50,33 +53,34 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     SharedUiProgressBarComponent,
     SharedUiIconChipComponent,
     TranslocoDirective,
+    PortalModule,
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SozialdienstAppFeatureGesuchFormComponent {
-  stepSig = signal<GesuchFormStep | undefined>(undefined);
-
-  navClicked$ = new EventEmitter<{ value: boolean }>();
+export class SozialdienstAppFeatureGesuchFormComponent
+  implements AfterViewInit, OnDestroy
+{
+  @HostBinding('class') klass = 'tw:dv-pass-height';
+  @ViewChild(CdkPortal)
+  portalContent: CdkPortal | null = null;
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private navigationStore = inject(NavigationStore);
 
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
-  // gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
-  // fallIdSig = computed(() => {
-  //   const gesuch = this.cacheViewSig().cache.gesuch;
-  //   return gesuch?.fallId;
-  // });
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+
+  stepSig = signal<GesuchFormStep | undefined>(undefined);
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
@@ -105,6 +109,13 @@ export class SozialdienstAppFeatureGesuchFormComponent {
       map((url) => url.includes('/tranche/')),
     ),
   );
+
+  ngAfterViewInit(): void {
+    this.navigationStore.setPortal(this.portalContent);
+  }
+  ngOnDestroy() {
+    this.portalContent?.detach();
+  }
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)

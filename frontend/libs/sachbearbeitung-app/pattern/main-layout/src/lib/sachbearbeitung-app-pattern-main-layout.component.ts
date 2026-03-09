@@ -62,7 +62,7 @@ const baseNavItems: NavItem[] = [
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
       <dv-shared-pattern-global-header
-        [staticNavItems]="navItemsSig()"
+        [staticNavItemsSig]="navItemsSig()"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>

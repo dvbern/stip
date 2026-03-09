@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-  <ng-template #navigation>
+  <ng-template #navigation cdkPortal>
     <div class="sidenav p-4">
       @for (option of options; track $index) {
         @let isActive = route.isActive(option.route, false);
@@ -22,7 +22,6 @@
     </div>
   </ng-template>
 
-  <!-- todo: add to mobile header with portal, see gesuch app step layout -->
   <div class="d-flex h-100">
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
