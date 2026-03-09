@@ -8,7 +8,7 @@
             class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
             [attr.data-testid]="item.testId"
             [matMenuTriggerFor]="itemMenu"
-            [class.active]="item.active"
+            [class.isActive]="item.active"
           >
             @if (item.icon) {
               <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>

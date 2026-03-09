@@ -20,12 +20,12 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         loadComponent: () =>
-          import('@dv/gesuch-app/feature/gesuch-form').then(
-            (m) => m.GesuchAppFeatureGesuchFormComponent,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.SharedFeatureGesuchFormComponent,
           ),
         loadChildren: () =>
-          import('@dv/gesuch-app/feature/gesuch-form').then(
-            (m) => m.gesuchAppFeatureGesuchFormRoutes,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.sharedFeatureGesuchFormRoutes,
           ),
       },
       {

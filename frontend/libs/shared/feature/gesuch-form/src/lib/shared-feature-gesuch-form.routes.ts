@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { baseGesuchFormRoutes } from '@dv/shared/feature/gesuch-form-routes';
 import { ABSCHLUSS } from '@dv/shared/model/gesuch-form';
 
-export const gesuchAppFeatureGesuchFormRoutes: Route[] = [
+export const sharedFeatureGesuchFormRoutes: Route[] = [
   ...baseGesuchFormRoutes,
   {
     path: ABSCHLUSS.route,

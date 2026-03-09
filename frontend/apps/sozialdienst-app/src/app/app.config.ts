@@ -9,11 +9,11 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { provideSharedPatternCore } from '@dv/shared/pattern/core';
 
-import { appRoutes } from './app.routes';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideSharedPatternCore(appRoutes, {
+    provideSharedPatternCore(routes, {
       authClientId: 'stip-gesuch-app',
       appType: 'gesuch-app',
     }),

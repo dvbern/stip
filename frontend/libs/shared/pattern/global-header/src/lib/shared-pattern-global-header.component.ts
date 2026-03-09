@@ -61,7 +61,7 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
-  staticNavItemsSig = input<NavItem[]>();
+  staticNavItemsSig = input<NavItem[]>([]);
 
   @Output() openSidenav = new EventEmitter<void>();
   @Output() closeSidenav = new EventEmitter<void>();
@@ -84,7 +84,7 @@ export class SharedPatternGlobalHeaderComponent {
       return dynamicItems;
     }
 
-    return this.staticNavItemsSig ?? [];
+    return this.staticNavItemsSig() ?? [];
   });
 
   benutzerNameSig = computed(() => {

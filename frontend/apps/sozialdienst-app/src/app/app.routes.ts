@@ -11,7 +11,7 @@ export const appRoutes: Route[] = [
     providers: [DashboardStore],
     children: [
       {
-        path: '',
+        path: 'dashboard',
         title: 'sozialdienst-app.dashboard.title',
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/cockpit').then(
@@ -32,12 +32,12 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         loadComponent: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-form').then(
-            (m) => m.SozialdienstAppFeatureGesuchFormComponent,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.SharedFeatureGesuchFormComponent,
           ),
         loadChildren: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-form').then(
-            (m) => m.sozialdienstAppFeatureGesuchFormRoutes,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.sharedFeatureGesuchFormRoutes,
           ),
       },
       {
@@ -68,5 +68,18 @@ export const appRoutes: Route[] = [
           ),
       },
     ],
+  },
+];
+
+export const routes: Route[] = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
+  ...appRoutes,
+  {
+    path: '**',
+    redirectTo: 'dashboard',
   },
 ];

@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -37,7 +36,7 @@ const sozialdienstBaseMenuItems: NavItem[] = [
     id: 'antraege',
     label: { key: 'sozialdienst-app.header.antraege' },
     icon: 'list',
-    route: ['/'],
+    route: ['/dashboard'],
   },
   {
     type: 'link',
@@ -81,7 +80,7 @@ const sozialdienstBaseMenuItems: NavItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SozialdienstAppPatternMainLayoutComponent {
-  // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Auszahlung, Administration
+  // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Administration
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
@@ -140,7 +139,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
     // naviation items effect
     effect(() => {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = untracked(this.fallIdSig) ?? ''; // check if really ok with untracked and fallback!
+      const fallId = this.fallIdSig() ?? '';
       const gesuchId = this.gesuchIdSig();
       const isDarlehenRoute = this.isDarlehenRouteSig();
       const rolesMap = this.permissionStore.rolesMapSig();
@@ -150,7 +149,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
         const tranchen =
           this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
 
-        // todo-before-merge or should we use this?
+        // todo-before-merge: @scph should we use this?
         // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
         //   this.gesuchIdSig,
         // );
@@ -256,19 +255,10 @@ export class SozialdienstAppPatternMainLayoutComponent {
         active: isDarlehenRoute,
       };
 
-      const auszahlungMenu: NavItem = {
-        type: 'link',
-        icon: 'payments',
-        id: 'auszahlungen',
-        label: { key: 'shared.menu.auszahlung' },
-        route: ['/auszahlung', fallId],
-      };
-
       const navItems: NavItem[] = [
         ...this.baseMenuItems,
         ...gesuchNav,
         darlehenMenu,
-        auszahlungMenu,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

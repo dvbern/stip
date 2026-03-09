@@ -41,10 +41,8 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
-// todo-before-merge: unify with gesuch-app-feature-gesuch-form component
-
 @Component({
-  selector: 'dv-sozialdienst-app-feature-gesuch-form',
+  selector: 'dv-shared-feature-gesuch-form',
   imports: [
     SharedUiRouterOutletWrapperComponent,
     CommonModule,
@@ -55,10 +53,11 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
     TranslocoDirective,
     PortalModule,
   ],
-  templateUrl: './sozialdienst-app-feature-gesuch-form.component.html',
+  templateUrl: './shared-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [SharedUtilHeaderService],
 })
-export class SozialdienstAppFeatureGesuchFormComponent
+export class SharedFeatureGesuchFormComponent
   implements AfterViewInit, OnDestroy
 {
   @HostBinding('class') klass = 'tw:dv-pass-height';
@@ -132,6 +131,7 @@ export class SozialdienstAppFeatureGesuchFormComponent
     });
   }
 
+  // todo: move into header component!
   handleLanguageChangeHeader(language: Language) {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),

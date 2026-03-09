@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -30,7 +29,8 @@ import {
 } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
-const gsBaseMenuItems: NavItem[] = [
+
+const gesuchBaseMenuItems: NavItem[] = [
   {
     type: 'link',
     id: 'dashboard',
@@ -79,7 +79,7 @@ export class GesuchAppPatternMainLayoutComponent {
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
 
-  baseMenuItems = gsBaseMenuItems;
+  baseMenuItems = gesuchBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -126,8 +126,7 @@ export class GesuchAppPatternMainLayoutComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      // todo: check this
-      const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? '';
+      const fallId = this.fallStore.currentFallViewSig()?.id ?? '';
       const isDarlehenRoute = this.isDarlehenRouteSig();
       const rolesMap = this.permissionStore.rolesMapSig();
 
@@ -248,7 +247,7 @@ export class GesuchAppPatternMainLayoutComponent {
       };
 
       const navItems: NavItem[] = [
-        ...gsBaseMenuItems,
+        ...gesuchBaseMenuItems,
         ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,

@@ -26,6 +26,7 @@ interface NavItemBase {
   label?: TranslateLabel;
   icon?: string;
   active?: boolean | undefined;
+  routerlinkActiveOptions?: { exact: boolean };
   testId?: string;
 }
 
