@@ -5,27 +5,15 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
-import { filter, map } from 'rxjs';
+import { RouterOutlet } from '@angular/router';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { FallStore } from '@dv/shared/data-access/fall';
-import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
-// todo: really needed?
 // Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
 const baseNavItems: NavItem[] = [
   {
@@ -87,32 +75,10 @@ const baseNavItems: NavItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppPatternMainLayoutComponent {
-  private fallStore = inject(FallStore);
-  private darlehenStore = inject(DarlehenStore);
-  private navigationStore = inject(NavigationStore);
   private permissionStore = inject(PermissionStore);
-  private router = inject(Router);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
-
-  // todo: needed?
-  private allRouteParamsSig = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        let route: ActivatedRoute | null = this.router.routerState.root;
-        const params: Record<string, string> = {};
-
-        while (route) {
-          Object.assign(params, route.snapshot.params);
-          route = route.firstChild;
-        }
-
-        return params;
-      }),
-    ),
-  );
 
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
@@ -121,7 +87,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
     const navItems: NavItem[] = baseNavItems;
 
-    // todo: test
+    // todo-before-merge: test
     if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
       navItems.push({
         type: 'link',

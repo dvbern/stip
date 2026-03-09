@@ -57,12 +57,11 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 export class SharedPatternGlobalHeaderComponent {
   @HostBinding('class') klass = 'tw:block';
 
-  // todo: change syntax and remove unused
-  // todo: look at backlink, is the behavior still valid
-  @Input() backLink?: { path: string; text: string };
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
+
+  // todo: change syntax and remove unused
   @Input() staticNavItems?: NavItem[];
   @Output() openSidenav = new EventEmitter<void>();
   @Output() closeSidenav = new EventEmitter<void>();

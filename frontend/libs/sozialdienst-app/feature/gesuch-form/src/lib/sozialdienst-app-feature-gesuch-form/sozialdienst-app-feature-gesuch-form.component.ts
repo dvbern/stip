@@ -38,7 +38,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
 
-// todo: unify with gesuch-app-feature-gesuch-form component
+// todo-before-merge: unify with gesuch-app-feature-gesuch-form component
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-form',

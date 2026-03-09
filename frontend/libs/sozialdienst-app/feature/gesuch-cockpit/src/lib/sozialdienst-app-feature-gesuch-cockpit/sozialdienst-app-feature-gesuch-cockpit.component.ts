@@ -61,7 +61,7 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
-  // todo: change title for sozialdienst!
+
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;

@@ -1,10 +1,266 @@
-import { Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  computed,
+  effect,
+  inject,
+  untracked,
+} from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
+import { format } from 'date-fns/format';
+import { filter, map } from 'rxjs';
 
-// todo: put into this gesuch form
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
+import { FallStore } from '@dv/shared/data-access/fall';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { PermissionStore } from '@dv/shared/global/permission';
+import {
+  NavItem,
+  darlehenCompletedStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
+import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
+import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+const gsBaseMenuItems: NavItem[] = [
+  {
+    type: 'link',
+    id: 'dashboard',
+    icon: 'dashboard',
+    label: { key: 'gesuch-app.dashboard.title' },
+    route: ['/dashboard'],
+  },
+];
 
+/**
+ * This is the main layout for the gesuchsteller app.
+ * todo-before-merge: make or share with sozialdiesnt since it is mostly the same for all apps?
+ */
 @Component({
-  imports: [],
-  template: `<p>GesuchAppPatternMainLayout works!</p>`,
-  styles: ``,
+  selector: 'dv-gesuch-app-pattern-main-layout',
+  imports: [
+    MatSidenavModule,
+    RouterOutlet,
+    SharedPatternMobileSidenavComponent,
+    SharedPatternGlobalHeaderComponent,
+  ],
+  template: `<mat-sidenav-container>
+    <mat-sidenav #sidenav mode="over" position="end">
+      <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      </dv-shared-pattern-mobile-sidenav>
+    </mat-sidenav>
+    <mat-sidenav-content class="d-flex flex-column">
+      <dv-shared-pattern-global-header
+        [staticNavItems]="baseMenuItems"
+        (closeSidenav)="sidenav.close()"
+        (openSidenav)="sidenav.open()"
+      ></dv-shared-pattern-global-header>
+
+      <main class="page-body tw:flex tw:flex-col">
+        <router-outlet></router-outlet>
+      </main>
+    </mat-sidenav-content>
+  </mat-sidenav-container>`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GesuchAppPatternMainLayoutComponent {}
+export class GesuchAppPatternMainLayoutComponent {
+  private fallStore = inject(FallStore);
+  private darlehenStore = inject(DarlehenStore);
+  private navigationStore = inject(NavigationStore);
+  private router = inject(Router);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private permissionStore = inject(PermissionStore);
+
+  baseMenuItems = gsBaseMenuItems;
+
+  @HostBinding('class')
+  hostClass = 'tw:flex tw:flex-col';
+
+  private allRouteParamsSig = toSignal(
+    this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd),
+      map(() => {
+        let route: ActivatedRoute | null = this.router.routerState.root;
+        const params: Record<string, string> = {};
+
+        while (route) {
+          Object.assign(params, route.snapshot.params);
+          route = route.firstChild;
+        }
+
+        return params;
+      }),
+    ),
+  );
+
+  private isDarlehenRouteSig = computed(() => {
+    const params = this.allRouteParamsSig();
+    return params?.['darlehenId'] ? true : false;
+  });
+
+  private gesuchIdSig = computed(() => {
+    const params = this.allRouteParamsSig();
+    return params?.['gesuchId'];
+  });
+
+  constructor() {
+    this.fallStore.loadCurrentFall$();
+
+    effect(() => {
+      const fallId = this.fallStore.currentFallViewSig()?.id;
+
+      if (fallId) {
+        this.darlehenStore.getAllDarlehenGs$({ fallId });
+      }
+    });
+
+    // naviation items effect
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      // todo: check this
+      const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? '';
+      const isDarlehenRoute = this.isDarlehenRouteSig();
+      const rolesMap = this.permissionStore.rolesMapSig();
+
+      const gesuchNav: NavItem[] = [];
+
+      if (gesuchId) {
+        const tranchen =
+          this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
+
+        if (tranchen.length > 1) {
+          gesuchNav.push({
+            type: 'menu',
+            id: 'gesuch',
+            label: { key: 'shared.header.gesuch' },
+            icon: 'description',
+            children: tranchen.map((tranche, index) => ({
+              type: 'link' as const,
+              id: tranche.id,
+              label: {
+                key: 'shared.header.tranche.item',
+                context: {
+                  date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
+                  index: index + 1,
+                },
+              },
+              route: ['/gesuch', gesuchId, 'tranche', tranche.id],
+            })),
+          });
+        } else if (tranchen.length === 1) {
+          gesuchNav.push({
+            type: 'link',
+            id: 'gesuch',
+            label: { key: 'shared.header.gesuch' },
+            icon: 'description',
+            route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
+            active: !!gesuchId,
+          });
+        }
+      }
+
+      // todo: put into lib
+      const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
+        status,
+        darlehen: darlehnen.list.filter(
+          (dar) => darlehenStatusMapping[dar.status!] === status,
+        ),
+      }));
+
+      // list with separators for each status
+      const darlehenMenuItems: NavItem[] = darlehenListByStatus.flatMap(
+        ({ status, darlehen }) => {
+          const items: NavItem[] = [];
+
+          if (darlehen.length > 0) {
+            items.push({
+              type: 'separator',
+              id: `separator-${status}`,
+              label: {
+                key: 'shared.header.darlehen.complete-states.' + status,
+              },
+            });
+
+            items.push(
+              ...darlehen.map((darlehen) => ({
+                type: 'link' as const,
+                id: darlehen.id,
+                label: {
+                  key: 'shared.header.darlehen.item',
+                  context: {
+                    date: format(darlehen.timestampErstellt!, 'dd.MM.yyyy'),
+                  },
+                },
+                route: ['/darlehen', darlehen.id, 'fall', fallId],
+              })),
+            );
+          }
+
+          return items;
+        },
+      );
+
+      const darlehenMenu: NavItem = {
+        type: 'menu',
+        icon: 'account_balance',
+        id: 'darlehen',
+        label: { key: 'shared.header.darlehen' },
+        children: darlehnen.canCreateDarlehen
+          ? darlehenMenuItems.concat([
+              ...(darlehenMenuItems.length > 0
+                ? [
+                    {
+                      type: 'separator' as const,
+                      id: 'separator-create',
+                    },
+                  ]
+                : []),
+              {
+                type: 'action',
+                id: 'create-darlehen',
+                label: { key: 'shared.header.darlehen.create' },
+                icon: 'add',
+                action: () =>
+                  this.darlehenStore.createDarlehen$({
+                    fallId,
+                  }),
+              },
+            ])
+          : darlehenMenuItems,
+        active: isDarlehenRoute,
+      };
+
+      const auszahlungMenu: NavItem = {
+        type: 'link',
+        icon: 'payments',
+        id: 'auszahlungen',
+        label: { key: 'shared.menu.auszahlung' },
+        route: ['/auszahlung', fallId],
+      };
+
+      const navItems: NavItem[] = [
+        ...gsBaseMenuItems,
+        ...gesuchNav,
+        darlehenMenu,
+        auszahlungMenu,
+      ].filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
+
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      });
+
+      this.navigationStore.setNavigationItems(navItems);
+    });
+  }
+}

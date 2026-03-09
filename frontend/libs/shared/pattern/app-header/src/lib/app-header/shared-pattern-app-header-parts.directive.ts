@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
 
-// todo: cleanup unused
+// todo-before-merge: cleanup unused refs
 @Directive({
   selector:
     '[dvMobileNavContent], [dvHeaderDesktopRight], [dvHeaderDesktopLeft], [dvHeaderMobileAddons], [dvGesuchNavItems], [dvGesuchStatusIndication]',

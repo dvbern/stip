@@ -54,35 +54,26 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   providers: [SharedUtilHeaderService],
 })
 export class SachbearbeitungAppFeatureGesuchFormComponent {
-  // currentStep?: GesuchFormStep;
+  @HostBinding('class') klass = 'tw:dv-pass-height';
   stepSig = signal<GesuchFormStep | undefined>(undefined);
 
-  @HostBinding('class') klass = 'tw:dv-pass-height';
-
-  navClicked$ = new EventEmitter();
+  // todo: mobile nav
+  // navClicked$ = new EventEmitter();
 
   private store = inject(Store);
-  private router = inject(Router);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
   private steuerdatenStore = inject(SteuerdatenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
   tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
     this.gesuchIdSig,
   );
-  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  // todo: do with inputs?
-  // isTrancheRouteSig = toSignal(
-  //   urlAfterNavigationEnd(this.router).pipe(
-  //     map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
-  //   ),
-  // );
-
-  // todo: does this have to be calculated like
+  // todo-before-merge: ask scph if correct
   currentTrancheWithIndexSig = computed(() => {
     const tranchenWithIndex = this.tranchenSig().map((tranche, index) => ({
       tranche,
@@ -92,22 +83,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
 
     return tranchenWithIndex.find(({ tranche }) => tranche.id === trancheId);
   });
-
-  // private gesuchUpdatedSig = toSignal(
-  //   this.store.select(selectSharedDataAccessGesuchCache).pipe(
-  //     map(({ gesuch }) => gesuch),
-  //     filter(isDefined),
-  //   ),
-  // );
-
-  // gesuchInfoSig = computed(() => {
-  //   const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
-
-  //   return cache;
-  // });
-
-  // headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
-  //   this.gesuchHeaderStore.viewSbSig;
 
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
@@ -148,12 +123,5 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
         this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
       });
-    // effect(() => {
-    //   const gesuchTrancheId = this.gesuchTrancheIdSig();
-    //   this.gesuchUpdatedSig();
-    //   if (gesuchTrancheId) {
-    //     this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
-    //   }
-    // });
   }
 }

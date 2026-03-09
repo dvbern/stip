@@ -121,7 +121,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private gesuchIdSig = computed(() => {
     const params = this.allRouteParamsSig();
-    return params?.['id']; // todo: change route to more descriptive
+    return params?.['gesuchId'];
   });
 
   private fallIdSig = computed(() => {
