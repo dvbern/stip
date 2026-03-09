@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
+import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
@@ -51,6 +52,7 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final DokumentRepository dokumentRepository;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private final FallRepository fallRepository;
 
     public void assertSbCanModifyDokumentOfTranche(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
@@ -202,9 +204,11 @@ public class GesuchDokumentAuthorizer extends BaseAuthorizer {
         final Benutzer currentBenutzer,
         final GesuchTranche gesuchTranche
     ) {
+        final var fall = fallRepository.requireById(gesuchTranche.getGesuch().getAusbildung().getFall().getId());
+
         if (
             AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                gesuchTranche.getGesuch().getAusbildung().getFall(),
+                fall,
                 currentBenutzer,
                 sozialdienstService
             )
