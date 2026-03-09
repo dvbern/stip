@@ -151,11 +151,12 @@ public class BerechnungService {
         final var totalNachKuerzungUnterbruch =
             anzahlMonateUnterbruch > 0 ? totalVorKuerzungUnterbruch * (12 - anzahlMonateUnterbruch) / 12 : null;
 
-        final var totalVorTeilungDarlehen =
+        final int totalVorTeilungDarlehen =
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
 
         final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
-        final var berechnungStipendium = totalVorTeilungDarlehen - Objects.requireNonNullElse(berechnungDarlehen, 0);
+        final var berechnungStipendium =
+            berechnungDarlehen != null ? (totalVorTeilungDarlehen / 3) * 2 : totalVorTeilungDarlehen;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
