@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class KindDto  implements Serializable {
+  private @Valid UUID entryId;
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
@@ -32,6 +33,25 @@ public class KindDto  implements Serializable {
   private @Valid Integer renten;
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer andereEinnahmen;
+
+  /**
+   **/
+  public KindDto entryId(UUID entryId) {
+    this.entryId = entryId;
+    return this;
+  }
+
+  
+  @JsonProperty("entryId")
+  @NotNull
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+  @JsonProperty("entryId")
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
 
   /**
    **/
@@ -247,7 +267,8 @@ public class KindDto  implements Serializable {
       return false;
     }
     KindDto kind = (KindDto) o;
-    return Objects.equals(this.vorname, kind.vorname) &&
+    return Objects.equals(this.entryId, kind.entryId) &&
+        Objects.equals(this.vorname, kind.vorname) &&
         Objects.equals(this.geburtsdatum, kind.geburtsdatum) &&
         Objects.equals(this.ausbildungssituation, kind.ausbildungssituation) &&
         Objects.equals(this.wohnsitzAnteilPia, kind.wohnsitzAnteilPia) &&
@@ -262,7 +283,7 @@ public class KindDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, wohnsitzAnteilPia, nachname, id, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
@@ -270,6 +291,7 @@ public class KindDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class KindDto {\n");
     
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");

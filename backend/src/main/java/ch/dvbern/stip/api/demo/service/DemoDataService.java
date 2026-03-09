@@ -165,7 +165,7 @@ public class DemoDataService {
             throw new DemoDataApplyException("ValidationError", preValidation.getValidationErrors());
         }
 
-        generateDemoDataService.createDemoDokumentsForAllRequired(gesuch);
+        generateDemoDataService.createDemoDokumentsForAllRequired(gesuch.getLatestGesuchTranche());
         zuordnungService.updateZuordnungOnGesuch(gesuch);
 
         final var violations =

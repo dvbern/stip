@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.type.DemoDataDatedif;
 import ch.dvbern.stip.api.demo.util.ParseDemoDataUtil;
 import ch.dvbern.stip.api.demo.util.ParseDemoEnumUtil;
-import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDocumentsProducerUtil.EinnahmenKostenType;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;

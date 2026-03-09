@@ -28,6 +28,7 @@ public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
   private @Valid ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status;
+  private @Valid UUID entryId;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid CustomDokumentTypDto customDokumentTyp;
 
@@ -106,6 +107,24 @@ public class GesuchDokumentDto  implements Serializable {
 
   /**
    **/
+  public GesuchDokumentDto entryId(UUID entryId) {
+    this.entryId = entryId;
+    return this;
+  }
+
+  
+  @JsonProperty("entryId")
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+  @JsonProperty("entryId")
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
+
+  /**
+   **/
   public GesuchDokumentDto dokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
     this.dokumentTyp = dokumentTyp;
     return this;
@@ -153,13 +172,14 @@ public class GesuchDokumentDto  implements Serializable {
     return Objects.equals(this.id, gesuchDokument.id) &&
         Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
         Objects.equals(this.status, gesuchDokument.status) &&
+        Objects.equals(this.entryId, gesuchDokument.entryId) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
         Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumente, status, dokumentTyp, customDokumentTyp);
+    return Objects.hash(id, dokumente, status, entryId, dokumentTyp, customDokumentTyp);
   }
 
   @Override
@@ -170,6 +190,7 @@ public class GesuchDokumentDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
     sb.append("}");

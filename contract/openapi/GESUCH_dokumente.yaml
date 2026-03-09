@@ -75,6 +75,12 @@ paths:
             $ref: './components/common.yaml#/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: query
+          description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
+          required: false
       responses:
         '200':
           content:
@@ -112,6 +118,12 @@ paths:
             $ref: './components/common.yaml#/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: query
+          description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
+          required: false
       responses:
         '200':
           description: OK
@@ -139,6 +151,12 @@ paths:
             $ref: './components/common.yaml#/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: query
+          description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
+          required: false
       responses:
         '200':
           content:
@@ -176,6 +194,12 @@ paths:
             $ref: './components/common.yaml#/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: query
+          description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
+          required: false
       responses:
         '200':
           description: OK
@@ -593,8 +617,6 @@ components:
           $ref: './components/common.yaml#/UUID'
         gesuchDokumentId:
           $ref: './components/common.yaml#/UUID'
-        dokumentStatus:
-          $ref: './components/common.yaml#/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:

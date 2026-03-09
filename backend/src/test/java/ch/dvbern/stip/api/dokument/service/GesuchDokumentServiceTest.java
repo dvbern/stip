@@ -64,7 +64,6 @@ import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTr
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -160,8 +159,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAblehnen(mockedDokument.getId(), ablehnenRequest);
 
         // Assert
-        assertThat(comment.getKommentar(), is(ablehnenRequest.getKommentar().getKommentar()));
-        assertThat(comment.getGesuchDokumentStatus(), is(GesuchDokumentStatus.ABGELEHNT));
+        assertThat(mockedDokument.getStatus(), is(GesuchDokumentStatus.ABGELEHNT));
     }
 
     @TestAsSachbearbeiter
@@ -181,8 +179,7 @@ class GesuchDokumentServiceTest {
         gesuchDokumentService.gesuchDokumentAkzeptieren(mockedDokument.getId());
 
         // Assert
-        assertNull(comment.getKommentar());
-        assertThat(comment.getGesuchDokumentStatus(), is(GesuchDokumentStatus.AKZEPTIERT));
+        assertThat(mockedDokument.getStatus(), is(GesuchDokumentStatus.AKZEPTIERT));
     }
 
     @Test

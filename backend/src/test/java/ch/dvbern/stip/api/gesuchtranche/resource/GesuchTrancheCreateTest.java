@@ -42,7 +42,7 @@ import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
@@ -257,7 +257,7 @@ class GesuchTrancheCreateTest {
                 .extract()
                 .body()
                 .as(DokumenteToUploadDtoSpec.class);
-        assertThat(documentsToUploadOfTranche1.getRequired().size(), is(0));
+        assertThat(documentsToUploadOfTranche1.getRequiredRefs().size(), is(0));
         var documentsToUploadOfTranche2 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
                 .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(1).getId())
@@ -266,7 +266,7 @@ class GesuchTrancheCreateTest {
                 .extract()
                 .body()
                 .as(DokumenteToUploadDtoSpec.class);
-        assertThat(documentsToUploadOfTranche2.getRequired().size(), is(1));
+        assertThat(documentsToUploadOfTranche2.getRequiredRefs().size(), is(1));
 
         // verify that the superflous document only gets deleted on the correct tranche - not on both...
         var dokumentsOfTranche1 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
@@ -277,7 +277,8 @@ class GesuchTrancheCreateTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
         var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(1).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -286,8 +287,9 @@ class GesuchTrancheCreateTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
-        assertThat(dokumentsOfTranche1.length, is(greaterThan(dokumentsOfTranche2.length)));
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+        assertThat(dokumentsOfTranche1.size(), is(greaterThan(dokumentsOfTranche2.size())));
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
@@ -412,6 +414,7 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         geschwisterUpdate.setNachname("test");
         geschwisterUpdate.setVorname("test");
+        geschwisterUpdate.setEntryId(UUID.randomUUID());
         geschwisterUpdate.setGeburtsdatum(LocalDate.now().minusYears(18));
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));

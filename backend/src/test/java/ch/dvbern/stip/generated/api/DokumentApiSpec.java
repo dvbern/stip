@@ -265,6 +265,7 @@ public class DokumentApiSpec {
      * @see #dokumentTypPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * @see #fileUploadMultiPart  (required)
+     * @see #entryIdQuery A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
      */
     public static class CreateDokumentGSOper implements Oper {
 
@@ -314,6 +315,17 @@ public class DokumentApiSpec {
             return this;
         }
 
+        public static final String ENTRY_ID_QUERY = "entryId";
+
+        /**
+         * @param entryId (UUID) A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
+         * @return operation
+         */
+        public CreateDokumentGSOper entryIdQuery(Object... entryId) {
+            reqSpec.addQueryParam(ENTRY_ID_QUERY, entryId);
+            return this;
+        }
+
          /**
          * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
          * @see #reqSpec for customise
@@ -352,6 +364,7 @@ public class DokumentApiSpec {
      * @see #dokumentTypPath  (required)
      * @see #gesuchTrancheIdPath  (required)
      * @see #fileUploadMultiPart  (required)
+     * @see #entryIdQuery A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
      */
     public static class CreateDokumentSBOper implements Oper {
 
@@ -398,6 +411,17 @@ public class DokumentApiSpec {
          */
         public CreateDokumentSBOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        public static final String ENTRY_ID_QUERY = "entryId";
+
+        /**
+         * @param entryId (UUID) A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
+         * @return operation
+         */
+        public CreateDokumentSBOper entryIdQuery(Object... entryId) {
+            reqSpec.addQueryParam(ENTRY_ID_QUERY, entryId);
             return this;
         }
 
@@ -1212,6 +1236,7 @@ public class DokumentApiSpec {
      *
      * @see #dokumentTypPath  (required)
      * @see #gesuchTrancheIdPath  (required)
+     * @see #entryIdQuery A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
      * return NullableGesuchDokumentDtoSpec
      */
     public static class GetGesuchDokumentForTypGSOper implements Oper {
@@ -1271,6 +1296,17 @@ public class DokumentApiSpec {
             return this;
         }
 
+        public static final String ENTRY_ID_QUERY = "entryId";
+
+        /**
+         * @param entryId (UUID) A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
+         * @return operation
+         */
+        public GetGesuchDokumentForTypGSOper entryIdQuery(Object... entryId) {
+            reqSpec.addQueryParam(ENTRY_ID_QUERY, entryId);
+            return this;
+        }
+
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
@@ -1297,6 +1333,7 @@ public class DokumentApiSpec {
      *
      * @see #dokumentTypPath  (required)
      * @see #gesuchTrancheIdPath  (required)
+     * @see #entryIdQuery A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
      * return NullableGesuchDokumentDtoSpec
      */
     public static class GetGesuchDokumentForTypSBOper implements Oper {
@@ -1353,6 +1390,17 @@ public class DokumentApiSpec {
          */
         public GetGesuchDokumentForTypSBOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        public static final String ENTRY_ID_QUERY = "entryId";
+
+        /**
+         * @param entryId (UUID) A specific entry ID to refine the uniqueness of gesuchDokumente for list elements (optional)
+         * @return operation
+         */
+        public GetGesuchDokumentForTypSBOper entryIdQuery(Object... entryId) {
+            reqSpec.addQueryParam(ENTRY_ID_QUERY, entryId);
             return this;
         }
 

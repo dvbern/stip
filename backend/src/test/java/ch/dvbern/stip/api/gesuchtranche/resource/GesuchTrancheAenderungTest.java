@@ -41,8 +41,8 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
@@ -418,7 +418,8 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         for (final var gesuchDokument : gesuchDokuments) {
             if (gesuchDokument.getStatus() == DokumentstatusDtoSpec.AUSSTEHEND) {
@@ -467,7 +468,8 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         for (final var gesuchDokument : gesuchDokuments) {
             assertThat(gesuchDokument.getStatus())

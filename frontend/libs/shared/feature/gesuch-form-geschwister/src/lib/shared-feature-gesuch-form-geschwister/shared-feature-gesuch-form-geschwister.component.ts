@@ -4,7 +4,6 @@ import {
   OnInit,
   computed,
   inject,
-  signal,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -14,7 +13,6 @@ import { SharedEventGesuchFormGeschwister } from '@dv/shared/event/gesuch-form-g
 import { Geschwister, GeschwisterUpdate } from '@dv/shared/model/gesuch';
 import { GESCHWISTER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
-import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
@@ -31,7 +29,6 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
-    SharedUiFormZuvorHintListPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
@@ -44,9 +41,13 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
     selectSharedFeatureGesuchFormGeschwisterView,
   );
   changesSig = computed<Partial<Geschwister>>(() => {
-    const view = this.viewSig();
-    const index = this.editedGeschwisterIndexSig();
-    return view.listChanges?.changesByIndex?.[index ?? -1] ?? {};
+    const { listChanges } = this.viewSig();
+    if (!this.editedGeschwister?.entryId) {
+      return {};
+    }
+    return (
+      listChanges?.changesByIdentifier[this.editedGeschwister?.entryId] ?? {}
+    );
   });
 
   hasUnsavedChanges = false;
@@ -55,7 +56,6 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   editedGeschwister?: Partial<GeschwisterUpdate>;
-  editedGeschwisterIndexSig = signal<number | undefined>(undefined);
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormGeschwister.init());
@@ -63,12 +63,10 @@ export class SharedFeatureGesuchFormGeschwisterComponent implements OnInit {
 
   public handleAddGeschwister(): void {
     this.editedGeschwister = {};
-    this.editedGeschwisterIndexSig.set(undefined);
   }
 
-  public handleSelectGeschwister(ge: GeschwisterUpdate, index: number): void {
+  public handleSelectGeschwister(ge: GeschwisterUpdate): void {
     this.editedGeschwister = ge;
-    this.editedGeschwisterIndexSig.set(index);
   }
 
   handleEditorSave(geschwister: GeschwisterUpdate) {

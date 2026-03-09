@@ -230,6 +230,15 @@ Adresse:
       type: string
     ort:
       type: string
+GesuchDokumentRef:
+  required:
+    - dokumentTyp
+  type: object
+  properties:
+    dokumentTyp:
+      $ref: '#/DokumentTyp'
+    entryId:
+      $ref: '#/UUID'
 GesuchDokument:
   required:
     - id
@@ -239,6 +248,9 @@ GesuchDokument:
   properties:
     id:
       $ref: '#/UUID'
+    entryId:
+      $ref: '#/UUID'
+      description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
     dokumentTyp:
       $ref: '#/DokumentTyp'
     customDokumentTyp:

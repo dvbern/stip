@@ -104,18 +104,28 @@ public class DokumentResourceImpl implements DokumentResource {
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_GS)
-    public Uni<Response> createDokumentGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
-        gesuchDokumentAuthorizer.canGsUploadDokument(gesuchTrancheId, dokumentTyp);
-        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
+    public Uni<Response> createDokumentGS(
+        DokumentTyp dokumentTyp,
+        UUID gesuchTrancheId,
+        FileUpload fileUpload,
+        UUID entryId
+    ) {
+        gesuchDokumentAuthorizer.canGsUploadDokument(gesuchTrancheId, dokumentTyp, entryId);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, entryId, fileUpload);
     }
 
     @Blocking
     @Override
     @RolesAllowed(DOKUMENT_UPLOAD_SB)
-    public Uni<Response> createDokumentSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId, FileUpload fileUpload) {
+    public Uni<Response> createDokumentSB(
+        DokumentTyp dokumentTyp,
+        UUID gesuchTrancheId,
+        FileUpload fileUpload,
+        UUID entryId
+    ) {
         gesuchDokumentAuthorizer.assertSbCanModifyDokumentOfTranche(gesuchTrancheId);
-        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp);
-        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, fileUpload);
+        gesuchDokumentService.setGesuchDokumentOfDokumentTypToAusstehend(gesuchTrancheId, dokumentTyp, entryId);
+        return gesuchDokumentService.getUploadDokumentUni(dokumentTyp, gesuchTrancheId, entryId, fileUpload);
     }
 
     @Override
@@ -267,15 +277,23 @@ public class DokumentResourceImpl implements DokumentResource {
 
     @Override
     @RolesAllowed(DOKUMENT_READ)
-    public NullableGesuchDokumentDto getGesuchDokumentForTypGS(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+    public NullableGesuchDokumentDto getGesuchDokumentForTypGS(
+        DokumentTyp dokumentTyp,
+        UUID gesuchTrancheId,
+        UUID entryId
+    ) {
         gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheGS(gesuchTrancheId);
-        return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp);
+        return gesuchDokumentService.findGesuchDokumentForTypGS(gesuchTrancheId, dokumentTyp, entryId);
     }
 
     @Override
     @RolesAllowed(DOKUMENT_READ)
-    public NullableGesuchDokumentDto getGesuchDokumentForTypSB(DokumentTyp dokumentTyp, UUID gesuchTrancheId) {
+    public NullableGesuchDokumentDto getGesuchDokumentForTypSB(
+        DokumentTyp dokumentTyp,
+        UUID gesuchTrancheId,
+        UUID entryId
+    ) {
         gesuchDokumentAuthorizer.canGetGesuchDokumentForTrancheSB(gesuchTrancheId);
-        return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp);
+        return gesuchDokumentService.findGesuchDokumentForTypSB(gesuchTrancheId, dokumentTyp, entryId);
     }
 }

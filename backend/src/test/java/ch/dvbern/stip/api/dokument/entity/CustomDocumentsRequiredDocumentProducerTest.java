@@ -35,14 +35,14 @@ import static org.mockito.Mockito.when;
 
 @Execution(ExecutionMode.CONCURRENT)
 class CustomDocumentsRequiredDocumentProducerTest {
-    private CustomDocumentsRequiredDocumentProducer producer;
+    private CustomDokumentsRequiredDocumentProducer producer;
     private CustomDokumentTypService service;
     private GesuchTranche tranche;
 
     @BeforeEach
     void setUp() {
         service = Mockito.mock(CustomDokumentTypService.class);
-        producer = new CustomDocumentsRequiredDocumentProducer(service);
+        producer = new CustomDokumentsRequiredDocumentProducer(service);
         tranche = Mockito.mock(GesuchTranche.class);
     }
 
@@ -51,7 +51,7 @@ class CustomDocumentsRequiredDocumentProducerTest {
         // arrange
         when(service.getAllCustomDokumentTypsOfTranche(any())).thenReturn(List.of());
         // act
-        final var requiredCustomDocuments = producer.getRequiredDocuments(tranche);
+        final var requiredCustomDocuments = producer.getRequiredDokuments(tranche);
         // assert
         assertThat(requiredCustomDocuments.getValue().isEmpty(),is(true));
         assertThat(requiredCustomDocuments.getKey().equals(""),is(true));
@@ -67,7 +67,7 @@ class CustomDocumentsRequiredDocumentProducerTest {
         when(tranche.getGesuchDokuments()).thenReturn(List.of(customGesuchDokument));
 
         // act
-        final var requiredCustomDocuments = producer.getRequiredDocuments(tranche);
+        final var requiredCustomDocuments = producer.getRequiredDokuments(tranche);
 
         // assert
         assertThat(requiredCustomDocuments.getKey().equals("custom-documents"), is(true));

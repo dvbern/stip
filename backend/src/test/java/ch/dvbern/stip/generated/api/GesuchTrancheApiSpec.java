@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -1134,7 +1134,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;GesuchDokumentDtoSpec&gt;
+     * return GesuchDokumentListDtoSpec
      */
     public static class GetGesuchDokumenteGSOper implements Oper {
 
@@ -1164,10 +1164,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/{gesuchTrancheId}/dokumente/gs
          * @param handler handler
-         * @return List&lt;GesuchDokumentDtoSpec&gt;
+         * @return GesuchDokumentListDtoSpec
          */
-        public List<GesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDokumentDtoSpec>> type = new TypeRef<List<GesuchDokumentDtoSpec>>(){};
+        public GesuchDokumentListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentListDtoSpec> type = new TypeRef<GesuchDokumentListDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1207,7 +1207,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;GesuchDokumentDtoSpec&gt;
+     * return GesuchDokumentListDtoSpec
      */
     public static class GetGesuchDokumenteSBOper implements Oper {
 
@@ -1237,10 +1237,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/{gesuchTrancheId}/dokumente/sb
          * @param handler handler
-         * @return List&lt;GesuchDokumentDtoSpec&gt;
+         * @return GesuchDokumentListDtoSpec
          */
-        public List<GesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDokumentDtoSpec>> type = new TypeRef<List<GesuchDokumentDtoSpec>>(){};
+        public GesuchDokumentListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentListDtoSpec> type = new TypeRef<GesuchDokumentListDtoSpec>(){};
             return execute(handler).as(type);
         }
 

@@ -28,6 +28,7 @@ export type SharedModelStandardGesuchDokument = {
   dokumentTyp: DokumentTyp;
   permissions: PermissionMap;
   trancheId: string;
+  entryId: string | undefined;
   gesuchDokument?: GesuchDokument;
 };
 
@@ -67,6 +68,9 @@ export type SharedModelGenericDokument = {
 export interface SharedModelTableRequiredDokument {
   formStep: GesuchFormStep;
   dokumentTyp: DokumentTyp;
+  entryId: string | undefined;
+  entryName: string | undefined;
+  isExpanded: boolean;
   gesuchDokument?: GesuchDokument;
   dokumentOptions: StandardDokumentOptions;
   kommentare: GesuchDokumentKommentar[];

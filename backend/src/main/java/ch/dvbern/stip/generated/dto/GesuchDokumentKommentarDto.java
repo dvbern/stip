@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid UUID gesuchTrancheId;
   private @Valid UUID gesuchDokumentId;
-  private @Valid ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus;
   private @Valid String kommentar;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
@@ -66,24 +65,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   @JsonProperty("gesuchDokumentId")
   public void setGesuchDokumentId(UUID gesuchDokumentId) {
     this.gesuchDokumentId = gesuchDokumentId;
-  }
-
-  /**
-   **/
-  public GesuchDokumentKommentarDto dokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
-    this.dokumentStatus = dokumentStatus;
-    return this;
-  }
-
-  
-  @JsonProperty("dokumentStatus")
-  public ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus getDokumentStatus() {
-    return dokumentStatus;
-  }
-
-  @JsonProperty("dokumentStatus")
-  public void setDokumentStatus(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus dokumentStatus) {
-    this.dokumentStatus = dokumentStatus;
   }
 
   /**
@@ -152,7 +133,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     GesuchDokumentKommentarDto gesuchDokumentKommentar = (GesuchDokumentKommentarDto) o;
     return Objects.equals(this.gesuchTrancheId, gesuchDokumentKommentar.gesuchTrancheId) &&
         Objects.equals(this.gesuchDokumentId, gesuchDokumentKommentar.gesuchDokumentId) &&
-        Objects.equals(this.dokumentStatus, gesuchDokumentKommentar.dokumentStatus) &&
         Objects.equals(this.kommentar, gesuchDokumentKommentar.kommentar) &&
         Objects.equals(this.userErstellt, gesuchDokumentKommentar.userErstellt) &&
         Objects.equals(this.timestampErstellt, gesuchDokumentKommentar.timestampErstellt);
@@ -160,7 +140,7 @@ public class GesuchDokumentKommentarDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchTrancheId, gesuchDokumentId, dokumentStatus, kommentar, userErstellt, timestampErstellt);
+    return Objects.hash(gesuchTrancheId, gesuchDokumentId, kommentar, userErstellt, timestampErstellt);
   }
 
   @Override
@@ -170,7 +150,6 @@ public class GesuchDokumentKommentarDto  implements Serializable {
     
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
     sb.append("    gesuchDokumentId: ").append(toIndentedString(gesuchDokumentId)).append("\n");
-    sb.append("    dokumentStatus: ").append(toIndentedString(dokumentStatus)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");

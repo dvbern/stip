@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
@@ -44,7 +45,8 @@ import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.common.validation.RequiredDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
@@ -126,7 +128,8 @@ public class GenerateDemoDataService {
     private final EntityCopyMapper copyMapper;
     private final ConfigService configService;
 
-    private final Instance<RequiredDocumentsProducer> requiredDocumentProducers;
+    private final Instance<RequiredDokumentsProducer> requiredDokumentProducers;
+    private final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers;
     private final LandRepository landRepository;
     private final FallRepository fallRepository;
     private final AusbildungRepository ausbildungRepository;
@@ -357,6 +360,7 @@ public class GenerateDemoDataService {
                     .unterhaltsbeitraege(
                         DemoDataDefaults.defaultByKindsIfNull(kindDto.getUnterhaltsbeitraege(), demoDataDto)
                     )
+                    .entryId(UUID.randomUUID())
                     .wohnsitzAnteilPia(kindDto.getWohnsitzAnteilPia())
                     .kinderUndAusbildungszulagen(kindDto.getKinderUndAusbildungszulagen())
                     .renten(kindDto.getRenten())
@@ -559,7 +563,8 @@ public class GenerateDemoDataService {
             geschwisters.add(
                 DemoPerson.createGeschwister(
                     GeschwisterBuilder.geschwister()
-                        .ausbildungssituation(geschwisterDto.getAusbildungssituation()),
+                        .ausbildungssituation(geschwisterDto.getAusbildungssituation())
+                        .entryId(UUID.randomUUID()),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(
@@ -677,16 +682,26 @@ public class GenerateDemoDataService {
         return Arrays.stream(value).filter(Objects::nonNull).findFirst().orElse(null);
     }
 
-    public void createDemoDokumentsForAllRequired(Gesuch gesuch) {
-        final var gesuchTranche = gesuch.getLatestGesuchTranche();
-        final var requiredDocuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
-            gesuch.getLatestGesuchTranche().getGesuchFormular(),
-            requiredDocumentProducers
+    public void createDemoDokumentsForAllRequired(UUID gesuchTrancheId) {
+        createDemoDokumentsForAllRequired(gesuchTrancheRepository.requireById(gesuchTrancheId));
+    }
+
+    public void createDemoDokumentsForAllRequired(GesuchTranche gesuchTranche) {
+        final var requiredDokuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
+            gesuchTranche.getGesuchFormular(),
+            requiredDokumentProducers
+        );
+        final var requiredListDocuments = RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(
+            gesuchTranche.getGesuchFormular(),
+            requiredRefDokumentProducers
         );
 
-        final var gesuchDokuments = requiredDocuments.stream()
-            .map(dokumentTyp -> createDemoGesuchDokumentWithoutUpload(dokumentTyp, gesuchTranche))
-            .toList();
+        final var gesuchDokuments = Stream.concat(
+            requiredDokuments.stream()
+                .map(dokumentTyp -> createDemoGesuchDokumentWithoutUpload(dokumentTyp, gesuchTranche)),
+            requiredListDocuments.stream()
+                .map(pair -> createDemoGesuchDokumentWithoutUpload(pair.getLeft(), gesuchTranche, pair.getRight()))
+        ).toList();
         final var allDokuments =
             gesuchDokuments.stream().flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream()).toList();
 
@@ -695,6 +710,14 @@ public class GenerateDemoDataService {
         dokumentRepository.persist(allDokuments);
         gesuchDokumentRepository.persist(gesuchDokuments);
         gesuchTrancheRepository.persist(gesuchTranche);
+    }
+
+    private GesuchDokument createDemoGesuchDokumentWithoutUpload(
+        DokumentTyp dokumentTyp,
+        GesuchTranche gesuchTranche,
+        UUID entryId
+    ) {
+        return createDemoGesuchDokumentWithoutUpload(dokumentTyp, gesuchTranche).setEntryId(entryId);
     }
 
     private GesuchDokument createDemoGesuchDokumentWithoutUpload(DokumentTyp dokumentTyp, GesuchTranche gesuchTranche) {

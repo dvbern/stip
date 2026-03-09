@@ -66,6 +66,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
     this.dokumentsStore.getGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,
+      entryId: dokumentModel.entryId,
     });
   }
 
@@ -132,6 +133,7 @@ export class DocumentUploadApprovalComponent implements OnInit, OnDestroy {
     this.dokumentsStore.getGesuchDokument$({
       trancheId: dokumentModel.trancheId,
       dokumentTyp: dokumentModel.dokumentTyp,
+      entryId: dokumentModel.entryId,
     });
   }
 }

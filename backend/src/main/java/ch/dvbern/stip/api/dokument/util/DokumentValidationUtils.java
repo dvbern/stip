@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.common.validation.RequiredCustomDocumentsProducer;
+import ch.dvbern.stip.api.common.validation.RequiredCustomDokumentsProducer;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -33,7 +33,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class DokumentValidationUtils {
     public List<String> getMissingCustomDocumentTypsByTranche(
-        Instance<RequiredCustomDocumentsProducer> customProducers,
+        Instance<RequiredCustomDokumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
         List<String> result = new ArrayList<>();
@@ -53,13 +53,13 @@ public class DokumentValidationUtils {
     }
 
     public List<CustomDokumentTyp> getRequiredCustomDokumentTypes(
-        Instance<RequiredCustomDocumentsProducer> customProducers,
+        Instance<RequiredCustomDokumentsProducer> customProducers,
         GesuchTranche tranche
     ) {
 
         ArrayList<CustomDokumentTyp> customDokumentTypes = new ArrayList<>();
         customProducers.stream()
-            .map(producer -> producer.getRequiredDocuments(tranche))
+            .map(producer -> producer.getRequiredDokuments(tranche))
             .forEach(pair -> {
                 if (pair != null) {
                     customDokumentTypes.addAll(pair.getValue());

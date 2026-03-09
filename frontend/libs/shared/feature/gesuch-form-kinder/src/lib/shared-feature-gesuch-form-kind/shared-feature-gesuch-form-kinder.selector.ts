@@ -13,7 +13,12 @@ export const selectSharedFeatureGesuchFormKinderView = createSelector(
 
     return {
       ...gesuchsView,
-      listChanges: getChangesForList(current, previous),
+      listChanges: getChangesForList(
+        current,
+        previous,
+        (e) => e.entryId,
+        'entryId',
+      ),
     };
   },
 );

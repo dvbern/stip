@@ -35,6 +35,13 @@ public class RequiredDocsUtil {
         requiresOneAndType(requiredDocs.getRight(), dokTyp);
     }
 
+    public void requiresOneAndRef(
+        final Pair<String, Set<Pair<DokumentTyp, java.util.UUID>>> requiredDocs,
+        final DokumentTyp dokTyp
+    ) {
+        requiresOneAndType(requiredDocs.getRight().stream().map(Pair::getLeft).collect(Collectors.toSet()), dokTyp);
+    }
+
     public void requiresOneAndType(final Set<DokumentTyp> requiredDocs, final DokumentTyp dokTyp) {
         assertCount(requiredDocs, 1);
         assertType(requiredDocs, dokTyp);

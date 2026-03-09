@@ -26,7 +26,9 @@ import {
   DokumentTyp,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentEntry,
   GesuchDokumentKommentar,
+  GesuchDokumentRef,
   GesuchTrancheStatus,
   Gesuchstatus,
   TrancheSetting,
@@ -36,6 +38,7 @@ import {
   getFormStepByDocumentType,
 } from '@dv/shared/model/gesuch-form';
 import { PermissionMap } from '@dv/shared/model/permission-state';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   DOKUMENT_TYP_TO_DOCUMENT_OPTIONS,
   SharedPatternDocumentUploadComponent,
@@ -45,7 +48,10 @@ import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-direc
 import { detailExpand } from '@dv/shared/ui/animations';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import {
+  TypeSafeMatCellDefDirective,
+  TypeSafeMatRowDefDirective,
+} from '@dv/shared/ui/table-helper';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { RemoteData, isPending } from '@dv/shared/util/remote-data';
@@ -65,6 +71,20 @@ const interactionMapAenderung: Partial<
   FEHLENDE_DOKUMENTE: true,
 };
 
+type ExpandedRow =
+  | {
+      type: 'none';
+    }
+  | {
+      type: 'id';
+      id: string;
+    }
+  | {
+      type: 'ref';
+      dokumentTyp: DokumentTyp;
+      entryId: string | undefined;
+    };
+
 @Component({
   selector: 'dv-required-dokumente',
   imports: [
@@ -73,6 +93,7 @@ const interactionMapAenderung: Partial<
     MatTableModule,
     MatTooltipModule,
     TypeSafeMatCellDefDirective,
+    TypeSafeMatRowDefDirective,
     SharedPatternDocumentUploadComponent,
     DokumentStatusActionsComponent,
     SharedUiLoadingComponent,
@@ -102,8 +123,10 @@ export class RequiredDokumenteComponent {
     allowTypes: string | undefined;
     stepsFlow: GesuchFormStep[];
     dokuments: GesuchDokument[];
+    entrys: GesuchDokumentEntry[];
     kommentare: RemoteData<GesuchDokumentKommentar[]>;
     requiredDocumentTypes: DokumentTyp[];
+    requiredDocumentRefs: GesuchDokumentRef[];
     readonly: boolean;
     loading: boolean;
     gesuchStatus?: Gesuchstatus;
@@ -125,7 +148,7 @@ export class RequiredDokumenteComponent {
 
   DokumentStatus = Dokumentstatus;
 
-  expandedRowSig = signal<null | string>(null);
+  expandedRowSig = signal<ExpandedRow>({ type: 'none' });
 
   canEditNachfristSig = computed(() => {
     const { gesuchStatus, trancheSetting, trancheStatus } =
@@ -152,13 +175,17 @@ export class RequiredDokumenteComponent {
       allowTypes,
       stepsFlow,
       dokuments,
+      entrys,
       kommentare,
       requiredDocumentTypes,
+      requiredDocumentRefs,
     } = this.dokumenteViewSig();
 
     if (!trancheId || !allowTypes) {
       return new MatTableDataSource<SharedModelTableRequiredDokument>([]);
     }
+
+    const expandedRow = this.expandedRowSig();
 
     const uploadedDocuments: SharedModelTableRequiredDokument[] = dokuments.map(
       (gesuchDokument) => {
@@ -168,8 +195,10 @@ export class RequiredDokumenteComponent {
           throw new Error('Document type is missing');
         }
 
+        const entryId = gesuchDokument.entryId;
         const dokumentOptions = createGesuchDokumentOptions({
           trancheId,
+          entryId,
           permissions,
           allowTypes,
           dokumentTyp,
@@ -181,37 +210,57 @@ export class RequiredDokumenteComponent {
 
         return {
           dokumentTyp,
+          entryId,
+          isExpanded: isExpanded(expandedRow, {
+            id: gesuchDokument.id,
+            dokumentTyp: dokumentTyp,
+            entryId,
+          }),
           gesuchDokument,
           kommentare: [],
           kommentarePending: false,
           formStep,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+          entryName: entrys.find(
+            (e) =>
+              e.dokumentTyps.includes(dokumentTyp) && e.entryId === entryId,
+          )?.name,
           dokumentOptions,
         };
       },
     );
 
-    const missingDocuments: SharedModelTableRequiredDokument[] =
-      requiredDocumentTypes.map((dokumentTyp) => {
-        const formStep = getFormStepByDocumentType(dokumentTyp);
+    const missingDocuments: SharedModelTableRequiredDokument[] = [
+      ...requiredDocumentTypes.map((dokumentTyp) => ({
+        dokumentTyp,
+        entryId: undefined,
+      })),
+      ...requiredDocumentRefs,
+    ].map(({ dokumentTyp, entryId }) => {
+      const formStep = getFormStepByDocumentType(dokumentTyp);
 
-        const dokumentOptions = createGesuchDokumentOptions({
-          trancheId,
-          permissions,
-          allowTypes,
-          dokumentTyp,
-          initialDocuments: [],
-        });
-
-        return {
-          formStep,
-          dokumentTyp,
-          kommentare: [],
-          kommentarePending: false,
-          titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
-          dokumentOptions,
-        };
+      const dokumentOptions = createGesuchDokumentOptions({
+        trancheId,
+        entryId,
+        permissions,
+        allowTypes,
+        dokumentTyp,
+        initialDocuments: [],
       });
+
+      return {
+        formStep,
+        dokumentTyp,
+        entryId,
+        entryName: entrys.find(
+          (e) => e.dokumentTyps.includes(dokumentTyp) && e.entryId === entryId,
+        )?.name,
+        isExpanded: isExpanded(expandedRow, { dokumentTyp, entryId }),
+        kommentare: [],
+        kommentarePending: false,
+        titleKey: DOKUMENT_TYP_TO_DOCUMENT_OPTIONS[dokumentTyp],
+        dokumentOptions,
+      };
+    });
 
     return new MatTableDataSource<SharedModelTableRequiredDokument>(
       [...uploadedDocuments, ...missingDocuments]
@@ -220,11 +269,18 @@ export class RequiredDokumenteComponent {
             stepsFlow,
             a.formStep,
             b.formStep,
-            () => a.dokumentTyp.localeCompare(b.dokumentTyp),
+            () => {
+              return getEntryName(a).localeCompare(getEntryName(b));
+            },
           ),
         )
         .map((dokument) => ({
           ...dokument,
+          isExpanded: isExpanded(expandedRow, {
+            id: dokument.gesuchDokument?.id,
+            dokumentTyp: dokument.dokumentTyp,
+            entryId: dokument.entryId,
+          }),
           kommentarePending: isPending(kommentare),
           kommentare:
             kommentare.data?.filter(
@@ -251,13 +307,13 @@ export class RequiredDokumenteComponent {
       const el = this.dokumentStore.expandedComponentList();
 
       if (el !== 'required') {
-        this.expandedRowSig.set(null);
+        this.expandedRowSig.set({ type: 'none' });
       }
     });
   }
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
-    return item.dokumentTyp;
+    return getEntryName(item);
   }
 
   editNachfrist(gesuchId: string, nachfrist: string) {
@@ -277,10 +333,16 @@ export class RequiredDokumenteComponent {
   }
 
   expandRow(dokument: SharedModelTableRequiredDokument) {
-    const identifier = dokument.gesuchDokument?.id ?? dokument.dokumentTyp;
+    const identifier: ExpandedRow = dokument.gesuchDokument?.id
+      ? { type: 'id', id: dokument.gesuchDokument.id }
+      : {
+          type: 'ref',
+          dokumentTyp: dokument.dokumentTyp,
+          entryId: dokument.entryId,
+        };
 
-    if (this.expandedRowSig() === identifier) {
-      this.expandedRowSig.set(null);
+    if (JSON.stringify(this.expandedRowSig()) === JSON.stringify(identifier)) {
+      this.expandedRowSig.set({ type: 'none' });
     } else {
       this.dokumentStore.setExpandedList('required');
       this.expandedRowSig.set(identifier);
@@ -288,3 +350,29 @@ export class RequiredDokumenteComponent {
     }
   }
 }
+
+const isExpanded = (
+  expandedRow: ExpandedRow,
+  ref: { id?: string; dokumentTyp: DokumentTyp; entryId: string | undefined },
+) => {
+  switch (expandedRow.type) {
+    case 'none':
+      return false;
+    case 'id':
+      return ref.id === expandedRow.id;
+    case 'ref':
+      return (
+        ref.dokumentTyp === expandedRow.dokumentTyp &&
+        ref.entryId === expandedRow.entryId
+      );
+    default:
+      assertUnreachable(expandedRow);
+  }
+};
+
+const getEntryName = (item: {
+  dokumentTyp: DokumentTyp;
+  entryName?: string;
+}) => {
+  return `${item.dokumentTyp}_${item.entryName ?? ''}`;
+};

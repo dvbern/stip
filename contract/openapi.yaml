@@ -2990,6 +2990,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -3032,6 +3040,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -3062,6 +3078,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -3104,6 +3128,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -5161,9 +5193,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5190,9 +5220,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -8821,8 +8849,6 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
-        dokumentStatus:
-          $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:
@@ -9007,6 +9033,11 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
         customDokumentTyp:
@@ -10190,6 +10221,7 @@ components:
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
+        - entryId
         - wohnsitz
         - vorname
         - nachname
@@ -10197,6 +10229,9 @@ components:
         - ausbildungssituation
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -10252,8 +10287,9 @@ components:
           description: Required wenn taetigkeitsart != null
           type: string
     KindUpdate:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       required:
+        - entryId
         - vorname
         - nachname
         - geburtsdatum
@@ -10261,6 +10297,9 @@ components:
         - wohnsitzAnteilPia
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -10489,7 +10528,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Kind:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       type: object
       allOf:
         - $ref: '#/components/schemas/KindUpdate'
@@ -10762,6 +10801,35 @@ components:
           required:
             - start
             - comment
+    GesuchDokumentEntry:
+      required:
+        - entryId
+        - name
+        - dokumentTyps
+      type: object
+      properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        dokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+    GesuchDokumentList:
+      required:
+        - entrys
+        - dokuments
+      type: object
+      properties:
+        entrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentEntry'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokument'
     DokumenteToUpload:
       type: object
       properties:
@@ -10773,6 +10841,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DokumentTyp'
+        requiredRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentRef'
         unterschriftenblaetter:
           type: array
           items:
@@ -10783,6 +10855,15 @@ components:
           type: boolean
         sbCanUploadUnterschriftenblatt:
           type: boolean
+    GesuchDokumentRef:
+      required:
+        - dokumentTyp
+      type: object
+      properties:
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        entryId:
+          $ref: '#/components/schemas/UUID'
     NeskoGetSteuerdatenRequest:
       required:
         - steuerdatenTyp
