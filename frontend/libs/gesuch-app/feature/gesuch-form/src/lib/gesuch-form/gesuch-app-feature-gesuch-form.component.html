@@ -1,5 +1,4 @@
 <ng-container *dvTranslocoGs="let t">
-  <!-- todo: set height -->
   <div class="d-flex h-100">
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
@@ -12,7 +11,7 @@
       <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
 
-    <div class="pt-lg-4 px-lg-4 container mb-5">
+    <div class="pt-lg-4 px-lg-4 container tw:dv-pass-height">
       @if (currentStepSig(); as step) {
         <!-- step header (mobile) -->
         <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">

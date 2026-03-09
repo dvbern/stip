@@ -31,7 +31,7 @@ import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRevision,
-  selectRouteId,
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
@@ -95,7 +95,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   @Output() openSidenav = new EventEmitter<void>();
 
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
 
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);

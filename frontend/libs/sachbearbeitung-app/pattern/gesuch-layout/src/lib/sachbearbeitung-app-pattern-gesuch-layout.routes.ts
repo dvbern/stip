@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 
 export const sachbearbeitungAppPatternGesuchLayoutRoutes: Route[] = [
-  // todo: rename to berechnung
+  // todo-after-merge: rename to berechnung
   {
     path: 'verfuegung',
     title: 'sachbearbeitung-app.verfuegung.title',
@@ -38,7 +38,7 @@ export const sachbearbeitungAppPatternGesuchLayoutRoutes: Route[] = [
       ),
   },
   {
-    // todo: work with 'formular'?
+    // todo-after-merge: rename to formular?
     path: '',
     title: 'sachbearbeitung-app.gesuch-form.title',
     loadComponent: () =>

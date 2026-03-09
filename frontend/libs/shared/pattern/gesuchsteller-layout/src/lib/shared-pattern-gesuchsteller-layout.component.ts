@@ -23,8 +23,11 @@ import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { DarlehenStatus } from '@dv/shared/model/gesuch';
-import { NavItem } from '@dv/shared/model/ui';
+import {
+  NavItem,
+  darlehenCompletedStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
@@ -38,25 +41,10 @@ const gsBaseMenuItems: NavItem[] = [
   },
 ];
 
-type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
-const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
-  IN_BEARBEITUNG_GS: 'open',
-  EINGEGEBEN: 'open',
-  IN_FREIGABE: 'open',
-  ABGELEHNT: 'rejected',
-  AKZEPTIERT: 'accepted',
-};
-
-const darlehenCompletedStates: DarlehenCompleteStates[] = [
-  'open',
-  'rejected',
-  'accepted',
-];
-
 /**
  * This is the main layout for the gesuchsteller app.
- * todo: move into gesuch-app?
- * todo: make the template reusable, since it is mostly the same for all apps?
+ * todo-before-merge: move into gesuch-app?
+ * todo-before-merge: make the template reusable, since it is mostly the same for all apps?
  */
 @Component({
   selector: 'dv-shared-pattern-gesuchsteller-layout',
@@ -73,12 +61,12 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
       <dv-shared-pattern-global-header
-        [staticNavItems]="staticNavItems"
+        [staticNavItems]="baseMenuItems"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
-      <main class="page-body">
+      <main class="page-body tw:flex tw:flex-col">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>
@@ -92,6 +80,8 @@ export class SharedPatternGesuchstellerLayoutComponent {
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+
+  baseMenuItems = gsBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -118,10 +108,9 @@ export class SharedPatternGesuchstellerLayoutComponent {
     return params?.['darlehenId'] ? true : false;
   });
 
-  // todo: really needed?
   private gesuchIdSig = computed(() => {
     const params = this.allRouteParamsSig();
-    return params?.['id'];
+    return params?.['gesuchId'];
   });
 
   constructor() {
@@ -139,14 +128,13 @@ export class SharedPatternGesuchstellerLayoutComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? ''; // check if really ok!
+      // todo: check this
+      const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? '';
       const isDarlehenRoute = this.isDarlehenRouteSig();
       const rolesMap = this.permissionStore.rolesMapSig();
 
       const gesuchNav: NavItem[] = [];
 
-      // todo: finish this.... URLltree route format not working!
-      // todo: what's with the getRelativeTrancheRoute?
       if (gesuchId) {
         const tranchen =
           this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
@@ -177,7 +165,6 @@ export class SharedPatternGesuchstellerLayoutComponent {
             label: { key: 'shared.header.gesuch' },
             icon: 'description',
             route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
-            // todo: fix routerlink active
             active: !!gesuchId,
           });
         }
@@ -275,20 +262,7 @@ export class SharedPatternGesuchstellerLayoutComponent {
         return item.rolesAllowed.some((role) => rolesMap[role]);
       });
 
-      console.log('Setting navigation items:', navItems);
-
       this.navigationStore.setNavigationItems(navItems);
     });
   }
-
-  // todo: really needed?
-  staticNavItems: NavItem[] = [
-    {
-      type: 'link',
-      id: 'dashboard',
-      label: { key: 'gesuch-app.dashboard.title' },
-      icon: 'dashboard',
-      route: ['/dashboard'],
-    },
-  ];
 }

@@ -51,7 +51,7 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
-        path: BUCHHALTUNG_ROUTE.route + '/:id',
+        path: BUCHHALTUNG_ROUTE.route + '/:gesuchId',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/infos-buchhaltung').then(
             (m) => m.sachbearbeitungAppFeatureInfosBuchhaltungRoutes,
@@ -62,13 +62,13 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
         component: SharedUiCommingSoonComponent,
       },
       {
-        path: ':id',
+        path: ':gesuchId',
         pathMatch: 'prefix',
-        redirectTo: PROTOKOLL_ROUTE.route + '/:id',
+        redirectTo: PROTOKOLL_ROUTE.route + '/:gesuchId',
       },
       {
-        path: ':id/tranche/:trancheId',
-        redirectTo: PROTOKOLL_ROUTE.route + '/:id/tranche/:trancheId',
+        path: ':gesuchId/tranche/:trancheId',
+        redirectTo: PROTOKOLL_ROUTE.route + '/:gesuchId/tranche/:trancheId',
       },
     ],
   },

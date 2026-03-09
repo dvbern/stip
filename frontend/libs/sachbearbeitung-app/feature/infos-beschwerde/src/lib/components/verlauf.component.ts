@@ -50,7 +50,7 @@ export class VerlaufComponent {
 
   gesuchStore = inject(GesuchStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchIdSig = input.required<string>({ alias: 'id' });
+  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
   displayColumns = [
     'timestampErstellt',
     'userErstellt',

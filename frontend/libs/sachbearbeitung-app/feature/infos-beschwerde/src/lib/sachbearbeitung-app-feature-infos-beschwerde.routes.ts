@@ -7,7 +7,7 @@ import { SachbearbeitungAppFeatureInfosBeschwerdeComponent } from './sachbearbei
 
 export const sachbearbeitungAppFeatureInfosBeschwerdeRoutes: Route[] = [
   {
-    path: ':id',
+    path: ':gesuchId',
     pathMatch: 'prefix',
     providers: [BeschwerdeStore],
     component: SachbearbeitungAppFeatureInfosBeschwerdeComponent,

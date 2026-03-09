@@ -26,7 +26,7 @@ import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRevision,
-  selectRouteId,
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
@@ -85,7 +85,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   private gesuchStore = inject(GesuchStore);
 
   darlehenStore = inject(DarlehenStore);
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
   isAenderungRouteSig = toSignal(
@@ -146,6 +146,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
     selectSharedDataAccessConfigsView,
   );
 
+  // todo-after-merge: revisit in KSTIP-2856
   private gesuchUpdatedSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
@@ -163,7 +164,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
     this.gesuchHeaderStore.viewSbSig;
 
-  // todo: revisit in KSTIP-2856
+  // todo-after-merge: revisit in KSTIP-2856
   firstCurrentTranchenIdSig = computed(() => {
     const data = this.gesuchHeaderStore.headerSb().data;
 
@@ -182,7 +183,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
     const { stateInfo } = this.headerViewSbSig();
     const activePath = this.routeUrlSig();
 
-    // todo: use correct tranche in KSTIP-2856
+    // todo-after-merge: use correct tranche in KSTIP-2856
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
       route: [
@@ -270,7 +271,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
       }
     });
 
-    // todo: adjust info and verfuegung routes, to include trancheId
+    // todo-after-merge: After merge will change to gesuchId instead of trancheId, also move to main-layout?
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
       if (gesuchTrancheId) {

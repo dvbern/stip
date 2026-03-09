@@ -21,7 +21,7 @@ import { filter, map } from 'rxjs';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRouteId,
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
@@ -63,41 +63,26 @@ export class GesuchAppFeatureGesuchFormComponent
   implements AfterViewInit, OnDestroy
 {
   @HostBinding('class') klass = 'tw:dv-pass-height';
-
-  stepSig = signal<GesuchFormStep | undefined>(undefined);
-
-  // navClicked = new EventEmitter<{ value: boolean }>();
-  private navigationStore = inject(NavigationStore);
-
-  // todo: find generic pattern for this
   @ViewChild(CdkPortal)
   portalContent: CdkPortal | null = null;
-
-  ngAfterViewInit(): void {
-    this.navigationStore.setPortal(this.portalContent);
-  }
-  ngOnDestroy() {
-    this.portalContent?.detach();
-  }
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private navigationStore = inject(NavigationStore);
 
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-
-  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-  // what is this?
-  // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
-  //   this.gesuchIdSig,
-  // );
+
+  viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
+
+  stepSig = signal<GesuchFormStep | undefined>(undefined);
 
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
@@ -127,6 +112,13 @@ export class GesuchAppFeatureGesuchFormComponent
       map((url) => url.includes('/tranche/')),
     ),
   );
+
+  ngAfterViewInit(): void {
+    this.navigationStore.setPortal(this.portalContent);
+  }
+  ngOnDestroy() {
+    this.portalContent?.detach();
+  }
 
   constructor() {
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)

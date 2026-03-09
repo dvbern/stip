@@ -69,7 +69,6 @@ export const appRoutes: Route[] = [
             '/administration',
           ),
         ],
-        // todo: chane all cockpit to dashboard, also replace all testids and translation keys
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/cockpit').then(

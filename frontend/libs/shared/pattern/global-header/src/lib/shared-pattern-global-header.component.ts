@@ -56,23 +56,27 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 })
 export class SharedPatternGlobalHeaderComponent {
   @HostBinding('class') klass = 'tw:block';
+
   // todo: change syntax and remove unused
+  // todo: look at backlink, is the behavior still valid
   @Input() backLink?: { path: string; text: string };
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
-
   @Input() staticNavItems?: NavItem[];
-
-  private oauthService = inject(OAuthService);
   @Output() openSidenav = new EventEmitter<void>();
   @Output() closeSidenav = new EventEmitter<void>();
+
+  protected breakpointObserver = inject(BreakpointObserver);
+  private oauthService = inject(OAuthService);
   private cd = inject(ChangeDetectorRef);
   private store = inject(Store);
   private tenantCacheService = inject(SharedUtilTenantConfigService);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
-  protected breakpointObserver = inject(BreakpointObserver);
+
+  languageSig = this.store.selectSignal(selectLanguage);
   navigationStore = inject(NavigationStore);
+  tenantSig = this.tenantCacheService.tenantInfoSig;
 
   navItemsSig = computed(() => {
     const dynamicItems = this.navigationStore.navigationViewSig();
@@ -84,8 +88,6 @@ export class SharedPatternGlobalHeaderComponent {
     return this.staticNavItems ?? [];
   });
 
-  languageSig = this.store.selectSignal(selectLanguage);
-  tenantSig = this.tenantCacheService.tenantInfoSig;
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;

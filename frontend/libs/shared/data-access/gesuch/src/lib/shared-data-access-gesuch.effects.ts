@@ -53,7 +53,7 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 import { SharedDataAccessGesuchEvents } from './shared-data-access-gesuch.events';
 import {
   selectRevision,
-  selectRouteId,
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
@@ -62,7 +62,7 @@ import {
 
 export const LOAD_ALL_DEBOUNCE_TIME = 300;
 export const ROUTE_ID_MISSING =
-  'Make sure that the route is correct and contains the gesuch :id';
+  'Make sure that the route is correct and contains the param :gesuchId';
 
 export const loadOwnGesuchs = createEffect(
   (
@@ -118,7 +118,7 @@ export const loadGesuch = createEffect(
       ),
       concatLatestFrom(() =>
         store
-          .select(selectRouteId)
+          .select(selectRouteGesuchId)
           .pipe(
             combineLatestWith(
               store.select(selectTrancheTyp),

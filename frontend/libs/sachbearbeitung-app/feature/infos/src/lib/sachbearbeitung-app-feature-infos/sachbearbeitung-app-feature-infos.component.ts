@@ -15,7 +15,10 @@ import {
   INFOS_ROUTE,
   InfosOptions,
 } from '@dv/sachbearbeitung-app/model/infos';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import {
+  selectRouteGesuchId,
+  selectRouteId,
+} from '@dv/shared/data-access/gesuch';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 
@@ -43,5 +46,5 @@ export class SachbearbeitungAppFeatureInfosComponent {
   infosOptions = INFOS_OPTIONS;
   infosRoute = INFOS_ROUTE;
   navClicked$ = new EventEmitter();
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
 }

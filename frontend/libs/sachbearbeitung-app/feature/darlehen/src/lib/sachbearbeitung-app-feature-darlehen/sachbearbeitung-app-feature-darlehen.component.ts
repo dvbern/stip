@@ -11,7 +11,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
@@ -35,7 +35,7 @@ export class SachbearbeitungAppFeatureDarlehenComponent {
   darlehenStore = inject(DarlehenStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   hasUnsavedChanges = false;
 
   constructor() {

@@ -34,6 +34,7 @@ const baseFormStepsArray = Object.values(BaseFormSteps);
 const { selectRouteParam, selectQueryParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
+export const selectRouteGesuchId = selectRouteParam('gesuchId');
 export const selectRouteDarlehenId = selectRouteParam('darlehenId');
 
 const isExistingTrancheTyp = (

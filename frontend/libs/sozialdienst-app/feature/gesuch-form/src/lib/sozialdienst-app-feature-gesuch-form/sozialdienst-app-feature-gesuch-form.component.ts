@@ -16,6 +16,7 @@ import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRouteGesuchId,
   selectRouteId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
@@ -66,18 +67,16 @@ export class SozialdienstAppFeatureGesuchFormComponent {
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  // gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-  // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
-  //   this.gesuchIdSig,
-  // );
-  fallIdSig = computed(() => {
-    const gesuch = this.cacheViewSig().cache.gesuch;
-    return gesuch?.fallId;
-  });
+
+  // fallIdSig = computed(() => {
+  //   const gesuch = this.cacheViewSig().cache.gesuch;
+  //   return gesuch?.fallId;
+  // });
   stepsSig = computed(() => {
     const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
@@ -113,6 +112,7 @@ export class SozialdienstAppFeatureGesuchFormComponent {
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
+    // todo: move into parent component? and check for Id route there?
     effect(() => {
       const gesuchTrancheId = this.trancheIdSig();
       if (gesuchTrancheId) {

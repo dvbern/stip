@@ -7,7 +7,7 @@ import { SachbearbeitungAppFeatureInfosGesuchsDokumenteComponent } from './sachb
 
 export const sachbearbeitungAppFeatureInfosGesuchsdokumenteRoutes: Route[] = [
   {
-    path: ':id',
+    path: ':gesuchId',
     pathMatch: 'prefix',
     data: { option: INFO_ADMIN_DOKUMENTE_ROUTE },
     providers: [InfosGesuchsdokumenteStore],
@@ -21,23 +21,23 @@ export const sachbearbeitungAppFeatureInfosGesuchsdokumenteRoutes: Route[] = [
       {
         path: 'stipendien',
         loadComponent: () =>
-          import(
-            './components/stipenedien-dokumente/stipendien-dokumente.component'
-          ).then((m) => m.StipendienDokumenteComponent),
+          import('./components/stipenedien-dokumente/stipendien-dokumente.component').then(
+            (m) => m.StipendienDokumenteComponent,
+          ),
       },
       {
         path: 'darlehen',
         loadComponent: () =>
-          import(
-            './components/darlehen-dokumente/darlehen-dokumente.component'
-          ).then((m) => m.DarlehenDokumenteComponent),
+          import('./components/darlehen-dokumente/darlehen-dokumente.component').then(
+            (m) => m.DarlehenDokumenteComponent,
+          ),
       },
       {
         path: 'datenschutzbriefe',
         loadComponent: () =>
-          import(
-            './components/datenschutzbriefe-dokumente/datenschutzbriefe-dokumente.component'
-          ).then((m) => m.DatenschutzbriefeDokumenteComponent),
+          import('./components/datenschutzbriefe-dokumente/datenschutzbriefe-dokumente.component').then(
+            (m) => m.DatenschutzbriefeDokumenteComponent,
+          ),
       },
     ],
   },

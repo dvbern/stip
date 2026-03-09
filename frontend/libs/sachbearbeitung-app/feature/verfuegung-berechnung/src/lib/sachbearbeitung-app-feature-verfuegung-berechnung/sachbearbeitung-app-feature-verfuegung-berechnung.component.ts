@@ -12,7 +12,10 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import {
+  selectRouteGesuchId,
+  selectRouteId,
+} from '@dv/shared/data-access/gesuch';
 import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -59,7 +62,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       kosten: false,
     },
   };
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   berechnungStore = inject(BerechnungStore);
 
   berechnungenRawSig = computed<BerechnungView>(() => {

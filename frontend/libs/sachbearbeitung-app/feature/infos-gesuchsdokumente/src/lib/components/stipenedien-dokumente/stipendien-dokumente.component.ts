@@ -55,7 +55,7 @@ export class StipendienDokumenteComponent {
   infosStore = inject(InfosGesuchsdokumenteStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchId = input.required<string>({ alias: 'id' });
+  gesuchId = input.required<string>({ alias: 'gesuchId' });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;

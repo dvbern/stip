@@ -19,7 +19,10 @@ import {
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import {
+  selectRouteGesuchId,
+  selectRouteId,
+} from '@dv/shared/data-access/gesuch';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -57,7 +60,7 @@ export class SachbearbeitungAppFeatureVerfuegungComponent {
   private permissionStore = inject(PermissionStore);
   private config = inject(SharedModelCompileTimeConfig);
 
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   gesuchPermissionsSig = computed(() => {
     const gesuchStatus =
       this.gesuchInfoStore.gesuchInfo().data?.state.gesuchStatus;

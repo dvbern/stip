@@ -18,7 +18,7 @@ import { filter } from 'rxjs';
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRouteId,
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
@@ -67,8 +67,8 @@ export class SachbearbeitungAppFeatureGesuchFormComponent {
   private permissionStore = inject(PermissionStore);
   private steuerdatenStore = inject(SteuerdatenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
-  // todo: rename to gesuchRouteId (also rename route param?)
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
 
   tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
     this.gesuchIdSig,

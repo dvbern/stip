@@ -24,7 +24,11 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
-import { NavItem } from '@dv/shared/model/ui';
+import {
+  NavItem,
+  darlehenCompletedStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
@@ -44,21 +48,6 @@ const gsBaseMenuItems: NavItem[] = [
     route: ['/administration'],
     rolesAllowed: ['V0_Sozialdienst-Admin'],
   },
-];
-
-type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
-const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
-  IN_BEARBEITUNG_GS: 'open',
-  EINGEGEBEN: 'open',
-  IN_FREIGABE: 'open',
-  ABGELEHNT: 'rejected',
-  AKZEPTIERT: 'accepted',
-};
-
-const darlehenCompletedStates: DarlehenCompleteStates[] = [
-  'open',
-  'rejected',
-  'accepted',
 ];
 
 /**
@@ -86,7 +75,7 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
-      <main class="page-body">
+      <main class="page-body tw:flex tw:flex-col">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>
@@ -125,8 +114,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
     ),
   );
 
-  // fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
-
   private isDarlehenRouteSig = computed(() => {
     const params = this.allRouteParamsSig();
     return params?.['darlehenId'] ? true : false;
@@ -162,11 +149,15 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const rolesMap = this.permissionStore.rolesMapSig();
       const gesuchNav: NavItem[] = [];
 
-      // todo: finish this.... URLltree route format not working!
       // todo: what's with the getRelativeTrancheRoute?
       if (gesuchId) {
         const tranchen =
           this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
+
+        // todo-before-merge or should we use this?
+        // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
+        //   this.gesuchIdSig,
+        // );
 
         if (tranchen.length > 1) {
           gesuchNav.push({
