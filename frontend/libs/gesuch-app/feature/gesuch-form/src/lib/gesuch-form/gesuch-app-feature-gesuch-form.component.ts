@@ -4,6 +4,7 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   OnDestroy,
   ViewChild,
   computed,
@@ -61,6 +62,8 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
 export class GesuchAppFeatureGesuchFormComponent
   implements AfterViewInit, OnDestroy
 {
+  @HostBinding('class') klass = 'tw:dv-pass-height';
+
   stepSig = signal<GesuchFormStep | undefined>(undefined);
 
   // navClicked = new EventEmitter<{ value: boolean }>();

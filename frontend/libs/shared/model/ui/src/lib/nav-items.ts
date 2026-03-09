@@ -5,6 +5,11 @@ import {
 } from '@angular/cdk/portal';
 import { UrlTree } from '@angular/router';
 
+import {
+  BenutzerRole,
+  SozialdienstBenutzerRole,
+} from '@dv/shared/model/benutzer';
+
 export type Portal<T = unknown> =
   | TemplatePortal
   | ComponentPortal<T>
@@ -17,6 +22,7 @@ export type TranslateLabel = {
 
 interface NavItemBase {
   id: string;
+  rolesAllowed?: BenutzerRole[] | SozialdienstBenutzerRole[];
   label?: TranslateLabel;
   icon?: string;
   active?: boolean | undefined;

@@ -9,7 +9,6 @@
           class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
           [class.btn-light]="!isActive"
           [class.shadow-none]="!isActive"
-          (click)="navClicked.emit({ value: true })"
           [routerLink]="['/', 'administration', option.route]"
           routerLinkActive="active"
           [attr.data-testid]="'option-nav-' + option.route"

@@ -20,7 +20,9 @@ import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
@@ -88,6 +90,8 @@ export class SharedPatternGesuchstellerLayoutComponent {
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private permissionStore = inject(PermissionStore);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -117,7 +121,7 @@ export class SharedPatternGesuchstellerLayoutComponent {
   // todo: really needed?
   private gesuchIdSig = computed(() => {
     const params = this.allRouteParamsSig();
-    return params?.['gesuchId'];
+    return params?.['id'];
   });
 
   constructor() {
@@ -133,9 +137,51 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
     // naviation items effect
     effect(() => {
+      const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = untracked(this.fallStore.currentFallViewSig)?.id ?? ''; // check if really ok!
       const isDarlehenRoute = this.isDarlehenRouteSig();
+      const rolesMap = this.permissionStore.rolesMapSig();
+
+      const gesuchNav: NavItem[] = [];
+
+      // todo: finish this.... URLltree route format not working!
+      // todo: what's with the getRelativeTrancheRoute?
+      if (gesuchId) {
+        const tranchen =
+          this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
+
+        if (tranchen.length > 1) {
+          gesuchNav.push({
+            type: 'menu',
+            id: 'gesuch',
+            label: { key: 'shared.header.gesuch' },
+            icon: 'description',
+            children: tranchen.map((tranche, index) => ({
+              type: 'link' as const,
+              id: tranche.id,
+              label: {
+                key: 'shared.header.tranche.item',
+                context: {
+                  date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
+                  index: index + 1,
+                },
+              },
+              route: ['/gesuch', gesuchId, 'tranche', tranche.id],
+            })),
+          });
+        } else if (tranchen.length === 1) {
+          gesuchNav.push({
+            type: 'link',
+            id: 'gesuch',
+            label: { key: 'shared.header.gesuch' },
+            icon: 'description',
+            route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
+            // todo: fix routerlink active
+            active: !!gesuchId,
+          });
+        }
+      }
 
       // todo: put into lib
       const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
@@ -218,9 +264,18 @@ export class SharedPatternGesuchstellerLayoutComponent {
 
       const navItems: NavItem[] = [
         ...gsBaseMenuItems,
+        ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
-      ];
+      ].filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
+
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      });
+
+      console.log('Setting navigation items:', navItems);
 
       this.navigationStore.setNavigationItems(navItems);
     });

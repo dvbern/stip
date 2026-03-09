@@ -22,6 +22,7 @@ import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
@@ -35,13 +36,13 @@ const gsBaseMenuItems: NavItem[] = [
     icon: 'list',
     route: ['/'],
   },
-  // todo: hasRoles V0_Sozialdienst-Admin
   {
     type: 'link',
     id: 'administration',
     label: { key: 'sozialdienst-app.header.administration' },
     icon: 'settings',
     route: ['/administration'],
+    rolesAllowed: ['V0_Sozialdienst-Admin'],
   },
 ];
 
@@ -102,6 +103,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
+  private permissionStore = inject(PermissionStore);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -157,7 +159,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const fallId = untracked(this.fallIdSig) ?? ''; // check if really ok with untracked and fallback!
       const gesuchId = this.gesuchIdSig();
       const isDarlehenRoute = this.isDarlehenRouteSig();
-
+      const rolesMap = this.permissionStore.rolesMapSig();
       const gesuchNav: NavItem[] = [];
 
       // todo: finish this.... URLltree route format not working!
@@ -280,7 +282,13 @@ export class SozialdienstAppPatternMainLayoutComponent {
         ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
-      ];
+      ].filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
+
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      });
 
       this.navigationStore.setNavigationItems(navItems);
     });

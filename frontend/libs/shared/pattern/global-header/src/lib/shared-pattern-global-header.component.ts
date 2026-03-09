@@ -56,6 +56,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 })
 export class SharedPatternGlobalHeaderComponent {
   @HostBinding('class') klass = 'tw:block';
+  // todo: change syntax and remove unused
   @Input() backLink?: { path: string; text: string };
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';

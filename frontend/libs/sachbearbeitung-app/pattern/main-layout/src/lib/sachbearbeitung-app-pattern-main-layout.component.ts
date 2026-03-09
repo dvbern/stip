@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  computed,
   inject,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -18,34 +19,44 @@ import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-acce
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { PermissionStore } from '@dv/shared/global/permission';
 import { DarlehenStatus } from '@dv/shared/model/gesuch';
 import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 
-const gsBaseMenuItems: NavItem[] = [
+// todo: really needed?
+// Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
+const baseNavItems: NavItem[] = [
   {
     type: 'link',
     id: 'dashboard',
+    label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
-    label: { key: 'gesuch-app.dashboard.title' },
     route: ['/dashboard'],
   },
-];
-
-type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
-const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
-  IN_BEARBEITUNG_GS: 'open',
-  EINGEGEBEN: 'open',
-  IN_FREIGABE: 'open',
-  ABGELEHNT: 'rejected',
-  AKZEPTIERT: 'accepted',
-};
-
-const darlehenCompletedStates: DarlehenCompleteStates[] = [
-  'open',
-  'rejected',
-  'accepted',
+  {
+    type: 'link',
+    id: 'darlehen-dashboard',
+    label: { key: 'sachbearbeitung-app.header.darlehen' },
+    icon: 'payments',
+    route: ['/darlehen-dashboard'],
+  },
+  {
+    type: 'link',
+    id: 'massendruck',
+    label: { key: 'sachbearbeitung-app.header.massendruck' },
+    icon: 'print',
+    route: ['/massendruck'],
+  },
+  {
+    type: 'link',
+    id: 'administration',
+    label: { key: 'sachbearbeitung-app.header.administration' },
+    icon: 'settings',
+    route: ['/administration'],
+    rolesAllowed: ['V0_Sachbearbeiter-Admin'],
+  },
 ];
 
 @Component({
@@ -63,7 +74,7 @@ const darlehenCompletedStates: DarlehenCompleteStates[] = [
     </mat-sidenav>
     <mat-sidenav-content class="d-flex flex-column">
       <dv-shared-pattern-global-header
-        [staticNavItems]="staticNavItems"
+        [staticNavItems]="navItemsSig()"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
@@ -79,36 +90,13 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
+  private permissionStore = inject(PermissionStore);
   private router = inject(Router);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
-  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
-
-  // todo: finish!
-  // todo: also show in header!
-  constructor() {
-    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
-      page: 1,
-      pageSize: 10,
-    });
-  }
-
-  // @if (fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
-  //         <a
-  //           routerLink="/fehlgeschlagene-zahlungen"
-  //           routerLinkActive="active"
-  //           class="btn btn-nav fw-normal px-2 d-flex align-items-center shadow-none"
-  //           data-testid="gesuch-step-nav-fehlgeschlagene-zahlungen"
-  //         >
-  //           <i class="material-symbols-rounded text-white me-2">error_outline</i>
-  //           <span>
-  //             {{ 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' | transloco }}
-  //           </span>
-  //         </a>
-  //       }
-
+  // todo: needed?
   private allRouteParamsSig = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),
@@ -126,36 +114,39 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
     ),
   );
 
-  // todo: really needed?
-  // Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
-  staticNavItems: NavItem[] = [
-    {
-      type: 'link',
-      id: 'dashboard',
-      label: { key: 'sachbearbeitung-app.header.antraege' },
-      icon: 'dashboard',
-      route: ['/dashboard'],
-    },
-    {
-      type: 'link',
-      id: 'darlehen-dashboard',
-      label: { key: 'sachbearbeitung-app.header.darlehen' },
-      icon: 'payments',
-      route: ['/darlehen-dashboard'],
-    },
-    {
-      type: 'link',
-      id: 'massendruck',
-      label: { key: 'sachbearbeitung-app.header.massendruck' },
-      icon: 'print',
-      route: ['/massendruck'],
-    },
-    {
-      type: 'link',
-      id: 'administration',
-      label: { key: 'sachbearbeitung-app.header.administration' },
-      icon: 'settings',
-      route: ['/administration'],
-    },
-  ];
+  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
+
+  navItemsSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
+
+    const navItems: NavItem[] = baseNavItems;
+
+    // todo: test
+    if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
+      navItems.push({
+        type: 'link',
+        id: 'fehlgeschlagene-zahlungen',
+        label: { key: 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' },
+        icon: 'error_outline',
+        route: ['/fehlgeschlagene-zahlungen'],
+      });
+    }
+
+    const filtered: NavItem[] = navItems.filter((item) => {
+      if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+        return true;
+      }
+
+      return item.rolesAllowed.some((role) => rolesMap[role]);
+    });
+
+    return filtered;
+  });
+
+  constructor() {
+    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
+      page: 1,
+      pageSize: 10,
+    });
+  }
 }
