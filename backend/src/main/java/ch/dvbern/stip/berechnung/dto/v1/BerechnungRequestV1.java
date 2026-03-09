@@ -179,12 +179,6 @@ public class BerechnungRequestV1 implements CalculatorRequest {
                     (int) gesuchFormular.getGeschwisters()
                         .stream()
                         .filter(
-                            geschwister -> geschwister.getAusbildungssituation() != Ausbildungssituation.KEINE
-                        )
-                        .count(),
-                    (int) gesuchFormular.getGeschwisters()
-                        .stream()
-                        .filter(
                             geschwister -> geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
                         )
                         .count(),
