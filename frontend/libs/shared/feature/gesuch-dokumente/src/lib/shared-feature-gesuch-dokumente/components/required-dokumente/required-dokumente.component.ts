@@ -269,10 +269,9 @@ export class RequiredDokumenteComponent {
             stepsFlow,
             a.formStep,
             b.formStep,
-            () =>
-              a.dokumentTyp.localeCompare(
-                `${b.dokumentTyp}_${b.entryName ?? ''}`,
-              ),
+            () => {
+              return getEntryName(a).localeCompare(getEntryName(b));
+            },
           ),
         )
         .map((dokument) => ({
@@ -314,7 +313,7 @@ export class RequiredDokumenteComponent {
   }
 
   trackByFn(_index: number, item: SharedModelTableRequiredDokument) {
-    return `${item.dokumentTyp}_${item.entryName}`;
+    return getEntryName(item);
   }
 
   editNachfrist(gesuchId: string, nachfrist: string) {
@@ -369,4 +368,11 @@ const isExpanded = (
     default:
       assertUnreachable(expandedRow);
   }
+};
+
+const getEntryName = (item: {
+  dokumentTyp: DokumentTyp;
+  entryName?: string;
+}) => {
+  return `${item.dokumentTyp}_${item.entryName ?? ''}`;
 };
