@@ -29,5 +29,9 @@
   "demo-data-app.overview.file-upload.confirm.placeholder": "Commentaire",
   "demo-data-app.overview.file-upload.confirm.button": "Charger",
   "demo-data-app.overview.file-upload.error": "Erreur lors du chargement du fichier",
-  "demo-data-app.overview.file-upload.success": "Les données de test ont été chargées avec succès"
+  "demo-data-app.overview.file-upload.success": "Les données de test ont été chargées avec succès",
+  "demo-data-app.overview.test-berechnung": "Tester tous les calculs",
+  "demo-data-app.overview.test-berechnung.copy-to-clipboard": "Copier dans le presse-papiers",
+  "demo-data-app.overview.test-berechnung.soll-ist": "Doit être: {{soll}}\n Est: {{ist}}",
+  "demo-data-app.overview.test-berechnung.success": "Les données de test ont été calculées avec succès"
 }

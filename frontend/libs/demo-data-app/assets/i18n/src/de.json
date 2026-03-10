@@ -29,5 +29,9 @@
   "demo-data-app.overview.file-upload.confirm.placeholder": "Kommentar",
   "demo-data-app.overview.file-upload.confirm.button": "Hochladen",
   "demo-data-app.overview.file-upload.error": "Fehler beim Hochladen der Datei",
-  "demo-data-app.overview.file-upload.success": "Die Testdaten wurden erfolgreich hochgeladen"
+  "demo-data-app.overview.file-upload.success": "Die Testdaten wurden erfolgreich hochgeladen",
+  "demo-data-app.overview.test-berechnung": "Alle Berechnungen Testen",
+  "demo-data-app.overview.test-berechnung.copy-to-clipboard": "In die Zwischenablage kopieren",
+  "demo-data-app.overview.test-berechnung.soll-ist": "Soll: {{soll}}\n Ist: {{ist}}",
+  "demo-data-app.overview.test-berechnung.success": "Die Testdaten wurden erfolgreich berechnet"
 }

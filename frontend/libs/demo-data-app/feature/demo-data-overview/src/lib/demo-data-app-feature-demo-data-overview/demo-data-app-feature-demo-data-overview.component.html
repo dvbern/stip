@@ -1,10 +1,20 @@
 <dv-shared-pattern-basic-layout *dvTranslocoDemo="let t">
+  @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
   <div class="tw:p-8 tw:flex">
     <dv-shared-ui-icon-chip class="tw:mr-3">
       <i class="material-symbols-rounded title-icon">science</i>
     </dv-shared-ui-icon-chip>
-    <h1 class="tw:mb-4! tw:font-bold">
+    <h1 class="tw:mb-4! tw:flex tw:justify-between tw:w-3/5">
       {{ t('demo-data-app.overview.title') }}
+      @if (demoDataList?.demoDatas?.length) {
+        <button
+          class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+          type="button"
+          (click)="testDemoDataBerechnung()"
+        >
+          {{ t('demo-data-app.overview.apply-demo-data.button') }}
+        </button>
+      }
     </h1>
   </div>
   @if (demoDataStore.lastDemoDataRun() | rdIsPending: { ignoreInitial: true }) {
@@ -13,8 +23,10 @@
   @if (demoDataStore.cachedDemoDataListViewSig() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
-    @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
-    <div class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8 tw:items-start">
+    <div
+      class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8 tw:items-start"
+      [class.busy]="demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }"
+    >
       @if (demoDataList?.demoDatas?.length) {
         <div class="tw:col-span-2">
           <mat-form-field [subscriptSizing]="'dynamic'" class="dense-control">
@@ -22,6 +34,9 @@
             <span matSuffix class="material-symbols-rounded tw:align-middle tw:mr-2">search</span>
           </mat-form-field>
         </div>
+      }
+      @if (demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }) {
+        <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
       }
       <ul
         class="tw:mb-4 tw:list-none tw:col-span-2 tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6"
@@ -35,14 +50,40 @@
               <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
             </div>
             <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
-            <button
-              class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
-              type="button"
-              (click)="applyDemoData(demoData.id)"
-              [matTooltip]="t('demo-data-app.overview.apply-demo-data.button')"
-            >
-              <i class="material-symbols-rounded tw:text-sm">add</i>
-            </button>
+            <div class="tw:flex tw:gap-2 tw:items-center">
+              <button
+                class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
+                type="button"
+                (click)="applyDemoData(demoData.id)"
+                [matTooltip]="t('demo-data-app.overview.apply-demo-data.button')"
+              >
+                <i class="material-symbols-rounded tw:text-sm">add</i>
+              </button>
+              @if (demoData.testResult) {
+                @if (demoData.testResult.valid) {
+                  <i class="material-symbols-rounded tw:text-sm tw:text-dv-green">check_circle</i>
+                } @else {
+                  @let info =
+                    t('demo-data-app.overview.test-berechnung.soll-ist', {
+                      soll: demoData.testResult.soll | formatChfNullable,
+                      ist: demoData.testResult.ist | formatChfNullable,
+                    });
+                  <i
+                    class="material-symbols-rounded tw:text-sm tw:text-dv-red"
+                    [matTooltip]="info"
+                    [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
+                    >cancel</i
+                  >
+                  <button
+                    type="button"
+                    (click)="copyToClipboard(info)"
+                    [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
+                  >
+                    <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
+                  </button>
+                }
+              }
+            </div>
           </li>
         } @empty {
           <li>

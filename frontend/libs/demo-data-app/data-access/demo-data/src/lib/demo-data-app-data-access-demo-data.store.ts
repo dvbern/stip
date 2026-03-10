@@ -9,6 +9,7 @@ import {
   ApplyDemoDataResponse,
   DemoDataList,
   DemoDataService,
+  DemoDataTestBerechnungResult,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
@@ -26,11 +27,15 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 type DemoDataState = {
   demoData: CachedRemoteData<DemoDataList>;
   lastDemoDataRun: RemoteData<ApplyDemoDataResponse>;
+  demoDataTestBerechnungResults: CachedRemoteData<
+    DemoDataTestBerechnungResult[]
+  >;
 };
 
 const initialState: DemoDataState = {
   demoData: initial(),
   lastDemoDataRun: initial(),
+  demoDataTestBerechnungResults: initial(),
 };
 
 type DemoDataError = SharedModelError & {
@@ -60,6 +65,15 @@ export class DemoDataStore extends signalStore(
               demoData.demoDatas.filter((item) => item.typ === 'TRANCHE') ?? [],
           };
     });
+  });
+
+  demoDataTestBerechnungResultsSig = computed(() => {
+    const testResults = this.demoDataTestBerechnungResults().data ?? [];
+
+    return testResults.reduce(
+      (acc, result) => ({ ...acc, [result.demoDataId]: result }),
+      {} as Record<string, DemoDataTestBerechnungResult>,
+    );
   });
 
   demoDataViewSig = computed(() => {
@@ -186,6 +200,35 @@ export class DemoDataStore extends signalStore(
                 },
               ),
             ),
+      ),
+    ),
+  );
+
+  testBerechnung$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          demoDataTestBerechnungResults: cachedPending(
+            state.demoDataTestBerechnungResults,
+          ),
+        }));
+      }),
+      switchMap(() =>
+        this.demoDataService.testAllDemoDataBerechnung$().pipe(
+          handleApiResponse(
+            (testResult) =>
+              patchState(this, () => ({
+                demoDataTestBerechnungResults: testResult,
+              })),
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification({
+                  messageKey: 'demo-data-app.overview.file-upload.success',
+                });
+              },
+            },
+          ),
+        ),
       ),
     ),
   );
