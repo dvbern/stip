@@ -1,7 +1,7 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
-import { NavItem, Portal } from '@dv/shared/model/ui';
+import { NavItem, Portal } from '@dv/shared/util/navigation';
 
 type NavigationState = {
   navigationItems: NavItem[];

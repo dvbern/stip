@@ -10,7 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
-import { NavItem } from '@dv/shared/model/ui';
+import { NavItem } from '@dv/shared/util/navigation';
 
 @Component({
   selector: 'dv-shared-ui-nav-items',

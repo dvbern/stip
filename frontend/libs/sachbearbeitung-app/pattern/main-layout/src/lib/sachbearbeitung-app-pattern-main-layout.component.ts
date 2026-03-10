@@ -10,9 +10,9 @@ import { RouterOutlet } from '@angular/router';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { NavItem } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { NavItem } from '@dv/shared/util/navigation';
 
 // Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
 const baseNavItems: NavItem[] = [

@@ -28,10 +28,10 @@ import {
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
-import { NavItem } from '@dv/shared/model/ui';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
+import { NavItem } from '@dv/shared/util/navigation';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
