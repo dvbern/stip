@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ElternTyp } from './elternTyp';
+import { SteuerdatenTyp } from './steuerdatenTyp';
 
 export interface DemoSteuerdaten { 
-    type: ElternTyp;
+    type: SteuerdatenTyp;
     totalEinkuenfte: number;
     eigenmietwert: number;
     isArbeitsverhaeltnisSelbstaendig: boolean;

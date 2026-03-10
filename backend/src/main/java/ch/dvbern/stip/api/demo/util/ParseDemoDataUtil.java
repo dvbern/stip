@@ -26,6 +26,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoPartnerDto;
@@ -234,15 +235,16 @@ public class ParseDemoDataUtil {
         int column,
         int amountOfEntries,
         String pattern,
-        Function<Cell, T> createValue
+        Function<DemoDataParseContext, T> createValue
     ) {
         final var listIterator = list.listIterator();
         checkCellContains(currentRow, pattern, column);
         for (int i = firstValueColumn; i < amountOfEntries; i++) {
             final var cell = currentRow.getCell(i);
+            final var index = i - firstValueColumn;
             tryParseData(
                 () -> {
-                    listIterator.add(createValue.apply(cell));
+                    listIterator.add(createValue.apply(new DemoDataParseContext(cell, index)));
                 },
                 cell
             );
@@ -256,7 +258,7 @@ public class ParseDemoDataUtil {
         int column,
         int amountOfEntries,
         String pattern,
-        BiConsumer<Cell, T> updateValue
+        BiConsumer<DemoDataParseContext, T> updateValue
     ) {
         final var listIterator = list.listIterator();
         checkCellContains(currentRow, pattern, column);
@@ -266,9 +268,10 @@ public class ParseDemoDataUtil {
                 throw new BadRequestException("List hast not enough entries");
             }
             final var listItem = listIterator.next();
+            final var index = i - firstValueColumn;
             tryParseData(
                 () -> {
-                    updateValue.accept(cell, listItem);
+                    updateValue.accept(new DemoDataParseContext(cell, index), listItem);
                 },
                 cell
             );

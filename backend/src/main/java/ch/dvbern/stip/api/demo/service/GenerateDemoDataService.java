@@ -91,7 +91,6 @@ import ch.dvbern.stip.api.partner.entity.PartnerBuilder;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildungBuilder;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
@@ -175,16 +174,6 @@ public class GenerateDemoDataService {
             .vorname(pia.getVorname())
             .nachname(pia.getNachname())
             .build();
-    }
-
-    private SteuerdatenTyp getSteuerdatenTyp(DemoDataDto demoDataDto, ElternTyp type) {
-        if (demoDataDto.getFamiliensituation().getElternVerheiratetZusammen()) {
-            return SteuerdatenTyp.FAMILIE;
-        }
-        return switch (type) {
-            case VATER -> SteuerdatenTyp.VATER;
-            case MUTTER -> SteuerdatenTyp.MUTTER;
-        };
     }
 
     @Transactional
@@ -498,7 +487,7 @@ public class GenerateDemoDataService {
         for (var steuererklaerungDto : demoDataDto.getSteuererklaerung()) {
             steuererklaerungs.add(
                 SteuererklaerungBuilder.steuererklaerung()
-                    .steuerdatenTyp(getSteuerdatenTyp(demoDataDto, steuererklaerungDto.getType()))
+                    .steuerdatenTyp(steuererklaerungDto.getType())
                     .steuererklaerungInBern(steuererklaerungDto.getSteuererklaerungInBern())
                     .ergaenzungsleistungen(steuererklaerungDto.getErgaenzungsleistungen())
                     .unterhaltsbeitraege(steuererklaerungDto.getUnterhaltsbeitraege())
@@ -512,7 +501,7 @@ public class GenerateDemoDataService {
         for (var steuerdatenDto : demoDataDto.getSteuerdaten()) {
             steuerdatens.add(
                 SteuerdatenBuilder.steuerdaten()
-                    .steuerdatenTyp(getSteuerdatenTyp(demoDataDto, steuerdatenDto.getType()))
+                    .steuerdatenTyp(steuerdatenDto.getType())
                     .totalEinkuenfte(steuerdatenDto.getTotalEinkuenfte())
                     .eigenmietwert(
                         Objects.requireNonNullElse(
