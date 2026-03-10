@@ -156,7 +156,12 @@ public class BerechnungService {
 
         final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
         final var berechnungStipendium =
-            berechnungDarlehen != null ? (totalVorTeilungDarlehen / 3) * 2 : totalVorTeilungDarlehen;
+            berechnungDarlehen != null
+                ? BigDecimal.valueOf(berechnungDarlehen)
+                    .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(2))
+                    .intValue()
+                : totalVorTeilungDarlehen;
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
