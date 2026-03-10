@@ -1490,6 +1490,34 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /demo-data/test-all-berechnung:
+    get:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemoDataTestBerechnungResult'
+          description: The results of comparing all Berechnung tests
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: testAllDemoDataBerechnung
+      summary: >-
+        Tests the Berechnung of all testcases to their excepted
+        Stipendienanspruch values
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /datenschutzbrief/{trancheId}/download:
     parameters:
       - name: trancheId
@@ -7939,6 +7967,20 @@ components:
               type: integer
             betragDarlehenIst:
               type: integer
+    DemoDataTestBerechnungResult:
+      required:
+        - demoDataId
+        - valid
+      type: object
+      properties:
+        demoDataId:
+          $ref: '#/components/schemas/UUID'
+        valid:
+          type: boolean
+        soll:
+          type: integer
+        ist:
+          type: integer
     ApplyDemoDataResponse:
       required:
         - gesuchId
