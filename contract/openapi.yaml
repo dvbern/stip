@@ -7721,7 +7721,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
         unterhaltsbeitraege:
@@ -7754,7 +7754,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         totalEinkuenfte:
           type: integer
         eigenmietwert:
@@ -8118,6 +8118,12 @@ components:
       type: string
     ElternTyp:
       enum:
+        - VATER
+        - MUTTER
+      type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
         - VATER
         - MUTTER
       type: string
@@ -10401,12 +10407,6 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-    SteuerdatenTyp:
-      enum:
-        - FAMILIE
-        - VATER
-        - MUTTER
-      type: string
     SteuererklaerungUpdate:
       title: Root Type for Steuererklaerung
       required:

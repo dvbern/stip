@@ -638,7 +638,7 @@ components:
       type: object
       properties:
         type:
-          $ref: './components/common.yaml#/ElternTyp'
+          $ref: './components/common.yaml#/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
         unterhaltsbeitraege:
@@ -671,7 +671,7 @@ components:
       type: object
       properties:
         type:
-          $ref: './components/common.yaml#/ElternTyp'
+          $ref: './components/common.yaml#/SteuerdatenTyp'
         totalEinkuenfte:
           type: integer
         eigenmietwert:

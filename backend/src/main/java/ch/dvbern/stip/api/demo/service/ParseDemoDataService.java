@@ -29,11 +29,13 @@ import java.util.function.Function;
 
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.type.DemoDataDatedif;
+import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.api.demo.util.ParseDemoDataUtil;
 import ch.dvbern.stip.api.demo.util.ParseDemoEnumUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmeKostenRequiredDokumentsProducerUtil.EinnahmenKostenType;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDto;
@@ -54,7 +56,6 @@ import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.formula.WorkbookEvaluator;
-import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -112,7 +113,7 @@ public class ParseDemoDataService {
         final var ekPartner = prepareEinnahmenKostenGeneric(EinnahmenKostenType.PARTNER);
         final var familiensituation = prepareFamiliensituation();
         final var elterns = prepareElterns();
-        final var steuererklaerungsSteuerdatens = prepareSteuererklaerungsAndSteuerdatens();
+        final var steuererklaerungsSteuerdatens = prepareSteuererklaerungsAndSteuerdatens(familiensituation);
         final var geschwisters = prepareGeschwisters();
         final var auszahlungs = prepareAuszahlungs();
         final var darlehens = prepareDarlehens();
@@ -143,7 +144,7 @@ public class ParseDemoDataService {
         return demoDataList;
     }
 
-    private <T> void initList(List<T> list, String pattern, int column, Function<Cell, T> createValue) {
+    private <T> void initList(List<T> list, String pattern, int column, Function<DemoDataParseContext, T> createValue) {
         ParseDemoDataUtil.initListEntries(
             rowIterator.next(),
             list,
@@ -155,7 +156,12 @@ public class ParseDemoDataService {
         );
     }
 
-    private <T> void updateList(List<T> list, String pattern, int column, BiConsumer<Cell, T> updateValue) {
+    private <T> void updateList(
+        List<T> list,
+        String pattern,
+        int column,
+        BiConsumer<DemoDataParseContext, T> updateValue
+    ) {
         ParseDemoDataUtil.updateListEntries(
             rowIterator.next(),
             list,
@@ -173,19 +179,19 @@ public class ParseDemoDataService {
 
     private List<DemoData> prepareInfo() {
         final List<DemoData> list = new ArrayList<>(amountOfCells);
-        initList(list, "Typ", 0, c -> new DemoData().setTyp(ParseDemoEnumUtil.parseTyp(c)));
-        updateList(list, "Testfall-ID", 0, (c, d) -> d.setTestFall(ParseDemoDataUtil.parseString(c)));
+        initList(list, "Typ", 0, (c) -> new DemoData().setTyp(ParseDemoEnumUtil.parseTyp(c.getCell())));
+        updateList(list, "Testfall-ID", 0, (c, d) -> d.setTestFall(ParseDemoDataUtil.parseString(c.getCell())));
         ParseDemoDataUtil.skipEntries(rowIterator, 2);
         updateList(list, "Kurzbeschrieb .* Bemerkungen.*", 0, (c, d) -> {
-            final var description = ParseDemoDataUtil.parseDescription(c);
+            final var description = ParseDemoDataUtil.parseDescription(c.getCell());
             d.setName(description.getLeft());
             d.setDescription(description.getRight());
         });
         // spotless:off
-        updateList(list, "Anzahl Monate", 0, (c, d) -> d.setAnzahlMonate(ParseDemoDataUtil.parseInteger(c)));
-        updateList(list, "Erfasser des Testfalls", 0, (c, d) -> d.setErfasser(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Gesuchsjahr", 0, (c, d) -> d.setGesuchsjahr(ParseDemoDataUtil.parseInteger(c)));
-        updateList(list, "Gesuchseingang", 0, (c, d) -> d.setGesuchseingang(ParseDemoDataUtil.parseDateString(c)));
+        updateList(list, "Anzahl Monate", 0, (c, d) -> d.setAnzahlMonate(ParseDemoDataUtil.parseInteger(c.getCell())));
+        updateList(list, "Erfasser des Testfalls", 0, (c, d) -> d.setErfasser(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Gesuchsjahr", 0, (c, d) -> d.setGesuchsjahr(ParseDemoDataUtil.parseInteger(c.getCell())));
+        updateList(list, "Gesuchseingang", 0, (c, d) -> d.setGesuchseingang(ParseDemoDataUtil.parseDateString(c.getCell())));
         // spotless:on
 
         return list;
@@ -196,17 +202,17 @@ public class ParseDemoDataService {
 
         final List<DemoAusbildungDto> list = new ArrayList<>();
         // spotless:off
-        initList(list, "Ausbildung für Stipendium.*", 0, c -> new DemoAusbildungDto());
-        updateList(list, "Ausbildungsstätte", 1, (c, d) -> d.setAusbildungsstaette(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Ausbildungsgang", 1, (c, d) -> d.setAusbildungsgang(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Berufsbezeichnung .* Fachrichtung", 2, (c, d) -> d.setBerufsbezeichnungFachrichtung(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, ".*Ausbildung im Ausland.*", 1, (c, d) -> d.setIsAusbildungAusland(ParseDemoDataUtil.parseBoolean(c)));
-        updateList(list, "Andere Ausbildungsstätte.*", 1, (c, d) -> d.setAusbildungNichtGefunden(ParseDemoDataUtil.parseBoolean(c)));
-        updateList(list, "Beginn der Ausbildung", 1, (c, d) -> d.setAusbildungBeginn(ParseDemoDataUtil.parseMonthYear(c, false)));
-        updateList(list, ".*Ende der Ausbildung", 1, (c, d) -> d.setAusbildungEnd(ParseDemoDataUtil.parseMonthYear(c, true)));
-        updateList(list, "Pensum.*", 1, (c, d) -> d.setPensum(ParseDemoEnumUtil.parseAusbildungsPensum(c)));
+        initList(list, "Ausbildung für Stipendium.*", 0, (c) -> new DemoAusbildungDto());
+        updateList(list, "Ausbildungsstätte", 1, (c, d) -> d.setAusbildungsstaette(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Ausbildungsgang", 1, (c, d) -> d.setAusbildungsgang(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Berufsbezeichnung .* Fachrichtung", 2, (c, d) -> d.setBerufsbezeichnungFachrichtung(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, ".*Ausbildung im Ausland.*", 1, (c, d) -> d.setIsAusbildungAusland(ParseDemoDataUtil.parseBoolean(c.getCell())));
+        updateList(list, "Andere Ausbildungsstätte.*", 1, (c, d) -> d.setAusbildungNichtGefunden(ParseDemoDataUtil.parseBoolean(c.getCell())));
+        updateList(list, "Beginn der Ausbildung", 1, (c, d) -> d.setAusbildungBeginn(ParseDemoDataUtil.parseMonthYear(c.getCell(), false)));
+        updateList(list, ".*Ende der Ausbildung", 1, (c, d) -> d.setAusbildungEnd(ParseDemoDataUtil.parseMonthYear(c.getCell(), true)));
+        updateList(list, "Pensum.*", 1, (c, d) -> d.setPensum(ParseDemoEnumUtil.parseAusbildungsPensum(c.getCell())));
         // spotless:on
 
         return list;
@@ -215,48 +221,48 @@ public class ParseDemoDataService {
     private List<DemoPersonInAusbildungDto> preparePersonInAusbildung() {
         final List<DemoPersonInAusbildungDto> list = new ArrayList<>();
         // spotless:off
-        initList(list, "Person in Ausbildung", 0, c -> new DemoPersonInAusbildungDto());
-        updateList(list, "Sozialversicherungsnummer", 1, (c, d) -> d.setSozialversicherungsnummer(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Anrede", 1, (c, d) -> d.setAnrede(ParseDemoEnumUtil.parseAnrede(c)));
-        updateList(list, "Nachname", 1, (c, d) -> d.setNachname(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseInteger(c))));
-        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseInteger(c))));
-        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Co-Adresse", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c)));
-        updateList(list, "Identischer zivilrechtlicher.*", 1, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitz(ParseDemoDataUtil.parseBoolean(c)));
-        updateList(list, "PLZ", 2, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitzPLZ(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Ort", 2, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Email", 1, (c, d) -> d.setEmail(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Telefonnummer", 1, (c, d) -> d.setTelefonnummer(ParseDemoDataUtil.parseString(c)));
-        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
-        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Zivilstand", 1, (c, d) -> d.setZivilstand(ParseDemoEnumUtil.parseZivilstand(c)));
-        updateList(list, "Nationalität", 1, (c, d) -> d.setNationalitaet(ParseDemoDataUtil.parseLandIsoCode(c)));
-        updateList(list, "Niederlassungsstatus.*", 2, (c, d) -> d.setNiederlassungsstatus(ParseDemoEnumUtil.parseNiederlassungsstatus(c)));
-        updateList(list, "Einreisdatum Schweiz.*", 3, (c, d) -> d.setEinreisedatum(ParseDemoDataUtil.parseDate(c)));
+        initList(list, "Person in Ausbildung", 0, (c) -> new DemoPersonInAusbildungDto());
+        updateList(list, "Sozialversicherungsnummer", 1, (c, d) -> d.setSozialversicherungsnummer(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Anrede", 1, (c, d) -> d.setAnrede(ParseDemoEnumUtil.parseAnrede(c.getCell())));
+        updateList(list, "Nachname", 1, (c, d) -> d.setNachname(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseInteger(c.getCell()))));
+        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseInteger(c.getCell()))));
+        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Co-Adresse", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c.getCell())));
+        updateList(list, "Identischer zivilrechtlicher.*", 1, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitz(ParseDemoDataUtil.parseBoolean(c.getCell())));
+        updateList(list, "PLZ", 2, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitzPLZ(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Ort", 2, (c, d) -> d.setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Email", 1, (c, d) -> d.setEmail(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Telefonnummer", 1, (c, d) -> d.setTelefonnummer(ParseDemoDataUtil.parseString(c.getCell())));
+        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c.getCell()))));
+        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Zivilstand", 1, (c, d) -> d.setZivilstand(ParseDemoEnumUtil.parseZivilstand(c.getCell())));
+        updateList(list, "Nationalität", 1, (c, d) -> d.setNationalitaet(ParseDemoDataUtil.parseLandIsoCode(c.getCell())));
+        updateList(list, "Niederlassungsstatus.*", 2, (c, d) -> d.setNiederlassungsstatus(ParseDemoEnumUtil.parseNiederlassungsstatus(c.getCell())));
+        updateList(list, "Einreisdatum Schweiz.*", 3, (c, d) -> d.setEinreisedatum(ParseDemoDataUtil.parseDate(c.getCell())));
         updateList(list, "Flüchtlingsstatus.*", 3, (c, d) -> {
-            final var fluechtling = ParseDemoDataUtil.parseBooleanNullable(c);
+            final var fluechtling = ParseDemoDataUtil.parseBooleanNullable(c.getCell());
             if (Boolean.TRUE.equals(fluechtling)) {
                 d.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS);
             }
         });
         updateList(list, "Zuständiger Kanton.*", 4, (c, d) -> {
-            final var zustaendigerKanton = ParseDemoDataUtil.parseStringNullable(c);
+            final var zustaendigerKanton = ParseDemoDataUtil.parseStringNullable(c.getCell());
             if (Objects.equals(zustaendigerKanton, "Kanton Bern")) {
                 d.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
             }
         });
-        updateList(list, "PLZ", 3, (c, d) -> d.setHeimatortPLZ(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "Heimatort", 3, (c, d) -> d.setHeimatort(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Wohnsitz bei", 1, (c, d) -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitz(c)));
-        updateList(list, "bei Vater.*", 2, (c, d) -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c)));
-        updateList(list, "bei Mutter.*", 2, (c, d) -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c)));
-        updateList(list, ".*Beistandschaft", 1, (c, d) -> d.setVormundschaft(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, "Zuständige KESB ", 2, (c, d) -> d.setZustaendigeKESB(ParseDemoEnumUtil.parseZustaendigeKESB(c)));
-        updateList(list, ".*Sozialhilfebeiträge.*", 1, (c, d) -> d.setSozialhilfebeitraege(ParseDemoDataUtil.parseBoolean(c)));
+        updateList(list, "PLZ", 3, (c, d) -> d.setHeimatortPLZ(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "Heimatort", 3, (c, d) -> d.setHeimatort(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Wohnsitz bei", 1, (c, d) -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitz(c.getCell())));
+        updateList(list, "bei Vater.*", 2, (c, d) -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c.getCell())));
+        updateList(list, "bei Mutter.*", 2, (c, d) -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell())));
+        updateList(list, ".*Beistandschaft", 1, (c, d) -> d.setVormundschaft(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, "Zuständige KESB ", 2, (c, d) -> d.setZustaendigeKESB(ParseDemoEnumUtil.parseZustaendigeKESB(c.getCell())));
+        updateList(list, ".*Sozialhilfebeiträge.*", 1, (c, d) -> d.setSozialhilfebeitraege(ParseDemoDataUtil.parseBoolean(c.getCell())));
         updateList(list, "Korrespondenzsprache", 1, (c, d) -> {});
         // spotless:on
 
@@ -271,14 +277,17 @@ public class ParseDemoDataService {
         for (var i = 0; i < ANZAHL_LEBENSLAUF_ITEMS_AUSBILDUNG; i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 4 Ausbildungen
-                initList(ausbildungen, "Abschluss", 1, cell -> {
-                    if (ParseDemoDataUtil.isBlank(cell)) {
+                initList(ausbildungen, "Abschluss", 1, (c) -> {
+                    if (ParseDemoDataUtil.isBlank(c.getCell())) {
                         return new ArrayList<>(List.of(Optional.empty()));
                     }
                     return new ArrayList<>(
                         List.of(
                             Optional
-                                .of(new DemoLebenslaufAusbildungDto().abschluss(ParseDemoDataUtil.parseString(cell)))
+                                .of(
+                                    new DemoLebenslaufAusbildungDto()
+                                        .abschluss(ParseDemoDataUtil.parseString(c.getCell()))
+                                )
                         )
                     );
                 });
@@ -286,15 +295,15 @@ public class ParseDemoDataService {
             // spotless:off
             else {
                 // Append to the list of Ausbildungen if there is a value
-                updateList(ausbildungen, "Abschluss", 1, (cell, o) -> o.add(ParseDemoDataUtil.isBlank(cell) ? Optional.empty() : Optional.of(new DemoLebenslaufAusbildungDto().abschluss(ParseDemoDataUtil.parseString(cell)))));
+                updateList(ausbildungen, "Abschluss", 1, (c, o) -> o.add(ParseDemoDataUtil.isBlank(c.getCell()) ? Optional.empty() : Optional.of(new DemoLebenslaufAusbildungDto().abschluss(ParseDemoDataUtil.parseString(c.getCell())))));
             }
             int index = i;
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
-            updateList(ausbildungen, "Berufsbezeichnung.*Fachrichtung", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBerufsbezeichnungFachrichtung(ParseDemoDataUtil.parseStringNullable(c))));
-            updateList(ausbildungen, "Beginn.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVon(ParseDemoDataUtil.parseMonthYear(c, false))));
-            updateList(ausbildungen, "Ende.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBis(ParseDemoDataUtil.parseMonthYear(c, true))));
-            updateList(ausbildungen, "Wohnsitz", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitzKanton(c))));
-            updateList(ausbildungen, "Ausbildung abgeschlossen.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAusbildungAbgeschlossen(ParseDemoDataUtil.parseBoolean(c))));
+            updateList(ausbildungen, "Berufsbezeichnung.*Fachrichtung", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBerufsbezeichnungFachrichtung(ParseDemoDataUtil.parseStringNullable(c.getCell()))));
+            updateList(ausbildungen, "Beginn.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVon(ParseDemoDataUtil.parseMonthYear(c.getCell(), false))));
+            updateList(ausbildungen, "Ende.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBis(ParseDemoDataUtil.parseMonthYear(c.getCell(), true))));
+            updateList(ausbildungen, "Wohnsitz", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitzKanton(c.getCell()))));
+            updateList(ausbildungen, "Ausbildung abgeschlossen.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAusbildungAbgeschlossen(ParseDemoDataUtil.parseBoolean(c.getCell()))));
             // spotless:on
         }
         // endregion
@@ -306,32 +315,42 @@ public class ParseDemoDataService {
         for (var i = 0; i < ANZAHL_LEBENSLAUF_ITEMS_TAETIGKEITEN; i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 4 Tätigkeiten
-                initList(taetigkeiten, "Tätigkeitstyp", 1, cell -> {
-                    if (ParseDemoDataUtil.isBlank(cell)) {
+                initList(taetigkeiten, "Tätigkeitstyp", 1, (c) -> {
+                    if (ParseDemoDataUtil.isBlank(c.getCell())) {
                         return new ArrayList<>(List.of(Optional.empty()));
                     }
                     return new ArrayList<>(
                         List.of(
                             Optional.of(
                                 new DemoLebenslaufTaetigkeitDto()
-                                    .taetigkeitsart(ParseDemoEnumUtil.parseTaetigkeitsart(cell))
+                                    .taetigkeitsart(ParseDemoEnumUtil.parseTaetigkeitsart(c.getCell()))
                             )
                         )
                     );
                 });
-            }
-            // spotless:off
-            else {
+            } else {
                 // Append to the list of Tätigkeiten if there is a value
-                updateList(taetigkeiten, "Tätigkeitstyp", 1, (cell, o) -> o.add(ParseDemoDataUtil.isBlank(cell) ? Optional.empty() : Optional.of(new DemoLebenslaufTaetigkeitDto().taetigkeitsart(ParseDemoEnumUtil.parseTaetigkeitsart(cell)))));
+                updateList(
+                    taetigkeiten,
+                    "Tätigkeitstyp",
+                    1,
+                    (c, o) -> o.add(
+                        ParseDemoDataUtil.isBlank(c.getCell()) ? Optional.empty()
+                            : Optional.of(
+                                new DemoLebenslaufTaetigkeitDto()
+                                    .taetigkeitsart(ParseDemoEnumUtil.parseTaetigkeitsart(c.getCell()))
+                            )
+                    )
+                );
             }
 
             int index = i;
+            // spotless:off
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
-            updateList(taetigkeiten, "Tätigkeit.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setTaetigkeitsBeschreibung(ParseDemoDataUtil.parseStringNullable(c))));
-            updateList(taetigkeiten, "Beginn.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVon(ParseDemoDataUtil.parseMonthYear(c, false))));
-            updateList(taetigkeiten, "Ende.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBis(ParseDemoDataUtil.parseMonthYear(c, true))));
-            updateList(taetigkeiten, "Wohnsitz", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitzKanton(c))));
+            updateList(taetigkeiten, "Tätigkeit.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setTaetigkeitsBeschreibung(ParseDemoDataUtil.parseStringNullable(c.getCell()))));
+            updateList(taetigkeiten, "Beginn.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVon(ParseDemoDataUtil.parseMonthYear(c.getCell(), false))));
+            updateList(taetigkeiten, "Ende.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setBis(ParseDemoDataUtil.parseMonthYear(c.getCell(), true))));
+            updateList(taetigkeiten, "Wohnsitz", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitz(ParseDemoEnumUtil.parseWohnsitzKanton(c.getCell()))));
             // spotless:on
         }
         // endregion
@@ -356,21 +375,21 @@ public class ParseDemoDataService {
             list,
             "Sozialversicherungsnummer",
             1,
-            c -> new DemoPartnerDto().sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(c))
+            (c) -> new DemoPartnerDto().sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(c.getCell()))
         );
         // spotless:off
-        updateList(list, "Nachname", 1, (c, d) -> d.setNachname(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Co-Adresse.*", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c)));
-        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
-        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "In Ausbildung", 1, (c, d) -> d.setInAusbildung(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, "Pensum.*", 2, (c, d) -> d.setPensum(ParseDemoEnumUtil.parseAusbildungsPensum(c)));
+        updateList(list, "Nachname", 1, (c, d) -> d.setNachname(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Co-Adresse.*", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c.getCell())));
+        updateList(list, "Geburtsdatum", 1, (c, d) -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c.getCell()))));
+        updateList(list, "Alter.*", 1, (c, d) -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "In Ausbildung", 1, (c, d) -> d.setInAusbildung(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, "Pensum.*", 2, (c, d) -> d.setPensum(ParseDemoEnumUtil.parseAusbildungsPensum(c.getCell())));
         // spotless:on
 
         return list.stream().map(d -> Optional.of(d).filter(ParseDemoDataUtil::hasValue)).toList();
@@ -383,30 +402,30 @@ public class ParseDemoDataService {
         for (var i = 0; i < ANZAHL_KINDS; i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 5 Kinder
-                initList(kinds, "Nachname", 1, cell -> {
-                    if (ParseDemoDataUtil.isBlank(cell)) {
+                initList(kinds, "Nachname", 1, (c) -> {
+                    if (ParseDemoDataUtil.isBlank(c.getCell())) {
                         return new ArrayList<>(List.of(Optional.empty()));
                     }
-                    return new ArrayList<>(List.of(Optional.of(new DemoKindDto().nachname(ParseDemoDataUtil.parseString(cell)))));
+                    return new ArrayList<>(List.of(Optional.of(new DemoKindDto().nachname(ParseDemoDataUtil.parseString(c.getCell())))));
                 });
             }
             else {
                 // Append to the list of Kinder if there is a value in the new dataset
-                updateList(kinds, "Nachname", 1, (cell, o) -> o.add(ParseDemoDataUtil.isBlank(cell) ? Optional.empty() : Optional.of(new DemoKindDto().nachname(ParseDemoDataUtil.parseString(cell)))));
+                updateList(kinds, "Nachname", 1, (c, o) -> o.add(ParseDemoDataUtil.isBlank(c.getCell()) ? Optional.empty() : Optional.of(new DemoKindDto().nachname(ParseDemoDataUtil.parseString(c.getCell())))));
             }
 
             int index = i;
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
-            updateList(kinds, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVorname(c.getStringCellValue())));
-            updateList(kinds, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c)))));
-            updateList(kinds, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, "Wieviel wohnt.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilPia(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAusbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c))));
-            updateList(kinds, ".*Unterhaltsbeiträge", 1, (c, o) -> o.get(index).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, ".*Ausbildungszulagen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setKinderUndAusbildungszulagen(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, "Renten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, "Ergänzungsleistungen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(kinds, "Andere Einnahmen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c))));
+            updateList(kinds, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.setVorname(c.getCell().getStringCellValue())));
+            updateList(kinds, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.setGeburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c.getCell())))));
+            updateList(kinds, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAlter(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Wieviel wohnt.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilPia(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAusbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
+            updateList(kinds, ".*Unterhaltsbeiträge", 1, (c, o) -> o.get(index).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, ".*Ausbildungszulagen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setKinderUndAusbildungszulagen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Renten", 1, (c, o) -> o.get(index).ifPresent(d -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Ergänzungsleistungen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(kinds, "Andere Einnahmen", 1, (c, o) -> o.get(index).ifPresent(d -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             // spotless:on
         }
 
@@ -424,34 +443,35 @@ public class ParseDemoDataService {
             list,
             "Nettoerwerbseinkommen",
             1,
-            c -> new DemoEinnahmenKostenDto().nettoerwerbseinkommen(ParseDemoDataUtil.parseIntegerNullable(c))
+            (c) -> new DemoEinnahmenKostenDto()
+                .nettoerwerbseinkommen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))
         );
         // spotless:off
-        updateList(list, ".*Unterhaltsbeiträge", 1, (c, d) -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Kinder.*Ausbildungszulagen", 1, (c, d) -> d.zulagen(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Renten", 1, (c, d) -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Leistungen EO", 1, (c, d) -> d.setEoLeistungen(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Ergänzungsleistungen", 1, (c, d) -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Beträge.*Gemeinden/Institutionen", 1, (c, d) -> d.setBeitraege(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Einnahmen BGSA", 1, (c, d) -> d.setEinnahmenBGSA(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Taggelder.*", 1, (c, d) -> d.setTaggelderAHVIV(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Andere Einnahmen", 1, (c, d) -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c)));
+        updateList(list, ".*Unterhaltsbeiträge", 1, (c, d) -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Kinder.*Ausbildungszulagen", 1, (c, d) -> d.zulagen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Renten", 1, (c, d) -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Leistungen EO", 1, (c, d) -> d.setEoLeistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Ergänzungsleistungen", 1, (c, d) -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Beträge.*Gemeinden/Institutionen", 1, (c, d) -> d.setBeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Einnahmen BGSA", 1, (c, d) -> d.setEinnahmenBGSA(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Taggelder.*", 1, (c, d) -> d.setTaggelderAHVIV(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Andere Einnahmen", 1, (c, d) -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PERSON_IN_AUSBILDUNG) {
-            updateList(list, "Ausbildungskosten", 1, (c, d) -> d.setAusbildungskosten(ParseDemoDataUtil.parseIntegerNullable(c)));
+            updateList(list, "Ausbildungskosten", 1, (c, d) -> d.setAusbildungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         }
-        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> d.setBetreuungskostenKinder(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Fahrkosten", 1, (c, d) -> d.setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c)));
+        updateList(list, "Betreuungskosten Kinder", 1, (c, d) -> d.setBetreuungskostenKinder(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Fahrkosten", 1, (c, d) -> d.setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PARTNER) {
-            updateList(list, "Verpflegungskosten", 1, (c, d) -> d.setVerpflegungskosten(ParseDemoDataUtil.parseIntegerNullable(c)));
+            updateList(list, "Verpflegungskosten", 1, (c, d) -> d.setVerpflegungskosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         }
-        updateList(list, ".*Mittagessen pro Woche", 1, (c, d) -> d.setAuswaertigeMittagessenProWoche(ParseDemoDataUtil.parseIntegerNullable(c)));
+        updateList(list, ".*Mittagessen pro Woche", 1, (c, d) -> d.setAuswaertigeMittagessenProWoche(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PERSON_IN_AUSBILDUNG) {
-            updateList(list, "monatliche Wohnkosten", 1, (c, d) -> d.setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(list, "In WG wohnend", 1, (c, d) -> d.setWgWohnend(ParseDemoDataUtil.parseBooleanNullable(c)));
-            updateList(list, ".*anderen Wohnform", 1, (c, d) -> d.setAlternativeWohnformWohnend(ParseDemoDataUtil.parseBooleanNullable(c)));
+            updateList(list, "monatliche Wohnkosten", 1, (c, d) -> d.setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "In WG wohnend", 1, (c, d) -> d.setWgWohnend(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+            updateList(list, ".*anderen Wohnform", 1, (c, d) -> d.setAlternativeWohnformWohnend(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         }
-        updateList(list, "Vermögen", 1, (c, d) -> d.setVermoegen(ParseDemoDataUtil.parseIntegerNullable(c)));
-        updateList(list, "Steuern Kanton/Gemeinde.*", 1, (c, d) -> d.setSteuernKantonGemeinde(ParseDemoDataUtil.parseIntegerNullable(evaluator.evaluateInCell(c))));
+        updateList(list, "Vermögen", 1, (c, d) -> d.setVermoegen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+        updateList(list, "Steuern Kanton/Gemeinde.*", 1, (c, d) -> d.setSteuernKantonGemeinde(ParseDemoDataUtil.parseIntegerNullable(evaluator.evaluateInCell(c.getCell()))));
         // spotless:on
 
         return list;
@@ -460,25 +480,25 @@ public class ParseDemoDataService {
     private List<DemoFamiliensituationDto> prepareFamiliensituation() {
         final List<DemoFamiliensituationDto> list = new ArrayList<>();
         // spotless:off
-        initList(list, "Familiensituation", 0, c -> new DemoFamiliensituationDto());
-        updateList(list, ".*Eltern verheiratet.*", 1, (c, d) -> d.setElternVerheiratetZusammen(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Alimentenregelung.*", 2, (c, d) -> d.setGerichtlicheAlimentenregelung(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Wer zahlt Alimente.*", 2, (c, d) -> d.setWerZahltAlimente(ParseDemoEnumUtil.parseElternschaftsteilung(c)));
-        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*unbekannt.*verstorben.*", 1, (c, d) -> d.setElternteilUnbekanntVerstorben(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Mutter verstorben", 2, (c, d) -> d.setMutterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Mutter unbekannt", 2, (c, d) -> d.setMutterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Wieso.*Mutter unbekannt.*", 3, (c, d) -> d.setMutterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c)));
-        updateList(list, "Mutter: keine der Optionen", 2, (c, d) -> d.setMutterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Vater verstorben", 2, (c, d) -> d.setVaterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Vater unbekannt", 2, (c, d) -> d.setVaterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Wieso.*Vater unbekannt.*", 3, (c, d) -> d.setVaterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c)));
-        updateList(list, "Vater: keine der Optionen", 2, (c, d) -> d.setVaterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Mutter wiederverheiratet.*", 2, (c, d) -> d.setMutterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c)));
-        updateList(list, ".*Vater wiederverheiratet.*", 2, (c, d) -> d.setVaterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c)));
+        initList(list, "Familiensituation", 0, (c) -> new DemoFamiliensituationDto());
+        updateList(list, ".*Eltern verheiratet.*", 1, (c, d) -> d.setElternVerheiratetZusammen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Alimentenregelung.*", 2, (c, d) -> d.setGerichtlicheAlimentenregelung(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Wer zahlt Alimente.*", 2, (c, d) -> d.setWerZahltAlimente(ParseDemoEnumUtil.parseElternschaftsteilung(c.getCell())));
+        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*unbekannt.*verstorben.*", 1, (c, d) -> d.setElternteilUnbekanntVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter verstorben", 2, (c, d) -> d.setMutterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter unbekannt", 2, (c, d) -> d.setMutterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Wieso.*Mutter unbekannt.*", 3, (c, d) -> d.setMutterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c.getCell())));
+        updateList(list, "Mutter: keine der Optionen", 2, (c, d) -> d.setMutterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater verstorben", 2, (c, d) -> d.setVaterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater unbekannt", 2, (c, d) -> d.setVaterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Wieso.*Vater unbekannt.*", 3, (c, d) -> d.setVaterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c.getCell())));
+        updateList(list, "Vater: keine der Optionen", 2, (c, d) -> d.setVaterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter wiederverheiratet.*", 2, (c, d) -> d.setMutterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater wiederverheiratet.*", 2, (c, d) -> d.setVaterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         // spotless:on
 
         return list;
@@ -503,11 +523,11 @@ public class ParseDemoDataService {
                     elterns,
                     "Sozialversicherungsnummer",
                     1,
-                    cell -> new ArrayList<>(
+                    (c) -> new ArrayList<>(
                         List.of(
                             new DemoElternteilDto()
                                 .type(elterntyp)
-                                .sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(cell))
+                                .sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(c.getCell()))
                         )
                     )
                 );
@@ -516,32 +536,32 @@ public class ParseDemoDataService {
                     elterns,
                     "Sozialversicherungsnummer",
                     1,
-                    (cell, l) -> l.add(
+                    (c, l) -> l.add(
                         new DemoElternteilDto()
                             .type(elterntyp)
-                            .sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(cell))
+                            .sozialversicherungsnummer(ParseDemoDataUtil.parseStringNullable(c.getCell()))
                     )
                 );
             }
 
             // spotless:off
-            updateList(elterns, "Nachname", 1, (c, l) -> l.get(i).setNachname(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Vorname", 1, (c, l) -> l.get(i).setVorname(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Strasse", 1, (c, l) -> l.get(i).setStrasse(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Nr.", 1, (c, l) -> l.get(i).setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(elterns, "PLZ", 1, (c, l) -> l.get(i).setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(elterns, "Ort", 1, (c, l) -> l.get(i).setOrt(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Co-Adresse", 1, (c, l) -> l.get(i).setCoAdresse(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Land", 1, (c, l) -> l.get(i).setLand(ParseDemoDataUtil.parseLandIsoCode(c)));
-            updateList(elterns, ".*zivilrechtlicher Wohnsitz", 1, (c, l) -> l.get(i).identischerZivilrechtlicherWohnsitz(ParseDemoDataUtil.parseBooleanNullable(c)));
-            updateList(elterns, "PLZ", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzPLZ(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, "Ort", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, ".*Wohnkosten", 1, (c, l) -> l.get(i).setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(elterns, "Geburtsdatum", 1, (c, l) -> l.get(i).geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c))));
-            updateList(elterns, "Alter.*", 1, (c, l) -> l.get(i).alter(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(elterns, "Telefonnummer", 1, (c, l) -> l.get(i).setTelefonnummer(ParseDemoDataUtil.parseStringNullable(c)));
-            updateList(elterns, ".*Sozialhilfebeiträge.*", 1, (c, l) -> l.get(i).setSozialhilfebeitraege(ParseDemoDataUtil.parseBooleanNullable(c)));
-            updateList(elterns, ".*Ausweis B.*", 1, (c, l) -> l.get(i).ausweisbFluechtling(ParseDemoDataUtil.parseBooleanNullable(c)));
+            updateList(elterns, "Nachname", 1, (c, l) -> l.get(i).setNachname(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Vorname", 1, (c, l) -> l.get(i).setVorname(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Strasse", 1, (c, l) -> l.get(i).setStrasse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Nr.", 1, (c, l) -> l.get(i).setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(elterns, "PLZ", 1, (c, l) -> l.get(i).setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(elterns, "Ort", 1, (c, l) -> l.get(i).setOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Co-Adresse", 1, (c, l) -> l.get(i).setCoAdresse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Land", 1, (c, l) -> l.get(i).setLand(ParseDemoDataUtil.parseLandIsoCode(c.getCell())));
+            updateList(elterns, ".*zivilrechtlicher Wohnsitz", 1, (c, l) -> l.get(i).identischerZivilrechtlicherWohnsitz(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+            updateList(elterns, "PLZ", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzPLZ(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, "Ort", 2, (c, l) -> l.get(i).setIdentischerZivilrechtlicherWohnsitzOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, ".*Wohnkosten", 1, (c, l) -> l.get(i).setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(elterns, "Geburtsdatum", 1, (c, l) -> l.get(i).geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c.getCell()))));
+            updateList(elterns, "Alter.*", 1, (c, l) -> l.get(i).alter(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(elterns, "Telefonnummer", 1, (c, l) -> l.get(i).setTelefonnummer(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+            updateList(elterns, ".*Sozialhilfebeiträge.*", 1, (c, l) -> l.get(i).setSozialhilfebeitraege(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+            updateList(elterns, ".*Ausweis B.*", 1, (c, l) -> l.get(i).ausweisbFluechtling(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
             // spotless:on
             index++;
         }
@@ -549,9 +569,11 @@ public class ParseDemoDataService {
         return elterns.stream().map(l -> l.stream().filter(ParseDemoDataUtil::hasValue).toList()).toList();
     }
 
-    private DemoSteuererklaerungSteuerdatenLists prepareSteuererklaerungsAndSteuerdatens() {
-        final List<List<DemoSteuererklaerungDto>> steuererklaerungs = new ArrayList<>();
-        final List<List<DemoSteuerdatenDto>> steuerdatens = new ArrayList<>();
+    private DemoSteuererklaerungSteuerdatenLists prepareSteuererklaerungsAndSteuerdatens(
+        List<DemoFamiliensituationDto> demoFamiliensituationDtos
+    ) {
+        final List<List<Optional<DemoSteuererklaerungDto>>> steuererklaerungs = new ArrayList<>();
+        final List<List<Optional<DemoSteuerdatenDto>>> steuerdatens = new ArrayList<>();
         var index = 0;
         for (var elterntyp : List.of(ElternTyp.MUTTER, ElternTyp.VATER)) {
             final var expected = switch (elterntyp) {
@@ -567,33 +589,59 @@ public class ParseDemoDataService {
                     steuererklaerungs,
                     ".*Kanton Bern.*",
                     1,
-                    cell -> new ArrayList<>(
-                        List.of(
-                            new DemoSteuererklaerungDto()
-                                .type(elterntyp)
-                                .steuererklaerungInBern(ParseDemoDataUtil.parseBooleanNullable(cell))
-                        )
-                    )
+                    (c) -> {
+                        final var steuererklaerungInBern = ParseDemoDataUtil.parseBooleanNullable(c.getCell());
+                        if (Objects.isNull(steuererklaerungInBern)) {
+                            return new ArrayList<>(List.of(Optional.empty()));
+                        }
+                        if (demoFamiliensituationDtos.get(c.getIndex()).getElternVerheiratetZusammen()) {
+                            throw new IllegalStateException(
+                                "Cannot have Values for Mutter if Familiensituation -> ElternVerheiratetZusammen"
+                            );
+                        }
+                        return new ArrayList<>(
+                            List.of(
+                                Optional.of(
+                                    new DemoSteuererklaerungDto()
+                                        .type(elterntyp.getSteuerdatenTyp())
+                                        .steuererklaerungInBern(steuererklaerungInBern)
+                                )
+                            )
+                        );
+                    }
                 );
             } else {
                 updateList(
                     steuererklaerungs,
                     ".*Kanton Bern.*",
                     1,
-                    (cell, l) -> l.add(
-                        new DemoSteuererklaerungDto()
-                            .type(elterntyp)
-                            .steuererklaerungInBern(ParseDemoDataUtil.parseBooleanNullable(cell))
-                    )
+                    (c, l) -> {
+                        final var steuererklaerungInBern = ParseDemoDataUtil.parseBooleanNullable(c.getCell());
+                        if (Objects.isNull(steuererklaerungInBern)) {
+                            l.add(Optional.empty());
+                        } else {
+                            l.add(
+                                Optional.of(
+                                    new DemoSteuererklaerungDto()
+                                        .type(
+                                            demoFamiliensituationDtos.get(c.getIndex()).getElternVerheiratetZusammen()
+                                                ? SteuerdatenTyp.FAMILIE
+                                                : elterntyp.getSteuerdatenTyp()
+                                        )
+                                        .steuererklaerungInBern(steuererklaerungInBern)
+                                )
+                            );
+                        }
+                    }
                 );
             }
 
             // spotless:off
-            updateList(steuererklaerungs, ".*Unterhaltsbeiträge", 1, (c,  l) -> l.get(i).setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuererklaerungs, "Renten", 1, (c,  l) -> l.get(i).setRenten(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuererklaerungs, "Ergänzungsleistungen", 1, (c,  l) -> l.get(i).setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuererklaerungs, "Einnahmen BGSA", 1, (c,  l) -> l.get(i).setEinnahmenBGSA(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuererklaerungs, "Andere Einnahmen", 1, (c,  l) -> l.get(i).setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c)));
+            updateList(steuererklaerungs, ".*Unterhaltsbeiträge", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setUnterhaltsbeitraege(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuererklaerungs, "Renten", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setRenten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuererklaerungs, "Ergänzungsleistungen", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setErgaenzungsleistungen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuererklaerungs, "Einnahmen BGSA", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setEinnahmenBGSA(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuererklaerungs, "Andere Einnahmen", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setAndereEinnahmen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
             // spotless:on
 
             ParseDemoDataUtil.checkCellContains(rowIterator.next(), "Steuerdaten " + expected, 0);
@@ -603,48 +651,69 @@ public class ParseDemoDataService {
                     steuerdatens,
                     ".*Einkünfte",
                     1,
-                    cell -> new ArrayList<>(
-                        List.of(
-                            new DemoSteuerdatenDto()
-                                .type(elterntyp)
-                                .totalEinkuenfte(ParseDemoDataUtil.parseIntegerNullable(cell))
-                        )
-                    )
+                    (c) -> {
+                        final var einkuenfte = ParseDemoDataUtil.parseIntegerNullable(c.getCell());
+                        if (Objects.isNull(einkuenfte)) {
+                            return new ArrayList<>(List.of(Optional.empty()));
+                        }
+                        return new ArrayList<>(
+                            List.of(
+                                Optional.of(
+                                    new DemoSteuerdatenDto()
+                                        .type(elterntyp.getSteuerdatenTyp())
+                                        .totalEinkuenfte(einkuenfte)
+                                )
+                            )
+                        );
+                    }
                 );
             } else {
                 updateList(
                     steuerdatens,
                     ".*Einkünfte",
                     1,
-                    (cell, l) -> l.add(
-                        new DemoSteuerdatenDto()
-                            .type(elterntyp)
-                            .totalEinkuenfte(ParseDemoDataUtil.parseIntegerNullable(cell))
-                    )
+                    (c, l) -> {
+                        final var einkuenfte = ParseDemoDataUtil.parseIntegerNullable(c.getCell());
+                        if (Objects.isNull(einkuenfte)) {
+                            l.add(Optional.empty());
+                        } else {
+                            l.add(
+                                Optional.of(
+                                    new DemoSteuerdatenDto()
+                                        .type(
+                                            demoFamiliensituationDtos.get(c.getIndex()).getElternVerheiratetZusammen()
+                                                ? SteuerdatenTyp.FAMILIE
+                                                : elterntyp.getSteuerdatenTyp()
+                                        )
+                                        .totalEinkuenfte(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))
+                                )
+                            );
+                        }
+                    }
                 );
             }
 
             // spotless:off
-            updateList(steuerdatens, "Eigenmietwert", 1, (c,  l) -> l.get(i).setEigenmietwert(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Arbeitsverhältnis", 1, (c,  l) -> l.get(i).setIsArbeitsverhaeltnisSelbstaendig(ParseDemoEnumUtil.parseArbeitsverhaeltnisSelbstaendig(c)));
-            updateList(steuerdatens, "Säule 3a", 1, (c,  l) -> l.get(i).setSaeule3a(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "2. Säule", 1, (c,  l) -> l.get(i).setSaeule2(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Vermögen", 1, (c,  l) -> l.get(i).setVermoegen(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Kantons.*Gemeindesteuern", 1, (c,  l) -> l.get(i).setSteuernKantonGemeinde(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Steuern Bund", 1, (c,  l) -> l.get(i).setSteuernBund(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Fahrkosten", 1, (c,  l) -> l.get(i).setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Fahrkosten Partner/in", 1, (c,  l) -> l.get(i).setFahrkostenPartner(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Verpflegung ", 1, (c,  l) -> l.get(i).setVerpflegung(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Verpflegung Partner/in", 1, (c,  l) -> l.get(i).setVerpflegungPartner(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Steuerjahr", 1, (c,  l) -> l.get(i).setSteuerjahr(ParseDemoDataUtil.parseIntegerNullable(c)));
-            updateList(steuerdatens, "Status der Veranlagung", 1, (c,  l) -> l.get(i).setVeranlagungsStatus(ParseDemoDataUtil.parseStringNullable(c)));
+            updateList(steuerdatens, "Eigenmietwert", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setEigenmietwert(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Arbeitsverhältnis", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setIsArbeitsverhaeltnisSelbstaendig(ParseDemoEnumUtil.parseArbeitsverhaeltnisSelbstaendig(c.getCell()))));
+            updateList(steuerdatens, "Säule 3a", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setSaeule3a(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "2. Säule", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setSaeule2(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Vermögen", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setVermoegen(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Kantons.*Gemeindesteuern", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setSteuernKantonGemeinde(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Steuern Bund", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setSteuernBund(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Fahrkosten", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setFahrkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Fahrkosten Partner/in", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setFahrkostenPartner(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Verpflegung ", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setVerpflegung(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Verpflegung Partner/in", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setVerpflegungPartner(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Steuerjahr", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setSteuerjahr(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(steuerdatens, "Status der Veranlagung", 1, (c,  l) -> l.get(i).ifPresent(d -> d.setVeranlagungsStatus(ParseDemoDataUtil.parseStringNullable(c.getCell()))));
             // spotless:on
             index++;
         }
 
         return new DemoSteuererklaerungSteuerdatenLists(
-            steuererklaerungs.stream().map(l -> l.stream().filter(ParseDemoDataUtil::hasValue).toList()).toList(),
-            steuerdatens.stream().map(l -> l.stream().filter(ParseDemoDataUtil::hasValue).toList()).toList()
+            steuererklaerungs.stream().map(l -> l.stream().flatMap(Optional::stream).toList()).toList(),
+            steuerdatens.stream().map(l -> l.stream().flatMap(Optional::stream).toList()).toList()
         );
     }
 
@@ -655,27 +724,27 @@ public class ParseDemoDataService {
         for (var i = 0; i < ANZAHL_GESCHWISTERS; i++) {
             if (i == 0) {
                 // Init a list for all Testfälle with max 5 Kinder
-                initList(geschwisters, "Nachname", 1, cell -> {
-                    if (ParseDemoDataUtil.isBlank(cell)) {
+                initList(geschwisters, "Nachname", 1, (c) -> {
+                    if (ParseDemoDataUtil.isBlank(c.getCell())) {
                         return new ArrayList<>(List.of(Optional.empty()));
                     }
-                    return new ArrayList<>(List.of(Optional.of(new DemoGeschwisterDto().nachname(ParseDemoDataUtil.parseString(cell)))));
+                    return new ArrayList<>(List.of(Optional.of(new DemoGeschwisterDto().nachname(ParseDemoDataUtil.parseString(c.getCell())))));
                 });
             }
             else {
                 // Append to the list of Kinder if there is a value in the new dataset
-                updateList(geschwisters, "Nachname", 1, (cell, o) -> o.add(ParseDemoDataUtil.isBlank(cell) ? Optional.empty() : Optional.of(new DemoGeschwisterDto().nachname(ParseDemoDataUtil.parseString(cell)))));
+                updateList(geschwisters, "Nachname", 1, (c, o) -> o.add(ParseDemoDataUtil.isBlank(c.getCell()) ? Optional.empty() : Optional.of(new DemoGeschwisterDto().nachname(ParseDemoDataUtil.parseString(c.getCell())))));
             }
 
             int index = i;
             // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
-            updateList(geschwisters, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.vorname(ParseDemoDataUtil.parseString(c))));
-            updateList(geschwisters, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c)))));
-            updateList(geschwisters, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.alter(ParseDemoDataUtil.parseIntegerNullable(c))));
-            updateList(geschwisters, "Wohnsitz bei", 1, (c, o) -> o.get(index).ifPresent(d -> d.wohnsitzBei(ParseDemoEnumUtil.parseWohnsitz(c))));
-            updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c))));
-            updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c))));
-            updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c))));
+            updateList(geschwisters, "Vorname", 1, (c, o) -> o.get(index).ifPresent(d -> d.vorname(ParseDemoDataUtil.parseString(c.getCell()))));
+            updateList(geschwisters, "Geburtsdatum", 1, (c, o) -> o.get(index).ifPresent(d -> d.geburtsdatum(ParseDemoDataUtil.parseGeburtsdatum(evaluator.evaluateInCell(c.getCell())))));
+            updateList(geschwisters, "Alter.*", 1, (c, o) -> o.get(index).ifPresent(d -> d.alter(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+            updateList(geschwisters, "Wohnsitz bei", 1, (c, o) -> o.get(index).ifPresent(d -> d.wohnsitzBei(ParseDemoEnumUtil.parseWohnsitz(c.getCell()))));
+            updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
+            updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
+            updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
             // spotless:on
         }
 
@@ -689,17 +758,17 @@ public class ParseDemoDataService {
             list,
             "Nachname",
             1,
-            c -> new DemoAuszahlungDto().nachname(c.getStringCellValue())
+            (c) -> new DemoAuszahlungDto().nachname(c.getCell().getStringCellValue())
         );
         // spotless:off
-        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c))));
-        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Co-Adresse.*", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c)));
-        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c)));
-        updateList(list, "IBAN", 1, (c, d) -> d.setIban(ParseDemoDataUtil.parseStringNullable(c)));
+        updateList(list, "Vorname", 1, (c, d) -> d.setVorname(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Strasse", 1, (c, d) -> d.setStrasse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Nr.", 1, (c, d) -> d.setHausnummer(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "PLZ", 1, (c, d) -> d.setPlz(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
+        updateList(list, "Ort", 1, (c, d) -> d.setOrt(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Co-Adresse.*", 1, (c, d) -> d.setCoAdresse(ParseDemoDataUtil.parseStringNullable(c.getCell())));
+        updateList(list, "Land", 1, (c, d) -> d.setLand(ParseDemoDataUtil.parseLandIsoCode(c.getCell())));
+        updateList(list, "IBAN", 1, (c, d) -> d.setIban(ParseDemoDataUtil.parseStringNullable(c.getCell())));
         // spotless:on
 
         return list.stream().map(d -> Optional.of(d).filter(ParseDemoDataUtil::hasValue)).toList();
@@ -712,20 +781,20 @@ public class ParseDemoDataService {
             darlehens,
             "Wünschen.*Darlehen.*",
             1,
-            c -> Optional.ofNullable(ParseDemoDataUtil.parseBooleanNullable(c))
+            (c) -> Optional.ofNullable(ParseDemoDataUtil.parseBooleanNullable(c.getCell()))
                 .filter(Boolean.TRUE::equals)
                 .map((willDarlehen) -> new DemoDarlehenDto().willDarlehen(willDarlehen))
         );
         // spotless:off
         // Only update (ifPresent) the current entry if the list was initialized (when a value was defined)
-        updateList(darlehens, "Gewünschter Betrag", 2, (c, o) -> o.ifPresent(d -> d.setBetragGewuenscht(ParseDemoDataUtil.parseInteger(c))));
-        updateList(darlehens, "Andere Schulden", 2, (c, o) -> o.ifPresent(d -> d.setSchulden(ParseDemoDataUtil.parseInteger(c))));
-        updateList(darlehens, "Anzahl Betreibungen", 2, (c, o) -> o.ifPresent(d -> d.setAnzahlBetreibungen(ParseDemoDataUtil.parseInteger(c))));
-        updateList(darlehens, ".*Eltern.*", 2, (c, o) -> o.ifPresent(d -> d.setGruende(new DemoDarlehenGruendeDto().grundNichtBerechtigt(ParseDemoDataUtil.parseBoolean(c)))));
-        updateList(darlehens, ".*12 Jahren.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundAusbildungZwoelfJahre(ParseDemoDataUtil.parseBoolean(c))));
-        updateList(darlehens, ".*hohe.*gebühren", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundHoheGebuehren(ParseDemoDataUtil.parseBoolean(c))));
-        updateList(darlehens, ".*Anschaffungen.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundAnschaffungenFuerAusbildung(ParseDemoDataUtil.parseBoolean(c))));
-        updateList(darlehens, ".*Zweitausbildung.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundZweitausbildung(ParseDemoDataUtil.parseBoolean(c))));
+        updateList(darlehens, "Gewünschter Betrag", 2, (c, o) -> o.ifPresent(d -> d.setBetragGewuenscht(ParseDemoDataUtil.parseInteger(c.getCell()))));
+        updateList(darlehens, "Andere Schulden", 2, (c, o) -> o.ifPresent(d -> d.setSchulden(ParseDemoDataUtil.parseInteger(c.getCell()))));
+        updateList(darlehens, "Anzahl Betreibungen", 2, (c, o) -> o.ifPresent(d -> d.setAnzahlBetreibungen(ParseDemoDataUtil.parseInteger(c.getCell()))));
+        updateList(darlehens, ".*Eltern.*", 2, (c, o) -> o.ifPresent(d -> d.setGruende(new DemoDarlehenGruendeDto().grundNichtBerechtigt(ParseDemoDataUtil.parseBoolean(c.getCell())))));
+        updateList(darlehens, ".*12 Jahren.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundAusbildungZwoelfJahre(ParseDemoDataUtil.parseBoolean(c.getCell()))));
+        updateList(darlehens, ".*hohe.*gebühren", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundHoheGebuehren(ParseDemoDataUtil.parseBoolean(c.getCell()))));
+        updateList(darlehens, ".*Anschaffungen.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundAnschaffungenFuerAusbildung(ParseDemoDataUtil.parseBoolean(c.getCell()))));
+        updateList(darlehens, ".*Zweitausbildung.*", 2, (c, o) -> o.ifPresent(d -> d.getGruende().setGrundZweitausbildung(ParseDemoDataUtil.parseBoolean(c.getCell()))));
         // spotless:on
 
         return darlehens;
@@ -737,15 +806,15 @@ public class ParseDemoDataService {
             list,
             "Stipendienanspruch \\(Status\\)",
             0,
-            c -> new DemoDataStipendienanspruchDto().status(ParseDemoEnumUtil.parseVerfuegungstatus(c))
+            (c) -> new DemoDataStipendienanspruchDto().status(ParseDemoEnumUtil.parseVerfuegungstatus(c.getCell()))
         );
         try {
             // spotless:off
-            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
+            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
             skipRows(1);
-            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
-            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c))));
+            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
+            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
             // spotless:on
         } catch (Exception e) {
             if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {

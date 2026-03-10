@@ -15,18 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.eltern.type;
+package ch.dvbern.stip.api.demo.type;
 
-import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.usermodel.Cell;
 
-public enum ElternTyp {
-    VATER,
-    MUTTER;
-
-    public SteuerdatenTyp getSteuerdatenTyp() {
-        return switch (this) {
-            case VATER -> SteuerdatenTyp.VATER;
-            case MUTTER -> SteuerdatenTyp.MUTTER;
-        };
-    }
+@RequiredArgsConstructor
+public class DemoDataParseContext {
+    @Getter
+    private final Cell cell;
+    @Getter
+    private final int index;
 }
