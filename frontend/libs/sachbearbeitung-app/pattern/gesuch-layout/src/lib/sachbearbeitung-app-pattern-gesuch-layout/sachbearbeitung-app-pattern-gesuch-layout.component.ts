@@ -129,7 +129,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
     };
   });
 
-  gesuchInfoSig = computed(() => {
+  cacheSig = computed(() => {
     const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
 
     return cache;
@@ -137,7 +137,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
 
   gesuchstellerNameSig = computed(() => {
     const pia =
-      this.gesuchInfoSig().gesuch?.gesuchTrancheToWorkWith?.gesuchFormular
+      this.cacheSig().gesuch?.gesuchTrancheToWorkWith?.gesuchFormular
         ?.personInAusbildung;
     return pia ? `${pia.vorname} ${pia.nachname}` : '';
   });
@@ -179,7 +179,7 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
   );
 
   tabsSig = computed(() => {
-    const cache = this.gesuchInfoSig();
+    const cache = this.cacheSig();
     const { stateInfo } = this.headerViewSbSig();
     const activePath = this.routeUrlSig();
 

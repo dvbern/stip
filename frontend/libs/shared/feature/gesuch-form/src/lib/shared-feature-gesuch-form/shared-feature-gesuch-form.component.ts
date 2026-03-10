@@ -26,11 +26,9 @@ import {
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
-import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { Language } from '@dv/shared/model/language';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
@@ -129,12 +127,5 @@ export class SharedFeatureGesuchFormComponent
         this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
       }
     });
-  }
-
-  // todo: move into header component!
-  handleLanguageChangeHeader(language: Language) {
-    this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
-    );
   }
 }

@@ -8,6 +8,8 @@
   "sozialdienst-app.header.fall": "Cas",
   "sozialdienst-app.header.administration": "Administration",
   "sozialdienst-app.header.gesuch": "Demande",
+  "sozialdienst-app.header.darlehen": "Prêts",
+  "sozialdienst-app.header.auszahlung": "Paiement",
 
   "sozialdienst-app.admin.option.sozialdienstBenutzer": "Gestion des utilisateurs",
 

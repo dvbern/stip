@@ -17,7 +17,7 @@
       </a>
       <span>|</span>
       <div class="tw:font-semibold tw:ml-4">
-        @if (gesuchInfoSig().gesuch; as gesuchInfo) {
+        @if (cacheSig().gesuch; as gesuchInfo) {
           <span>{{ gesuchInfo.fallNummer }} / </span>
           <span>{{ gesuchInfo.gesuchNummer }} - </span>
         }
@@ -62,7 +62,7 @@
 
       <!-- info -->
       <a
-        [routerLink]="['/gesuch', 'infos', gesuchInfoSig().gesuch?.id]"
+        [routerLink]="['/gesuch', 'infos', cacheSig().gesuch?.id]"
         class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
         data-testid="sb-gesuch-header-infos-link"
       >

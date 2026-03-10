@@ -21,12 +21,10 @@ import {
   selectLastUpdate,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
-import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -104,12 +102,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  handleLanguageChangeHeader(language: Language) {
-    this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
-    );
   }
 
   aenderungMelden(melden: AenderungMelden) {

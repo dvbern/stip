@@ -41,8 +41,8 @@ const gesuchBaseMenuItems: NavItem[] = [
 ];
 
 /**
- * This is the main layout for the gesuchsteller app.
- * todo-before-merge: make or share with sozialdiesnt since it is mostly the same for all apps?
+ * Main layout for the gesuchsteller app.
+ * todo-before-merge: make or share with sozialdienst since it is mostly the same for all apps?
  */
 @Component({
   selector: 'dv-gesuch-app-pattern-main-layout',

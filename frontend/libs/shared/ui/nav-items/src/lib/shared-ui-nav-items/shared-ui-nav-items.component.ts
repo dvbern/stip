@@ -26,8 +26,7 @@ import { NavItem } from '@dv/shared/model/ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNavItemsComponent {
-  @HostBinding('class') klass =
-    'tw:ml-10 tw:flex tw:grow tw:items-center tw:gap-4';
+  @HostBinding('class') klass = 'tw:flex tw:grow tw:items-center tw:gap-4';
 
   navItemsSig = input.required<NavItem[]>();
 }

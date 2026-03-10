@@ -14,11 +14,13 @@ import {
   Router,
   RouterOutlet,
 } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -49,8 +51,9 @@ const sozialdienstBaseMenuItems: NavItem[] = [
 ];
 
 /**
- * This is the new main layout for the sozialdienst app.
+ * Main layout for the sozialdienst app.
  * This will also change once we have the new design to what SB is going to be.
+ * In the Sozialdienst app, the fallId has to be the fallId of the GS, not the fall of the soz-mitarbeiter!
  */
 @Component({
   selector: 'dv-sozialdienst-app-pattern-main-layout',
@@ -80,13 +83,20 @@ const sozialdienstBaseMenuItems: NavItem[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SozialdienstAppPatternMainLayoutComponent {
-  // todo: dynamic nav items on fall route: Antraege, Fall, Darlehen, Administration
   private fallStore = inject(FallStore);
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private store = inject(Store);
+
+  cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
+
+  fallIdFromGesuchCacheSig = computed(() => {
+    const { gesuch } = this.cacheSig();
+    return gesuch?.fallId;
+  });
 
   baseMenuItems = sozialdienstBaseMenuItems;
 
@@ -129,7 +139,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
     this.fallStore.loadCurrentFall$();
 
     effect(() => {
-      const fallId = this.fallIdSig();
+      const fallId = this.fallIdSig() ?? this.fallIdFromGesuchCacheSig();
 
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
@@ -139,20 +149,44 @@ export class SozialdienstAppPatternMainLayoutComponent {
     // naviation items effect
     effect(() => {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = this.fallIdSig() ?? '';
+      const fallId = this.fallIdSig() ?? this.fallIdFromGesuchCacheSig() ?? '';
       const gesuchId = this.gesuchIdSig();
       const isDarlehenRoute = this.isDarlehenRouteSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+
+      const fallNav: NavItem[] = [];
+      const ausZahlungNav: NavItem[] = [];
+
+      if (fallId) {
+        fallNav.push({
+          type: 'link',
+          id: 'fall',
+          label: { key: 'sozialdienst-app.header.fall' },
+          icon: 'assignment_ind',
+          route: ['/fall', fallId],
+        });
+
+        ausZahlungNav.push(
+          {
+            type: 'link',
+            id: 'auszahlung',
+            label: { key: 'sozialdienst-app.header.auszahlung' },
+            icon: 'payments',
+            route: ['/auszahlung', fallId],
+          },
+          {
+            type: 'separator',
+            id: 'separator-1',
+            orientation: 'vertical',
+          },
+        );
+      }
+
       const gesuchNav: NavItem[] = [];
 
       if (gesuchId) {
         const tranchen =
           this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
-
-        // todo-before-merge: @scph should we use this?
-        // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewGsSig(
-        //   this.gesuchIdSig,
-        // );
 
         if (tranchen.length > 1) {
           gesuchNav.push({
@@ -170,7 +204,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
                   index: index + 1,
                 },
               },
-              route: [gesuchId, 'tranche', tranche.id],
+              route: ['/gesuch', gesuchId, 'tranche', tranche.id],
             })),
           });
         } else if (tranchen.length === 1) {
@@ -179,12 +213,12 @@ export class SozialdienstAppPatternMainLayoutComponent {
             id: 'gesuch',
             label: { key: 'sozialdienst-app.header.gesuch' },
             icon: 'description',
-            route: [gesuchId, 'tranche', tranchen[0].id],
+            route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
+            active: !!gesuchId,
           });
         }
       }
 
-      // todo: put into lib
       const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
         status,
         darlehen: darlehnen.list.filter(
@@ -256,9 +290,11 @@ export class SozialdienstAppPatternMainLayoutComponent {
       };
 
       const navItems: NavItem[] = [
-        ...this.baseMenuItems,
+        ...fallNav,
         ...gesuchNav,
         darlehenMenu,
+        ...ausZahlungNav,
+        ...this.baseMenuItems,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

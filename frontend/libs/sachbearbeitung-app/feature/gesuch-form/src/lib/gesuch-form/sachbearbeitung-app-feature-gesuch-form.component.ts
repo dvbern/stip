@@ -81,7 +81,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     this.gesuchIdSig,
   );
 
-  // todo-before-merge: ask scph if correct
+  // todo-after-merge: @scph: enough, or should it be done as currentTrancheNumberSig?
   currentTrancheWithIndexSig = computed(() => {
     const tranchenWithIndex = this.tranchenSig().map((tranche, index) => ({
       tranche,

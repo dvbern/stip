@@ -5,7 +5,7 @@ import { INFO_ADMIN_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
 import { SachbearbeitungAppFeatureInfosAdminComponent } from './sachbearbeitung-app-feature-infos-admin/sachbearbeitung-app-feature-infos-admin.component';
 
 export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
-  // todo-before-merge: id?
+  // todo-after-merge: rename to gesuchId since feature is now implemented
   {
     path: ':id',
     pathMatch: 'prefix',

@@ -49,6 +49,7 @@ export interface NavItemGroup extends NavItemBase {
 
 export interface NavItemSeparator extends NavItemBase {
   type: 'separator';
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export type NavItem =

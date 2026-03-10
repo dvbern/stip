@@ -19,9 +19,10 @@
             <i class="material-symbols-rounded ms-2">expand_more</i>
           </button>
           <mat-menu #itemMenu="matMenu" class="header-menu-panel mt-2 rounded tw:gap-4">
-            <div class="tw:flex tw:flex-col tw:gap-2">
-              <dv-shared-ui-nav-items [navItemsSig]="item.children"></dv-shared-ui-nav-items>
-            </div>
+            <dv-shared-ui-nav-items
+              class="tw:flex tw:flex-col tw:gap-2"
+              [navItemsSig]="item.children"
+            ></dv-shared-ui-nav-items>
           </mat-menu>
         }
       }
@@ -61,14 +62,20 @@
         </button>
       }
       @case ('separator') {
-        @if (item.label) {
-          <div class="d-flex align-items-center text-muted small gap-2">
-            <hr class="flex-grow-1 tw:m-0!" />
-            {{ t(item.label.key, item.label.context) }}
-            <hr class="flex-grow-1 tw:m-0!" />
-          </div>
+        @if (item.orientation === 'vertical') {
+          <div class="tw:w-px tw:bg-gray-300 tw:self-stretch"></div>
         } @else {
-          <hr class="flex-grow-1 tw:m-0!" />
+          @if (item.label) {
+            <div class="d-flex align-items-center text-muted small gap-2 tw:w-full">
+              <div class="flex-grow-1 tw:border tw:border-gray-300"></div>
+              <div class="tw:whitespace-nowrap">
+                {{ t(item.label.key, item.label.context) }}
+              </div>
+              <div class="flex-grow-1 tw:border tw:border-gray-300"></div>
+            </div>
+          } @else {
+            <div class="flex-grow-1 tw:border tw:border-gray-300 tw:w-full"></div>
+          }
         }
       }
     }
