@@ -64,7 +64,6 @@ export class SharedFeatureGesuchFormComponent
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
-  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private navigationStore = inject(NavigationStore);
 
@@ -120,12 +119,5 @@ export class SharedFeatureGesuchFormComponent
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
       });
-    // todo: move into parent component? and check for Id route there?
-    effect(() => {
-      const gesuchTrancheId = this.trancheIdSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
-      }
-    });
   }
 }

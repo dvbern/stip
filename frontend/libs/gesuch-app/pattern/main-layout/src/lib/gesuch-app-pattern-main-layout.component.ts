@@ -111,6 +111,11 @@ export class GesuchAppPatternMainLayoutComponent {
     return params?.['gesuchId'];
   });
 
+  private trancheIdSig = computed(() => {
+    const params = this.allRouteParamsSig();
+    return params?.['trancheId'];
+  });
+
   constructor() {
     this.fallStore.loadCurrentFall$();
 
@@ -260,6 +265,13 @@ export class GesuchAppPatternMainLayoutComponent {
       });
 
       this.navigationStore.setNavigationItems(navItems);
+    });
+
+    effect(() => {
+      const gesuchTrancheId = this.trancheIdSig();
+      if (gesuchTrancheId) {
+        this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
+      }
     });
   }
 }

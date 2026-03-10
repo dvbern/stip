@@ -271,9 +271,10 @@ export class SachbearbeitungAppPatternGesuchLayoutComponent {
       }
     });
 
-    // todo-after-merge: After merge will change to gesuchId instead of trancheId, also move to main-layout?
+    // todo-after-merge: After merge will change to gesuchId instead of trancheId
     effect(() => {
       const gesuchTrancheId = this.gesuchTrancheIdSig();
+      this.gesuchUpdatedSig();
       if (gesuchTrancheId) {
         this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
       }

@@ -3,6 +3,7 @@
 @let gesuchId = view.gesuchId;
 
 <ng-container *dvTranslocoShared="let t">
+  <!-- todo-after-merge: move header to right place move into component? -->
   <ng-template dvHeaderSuffix>
     <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold tw:flex tw:gap-8 tw:items-center">
       @if (tranche) {

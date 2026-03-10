@@ -135,6 +135,11 @@ export class SozialdienstAppPatternMainLayoutComponent {
     return params?.['fallId'];
   });
 
+  private trancheIdSig = computed(() => {
+    const params = this.allRouteParamsSig();
+    return params?.['trancheId'];
+  });
+
   constructor() {
     this.fallStore.loadCurrentFall$();
 
@@ -304,6 +309,13 @@ export class SozialdienstAppPatternMainLayoutComponent {
       });
 
       this.navigationStore.setNavigationItems(navItems);
+    });
+
+    effect(() => {
+      const gesuchTrancheId = this.trancheIdSig();
+      if (gesuchTrancheId) {
+        this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
+      }
     });
   }
 }
