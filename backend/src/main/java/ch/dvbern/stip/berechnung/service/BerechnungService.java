@@ -187,6 +187,10 @@ public class BerechnungService {
     }
 
     private static Integer getDarlehen(Gesuch gesuch, int stipendium) {
+        if (!gesuch.getAusbildung().getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            return null;
+        }
+
         int monateTertiaerstufe = 0;
 
         for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {
