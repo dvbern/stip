@@ -23,6 +23,7 @@ import jakarta.ws.rs.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.formula.LazyRefEval;
 import org.apache.poi.ss.formula.eval.BlankEval;
+import org.apache.poi.ss.formula.eval.ErrorEval;
 import org.apache.poi.ss.formula.eval.NumberEval;
 import org.apache.poi.ss.formula.eval.StringEval;
 import org.apache.poi.ss.formula.eval.ValueEval;
@@ -62,10 +63,12 @@ public class DemoDataDatedif implements Function {
 
             return new NumberEval(ChronoUnit.YEARS.between(date1, date2));
         } catch (BadRequestException e) {
-            throw new BadRequestException(
-                "%s\n%sCell (unknown sheet) [%s]"
-                    .formatted(e.getMessage(), new CellAddress(srcRowIndex, srcColumnIndex))
+            LOG.error(
+                "{}\nCell (unknown sheet) [{}]",
+                e.getMessage(),
+                new CellAddress(srcRowIndex, srcColumnIndex)
             );
+            return ErrorEval.VALUE_INVALID;
         }
     }
 

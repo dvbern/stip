@@ -38,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
@@ -113,16 +114,16 @@ public class ParseDemoDataUtil {
         };
     }
 
-    public Integer parseBerechnung(Cell cell) {
+    public Integer parseBerechnung(Cell cell, CellValue cellValue) {
         if (isBlank(cell)) {
             return null;
         }
-        switch (cell.getCellType()) {
+        switch (cellValue.getCellType()) {
             case STRING, ERROR -> {
                 return null;
             }
         }
-        return parseInteger(cell);
+        return (int) cellValue.getNumberValue();
     }
 
     public static Integer parsePercentageNullable(Cell cell) {

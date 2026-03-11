@@ -54,12 +54,15 @@ import ch.dvbern.stip.generated.dto.DemoPersonInAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
 import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.formula.WorkbookEvaluator;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+@Slf4j
 public class ParseDemoDataService {
 
     @RequiredArgsConstructor
@@ -91,6 +94,19 @@ public class ParseDemoDataService {
             final var amountOfCells =
                 ParseDemoDataUtil.getNumberOfCells(sheet.getRow(UNUSED_START_LINES), FIRST_VALUE_COLOUMN);
             final var evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            for (var row : workbook.getSheetAt(0)) {
+                for (var cell : row) {
+                    if (cell.getCellType() == CellType.FORMULA) {
+                        try {
+                            evaluator.evaluateFormulaCell(cell);
+                        }
+                        catch (Exception e) {
+                            final var address = cell.getAddress().formatAsString();
+                            LOG.warn("Formula was not parsed: {} [{}]", cell.getCellFormula(), address);
+                        }
+                    }
+                }
+            }
             if (WorkbookEvaluator.getNotSupportedFunctionNames().contains("DATEDIF")) {
                 WorkbookEvaluator.registerFunction("DATEDIF", new DemoDataDatedif());
             }
@@ -810,11 +826,11 @@ public class ParseDemoDataService {
         );
         try {
             // spotless:off
-            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
-            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
+            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseBerechnung(c.getCell(), evaluator.evaluate(c.getCell()))));
+            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseBerechnung(c.getCell(), evaluator.evaluate(c.getCell()))));
             skipRows(1);
-            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
-            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(evaluator.evaluateInCell(c.getCell()))));
+            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseBerechnung(c.getCell(), evaluator.evaluate(c.getCell()))));
+            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseBerechnung(c.getCell(), evaluator.evaluate(c.getCell()))));
             // spotless:on
         } catch (Exception e) {
             if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {
