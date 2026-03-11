@@ -157,7 +157,7 @@ public class BerechnungService {
         final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
         final var berechnungStipendium =
             berechnungDarlehen != null
-                ? BigDecimal.valueOf(berechnungDarlehen)
+                ? BigDecimal.valueOf(totalVorTeilungDarlehen)
                     .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(2))
                     .intValue()
