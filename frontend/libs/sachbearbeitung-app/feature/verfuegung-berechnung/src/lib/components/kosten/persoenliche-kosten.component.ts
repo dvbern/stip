@@ -123,7 +123,7 @@ import { PositionComponent } from '../position/position.component';
             anzahlPersonenImHaushalt: budget.anzahlPersonenImHaushalt,
           })
         "
-        [amountSig]="kosten.fahrkostenPartnerTotal | formatChfPositive"
+        [amountSig]="kosten.fahrkostenPartner | formatChfPositive"
       >
       </dv-position>
 

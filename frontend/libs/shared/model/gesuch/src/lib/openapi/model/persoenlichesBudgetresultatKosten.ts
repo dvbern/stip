@@ -26,7 +26,6 @@ export interface PersoenlichesBudgetresultatKosten {
     medizinischeGrundversorgung: Array<PersonValueItem>;
     medizinischeGrundversorgungTotal: number;
     fahrkostenPartner?: number;
-    fahrkostenPartnerTotal?: number;
     verpflegungPartner?: number;
     betreuungskostenKinder: number;
     kantonsGemeindesteuern: number;
