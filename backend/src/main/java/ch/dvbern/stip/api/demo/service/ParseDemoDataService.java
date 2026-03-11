@@ -99,8 +99,7 @@ public class ParseDemoDataService {
                     if (cell.getCellType() == CellType.FORMULA) {
                         try {
                             evaluator.evaluateFormulaCell(cell);
-                        }
-                        catch (Exception e) {
+                        } catch (Exception e) {
                             final var address = cell.getAddress().formatAsString();
                             LOG.warn("Formula was not parsed: {} [{}]", cell.getCellFormula(), address);
                         }
