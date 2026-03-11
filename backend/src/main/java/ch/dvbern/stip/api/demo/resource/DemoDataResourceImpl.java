@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.demo.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -30,6 +31,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -104,5 +106,12 @@ public class DemoDataResourceImpl implements DemoDataResource {
             benutzerService,
             configService
         );
+    }
+
+    @Override
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung() {
+        demoDataAuthorizer.canRead();
+        return demoDataService.testAllDemoDataBerechnung();
     }
 }

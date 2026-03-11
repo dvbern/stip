@@ -18,6 +18,8 @@
 package ch.dvbern.stip.api.demo.service;
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
@@ -32,12 +34,14 @@ import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -110,6 +114,30 @@ public class DemoDataService {
     }
 
     @Transactional
+    public List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung() {
+        final var demoDataList =
+            demoDataRepository.findAll().stream().sorted(Comparator.comparing(DemoData::getTestFall));
+        final var demoDataTestResultOpt = demoDataList.map(demoData -> {
+            try {
+                final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
+                final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+                return Optional.of(
+                    new DemoDataTestBerechnungResultDto()
+                        .demoDataId(demoData.getId())
+                        .valid(stipendienanspruchDto.getSuccess())
+                        .soll(stipendienanspruchDto.getBetragStipendienSoll())
+                        .ist(stipendienanspruchDto.getBetragStipendienIst())
+                );
+            } catch (Exception e) {
+                final Optional<DemoDataTestBerechnungResultDto> ret = Optional.empty();
+                return ret;
+            }
+        }
+        ).toList();
+        return demoDataTestResultOpt.stream().filter(Optional::isPresent).map(Optional::get).toList();
+    }
+
+    @Transactional
     public DemoDataListDto getAllDemoData() {
         final var demoDataList =
             demoDataRepository.findAll().stream().sorted(Comparator.comparing(DemoData::getTestFall));
@@ -151,7 +179,7 @@ public class DemoDataService {
 
         UUID gesuchId;
         try {
-            gesuchId = generateDemoDataService.createEinreichableGesuch(demoData);
+            gesuchId = generateDemoDataService.createAndPersistEinreichableGesuch(demoData);
         } catch (NullPointerException e) {
             LOG.error("DemoDataApplyError", e);
             throw new DemoDataApplyException("A required value was not set", e);
