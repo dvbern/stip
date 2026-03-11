@@ -60,14 +60,25 @@
                 <i class="material-symbols-rounded tw:text-sm">add</i>
               </button>
               @if (demoData.testResult) {
+                @let info =
+                  t('demo-data-app.overview.test-berechnung.soll-ist', {
+                    soll: demoData.testResult.soll | formatChfNullable,
+                    ist: demoData.testResult.ist | formatChfNullable,
+                  });
                 @if (demoData.testResult.valid) {
-                  <i class="material-symbols-rounded tw:text-sm tw:text-dv-green">check_circle</i>
+                  <i
+                    class="material-symbols-rounded tw:text-sm tw:text-dv-green"
+                    [matTooltip]="info"
+                    [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
+                    >check_circle</i
+                  >
+                } @else if (demoData.testResult.valid !== false) {
+                  <i
+                    class="material-symbols-rounded tw:text-sm tw:text-dv-yellow"
+                    [matTooltip]="t('demo-data-app.overview.test-berechnung.gesuch-invalid')"
+                    >warning</i
+                  >
                 } @else {
-                  @let info =
-                    t('demo-data-app.overview.test-berechnung.soll-ist', {
-                      soll: demoData.testResult.soll | formatChfNullable,
-                      ist: demoData.testResult.ist | formatChfNullable,
-                    });
                   <i
                     class="material-symbols-rounded tw:text-sm tw:text-dv-red"
                     [matTooltip]="info"

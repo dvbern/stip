@@ -107,6 +107,7 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.util.MathUtil;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
@@ -632,7 +633,6 @@ public class GenerateDemoDataService {
 
     @Transactional
     public UUID createAndPersistEinreichableGesuch(DemoData demoData) {
-
         final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
         final var fall = fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow();
 
@@ -698,10 +698,7 @@ public class GenerateDemoDataService {
 
         return new ApplyDemoDataResponseStipendienanspruchDto()
             .success(
-                Objects.equals(
-                    stipendienSoll,
-                    berechnungsresultat.getBerechnungStipendium()
-                )
+                MathUtil.around(berechnungsresultat.getBerechnungStipendium(), stipendienSoll, 1)
             )
             .statusSoll(stipendienanspruchDto.getStatus())
             .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)

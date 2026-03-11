@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.demo.service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
@@ -117,24 +116,21 @@ public class DemoDataService {
     public List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung() {
         final var demoDataList =
             demoDataRepository.findAll().stream().sorted(Comparator.comparing(DemoData::getTestFall));
-        final var demoDataTestResultOpt = demoDataList.map(demoData -> {
+        return demoDataList.map(demoData -> {
+            final var ret = new DemoDataTestBerechnungResultDto();
+            ret.demoDataId(demoData.getId());
             try {
                 final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
                 final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
-                return Optional.of(
-                    new DemoDataTestBerechnungResultDto()
-                        .demoDataId(demoData.getId())
-                        .valid(stipendienanspruchDto.getSuccess())
-                        .soll(stipendienanspruchDto.getBetragStipendienSoll())
-                        .ist(stipendienanspruchDto.getBetragStipendienIst())
-                );
+                ret.valid(stipendienanspruchDto.getSuccess());
+                ret.ist(stipendienanspruchDto.getBetragStipendienIst());
+                ret.soll(stipendienanspruchDto.getBetragStipendienSoll());
+                return ret;
             } catch (Exception e) {
-                final Optional<DemoDataTestBerechnungResultDto> ret = Optional.empty();
                 return ret;
             }
         }
         ).toList();
-        return demoDataTestResultOpt.stream().filter(Optional::isPresent).map(Optional::get).toList();
     }
 
     @Transactional
