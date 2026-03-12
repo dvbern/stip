@@ -14,7 +14,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
@@ -48,7 +48,6 @@ import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
   imports: [
     CommonModule,
-    TranslocoPipe,
     SharedUiRouterOutletWrapperComponent,
     SharedPatternGesuchStepNavComponent,
     SharedUiIconChipComponent,

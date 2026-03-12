@@ -436,6 +436,7 @@
   "sachbearbeitung-app.massendruck.table.typ.filter.alle": "Alle",
   "sachbearbeitung-app.massendruck.table.typ.filter.VERFUEGUNG": "Verfügung",
   "sachbearbeitung-app.massendruck.table.typ.filter.DATENSCHUTZBRIEF": "Datenschutzbrief",
+  "sachbearbeitung-app.massendruck.table.no.data": "Keine Druckaufträge vorhanden",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE": "Alle Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_AKTIV": "Aktive Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_ARCHIVIERT": "Archivierte Druckaufträge",
@@ -464,6 +465,7 @@
   "sachbearbeitung-app.massendruck-detail.table.adressat.MUTTER": "Mutter",
   "sachbearbeitung-app.massendruck-detail.table.adressat.VATER": "Vater",
   "sachbearbeitung-app.massendruck-detail.table.adressat.PIA": "PiA",
+  "sachbearbeitung-app.massendruck-detail.table.no.data": "Keine Dokumente in diesem Druckauftrag",
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",

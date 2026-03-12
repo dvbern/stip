@@ -1,4 +1,4 @@
-<div class="container" *transloco="let t">
+<div class="container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck'">
   <div
     class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
     [formGroup]="quickFilterForm"
@@ -17,7 +17,7 @@
         </dv-shared-ui-icon-chip>
         <div class="tw:text-start tw:leading-4 flex-grow-1">
           <span class="tw:font-semibold tw:mb-0">
-            {{ 'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco }}
+            {{ t('quick-filter.' + quickFilter.typ) }}
           </span>
           <input
             #radio
@@ -27,14 +27,14 @@
             labelPosition="before"
             formControlName="query"
             [value]="quickFilter.typ"
-            [attr.aria-label]="'sachbearbeitung-app.massendruck.quick-filter.' + quickFilter.typ | transloco"
+            [attr.aria-label]="t('quick-filter.' + quickFilter.typ)"
           />
         </div>
       </button>
     }
   </div>
   <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-title">
-    {{ 'sachbearbeitung-app.massendruck.title' | transloco }}
+    {{ t('title') }}
   </h1>
   <div class="tw:my-6">
     <div class="tw:dv-table tw:relative">
@@ -53,7 +53,7 @@
           >
             <caption class="cdk-visually-hidden">
               {{
-                'sachbearbeitung-app.massendruck.table.description' | transloco
+                t('table.description')
               }}
             </caption>
 
@@ -66,9 +66,7 @@
                 class="filtered tw:w-32 tw:whitespace-nowrap"
                 example="01.01.2000"
               >
-                <label class="pe-none" for="timestampErstellt">{{
-                  'sachbearbeitung-app.massendruck.table.timestampErstellt' | transloco
-                }}</label>
+                <label class="pe-none" for="timestampErstellt">{{ t('table.timestampErstellt') }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -112,7 +110,7 @@
 
             <ng-container matColumnDef="USER_ERSTELLT">
               <th mat-header-cell mat-sort-header *matHeaderCellDef class="filtered tw:w-36 tw:whitespace-nowrap">
-                <label for="userErstellt">{{ 'sachbearbeitung-app.massendruck.table.userErstellt' | transloco }}</label>
+                <label for="userErstellt">{{ t('table.userErstellt') }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field class="tw:w-full">
                     <input
@@ -142,23 +140,19 @@
 
             <ng-container matColumnDef="STATUS">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                {{ 'sachbearbeitung-app.massendruck.table.status' | transloco }}
+                {{ t('table.status') }}
                 <mat-form-field>
                   <mat-select
-                    [aria-label]="'sachbearbeitung-app.massendruck.table.status' | transloco"
+                    [aria-label]="t('table.status')"
                     formControlName="massendruckJobStatus"
                     (click)="$event.stopPropagation()"
                     class="tw:!font-normal"
                     panelClass="table-select"
-                    [placeholder]="'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco"
+                    [placeholder]="t('table.status.filter.alle')"
                   >
-                    <mat-option [value]="null">{{
-                      'sachbearbeitung-app.massendruck.table.status.filter.alle' | transloco
-                    }}</mat-option>
+                    <mat-option [value]="null">{{ t('table.status.filter.alle') }}</mat-option>
                     @for (status of availableStatus; track status) {
-                      <mat-option [value]="status">{{
-                        'sachbearbeitung-app.massendruck.table.status.filter.' + status | transloco
-                      }}</mat-option>
+                      <mat-option [value]="status">{{ t('table.status.filter.' + status) }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
@@ -168,29 +162,25 @@
                 *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                 class="tw:w-32 tw:whitespace-nowrap"
               >
-                {{ 'sachbearbeitung-app.massendruck.table.status.filter.' + item.massendruckJobStatus | transloco }}
+                {{ t('table.status.filter.' + item.massendruckJobStatus) }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="TYP">
               <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
-                {{ 'sachbearbeitung-app.massendruck.table.typ' | transloco }}
+                {{ t('table.typ') }}
                 <mat-form-field class="tw:flex! tw:w-max">
                   <mat-select
-                    [aria-label]="'sachbearbeitung-app.massendruck.table.typ' | transloco"
+                    [aria-label]="t('table.typ')"
                     formControlName="massendruckJobTyp"
                     (click)="$event.stopPropagation()"
                     class="tw:!font-normal"
                     panelClass="table-select"
-                    [placeholder]="'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco"
+                    [placeholder]="t('table.typ.filter.alle')"
                   >
-                    <mat-option [value]="null">{{
-                      'sachbearbeitung-app.massendruck.table.typ.filter.alle' | transloco
-                    }}</mat-option>
+                    <mat-option [value]="null">{{ t('table.typ.filter.alle') }}</mat-option>
                     @for (typ of availableTypes; track typ) {
-                      <mat-option [value]="typ">{{
-                        'sachbearbeitung-app.massendruck.table.typ.filter.' + typ | transloco
-                      }}</mat-option>
+                      <mat-option [value]="typ">{{ t('table.typ.filter.' + typ) }}</mat-option>
                     }
                   </mat-select>
                 </mat-form-field>
@@ -200,7 +190,7 @@
                 *dvMatCellDef="let item; dataSource: massendruckDataSourceSig()"
                 class="tw:w-32 tw:whitespace-nowrap"
               >
-                {{ 'sachbearbeitung-app.massendruck.table.typ.filter.' + item.massendruckJobTyp | transloco }}
+                {{ t('table.typ.filter.' + item.massendruckJobTyp) }}
               </td>
             </ng-container>
 
@@ -215,7 +205,7 @@
             ></tr>
             <tr class="mat-mdc-row" *matNoDataRow>
               <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-                {{ 'shared.table.noData' | transloco }}
+                {{ t('table.noData') }}
               </td>
             </tr>
           </table>

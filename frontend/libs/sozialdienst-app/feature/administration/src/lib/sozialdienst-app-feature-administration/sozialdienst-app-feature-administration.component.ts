@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { AdminOption, ChildAdminOption } from '@dv/shared/model/router';
@@ -24,7 +24,6 @@ import { AdminOptions } from '@dv/sozialdienst-app/model/administration';
 @Component({
   imports: [
     CommonModule,
-    TranslocoPipe,
     RouterModule,
     MatSidenavModule,
     SharedUiIconChipComponent,

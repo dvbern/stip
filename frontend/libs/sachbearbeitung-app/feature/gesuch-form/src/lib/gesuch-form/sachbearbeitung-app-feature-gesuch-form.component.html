@@ -62,12 +62,12 @@
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="text-end">
           <h5 class="step-title">
-            {{ step.translationKey | transloco }}
+            {{ t(step.translationKey) }}
           </h5>
           @if (step.nextStep?.translationKey; as nextStepKey) {
             <p class="fst-italic mb-0">
-              {{ 'shared.form.next' | transloco }}:
-              {{ nextStepKey | transloco }}
+              {{ t('shared.form.next') }}:
+              {{ t(nextStepKey) }}
             </p>
           }
         </div>
@@ -80,7 +80,7 @@
         </dv-shared-ui-icon-chip>
 
         <h2 class="fw-bold" data-testid="step-title">
-          {{ step.titleTranslationKey | transloco }}
+          {{ t(step.titleTranslationKey) }}
         </h2>
         <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
       </div>

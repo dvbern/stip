@@ -26,7 +26,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs';
 
@@ -87,7 +87,6 @@ type DisplayColumns =
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatSidenavModule,
     MatTableModule,
     MatSortModule,

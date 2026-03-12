@@ -28,7 +28,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import {
@@ -70,7 +70,6 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,

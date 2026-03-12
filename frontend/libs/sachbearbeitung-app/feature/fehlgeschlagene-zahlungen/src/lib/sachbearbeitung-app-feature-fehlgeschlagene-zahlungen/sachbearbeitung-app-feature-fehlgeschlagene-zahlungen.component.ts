@@ -21,7 +21,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { FailedAuszahlungBuchhaltung } from '@dv/shared/model/gesuch';
@@ -43,7 +43,6 @@ import { restrictNumberParam } from '@dv/shared/util/table';
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,

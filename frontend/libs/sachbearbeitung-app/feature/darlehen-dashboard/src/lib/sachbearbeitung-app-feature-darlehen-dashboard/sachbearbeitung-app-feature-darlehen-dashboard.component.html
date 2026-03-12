@@ -14,7 +14,7 @@
 
     <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
       <h1 class="tw:text-2xl!" data-testid="darlehen-title">
-        {{ 'sachbearbeitung-app.darlehen.title' | transloco }}
+        {{ t('sachbearbeitung-app.darlehen.title') }}
       </h1>
     </div>
 
@@ -33,14 +33,14 @@
             >
               <caption class="cdk-visually-hidden">
                 {{
-                  'sachbearbeitung-app.darlehen-dashboard.table.description' | transloco
+                  t('sachbearbeitung-app.darlehen-dashboard.table.description')
                 }}
               </caption>
 
               <ng-container matColumnDef="FALLNUMMER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
                   <label class="pe-none" for="fallNummer">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.fallNummer' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.fallNummer')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -79,7 +79,7 @@
               <ng-container matColumnDef="PIA_NACHNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaNachname">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.nachname' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.nachname')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -114,7 +114,7 @@
               <ng-container matColumnDef="PIA_VORNAME">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="piaVorname">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.vorname' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.vorname')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -156,7 +156,7 @@
                   example="01.01.2000"
                 >
                   <label class="pe-none" for="piaGeburtsdatum">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.geburtsdatum' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.geburtsdatum')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -202,22 +202,22 @@
 
               <ng-container matColumnDef="STATUS">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-                  {{ 'sachbearbeitung-app.darlehen-dashboard.table.status' | transloco }}
+                  {{ t('sachbearbeitung-app.darlehen-dashboard.table.status') }}
                   <mat-form-field class="tw:w-full">
                     <mat-select
-                      [aria-label]="'sachbearbeitung-app.darlehen-dashboard.table.status' | transloco"
+                      [aria-label]="t('sachbearbeitung-app.darlehen-dashboard.table.status')"
                       [formControl]="filterForm.controls.status"
                       (click)="$event.stopPropagation()"
                       class="tw:!font-normal"
-                      [placeholder]="'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco"
+                      [placeholder]="t('sachbearbeitung-app.darlehen-dashboard.no-status-filter')"
                       panelClass="table-select"
                     >
                       <mat-option [value]="null">
-                        {{ 'sachbearbeitung-app.darlehen-dashboard.no-status-filter' | transloco }}
+                        {{ t('sachbearbeitung-app.darlehen-dashboard.no-status-filter') }}
                       </mat-option>
                       @for (status of statusValues; track status) {
                         <mat-option [value]="status">
-                          {{ 'sachbearbeitung-app.darlehen.status.' + status | transloco }}
+                          {{ t('sachbearbeitung-app.darlehen.status.' + status) }}
                         </mat-option>
                       }
                     </mat-select>
@@ -228,8 +228,8 @@
                   *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
                   class="tw:w-48 tw:whitespace-nowrap"
                 >
-                  <span [dvTruncateTooltip]="darlehen.translationKey | transloco">
-                    {{ darlehen.translationKey | transloco }}
+                  <span [dvTruncateTooltip]="t(darlehen.translationKey)">
+                    {{ t(darlehen.translationKey) }}
                   </span>
                 </td>
               </ng-container>
@@ -237,7 +237,7 @@
               <ng-container matColumnDef="BEARBEITER">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
                   <label class="pe-none" for="bearbeiter">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.bearbeiter' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.bearbeiter')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -277,7 +277,7 @@
                   class="filtered tw:w-40 tw:whitespace-nowrap"
                 >
                   <label class="pe-none" for="letzteAktivitaet">{{
-                    'sachbearbeitung-app.darlehen-dashboard.table.letzteAktivitaet' | transloco
+                    t('sachbearbeitung-app.darlehen-dashboard.table.letzteAktivitaet')
                   }}</label>
                   <div class="tw:relative tw:flex">
                     <mat-form-field>
@@ -310,12 +310,12 @@
                         <input
                           [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
                           matStartDate
-                          [placeholder]="'shared.label.von' | transloco"
+                          [placeholder]="t('shared.label.von')"
                         />
                         <input
                           [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
                           matEndDate
-                          [placeholder]="'shared.label.bis' | transloco"
+                          [placeholder]="t('shared.label.bis')"
                         />
                       </mat-date-range-input>
                       <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
@@ -353,7 +353,7 @@
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>
                 <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-                  {{ 'shared.table.noData' | transloco }}
+                  {{ t('shared.table.noData') }}
                 </td>
               </tr>
             </table>

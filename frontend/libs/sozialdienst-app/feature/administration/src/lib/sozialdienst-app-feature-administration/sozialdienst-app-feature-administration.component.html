@@ -15,7 +15,7 @@
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
           <span class="text-start">
-            {{ option.translationKey | transloco }}
+            {{ t(option.translationKey) }}
           </span>
         </a>
       }
@@ -51,7 +51,7 @@
           }
 
           <h2 class="fw-bold m-0" data-testid="step-title">
-            {{ option.titleTranslationKey | transloco }}
+            {{ t(option.titleTranslationKey) }}
             <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
           </h2>
         </div>

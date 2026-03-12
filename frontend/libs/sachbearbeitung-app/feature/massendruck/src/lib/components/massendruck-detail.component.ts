@@ -22,7 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { translatableSb } from '@dv/sachbearbeitung-app/assets/i18n';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
@@ -60,7 +60,6 @@ type TableItem = { adressat: ElternTyp | 'PIA' } & (
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     MatTableModule,
     MatSortModule,

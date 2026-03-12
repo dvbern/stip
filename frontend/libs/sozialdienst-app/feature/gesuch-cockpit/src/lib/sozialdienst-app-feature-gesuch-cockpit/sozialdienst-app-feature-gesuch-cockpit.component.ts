@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
@@ -38,7 +38,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
   imports: [
     MatSidenavModule,
-    TranslocoPipe,
     MatSelectModule,
     MatMenuModule,
     SharedUiIconChipComponent,

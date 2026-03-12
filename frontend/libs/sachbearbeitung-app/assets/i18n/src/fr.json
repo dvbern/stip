@@ -436,6 +436,7 @@
   "sachbearbeitung-app.massendruck.table.typ.filter.alle": "Tous",
   "sachbearbeitung-app.massendruck.table.typ.filter.VERFUEGUNG": "Décision",
   "sachbearbeitung-app.massendruck.table.typ.filter.DATENSCHUTZBRIEF": "Lettre de protection des données",
+  "sachbearbeitung-app.massendruck.table.no.data": "Keine Druckaufträge vorhanden",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE": "Tous les ordres d'impression",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_AKTIV": "Actifs ordres d'impression",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_ARCHIVIERT": "Ordres d'impression archivés",
@@ -464,6 +465,7 @@
   "sachbearbeitung-app.massendruck-detail.table.adressat.MUTTER": "Mère",
   "sachbearbeitung-app.massendruck-detail.table.adressat.VATER": "Père",
   "sachbearbeitung-app.massendruck-detail.table.adressat.PIA": "PiA",
+  "sachbearbeitung-app.massendruck-detail.table.no.data": "Aucun document dans cet ordre d'impression",
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
