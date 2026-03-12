@@ -58,6 +58,8 @@ export class SachbearbeitungAppFeatureAdministrationComponent
     this.navigationStore.setPortal(this.portalContent);
   }
   ngOnDestroy() {
-    this.portalContent?.detach();
+    if (this.portalContent?.isAttached) {
+      this.portalContent.detach();
+    }
   }
 }

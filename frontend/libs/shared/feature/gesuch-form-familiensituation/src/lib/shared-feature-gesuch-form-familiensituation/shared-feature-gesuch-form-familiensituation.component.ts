@@ -119,9 +119,7 @@ const animationTime = 500;
     ]),
   ],
 })
-export class SharedFeatureGesuchFormFamiliensituationComponent
-  implements OnInit
-{
+export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit {
   private elementRef = inject(ElementRef);
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);

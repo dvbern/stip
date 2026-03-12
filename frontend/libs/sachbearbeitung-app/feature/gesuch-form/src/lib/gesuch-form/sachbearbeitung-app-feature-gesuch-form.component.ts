@@ -177,7 +177,9 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     this.navigationStore.setPortal(this.portalContent);
   }
   ngOnDestroy() {
-    this.portalContent?.detach();
+    if (this.portalContent?.isAttached) {
+      this.portalContent.detach();
+    }
   }
 
   constructor() {

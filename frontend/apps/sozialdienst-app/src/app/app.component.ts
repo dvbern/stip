@@ -1,10 +1,10 @@
 import { Component, HostBinding, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { SozialdienstAppPatternMainLayoutComponent } from '@dv/sozialdienst-app/pattern/main-layout';
 import { Store } from '@ngrx/store';
 
 import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SozialdienstAppPatternMainLayoutComponent } from '@dv/sozialdienst-app/pattern/main-layout';
 
 @Component({
   imports: [

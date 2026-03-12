@@ -76,17 +76,24 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'sachbearbeitung-app-feature-gesuch-layout',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
+          ),
+      },
+      {
         path: 'gesuch',
         canActivate: [hasBenutzer],
         providers: [SteuerdatenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
-          import('@dv/sachbearbeitung-app/pattern/gesuch-layout').then(
-            (m) => m.SachbearbeitungAppPatternGesuchLayoutComponent,
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.SachbearbeitungAppFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/pattern/gesuch-layout').then(
-            (m) => m.sachbearbeitungAppPatternGesuchLayoutRoutes,
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
           ),
       },
       {

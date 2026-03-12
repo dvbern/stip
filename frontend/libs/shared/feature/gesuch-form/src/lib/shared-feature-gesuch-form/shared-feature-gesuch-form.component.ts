@@ -8,7 +8,6 @@ import {
   OnDestroy,
   ViewChild,
   computed,
-  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -25,7 +24,6 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -110,7 +108,9 @@ export class SharedFeatureGesuchFormComponent
     this.navigationStore.setPortal(this.portalContent);
   }
   ngOnDestroy() {
-    this.portalContent?.detach();
+    if (this.portalContent?.isAttached) {
+      this.portalContent.detach();
+    }
   }
 
   constructor() {

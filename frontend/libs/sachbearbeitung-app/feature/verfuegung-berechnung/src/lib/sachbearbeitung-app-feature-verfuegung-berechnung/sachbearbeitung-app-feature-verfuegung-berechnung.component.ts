@@ -12,10 +12,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import {
-  selectRouteGesuchId,
-  selectRouteId,
-} from '@dv/shared/data-access/gesuch';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 

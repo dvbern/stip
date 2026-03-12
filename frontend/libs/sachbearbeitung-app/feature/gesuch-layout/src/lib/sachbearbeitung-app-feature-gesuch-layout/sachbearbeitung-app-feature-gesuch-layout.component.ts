@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   HostBinding,
@@ -69,9 +70,10 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedUiAenderungenMenuComponent,
     TranslocoDirective,
   ],
-  templateUrl: './sachbearbeitung-app-pattern-gesuch-layout.component.html',
+  templateUrl: './sachbearbeitung-app-feature-gesuch-layout.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppPatternGesuchLayoutComponent {
+export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
 
   private router = inject(Router);

@@ -120,7 +120,9 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
     this.navigationStore.setPortal(this.portalContent);
   }
   ngOnDestroy() {
-    this.portalContent?.detach();
+    if (this.portalContent?.isAttached) {
+      this.portalContent.detach();
+    }
   }
 
   constructor() {

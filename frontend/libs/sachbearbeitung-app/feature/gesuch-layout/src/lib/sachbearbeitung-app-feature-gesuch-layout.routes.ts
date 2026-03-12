@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 
-export const sachbearbeitungAppPatternGesuchLayoutRoutes: Route[] = [
+export const sachbearbeitungAppFeatureGesuchLayoutRoutes: Route[] = [
   // todo-after-merge: rename to berechnung
   {
     path: 'verfuegung',
