@@ -1,10 +1,10 @@
-import { Signal, computed, effect, inject } from '@angular/core';
+import { Signal, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
-import { DarlehenStatus, GesuchTrancheSlim } from '@dv/shared/model/gesuch';
+import { FreiwilligDarlehen, GesuchTrancheSlim } from '@dv/shared/model/gesuch';
 import {
   darlehenCompletedStates,
   darlehenStatusMapping,
@@ -30,63 +30,19 @@ export const createAllRouteParamsSig = (router: Router) =>
     ),
   );
 
-// --- Shared navigation builder types ---
-
-export interface NavigationParts {
-  gesuchNav: NavItem[];
-  darlehenMenu: NavItem;
-  fallId: string;
-}
-
-interface DarlehenItem {
-  id: string;
-  status?: DarlehenStatus;
-  timestampErstellt?: string;
-}
-
-interface DarlehenView {
-  list: DarlehenItem[];
-  canCreateDarlehen: boolean;
-}
-
-export interface NavigationEffectConfig {
-  /** Signal providing the fallId (source differs per app) */
-  fallIdSig: Signal<string | undefined>;
-  /** Translation key for the gesuch nav item label */
-  gesuchLabelKey?: string;
-  /** Assemble the final ordered navigation from the shared building blocks */
-  assembleNavItems: (parts: NavigationParts) => NavItem[];
-  /** Signals and callbacks bridging the stores (avoids importing data-access from util) */
-  stores: {
-    fallStore: {
-      loadCurrentFall$: () => void;
-    };
-    darlehenStore: {
-      darlehenGsViewSig: Signal<DarlehenView>;
-      getAllDarlehenGs$: (config: { fallId: string }) => void;
-      createDarlehen$: (config: { fallId: string }) => void;
-    };
-    gesuchHeaderStore: {
-      viewGsSig: Signal<{
-        currentTranchen?: GesuchTrancheSlim[] | null;
-      }>;
-      loadHeaderGs$: (config: { gesuchTrancheId: string }) => void;
-    };
-    navigationStore: {
-      setNavigationItems: (items: NavItem[]) => void;
-    };
-    permissionStore: {
-      rolesMapSig: Signal<Record<string, boolean>>;
-    };
-  };
-}
-
-// --- Pure builder functions ---
+export const createParamsIdSig = (
+  idKey: string,
+  allRouteParamsSig: Signal<Record<string, string> | undefined>,
+) =>
+  computed(() => {
+    const params = allRouteParamsSig();
+    return params ? params[idKey] : undefined;
+  });
 
 export function buildGesuchNavItems(
   gesuchId: string | undefined,
   tranchen: Pick<GesuchTrancheSlim, 'id' | 'gueltigAb'>[],
-  labelKey = 'shared.header.gesuch',
+  baseKey = 'shared',
 ): NavItem[] {
   if (!gesuchId) return [];
 
@@ -95,13 +51,13 @@ export function buildGesuchNavItems(
       {
         type: 'menu',
         id: 'gesuch',
-        label: { key: labelKey },
+        label: { key: `${baseKey}.header.gesuch` },
         icon: 'description',
         children: tranchen.map((tranche, index) => ({
           type: 'link' as const,
           id: tranche.id,
           label: {
-            key: 'shared.header.tranche.item',
+            key: `${baseKey}.header.tranche.item`,
             context: {
               date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
               index: index + 1,
@@ -118,7 +74,7 @@ export function buildGesuchNavItems(
       {
         type: 'link',
         id: 'gesuch',
-        label: { key: labelKey },
+        label: { key: `${baseKey}.header.gesuch` },
         icon: 'description',
         route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
         active: !!gesuchId,
@@ -130,29 +86,36 @@ export function buildGesuchNavItems(
 }
 
 export function buildDarlehenMenu(config: {
-  darlehenView: DarlehenView;
+  darlehen: FreiwilligDarlehen[];
+  canCreateDarlehen: boolean;
   fallId: string;
   isDarlehenRoute: boolean;
-  onCreateDarlehen: () => void;
+  createDarlehen: () => void;
 }): NavItem {
-  const { darlehenView, fallId, isDarlehenRoute, onCreateDarlehen } = config;
+  const {
+    darlehen,
+    canCreateDarlehen,
+    fallId,
+    isDarlehenRoute,
+    createDarlehen,
+  } = config;
 
   const darlehenMenuItems: NavItem[] = darlehenCompletedStates.flatMap(
     (status) => {
-      const darlehen = darlehenView.list.filter(
+      const list = darlehen.filter(
         (dar) => dar.status && darlehenStatusMapping[dar.status] === status,
       );
-      if (darlehen.length === 0) return [];
+      if (list.length === 0) return [];
 
       return [
         {
           type: 'separator' as const,
           id: `separator-${status}`,
           label: {
-            key: 'shared.header.darlehen.complete-states.' + status,
+            key: `shared.header.darlehen.complete-states.${status}`,
           },
         },
-        ...darlehen.map((dar) => ({
+        ...list.map((dar) => ({
           type: 'link' as const,
           id: dar.id,
           label: {
@@ -174,7 +137,7 @@ export function buildDarlehenMenu(config: {
     icon: 'account_balance',
     id: 'darlehen',
     label: { key: 'shared.header.darlehen' },
-    children: darlehenView.canCreateDarlehen
+    children: canCreateDarlehen
       ? darlehenMenuItems.concat([
           ...(darlehenMenuItems.length > 0
             ? [{ type: 'separator' as const, id: 'separator-create' }]
@@ -184,87 +147,10 @@ export function buildDarlehenMenu(config: {
             id: 'create-darlehen',
             label: { key: 'shared.header.darlehen.create' },
             icon: 'add',
-            action: onCreateDarlehen,
+            action: createDarlehen,
           },
         ])
       : darlehenMenuItems,
     active: isDarlehenRoute,
   };
-}
-
-export function filterNavItemsByRoles(
-  items: NavItem[],
-  rolesMap: Record<string, boolean>,
-): NavItem[] {
-  return items.filter((item) => {
-    if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-      return true;
-    }
-    return item.rolesAllowed.some((role) => rolesMap[role]);
-  });
-}
-
-// --- Navigation effect creator ---
-
-/**
- * Creates the standard navigation effects (load fall, load darlehen,
- * build & set nav items, load gesuch header).
- * Must be called in an injection context (component constructor).
- */
-export function createNavigationEffect(config: NavigationEffectConfig) {
-  const router = inject(Router);
-  const allRouteParamsSig = createAllRouteParamsSig(router);
-  const { stores } = config;
-  const gesuchLabelKey = config.gesuchLabelKey ?? 'shared.header.gesuch';
-
-  const gesuchIdSig = computed(() => allRouteParamsSig()?.['gesuchId']);
-  const trancheIdSig = computed(() => allRouteParamsSig()?.['trancheId']);
-  const isDarlehenRouteSig = computed(
-    () => !!allRouteParamsSig()?.['darlehenId'],
-  );
-
-  stores.fallStore.loadCurrentFall$();
-
-  // Load darlehen when fallId becomes available
-  effect(() => {
-    const fallId = config.fallIdSig();
-    if (fallId) {
-      stores.darlehenStore.getAllDarlehenGs$({ fallId });
-    }
-  });
-
-  // Build and set navigation items
-  effect(() => {
-    const gesuchId = gesuchIdSig();
-    const darlehenView = stores.darlehenStore.darlehenGsViewSig();
-    const fallId = config.fallIdSig() ?? '';
-    const isDarlehenRoute = isDarlehenRouteSig();
-    const rolesMap = stores.permissionStore.rolesMapSig();
-    const tranchen = stores.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
-
-    const gesuchNav = buildGesuchNavItems(gesuchId, tranchen, gesuchLabelKey);
-    const darlehenMenu = buildDarlehenMenu({
-      darlehenView,
-      fallId,
-      isDarlehenRoute,
-      onCreateDarlehen: () => stores.darlehenStore.createDarlehen$({ fallId }),
-    });
-
-    const navItems = filterNavItemsByRoles(
-      config.assembleNavItems({ gesuchNav, darlehenMenu, fallId }),
-      rolesMap,
-    );
-
-    stores.navigationStore.setNavigationItems(navItems);
-  });
-
-  // Load gesuch header when trancheId changes
-  effect(() => {
-    const gesuchTrancheId = trancheIdSig();
-    if (gesuchTrancheId) {
-      stores.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
-    }
-  });
-
-  return { allRouteParamsSig };
 }

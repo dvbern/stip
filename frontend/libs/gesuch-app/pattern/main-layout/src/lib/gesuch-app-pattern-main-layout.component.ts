@@ -7,35 +7,22 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterOutlet } from '@angular/router';
-import { format } from 'date-fns/format';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import {
-  darlehenCompletedStates,
-  darlehenStatusMapping,
-} from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
   NavItem,
+  buildDarlehenMenu,
+  buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
+  gesuchBaseMenuItems,
 } from '@dv/shared/util/navigation';
-
-const gesuchBaseMenuItems: NavItem[] = [
-  {
-    type: 'link',
-    id: 'dashboard',
-    icon: 'dashboard',
-    label: { key: 'gesuch-app.dashboard.title' },
-    route: ['/dashboard'],
-  },
-];
 
 /**
  * Main layout for the gesuchsteller app.
@@ -75,7 +62,6 @@ export class GesuchAppPatternMainLayoutComponent {
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
-  private config = inject(SharedModelCompileTimeConfig);
 
   baseMenuItems = gesuchBaseMenuItems;
 
@@ -93,13 +79,6 @@ export class GesuchAppPatternMainLayoutComponent {
 
   private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
-  private routeParamsFallIdSig = createParamsIdSig(
-    'fallId',
-    this.allRouteParamsSig,
-  );
-
-  private currentBenutzerFallIdSig = this.fallStore.currentFallViewSig()?.id;
-
   constructor() {
     this.fallStore.loadCurrentFall$();
 
@@ -115,117 +94,19 @@ export class GesuchAppPatternMainLayoutComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = this.fallStore.currentFallViewSig()?.id ?? '';
+      const fallId = this.fallStore.currentFallViewSig()?.id;
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
 
-      const gesuchNav: NavItem[] = [];
-
-      if (gesuchId) {
-        const tranchen =
-          this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
-
-        if (tranchen.length > 1) {
-          gesuchNav.push({
-            type: 'menu',
-            id: 'gesuch',
-            label: { key: 'shared.header.gesuch' },
-            icon: 'description',
-            children: tranchen.map((tranche, index) => ({
-              type: 'link' as const,
-              id: tranche.id,
-              label: {
-                key: 'shared.header.tranche.item',
-                context: {
-                  date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
-                  index: index + 1,
-                },
-              },
-              route: ['/gesuch', gesuchId, 'tranche', tranche.id],
-            })),
-          });
-        } else if (tranchen.length === 1) {
-          gesuchNav.push({
-            type: 'link',
-            id: 'gesuch',
-            label: { key: 'shared.header.gesuch' },
-            icon: 'description',
-            route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
-            active: !!gesuchId,
-          });
-        }
+      if (!fallId) {
+        this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
+        return;
       }
 
-      // todo: put into lib
-      const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
-        status,
-        darlehen: darlehnen.list.filter(
-          (dar) => darlehenStatusMapping[dar.status!] === status,
-        ),
-      }));
-
-      // list with separators for each status
-      const darlehenMenuItems: NavItem[] = darlehenListByStatus.flatMap(
-        ({ status, darlehen }) => {
-          const items: NavItem[] = [];
-
-          if (darlehen.length > 0) {
-            items.push({
-              type: 'separator',
-              id: `separator-${status}`,
-              label: {
-                key: 'shared.header.darlehen.complete-states.' + status,
-              },
-            });
-
-            items.push(
-              ...darlehen.map((darlehen) => ({
-                type: 'link' as const,
-                id: darlehen.id,
-                label: {
-                  key: 'shared.header.darlehen.item',
-                  context: {
-                    date: format(darlehen.timestampErstellt!, 'dd.MM.yyyy'),
-                  },
-                },
-                route: ['/darlehen', darlehen.id, 'fall', fallId],
-              })),
-            );
-          }
-
-          return items;
-        },
+      const gesuchNav = buildGesuchNavItems(
+        gesuchId,
+        this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [],
       );
-
-      const darlehenMenu: NavItem = {
-        type: 'menu',
-        icon: 'account_balance',
-        id: 'darlehen',
-        label: { key: 'shared.header.darlehen' },
-        children: darlehnen.canCreateDarlehen
-          ? darlehenMenuItems.concat([
-              ...(darlehenMenuItems.length > 0
-                ? [
-                    {
-                      type: 'separator' as const,
-                      id: 'separator-create',
-                    },
-                  ]
-                : []),
-              {
-                type: 'action',
-                id: 'create-darlehen',
-                label: { key: 'shared.header.darlehen.create' },
-                icon: 'add',
-                action: () =>
-                  this.darlehenStore.createDarlehen$({
-                    fallId,
-                  }),
-              },
-            ])
-          : darlehenMenuItems,
-        active: !!darlehenId,
-      };
 
       const auszahlungMenu: NavItem = {
         type: 'link',
@@ -234,6 +115,17 @@ export class GesuchAppPatternMainLayoutComponent {
         label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
       };
+
+      const darlehenMenu = buildDarlehenMenu({
+        darlehen: darlehnen.list,
+        canCreateDarlehen: darlehnen.canCreateDarlehen,
+        fallId: fallId,
+        isDarlehenRoute: !!darlehenId,
+        createDarlehen: () =>
+          this.darlehenStore.createDarlehen$({
+            fallId: fallId,
+          }),
+      });
 
       const navItems: NavItem[] = [
         ...gesuchBaseMenuItems,

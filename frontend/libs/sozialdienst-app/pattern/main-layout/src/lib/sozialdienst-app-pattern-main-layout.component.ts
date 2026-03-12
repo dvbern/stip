@@ -9,7 +9,6 @@ import {
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { format } from 'date-fns/format';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -17,36 +16,16 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import {
-  darlehenCompletedStates,
-  darlehenStatusMapping,
-} from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
   NavItem,
+  buildDarlehenMenu,
+  buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
+  sozialdienstBaseMenuItems,
 } from '@dv/shared/util/navigation';
-
-const sozialdienstBaseMenuItems: NavItem[] = [
-  {
-    type: 'link',
-    id: 'antraege',
-    label: { key: 'sozialdienst-app.header.antraege' },
-    icon: 'list',
-    route: ['/dashboard'],
-  },
-  {
-    type: 'link',
-    id: 'administration',
-    label: { key: 'sozialdienst-app.header.administration' },
-    icon: 'settings',
-    route: ['/administration'],
-    rolesAllowed: ['V0_Sozialdienst-Admin'],
-  },
-];
 
 /**
  * Main layout for the sozialdienst app.
@@ -88,7 +67,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
-  private config = inject(SharedModelCompileTimeConfig);
+
+  baseMenuItems = sozialdienstBaseMenuItems;
 
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
@@ -96,8 +76,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
     const { gesuch } = this.cacheSig();
     return gesuch?.fallId;
   });
-
-  baseMenuItems = sozialdienstBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
@@ -118,19 +96,10 @@ export class SozialdienstAppPatternMainLayoutComponent {
     this.allRouteParamsSig,
   );
 
-  private currentBenutzerFallIdSig = this.fallStore.currentFallViewSig;
-
   private fallIdSig = computed(() => {
-    const appType = this.config.appType;
-
-    if (appType === 'sozialdienst-app') {
-      return this.routeParamsFallIdSig() ?? this.fallIdFromGesuchCacheSig();
-    }
-    if (appType === 'gesuch-app') {
-      return this.currentBenutzerFallIdSig()?.id;
-    }
-
-    return undefined;
+    const routeFallId = this.routeParamsFallIdSig();
+    const cacheFallId = this.fallIdFromGesuchCacheSig();
+    return routeFallId ?? cacheFallId;
   });
 
   constructor() {
@@ -146,10 +115,15 @@ export class SozialdienstAppPatternMainLayoutComponent {
     // naviation items effect
     effect(() => {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
-      const fallId = this.fallIdSig() ?? this.fallIdFromGesuchCacheSig() ?? '';
+      const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+
+      if (!fallId) {
+        this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
+        return;
+      }
 
       const fallNav: NavItem[] = [];
       const ausZahlungNav: NavItem[] = [];
@@ -179,112 +153,22 @@ export class SozialdienstAppPatternMainLayoutComponent {
         );
       }
 
-      const gesuchNav: NavItem[] = [];
-
-      if (gesuchId) {
-        const tranchen =
-          this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [];
-
-        if (tranchen.length > 1) {
-          gesuchNav.push({
-            type: 'menu',
-            id: 'gesuch',
-            label: { key: 'sozialdienst-app.header.gesuch' },
-            icon: 'description',
-            children: tranchen.map((tranche, index) => ({
-              type: 'link' as const,
-              id: tranche.id,
-              label: {
-                key: 'shared.header.tranche.item',
-                context: {
-                  date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
-                  index: index + 1,
-                },
-              },
-              route: ['/gesuch', gesuchId, 'tranche', tranche.id],
-            })),
-          });
-        } else if (tranchen.length === 1) {
-          gesuchNav.push({
-            type: 'link',
-            id: 'gesuch',
-            label: { key: 'sozialdienst-app.header.gesuch' },
-            icon: 'description',
-            route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
-            active: !!gesuchId,
-          });
-        }
-      }
-
-      const darlehenListByStatus = darlehenCompletedStates.map((status) => ({
-        status,
-        darlehen: darlehnen.list.filter(
-          (dar) => darlehenStatusMapping[dar.status!] === status,
-        ),
-      }));
-
-      // list with separators for each status
-      const darlehenMenuItems: NavItem[] = darlehenListByStatus.flatMap(
-        ({ status, darlehen }) => {
-          const items: NavItem[] = [];
-
-          if (darlehen.length > 0) {
-            items.push({
-              type: 'separator',
-              id: `separator-${status}`,
-              label: {
-                key: 'shared.header.darlehen.complete-states.' + status,
-              },
-            });
-
-            items.push(
-              ...darlehen.map((darlehen) => ({
-                type: 'link' as const,
-                id: darlehen.id,
-                label: {
-                  key: 'shared.header.darlehen.item',
-                  context: {
-                    date: format(darlehen.timestampErstellt!, 'dd.MM.yyyy'),
-                  },
-                },
-                route: ['/darlehen', darlehen.id, 'fall', fallId],
-              })),
-            );
-          }
-
-          return items;
-        },
+      const gesuchNav = buildGesuchNavItems(
+        gesuchId,
+        this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [],
+        'sozialdienst-app',
       );
 
-      const darlehenMenu: NavItem = {
-        type: 'menu',
-        icon: 'account_balance',
-        id: 'darlehen',
-        label: { key: 'shared.header.darlehen' },
-        children: darlehnen.canCreateDarlehen
-          ? darlehenMenuItems.concat([
-              ...(darlehenMenuItems.length > 0
-                ? [
-                    {
-                      type: 'separator' as const,
-                      id: 'separator-create',
-                    },
-                  ]
-                : []),
-              {
-                type: 'action',
-                id: 'create-darlehen',
-                label: { key: 'shared.header.darlehen.create' },
-                icon: 'add',
-                action: () =>
-                  this.darlehenStore.createDarlehen$({
-                    fallId,
-                  }),
-              },
-            ])
-          : darlehenMenuItems,
-        active: !!darlehenId,
-      };
+      const darlehenMenu = buildDarlehenMenu({
+        darlehen: darlehnen.list,
+        canCreateDarlehen: darlehnen.canCreateDarlehen,
+        fallId: fallId,
+        isDarlehenRoute: !!darlehenId,
+        createDarlehen: () =>
+          this.darlehenStore.createDarlehen$({
+            fallId: fallId,
+          }),
+      });
 
       const navItems: NavItem[] = [
         ...fallNav,
