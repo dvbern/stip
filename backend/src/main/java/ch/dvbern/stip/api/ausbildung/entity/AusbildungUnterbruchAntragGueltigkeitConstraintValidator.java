@@ -41,6 +41,11 @@ public class AusbildungUnterbruchAntragGueltigkeitConstraintValidator
         return DateUtil
             .beforeOrEqual(gesuchRange.getGueltigAb(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb())
         && DateUtil
-            .afterOrEqual(gesuchRange.getGueltigBis(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis());
+            .afterOrEqual(gesuchRange.getGueltigBis(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis())
+        && DateUtil
+            .afterOrEqual(
+                ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis(),
+                ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb()
+            );
     }
 }

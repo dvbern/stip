@@ -214,7 +214,8 @@ public class AusbildungUnterbruchAntragService {
         final UUID ausbildungUnterbruchAntragId,
         final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
     ) {
-        final var antrag = requireById(ausbildungUnterbruchAntragId);
+        var antrag = requireById(ausbildungUnterbruchAntragId);
+        antrag = ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
         notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         createStatusprotokollEntry(
             antrag,
@@ -222,8 +223,7 @@ public class AusbildungUnterbruchAntragService {
             antrag.getStatus().toString(),
             antrag.getKommentarGS()
         );
-        return ausbildungUnterbruchAntragMapper
-            .toGsDto(ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag));
+        return ausbildungUnterbruchAntragMapper.toGsDto(antrag);
     }
 
     @Transactional
