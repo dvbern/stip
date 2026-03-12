@@ -2,33 +2,30 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  computed,
   effect,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { format } from 'date-fns/format';
-import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
-  NavItem,
   darlehenCompletedStates,
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import {
+  NavItem,
+  createAllRouteParamsSig,
+  createParamsIdSig,
+} from '@dv/shared/util/navigation';
 
 const gesuchBaseMenuItems: NavItem[] = [
   {
@@ -78,43 +75,30 @@ export class GesuchAppPatternMainLayoutComponent {
   private router = inject(Router);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private config = inject(SharedModelCompileTimeConfig);
 
   baseMenuItems = gesuchBaseMenuItems;
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
-  private allRouteParamsSig = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        let route: ActivatedRoute | null = this.router.routerState.root;
-        const params: Record<string, string> = {};
+  private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-        while (route) {
-          Object.assign(params, route.snapshot.params);
-          route = route.firstChild;
-        }
-
-        return params;
-      }),
-    ),
+  private darlehenIdSig = createParamsIdSig(
+    'darlehenId',
+    this.allRouteParamsSig,
   );
 
-  private isDarlehenRouteSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['darlehenId'] ? true : false;
-  });
+  private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
-  private gesuchIdSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['gesuchId'];
-  });
+  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
-  private trancheIdSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['trancheId'];
-  });
+  private routeParamsFallIdSig = createParamsIdSig(
+    'fallId',
+    this.allRouteParamsSig,
+  );
+
+  private currentBenutzerFallIdSig = this.fallStore.currentFallViewSig()?.id;
 
   constructor() {
     this.fallStore.loadCurrentFall$();
@@ -132,7 +116,7 @@ export class GesuchAppPatternMainLayoutComponent {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id ?? '';
-      const isDarlehenRoute = this.isDarlehenRouteSig();
+      const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
 
       const gesuchNav: NavItem[] = [];
@@ -240,7 +224,7 @@ export class GesuchAppPatternMainLayoutComponent {
               },
             ])
           : darlehenMenuItems,
-        active: isDarlehenRoute,
+        active: !!darlehenId,
       };
 
       const auszahlungMenu: NavItem = {

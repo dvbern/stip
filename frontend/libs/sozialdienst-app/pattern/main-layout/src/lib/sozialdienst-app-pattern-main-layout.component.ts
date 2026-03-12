@@ -6,17 +6,10 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterOutlet,
-} from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { format } from 'date-fns/format';
-import { filter, map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -24,13 +17,18 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
-  NavItem,
   darlehenCompletedStates,
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import {
+  NavItem,
+  createAllRouteParamsSig,
+  createParamsIdSig,
+} from '@dv/shared/util/navigation';
 
 const sozialdienstBaseMenuItems: NavItem[] = [
   {
@@ -90,6 +88,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
+  private config = inject(SharedModelCompileTimeConfig);
 
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
@@ -103,49 +102,42 @@ export class SozialdienstAppPatternMainLayoutComponent {
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
-  private allRouteParamsSig = toSignal(
-    this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
-      map(() => {
-        let route: ActivatedRoute | null = this.router.routerState.root;
-        const params: Record<string, string> = {};
+  private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-        while (route) {
-          Object.assign(params, route.snapshot.params);
-          route = route.firstChild;
-        }
-
-        return params;
-      }),
-    ),
+  private darlehenIdSig = createParamsIdSig(
+    'darlehenId',
+    this.allRouteParamsSig,
   );
 
-  private isDarlehenRouteSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['darlehenId'] ? true : false;
-  });
+  private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
-  private gesuchIdSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['gesuchId'];
-  });
+  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
+
+  private routeParamsFallIdSig = createParamsIdSig(
+    'fallId',
+    this.allRouteParamsSig,
+  );
+
+  private currentBenutzerFallIdSig = this.fallStore.currentFallViewSig;
 
   private fallIdSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['fallId'];
-  });
+    const appType = this.config.appType;
 
-  private trancheIdSig = computed(() => {
-    const params = this.allRouteParamsSig();
-    return params?.['trancheId'];
+    if (appType === 'sozialdienst-app') {
+      return this.routeParamsFallIdSig() ?? this.fallIdFromGesuchCacheSig();
+    }
+    if (appType === 'gesuch-app') {
+      return this.currentBenutzerFallIdSig()?.id;
+    }
+
+    return undefined;
   });
 
   constructor() {
     this.fallStore.loadCurrentFall$();
 
     effect(() => {
-      const fallId = this.fallIdSig() ?? this.fallIdFromGesuchCacheSig();
-
+      const fallId = this.fallIdSig();
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
       }
@@ -156,7 +148,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = this.fallIdSig() ?? this.fallIdFromGesuchCacheSig() ?? '';
       const gesuchId = this.gesuchIdSig();
-      const isDarlehenRoute = this.isDarlehenRouteSig();
+      const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
 
       const fallNav: NavItem[] = [];
@@ -291,7 +283,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
               },
             ])
           : darlehenMenuItems,
-        active: isDarlehenRoute,
+        active: !!darlehenId,
       };
 
       const navItems: NavItem[] = [
