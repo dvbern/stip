@@ -214,8 +214,8 @@ public class AusbildungUnterbruchAntragService {
         final UUID ausbildungUnterbruchAntragId,
         final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
     ) {
-        var antrag = requireById(ausbildungUnterbruchAntragId);
-        antrag = ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
+        final var antrag = requireById(ausbildungUnterbruchAntragId);
+        ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
         notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         createStatusprotokollEntry(
             antrag,

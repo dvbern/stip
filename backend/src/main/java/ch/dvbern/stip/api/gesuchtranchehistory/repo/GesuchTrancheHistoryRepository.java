@@ -198,21 +198,47 @@ public class GesuchTrancheHistoryRepository {
         return akzeptierteAenderungs;
     }
 
+    // @Transactional
+    // public List<GesuchTranche> getAllAbgelehnteAenderungTranches(final UUID gesuchId) {
+    // // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
+    // // List<GesuchTranche>
+    // @SuppressWarnings("unchecked")
+    // final List<GesuchTranche> abgehlenteAenderungen = AuditReaderFactory.get(em)
+    // .createQuery()
+    // .forRevisionsOfEntity(GesuchTranche.class, true, true)
+    // .add(AuditEntity.property("gesuch_id").eq(gesuchId))
+    // .add(AuditEntity.revisionType().ne(RevisionType.DEL))
+    // .add(AuditEntity.revisionType().ne(RevisionType.ADD))
+    // .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
+    // .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+    // .add(AuditEntity.property("status").hasChanged())
+    // .getResultList();
+    //
+    // return abgehlenteAenderungen;
+    // }
+
     @Transactional
-    public List<GesuchTranche> getAllAbgelehnteAenderungTranches(final UUID gesuchId) {
+    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungTranches(final UUID gesuchId) {
         // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
         // List<GesuchTranche>
         @SuppressWarnings("unchecked")
-        final List<GesuchTranche> abgehlenteAenderungen = AuditReaderFactory.get(em)
+        final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgehlenteAenderungen = AuditReaderFactory.get(em)
             .createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, true, true)
+            .forRevisionsOfEntity(GesuchTranche.class, false, true)
             .add(AuditEntity.property("gesuch_id").eq(gesuchId))
             .add(AuditEntity.revisionType().ne(RevisionType.DEL))
             .add(AuditEntity.revisionType().ne(RevisionType.ADD))
             .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
             .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
             .add(AuditEntity.property("status").hasChanged())
-            .getResultList();
+            .getResultList()
+            .stream()
+            .filter(result -> result instanceof Object[] array && array.length >= 2)
+            .map(result -> {
+                final var list = (Object[]) result;
+                return Pair.of((GesuchTranche) list[0], (DefaultRevisionEntity) list[1]);
+            })
+            .toList();
 
         return abgehlenteAenderungen;
     }
@@ -240,31 +266,5 @@ public class GesuchTrancheHistoryRepository {
                 aenderung.getGesuch().getTranchenTranchen().toList()
             )
         ).toList();
-    }
-
-    @Transactional
-    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
-        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
-        // List<GesuchTranche>
-        @SuppressWarnings("unchecked")
-        final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgehlenteAenderungen = AuditReaderFactory.get(em)
-            .createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, false, true)
-            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
-            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
-            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
-            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-            .add(AuditEntity.property("status").hasChanged())
-            .getResultList()
-            .stream()
-            .filter(result -> result instanceof Object[] array && array.length >= 2)
-            .map(result -> {
-                final var list = (Object[]) result;
-                return Pair.of((GesuchTranche) list[0], (DefaultRevisionEntity) list[1]);
-            })
-            .toList();
-
-        return abgehlenteAenderungen;
     }
 }
