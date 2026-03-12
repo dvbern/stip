@@ -10,6 +10,7 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -20,6 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { addDays } from 'date-fns';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
@@ -89,6 +91,19 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     startDate: [<string | undefined>undefined, Validators.required],
     endDate: [<string | undefined>undefined, Validators.required],
     kommentarGS: [<string | undefined>undefined, Validators.required],
+  });
+  private startDateChangedSig = toSignal(
+    this.form.controls.startDate.valueChanges,
+    {
+      initialValue: this.form.controls.startDate.value,
+    },
+  );
+  oneDayAfterStartDateSig = computed(() => {
+    const gueltigAb = this.startDateChangedSig();
+    if (!gueltigAb) {
+      return null;
+    }
+    return addDays(gueltigAb, 1);
   });
   formWasSubmittedSig = signal(false);
   unterbruchDokumenteOptionsSig = computed(() => {
