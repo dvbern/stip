@@ -3,8 +3,10 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  computed,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -20,6 +22,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { addDays } from 'date-fns';
 
 import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import {
@@ -84,6 +87,20 @@ export class UnterbruchInfoDialogComponent {
     endDate: [<string>this.dialogData.endDate, Validators.required],
     kommentarSB: [<string | undefined>undefined, Validators.required],
     monateOhneAnspruch: [<number | undefined>undefined],
+  });
+
+  private startDateChangedSig = toSignal(
+    this.form.controls.startDate.valueChanges,
+    {
+      initialValue: this.form.controls.startDate.value,
+    },
+  );
+  oneDayAfterStartDateSig = computed(() => {
+    const gueltigAb = this.startDateChangedSig();
+    if (!gueltigAb) {
+      return null;
+    }
+    return addDays(gueltigAb, 1);
   });
 
   static open(dialog: MatDialog, data: AusbildungUnterbruchAntragEntry) {
