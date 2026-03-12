@@ -15,5 +15,6 @@ export interface DemoDataTestBerechnungResult {
     valid: boolean;
     soll?: number;
     ist?: number;
+    message?: string;
 }
 

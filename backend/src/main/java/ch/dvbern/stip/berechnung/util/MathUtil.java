@@ -39,6 +39,5 @@ public final class MathUtil {
     public static boolean around(final Integer value, final Integer target, final Integer tolerance) {
         assert tolerance > 0;
         return Math.abs(value - target) <= Math.abs(tolerance);
-        // return (target + tolerance) > value && (target - tolerance) < value;
     }
 }

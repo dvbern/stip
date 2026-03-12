@@ -127,6 +127,7 @@ public class DemoDataService {
                 ret.soll(stipendienanspruchDto.getBetragStipendienSoll());
                 return ret;
             } catch (Exception e) {
+                ret.message(e.getMessage());
                 return ret;
             }
         }

@@ -893,6 +893,8 @@ components:
           type: integer
         ist:
           type: integer
+        message:
+          type: string
     ApplyDemoDataResponse:
       required:
         - gesuchId

@@ -78,6 +78,13 @@
                     [matTooltip]="t('demo-data-app.overview.test-berechnung.gesuch-invalid')"
                     >warning</i
                   >
+                  <button
+                    type="button"
+                    (click)="copyToClipboard(demoData.testResult?.message ?? 'error')"
+                    [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
+                  >
+                    <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
+                  </button>
                 } @else {
                   <i
                     class="material-symbols-rounded tw:text-sm tw:text-dv-red"

@@ -31,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_DEMO_DATA_ID,
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_VALID,
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_SOLL,
-  DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_IST
+  DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_IST,
+  DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_MESSAGE
 })
 @JsonTypeName("DemoDataTestBerechnungResult")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -47,6 +48,9 @@ public class DemoDataTestBerechnungResultDtoSpec {
 
   public static final String JSON_PROPERTY_IST = "ist";
   private Integer ist;
+
+  public static final String JSON_PROPERTY_MESSAGE = "message";
+  private String message;
 
   public DemoDataTestBerechnungResultDtoSpec() {
   }
@@ -154,6 +158,32 @@ public class DemoDataTestBerechnungResultDtoSpec {
     this.ist = ist;
   }
 
+
+  public DemoDataTestBerechnungResultDtoSpec message(String message) {
+    
+    this.message = message;
+    return this;
+  }
+
+   /**
+   * Get message
+   * @return message
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getMessage() {
+    return message;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MESSAGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -166,12 +196,13 @@ public class DemoDataTestBerechnungResultDtoSpec {
     return Objects.equals(this.demoDataId, demoDataTestBerechnungResult.demoDataId) &&
         Objects.equals(this.valid, demoDataTestBerechnungResult.valid) &&
         Objects.equals(this.soll, demoDataTestBerechnungResult.soll) &&
-        Objects.equals(this.ist, demoDataTestBerechnungResult.ist);
+        Objects.equals(this.ist, demoDataTestBerechnungResult.ist) &&
+        Objects.equals(this.message, demoDataTestBerechnungResult.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, valid, soll, ist);
+    return Objects.hash(demoDataId, valid, soll, ist, message);
   }
 
   @Override
@@ -182,6 +213,7 @@ public class DemoDataTestBerechnungResultDtoSpec {
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
     sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

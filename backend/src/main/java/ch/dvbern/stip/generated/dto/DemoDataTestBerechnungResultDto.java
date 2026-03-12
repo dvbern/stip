@@ -24,6 +24,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
   private @Valid Boolean valid;
   private @Valid Integer soll;
   private @Valid Integer ist;
+  private @Valid String message;
 
   /**
    **/
@@ -99,6 +100,24 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     this.ist = ist;
   }
 
+  /**
+   **/
+  public DemoDataTestBerechnungResultDto message(String message) {
+    this.message = message;
+    return this;
+  }
+
+  
+  @JsonProperty("message")
+  public String getMessage() {
+    return message;
+  }
+
+  @JsonProperty("message")
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -112,12 +131,13 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     return Objects.equals(this.demoDataId, demoDataTestBerechnungResult.demoDataId) &&
         Objects.equals(this.valid, demoDataTestBerechnungResult.valid) &&
         Objects.equals(this.soll, demoDataTestBerechnungResult.soll) &&
-        Objects.equals(this.ist, demoDataTestBerechnungResult.ist);
+        Objects.equals(this.ist, demoDataTestBerechnungResult.ist) &&
+        Objects.equals(this.message, demoDataTestBerechnungResult.message);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, valid, soll, ist);
+    return Objects.hash(demoDataId, valid, soll, ist, message);
   }
 
   @Override
@@ -129,6 +149,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
     sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }
