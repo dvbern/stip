@@ -78,6 +78,7 @@ export * from './demoDataError';
 export * from './demoDataList';
 export * from './demoDataSlim';
 export * from './demoDataStipendienanspruch';
+export * from './demoDataTestBerechnungResult';
 export * from './demoEinnahmenKosten';
 export * from './demoElternteil';
 export * from './demoFamiliensituation';

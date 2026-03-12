@@ -42,8 +42,10 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntityBuilder;
 import ch.dvbern.stip.api.common.entity.AbstractPersonBuilder;
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
+import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
@@ -69,6 +71,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenBuilder;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.entity.ElternBuilder;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.FamiliensituationBuilder;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -76,10 +79,15 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.geschwister.entity.GeschwisterBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.entity.KindBuilder;
 import ch.dvbern.stip.api.land.entity.Land;
@@ -89,6 +97,8 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItemBuilder;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.entity.PartnerBuilder;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildungBuilder;
+import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
+import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
@@ -97,15 +107,17 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.util.MathUtil;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
-import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.keycloak.common.util.TriFunction;
@@ -138,6 +150,10 @@ public class GenerateDemoDataService {
     private final GesuchTrancheRepository gesuchTrancheRepository;
     private final BerechnungService berechnungService;
     private final DokumentRepository dokumentRepository;
+    private final GesuchsperiodenService gesuchsperiodenService;
+    private final GesuchNummerService gesuchNummerService;
+    private final Validator validator;
+    private final StatusprotokollService statusprotokollService;
 
     private Land getLandIso2(String iso2Code) {
         try {
@@ -176,8 +192,7 @@ public class GenerateDemoDataService {
             .build();
     }
 
-    @Transactional
-    public UUID createEinreichableGesuch(DemoData demoData) {
+    public Gesuch createEinreichableGesuch(DemoData demoData, Fall fall) {
         final var demoDataDto = demoData.parseDemoDataDto();
         final var piaDto = demoDataDto.getPersonInAusbildung();
         final var piaAdresse = AdresseBuilder.adresse()
@@ -194,10 +209,7 @@ public class GenerateDemoDataService {
             .sapBusinessPartnerId(null)
             .buchhaltung(null)
             .build();
-        final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
-        final var fall = fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow();
         fall.setAuszahlung(auszahlung);
-
         final var ausbildungDto = demoDataDto.getAusbildung();
         // Reuse a existing Ausbildung if it exists and is not completed, otherwise create a new one
         final var ausbildung = fall.getAusbildungs()
@@ -572,18 +584,35 @@ public class GenerateDemoDataService {
             );
         }
 
-        fallRepository.persist(fall);
-        ausbildungRepository.persist(ausbildung);
-        final var createdGesuch = gesuchService.createGesuchForAusbildung(
-            new GesuchCreateDto().ausbildungId(ausbildung.getId())
-        );
-        if (Objects.nonNull(createdGesuch.getRight())) {
-            if (Objects.nonNull(createdGesuch.getRight().getRight())) {
-                createdGesuch.getRight().getRight().throwCustomValidation();
-            }
-            throw new RuntimeException("Unable to create the gesuch");
+        final Gesuch gesuch = new Gesuch();
+        gesuch.setAusbildung(ausbildung);
+
+        final var gesuchsperiode = gesuchsperiodenService.getGesuchsperiodeForAusbildung(
+            ausbildung
+        ).getLeft();
+
+        var ausbildungsstart = gesuch
+            .getAusbildung()
+            .getAusbildungBegin()
+            .withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());
+        if (ausbildungsstart.isAfter(gesuchsperiode.getGesuchsperiodeStopp())) {
+            ausbildungsstart = ausbildungsstart.minusYears(1);
         }
-        final var gesuch = gesuchRepository.requireById(createdGesuch.getLeft().getId());
+
+        var tranche = new GesuchTranche()
+            .setGueltigkeit(new DateRange(ausbildungsstart, ausbildungsstart.plusYears(1).minusDays(1)))
+            .setGesuch(gesuch)
+            .setGesuchFormular(new GesuchFormular())
+            .setTyp(GesuchTrancheTyp.TRANCHE);
+
+        tranche.getGesuchFormular().setTranche(tranche);
+
+        gesuch.getGesuchTranchen().add(tranche);
+        gesuch.setAusbildung(ausbildung);
+        gesuch.setGesuchsperiode(gesuchsperiode);
+        gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
+        gesuch.getAusbildung().getGesuchs().add(gesuch);
+
         final var gesuchFormular = gesuch
             .getLatestGesuchTranche()
             .getGesuchFormular();
@@ -599,6 +628,36 @@ public class GenerateDemoDataService {
         gesuchFormular.getSteuererklaerung().addAll(steuererklaerungs);
         gesuchFormular.getSteuerdaten().addAll(steuerdatens);
         gesuchFormular.getGeschwisters().addAll(geschwisters);
+        return gesuch;
+    }
+
+    @Transactional
+    public UUID createAndPersistEinreichableGesuch(DemoData demoData) {
+        final var gesuchstellerId = benutzerService.getCurrentBenutzer().getId();
+        final var fall = fallRepository.findFallForGsOptional(gesuchstellerId).orElseThrow();
+
+        final var gesuch = createEinreichableGesuch(demoData, fall);
+
+        fallRepository.persist(fall);
+        ausbildungRepository.persist(gesuch.getAusbildung());
+
+        Set<ConstraintViolation<Ausbildung>> violations = validator.validate(gesuch.getAusbildung());
+        if (!violations.isEmpty()) {
+            throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
+        }
+
+        gesuchRepository.persistAndFlush(gesuch);
+        statusprotokollService.createStatusprotokoll(
+            Gesuchstatus.IN_BEARBEITUNG_GS.toString(),
+            null,
+            StatusprotokollEntryTyp.GESUCH,
+            null,
+            gesuch
+        );
+
+        final var gesuchFormular = gesuch
+            .getLatestGesuchTranche()
+            .getGesuchFormular();
 
         gesuchFormularRepository.persist(gesuchFormular);
         gesuchRepository.persistAndFlush(gesuch);
@@ -639,10 +698,7 @@ public class GenerateDemoDataService {
 
         return new ApplyDemoDataResponseStipendienanspruchDto()
             .success(
-                Objects.equals(
-                    stipendienSoll,
-                    berechnungsresultat.getBerechnungStipendium()
-                )
+                MathUtil.around(berechnungsresultat.getBerechnungStipendium(), stipendienSoll, 1)
             )
             .statusSoll(stipendienanspruchDto.getStatus())
             .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)
