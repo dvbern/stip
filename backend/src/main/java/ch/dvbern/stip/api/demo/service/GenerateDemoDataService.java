@@ -362,6 +362,7 @@ public class GenerateDemoDataService {
                     )
                     .entryId(UUID.randomUUID())
                     .wohnsitzAnteilPia(kindDto.getWohnsitzAnteilPia())
+                    .ergaenzungsleistungen(kindDto.getErgaenzungsleistungen())
                     .kinderUndAusbildungszulagen(kindDto.getKinderUndAusbildungszulagen())
                     .renten(kindDto.getRenten())
                     .andereEinnahmen(kindDto.getAndereEinnahmen()),
