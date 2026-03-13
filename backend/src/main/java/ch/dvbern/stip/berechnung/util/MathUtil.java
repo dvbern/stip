@@ -35,9 +35,4 @@ public final class MathUtil {
         }
         return value.multiply(BigDecimal.valueOf(tranchen)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
     }
-
-    public static boolean around(final Integer value, final Integer target, final Integer tolerance) {
-        assert tolerance > 0;
-        return Math.abs(value - target) <= Math.abs(tolerance);
-    }
 }
