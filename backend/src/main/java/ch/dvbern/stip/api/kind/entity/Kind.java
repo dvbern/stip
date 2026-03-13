@@ -22,7 +22,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -74,7 +73,7 @@ public class Kind extends AbstractPerson {
     @Min(0)
     private Integer wohnsitzAnteilPia;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Column(name = "ergaenzungsleistungen")
     @Min(0)
     private Integer ergaenzungsleistungen;
