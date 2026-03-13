@@ -31,8 +31,6 @@ import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoPartnerDto;
-import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
-import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import jakarta.ws.rs.BadRequestException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +61,7 @@ public class ParseDemoDataUtil {
             throw new BadRequestException("No description provided");
         }
 
-        final var fullText = cellToSimpleHtml(cell);
+        final var fullText = cell.getText();
         final var indexColon = fullText.indexOf(':');
         final var substringIndex = indexColon > 0 ? indexColon : fullText.indexOf('.');
 
@@ -268,14 +266,6 @@ public class ParseDemoDataUtil {
         return Objects.nonNull(elternteilDto.getNachname());
     }
 
-    public boolean hasValue(DemoSteuererklaerungDto steuernerklaerungDto) {
-        return Objects.nonNull(steuernerklaerungDto.getSteuererklaerungInBern());
-    }
-
-    public boolean hasValue(DemoSteuerdatenDto steuerdatenDto) {
-        return Objects.nonNull(steuerdatenDto.getTotalEinkuenfte());
-    }
-
     public static boolean hasValue(DemoAuszahlungDto demoAuszahlungDto) {
         return Objects.nonNull(demoAuszahlungDto.getIban());
     }
@@ -292,68 +282,4 @@ public class ParseDemoDataUtil {
             );
         }
     }
-
-    private static String cellToSimpleHtml(Cell cell) {
-        return cell.getText();
-        // if (!(cell instanceof XSSFCell) || cell.getRichStringCellValue().numFormattingRuns() == 0) {
-        // return cell.getStringCellValue();
-        // }
-        // final var rich = ((XSSFCell) cell).getRichStringCellValue();
-        // String full = rich.getString();
-        //
-        // StringBuilder taggedValue = new StringBuilder();
-        //
-        // for (int i = 0; i < rich.numFormattingRuns(); i++) {
-        // int start = rich.getIndexOfFormattingRun(i);
-        // int length = rich.getLengthOfFormattingRun(i);
-        //
-        // // If an empty formatting cell is found
-        // if (length <= 0) {
-        // continue;
-        // }
-        //
-        // final var text = full.substring(start, start + length);
-        // final var font = rich.getFontOfFormattingRun(i);
-        //
-        // if (Objects.isNull(font)) {
-        // taggedValue.append(escape(text));
-        // continue;
-        // }
-        //
-        // final var hasUnderline = font.getUnderline() > 0;
-        // final var hasBold = font.getBold();
-        // final var hasItalic = font.getItalic();
-        //
-        // if (hasUnderline) {
-        // taggedValue.append("<u>");
-        // }
-        // if (hasBold) {
-        // taggedValue.append("<b>");
-        // }
-        // if (hasItalic) {
-        // taggedValue.append("<i>");
-        // }
-        //
-        // taggedValue.append(escape(text));
-        //
-        // if (hasItalic) {
-        // taggedValue.append("</i>");
-        // }
-        // if (hasBold) {
-        // taggedValue.append("</b>");
-        // }
-        // if (hasUnderline) {
-        // taggedValue.append("</u>");
-        // }
-        // }
-        //
-        // return taggedValue.toString();
-    }
-
-    // Simple HTML escaper
-    // private static String escape(String s) {
-    // return s.replace("&", "&amp;")
-    // .replace("<", "&lt;")
-    // .replace(">", "&gt;");
-    // }
 }
