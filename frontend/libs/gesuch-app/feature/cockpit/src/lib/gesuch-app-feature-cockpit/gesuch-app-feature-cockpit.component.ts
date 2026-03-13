@@ -9,12 +9,16 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
 import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
-import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
+import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -22,9 +26,11 @@ import {
   selectLastUpdate,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
@@ -44,6 +50,7 @@ import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
+import { isPending } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
 
@@ -71,6 +78,8 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 export class GesuchAppFeatureCockpitComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
+  private ausbildungStore = inject(AusbildungStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   route = inject(ActivatedRoute);
@@ -78,9 +87,9 @@ export class GesuchAppFeatureCockpitComponent {
   navigationStore = inject(NavigationStore);
 
   fallStore = inject(FallStore);
-  // darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   globalNotificationStore = inject(GlobalNotificationStore);
   sozialdienstStore = inject(SozialdienstStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
@@ -97,6 +106,14 @@ export class GesuchAppFeatureCockpitComponent {
       (sozialdienst) =>
         sozialdienst.aktiv || sozialdienst.id === delegierterSozialdienst?.id,
     );
+  });
+
+  isUnterbruchOrAenderungPendingSig = computed(() => {
+    const ausbildungUnterbruchPending = isPending(
+      this.ausbildungStore.ausbildungUnterbrechenResponse(),
+    );
+    const aenderungPending = isPending(this.gesuchHeaderStore.header());
+    return ausbildungUnterbruchPending || aenderungPending;
   });
 
   private gotNewFallSig = computed(() => {
@@ -127,11 +144,32 @@ export class GesuchAppFeatureCockpitComponent {
   compareById = compareById;
 
   createAusbildung(fallId: string) {
-    SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
-      .afterClosed()
-      .subscribe(() => {
-        this.dashboardStore.loadDashboard$();
-      });
+    const nutzungsbedingungenAkzeptiert =
+      this.benutzerSig()?.nutzungsbedingungenAkzeptiert;
+    const benutzerId = this.benutzerSig()?.id;
+
+    if (!nutzungsbedingungenAkzeptiert) {
+      SharedDialogNutzungsbedingungenComponent.open(
+        this.dialog,
+        nutzungsbedingungenAkzeptiert ?? false,
+      )
+        .afterClosed()
+        .subscribe((result) => {
+          if (result && benutzerId) {
+            this.store.dispatch(
+              SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
+                benutzerId,
+              }),
+            );
+          }
+        });
+    } else {
+      SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+        .afterClosed()
+        .subscribe(() => {
+          this.dashboardStore.loadDashboard$();
+        });
+    }
   }
 
   trackByPerioden(
@@ -147,7 +185,7 @@ export class GesuchAppFeatureCockpitComponent {
     } = melden;
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createAenderung',
-      id,
+      gesuchId: id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
     })
@@ -173,6 +211,26 @@ export class GesuchAppFeatureCockpitComponent {
           this.store.dispatch(SharedDataAccessGesuchEvents.reset());
         }
       });
+  }
+
+  ausbildungUnterbrechen(
+    ausbildungId: string,
+    openAusbildungUnterbruchAntragId?: string,
+  ) {
+    if (openAusbildungUnterbruchAntragId) {
+      this.router.navigate([
+        '/',
+        'ausbildung-unterbrechen',
+        openAusbildungUnterbruchAntragId,
+      ]);
+    } else {
+      this.ausbildungStore.createAusbildungUnterbruchAntrag$({
+        ausbildungId,
+        onSuccess: (unterbruchId) => {
+          this.router.navigate(['/', 'ausbildung-unterbrechen', unterbruchId]);
+        },
+      });
+    }
   }
 
   deleteGesuch(gesuchId: string) {

@@ -180,7 +180,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments() {
-        var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -189,7 +189,7 @@ class DokumentResourcesCustomDokumenteTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        var result = requiredDocuments.getCustomDokumentTyps();
+        var result = requiredDokuments.getCustomDokumentTyps();
         assertThat(result.size(), is(0));
     }
 
@@ -199,7 +199,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(9)
     void test_get_required_custom_gesuchdokuments_should_not_appear() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        final var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -208,7 +208,7 @@ class DokumentResourcesCustomDokumenteTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        final var result = requiredDocuments.getCustomDokumentTyps();
+        final var result = requiredDokuments.getCustomDokumentTyps();
         assertThat(result.size(), is(0));
     }
 
@@ -445,7 +445,7 @@ class DokumentResourcesCustomDokumenteTest {
     @TestAsGesuchsteller
     @Order(24)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        final var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -454,7 +454,7 @@ class DokumentResourcesCustomDokumenteTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
+        assertThat(requiredDokuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

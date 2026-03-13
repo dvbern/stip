@@ -4,13 +4,14 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { exhaustMap, pipe, tap } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
-  GesuchHeaderGs,
-  GesuchHeaderSb,
+  GesuchHeader,
   GesuchService,
   GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
 import { getRelativeTrancheRoute } from '@dv/shared/model/router';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   cachedPending,
@@ -20,13 +21,11 @@ import {
 } from '@dv/shared/util/remote-data';
 
 type GesuchHeaderStoreState = {
-  headerSb: CachedRemoteData<GesuchHeaderSb>;
-  headerGs: CachedRemoteData<GesuchHeaderGs>;
+  header: CachedRemoteData<GesuchHeader>;
 };
 
 const initialState: GesuchHeaderStoreState = {
-  headerSb: initial(),
-  headerGs: initial(),
+  header: initial(),
 };
 
 @Injectable({ providedIn: 'root' })
@@ -36,69 +35,57 @@ export class GesuchHeaderStore extends signalStore(
 ) {
   private gesuchService = inject(GesuchService);
   private router = inject(Router);
+  private config = inject(SharedModelCompileTimeConfig);
 
-  viewGsSig = computed(() => {
+  viewSig = computed(() => {
     return {
-      ...this.headerGs().data,
-      isLoading: isPendingWithoutCache(this.headerGs()),
+      ...this.header().data,
+      isLoading: isPendingWithoutCache(this.header()),
     };
   });
 
-  viewSbSig = computed(() => {
-    return {
-      ...this.headerSb().data,
-      isLoading: isPendingWithoutCache(this.headerSb()),
-    };
-  });
-
-  getRelativeTranchenViewGsSig = prepareTranchenListSig(
-    this.viewGsSig,
+  getRelativeTranchenViewSig = prepareTranchenListSig(
+    this.viewSig,
     this.router,
   );
 
-  getRelativeTranchenViewSbSig = prepareTranchenListSig(
-    this.viewSbSig,
-    this.router,
-  );
-
-  loadHeaderGs$ = rxMethod<{ gesuchTrancheId: string }>(
+  loadHeader$ = rxMethod<{ gesuchId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          headerGs: cachedPending(state.headerGs),
+          header: cachedPending(state.header),
         }));
       }),
-      exhaustMap(({ gesuchTrancheId }) =>
-        this.gesuchService
-          .getGesuchHeaderGs$({ gesuchTrancheId })
-          .pipe(
-            handleApiResponse((headerGs) => patchState(this, { headerGs })),
-          ),
-      ),
-    ),
-  );
-
-  loadHeaderSb$ = rxMethod<{ gesuchTrancheId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          headerSb: cachedPending(state.headerSb),
-        }));
+      exhaustMap(({ gesuchId }) => {
+        switch (this.config.appType) {
+          case 'gesuch-app': {
+            return this.gesuchService
+              .getGesuchHeaderGs$({ gesuchId })
+              .pipe(
+                handleApiResponse((header) => patchState(this, { header })),
+              );
+          }
+          case 'sachbearbeitung-app': {
+            return this.gesuchService
+              .getGesuchHeaderSb$({ gesuchId })
+              .pipe(
+                handleApiResponse((header) => patchState(this, { header })),
+              );
+          }
+          case 'demo-data-app': {
+            throw new Error('App-Type not handled');
+          }
+          default:
+            assertUnreachable(this.config.appType);
+        }
       }),
-      exhaustMap(({ gesuchTrancheId }) =>
-        this.gesuchService
-          .getGesuchHeaderSb$({ gesuchTrancheId })
-          .pipe(
-            handleApiResponse((headerSb) => patchState(this, { headerSb })),
-          ),
-      ),
     ),
   );
 }
 
 const prepareTranchenListSig =
   (
-    viewSig: Signal<{ currentTranchen?: GesuchTrancheSlim[] }>,
+    viewSig: Signal<{ currentTranches?: GesuchTrancheSlim[] }>,
     router: Router,
   ) =>
   (gesuchIdSig: Signal<string | undefined>) => {
@@ -107,7 +94,7 @@ const prepareTranchenListSig =
     return computed(() => {
       const gesuchId = gesuchIdSig();
       const relativeRoute = relativeRouteSig();
-      const tranchen = viewSig().currentTranchen ?? [];
+      const tranchen = viewSig().currentTranches ?? [];
 
       return tranchen.map((tranche) => ({
         ...tranche,

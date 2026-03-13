@@ -59,6 +59,8 @@ public class GesuchTrancheOverrideDokumentService {
             return;
         }
 
+        final var jahreswertDokumentTyps = gesuchDokumentService.getDokumentTypsOfJahreswerte();
+
         // Create a Map<Tranche ID, Map<DokumentTyp, GesuchDokument>>
         // to simplify lookup of GesuchDokumente by Tranche ID and Dokument Typ
         final var targetTranchenLUT = targetTranchen.stream()
@@ -67,6 +69,10 @@ public class GesuchTrancheOverrideDokumentService {
                     AbstractEntity::getId,
                     tranche -> tranche.getGesuchDokuments()
                         .stream()
+                        .filter(
+                            gesuchDokument -> Objects.nonNull(gesuchDokument.getDokumentTyp())
+                            && jahreswertDokumentTyps.contains(gesuchDokument.getDokumentTyp())
+                        )
                         .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument))
                 )
             );
@@ -107,7 +113,7 @@ public class GesuchTrancheOverrideDokumentService {
             .filter(gesuchDokument -> gesuchDokumentService.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp()))
             .collect(Collectors.toMap(GesuchDokument::getDokumentTyp, gesuchDokument -> gesuchDokument));
 
-        for (final var jahreswertDokument : gesuchDokumentService.getDokumentTypsOfJahreswerte()) {
+        for (final var jahreswertDokument : jahreswertDokumentTyps) {
             if (newDokumente.containsKey(jahreswertDokument)) {
                 newDokumentFound.accept(jahreswertDokument, newDokumente.get(jahreswertDokument));
             } else {

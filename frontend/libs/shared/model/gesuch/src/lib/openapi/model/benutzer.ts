@@ -18,5 +18,6 @@ export interface Benutzer {
     vorname: string;
     nachname: string;
     benutzereinstellungen?: BenutzereinstellungenUpdate;
+    nutzungsbedingungenAkzeptiert?: boolean;
 }
 

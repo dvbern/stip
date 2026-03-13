@@ -30,6 +30,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid UUID fallId;
   private @Valid String fallNummer;
   private @Valid UUID ausbildungId;
+  private @Valid Boolean hasPendingAusbildungUnterbruchAntrag;
   private @Valid GesuchsperiodeDto gesuchsperiode;
   private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid String gesuchNummer;
@@ -99,6 +100,25 @@ public class GesuchWithChangesDto  implements Serializable {
   @JsonProperty("ausbildungId")
   public void setAusbildungId(UUID ausbildungId) {
     this.ausbildungId = ausbildungId;
+  }
+
+  /**
+   **/
+  public GesuchWithChangesDto hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+    return this;
+  }
+
+  
+  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
+  @NotNull
+  public Boolean getHasPendingAusbildungUnterbruchAntrag() {
+    return hasPendingAusbildungUnterbruchAntrag;
+  }
+
+  @JsonProperty("hasPendingAusbildungUnterbruchAntrag")
+  public void setHasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+    this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
   }
 
   /**
@@ -372,6 +392,7 @@ public class GesuchWithChangesDto  implements Serializable {
     return Objects.equals(this.fallId, gesuchWithChanges.fallId) &&
         Objects.equals(this.fallNummer, gesuchWithChanges.fallNummer) &&
         Objects.equals(this.ausbildungId, gesuchWithChanges.ausbildungId) &&
+        Objects.equals(this.hasPendingAusbildungUnterbruchAntrag, gesuchWithChanges.hasPendingAusbildungUnterbruchAntrag) &&
         Objects.equals(this.gesuchsperiode, gesuchWithChanges.gesuchsperiode) &&
         Objects.equals(this.gesuchStatus, gesuchWithChanges.gesuchStatus) &&
         Objects.equals(this.gesuchNummer, gesuchWithChanges.gesuchNummer) &&
@@ -389,7 +410,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes, isInitial);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes, isInitial);
   }
 
   @Override
@@ -400,6 +421,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    ausbildungId: ").append(toIndentedString(ausbildungId)).append("\n");
+    sb.append("    hasPendingAusbildungUnterbruchAntrag: ").append(toIndentedString(hasPendingAusbildungUnterbruchAntrag)).append("\n");
     sb.append("    gesuchsperiode: ").append(toIndentedString(gesuchsperiode)).append("\n");
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.berechnung.service;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -45,6 +49,8 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +64,18 @@ public class BerechnungService {
     private final Instance<BerechnungsStammdatenMapper> berechnungsStammdatenMappers;
     private final Instance<StipendienCalculator> stipendienCalculators;
     private final TenantService tenantService;
+
+    public static String serializeBerechnungresultatDto(final BerechnungsresultatDto berechnungsresultatDto) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        StringWriter writer = new StringWriter();
+        try {
+            mapper.writeValue(writer, berechnungsresultatDto);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+        return writer.toString();
+    }
 
     private BerechnungsStammdatenDto berechnungsStammdatenFromRequest(
         final CalculatorRequest berechnungRequest,
@@ -130,7 +148,21 @@ public class BerechnungService {
         final var totalVorKuerzungUnterbruch =
             Objects.requireNonNullElse(totalNachKuerzungNachEinreichefrist, berechnungVorKuerzungUndTeilung);
 
-        final var anzahlMonateUnterbruch = 0;
+        final var anzahlMonateUnterbruch = gesuch.getAusbildung()
+            .getAusbildungUnterbruchAntrags()
+            .stream()
+            .sorted(Comparator.comparing(AusbildungUnterbruchAntrag::getTimestampErstellt))
+            .filter(ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag.getGesuch().getId().equals(gesuch.getId()))
+            .filter(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.AKZEPTIERT
+            )
+            .map(
+                ausbildungUnterbruchAntrag -> Objects
+                    .requireNonNullElse(ausbildungUnterbruchAntrag.getMonateOhneAnspruch(), 0)
+            )
+            .findFirst()
+            .orElse(0);
 
         final var totalNachKuerzungUnterbruch =
             anzahlMonateUnterbruch > 0 ? totalVorKuerzungUnterbruch * (12 - anzahlMonateUnterbruch) / 12 : null;
@@ -155,6 +187,10 @@ public class BerechnungService {
     }
 
     private static Integer getDarlehen(Gesuch gesuch, int stipendium) {
+        if (!gesuch.getAusbildung().getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            return null;
+        }
+
         int monateTertiaerstufe = 0;
 
         for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {

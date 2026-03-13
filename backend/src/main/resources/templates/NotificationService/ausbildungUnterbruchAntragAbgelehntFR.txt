@@ -1,0 +1,1 @@
+Nous avons examiné votre demande d’interruption de votre formation du {startDate} au {endDate} et ne pouvons y donner pas une suite favorable pour les raisons suivantes "{kommentarSb}".

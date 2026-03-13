@@ -31,9 +31,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchInfoDtoSpec.JSON_PROPERTY_ID,
+  GesuchInfoDtoSpec.JSON_PROPERTY_FALL_NUMMER,
   GesuchInfoDtoSpec.JSON_PROPERTY_GESUCH_NUMMER,
   GesuchInfoDtoSpec.JSON_PROPERTY_START_DATE,
   GesuchInfoDtoSpec.JSON_PROPERTY_END_DATE,
+  GesuchInfoDtoSpec.JSON_PROPERTY_PIA_VORNAME,
+  GesuchInfoDtoSpec.JSON_PROPERTY_PIA_NACHNAME,
   GesuchInfoDtoSpec.JSON_PROPERTY_STATE
 })
 @JsonTypeName("GesuchInfo")
@@ -41,6 +44,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchInfoDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
+  private String fallNummer;
 
   public static final String JSON_PROPERTY_GESUCH_NUMMER = "gesuchNummer";
   private String gesuchNummer;
@@ -50,6 +56,12 @@ public class GesuchInfoDtoSpec {
 
   public static final String JSON_PROPERTY_END_DATE = "endDate";
   private LocalDate endDate;
+
+  public static final String JSON_PROPERTY_PIA_VORNAME = "piaVorname";
+  private String piaVorname;
+
+  public static final String JSON_PROPERTY_PIA_NACHNAME = "piaNachname";
+  private String piaNachname;
 
   public static final String JSON_PROPERTY_STATE = "state";
   private GesuchStateInfoDtoSpec state;
@@ -80,6 +92,32 @@ public class GesuchInfoDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public GesuchInfoDtoSpec fallNummer(String fallNummer) {
+    
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+   /**
+   * Get fallNummer
+   * @return fallNummer
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FALL_NUMMER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
   }
 
 
@@ -161,6 +199,58 @@ public class GesuchInfoDtoSpec {
   }
 
 
+  public GesuchInfoDtoSpec piaVorname(String piaVorname) {
+    
+    this.piaVorname = piaVorname;
+    return this;
+  }
+
+   /**
+   * Get piaVorname
+   * @return piaVorname
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getPiaVorname() {
+    return piaVorname;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PIA_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPiaVorname(String piaVorname) {
+    this.piaVorname = piaVorname;
+  }
+
+
+  public GesuchInfoDtoSpec piaNachname(String piaNachname) {
+    
+    this.piaNachname = piaNachname;
+    return this;
+  }
+
+   /**
+   * Get piaNachname
+   * @return piaNachname
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getPiaNachname() {
+    return piaNachname;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PIA_NACHNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPiaNachname(String piaNachname) {
+    this.piaNachname = piaNachname;
+  }
+
+
   public GesuchInfoDtoSpec state(GesuchStateInfoDtoSpec state) {
     
     this.state = state;
@@ -196,15 +286,18 @@ public class GesuchInfoDtoSpec {
     }
     GesuchInfoDtoSpec gesuchInfo = (GesuchInfoDtoSpec) o;
     return Objects.equals(this.id, gesuchInfo.id) &&
+        Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
+        Objects.equals(this.piaVorname, gesuchInfo.piaVorname) &&
+        Objects.equals(this.piaNachname, gesuchInfo.piaNachname) &&
         Objects.equals(this.state, gesuchInfo.state);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, startDate, endDate, state);
+    return Objects.hash(id, fallNummer, gesuchNummer, startDate, endDate, piaVorname, piaNachname, state);
   }
 
   @Override
@@ -212,9 +305,12 @@ public class GesuchInfoDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchInfoDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
+    sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
+    sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -79,6 +79,10 @@ public class Benutzer extends AbstractMandantEntity {
     private String vorname;
 
     @NotNull
+    @Column(name = "nutzungsbedingungen_akzeptiert", nullable = false)
+    private boolean nutzungsbedingungenAkzeptiert = false;
+
+    @NotNull
     @Column(name = "benutzer_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private BenutzerStatus benutzerStatus;

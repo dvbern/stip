@@ -34,15 +34,17 @@ export class LandStore extends signalStore(
   });
 
   autocompleteLandListViewSig = computed(() => {
-    return (
-      fromCachedDataSig(this.laender)?.map((land) => ({
-        ...land,
-        alwaysOnTop: land.iso3code === 'CHE',
-        testId: land.deKurzform,
-        invalid: !land.eintragGueltig,
-        displayValueDe: land.deKurzform,
-        displayValueFr: land.frKurzform,
-      })) ?? []
+    return mapCachedData(
+      this.laender(),
+      (laender) =>
+        laender.map((land) => ({
+          ...land,
+          alwaysOnTop: land.iso3code === 'CHE',
+          testId: land.deKurzform,
+          invalid: !land.eintragGueltig,
+          displayValueDe: land.deKurzform,
+          displayValueFr: land.frKurzform,
+        })) ?? [],
     );
   });
 

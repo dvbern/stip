@@ -17,17 +17,13 @@
 
 package ch.dvbern.stip.api.benutzer.service;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.net.ssl.SSLContext;
 
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.keycloak.admin.client.common.runtime.KeycloakAdminClientConfig;
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.WebApplicationException;
@@ -35,9 +31,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.keycloak.admin.client.ClientBuilderWrapper;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.representations.idm.UserRepresentation;
 
 @RequestScoped
@@ -45,37 +39,10 @@ import org.keycloak.representations.idm.UserRepresentation;
 @RequiredArgsConstructor
 @Slf4j
 public class KeycloakBenutzerService {
+
     private final TenantService tenantService;
 
-    private final KeycloakAdminClientConfig keycloakAdminClientConfigRuntimeValue;
-
-    private Keycloak keycloak = null;
-
-    @PostConstruct
-    public void setup() throws NoSuchAlgorithmException {
-        keycloak = initKeycloak();
-    }
-
-    public Keycloak initKeycloak() throws NoSuchAlgorithmException {
-        final KeycloakAdminClientConfig config = keycloakAdminClientConfigRuntimeValue;
-        if (config == null) {
-            throw new IllegalStateException("Could not inject KC Admin client config");
-        }
-
-        // TODO: When we upgrade to a quarkus version using hibernate 7 we will be able to use the newer keycloak
-        // admin client which will allow us to easily configure the truststore and secure the connection
-        return KeycloakBuilder.builder()
-            .clientId(config.clientId())
-            .clientSecret(config.clientSecret().orElse(null))
-            .grantType(config.grantType().asString())
-            .username(config.username().orElse(null))
-            .password(config.password().orElse(null))
-            .realm(config.realm())
-            .serverUrl(config.serverUrl().orElse(null))
-            .scope(config.scope().orElse(null))
-            .resteasyClient(ClientBuilderWrapper.create(SSLContext.getDefault(), true).build())
-            .build();
-    }
+    private final Keycloak keycloak;
 
     public String createKeycloakBenutzer(
         final String vorname,
@@ -139,7 +106,7 @@ public class KeycloakBenutzerService {
         } catch (Exception e) {
             deleteKeycloakBenutzer(keycloakUserId);
             throw new WebApplicationException(
-                "Failed to assign roles to newly created Keylcoak user, Deleted the user", e
+                "Failed to assign roles to newly created Keycloak user, Deleted the user", e
             );
         }
 
@@ -185,7 +152,6 @@ public class KeycloakBenutzerService {
         }
 
         keycloakUserResource.update(userRep);
-
     }
 
     public void deleteKeycloakBenutzer(

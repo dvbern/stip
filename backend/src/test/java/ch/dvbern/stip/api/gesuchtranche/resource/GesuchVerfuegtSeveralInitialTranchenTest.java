@@ -33,7 +33,7 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -65,7 +65,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
-    private GesuchTrancheListDtoSpec gesuchtranchen;
+
     private GesuchDtoSpec gesuch;
     private GesuchWithChangesDtoSpec gesuchWithChanges;
 
@@ -157,16 +157,12 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
     @TestAsSachbearbeiter
     @Order(7)
     void shouldReturnListOfInitialTranches() {
-        var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        assertThat(tranchen.getHistorized().getInitial().getTranchen()).hasSize(2);
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
+
+        assertThat(gesuchHeader.getInitial().getTranchen()).hasSize(2);
     }
 
     @Test

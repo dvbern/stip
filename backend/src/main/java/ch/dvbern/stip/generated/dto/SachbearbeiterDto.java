@@ -33,6 +33,7 @@ public class SachbearbeiterDto  implements Serializable {
   private @Valid List<String> sachbearbeiterRollen = new ArrayList<>();
   private @Valid UUID id;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid String redirectUri;
 
   /**
@@ -223,6 +224,24 @@ public class SachbearbeiterDto  implements Serializable {
 
   /**
    **/
+  public SachbearbeiterDto nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+  
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
+  /**
+   **/
   public SachbearbeiterDto redirectUri(String redirectUri) {
     this.redirectUri = redirectUri;
     return this;
@@ -258,12 +277,13 @@ public class SachbearbeiterDto  implements Serializable {
         Objects.equals(this.sachbearbeiterRollen, sachbearbeiter.sachbearbeiterRollen) &&
         Objects.equals(this.id, sachbearbeiter.id) &&
         Objects.equals(this.benutzereinstellungen, sachbearbeiter.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, sachbearbeiter.nutzungsbedingungenAkzeptiert) &&
         Objects.equals(this.redirectUri, sachbearbeiter.redirectUri);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, id, benutzereinstellungen, redirectUri);
+    return Objects.hash(vorname, nachname, telefonnummer, email, funktionDe, funktionFr, sachbearbeiterRollen, id, benutzereinstellungen, nutzungsbedingungenAkzeptiert, redirectUri);
   }
 
   @Override
@@ -280,6 +300,7 @@ public class SachbearbeiterDto  implements Serializable {
     sb.append("    sachbearbeiterRollen: ").append(toIndentedString(sachbearbeiterRollen)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("    redirectUri: ").append(toIndentedString(redirectUri)).append("\n");
     sb.append("}");
     return sb.toString();

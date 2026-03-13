@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -72,6 +73,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchhistory.service.GesuchHistoryService;
 import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrUtil;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
@@ -99,6 +101,7 @@ import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -112,8 +115,7 @@ import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchHeaderGsDto;
-import ch.dvbern.stip.generated.dto.GesuchHeaderSbDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchNotizDto;
@@ -124,6 +126,7 @@ import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
+import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
@@ -183,6 +186,7 @@ public class GesuchService {
     private final DokumentRepository dokumentRepository;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
+    private final GesuchHistoryService gesuchHistoryService;
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
     private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
@@ -190,7 +194,8 @@ public class GesuchService {
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
     private final DatenschutzbriefService datenschutzbriefService;
-    private final GesuchStateInfoMapper gesuchStateInfoMapper;
+    private final VerfuegungHistoryService verfuegungHistoryService;
+    private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -522,6 +527,7 @@ public class GesuchService {
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
+        ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();
@@ -602,7 +608,7 @@ public class GesuchService {
             configService.getCurrentDmnMinorVersion()
         );
 
-        if (stipendien.getBerechnungStipendium() <= 0) {
+        if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {
             // Keine Stipendien, next Status = Verfuegt
             gesuchStatusToVerfuegt(gesuchId);
         } else {
@@ -1305,30 +1311,52 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchHeaderGsDto getGesuchTrancheHeaderGs(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        final var currentGesuch = gesuchRepository.requireById(gesuch.getId());
-        final var historizedTranchen = gesuchTrancheService.getHistorizedGesuchTranches(gesuch);
+    public VerfuegtGesuchDto getInitialGesuchTranches(final Gesuch gesuch) {
+        final var initialVerfuegtGesuchOpt =
+            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
+        if (initialVerfuegtGesuchOpt.isEmpty()) {
+            return null;
+        }
+        final var initialVerfuegtGesuch = initialVerfuegtGesuchOpt.get();
+        final var verfuegtGesuch = new VerfuegtGesuchDto();
+        verfuegtGesuch.setTranchen(
+            initialVerfuegtGesuch.getGesuchTranchen().stream().map(gesuchTrancheMapper::toSlimDto).toList()
+        );
+        verfuegtGesuch.setTimestamp(initialVerfuegtGesuch.getTimestampMutiert().toLocalDate());
+        verfuegtGesuch.setBerechnungId(initialVerfuegtGesuch.getVerfuegungs().getLast().getId());
+        return verfuegtGesuch;
+    }
 
-        return new GesuchHeaderGsDto()
-            .stateInfo(gesuchStateInfoMapper.toDto(currentGesuch))
-            .currentTranchen(currentGesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
-            .historized(historizedTranchen);
+    public List<VerfuegtGesuchDto> getHistorizedVerfuegtVersionsOfGesuch(final Gesuch gesuch) {
+        final var verfuegungsRevisions = verfuegungHistoryService.getVerfuegungsHistoryByGesuchId(gesuch.getId());
+        return verfuegungsRevisions.stream().map(verfuegungDefaultRevisionEntityPair -> {
+            final var verfuegung = verfuegungDefaultRevisionEntityPair.getLeft();
+            final var revision = verfuegungDefaultRevisionEntityPair.getRight().getId();
+            final var gesuchAtRevision =
+                gesuchHistoryRepository.getGesuchAtRevision(gesuch.getId(), revision).orElseThrow();
+            return new VerfuegtGesuchDto()
+                .berechnungId(verfuegung.getId())
+                .tranchen(gesuchAtRevision.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+                .timestamp(gesuchAtRevision.getTimestampMutiert().toLocalDate());
+        }).toList();
     }
 
     @Transactional
-    public GesuchHeaderSbDto getGesuchTrancheHeaderSb(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
-        final var gesuch = gesuchTranche.getGesuch();
-        final var currentGesuch = gesuchRepository.requireById(gesuch.getId());
-        final var historizedTranchen = gesuchTrancheService.getHistorizedGesuchTranches(gesuch);
+    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
+        final var initialGesuch = getInitialGesuchTranches(gesuch);
 
-        return new GesuchHeaderSbDto()
-            .periodeStart(currentGesuch.getGesuchsperiode().getGesuchsperiodeStart())
-            .periodeEnd(currentGesuch.getGesuchsperiode().getGesuchsperiodeStopp())
-            .stateInfo(gesuchStateInfoMapper.toDto(currentGesuch))
-            .currentTranchen(currentGesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
-            .historized(historizedTranchen);
+        return new GesuchHeaderDto()
+            .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
+            .aenderungs(aenderungs)
+            .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .initial(initialGesuch)
+            .versions(versions);
+    }
+
+    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+        return verfuegungService.requireById(verfuegungId).parseBerechnungData();
     }
 }

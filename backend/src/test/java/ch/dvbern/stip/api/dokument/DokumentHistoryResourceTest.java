@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.entities.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -40,6 +41,7 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -49,6 +51,7 @@ import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.MethodOrderer;
@@ -83,6 +86,8 @@ class DokumentHistoryResourceTest {
     private GesuchWithChangesDtoSpec returnedGesuch;
     private UUID gesuchTrancheId;
     private List<GesuchDokumentDtoSpec> initialGesuchDokuments = null;
+    @Inject
+    DokumentGenerator dokumentGenerator;
 
     @Test
     @TestAsGesuchsteller
@@ -115,22 +120,18 @@ class DokumentHistoryResourceTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), dokTyp, file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(gesuchTrancheId);
 
-        initialGesuchDokuments = Arrays.stream(
-            gesuchTrancheApiSpec.getGesuchDokumenteGS()
-                .gesuchTrancheIdPath(gesuchTrancheId)
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(GesuchDokumentDtoSpec[].class)
-        ).toList();
+        initialGesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
     }
 
     @Test
@@ -224,17 +225,16 @@ class DokumentHistoryResourceTest {
     @TestAsSachbearbeiter
     @Order(6)
     void removeSuperfluousDokuments() {
-        final var gesuchDokuments = Arrays.stream(
-            gesuchTrancheApiSpec.getGesuchDokumenteSB()
-                .gesuchTrancheIdPath(gesuchTrancheId)
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(GesuchDokumentDtoSpec[].class)
-        ).toList();
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
         assertThat(gesuchDokuments.size(), is(23));
     }
 
@@ -269,17 +269,16 @@ class DokumentHistoryResourceTest {
 
         assertThat(dokumenteToUpload.getRequired().size(), equalTo(0));
 
-        final var gesuchDokuments = Arrays.stream(
-            gesuchTrancheApiSpec.getGesuchDokumenteGS()
-                .gesuchTrancheIdPath(gesuchTrancheId)
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(GesuchDokumentDtoSpec[].class)
-        ).toList();
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         assertThat(gesuchDokuments.size(), is(25));
     }
@@ -357,17 +356,16 @@ class DokumentHistoryResourceTest {
 
         assertThat(dokumenteToUpload.getRequired().get(0), equalTo(ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE));
 
-        final var gesuchDokuments = Arrays.stream(
-            gesuchTrancheApiSpec.getGesuchDokumenteGS()
-                .gesuchTrancheIdPath(gesuchTrancheId)
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(GesuchDokumentDtoSpec[].class)
-        ).toList();
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         assertThat(gesuchDokuments.size(), is(23));
     }
@@ -452,17 +450,16 @@ class DokumentHistoryResourceTest {
     @TestAsGesuchsteller
     @Order(15)
     void testDokumenteRestored() {
-        final var gesuchDokuments = Arrays.stream(
-            gesuchTrancheApiSpec.getGesuchDokumenteGS()
-                .gesuchTrancheIdPath(gesuchTrancheId)
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(GesuchDokumentDtoSpec[].class)
-        ).toList();
+        final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteGS()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
         var gesuchDokumentsComp = new ArrayList<>(gesuchDokuments);
         gesuchDokumentsComp.sort(Comparator.comparing(GesuchDokumentDtoSpec::getDokumentTyp));
         var gesuchDokumentsInit = new ArrayList<>(initialGesuchDokuments);

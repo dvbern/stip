@@ -230,9 +230,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchInfo
       summary: Returns the basic Gesuch info with the given Id
-  '/gesuch/gs/header/{gesuchTrancheId}':
+  '/gesuch/gs/header/{gesuchId}':
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -245,7 +245,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchHeaderGs'
+                $ref: '#/components/schemas/GesuchHeader'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -257,9 +257,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchHeaderGs
       summary: Get the GS Gesuch header information for the given gesuchTranche
-  '/gesuch/sb/header/{gesuchTrancheId}':
+  '/gesuch/sb/header/{gesuchId}':
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -272,7 +272,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchHeaderSb'
+                $ref: '#/components/schemas/GesuchHeader'
           description: OK
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -988,6 +988,35 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getStatusProtokoll
       summary: Holt das Statusprotokoll für ein Gesuch
+  '/gesuch/berechnung/{verfuegungId}':
+    parameters:
+      - name: verfuegungId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Archivierte Stipendien Berechnung einer Verfügung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getBerechnungForVerfuegung
+      summary: Holt die Berechnung für die angegebene Verfügung
   '/gesuch/{gesuchId}/berechnung':
     parameters:
       - name: gesuchId
@@ -1128,6 +1157,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canCreateAenderung
       type: object
       properties:
         nachfristDokumente:
@@ -1148,6 +1178,8 @@ components:
         endDate:
           type: string
           format: date
+        canCreateAenderung:
+          type: boolean
         missingDocuments:
           required:
             - trancheId
@@ -1179,11 +1211,20 @@ components:
           $ref: './components/common.yaml#/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
+      required:
+        - canCreateAusbildungUnterbruchAntrag
+        - hasPendingAusbildungUnterbruchAntrag
       properties:
         gesuchs:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
+        canCreateAusbildungUnterbruchAntrag:
+          type: boolean
+        hasPendingAusbildungUnterbruchAntrag:
+          type: boolean
+        openAusbildungUnterbruchAntragId:
+          $ref: './components/common.yaml#/UUID'
       allOf:
         - $ref: './components/common.yaml#/Ausbildung'
     SbGesucheDashboardColumn:
@@ -1379,9 +1420,42 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchAenderungs:
+      type: object
+      required:
+        - akzeptiert
+        - abgelehnt
+      properties:
+        offen:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        akzeptiert:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
+        abgelehnt:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
+    VerfuegtGesuch:
+      type: object
+      required:
+        - timestamp
+        - tranchen
+        - berechnungId
+      properties:
+        timestamp:
+          type: string
+          format: date
+        tranchen:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
+        berechnungId:
+          $ref: './components/common.yaml#/UUID'
     GesuchInfo:
       required:
         - id
+        - fallNummer
         - gesuchNummer
         - startDate
         - endDate
@@ -1390,39 +1464,42 @@ components:
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
+        fallNummer:
+          type: string
         gesuchNummer:
           type: string
         startDate:
           $ref: './components/common.yaml#/LocalDate'
         endDate:
           $ref: './components/common.yaml#/LocalDate'
+        piaVorname:
+          type: string
+        piaNachname:
+          type: string
         state:
           $ref: './components/common.yaml#/GesuchStateInfo'
-    GesuchHeaderGs:
+    GesuchHeader:
       required:
-        - stateInfo
+        - gesuchInfo
+        - versions
+        - aenderungs
+        - currentTranches
       type: object
-      allOf:
-        - $ref: './components/common.yaml#/GesuchTrancheList'
       properties:
-        stateInfo:
-          $ref: './components/common.yaml#/GesuchStateInfo'
-    GesuchHeaderSb:
-      required:
-        - periodeStart
-        - periodeEnd
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/GesuchHeaderGs'
-      properties:
-        periodeStart:
-          type: string
-          format: date
-        periodeEnd:
-          type: string
-          format: date
-        stateInfo:
-          $ref: './components/common.yaml#/GesuchStateInfo'
+        initial:
+          $ref: '#/components/schemas/VerfuegtGesuch'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegtGesuch'
+        aenderungs:
+          $ref: '#/components/schemas/GesuchAenderungs'
+        currentTranches:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
+        gesuchInfo:
+          $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
       type: object
       required:
@@ -1454,6 +1531,8 @@ components:
       enum:
         - GESUCH
         - AENDERUNG
+        - FREIWILLIG_DARLEHEN
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG
     StatusprotokollEntry:
       description: 'Eintrag von dem Statusprotokoll'
       type: object
@@ -1487,6 +1566,7 @@ components:
         - berechnungVorKuerzungUndTeilung
         - berechnungStipendium
         - tranchenBerechnungsresultate
+        - stipendienanspruch
       type: object
       properties:
         year:

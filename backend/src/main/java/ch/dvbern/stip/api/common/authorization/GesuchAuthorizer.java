@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.fall.entity.Fall;
@@ -33,6 +34,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -51,6 +53,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
     private final RequiredDokumentService requiredDokumentService;
+    private final VerfuegungService verfuegungService;
 
     @Transactional
     public void sbCanChangeGesuchStatusToInBearbeitung(final UUID gesuchId) {
@@ -123,6 +126,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         ) {
             forbidden();
         }
+    }
+
+    @Transactional
+    public void canGetBerechnungOfVerfuegung(final UUID verfuegungId) {
+        final var verfuegung = verfuegungService.requireById(verfuegungId);
+        gsSbOrFreigabestelleOrJuristCanRead(verfuegung.getGesuch().getId());
     }
 
     @Transactional
@@ -224,7 +233,15 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void gsCanCreateAenderung(final UUID gesuchId) {
         assertCanWriteAndIsGesuchstellerOfGesuchIdOrDelegatedToSozialdienst(gesuchId);
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN);
+        assertGesuchCanCreateAenderung(gesuchId);
+    }
+
+    private void assertGesuchCanCreateAenderung(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (GesuchUtil.canCreateAenderung(gesuch)) {
+            return;
+        }
+        forbidden();
     }
 
     public void canGetGsDashboard() {
@@ -285,7 +302,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     public void assertGesuchIsInOneOfGesuchStatus(final UUID gesuchId, final Set<Gesuchstatus> gesuchStatusSet) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusService.gesuchIsInOneOfGesuchStatus(gesuch, gesuchStatusSet)) {
+        if (GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, gesuchStatusSet)) {
             return;
         }
         forbidden();

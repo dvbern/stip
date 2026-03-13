@@ -23,10 +23,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid String fallNummer;
   private @Valid String gesuchNummer;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
   private @Valid GesuchStateInfoDto state;
+  private @Valid String piaVorname;
+  private @Valid String piaNachname;
 
   /**
    **/
@@ -45,6 +48,25 @@ public class GesuchInfoDto  implements Serializable {
   @JsonProperty("id")
   public void setId(UUID id) {
     this.id = id;
+  }
+
+  /**
+   **/
+  public GesuchInfoDto fallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
+    return this;
+  }
+
+  
+  @JsonProperty("fallNummer")
+  @NotNull
+  public String getFallNummer() {
+    return fallNummer;
+  }
+
+  @JsonProperty("fallNummer")
+  public void setFallNummer(String fallNummer) {
+    this.fallNummer = fallNummer;
   }
 
   /**
@@ -123,6 +145,42 @@ public class GesuchInfoDto  implements Serializable {
     this.state = state;
   }
 
+  /**
+   **/
+  public GesuchInfoDto piaVorname(String piaVorname) {
+    this.piaVorname = piaVorname;
+    return this;
+  }
+
+  
+  @JsonProperty("piaVorname")
+  public String getPiaVorname() {
+    return piaVorname;
+  }
+
+  @JsonProperty("piaVorname")
+  public void setPiaVorname(String piaVorname) {
+    this.piaVorname = piaVorname;
+  }
+
+  /**
+   **/
+  public GesuchInfoDto piaNachname(String piaNachname) {
+    this.piaNachname = piaNachname;
+    return this;
+  }
+
+  
+  @JsonProperty("piaNachname")
+  public String getPiaNachname() {
+    return piaNachname;
+  }
+
+  @JsonProperty("piaNachname")
+  public void setPiaNachname(String piaNachname) {
+    this.piaNachname = piaNachname;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -134,15 +192,18 @@ public class GesuchInfoDto  implements Serializable {
     }
     GesuchInfoDto gesuchInfo = (GesuchInfoDto) o;
     return Objects.equals(this.id, gesuchInfo.id) &&
+        Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
-        Objects.equals(this.state, gesuchInfo.state);
+        Objects.equals(this.state, gesuchInfo.state) &&
+        Objects.equals(this.piaVorname, gesuchInfo.piaVorname) &&
+        Objects.equals(this.piaNachname, gesuchInfo.piaNachname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, gesuchNummer, startDate, endDate, state);
+    return Objects.hash(id, fallNummer, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
   }
 
   @Override
@@ -151,10 +212,13 @@ public class GesuchInfoDto  implements Serializable {
     sb.append("class GesuchInfoDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    state: ").append(toIndentedString(state)).append("\n");
+    sb.append("    piaVorname: ").append(toIndentedString(piaVorname)).append("\n");
+    sb.append("    piaNachname: ").append(toIndentedString(piaNachname)).append("\n");
     sb.append("}");
     return sb.toString();
   }

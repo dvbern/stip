@@ -83,7 +83,7 @@ public class GesuchDokumentKommentarService {
                 final var fromGesuchDokument = fromKommentar.getGesuchDokument();
 
                 if (fromGesuchDokument.getDokumentTyp() != null) {
-                    if (fromGesuchDokument.getDokumentTyp() == toGesuchDokument.getDokumentTyp()) {
+                    if (fromGesuchDokument.getReference().equals(toGesuchDokument.getReference())) {
                         if (override) {
                             toGesuchDokument.getGesuchDokumentKommentare().clear();
                         }
@@ -188,21 +188,9 @@ public class GesuchDokumentKommentarService {
         final GesuchDokumentKommentarDto gesuchDokumentKommentarDto
     ) {
         final var kommentar = gesuchDokumentKommentarMapper.toEntity(gesuchDokumentKommentarDto);
-        if (gesuchDokumentKommentarDto == null) {
-            createEmptyKommentarForGesuchDokument(gesuchDokument);
-        } else {
+        if (gesuchDokumentKommentarDto != null) {
             gesuchDokument.addGesuchKommentar(kommentar);
-            kommentar.setGesuchDokumentStatus(gesuchDokument.getStatus());
             gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
         }
-    }
-
-    @Transactional
-    public void createEmptyKommentarForGesuchDokument(final GesuchDokument gesuchDokument) {
-        final var kommentar = new GesuchDokumentKommentar()
-            .setGesuchDokumentStatus(gesuchDokument.getStatus())
-            .setKommentar(null);
-        gesuchDokument.addGesuchKommentar(kommentar);
-        gesuchDokumentKommentarRepository.persistAndFlush(kommentar);
     }
 }

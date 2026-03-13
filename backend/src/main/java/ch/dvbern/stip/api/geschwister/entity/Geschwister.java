@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.geschwister.entity;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -54,8 +54,10 @@ public class Geschwister extends AbstractFamilieEntity {
     @Column(name = "ausbildungssituation", nullable = false)
     private Ausbildungssituation ausbildungssituation;
 
-    @Deprecated(forRemoval = true) // Not used anymore
-    @Nullable
-    @Column(name = "copy_of_id")
-    private UUID copyOfId;
+    /**
+     * A specific entry ID to refine the uniqueness of gesuchDokumente for list elements
+     */
+    @NullableUnlessGenerated
+    @Column(name = "entry_id", nullable = true)
+    private UUID entryId;
 }

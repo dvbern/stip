@@ -34,6 +34,7 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiPlzOrtAutocompleteDirective } from '@dv/shared/ui/plz-ort-autocomplete';
 import { SharedUiSelectSearchComponent } from '@dv/shared/ui/select-search';
 import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import { mapCachedData } from '@dv/shared/util/remote-data';
 import { LandLookupService } from '@dv/shared/util-data-access/land-lookup';
 
 type AddresseFormGroup = FormGroup<{
@@ -84,13 +85,15 @@ export class SharedUiFormAddressComponent implements DoCheck {
 
   laenderSig = computed(() => {
     const isIso2Only = this.onlyIso2Laender();
-    const laender = this.landLookupService.getCachedLandLookup()();
+    const laenderRd = this.landLookupService.getCachedLandLookup()();
 
     if (isIso2Only) {
-      return laender.filter((land) => land.iso2code);
+      return mapCachedData(laenderRd, (laender) =>
+        laender.filter((land) => land.iso2code),
+      );
     }
 
-    return laender;
+    return laenderRd;
   });
 
   isValidLandEntry = this.landLookupService.isValidLandEntry;

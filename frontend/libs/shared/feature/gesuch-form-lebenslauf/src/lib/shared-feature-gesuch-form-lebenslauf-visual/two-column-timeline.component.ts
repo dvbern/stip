@@ -154,7 +154,7 @@ export class TwoColumnTimelineComponent {
 
     const abschluss = this.ausbildungsstaetteStore
       .abschluesseViewSig()
-      .find((abschluss) => abschluss.id === lebenslaufItem.abschlussId);
+      .data?.find((abschluss) => abschluss.id === lebenslaufItem.abschlussId);
 
     if (!abschluss) {
       console.warn(`Abschluss with id ${lebenslaufItem.abschlussId} not found`);

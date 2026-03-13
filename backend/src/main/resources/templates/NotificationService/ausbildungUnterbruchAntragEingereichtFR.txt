@@ -1,0 +1,1 @@
+Nous avons reçu votre demande d’interruption de votre formation du {startDate} au {endDate}. Nous allons l’examiner et vous contacter ensuite.

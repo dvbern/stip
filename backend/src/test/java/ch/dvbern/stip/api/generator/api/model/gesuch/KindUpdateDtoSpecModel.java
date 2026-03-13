@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
@@ -36,6 +37,7 @@ public class KindUpdateDtoSpecModel {
                     LocalDate.of(2002, 1, 1)
                 )
             );
+            model.setEntryId(UUID.randomUUID());
             model.setAusbildungssituation(TestUtil.getRandomElementFromArray(AusbildungssituationDtoSpec.values()));
             model.setWohnsitzAnteilPia(TestUtil.getRandomInt(0, 100));
         }, 1);

@@ -89,8 +89,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
-  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
-
   private routeParamsFallIdSig = createParamsIdSig(
     'fallId',
     this.allRouteParamsSig,
@@ -153,9 +151,10 @@ export class SozialdienstAppPatternMainLayoutComponent {
         );
       }
 
+      // todo-after-merge: check
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
-        this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [],
+        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
         'sozialdienst-app',
       );
 
@@ -188,9 +187,9 @@ export class SozialdienstAppPatternMainLayoutComponent {
     });
 
     effect(() => {
-      const gesuchTrancheId = this.trancheIdSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
   }

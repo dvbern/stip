@@ -70,6 +70,8 @@ export class DashboardStore extends signalStore(
                 rolesMap,
                 fallItem: fallDashboardItem,
                 isAusbildungActive: ausbildung.status === 'AKTIV',
+                hasPendingAusbildungUnterbruchAntrag:
+                  ausbildung.hasPendingAusbildungUnterbruchAntrag,
                 hasMoreThanOneGesuche,
               }),
             ) ?? []);
@@ -172,6 +174,7 @@ const toGesuchDashboardItemView =
     gesuchs: GesuchDashboardItem[];
     rolesMap: RolesMap;
     isAusbildungActive: boolean;
+    hasPendingAusbildungUnterbruchAntrag: boolean;
     hasMoreThanOneGesuche: boolean;
   }) =>
   (gesuch: GesuchDashboardItem, index: number): SharedModelGsGesuchView => {
@@ -181,6 +184,7 @@ const toGesuchDashboardItemView =
       gesuchs,
       rolesMap,
       isAusbildungActive,
+      hasPendingAusbildungUnterbruchAntrag,
       hasMoreThanOneGesuche,
     } = data;
     const isErstgesuch = index === gesuchs.length - 1;
@@ -230,13 +234,9 @@ const toGesuchDashboardItemView =
       isErstgesuch,
       canEdit,
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
-      canCreateAenderung:
-        (gesuch.gesuchStatus === 'STIPENDIENANSPRUCH' ||
-          gesuch.gesuchStatus === 'KEIN_STIPENDIENANSPRUCH') &&
-        !gesuch.offeneAenderung &&
-        canCurrentlyEditGesuch,
       canDeleteAenderung:
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
+      hasPendingAusbildungUnterbruchAntrag,
       einreichefristAbgelaufen,
       reduzierterBeitrag,
       einreichefristDays,

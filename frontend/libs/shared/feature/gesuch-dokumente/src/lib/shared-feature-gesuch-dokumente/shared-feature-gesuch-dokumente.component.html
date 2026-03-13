@@ -59,7 +59,7 @@
       class="btn btn-primary ml-auto"
       (click)="fehlendeDokumenteUebermitteln()"
       data-testid="dokumente-button-sendMissingDocuments"
-      [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig()"
+      [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig() || (dokumentsStore.dokuments() | rdIsPending)"
     >
       {{ 'shared.dokumente.uebermitteln' | transloco }}
     </button>

@@ -34,6 +34,7 @@ import {
   AenderungChangeState,
   GesuchAenderungStore,
 } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
@@ -52,10 +53,7 @@ import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
 import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
-import {
-  getLatestGesuchIdFromGesuch$,
-  getLatestTrancheIdFromGesuchOnUpdate$,
-} from '@dv/shared/util/gesuch';
+import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
   dateFromMonthYearString,
@@ -101,6 +99,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchInfoStore = inject(GesuchInfoStore, {
     optional: true,
   });
@@ -145,22 +144,18 @@ export class SharedFeatureGesuchFormTrancheComponent {
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
 
-    const { list, isLoading } = this.gesuchAenderungStore.tranchenListViewSig();
+    const { currentTranches, aenderungs, initial, isLoading } =
+      this.gesuchHeaderStore.viewSig();
 
     if (!currentTranche || isLoading) {
       return '…';
     }
 
-    const { currentTranchen, historized } = list ?? {};
-
     const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
     const allTranchen = {
-      TRANCHE: [currentTranchen ?? []],
-      AENDERUNG: [
-        historized?.akzeptierteAenderungen?.map((a) => a.aenderung) ?? [],
-        historized?.abgelehnteAenderungen ?? [],
-      ],
-      INITIAL: [historized?.initial?.tranchen ?? []],
+      TRANCHE: [currentTranches ?? []],
+      AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
+      INITIAL: [initial?.tranchen ?? []],
     } satisfies Record<GesuchUrlType, unknown>;
     const index = gesuchUrlTyp
       ? findIndexInOneOf(
@@ -187,15 +182,10 @@ export class SharedFeatureGesuchFormTrancheComponent {
   );
 
   constructor() {
-    getLatestGesuchIdFromGesuch$(this.viewSig)
-      .pipe(takeUntilDestroyed())
-      .subscribe((gesuchId) => {
-        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-      });
-
     effect(() => {
       const { gesuchId } = this.currentGesuchSig();
       if (gesuchId && this.isSbApp) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
         this.gesuchInfoStore?.loadGesuchInfo$({ gesuchId });
         this.einreichenStore.checkEinreichedatumAendern$({ gesuchId });
       }
@@ -226,11 +216,16 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const status = isEditingAenderung ? tranche.status : gesuch.gesuchStatus;
       const type = isEditingAenderung ? 'tranche' : 'contract';
       const appPrefix = type === 'contract' ? appType : 'shared';
+      const overridenStatus = gesuch.hasPendingAusbildungUnterbruchAntrag
+        ? this.translate.translate('shared.gesuch.status.unterbruchAnfrage')
+        : null;
 
       this.form.patchValue({
-        status: this.translate.translate(
-          `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
-        ),
+        status:
+          overridenStatus ??
+          this.translate.translate(
+            `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
+          ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
         fallnummer: fallNummer,
@@ -290,6 +285,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
   updateAenderungVonBis(gesuch: SharedModelGesuch) {
     const {
+      id: gesuchId,
       gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis, gesuchFormular },
       gesuchsperiode: { gesuchsperiodeStart },
     } = gesuch;
@@ -303,7 +299,8 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'updateAenderungVonBis',
-      id: id,
+      trancheId: id,
+      gesuchId,
       minDate: new Date(gesuchsperiodeStart),
       maxDate,
       currentGueligAb: new Date(gueltigAb),

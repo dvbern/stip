@@ -3,10 +3,9 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
@@ -89,16 +88,6 @@ public interface GesuchTrancheResource {
     ValidationReportDto gesuchTrancheEinreichenValidierenSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
-    @Path("/gs/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchTrancheListDto getAllTranchenForGesuchGS(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
-    @Path("/sb/{gesuchId}")
-    @Produces({ "application/json", "text/plain" })
-    GesuchTrancheListDto getAllTranchenForGesuchSB(@PathParam("gesuchId") UUID gesuchId);
-
-    @GET
     @Path("/{gesuchTrancheId}/dokumenteToUpload/gs")
     @Produces({ "application/json", "text/plain" })
     DokumenteToUploadDto getDocumentsToUploadGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
@@ -111,12 +100,12 @@ public interface GesuchTrancheResource {
     @GET
     @Path("/{gesuchTrancheId}/dokumente/gs")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentDto> getGesuchDokumenteGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDokumentListDto getGesuchDokumenteGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @GET
     @Path("/{gesuchTrancheId}/dokumente/sb")
     @Produces({ "application/json", "text/plain" })
-    List<GesuchDokumentDto> getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDokumentListDto getGesuchDokumenteSB(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
     @Path("/{aenderungId}/patchAenderungInfo")

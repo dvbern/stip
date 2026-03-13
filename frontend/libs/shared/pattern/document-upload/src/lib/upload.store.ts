@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
-import { Subject, merge, of, throwError } from 'rxjs';
+import { EMPTY, Subject, merge, of, throwError } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -26,6 +26,7 @@ import {
   SharedModelStandardGesuchDokument,
 } from '@dv/shared/model/dokument';
 import {
+  AusbildungService,
   DarlehenService,
   Dokument,
   DokumentService,
@@ -103,6 +104,7 @@ export class UploadStore {
 
   private documentService = inject(DokumentService);
   private darlehenService = inject(DarlehenService);
+  private ausbildungService = inject(AusbildungService);
   private config = inject(SharedModelCompileTimeConfig);
   private loadDocuments$ = new Subject<DokumentOptions>();
   private removeDocument$ = new Subject<
@@ -122,6 +124,7 @@ export class UploadStore {
   private getRequiredGesuchDokumenteByAppType(params: {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    entryId: string | undefined;
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
@@ -178,6 +181,7 @@ export class UploadStore {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
             dokumentTyp: dokument.dokumentTyp,
+            entryId: dokument.entryId,
           },
           ...serviceDefaultParams,
         ),
@@ -187,6 +191,7 @@ export class UploadStore {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
             dokumentTyp: dokument.dokumentTyp,
+            entryId: dokument.entryId,
           },
           ...serviceDefaultParams,
         ),
@@ -252,6 +257,7 @@ export class UploadStore {
                 return this.getRequiredGesuchDokumenteByAppType({
                   dokumentTyp: dokument.dokumentTyp,
                   gesuchTrancheId: dokument.trancheId,
+                  entryId: dokument.entryId,
                 }).pipe(
                   map(
                     ({ value }) =>
@@ -259,6 +265,7 @@ export class UploadStore {
                         art: 'GESUCH_DOKUMENT',
                         gesuchDokument: value,
                         dokumentTyp: dokument.dokumentTyp,
+                        entryId: dokument.entryId,
                         trancheId: dokument.trancheId,
                         permissions: dokument.permissions,
                       }) satisfies SharedModelStandardGesuchDokument,
@@ -303,6 +310,8 @@ export class UploadStore {
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );
+              case 'GENERIC_DOKUMENT':
+                return EMPTY;
               default:
                 assertUnreachable(dokument);
             }
@@ -376,6 +385,17 @@ export class UploadStore {
                 return this.documentService.deleteUnterschriftenblattDokument$(
                   ...deleteCallParams,
                 );
+              case 'GENERIC_DOKUMENT':
+                switch (action.dokument.dokumentTyp) {
+                  case 'ausbildungUnterbruch':
+                    return this.ausbildungService.deleteAusbildungUnterbruchAntragDokument$(
+                      ...deleteCallParams,
+                    );
+
+                  default:
+                    assertUnreachable(action.dokument);
+                }
+                break;
               default:
                 assertUnreachable(action.dokument);
             }
@@ -574,6 +594,21 @@ export class UploadStore {
             },
             ...serviceDefaultParams,
           );
+        case 'GENERIC_DOKUMENT': {
+          switch (dokument.dokumentTyp) {
+            case 'ausbildungUnterbruch':
+              return this.ausbildungService.createAusbildungUnterbruchAntragDokument$(
+                {
+                  ausbildungUnterbruchAntragId: dokument.id,
+                  fileUpload,
+                },
+                ...serviceDefaultParams,
+              );
+            default:
+              assertUnreachable(dokument);
+          }
+          break;
+        }
         default:
           assertUnreachable(dokument);
       }

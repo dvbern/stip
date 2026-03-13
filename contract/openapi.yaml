@@ -281,7 +281,6 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-          description: File returned
       operationId: getDarlehenDownloadToken
       summary: get Token to downlaod Darlehen Dokument
       security:
@@ -2054,6 +2053,286 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /ausbildung/unterbruch/{ausbildungId}:
+    parameters:
+      - name: ausbildungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Ausbildung
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createAusbildungUnterbruchAntrag
+      summary: Create a new AusbildungUnterbruchAntrag
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/{gesuchId}/all:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+          description: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchAntragsByGesuchId
+      summary: returniert alle AusbildungUnterbruchAntrag des Falls des Gesuchs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/{ausbildungUnterbruchAntragId}/dokument:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    post:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AusbildungUnterbruchAntragDokumentCreate'
+      responses:
+        '201':
+          description: Created
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      summary: Created a AusbildungUnterbruchAntrag Dokument
+      operationId: createAusbildungUnterbruchAntragDokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/dokument/{dokumentId}:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchAntragDokumentDownloadToken
+      summary: get Token to downlaod AusbildungUnterbruchAntrag Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    delete:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          description: Dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteAusbildungUnterbruchAntragDokument
+      summary: deletes a AusbildungUnterbruchAntrag Dokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: downloadAusbildungUnterbruchAntragDokument
+      summary: Download AusbildungUnterbruchAntrag Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/gs/{ausbildungUnterbruchAntragId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    get:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+          description: AusbildungUnterbruchAntrag
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAusbildungUnterbruchAntragGS
+      summary: get a AusbildungUnterbruchAntrag
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    delete:
+      tags:
+        - Ausbildung
+      responses:
+        '200':
+          description: AusbildungUnterbruchAntrag deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteAusbildungUnterbruchAntrag
+      summary: deletes a AusbildungUnterbruchAntrag
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragGS'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragGS'
+          description: Returns the eingereicht AusbildungUnterbruchAntrag
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: einreichenAusbildungUnterbruchAntrag
+      summary: Reicht einen AusbildungUnterbruchAntrag ein
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /ausbildung/unterbruch/sb/{ausbildungUnterbruchAntragId}:
+    parameters:
+      - $ref: '#/components/parameters/ausbildungUnterbruchAntragId'
+    patch:
+      tags:
+        - Ausbildung
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AusbildungUnterbruchAntragSB'
+          description: Returns the created Ausbildung
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: updateAusbildungUnterbruchAntragSB
+      summary: Updated einen AusbildungUnterbruchAntrag
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /auszahlung/{fallId}:
     parameters:
       - name: fallId
@@ -2183,6 +2462,36 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: prepareCurrentBenutzer
       summary: Get or create and update current benutzer
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}:
+    parameters:
+      - name: benutzerId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Benutzer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Benutzer'
+          description: Current Benutzer with accepted Nutzungsbedingungen
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: nutzungsbedingungenAkzeptieren
+      summary: Accept the Nutzungsbedingungen for the current Benutzer
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2681,6 +2990,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -2723,6 +3040,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -2753,6 +3078,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -2795,6 +3128,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -3677,9 +4018,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/gs/header/{gesuchTrancheId}:
+  /gesuch/gs/header/{gesuchId}:
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -3692,7 +4033,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchHeaderGs'
+                $ref: '#/components/schemas/GesuchHeader'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -3707,9 +4048,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/sb/header/{gesuchTrancheId}:
+  /gesuch/sb/header/{gesuchId}:
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -3722,7 +4063,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GesuchHeaderSb'
+                $ref: '#/components/schemas/GesuchHeader'
           description: OK
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -4521,6 +4862,38 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/berechnung/{verfuegungId}:
+    parameters:
+      - name: verfuegungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Archivierte Stipendien Berechnung einer Verfügung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForVerfuegung
+      summary: Holt die Berechnung für die angegebene Verfügung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/{gesuchId}/berechnung:
     parameters:
       - name: gesuchId
@@ -4820,9 +5193,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -4849,9 +5220,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -4913,64 +5282,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDocumentsToUploadSB
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchtranche/gs/{gesuchId}:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuchGS
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchtranche/sb/{gesuchId}:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuchSB
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6312,6 +6623,9 @@ components:
         - DARLEHEN_ZURUECKGEWIESEN
         - DARLEHEN_AKZEPTIERT
         - DARLEHEN_ABGELEHNT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
     LocalDate:
       format: date
       type: string
@@ -7407,7 +7721,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
         unterhaltsbeitraege:
@@ -7440,7 +7754,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         totalEinkuenfte:
           type: integer
         eigenmietwert:
@@ -7807,6 +8121,12 @@ components:
         - VATER
         - MUTTER
       type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
+        - VATER
+        - MUTTER
+      type: string
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -8018,6 +8338,115 @@ components:
             Required wenn andere ausbildungNichtGefunden = false
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
+    AusbildungUnterbruchAntragGS:
+      type: object
+      required:
+        - id
+        - dokuments
+        - canEdit
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
+        canEdit:
+          type: boolean
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
+    AusbildungUnterbruchAntragDokumentCreate:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
+    UpdateAusbildungUnterbruchAntragGS:
+      type: object
+      required:
+        - kommentarGS
+        - startDate
+        - endDate
+      properties:
+        kommentarGS:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+    AusbildungUnterbruchAntragStatus:
+      enum:
+        - IN_BEARBEITUNG_GS
+        - EINGEGEBEN
+        - AKZEPTIERT
+        - ABGELEHNT
+    UpdateAusbildungUnterbruchAntragSB:
+      type: object
+      required:
+        - status
+        - kommentarSB
+        - startDate
+        - endDate
+      properties:
+        status:
+          $ref: '#/components/schemas/AusbildungUnterbruchAntragStatus'
+        kommentarSB:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        monateOhneAnspruch:
+          type: integer
+    AusbildungUnterbruchAntragSB:
+      type: object
+      required:
+        - id
+        - timestampErstellt
+        - userErstellt
+        - kommentarGS
+        - canAntragAkzeptieren
+        - dokuments
+        - gesuchId
+        - unterbruchLatestEndDate
+        - unterbruchEarliestStartDate
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          type: string
+          format: date-time
+        userErstellt:
+          type: string
+        kommentarGS:
+          type: string
+        canAntragAkzeptieren:
+          type: boolean
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        unterbruchLatestEndDate:
+          format: date
+          type: string
+        unterbruchEarliestStartDate:
+          format: date
+          type: string
+      allOf:
+        - $ref: '#/components/schemas/UpdateAusbildungUnterbruchAntragSB'
     AusbildungsStatus:
       enum:
         - AKTIV
@@ -8256,6 +8685,8 @@ components:
           type: string
         benutzereinstellungen:
           $ref: '#/components/schemas/BenutzereinstellungenUpdate'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     SachbearbeiterZuordnungStammdaten:
       type: object
       properties:
@@ -8424,8 +8855,6 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
-        dokumentStatus:
-          $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:
@@ -8610,6 +9039,11 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
         customDokumentTyp:
@@ -8713,6 +9147,7 @@ components:
         - gesuchStatus
         - startDate
         - endDate
+        - canCreateAenderung
       type: object
       properties:
         nachfristDokumente:
@@ -8733,6 +9168,8 @@ components:
         endDate:
           type: string
           format: date
+        canCreateAenderung:
+          type: boolean
         missingDocuments:
           required:
             - trancheId
@@ -8764,11 +9201,20 @@ components:
           $ref: '#/components/schemas/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
+      required:
+        - canCreateAusbildungUnterbruchAntrag
+        - hasPendingAusbildungUnterbruchAntrag
       properties:
         gesuchs:
           type: array
           items:
             $ref: '#/components/schemas/GesuchDashboardItem'
+        canCreateAusbildungUnterbruchAntrag:
+          type: boolean
+        hasPendingAusbildungUnterbruchAntrag:
+          type: boolean
+        openAusbildungUnterbruchAntragId:
+          $ref: '#/components/schemas/UUID'
       allOf:
         - $ref: '#/components/schemas/Ausbildung'
     SbGesucheDashboardColumn:
@@ -8962,9 +9408,42 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchAenderungs:
+      type: object
+      required:
+        - akzeptiert
+        - abgelehnt
+      properties:
+        offen:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        akzeptiert:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        abgelehnt:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+    VerfuegtGesuch:
+      type: object
+      required:
+        - timestamp
+        - tranchen
+        - berechnungId
+      properties:
+        timestamp:
+          type: string
+          format: date
+        tranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        berechnungId:
+          $ref: '#/components/schemas/UUID'
     GesuchInfo:
       required:
         - id
+        - fallNummer
         - gesuchNummer
         - startDate
         - endDate
@@ -8973,39 +9452,42 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         gesuchNummer:
           type: string
         startDate:
           $ref: '#/components/schemas/LocalDate'
         endDate:
           $ref: '#/components/schemas/LocalDate'
+        piaVorname:
+          type: string
+        piaNachname:
+          type: string
         state:
           $ref: '#/components/schemas/GesuchStateInfo'
-    GesuchHeaderGs:
+    GesuchHeader:
       required:
-        - stateInfo
+        - gesuchInfo
+        - versions
+        - aenderungs
+        - currentTranches
       type: object
-      allOf:
-        - $ref: '#/components/schemas/GesuchTrancheList'
       properties:
-        stateInfo:
-          $ref: '#/components/schemas/GesuchStateInfo'
-    GesuchHeaderSb:
-      required:
-        - periodeStart
-        - periodeEnd
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/GesuchHeaderGs'
-      properties:
-        periodeStart:
-          type: string
-          format: date
-        periodeEnd:
-          type: string
-          format: date
-        stateInfo:
-          $ref: '#/components/schemas/GesuchStateInfo'
+        initial:
+          $ref: '#/components/schemas/VerfuegtGesuch'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegtGesuch'
+        aenderungs:
+          $ref: '#/components/schemas/GesuchAenderungs'
+        currentTranches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        gesuchInfo:
+          $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
       type: object
       required:
@@ -9037,6 +9519,8 @@ components:
       enum:
         - GESUCH
         - AENDERUNG
+        - FREIWILLIG_DARLEHEN
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG
     StatusprotokollEntry:
       description: Eintrag von dem Statusprotokoll
       type: object
@@ -9070,6 +9554,7 @@ components:
         - berechnungVorKuerzungUndTeilung
         - berechnungStipendium
         - tranchenBerechnungsresultate
+        - stipendienanspruch
       type: object
       properties:
         year:
@@ -9742,6 +10227,7 @@ components:
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
+        - entryId
         - wohnsitz
         - vorname
         - nachname
@@ -9749,6 +10235,9 @@ components:
         - ausbildungssituation
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -9804,8 +10293,9 @@ components:
           description: Required wenn taetigkeitsart != null
           type: string
     KindUpdate:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       required:
+        - entryId
         - vorname
         - nachname
         - geburtsdatum
@@ -9813,6 +10303,9 @@ components:
         - wohnsitzAnteilPia
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -9914,12 +10407,6 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-    SteuerdatenTyp:
-      enum:
-        - FAMILIE
-        - VATER
-        - MUTTER
-      type: string
     SteuererklaerungUpdate:
       title: Root Type for Steuererklaerung
       required:
@@ -10041,7 +10528,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Kind:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       type: object
       allOf:
         - $ref: '#/components/schemas/KindUpdate'
@@ -10138,6 +10625,7 @@ components:
         - fallId
         - fallNummer
         - ausbildungId
+        - hasPendingAusbildungUnterbruchAntrag
         - gesuchsperiode
         - gesuchStatus
         - gesuchNummer
@@ -10153,6 +10641,8 @@ components:
           type: string
         ausbildungId:
           $ref: '#/components/schemas/UUID'
+        hasPendingAusbildungUnterbruchAntrag:
+          type: boolean
         gesuchsperiode:
           $ref: '#/components/schemas/Gesuchsperiode'
         gesuchStatus:
@@ -10234,57 +10724,6 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
-    TranchenWithVerfuegung:
-      required:
-        - tranchen
-        - berechnungId
-      type: object
-      properties:
-        tranchen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
-        berechnungId:
-          $ref: '#/components/schemas/UUID'
-    AenderungenWithVerfuegung:
-      required:
-        - aenderung
-      type: object
-      allOf:
-        - $ref: '#/components/schemas/TranchenWithVerfuegung'
-      properties:
-        aenderung:
-          $ref: '#/components/schemas/GesuchTrancheSlim'
-    HistorizedTranchen:
-      required:
-        - akzeptierteAenderungen
-        - abgelehnteAenderungen
-      type: object
-      properties:
-        initial:
-          $ref: '#/components/schemas/TranchenWithVerfuegung'
-        offeneAenderung:
-          $ref: '#/components/schemas/GesuchTrancheSlim'
-        akzeptierteAenderungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/AenderungenWithVerfuegung'
-        abgelehnteAenderungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
-    GesuchTrancheList:
-      required:
-        - historized
-        - currentTranchen
-      type: object
-      properties:
-        historized:
-          $ref: '#/components/schemas/HistorizedTranchen'
-        currentTranchen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
     Kanton:
       enum:
         - AG
@@ -10362,6 +10801,35 @@ components:
           required:
             - start
             - comment
+    GesuchDokumentEntry:
+      required:
+        - entryId
+        - name
+        - dokumentTyps
+      type: object
+      properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        dokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+    GesuchDokumentList:
+      required:
+        - entrys
+        - dokuments
+      type: object
+      properties:
+        entrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentEntry'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokument'
     DokumenteToUpload:
       type: object
       properties:
@@ -10373,6 +10841,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DokumentTyp'
+        requiredRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentRef'
         unterschriftenblaetter:
           type: array
           items:
@@ -10383,6 +10855,15 @@ components:
           type: boolean
         sbCanUploadUnterschriftenblatt:
           type: boolean
+    GesuchDokumentRef:
+      required:
+        - dokumentTyp
+      type: object
+      properties:
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        entryId:
+          $ref: '#/components/schemas/UUID'
     NeskoGetSteuerdatenRequest:
       required:
         - steuerdatenTyp
@@ -11034,6 +11515,12 @@ components:
       schema:
         type: string
         format: date
+    ausbildungUnterbruchAntragId:
+      name: ausbildungUnterbruchAntragId
+      in: path
+      schema:
+        $ref: '#/components/schemas/UUID'
+      required: true
     unterschriftenblattTyp:
       name: unterschriftenblattTyp
       schema:

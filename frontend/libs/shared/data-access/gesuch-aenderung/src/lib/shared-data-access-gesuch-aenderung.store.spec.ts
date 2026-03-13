@@ -32,10 +32,5 @@ describe('GesuchAenderungStore', () => {
       data: undefined,
       error: undefined,
     });
-    expect(store.cachedTranchenList()).toEqual({
-      type: 'initial',
-      data: undefined,
-      error: undefined,
-    });
   });
 });

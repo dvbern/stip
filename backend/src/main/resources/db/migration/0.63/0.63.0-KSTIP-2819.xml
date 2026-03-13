@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-519">
+      <addColumn tableName="geschwister">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-520">
+      <addColumn tableName="geschwister_aud">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-521">
+      <addColumn tableName="gesuch_dokument">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-522">
+      <addColumn tableName="gesuch_dokument_aud">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772620238964-529">
+     <dropColumn columnName="gesuch_dokument_status" tableName="gesuch_dokument_kommentar"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772620238964-530">
+     <dropColumn columnName="gesuch_dokument_status" tableName="gesuch_dokument_kommentar_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-523">
+      <addColumn tableName="kind">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-524">
+      <addColumn tableName="kind_aud">
+         <column name="entry_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-525">
+      <dropColumn columnName="copy_of_id" tableName="geschwister"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-526">
+      <dropColumn columnName="copy_of_id" tableName="geschwister_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-527">
+      <dropColumn columnName="copy_of_id" tableName="kind"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1772025200890-528">
+      <dropColumn columnName="copy_of_id" tableName="kind_aud"/>
+   </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1766050518210-266">
+    <dropUniqueConstraint constraintName="UC_gesuch_dokument_gesuch_tranche_id_dokument_typ" tableName="gesuch_dokument"/>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1772037155659-521">
+    <addUniqueConstraint columnNames="gesuch_tranche_id, dokument_typ, entry_id" constraintName="UC_gesuch_dokument_gesuch_tranche_id_dokument_typ_entry_id" tableName="gesuch_dokument" />
+  </changeSet>
+</databaseChangeLog>

@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.jahreswert;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
@@ -60,6 +62,9 @@ public class JahreswertUtil {
 
         final var einnahmenKostenPartner = gesuchFormular.getEinnahmenKostenPartner();
         final var targetEinnahmenPartner = targetTranchen.stream()
+            .filter(
+                trancheTranche -> Objects.nonNull(trancheTranche.getGesuchFormular().getEinnahmenKostenPartner())
+            )
             .map(targetTranche -> targetTranche.getGesuchFormular().getEinnahmenKostenPartner())
             .toList();
         EinnahmenKostenJahreswertUtil.synchroniseJahresfelder(

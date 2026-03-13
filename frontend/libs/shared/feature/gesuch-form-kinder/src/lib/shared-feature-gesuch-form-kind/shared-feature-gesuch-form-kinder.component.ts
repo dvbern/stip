@@ -4,7 +4,6 @@ import {
   OnInit,
   computed,
   inject,
-  signal,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -14,7 +13,6 @@ import { SharedEventGesuchFormKinder } from '@dv/shared/event/gesuch-form-kinder
 import { Kind, KindUpdate } from '@dv/shared/model/gesuch';
 import { KINDER } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
-import { SharedUiFormZuvorHintListPipe } from '@dv/shared/ui/form';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { parseBackendLocalDateAndPrint } from '@dv/shared/util/validator-date';
@@ -29,7 +27,6 @@ import { SharedFeatureGesuchFormKinderEditorComponent } from '../shared-feature-
     SharedFeatureGesuchFormKinderEditorComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
-    SharedUiFormZuvorHintListPipe,
     SharedUiLoadingComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-kinder.component.html',
@@ -39,10 +36,12 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   private store = inject(Store);
 
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormKinderView);
-  changesSig = computed<Partial<Kind>>(() => {
-    const view = this.viewSig();
-    const index = this.editedKindIndexSig();
-    return view.listChanges?.changesByIndex?.[index ?? -1] ?? {};
+  changesSig = computed<Record<string, Partial<Kind>>>(() => {
+    const { listChanges } = this.viewSig();
+    if (!this.editedKind?.entryId) {
+      return {};
+    }
+    return listChanges?.changesByIdentifier[this.editedKind?.entryId] ?? {};
   });
 
   hasUnsavedChanges = false;
@@ -51,7 +50,6 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
   editedKind?: Partial<KindUpdate>;
-  editedKindIndexSig = signal<number | undefined>(undefined);
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormKinder.init());
@@ -59,12 +57,10 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   public handleAddKinder(): void {
     this.editedKind = {};
-    this.editedKindIndexSig.set(undefined);
   }
 
-  public handleSelectKinder(ge: KindUpdate, index: number): void {
+  public handleSelectKinder(ge: KindUpdate): void {
     this.editedKind = ge;
-    this.editedKindIndexSig.set(index);
   }
 
   handleEditorSave(kind: KindUpdate) {

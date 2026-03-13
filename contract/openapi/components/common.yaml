@@ -230,6 +230,15 @@ Adresse:
       type: string
     ort:
       type: string
+GesuchDokumentRef:
+  required:
+    - dokumentTyp
+  type: object
+  properties:
+    dokumentTyp:
+      $ref: '#/DokumentTyp'
+    entryId:
+      $ref: '#/UUID'
 GesuchDokument:
   required:
     - id
@@ -239,6 +248,9 @@ GesuchDokument:
   properties:
     id:
       $ref: '#/UUID'
+    entryId:
+      $ref: '#/UUID'
+      description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
     dokumentTyp:
       $ref: '#/DokumentTyp'
     customDokumentTyp:
@@ -333,6 +345,7 @@ Gesuch:
     - fallId
     - fallNummer
     - ausbildungId
+    - hasPendingAusbildungUnterbruchAntrag
     - gesuchsperiode
     - gesuchStatus
     - gesuchNummer
@@ -348,6 +361,8 @@ Gesuch:
       type: string
     ausbildungId:
       $ref: '#/UUID'
+    hasPendingAusbildungUnterbruchAntrag:
+      type: boolean
     gesuchsperiode:
       $ref: '#/Gesuchsperiode'
     gesuchStatus:
@@ -820,57 +835,6 @@ GesuchTranche:
       $ref: '#/GesuchTrancheStatus'
     typ:
       $ref: '#/GesuchTrancheTyp'
-TranchenWithVerfuegung:
-  required:
-    - tranchen
-    - berechnungId
-  type: object
-  properties:
-    tranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    berechnungId:
-      $ref: '#/UUID'
-AenderungenWithVerfuegung:
-  required:
-    - aenderung
-  type: object
-  allOf:
-    - $ref: '#/TranchenWithVerfuegung'
-  properties:
-    aenderung:
-      $ref: '#/GesuchTrancheSlim'
-HistorizedTranchen:
-  required:
-    - akzeptierteAenderungen
-    - abgelehnteAenderungen
-  type: object
-  properties:
-    initial:
-      $ref: '#/TranchenWithVerfuegung'
-    offeneAenderung:
-      $ref: '#/GesuchTrancheSlim'
-    akzeptierteAenderungen:
-      type: array
-      items:
-        $ref: '#/AenderungenWithVerfuegung'
-    abgelehnteAenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-GesuchTrancheList:
-  required:
-    - historized
-    - currentTranchen
-  type: object
-  properties:
-    historized:
-      $ref: '#/HistorizedTranchen'
-    currentTranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
 GesuchTrancheSlim:
   type: object
   required:
@@ -981,6 +945,9 @@ NotificationType:
     - DARLEHEN_ZURUECKGEWIESEN
     - DARLEHEN_AKZEPTIERT
     - DARLEHEN_ABGELEHNT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+    - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
 Kommentar:
   type: object
   required:

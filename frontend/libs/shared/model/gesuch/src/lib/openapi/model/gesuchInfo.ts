@@ -13,9 +13,12 @@ import { GesuchStateInfo } from './gesuchStateInfo';
 
 export interface GesuchInfo { 
     id: string;
+    fallNummer: string;
     gesuchNummer: string;
     startDate: string;
     endDate: string;
+    piaVorname?: string;
+    piaNachname?: string;
     state: GesuchStateInfo;
 }
 

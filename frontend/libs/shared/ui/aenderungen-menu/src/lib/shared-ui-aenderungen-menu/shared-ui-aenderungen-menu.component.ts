@@ -4,11 +4,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
-import {
-  AenderungenWithVerfuegung,
-  GesuchTrancheSlim,
-  TranchenWithVerfuegung,
-} from '@dv/shared/model/gesuch';
+import { GesuchTrancheSlim, VerfuegtGesuch } from '@dv/shared/model/gesuch';
 
 @Component({
   selector: 'dv-shared-ui-aenderungen-menu',
@@ -23,8 +19,8 @@ export class SharedUiAenderungenMenuComponent {
   revisionSig = input.required<number | undefined>();
   historizedSig = input.required<{
     abgelehnteAenderungen: GesuchTrancheSlim[] | undefined;
-    akzeptierteAenderungen: AenderungenWithVerfuegung[] | undefined;
-    initial: TranchenWithVerfuegung | undefined;
+    akzeptierteAenderungen: GesuchTrancheSlim[] | undefined;
+    initial: VerfuegtGesuch | undefined;
     offeneAenderung: GesuchTrancheSlim | undefined;
   } | null>();
   isAenderungRouteSig = input.required<boolean | undefined>();

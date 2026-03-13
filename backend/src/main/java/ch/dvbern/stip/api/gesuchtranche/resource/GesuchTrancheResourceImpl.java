@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchtranche.resource;
 
-import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
@@ -29,10 +28,9 @@ import ch.dvbern.stip.generated.api.GesuchTrancheResource;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDto;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDto;
@@ -67,20 +65,6 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     ) {
         gesuchAuthorizer.gsCanCreateAenderung(gesuchId);
         return gesuchTrancheService.createAenderungsantrag(gesuchId, createAenderungsantragRequestDto);
-    }
-
-    @Override
-    @RolesAllowed(GS_GESUCH_READ)
-    public GesuchTrancheListDto getAllTranchenForGesuchGS(UUID gesuchId) {
-        gesuchAuthorizer.gsCanRead(gesuchId);
-        return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuchGS(gesuchId);
-    }
-
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    @Override
-    public GesuchTrancheListDto getAllTranchenForGesuchSB(UUID gesuchId) {
-        gesuchAuthorizer.sbOrJuristCanRead();
-        return gesuchTrancheService.getAllTranchenAndInitalTrancheForGesuchSB(gesuchId);
     }
 
     @RolesAllowed(GS_GESUCH_READ)
@@ -133,16 +117,16 @@ public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public List<GesuchDokumentDto> getGesuchDokumenteGS(UUID gesuchTrancheId) {
+    public GesuchDokumentListDto getGesuchDokumenteGS(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.gsCanRead(gesuchTrancheId);
-        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTrancheId);
+        return gesuchTrancheService.getGesuchDokumentListGS(gesuchTrancheId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public List<GesuchDokumentDto> getGesuchDokumenteSB(UUID gesuchTrancheId) {
+    public GesuchDokumentListDto getGesuchDokumenteSB(UUID gesuchTrancheId) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
-        return gesuchTrancheService.getAndCheckGesuchDokumentsForGesuchTrancheSB(gesuchTrancheId);
+        return gesuchTrancheService.getGesuchDokumentListSB(gesuchTrancheId);
     }
 
     @RolesAllowed(SB_GESUCH_UPDATE)

@@ -30,7 +30,6 @@ public class GesuchDokumentKommentarCopyUtil {
         final var copy = new GesuchDokumentKommentar();
 
         copy.setKommentar(source.getKommentar());
-        copy.setGesuchDokumentStatus(source.getGesuchDokumentStatus());
         copy.setAutor(source.getAutor());
         copy.setTimestampErstellt(source.getTimestampErstellt());
         copy.setTimestampMutiert(source.getTimestampMutiert());

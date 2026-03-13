@@ -8,6 +8,8 @@ import {
   Ausbildung,
   AusbildungCreateResponse,
   AusbildungService,
+  AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams,
+  AusbildungUnterbruchAntragGS,
   AusbildungUpdate,
 } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -25,15 +27,19 @@ import {
 
 type AusbildungState = {
   ausbildung: CachedRemoteData<Ausbildung>;
+  ausbildungUnterbrechenResponse: RemoteData<unknown>;
   ausbildungResponse: RemoteData<AusbildungCreateResponse>;
+  ausbildungUnterbruch: CachedRemoteData<AusbildungUnterbruchAntragGS>;
 };
 
 const initialState: AusbildungState = {
   ausbildung: initial(),
+  ausbildungUnterbrechenResponse: initial(),
   ausbildungResponse: initial(),
+  ausbildungUnterbruch: initial(),
 };
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class AusbildungStore extends signalStore(
   { protectedState: false },
   withState(initialState),
@@ -49,6 +55,12 @@ export class AusbildungStore extends signalStore(
       minEndDatum,
       minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
     };
+  });
+
+  ausbildungsUnterbruchViewSig = computed(() => {
+    const ausbildungUnterbruch = fromCachedDataSig(this.ausbildungUnterbruch);
+
+    return { ...ausbildungUnterbruch };
   });
 
   ausbildungCreateErrorResponseViewSig = computed(() => {
@@ -106,6 +118,116 @@ export class AusbildungStore extends signalStore(
             },
           ),
         ),
+      ),
+    ),
+  );
+
+  getAusbildungUnterbruch$ = rxMethod<{
+    ausbildungUnterbruchAntragId: string;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          ausbildungUnterbruch: cachedPending(state.ausbildungUnterbruch),
+        }));
+      }),
+      switchMap(({ ausbildungUnterbruchAntragId }) =>
+        this.ausbildungService
+          .getAusbildungUnterbruchAntragGS$({
+            ausbildungUnterbruchAntragId,
+          })
+          .pipe(
+            handleApiResponse((response) =>
+              patchState(this, { ausbildungUnterbruch: response }),
+            ),
+          ),
+      ),
+    ),
+  );
+
+  createAusbildungUnterbruchAntrag$ = rxMethod<{
+    ausbildungId: string;
+    onSuccess: (id: string) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(({ ausbildungId, onSuccess }) =>
+        this.ausbildungService
+          .createAusbildungUnterbruchAntrag$({ ausbildungId })
+          .pipe(
+            handleApiResponse(
+              (response) =>
+                patchState(this, { ausbildungUnterbrechenResponse: response }),
+              { onSuccess: (unterbruch) => onSuccess(unterbruch.id) },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  deleteAusbildungUnterbruchAntrag$ = rxMethod<{
+    ausbildungUnterbruchAntragId: string;
+    onSuccess: () => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(({ ausbildungUnterbruchAntragId, onSuccess }) =>
+        this.ausbildungService
+          .deleteAusbildungUnterbruchAntrag$({
+            ausbildungUnterbruchAntragId,
+          })
+          .pipe(
+            handleApiResponse(
+              (response) =>
+                patchState(this, {
+                  ausbildungUnterbrechenResponse: response,
+                }),
+              { onSuccess },
+            ),
+          ),
+      ),
+    ),
+  );
+
+  einreichenAusbildungUnterbruchAntrag$ = rxMethod<
+    AusbildungServiceEinreichenAusbildungUnterbruchAntragRequestParams & {
+      onSuccess: () => void;
+    }
+  >(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          ausbildungUnterbrechenResponse: pending(),
+        }));
+      }),
+      switchMap(
+        ({
+          ausbildungUnterbruchAntragId,
+          updateAusbildungUnterbruchAntragGS,
+          onSuccess,
+        }) =>
+          this.ausbildungService
+            .einreichenAusbildungUnterbruchAntrag$({
+              ausbildungUnterbruchAntragId,
+              updateAusbildungUnterbruchAntragGS,
+            })
+            .pipe(
+              handleApiResponse(
+                (response) =>
+                  patchState(this, {
+                    ausbildungUnterbrechenResponse: response,
+                  }),
+                { onSuccess },
+              ),
+            ),
       ),
     ),
   );

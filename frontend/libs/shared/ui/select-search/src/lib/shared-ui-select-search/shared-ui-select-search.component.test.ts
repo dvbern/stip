@@ -9,6 +9,7 @@ import {
   configureTestbedTranslateLanguage,
   getTranslocoModule,
 } from '@dv/shared/pattern/vitest-test-setup';
+import { success } from '@dv/shared/util/remote-data';
 
 import { SharedUiSelectSearchComponent } from './shared-ui-select-search.component';
 
@@ -46,7 +47,7 @@ async function setup(language: Language = 'de') {
     providers: [provideHttpClient()],
     inputs: {
       labelKeySig: 'label.test.key',
-      valuesSig: values,
+      valuesSig: success(values),
       invalidValueLabelKeySig: 'error.test.key',
       languageSig: language,
       testIdSig: 'autocomplete-test-id',

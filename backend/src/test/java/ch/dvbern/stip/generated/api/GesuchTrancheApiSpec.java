@@ -16,10 +16,9 @@ package ch.dvbern.stip.generated.api;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDtoSpec;
@@ -78,8 +77,6 @@ public class GesuchTrancheApiSpec {
                 deleteAenderung(),
                 gesuchTrancheEinreichenValidierenGS(),
                 gesuchTrancheEinreichenValidierenSB(),
-                getAllTranchenForGesuchGS(),
-                getAllTranchenForGesuchSB(),
                 getDocumentsToUploadGS(),
                 getDocumentsToUploadSB(),
                 getGesuchDokumenteGS(),
@@ -132,14 +129,6 @@ public class GesuchTrancheApiSpec {
 
     public GesuchTrancheEinreichenValidierenSBOper gesuchTrancheEinreichenValidierenSB() {
         return new GesuchTrancheEinreichenValidierenSBOper(createReqSpec());
-    }
-
-    public GetAllTranchenForGesuchGSOper getAllTranchenForGesuchGS() {
-        return new GetAllTranchenForGesuchGSOper(createReqSpec());
-    }
-
-    public GetAllTranchenForGesuchSBOper getAllTranchenForGesuchSB() {
-        return new GetAllTranchenForGesuchSBOper(createReqSpec());
     }
 
     public GetDocumentsToUploadGSOper getDocumentsToUploadGS() {
@@ -998,152 +987,6 @@ public class GesuchTrancheApiSpec {
      * 
      * 
      *
-     * @see #gesuchIdPath  (required)
-     * return GesuchTrancheListDtoSpec
-     */
-    public static class GetAllTranchenForGesuchGSOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/gs/{gesuchId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAllTranchenForGesuchGSOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/gs/{gesuchId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/gs/{gesuchId}
-         * @param handler handler
-         * @return GesuchTrancheListDtoSpec
-         */
-        public GesuchTrancheListDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchTrancheListDtoSpec> type = new TypeRef<GesuchTrancheListDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetAllTranchenForGesuchGSOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAllTranchenForGesuchGSOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAllTranchenForGesuchGSOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #gesuchIdPath  (required)
-     * return GesuchTrancheListDtoSpec
-     */
-    public static class GetAllTranchenForGesuchSBOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuchtranche/sb/{gesuchId}";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetAllTranchenForGesuchSBOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuchtranche/sb/{gesuchId}
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuchtranche/sb/{gesuchId}
-         * @param handler handler
-         * @return GesuchTrancheListDtoSpec
-         */
-        public GesuchTrancheListDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchTrancheListDtoSpec> type = new TypeRef<GesuchTrancheListDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String GESUCH_ID_PATH = "gesuchId";
-
-        /**
-         * @param gesuchId (UUID)  (required)
-         * @return operation
-         */
-        public GetAllTranchenForGesuchSBOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetAllTranchenForGesuchSBOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetAllTranchenForGesuchSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
      * @see #gesuchTrancheIdPath  (required)
      * return DokumenteToUploadDtoSpec
      */
@@ -1291,7 +1134,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;GesuchDokumentDtoSpec&gt;
+     * return GesuchDokumentListDtoSpec
      */
     public static class GetGesuchDokumenteGSOper implements Oper {
 
@@ -1321,10 +1164,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/{gesuchTrancheId}/dokumente/gs
          * @param handler handler
-         * @return List&lt;GesuchDokumentDtoSpec&gt;
+         * @return GesuchDokumentListDtoSpec
          */
-        public List<GesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDokumentDtoSpec>> type = new TypeRef<List<GesuchDokumentDtoSpec>>(){};
+        public GesuchDokumentListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentListDtoSpec> type = new TypeRef<GesuchDokumentListDtoSpec>(){};
             return execute(handler).as(type);
         }
 
@@ -1364,7 +1207,7 @@ public class GesuchTrancheApiSpec {
      * 
      *
      * @see #gesuchTrancheIdPath  (required)
-     * return List&lt;GesuchDokumentDtoSpec&gt;
+     * return GesuchDokumentListDtoSpec
      */
     public static class GetGesuchDokumenteSBOper implements Oper {
 
@@ -1394,10 +1237,10 @@ public class GesuchTrancheApiSpec {
         /**
          * GET /gesuchtranche/{gesuchTrancheId}/dokumente/sb
          * @param handler handler
-         * @return List&lt;GesuchDokumentDtoSpec&gt;
+         * @return GesuchDokumentListDtoSpec
          */
-        public List<GesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<GesuchDokumentDtoSpec>> type = new TypeRef<List<GesuchDokumentDtoSpec>>(){};
+        public GesuchDokumentListDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchDokumentListDtoSpec> type = new TypeRef<GesuchDokumentListDtoSpec>(){};
             return execute(handler).as(type);
         }
 

@@ -258,8 +258,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         : personInAusbildung.geburtsdatum,
       this.languageSig(),
     );
-    const ausbildungsgang = ausbildungsstaettes
-      .find((a) =>
+    const ausbildungsgang = ausbildungsstaettes.data
+      ?.find((a) =>
         a.ausbildungsgaenge?.some(
           (g) => g.id === ausbildung.ausbildungsgang?.id,
         ),

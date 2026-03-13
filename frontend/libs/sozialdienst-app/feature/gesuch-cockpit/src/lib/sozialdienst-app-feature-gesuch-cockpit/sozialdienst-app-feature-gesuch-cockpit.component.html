@@ -22,6 +22,7 @@
                 (deleteGesuch)="deleteGesuch($event)"
                 (aenderungMelden)="aenderungMelden($event)"
                 (deleteAenderung)="deleteAenderung($event)"
+                (ausbildungUnterbrechen)="ausbildungUnterbrechen($event, ausbildung.openAusbildungUnterbruchAntragId)"
               ></dv-shared-ui-dashboard-ausbildung>
             }
           } @else if (dashboard.canCreateAusbildung) {

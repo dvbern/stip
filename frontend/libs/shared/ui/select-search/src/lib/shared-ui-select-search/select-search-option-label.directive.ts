@@ -1,6 +1,7 @@
 import { Directive, TemplateRef, inject, input } from '@angular/core';
 
 import { LookupType } from '@dv/shared/model/select-search';
+import { CachedRemoteData } from '@dv/shared/util/remote-data';
 
 export interface SelectTemplateContext<T extends LookupType> {
   $implicit: T;
@@ -11,7 +12,7 @@ export interface SelectTemplateContext<T extends LookupType> {
   standalone: true,
 })
 export class SharedUiSearchOptionLabelDirective<T extends LookupType> {
-  dvSearchOptionLabel = input.required<T[]>();
+  dvSearchOptionLabel = input.required<CachedRemoteData<T[]>>();
 
   public templateRef = inject(TemplateRef<T>);
 

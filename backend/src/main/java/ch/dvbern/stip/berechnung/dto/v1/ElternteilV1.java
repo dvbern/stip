@@ -99,7 +99,6 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
-        final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation,
         final LocalDate ausbildungsBegin
@@ -214,7 +213,7 @@ public class ElternteilV1 {
 
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
-        final var integrationzulageAnzahl = anzahlGeschwisterInNachobligatorischerAusbildung + InputUtils.PIA_COUNT;
+        final var integrationzulageAnzahl = anzahlGeschwisterInAusbildung + InputUtils.PIA_COUNT;
         builder.integrationszulage(gesuchsperiode.getIntegrationszulage());
         builder.integrationszulageAnzahl(integrationzulageAnzahl);
         builder.integrationszulageTotal(
@@ -261,7 +260,6 @@ public class ElternteilV1 {
         final int anzahlPersonenImHaushalt,
         final List<AbstractFamilieEntity> kinderDerElternInHaushalten,
         final int anzahlGeschwisterInAusbildung,
-        final int anzahlGeschwisterInNachobligatorischerAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation,
         final LocalDate ausbildungsBegin
@@ -275,7 +273,6 @@ public class ElternteilV1 {
             anzahlPersonenImHaushalt,
             kinderDerElternInHaushalten,
             anzahlGeschwisterInAusbildung,
-            anzahlGeschwisterInNachobligatorischerAusbildung,
             elternTyp,
             familiensituation,
             ausbildungsBegin

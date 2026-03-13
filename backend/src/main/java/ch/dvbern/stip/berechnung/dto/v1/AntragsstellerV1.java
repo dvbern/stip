@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
-import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
+import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
@@ -232,10 +232,7 @@ public class AntragsstellerV1 {
         builder.fremdbetreuung(Objects.requireNonNullElse(einnahmenKosten.getBetreuungskostenKinder(), 0));
         final var abschluss = gesuchFormular.getAusbildung().getAusbildungsgang().getAbschluss();
 
-        final boolean isLehre = abschluss.getBildungsrichtung()
-            .equals(
-                Bildungsrichtung.BERUFLICHE_GRUNDBILDUNG
-            );
+        final boolean isLehre = abschluss.getFerien() == FerienTyp.LEHRE;
         builder.lehre(isLehre);
         builder.eigenerHaushalt(personInAusbildung.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT);
 

@@ -239,6 +239,10 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.KEIN_STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(
+                GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH,
+                Gesuchstatus.IN_BEARBEITUNG_SB
+            )
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .onEntryFrom(
                 triggers.get(
@@ -255,6 +259,10 @@ public class GesuchStatusConfigProducer {
 
         config.configure(Gesuchstatus.STIPENDIENANSPRUCH)
             .permit(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(
+                GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH,
+                Gesuchstatus.IN_BEARBEITUNG_SB
+            )
             .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.STIPENDIENANSPRUCH),

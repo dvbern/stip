@@ -41,11 +41,11 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
@@ -82,7 +82,7 @@ class GesuchTrancheAenderungTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
-    private GesuchTrancheListDtoSpec gesuchtranchen;
+    private GesuchHeaderDtoSpec gesuchHeader;
     private GesuchDtoSpec gesuch;
 
     private UUID aenderungId;
@@ -253,15 +253,11 @@ class GesuchTrancheAenderungTest {
     @Order(11)
     @Description("Test setup for: The another GS must not be able do delete a Aenderung'")
     void setupnextTest() {
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
+        gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
+        );
+
     }
 
     @Test
@@ -298,15 +294,13 @@ class GesuchTrancheAenderungTest {
     @Order(14)
     @Description("It should not be possible to delete a Tranche when a Aenderung should be deleted")
     void deleteAenderungShouldFailTest() {
-        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class)
-            .getCurrentTranchen();
-        final var tranche = gesuchtranchen.stream()
+        gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
+        );
+
+        final var tranche = gesuchHeader.getCurrentTranches()
+            .stream()
             .findFirst()
             .get();
         gesuchTrancheApiSpec.deleteAenderung()
@@ -337,15 +331,10 @@ class GesuchTrancheAenderungTest {
             .as(GesuchTrancheDtoSpec.class)
             .getId();
 
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
+        gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
+        );
 
         final var fullGesuch = GesuchTestSpecGenerator.gesuchUpdateDtoSpecFull();
 
@@ -429,7 +418,8 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         for (final var gesuchDokument : gesuchDokuments) {
             if (gesuchDokument.getStatus() == DokumentstatusDtoSpec.AUSSTEHEND) {
@@ -463,27 +453,12 @@ class GesuchTrancheAenderungTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
+        gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
 
-        gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-
-        assertThat(gesuchtranchen.getHistorized().getAbgelehnteAenderungen().size()).isEqualTo(1);
+        assertThat(gesuchHeader.getAenderungs().getAbgelehnt().size()).isEqualTo(1);
 
         final var gesuchDokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
             .gesuchTrancheIdPath(aenderungId)
@@ -493,7 +468,8 @@ class GesuchTrancheAenderungTest {
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         for (final var gesuchDokument : gesuchDokuments) {
             assertThat(gesuchDokument.getStatus())

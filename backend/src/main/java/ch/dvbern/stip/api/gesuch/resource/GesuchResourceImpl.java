@@ -54,8 +54,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
-import ch.dvbern.stip.generated.dto.GesuchHeaderGsDto;
-import ch.dvbern.stip.generated.dto.GesuchHeaderSbDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -419,6 +418,13 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ, GS_GESUCH_READ })
+    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+        gesuchAuthorizer.canGetBerechnungOfVerfuegung(verfuegungId);
+        return gesuchService.getBerechnungForVerfuegung(verfuegungId);
+    }
+
+    @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
@@ -453,19 +459,16 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public GesuchHeaderGsDto getGesuchHeaderGs(UUID gesuchTrancheId) {
-        final var gesuchTranche = gesuchTrancheService.getGesuchTrancheOrHistorical(gesuchTrancheId);
-        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
-
+    public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchId) {
         gesuchAuthorizer.gsCanRead(gesuchId);
-        return gesuchService.getGesuchTrancheHeaderGs(gesuchTrancheId);
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchHeaderSbDto getGesuchHeaderSb(UUID gesuchTrancheId) {
+    public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchId) {
         gesuchAuthorizer.sbOrJuristCanRead();
-        return gesuchService.getGesuchTrancheHeaderSb(gesuchTrancheId);
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
     }
 
     @Override

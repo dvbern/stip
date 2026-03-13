@@ -12,6 +12,7 @@ export type SharedModelGsGesuchView = Modify<
     fallId: string;
     isActive: boolean;
     isErstgesuch: boolean;
+    hasPendingAusbildungUnterbruchAntrag: boolean;
     canEdit: boolean;
     canDelete: boolean;
     canCreateAenderung: boolean;

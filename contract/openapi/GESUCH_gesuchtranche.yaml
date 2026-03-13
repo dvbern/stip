@@ -169,9 +169,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -195,9 +193,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: './components/common.yaml#/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
         '403':
@@ -253,58 +249,6 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: getDocumentsToUploadSB
-  '/gesuchtranche/gs/{gesuchId}':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAllTranchenForGesuchGS
-  '/gesuchtranche/sb/{gesuchId}':
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: './components/common.yaml#/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '404':
-          $ref: './components/responses.yaml#/NotFound'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: getAllTranchenForGesuchSB
   '/gesuchtranche/{aenderungId}/patchAenderungInfo':
     parameters:
       - name: aenderungId
@@ -542,6 +486,35 @@ components:
           required:
             - start
             - comment
+    GesuchDokumentEntry:
+      required:
+        - entryId
+        - name
+        - dokumentTyps
+      type: object
+      properties:
+        entryId:
+          $ref: './components/common.yaml#/UUID'
+        name:
+          type: string
+        dokumentTyps:
+          type: array
+          items:
+            $ref: './components/common.yaml#/DokumentTyp'
+    GesuchDokumentList:
+      required:
+        - entrys
+        - dokuments
+      type: object
+      properties:
+        entrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentEntry'
+        dokuments:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchDokument'
     DokumenteToUpload:
       type: object
       properties:
@@ -553,6 +526,10 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/DokumentTyp'
+        requiredRefs:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchDokumentRef'
         unterschriftenblaetter:
           type: array
           items:

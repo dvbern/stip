@@ -23,8 +23,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungsgangMapper;
+import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.DateMapper;
 import ch.dvbern.stip.api.common.service.DateToMonthYear;
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -42,6 +45,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = AusbildungsgangMapper.class)
 public abstract class AusbildungDashboardItemMapper {
@@ -57,6 +61,9 @@ public abstract class AusbildungDashboardItemMapper {
     @Inject
     GesuchTrancheMapper gesuchTrancheMapper;
 
+    @Inject
+    AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
+
     @Mapping(
         target = "ausbildungBegin",
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
@@ -66,7 +73,49 @@ public abstract class AusbildungDashboardItemMapper {
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
     )
     @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(
+        source = ".", target = "canCreateAusbildungUnterbruchAntrag",
+        qualifiedByName = "canCreateAusbildungUnterbruchAntrag"
+    )
+    @Mapping(
+        source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
+        qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
+    )
+    @Mapping(
+        source = ".", target = "openAusbildungUnterbruchAntragId",
+        qualifiedByName = "getOpenAusbildungUnterbruchAntragId"
+    )
     public abstract AusbildungDashboardItemDto toDto(final Ausbildung ausbildung);
+
+    @Named("canCreateAusbildungUnterbruchAntrag")
+    protected boolean canCreateAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
+        return ausbildungUnterbruchAntragService.canCreateAusbildungUnterbruchAntrag(ausbildung);
+    }
+
+    @Named("hasPendingAusbildungUnterbruchAntrag")
+    public boolean hasPendingAusbildungUnterbruchAntrag(final Ausbildung ausbildung) {
+        return ausbildung.getAusbildungUnterbruchAntrags()
+            .stream()
+            .anyMatch(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.EINGEGEBEN
+            );
+    }
+
+    @Named("getOpenAusbildungUnterbruchAntragId")
+    public UUID getOpenAusbildungUnterbruchAntragId(final Ausbildung ausbildung) {
+        return ausbildung.getAusbildungUnterbruchAntrags()
+            .stream()
+            .filter(
+                ausbildungUnterbruchAntrag -> ausbildungUnterbruchAntrag
+                    .getStatus() == AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS
+            )
+            .map(
+                AbstractEntity::getId
+            )
+            .findFirst()
+            .orElse(null);
+    }
 
     @AfterMapping
     protected void setGesuchDashboardItemsIfNull(

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GeschwisterDto  implements Serializable {
+  private @Valid UUID entryId;
   private @Valid String vorname;
   private @Valid LocalDate geburtsdatum;
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
@@ -30,6 +31,25 @@ public class GeschwisterDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+
+  /**
+   **/
+  public GeschwisterDto entryId(UUID entryId) {
+    this.entryId = entryId;
+    return this;
+  }
+
+  
+  @JsonProperty("entryId")
+  @NotNull
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+  @JsonProperty("entryId")
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
 
   /**
    **/
@@ -193,7 +213,8 @@ public class GeschwisterDto  implements Serializable {
       return false;
     }
     GeschwisterDto geschwister = (GeschwisterDto) o;
-    return Objects.equals(this.vorname, geschwister.vorname) &&
+    return Objects.equals(this.entryId, geschwister.entryId) &&
+        Objects.equals(this.vorname, geschwister.vorname) &&
         Objects.equals(this.geburtsdatum, geschwister.geburtsdatum) &&
         Objects.equals(this.wohnsitz, geschwister.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, geschwister.ausbildungssituation) &&
@@ -205,7 +226,7 @@ public class GeschwisterDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater);
   }
 
   @Override
@@ -213,6 +234,7 @@ public class GeschwisterDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeschwisterDto {\n");
     
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");

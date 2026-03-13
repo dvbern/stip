@@ -17,7 +17,16 @@
 
 package ch.dvbern.stip.api.eltern.type;
 
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+
 public enum ElternTyp {
     VATER,
-    MUTTER
+    MUTTER;
+
+    public SteuerdatenTyp getSteuerdatenTyp() {
+        return switch (this) {
+            case VATER -> SteuerdatenTyp.VATER;
+            case MUTTER -> SteuerdatenTyp.MUTTER;
+        };
+    }
 }

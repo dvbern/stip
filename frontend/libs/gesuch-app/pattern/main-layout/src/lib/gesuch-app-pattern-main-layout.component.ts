@@ -105,7 +105,7 @@ export class GesuchAppPatternMainLayoutComponent {
 
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
-        this.gesuchHeaderStore.viewGsSig().currentTranchen ?? [],
+        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
       );
 
       const auszahlungMenu: NavItem = {
@@ -144,9 +144,9 @@ export class GesuchAppPatternMainLayoutComponent {
     });
 
     effect(() => {
-      const gesuchTrancheId = this.trancheIdSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeaderGs$({ gesuchTrancheId });
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
   }

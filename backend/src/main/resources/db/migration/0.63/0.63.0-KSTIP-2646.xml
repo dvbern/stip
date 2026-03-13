@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+<changeSet author="spse (generated)" id="1771843339804-519">
+      <addColumn tableName="benutzer">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="spse (generated)" id="1771843339804-520">
+      <addColumn tableName="benutzer_aud">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="spse (generated)" id="1771843339804-521">
+      <addColumn tableName="sachbearbeiter">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="spse (generated)" id="1771843339804-522">
+      <addColumn tableName="sachbearbeiter_aud">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="spse (generated)" id="1771843339804-523">
+      <addColumn tableName="sozialdienstbenutzer">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="spse (generated)" id="1771843339804-524">
+      <addColumn tableName="sozialdienstbenutzer_aud">
+         <column name="nutzungsbedingungen_akzeptiert" type="BOOLEAN"/>
+      </addColumn>
+   </changeSet>
+</databaseChangeLog>

@@ -19,37 +19,51 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
+import org.apache.commons.lang3.tuple.Pair;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = { CustomDocumentTypMapper.class })
 public abstract class DokumenteToUploadMapper {
     public abstract DokumenteToUploadDto toDto(
         final List<DokumentTyp> required,
+        final List<Pair<DokumentTyp, UUID>> requiredRefs,
         final List<UnterschriftenblattDokumentTyp> unterschriftenblaetter,
         final List<CustomDokumentTyp> customDokumentTyps
     );
+
+    @Mapping(source = "left", target = "dokumentTyp")
+    @Mapping(source = "right", target = "entryId")
+    public abstract GesuchDokumentRefDto toDto(final Pair<DokumentTyp, UUID> pair);
 
     @AfterMapping
     protected void setNullToEmptyList(
         @MappingTarget final DokumenteToUploadDto dokumenteToUploadDto
     ) {
-        if (dokumenteToUploadDto.getRequired() == null) {
+        if (Objects.isNull(dokumenteToUploadDto.getRequired())) {
             dokumenteToUploadDto.setRequired(new ArrayList<>());
         }
 
-        if (dokumenteToUploadDto.getUnterschriftenblaetter() == null) {
+        if (Objects.isNull(dokumenteToUploadDto.getRequiredRefs())) {
+            dokumenteToUploadDto.setRequiredRefs(new ArrayList<>());
+        }
+
+        if (Objects.isNull(dokumenteToUploadDto.getUnterschriftenblaetter())) {
             dokumenteToUploadDto.setUnterschriftenblaetter(new ArrayList<>());
         }
 
-        if (dokumenteToUploadDto.getCustomDokumentTyps() == null) {
+        if (Objects.isNull(dokumenteToUploadDto.getCustomDokumentTyps())) {
             dokumenteToUploadDto.setCustomDokumentTyps(new ArrayList<>());
         }
     }

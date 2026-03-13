@@ -61,10 +61,12 @@ public class Kind extends AbstractPerson {
     @Column(name = "unterhaltsbeitraege")
     private Integer unterhaltsbeitraege;
 
-    @Deprecated(forRemoval = true) // Not used anymore
-    @Nullable
-    @Column(name = "copy_of_id")
-    private UUID copyOfId;
+    /**
+     * A specific entry ID to refine the uniqueness of gesuchDokumente for list elements
+     */
+    @NullableUnlessGenerated
+    @Column(name = "entry_id", nullable = true)
+    private UUID entryId;
 
     @NotNull
     @Column(name = "wohnsitz_anteil_pia", nullable = false)

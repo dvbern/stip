@@ -71,6 +71,7 @@ public class BenutzerApiSpec {
                 getSachbearbeiterForManagement(),
                 getSachbearbeiterStammdaten(),
                 getSachbearbeitersForManagement(),
+                nutzungsbedingungenAkzeptieren(),
                 prepareCurrentBenutzer(),
                 updateSachbearbeiter()
         );
@@ -110,6 +111,10 @@ public class BenutzerApiSpec {
 
     public GetSachbearbeitersForManagementOper getSachbearbeitersForManagement() {
         return new GetSachbearbeitersForManagementOper(createReqSpec());
+    }
+
+    public NutzungsbedingungenAkzeptierenOper nutzungsbedingungenAkzeptieren() {
+        return new NutzungsbedingungenAkzeptierenOper(createReqSpec());
     }
 
     public PrepareCurrentBenutzerOper prepareCurrentBenutzer() {
@@ -724,6 +729,79 @@ public class BenutzerApiSpec {
          * @return operation
          */
         public GetSachbearbeitersForManagementOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Accept the Nutzungsbedingungen for the current Benutzer
+     * 
+     *
+     * @see #benutzerIdPath  (required)
+     * return BenutzerDtoSpec
+     */
+    public static class NutzungsbedingungenAkzeptierenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public NutzungsbedingungenAkzeptierenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /benutzer/nutzungsbedingungenAkzeptieren/{benutzerId}
+         * @param handler handler
+         * @return BenutzerDtoSpec
+         */
+        public BenutzerDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BenutzerDtoSpec> type = new TypeRef<BenutzerDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String BENUTZER_ID_PATH = "benutzerId";
+
+        /**
+         * @param benutzerId (UUID)  (required)
+         * @return operation
+         */
+        public NutzungsbedingungenAkzeptierenOper benutzerIdPath(Object benutzerId) {
+            reqSpec.addPathParam(BENUTZER_ID_PATH, benutzerId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public NutzungsbedingungenAkzeptierenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public NutzungsbedingungenAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -237,9 +237,9 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
     void test_get_required_custom_gesuchdokuments_should_not_be_empty() {
         /*
          * Both the denied & the newly added custom document should:
-         * appear in requiredDocuments
+         * appear in requiredDokuments
          */
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        final var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -248,8 +248,8 @@ class DokumentResourcesFehlendeCustomDokumenteUebermittelnTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(1));
-        assertThat(requiredDocuments.getRequired().size(), is(1));
+        assertThat(requiredDokuments.getCustomDokumentTyps().size(), is(1));
+        assertThat(requiredDokuments.getRequired().size(), is(1));
     }
 
     @Test

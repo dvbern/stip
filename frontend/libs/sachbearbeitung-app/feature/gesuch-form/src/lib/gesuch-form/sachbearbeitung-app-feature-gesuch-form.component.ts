@@ -83,7 +83,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSbSig(
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -140,22 +140,18 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const { trancheSetting } = this.viewSig();
     const currentTranche = this.currentTrancheSig();
 
-    const { list, isLoading } = this.aenderungStore.tranchenListViewSig();
+    const { currentTranches, aenderungs, initial, isLoading } =
+      this.gesuchHeaderStore.viewSig();
 
     if (!currentTranche || isLoading) {
       return '…';
     }
 
-    const { currentTranchen, historized } = list ?? {};
-
     const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
     const allTranchen = {
-      TRANCHE: [currentTranchen ?? []],
-      AENDERUNG: [
-        historized?.akzeptierteAenderungen?.map((a) => a.aenderung) ?? [],
-        historized?.abgelehnteAenderungen ?? [],
-      ],
-      INITIAL: [historized?.initial?.tranchen ?? []],
+      TRANCHE: [currentTranches ?? []],
+      AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
+      INITIAL: [initial?.tranchen ?? []],
     } satisfies Record<GesuchUrlType, unknown>;
     const index = gesuchUrlTyp
       ? findIndexInOneOf(

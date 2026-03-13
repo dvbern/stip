@@ -36,7 +36,7 @@ import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
-  GesuchHeaderSb,
+  GesuchHeader,
   aenderungRoutes,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
@@ -63,6 +63,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatTabsModule,
     MatMenuModule,
     MatTooltipModule,
+    SharedUiAenderungenMenuComponent,
     SharedPatternGesuchInfoBarComponent,
     SharedUiDarlehenMenuComponent,
     MatChip,
@@ -85,51 +86,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private gesuchStore = inject(GesuchStore);
-
+  // route = inject(ActivatedRoute);
   darlehenStore = inject(DarlehenStore);
+
+  private deploymentConfigSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
-  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-
-  isAenderungRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
-    ),
-  );
-  isInitialRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
-    ),
-  );
-  isBeschwerdeHaengigSig = computed(() => {
-    const beschwerdeHaengig =
-      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.beschwerdeHaengig;
-    return beschwerdeHaengig;
-  });
-
   revisionSig = this.store.selectSignal(selectRevision);
-
-  historizedSig = computed(() => {
-    const {
-      abgelehnteAenderungen,
-      akzeptierteAenderungen,
-      initial,
-      offeneAenderung,
-    } = this.gesuchHeaderStore.viewSbSig().historized ?? {};
-    if (
-      !abgelehnteAenderungen?.length &&
-      !akzeptierteAenderungen?.length &&
-      !initial &&
-      !offeneAenderung
-    ) {
-      return null;
-    }
-    return {
-      abgelehnteAenderungen,
-      akzeptierteAenderungen,
-      initial,
-      offeneAenderung,
-    };
-  });
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
   cacheSig = computed(() => {
     const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
@@ -144,33 +109,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return pia ? `${pia.vorname} ${pia.nachname}` : '';
   });
 
-  private deploymentConfigSig = this.store.selectSignal(
-    selectSharedDataAccessConfigsView,
-  );
-
-  // todo-after-merge: revisit in KSTIP-2856
-  private gesuchUpdatedSig = toSignal(
-    this.store.select(selectSharedDataAccessGesuchCache).pipe(
-      map(({ gesuch }) => gesuch),
-      filter(isDefined),
-    ),
-  );
-
-  isLoadingSig = computed(() => {
-    return (
-      isPending(this.gesuchHeaderStore.headerSb()) ||
-      isPending(this.gesuchStore.lastStatusChange())
-    );
-  });
-
-  headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeaderSb>> =
-    this.gesuchHeaderStore.viewSbSig;
+  headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
+    this.gesuchHeaderStore.viewSig;
 
   // todo-after-merge: revisit in KSTIP-2856
   firstCurrentTranchenIdSig = computed(() => {
-    const data = this.gesuchHeaderStore.headerSb().data;
+    const data = this.gesuchHeaderStore.header().data?.initial?.tranchen;
 
-    return data?.currentTranchen[0]?.id;
+    return data?.[0]?.id;
   });
 
   routeUrlSig = toSignal(
@@ -179,10 +125,9 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       startWith(this.router.routerState.snapshot.url),
     ),
   );
-
   tabsSig = computed(() => {
     const cache = this.cacheSig();
-    const { stateInfo } = this.headerViewSbSig();
+    const { gesuchInfo } = this.headerViewSbSig();
     const activePath = this.routeUrlSig();
 
     // todo-after-merge: use correct tranche in KSTIP-2856
@@ -203,11 +148,120 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       name: 'verfuegung',
     };
 
-    if (stateInfo?.canGetBerechnung) {
+    if (gesuchInfo?.state.canGetBerechnung) {
       return [gesuchTab, verfuegungTab];
     }
 
     return [gesuchTab];
+  });
+
+  // todo-after-merge: revisit in KSTIP-2856
+  private gesuchUpdatedSig = toSignal(
+    this.store.select(selectSharedDataAccessGesuchCache).pipe(
+      map(({ gesuch }) => gesuch),
+      filter(isDefined),
+    ),
+  );
+
+  // todo-after-merge: is trancherouteSig ??
+
+  isAenderungRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
+    ),
+  );
+  isInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
+    ),
+  );
+
+  canViewBerechnungSig = computed(() => {
+    const canViewBerechnung =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.canGetBerechnung;
+
+    return canViewBerechnung;
+  });
+  isBeschwerdeHaengigSig = computed(() => {
+    const beschwerdeHaengig =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.beschwerdeHaengig;
+    return beschwerdeHaengig;
+  });
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
+  historizedSig = computed(() => {
+    const {
+      abgelehnt: abgelehnteAenderungen,
+      akzeptiert: akzeptierteAenderungen,
+      offen: offeneAenderung,
+    } = this.gesuchHeaderStore.viewSig().aenderungs ?? {};
+    const initial = this.gesuchHeaderStore.viewSig().initial;
+    if (
+      !abgelehnteAenderungen?.length &&
+      !akzeptierteAenderungen?.length &&
+      !initial &&
+      !offeneAenderung
+    ) {
+      return null;
+    }
+    return {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+    };
+  });
+
+  isLoadingSig = computed(() => {
+    return (
+      isPending(this.gesuchHeaderStore.header()) ||
+      isPending(this.gesuchStore.lastStatusChange())
+    );
+  });
+
+  isInfosRouteSig = computed(() => {
+    const isActive = this.router.isActive('infos', {
+      paths: 'subset',
+      fragment: 'ignored',
+      matrixParams: 'ignored',
+      queryParams: 'ignored',
+    });
+    return isActive;
+  });
+
+  constructor() {
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      this.gesuchUpdatedSig();
+      if (gesuchId) {
+        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
+      }
+    });
+  }
+
+  // availableTrancheInteractionSig = computed(() => {
+  //   const rolesMap = this.permissionStore.rolesMapSig();
+  //   const gesuchStatus =
+  //     this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.gesuchStatus;
+
+  //   if (stateInfo?.canGetBerechnung) {
+  //     return [gesuchTab, verfuegungTab];
+  //   }
+
+  //   return [gesuchTab];
+  // });
+  availableTrancheInteractionSig = computed(() => {
+    const rolesMap = this.permissionStore.rolesMapSig();
+    const gesuchStatus =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.gesuchStatus;
+
+    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
+      return 'CREATE_TRANCHE';
+    } else {
+      return null;
+    }
   });
 
   statusUebergaengeOptionsSig = computed(() => {
@@ -219,7 +273,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       gesuchStatus,
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
-    } = this.gesuchHeaderStore.viewSbSig()?.stateInfo ?? {};
+    } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
       return {};
@@ -251,37 +305,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       isNotEmpty: !!list?.length,
     };
   });
-
-  availableTrancheInteractionSig = computed(() => {
-    const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus =
-      this.gesuchHeaderStore.viewSbSig()?.stateInfo?.gesuchStatus;
-
-    if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
-      return 'CREATE_TRANCHE';
-    } else {
-      return null;
-    }
-  });
-
-  constructor() {
-    effect(() => {
-      const gesuchId = this.gesuchIdSig();
-
-      if (gesuchId) {
-        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
-      }
-    });
-
-    // todo-after-merge: After merge will change to gesuchId instead of trancheId
-    effect(() => {
-      const gesuchTrancheId = this.gesuchTrancheIdSig();
-      this.gesuchUpdatedSig();
-      if (gesuchTrancheId) {
-        this.gesuchHeaderStore.loadHeaderSb$({ gesuchTrancheId });
-      }
-    });
-  }
 
   setStatusUebergang(
     nextStatus: StatusUebergang,
@@ -408,16 +431,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   }
 
   createTranche() {
-    const id = this.gesuchIdSig();
-    const { periodeStart, periodeEnd } =
-      this.gesuchHeaderStore.headerSb().data ?? {};
-    if (!id || !periodeStart || !periodeEnd) return;
+    const gesuchId = this.gesuchIdSig();
+    const { gesuchInfo } = this.gesuchHeaderStore.header().data ?? {};
+    if (!gesuchId || !gesuchInfo) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createTranche',
-      id,
-      minDate: new Date(periodeStart),
-      maxDate: new Date(periodeEnd),
+      gesuchId,
+      minDate: new Date(gesuchInfo.startDate),
+      maxDate: new Date(gesuchInfo.endDate),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

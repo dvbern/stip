@@ -23,6 +23,7 @@ public class BenutzerUpdateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
+  private @Valid Boolean nutzungsbedingungenAkzeptiert;
 
   /**
    **/
@@ -80,6 +81,24 @@ public class BenutzerUpdateDto  implements Serializable {
     this.benutzereinstellungen = benutzereinstellungen;
   }
 
+  /**
+   **/
+  public BenutzerUpdateDto nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+  
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -92,12 +111,13 @@ public class BenutzerUpdateDto  implements Serializable {
     BenutzerUpdateDto benutzerUpdate = (BenutzerUpdateDto) o;
     return Objects.equals(this.vorname, benutzerUpdate.vorname) &&
         Objects.equals(this.nachname, benutzerUpdate.nachname) &&
-        Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen);
+        Objects.equals(this.benutzereinstellungen, benutzerUpdate.benutzereinstellungen) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, benutzerUpdate.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, benutzereinstellungen);
+    return Objects.hash(vorname, nachname, benutzereinstellungen, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -108,6 +128,7 @@ public class BenutzerUpdateDto  implements Serializable {
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    benutzereinstellungen: ").append(toIndentedString(benutzereinstellungen)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

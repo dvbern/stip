@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DemoSteuerdatenDto  implements Serializable {
-  private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp type;
+  private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
   private @Valid Integer totalEinkuenfte;
   private @Valid Integer eigenmietwert;
   private @Valid Boolean isArbeitsverhaeltnisSelbstaendig;
@@ -37,7 +37,7 @@ public class DemoSteuerdatenDto  implements Serializable {
 
   /**
    **/
-  public DemoSteuerdatenDto type(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+  public DemoSteuerdatenDto type(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
     this.type = type;
     return this;
   }
@@ -45,12 +45,12 @@ public class DemoSteuerdatenDto  implements Serializable {
   
   @JsonProperty("type")
   @NotNull
-  public ch.dvbern.stip.api.eltern.type.ElternTyp getType() {
+  public ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp getType() {
     return type;
   }
 
   @JsonProperty("type")
-  public void setType(ch.dvbern.stip.api.eltern.type.ElternTyp type) {
+  public void setType(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
     this.type = type;
   }
 

@@ -37,8 +37,8 @@ import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
@@ -259,16 +259,11 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     @TestAsSachbearbeiter
     @Order(12)
     void createCustomDokumentTypOnAenderungShouldSucceed() {
-        final var gesuchtranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        final var aenderung = gesuchtranchen.getHistorized().getOffeneAenderung();
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
+        final var aenderung = gesuchHeader.getAenderungs().getOffen();
 
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");

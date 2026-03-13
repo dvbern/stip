@@ -1,0 +1,1 @@
+Wir haben ihren Antrag für einen Unterbruch ihrer Ausbildung vom {startDate} bis {endDate} überprüft und können diesen nicht stattgeben mit folgender Begründung "{kommentarSb}".

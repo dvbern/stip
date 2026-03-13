@@ -147,13 +147,6 @@ public enum Gesuchstatus {
         )
     );
 
-    public static final Set<Gesuchstatus> GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN = Collections.unmodifiableSet(
-        EnumSet.of(
-            STIPENDIENANSPRUCH,
-            KEIN_STIPENDIENANSPRUCH
-        )
-    );
-
     public static final Set<Gesuchstatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
         EnumSet.of(
             IN_BEARBEITUNG_SB,

@@ -53,9 +53,17 @@ class GesuchAuthorizerCanTriggerManuelleUeberpruefungTest {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchService = Mockito.mock(GesuchService.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.gesuchIsInOneOfGesuchStatus(any(), any())).thenCallRealMethod();
         gesuchAuthorizer =
-            new GesuchAuthorizer(null, gesuchRepository, gesuchStatusService, null, null, gesuchService, null);
+            new GesuchAuthorizer(
+                null,
+                gesuchRepository,
+                gesuchStatusService,
+                null,
+                null,
+                gesuchService,
+                null,
+                null
+            );
     }
 
     @Test

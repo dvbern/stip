@@ -42,9 +42,9 @@ import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchTrancheListDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -191,20 +191,15 @@ class GesuchTrancheCreateTest {
     @TestAsSachbearbeiter
     @Order(10)
     void getTranchen() {
-        var result = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getCurrentTranchen().size(), is(2));
-        tranche1Id = result.getCurrentTranchen().get(0).getId();
-        tranche2Id = result.getCurrentTranchen().get(1).getId();
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
+        assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
+        tranche1Id = gesuchHeader.getCurrentTranches().get(0).getId();
+        tranche2Id = gesuchHeader.getCurrentTranches().get(1).getId();
 
-        trancheToOverwrite = result.getCurrentTranchen().get(0);
+        trancheToOverwrite = gesuchHeader.getCurrentTranches().get(0);
     }
 
     @Test
@@ -223,38 +218,28 @@ class GesuchTrancheCreateTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
         // verify that the tranche has been overwritten
-        var result = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getCurrentTranchen().size(), is(2));
-        tranche1Id = result.getCurrentTranchen().get(0).getId();
-        overwrittenTrancheId = result.getCurrentTranchen().get(1).getId();
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
+        assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
+        tranche1Id = gesuchHeader.getCurrentTranches().get(0).getId();
+        overwrittenTrancheId = gesuchHeader.getCurrentTranches().get(1).getId();
     }
 
     @Test
     @TestAsSachbearbeiter
     @Order(12)
     void testIfSuperflousDocumentOnlyGetsDeletedOnOneTranche() {
-        var tranchen = gesuchTrancheApiSpec.getAllTranchenForGesuchSB()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
+        );
 
         // make the formlerly added document (by GS) superflous on tranche 2:
         // therefore, remove & re-add the document
-        removeDocumentSB(tranchen.getCurrentTranchen().get(1).getId());
-        final var gesuchUpdateDTO = getAddDocumentDto(tranchen.getCurrentTranchen().get(1).getId());
+        removeDocumentSB(gesuchHeader.getCurrentTranches().get(1).getId());
+        final var gesuchUpdateDTO = getAddDocumentDto(gesuchHeader.getCurrentTranches().get(1).getId());
 
         gesuchApiSpec.updateGesuchSB()
             .gesuchIdPath(gesuch.getId())
@@ -266,43 +251,45 @@ class GesuchTrancheCreateTest {
 
         var documentsToUploadOfTranche1 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
-                .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(0).getId())
+                .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .extract()
                 .body()
                 .as(DokumenteToUploadDtoSpec.class);
-        assertThat(documentsToUploadOfTranche1.getRequired().size(), is(0));
+        assertThat(documentsToUploadOfTranche1.getRequiredRefs().size(), is(0));
         var documentsToUploadOfTranche2 =
             gesuchTrancheApiSpec.getDocumentsToUploadSB()
-                .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(1).getId())
+                .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(1).getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
                 .then()
                 .extract()
                 .body()
                 .as(DokumenteToUploadDtoSpec.class);
-        assertThat(documentsToUploadOfTranche2.getRequired().size(), is(1));
+        assertThat(documentsToUploadOfTranche2.getRequiredRefs().size(), is(1));
 
         // verify that the superflous document only gets deleted on the correct tranche - not on both...
         var dokumentsOfTranche1 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
-            .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(0).getId())
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
         var dokumentsOfTranche2 = gesuchTrancheApiSpec.getGesuchDokumenteSB()
-            .gesuchTrancheIdPath(tranchen.getCurrentTranchen().get(1).getId())
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(1).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDto[].class);
-        assertThat(dokumentsOfTranche1.length, is(greaterThan(dokumentsOfTranche2.length)));
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+        assertThat(dokumentsOfTranche1.size(), is(greaterThan(dokumentsOfTranche2.size())));
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
@@ -406,16 +393,11 @@ class GesuchTrancheCreateTest {
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2
-        var result = gesuchTrancheApiSpec.getAllTranchenForGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode())
-            .extract()
-            .body()
-            .as(GesuchTrancheListDtoSpec.class);
-        assertThat(result.getCurrentTranchen().size(), is(2));
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderGs().gesuchIdPath(gesuch.getId())
+        );
+        assertThat(gesuchHeader.getCurrentTranches().size(), is(2));
     }
 
     @Test
@@ -432,6 +414,7 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         geschwisterUpdate.setNachname("test");
         geschwisterUpdate.setVorname("test");
+        geschwisterUpdate.setEntryId(UUID.randomUUID());
         geschwisterUpdate.setGeburtsdatum(LocalDate.now().minusYears(18));
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));

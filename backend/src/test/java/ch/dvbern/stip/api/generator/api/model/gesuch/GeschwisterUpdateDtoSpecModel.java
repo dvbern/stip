@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
@@ -37,6 +38,7 @@ public final class GeschwisterUpdateDtoSpecModel {
                     LocalDate.of(2002, 1, 1)
                 )
             );
+            model.setEntryId(UUID.randomUUID());
             model.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
             model.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
         }, 1);

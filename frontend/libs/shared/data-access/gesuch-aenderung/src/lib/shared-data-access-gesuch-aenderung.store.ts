@@ -1,44 +1,35 @@
-import { Injectable, computed, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { map, pipe, switchMap, tap, throwError } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { isSharedModelError } from '@dv/shared/model/error';
 import {
   CreateAenderungsantragRequest,
   CreateGesuchTrancheRequest,
   GesuchTranche,
-  GesuchTrancheList,
   GesuchTrancheService,
   GesuchTrancheStatus,
   PatchAenderungsInfoRequest,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { PERSON } from '@dv/shared/model/gesuch-form';
-import { byAppType } from '@dv/shared/model/permission-state';
-import {
-  shouldIgnoreBadRequestErrorsIf,
-  shouldIgnoreNotFoundErrorsIf,
-} from '@dv/shared/util/http';
+import { shouldIgnoreBadRequestErrorsIf } from '@dv/shared/util/http';
 import {
   CachedRemoteData,
   cachedPending,
   handleApiResponse,
   initial,
-  isPending,
 } from '@dv/shared/util/remote-data';
 
 type GesuchAenderungState = {
   cachedGesuchAenderung: CachedRemoteData<GesuchTranche>;
-  cachedTranchenList: CachedRemoteData<GesuchTrancheList>;
 };
 
 const initialState: GesuchAenderungState = {
   cachedGesuchAenderung: initial(),
-  cachedTranchenList: initial(),
 };
 
 const EXPECTED_ERRORS: Record<string, string> = {
@@ -58,49 +49,7 @@ export class GesuchAenderungStore extends signalStore(
 ) {
   private gesuchTrancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
-  private config = inject(SharedModelCompileTimeConfig);
   private router = inject(Router);
-
-  tranchenListViewSig = computed(() => {
-    return {
-      list: this.cachedTranchenList().data,
-      isLoading: isPending(this.cachedTranchenList()),
-    };
-  });
-
-  getAllTranchenForGesuch$ = rxMethod<{ gesuchId: string }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          cachedTranchenList: cachedPending(state.cachedTranchenList),
-        }));
-      }),
-      switchMap((req) => {
-        const params = [
-          req,
-          undefined,
-          undefined,
-          {
-            context: shouldIgnoreNotFoundErrorsIf(true),
-          },
-        ] as const;
-        const serviceCall$ = byAppType(this.config.appType, {
-          'gesuch-app': () =>
-            this.gesuchTrancheService.getAllTranchenForGesuchGS$(...params),
-          'sachbearbeitung-app': () =>
-            this.gesuchTrancheService.getAllTranchenForGesuchSB$(...params),
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
-        });
-        return serviceCall$.pipe().pipe(map((tranchen) => tranchen ?? []));
-      }),
-      handleApiResponse((tranchen) => {
-        patchState(this, () => ({
-          cachedTranchenList: tranchen,
-        }));
-      }),
-    ),
-  );
 
   createGesuchAenderung$ = rxMethod<{
     gesuchId: string;
@@ -245,7 +194,6 @@ export class GesuchAenderungStore extends signalStore(
                     this.globalNotificationStore.createSuccessNotification({
                       messageKey: 'shared.dialog.gesuch.tranche.create.success',
                     });
-                    this.getAllTranchenForGesuch$({ gesuchId });
                     onSuccess();
                   },
                   onFailure,
@@ -270,13 +218,7 @@ export class GesuchAenderungStore extends signalStore(
         }));
       }),
       switchMap(
-        ({
-          aenderungId,
-          target,
-          gesuchId,
-          comment,
-          onSuccess: additionalOnSuccess,
-        }) => {
+        ({ aenderungId, target, comment, onSuccess: additionalOnSuccess }) => {
           const services$ = {
             AKZEPTIERT: () =>
               this.gesuchTrancheService.aenderungAkzeptieren$(
@@ -310,7 +252,6 @@ export class GesuchAenderungStore extends signalStore(
                   this.globalNotificationStore.createSuccessNotification({
                     messageKey: `shared.dialog.gesuch-aenderung.${target}.success`,
                   });
-                  this.getAllTranchenForGesuch$({ gesuchId });
                   additionalOnSuccess(value.id);
                 },
                 onFailure: handleKnownErrors(this.globalNotificationStore),
