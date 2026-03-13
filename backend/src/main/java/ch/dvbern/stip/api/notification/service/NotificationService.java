@@ -218,6 +218,27 @@ public class NotificationService {
     }
 
     @Transactional
+    public void createGesuchToBearbeitungAsAenderungNotificationAndSendStdMail(
+        final Gesuch gesuch,
+        final KommentarDto kommentar
+    ) {
+        final var pia = gesuch.getNewestGesuchTranche()
+            .orElseThrow(NotFoundException::new)
+            .getGesuchFormular()
+            .getPersonInAusbildung();
+        final var sprache = pia.getKorrespondenzSprache();
+
+        Notification notification = new Notification()
+            .setNotificationType(NotificationType.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG)
+            .setFall(gesuch.getAusbildung().getFall());
+        setAbsender(gesuch, notification);
+        String msg = Templates.getGesuchStatusChangeToBearbeitungAsAenderungText(sprache, kommentar.getText()).render();
+        notification.setNotificationText(msg);
+        notificationRepository.persistAndFlush(notification);
+        mailService.sendStandardNotificationEmailForGesuch(gesuch);
+    }
+
+    @Transactional
     public void createGesuchEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
@@ -609,6 +630,24 @@ public class NotificationService {
                 return gesuchStatusChangeWithKommentarFR(anrede, nachname, kommentar);
             }
             return gesuchStatusChangeWithKommentarDE(anrede, nachname, kommentar);
+        }
+
+        public static native TemplateInstance gesuchStatusChangeToBearbeitungAsAenderungDE(
+            final String kommentar
+        );
+
+        public static native TemplateInstance gesuchStatusChangeToBearbeitungAsAenderungFR(
+            final String kommentar
+        );
+
+        public static TemplateInstance getGesuchStatusChangeToBearbeitungAsAenderungText(
+            final Sprache korrespondenzSprache,
+            final String kommentar
+        ) {
+            if (korrespondenzSprache.equals(Sprache.FRANZOESISCH)) {
+                return gesuchStatusChangeToBearbeitungAsAenderungFR(kommentar);
+            }
+            return gesuchStatusChangeToBearbeitungAsAenderungDE(kommentar);
         }
 
         public static native TemplateInstance gesuchFehlendeDokumenteDE(

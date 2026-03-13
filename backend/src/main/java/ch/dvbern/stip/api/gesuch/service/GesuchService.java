@@ -682,6 +682,27 @@ public class GesuchService {
     }
 
     @Transactional
+    public void gesuchStatusToBearbeitungAsAenderung(final UUID gesuchId, final KommentarDto kommentar) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final Locale locale = LocaleUtil.getLocale(gesuch);
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+        gesuchStatusService.triggerStateMachineEventWithComment(
+            gesuch,
+            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            new KommentarDto().text(
+                translator.translate(
+                    "stip.gesuch.status-change.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG",
+                    "name",
+                    currentBenutzer.getFullName()
+                )
+            ),
+            false
+        );
+        notificationService.createGesuchToBearbeitungAsAenderungNotificationAndSendStdMail(gesuch, kommentar);
+    }
+
+    @Transactional
     public void gesuchStatusToVerfuegt(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         verfuegungService.createVerfuegung(gesuchId);

@@ -4438,6 +4438,37 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToBearbeitungAsAenderung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/{gesuchId}/einreichedatum:
     parameters:
       - $ref: '#/components/parameters/gesuchId'
@@ -6613,6 +6644,7 @@ components:
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
         - AENDERUNG_EINGEREICHT
+        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
         - NACHFRIST_DOKUMENTE_CHANGED
         - NEUE_VERFUEGUNG
         - FAILED_AUSZAHLUNG

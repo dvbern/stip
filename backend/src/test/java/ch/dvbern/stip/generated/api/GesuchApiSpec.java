@@ -85,6 +85,7 @@ public class GesuchApiSpec {
         return Arrays.asList(
                 bearbeitungAbschliessen(),
                 canEinreichedatumAendern(),
+                changeGesuchStatusToBearbeitungAsAenderung(),
                 changeGesuchStatusToBereitFuerBearbeitung(),
                 changeGesuchStatusToDatenschutzbriefDruckbereit(),
                 changeGesuchStatusToInBearbeitung(),
@@ -134,6 +135,10 @@ public class GesuchApiSpec {
 
     public CanEinreichedatumAendernOper canEinreichedatumAendern() {
         return new CanEinreichedatumAendernOper(createReqSpec());
+    }
+
+    public ChangeGesuchStatusToBearbeitungAsAenderungOper changeGesuchStatusToBearbeitungAsAenderung() {
+        return new ChangeGesuchStatusToBearbeitungAsAenderungOper(createReqSpec());
     }
 
     public ChangeGesuchStatusToBereitFuerBearbeitungOper changeGesuchStatusToBereitFuerBearbeitung() {
@@ -448,6 +453,90 @@ public class GesuchApiSpec {
          * @return operation
          */
         public CanEinreichedatumAendernOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #gesuchTrancheIdPath Die ID von der GesuchTranche (required)
+     * @see #body  (required)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class ChangeGesuchStatusToBearbeitungAsAenderungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public ChangeGesuchStatusToBearbeitungAsAenderungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param kommentarDtoSpec (KommentarDtoSpec)  (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToBearbeitungAsAenderungOper body(KommentarDtoSpec kommentarDtoSpec) {
+            reqSpec.setBody(kommentarDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+
+        /**
+         * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
+         * @return operation
+         */
+        public ChangeGesuchStatusToBearbeitungAsAenderungOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToBearbeitungAsAenderungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public ChangeGesuchStatusToBearbeitungAsAenderungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

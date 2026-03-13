@@ -526,6 +526,19 @@ public class GesuchResourceImpl implements GesuchResource {
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    @Override
+    public GesuchWithChangesDto changeGesuchStatusToBearbeitungAsAenderung(
+        UUID gesuchTrancheId,
+        KommentarDto kommentarDto
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(gesuchId);
+        gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuchId, kommentarDto);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
+    }
+
     @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)

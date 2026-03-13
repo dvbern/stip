@@ -142,6 +142,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
@@ -1142,6 +1143,58 @@ class GesuchServiceTest {
         );
     }
 
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from STIPENDIENANSPRUCH to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_Stipendienanspruch_to_BereitFuerBearbeitungAsAenderungTest() {
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.STIPENDIENANSPRUCH);
+        addSachbearbeiterZuordnungToGesuch(gesuch);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(
+            () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuch.getId(), new KommentarDto().text("Test"))
+        );
+        assertEquals(
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should be possible to change Gesuchstatus from KEIN_STIPENDIENANSPRUCH to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_Kein_Stipendienanspruch_to_BereitFuerBearbeitungAsAenderungTest() {
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.KEIN_STIPENDIENANSPRUCH);
+        addSachbearbeiterZuordnungToGesuch(gesuch);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertDoesNotThrow(
+            () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuch.getId(), new KommentarDto().text("Test"))
+        );
+        assertEquals(
+            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
+    @TestAsSachbearbeiter
+    @Test
+    @Description("It should not be possible to change Gesuchstatus from VERFUEGT to BEREIT_FUER_BEARBEITUNG")
+    void changeGesuchstatus_from_Verfuegt_to_BereitFuerBearbeitungAsAenderungTest() {
+        Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
+        addSachbearbeiterZuordnungToGesuch(gesuch);
+        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+
+        assertThrows(
+            IllegalStateException.class,
+            () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuch.getId(), new KommentarDto().text("Test"))
+        );
+        assertEquals(
+            Gesuchstatus.VERFUEGT,
+            gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
+        );
+    }
+
     @Test
     void changeGesuchstatusCheckUnterschriftenblattToVersandbereit() {
         final var gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.VERFUEGT);
@@ -2070,5 +2123,21 @@ class GesuchServiceTest {
         }
 
         return tranche.setGesuchFormular(gesuchFormular);
+    }
+
+    private void addSachbearbeiterZuordnungToGesuch(Gesuch gesuch) {
+        Fall fall = gesuch.getAusbildung().getFall();
+        fall.setGesuchsteller(new Benutzer());
+        Zuordnung zuordnung = new Zuordnung();
+        zuordnung.setSachbearbeiter(
+            (Sachbearbeiter) new Sachbearbeiter()
+                .setFunktionDe("")
+                .setFunktionFr("")
+                .setTelefonnummer("")
+                .setEmail("")
+                .setVorname("test")
+                .setNachname("test")
+        );
+        fall.setSachbearbeiterZuordnung(zuordnung);
     }
 }
