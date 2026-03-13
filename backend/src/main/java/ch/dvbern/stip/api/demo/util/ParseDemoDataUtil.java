@@ -112,10 +112,11 @@ public class ParseDemoDataUtil {
         return switch (cell.getType()) {
             case NUMBER -> {
                 final var value = cell.asNumber();
-                if (cell.getRawValue().contains("%")) {
-                    yield value.intValue() * 100;
+                if (value.compareTo(BigDecimal.ZERO) > 0 && value.compareTo(BigDecimal.ONE) <= 0) {
+                    yield value.multiply(BigDecimal.valueOf(100)).intValue();
+                } else {
+                    yield value.intValue();
                 }
-                yield value.intValue();
             }
             case STRING -> Integer.parseInt(cell.asString().replace('%', ' ').trim());
             default -> throw new BadRequestException("Unexpected value: " + cell.getType());
