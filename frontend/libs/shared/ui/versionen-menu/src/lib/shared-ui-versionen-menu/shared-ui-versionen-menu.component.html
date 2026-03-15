@@ -1,0 +1,53 @@
+<ng-container *transloco="let t">
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = trancheIdSig();
+  @let firstTrancheId = firstTrancheIdSig();
+  @let versionen = versionenSig();
+
+  @if (versionen.length) {
+    <button
+      type="button"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-versionen-menu"
+      [matMenuTriggerFor]="versionenMenu"
+    >
+      <span>{{ t('shared.header.versionen') }}</span>
+      <i class="material-symbols-rounded ms-2">expand_more</i>
+    </button>
+
+    <mat-menu #versionenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
+      <div class="d-flex flex-column gap-2">
+        @for (version of versionen; track version.berechnungId) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
+            [queryParams]="{ berechnungId: version.berechnungId }"
+            [queryParamsHandling]="'merge'"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="versionen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === version.tranchen[0].id"
+          >
+            <span>
+              {{
+                t('shared.header.versionen.item', {
+                  date: version.timestamp | date: 'dd.MM.yyyy',
+                })
+              }}
+            </span>
+          </a>
+        }
+      </div>
+    </mat-menu>
+  } @else {
+    <!-- this is a fallback button that does not route to any versions, basically a reload button on current gesuch -->
+    <button
+      type="button"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-versionen-default"
+      [routerLink]="['/gesuch/info', gesuchId, 'tranche', trancheId ?? firstTrancheId]"
+      [class.active]="trancheId === (trancheId ?? firstTrancheId)"
+    >
+      <span>{{ t('shared.header.versionen') }}</span>
+    </button>
+  }
+</ng-container>

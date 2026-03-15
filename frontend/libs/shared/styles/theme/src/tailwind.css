@@ -35,7 +35,7 @@
 }
 
 @utility dv-table {
-  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm tw:border tw:border-gray-300;
+  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm;
 }
 
 @utility dv-form-grid {

@@ -17,7 +17,8 @@ export class SharedUiAenderungenMenuComponent {
   gesuchIdSig = input.required<string | undefined>();
   trancheIdSig = input.required<string | undefined>();
   revisionSig = input.required<number | undefined>();
-  historizedSig = input.required<{
+  // todo: consider changing types
+  aenderungenSig = input.required<{
     abgelehnteAenderungen: GesuchTrancheSlim[] | undefined;
     akzeptierteAenderungen: GesuchTrancheSlim[] | undefined;
     initial: VerfuegtGesuch | undefined;

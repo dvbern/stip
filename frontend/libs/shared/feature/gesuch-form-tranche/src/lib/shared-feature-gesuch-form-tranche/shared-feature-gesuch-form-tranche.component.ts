@@ -140,7 +140,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
     return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
   });
 
-  // todo-after-merge: by moving the header into duplication!
+  // todo-after-merge: by moving the header into duplication => see other todo
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
 

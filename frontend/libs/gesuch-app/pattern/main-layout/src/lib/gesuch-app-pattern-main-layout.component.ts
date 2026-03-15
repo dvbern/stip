@@ -106,6 +106,7 @@ export class GesuchAppPatternMainLayoutComponent {
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        this.trancheIdSig(),
       );
 
       const auszahlungMenu: NavItem = {

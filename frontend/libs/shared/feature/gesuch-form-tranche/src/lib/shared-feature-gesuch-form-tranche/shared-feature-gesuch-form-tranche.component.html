@@ -3,7 +3,6 @@
 @let gesuchId = view.gesuchId;
 
 <ng-container *dvTranslocoShared="let t">
-  <!-- todo-after-merge: move header to right place move into component? -->
   <ng-template dvHeaderSuffix>
     <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold tw:flex tw:gap-8 tw:items-center">
       @if (tranche) {
@@ -15,7 +14,7 @@
         {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
-      <!-- todo-after-merge: move to aktionen -->
+      <!-- todo-after-merge: move to aktionen => UX sammeltask notieren -->
       @if (exportValuesSig(); as exportValues) {
         <div class="tw:relative">
           @if (isExportingSig()) {

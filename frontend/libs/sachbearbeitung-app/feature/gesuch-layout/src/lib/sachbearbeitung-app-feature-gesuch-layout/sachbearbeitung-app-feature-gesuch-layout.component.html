@@ -1,11 +1,10 @@
 <ng-container *transloco="let t">
   @let view = darlehenStore.darlehenListSbViewSig();
   @let gesuchId = gesuchIdSig();
-  @let trancheId = gesuchTrancheIdSig();
-  @let currentTrancheId = firstCurrentTranchenIdSig();
+  @let trancheId = trancheIdSig();
 
   <dv-shared-pattern-gesuch-info-bar>
-    <!-- dashboard link | GesuchNr. Fallid | gesuchstatus todo-after-merge: KSTIP-2856 get infor from headersb.gesuchinfo.state -->
+    <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
       <a
         class="btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
@@ -17,12 +16,12 @@
       </a>
       <span>|</span>
       <div class="tw:font-semibold tw:ml-4">
-        @if (cacheSig().gesuch; as gesuchInfo) {
+        @if (headerViewSig().gesuchInfo; as gesuchInfo) {
           <span>{{ gesuchInfo.fallNummer }} / </span>
           <span>{{ gesuchInfo.gesuchNummer }} - </span>
         }
         <span>{{ gesuchstellerNameSig() }}, </span>
-        @if (headerViewSbSig().gesuchInfo?.state?.gesuchStatus; as gesuchStatus) {
+        @if (headerViewSig().gesuchInfo?.state?.gesuchStatus; as gesuchStatus) {
           <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${gesuchStatus}`) }}</span>
         }
       </div>
@@ -31,27 +30,21 @@
     <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">
       <!-- Versionen Menu -->
       <!-- todo-after-merge: in after merge of Task: KSTIP-2856 -->
-      <div>
-        <button
-          type="button"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-          data-testid="sb-gesuch-header-versionen-nav-menu"
-          [routerLink]="['/gesuch/info', gesuchId, 'tranche', trancheId ?? currentTrancheId]"
-          [class.active]="gesuchIdSig()"
-        >
-          <!-- Versionstitel wird dynamisch, ggf ein menu, in KSTIP-2856 -->
-          <span>{{ t('shared.header.versionen') }}</span>
-        </button>
-      </div>
+      <dv-shared-ui-versionen-menu
+        [versionenSig]="headerViewSig().versions ?? []"
+        [gesuchIdSig]="gesuchIdSig()"
+        [trancheIdSig]="trancheIdSig()"
+        [firstTrancheIdSig]="firstCurrentTranchenSig()?.id"
+      ></dv-shared-ui-versionen-menu>
 
       <!-- Änderungen -->
       <!-- todo-after-merge: both menus are highlited in case of aenderung! -->
       <dv-shared-ui-aenderungen-menu
-        [historizedSig]="historizedSig()"
-        [isAenderungRouteSig]="isAenderungRouteSig()"
+        [aenderungenSig]="aenderungenSig()"
+        [isAenderungRouteSig]="isAenderungOrInitialRouteSig()"
         [isInitialRouteSig]="isInitialRouteSig()"
         [gesuchIdSig]="gesuchIdSig()"
-        [trancheIdSig]="gesuchTrancheIdSig()"
+        [trancheIdSig]="trancheIdSig()"
         [revisionSig]="revisionSig()"
       ></dv-shared-ui-aenderungen-menu>
 
@@ -64,7 +57,7 @@
 
       <!-- info -->
       <a
-        [routerLink]="['/gesuch', 'infos', cacheSig().gesuch?.id]"
+        [routerLink]="['/gesuch', 'infos', gesuchId]"
         class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
         data-testid="sb-gesuch-header-infos-link"
       >

@@ -58,6 +58,7 @@
   "shared.header.backToDashboard": "Dashboard",
   "shared.header.tranchenAuswahl": "Demande",
   "shared.header.versionen": "Version actuelle",
+  "shared.header.versionen.item": "Version {{ date }}",
   "shared.header.aenderungen": "Modifications",
   "shared.header.darlehen": "Prêts",
   "shared.header.darlehen.create": "Demander un prêt",

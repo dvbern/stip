@@ -1,6 +1,7 @@
 <ng-container *transloco="let t">
   @let gesuchId = gesuchIdSig();
   @let trancheId = trancheIdSig();
+  @let anederungen = aenderungenSig();
 
   <button
     type="button"
@@ -8,7 +9,7 @@
     data-testid="sb-gesuch-header-aenderungen-nav-menu"
     [class.active]="isAenderungRouteSig()"
     [class.tw:dv-historized]="isAenderungRouteSig()"
-    [disabled]="!historizedSig()"
+    [disabled]="!anederungen"
     [matMenuTriggerFor]="aenderungenMenu"
   >
     <span>{{ t('shared.header.aenderungen') }}</span>
@@ -16,7 +17,7 @@
   </button>
   <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
     <div class="d-flex flex-column gap-2">
-      @if (historizedSig()?.offeneAenderung; as offeneAenderung) {
+      @if (anederungen?.offeneAenderung; as offeneAenderung) {
         <a
           [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
@@ -36,13 +37,13 @@
           </span>
         </a>
       }
-      @if (historizedSig()?.akzeptierteAenderungen?.length) {
+      @if (anederungen?.akzeptierteAenderungen?.length) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.completed') }}
           <hr class="flex-grow-1" />
         </div>
-        @for (aenderung of historizedSig()?.akzeptierteAenderungen; track $index) {
+        @for (aenderung of anederungen?.akzeptierteAenderungen; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
@@ -64,13 +65,13 @@
           </a>
         }
       }
-      @if (historizedSig()?.abgelehnteAenderungen?.length) {
+      @if (anederungen?.abgelehnteAenderungen?.length) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.rejected') }}
           <hr class="flex-grow-1" />
         </div>
-        @for (aenderung of historizedSig()?.abgelehnteAenderungen; track $index) {
+        @for (aenderung of anederungen?.abgelehnteAenderungen; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
@@ -92,7 +93,7 @@
           </a>
         }
       }
-      @if (historizedSig()?.initial; as initialTranchen) {
+      @if (anederungen?.initial; as initialTranchen) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.initial') }}

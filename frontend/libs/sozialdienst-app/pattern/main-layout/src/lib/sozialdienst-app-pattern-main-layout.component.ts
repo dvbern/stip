@@ -89,6 +89,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
+  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
+
   private routeParamsFallIdSig = createParamsIdSig(
     'fallId',
     this.allRouteParamsSig,
@@ -155,6 +157,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        this.trancheIdSig(),
         'sozialdienst-app',
       );
 

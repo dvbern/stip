@@ -87,7 +87,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
     const navItems: NavItem[] = baseNavItems;
 
-    // todo-after-merge: test
+    // todo-after-merge: test => mit mock testen oder overrides
     if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
       navItems.push({
         type: 'link',

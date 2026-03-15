@@ -48,6 +48,7 @@ import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/glob
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
@@ -70,6 +71,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternGlobalHeaderPartsDirective,
     SharedUiAenderungenMenuComponent,
     TranslocoDirective,
+    SharedUiVersionenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -86,38 +88,17 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
   private gesuchStore = inject(GesuchStore);
-  // route = inject(ActivatedRoute);
-  darlehenStore = inject(DarlehenStore);
-
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
+
+  darlehenStore = inject(DarlehenStore);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
-  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  cacheSig = computed(() => {
-    const cache = this.store.selectSignal(selectSharedDataAccessGesuchCache)();
-
-    return cache;
-  });
-
-  gesuchstellerNameSig = computed(() => {
-    const pia =
-      this.cacheSig().gesuch?.gesuchTrancheToWorkWith?.gesuchFormular
-        ?.personInAusbildung;
-    return pia ? `${pia.vorname} ${pia.nachname}` : '';
-  });
-
-  headerViewSbSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
-    this.gesuchHeaderStore.viewSig;
-
-  // todo-after-merge: revisit in KSTIP-2856
-  firstCurrentTranchenIdSig = computed(() => {
-    const data = this.gesuchHeaderStore.header().data?.initial?.tranchen;
-
-    return data?.[0]?.id;
-  });
+  // use or remove?
+  // trancheTypSig = this.store.selectSignal(selectTrancheTyp);
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -125,26 +106,54 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       startWith(this.router.routerState.snapshot.url),
     ),
   );
+
+  isAenderungOrInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
+    ),
+  );
+  // todo: needed?
+  isAenderungRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('aenderung')}/`)),
+    ),
+  );
+  isInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
+    ),
+  );
+
+  headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
+    this.gesuchHeaderStore.viewSig;
+
+  gesuchstellerNameSig = computed(() => {
+    const info = this.headerViewSig().gesuchInfo;
+    return info ? `${info.piaVorname} ${info.piaNachname}` : '';
+  });
+
+  firstCurrentTranchenSig = computed(() => {
+    return this.headerViewSig().currentTranches?.[0];
+  });
+
   tabsSig = computed(() => {
-    const cache = this.cacheSig();
-    const { gesuchInfo } = this.headerViewSbSig();
+    const gesuchId = this.gesuchIdSig();
+    const trancheId = this.trancheIdSig();
+    const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
 
-    // todo-after-merge: use correct tranche in KSTIP-2856
+    // todo-after-merge: use correct tranche in KSTIP-2856 => solve routing issue with params in versionendropdown
+    // use active url for route params!
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
-      route: [
-        '/gesuch',
-        cache?.gesuch?.id,
-        'tranche',
-        cache?.gesuch?.gesuchTrancheToWorkWith?.id,
-      ],
+      route: ['/gesuch', gesuchId, 'tranche', trancheId],
       name: 'formular',
     };
 
+    // todo-after-merge: implement verfuegungId as param to route directly to a verfuegung
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
-      route: ['/gesuch/verfuegung', cache?.gesuch?.id],
+      route: ['/gesuch/verfuegung', gesuchId],
       name: 'verfuegung',
     };
 
@@ -155,24 +164,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return [gesuchTab];
   });
 
-  // todo-after-merge: revisit in KSTIP-2856
   private gesuchUpdatedSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
       filter(isDefined),
-    ),
-  );
-
-  // todo-after-merge: is trancherouteSig ??
-
-  isAenderungRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
-    ),
-  );
-  isInitialRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
     ),
   );
 
@@ -190,7 +185,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
-  historizedSig = computed(() => {
+  aenderungenSig = computed(() => {
     const {
       abgelehnt: abgelehnteAenderungen,
       akzeptiert: akzeptierteAenderungen,
@@ -220,17 +215,13 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     );
   });
 
-  isInfosRouteSig = computed(() => {
-    const isActive = this.router.isActive('infos', {
-      paths: 'subset',
-      fragment: 'ignored',
-      matrixParams: 'ignored',
-      queryParams: 'ignored',
-    });
-    return isActive;
-  });
-
   constructor() {
+    // log effect
+    // effect(() => {
+    //   // console.log('trancheTyp', this.trancheTypSig());
+    //   console.log('isAenderungRoute', this.isAenderungRouteSig());
+    // });
+
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       this.gesuchUpdatedSig();
@@ -241,17 +232,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     });
   }
 
-  // availableTrancheInteractionSig = computed(() => {
-  //   const rolesMap = this.permissionStore.rolesMapSig();
-  //   const gesuchStatus =
-  //     this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.gesuchStatus;
-
-  //   if (stateInfo?.canGetBerechnung) {
-  //     return [gesuchTab, verfuegungTab];
-  //   }
-
-  //   return [gesuchTab];
-  // });
   availableTrancheInteractionSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
     const gesuchStatus =
@@ -259,9 +239,9 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
-    } else {
-      return null;
     }
+
+    return null;
   });
 
   statusUebergaengeOptionsSig = computed(() => {

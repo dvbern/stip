@@ -42,6 +42,7 @@ export const createParamsIdSig = (
 export function buildGesuchNavItems(
   gesuchId: string | undefined,
   tranchen: Pick<GesuchTrancheSlim, 'id' | 'gueltigAb'>[],
+  trancheId: string | undefined,
   baseKey = 'shared',
 ): NavItem[] {
   if (!gesuchId) return [];
@@ -53,6 +54,7 @@ export function buildGesuchNavItems(
         id: 'gesuch',
         label: { key: `${baseKey}.header.gesuch` },
         icon: 'description',
+        active: !!gesuchId,
         children: tranchen.map((tranche, index) => ({
           type: 'link' as const,
           id: tranche.id,
@@ -64,6 +66,7 @@ export function buildGesuchNavItems(
             },
           },
           route: ['/gesuch', gesuchId, 'tranche', tranche.id],
+          active: trancheId === tranche.id,
         })),
       },
     ];

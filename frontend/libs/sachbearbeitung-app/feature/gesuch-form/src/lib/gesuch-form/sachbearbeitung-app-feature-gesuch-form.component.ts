@@ -8,15 +8,16 @@ import {
   OnDestroy,
   ViewChild,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -77,18 +78,38 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private navigationStore = inject(NavigationStore);
   private aenderungStore = inject(GesuchAenderungStore);
+  private route = inject(ActivatedRoute);
 
   revisionSig = this.store.selectSignal(selectRevision);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
-    this.gesuchIdSig,
+  berechnungIdSig = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('berechnungId'))),
   );
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
+
+  // todo: could be integrated into tranchenSig?
+  currentVersionTranchenSig = computed(() => {
+    const berechnungId = this.berechnungIdSig();
+    const versions = this.gesuchHeaderStore.header().data?.versions;
+
+    if (berechnungId && versions) {
+      const version = versions.find(
+        (version) => version.berechnungId === berechnungId,
+      );
+      return version?.tranchen;
+    }
+    return undefined;
+  });
+
   stepsSig = computed(() => {
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
     const rolesMap = this.permissionStore.rolesMapSig();
@@ -116,18 +137,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     return steps.find((step) => step.route === currentStep?.route);
   });
 
-  // todo-after-merge: @scph: not working!
-  // currentTrancheWithIndexSig = computed(() => {
-  //   const tranchenWithIndex = this.tranchenSig().map((tranche, index) => ({
-  //     tranche,
-  //     index,
-  //   }));
-  //   const trancheId = this.gesuchTrancheIdSig();
-
-  //   return tranchenWithIndex.find(({ tranche }) => tranche.id === trancheId);
-  // });
-
-  // todo-after-merge: by moving the header into duplication!
   currentTrancheSig = computed(() => {
     const trancheId = this.gesuchTrancheIdSig();
     const tranchen = this.tranchenSig();
@@ -136,6 +145,8 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       ? tranchen.find((tranche) => tranche.id === trancheId)
       : undefined;
   });
+
+  // todo-after-merge: by moving the header => make reusable
   currentTrancheNumberSig = computed(() => {
     const { trancheSetting } = this.viewSig();
     const currentTranche = this.currentTrancheSig();
@@ -179,6 +190,12 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   }
 
   constructor() {
+    // log effect
+    effect(() => {
+      console.log('berechnungId', this.berechnungIdSig());
+      console.log('relativeTranchen', this.tranchenSig());
+    });
+
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
