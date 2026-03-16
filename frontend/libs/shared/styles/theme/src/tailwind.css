@@ -16,6 +16,8 @@
 @theme {
   --color-dv-red: var(--dv-red);
   --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
+  --color-dv-green: var(--dv-green);
+  --color-dv-yellow: var(--dv-yellow);
 }
 
 /*

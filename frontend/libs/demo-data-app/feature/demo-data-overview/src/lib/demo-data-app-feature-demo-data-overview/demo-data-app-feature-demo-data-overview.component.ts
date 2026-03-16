@@ -73,7 +73,14 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   sollIst = ['Soll', 'Ist'] as const;
   demoDatasSig = computed(() => {
     const filterText = this.filterTextChangedSig()?.toLowerCase();
-    const list = this.demoDataStore.cachedDemoDataListViewSig().data?.demoDatas;
+    const testResultsMap =
+      this.demoDataStore.demoDataTestBerechnungResultsSig();
+    const list = this.demoDataStore
+      .cachedDemoDataListViewSig()
+      .data?.demoDatas.map((demoData) => ({
+        ...demoData,
+        testResult: testResultsMap[demoData.id],
+      }));
 
     if (filterText) {
       return list?.filter(
@@ -139,5 +146,13 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
           });
         }
       });
+  }
+
+  testDemoDataBerechnung() {
+    this.demoDataStore.testBerechnung$();
+  }
+
+  copyToClipboard(text: string) {
+    navigator.clipboard.writeText(text);
   }
 }
