@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.demo.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.apache.poi.ss.usermodel.Cell;
+import org.dhatim.fastexcel.reader.Cell;
 
 @RequiredArgsConstructor
 public class DemoDataParseContext {
