@@ -91,10 +91,11 @@ kstip:
   tenancy:
     bern:
       subdomains:
-        - '^dev-([^\-]+-)?stip'
+        - '^dev-.*'
+        - '^feature-kstip.*'
     dv:
       subdomains:
-        - '^dv-'
+        - '^dv-.*'
 
 quarkus:
   #  live-reload:
