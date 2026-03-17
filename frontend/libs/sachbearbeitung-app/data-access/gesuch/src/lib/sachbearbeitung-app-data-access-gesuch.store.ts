@@ -233,7 +233,7 @@ export class GesuchStore extends signalStore(
       pipe(
         switchMap(({ gesuchTrancheId, text, onSuccess }) =>
           this.gesuchService
-            .gesuchZurueckweisen$({
+            .gesuchZurueckweisenAenderungUndo$({
               gesuchTrancheId,
               kommentar: { text },
             })

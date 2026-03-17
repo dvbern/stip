@@ -541,7 +541,10 @@ public class GesuchResourceImpl implements GesuchResource {
     @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
-    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchZurueckweisenAenderungUndo(
+        UUID gesuchTrancheId,
+        KommentarDto kommentarDto
+    ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanGesuchZurueckweisen(gesuchId);

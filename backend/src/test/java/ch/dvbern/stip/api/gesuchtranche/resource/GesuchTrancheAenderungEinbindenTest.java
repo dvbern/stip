@@ -423,7 +423,7 @@ class GesuchTrancheAenderungEinbindenTest {
     @TestAsSachbearbeiter
     @Order(16)
     void aenderungAkzeptiertZurueckweisen() {
-        gesuchApiSpec.gesuchZurueckweisen()
+        gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

@@ -434,7 +434,7 @@ class DokumentHistoryResourceTest {
     @TestAsSachbearbeiter
     @Order(14)
     void zurueckweisen() {
-        gesuchApiSpec.gesuchZurueckweisen()
+        gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
                 new KommentarDtoSpec()

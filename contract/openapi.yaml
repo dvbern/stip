@@ -4830,7 +4830,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchTrancheId}/gesuchZurueckweisen:
+  /gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo:
     parameters:
       - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
@@ -4856,7 +4856,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchZurueckweisen
+      operationId: gesuchZurueckweisenAenderungUndo
       summary: Gas Gesuch an den GS zurueckweisen
       security:
         - auth-uat-bern: []

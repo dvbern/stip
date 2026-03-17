@@ -934,7 +934,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: bearbeitungAbschliessen
       summary: Die Bearbeitung des Gesuch durch den SB abschliessen
-  '/gesuch/{gesuchTrancheId}/gesuchZurueckweisen':
+  '/gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo':
     parameters:
       - $ref: './components/parameters.yaml#/gesuchTrancheId'
     patch:
@@ -960,7 +960,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: gesuchZurueckweisen
+      operationId: gesuchZurueckweisenAenderungUndo
       summary: Gas Gesuch an den GS zurueckweisen
   '/gesuch/{gesuchTrancheId}/manuelle-verfuegung':
     post:
