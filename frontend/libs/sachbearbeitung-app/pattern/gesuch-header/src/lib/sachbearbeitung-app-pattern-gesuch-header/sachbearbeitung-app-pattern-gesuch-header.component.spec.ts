@@ -26,6 +26,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     BEARBEITUNG_ABSCHLIESSEN: vitest.fn(),
     ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: vitest.fn(),
     BEREIT_FUER_BEARBEITUNG: vitest.fn(),
+    BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG: vitest.fn(),
     NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
     VERFUEGT: vitest.fn(),
     VERSENDET: vitest.fn(),
@@ -90,11 +91,13 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     ['SET_TO_BEARBEITUNG'],
     ['ANSPRUCH_PRUEFEN'],
     ['BEARBEITUNG_ABSCHLIESSEN'],
-    // ['ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'], is the same as 'BEREIT_FUER_BEARBEITUNG'
+    ['ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'],
     ['BEREIT_FUER_BEARBEITUNG'],
+    ['BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'],
     ['NEGATIVE_VERFUEGUNG_ERSTELLEN'],
     ['VERFUEGT'],
     ['STATUS_PRUEFUNG_AUSLOESEN'],
+    ['VERSENDET'],
   ] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang',
     (nextStatus) => {
@@ -105,7 +108,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     },
   );
 
-  it.each([['VERSENDET'], ['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
+  it.each([['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang with onSuccess',
     (nextStatus) => {
       component.setStatusUebergang(nextStatus, 'gesuchId', 'gesuchTrancheId');

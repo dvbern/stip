@@ -11,15 +11,16 @@
  */
 import { CustomDokumentTyp } from './customDokumentTyp';
 import { UnterschriftenblattDokumentTyp } from './unterschriftenblattDokumentTyp';
+import { GesuchDokumentRef } from './gesuchDokumentRef';
 import { DokumentTyp } from './dokumentTyp';
 
 export interface DokumenteToUpload { 
     customDokumentTyps?: Array<CustomDokumentTyp>;
     required?: Array<DokumentTyp>;
+    requiredRefs?: Array<GesuchDokumentRef>;
     unterschriftenblaetter?: Array<UnterschriftenblattDokumentTyp>;
     sbCanFehlendeDokumenteUebermitteln?: boolean;
     gsCanDokumenteUebermitteln?: boolean;
-    sbCanBearbeitungAbschliessen?: boolean;
     sbCanUploadUnterschriftenblatt?: boolean;
 }
 

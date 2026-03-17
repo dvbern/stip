@@ -95,7 +95,7 @@ import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -488,7 +488,8 @@ public class TestUtil {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         for (var dokument : gesuchdokuments) {
             dokumentApiSpec.gesuchDokumentAkzeptieren()

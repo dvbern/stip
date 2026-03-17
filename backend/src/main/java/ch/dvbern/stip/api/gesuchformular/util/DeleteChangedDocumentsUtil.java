@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.gesuchformular.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -28,14 +29,15 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
-import ch.dvbern.stip.api.partner.entity.Partner;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
+import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
+import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class DeleteChangedDocumentsUtil {
-    public ArrayList<DokumentTyp> getChangedDocumentsToDelete(
+    public ArrayList<GesuchDokumentRefDto> getChangedDocumentsToDelete(
         final GesuchFormularUpdateDto newFormular,
         final GesuchFormular oldFormular
     ) {
@@ -52,7 +54,7 @@ public class DeleteChangedDocumentsUtil {
             return new ArrayList<>();
         }
 
-        final var documentTypesToDelete = new ArrayList<DokumentTyp>();
+        final var documentTypesToDelete = new ArrayList<GesuchDokumentRefDto>();
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForPersonInAusbildung(
                 newFormular.getPersonInAusbildung(),
@@ -75,8 +77,8 @@ public class DeleteChangedDocumentsUtil {
             } else {
                 documentTypesToDelete.add(
                     switch (oldEltern.getElternTyp()) {
-                        case MUTTER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
-                        case VATER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
+                        case MUTTER -> toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER);
+                        case VATER -> toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
                     }
                 );
             }
@@ -89,101 +91,130 @@ public class DeleteChangedDocumentsUtil {
             )
         );
 
-        documentTypesToDelete.addAll(
-            getDocumentsToDeleteForPartner(newFormular.getPartner(), oldFormular.getPartner())
-        );
+        for (final var oldKind : oldFormular.getKinds()) {
+            final var newKind = newFormular.getKinds()
+                .stream()
+                .filter(
+                    kindUpdateDto -> kindUpdateDto.getEntryId().equals(oldKind.getEntryId())
+                )
+                .findFirst();
+
+            newKind.ifPresent(
+                kindUpdateDto -> documentTypesToDelete.addAll(
+                    getDocumentsToDeleteForKind(kindUpdateDto, oldKind)
+                )
+            );
+        }
+
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForEinnahmenKosten(newFormular.getEinnahmenKosten(), oldFormular.getEinnahmenKosten())
+        );
+        documentTypesToDelete.addAll(
+            getDocumentsToDeleteForEinnahmenKosten(
+                newFormular.getEinnahmenKostenPartner(),
+                oldFormular.getEinnahmenKostenPartner()
+            )
         );
 
         return documentTypesToDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForPersonInAusbildung(
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForPersonInAusbildung(
         final PersonInAusbildungUpdateDto newPia,
         final PersonInAusbildung oldPia
     ) {
-        final var toDelete = new ArrayList<DokumentTyp>();
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (!Objects.equals(newPia.getGeburtsdatum(), oldPia.getGeburtsdatum())) {
-            toDelete.add(DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN);
+            toDelete.add(toRefDto(DokumentTyp.PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN));
         }
 
         return toDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForPartner(
-        final PartnerUpdateDto newPartner,
-        final Partner oldPartner
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForKind(
+        final KindUpdateDto newKind,
+        final Kind oldKind
     ) {
-        if (newPartner == null || oldPartner == null) {
-            return List.of();
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
+        if (hasChangedAndNewIsGreaterThanZero(newKind.getUnterhaltsbeitraege(), oldKind.getUnterhaltsbeitraege())) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_ALIMENTENVERORDUNG, newKind.getEntryId()));
         }
-
-        final var toDelete = new ArrayList<DokumentTyp>();
-        // todo kstip-2779: check parter einnahmekosten here
-        // if (hasChangedAndNewIsGreaterThanZero(oldPartner.getJahreseinkommen(), newPartner.getJahreseinkommen())) {
-        // toDelete.add(DokumentTyp.PARTNER_AUSBILDUNG_LOHNABRECHNUNG);
-        // }
-        //
-        // if (hasChangedAndNewIsGreaterThanZero(oldPartner.getFahrkosten(), newPartner.getFahrkosten())) {
-        // toDelete.add(DokumentTyp.PARTNER_BELEG_OV_ABONNEMENT);
-        // }
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                newKind.getKinderUndAusbildungszulagen(),
+                oldKind.getKinderUndAusbildungszulagen()
+            )
+        ) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN, newKind.getEntryId()));
+        }
+        if (hasChangedAndNewIsGreaterThanZero(newKind.getRenten(), oldKind.getRenten())) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_RENTEN, newKind.getEntryId()));
+        }
+        if (hasChangedAndNewIsGreaterThanZero(newKind.getErgaenzungsleistungen(), oldKind.getErgaenzungsleistungen())) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN, newKind.getEntryId()));
+        }
+        if (hasChangedAndNewIsGreaterThanZero(newKind.getAndereEinnahmen(), oldKind.getAndereEinnahmen())) {
+            toDelete.add(toRefDto(DokumentTyp.KINDER_ANDERE_EINNAHMEN, newKind.getEntryId()));
+        }
 
         return toDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForEinnahmenKosten(
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForEinnahmenKosten(
         final EinnahmenKostenUpdateDto newEk,
         final EinnahmenKosten oldEk
     ) {
-        final var toDelete = new ArrayList<DokumentTyp>();
+        if (Objects.isNull(oldEk) || Objects.isNull(newEk)) {
+            return List.of();
+        }
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
-            toDelete.add(DokumentTyp.EK_LOHNABRECHNUNG);
+            toDelete.add(toRefDto(DokumentTyp.EK_LOHNABRECHNUNG));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
-            toDelete.add(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER);
+            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
-            toDelete.add(DokumentTyp.EK_MIETVERTRAG);
+            toDelete.add(toRefDto(DokumentTyp.EK_MIETVERTRAG));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
-            toDelete.add(DokumentTyp.EK_BELEG_OV_ABONNEMENT);
+            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_OV_ABONNEMENT));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
-            toDelete.add(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO);
+            toDelete.add(toRefDto(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getRenten(), newEk.getRenten())) {
-            toDelete.add(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN);
+            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getBeitraege(), newEk.getBeitraege())) {
-            toDelete.add(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION);
+            toDelete.add(toRefDto(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getZulagen(), newEk.getZulagen())) {
-            toDelete.add(DokumentTyp.EK_BELEG_KINDERZULAGEN);
+            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_KINDERZULAGEN));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getUnterhaltsbeitraege(), newEk.getUnterhaltsbeitraege())) {
-            toDelete.add(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
+            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
-            toDelete.add(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN);
+            toDelete.add(toRefDto(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN));
         }
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getVermoegen(), newEk.getVermoegen())) {
-            toDelete.add(DokumentTyp.EK_VERMOEGEN);
+            toDelete.add(toRefDto(DokumentTyp.EK_VERMOEGEN));
         }
 
         return toDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForDarlehen(
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForDarlehen(
         final FreiwilligDarlehenDto newFreiwilligDarlehen,
         final FreiwilligDarlehen oldFreiwilligDarlehen
     ) {
@@ -191,20 +222,20 @@ public class DeleteChangedDocumentsUtil {
             return List.of();
         }
 
-        final var toDelete = new ArrayList<DokumentTyp>();
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (
             hasChangedAndNewIsGreaterThanZero(
                 oldFreiwilligDarlehen.getAnzahlBetreibungen(),
                 newFreiwilligDarlehen.getAnzahlBetreibungen()
             )
         ) {
-            toDelete.add(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG);
+            toDelete.add(toRefDto(DokumentTyp.DARLEHEN_BETREIBUNGSREGISTERAUSZUG));
         }
 
         return toDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForEltern(
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForEltern(
         final ElternUpdateDto newEltern,
         final Eltern oldEltern
     ) {
@@ -212,28 +243,28 @@ public class DeleteChangedDocumentsUtil {
             return List.of();
         }
 
-        final var toDelete = new ArrayList<DokumentTyp>();
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (
             hasChangedAndNewIsGreaterThanZero(oldEltern.getWohnkosten(), newEltern.getWohnkosten())
         ) {
             final var toDeleteDoc = switch (newEltern.getElternTyp()) {
-                case MUTTER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER;
-                case VATER -> DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER;
+                case MUTTER -> toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
             };
             toDelete.add(toDeleteDoc);
-            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+            toDelete.add(toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE));
         }
         return toDelete;
     }
 
-    List<DokumentTyp> getDocumentsToDeleteForFamiliensituation(
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForFamiliensituation(
         final FamiliensituationUpdateDto newFamiliensituation,
         final Familiensituation oldFamiliensituation
     ) {
         if (newFamiliensituation == null || oldFamiliensituation == null) {
             return List.of();
         }
-        final var toDelete = new ArrayList<DokumentTyp>();
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
 
         if (
             !Objects.equals(
@@ -241,14 +272,22 @@ public class DeleteChangedDocumentsUtil {
                 oldFamiliensituation.getElternVerheiratetZusammen()
             )
         ) {
-            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER);
-            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER);
-            toDelete.add(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE);
+            toDelete.add(toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_MUTTER));
+            toDelete.add(toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER));
+            toDelete.add(toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE));
         }
         return toDelete;
     }
 
     private boolean hasChangedAndNewIsGreaterThanZero(final Integer oldVal, final Integer newVal) {
         return !Objects.equals(oldVal, newVal) && oldVal != null && oldVal != 0 && newVal != null && newVal > 0;
+    }
+
+    private GesuchDokumentRefDto toRefDto(final DokumentTyp dokumentTyp) {
+        return new GesuchDokumentRefDto().dokumentTyp(dokumentTyp);
+    }
+
+    private GesuchDokumentRefDto toRefDto(final DokumentTyp dokumentTyp, final UUID entryId) {
+        return toRefDto(dokumentTyp).entryId(entryId);
     }
 }

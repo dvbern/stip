@@ -249,6 +249,7 @@ Geschwister:
 GeschwisterUpdate:
   title: Root Type for Geschwister
   required:
+    - entryId
     - wohnsitz
     - vorname
     - nachname
@@ -256,6 +257,9 @@ GeschwisterUpdate:
     - ausbildungssituation
   type: object
   properties:
+    entryId:
+      $ref: './common.yaml#/UUID'
+      description: 'A specific entry ID to refine the uniqueness'
     vorname:
       type: string
     geburtsdatum:
@@ -317,13 +321,14 @@ LebenslaufItemUpdate:
       type: string
 
 Kind:
-  title: Root Type for Geschwister
+  title: Root Type for Kind
   type: object
   allOf:
     - $ref: '#/KindUpdate'
 KindUpdate:
-  title: Root Type for Geschwister
+  title: Root Type for Kind
   required:
+    - entryId
     - vorname
     - nachname
     - geburtsdatum
@@ -331,6 +336,9 @@ KindUpdate:
     - wohnsitzAnteilPia
   type: object
   properties:
+    entryId:
+      $ref: './common.yaml#/UUID'
+      description: 'A specific entry ID to refine the uniqueness'
     vorname:
       type: string
     geburtsdatum:

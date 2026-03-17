@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecMod
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.entities.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -51,6 +52,7 @@ import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
@@ -64,6 +66,7 @@ import ch.dvbern.stip.generated.dto.ValidationReportDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -110,6 +113,8 @@ class GesuchFillFormularTest {
     private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
+    @Inject
+    DokumentGenerator dokumentGenerator;
 
     @Test
     @TestAsGesuchsteller
@@ -349,10 +354,7 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(17)
     void addDokumente() {
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(gesuchTrancheId);
 
         validatePage(false);
     }
@@ -399,17 +401,18 @@ class GesuchFillFormularTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(GesuchDokumentDtoSpec[].class);
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
 
         final var message = String.format(
             "Expected: \n%s\nbut was: \n%s",
             Arrays.toString(expectedDokumentTypes),
-            Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
+            gesuchDokumente.stream().map(GesuchDokumentDtoSpec::getDokumentTyp).toList()
         );
         assertThat(
             message,
             expectedDokumentTypes.length,
-            is(gesuchDokumente.length)
+            is(gesuchDokumente.size())
         );
 
         final var set = EnumSet.noneOf(DokumentTypDtoSpec.class);
@@ -418,7 +421,7 @@ class GesuchFillFormularTest {
         // Checks if all dokument types returned from the API are in the list of expected types
         assertThat(
             message,
-            set.containsAll(Arrays.stream(gesuchDokumente).map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
+            set.containsAll(gesuchDokumente.stream().map(GesuchDokumentDtoSpec::getDokumentTyp).toList()),
             is(true)
         );
     }

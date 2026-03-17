@@ -16,6 +16,7 @@ import { Dokument } from './dokument';
 
 export interface GesuchDokument { 
     id: string;
+    entryId?: string;
     dokumentTyp?: DokumentTyp;
     customDokumentTyp?: CustomDokumentTyp;
     dokumente: Array<Dokument>;

@@ -311,7 +311,7 @@ export function createUploadOptionsFactory<
     allowTypes: string | undefined;
     permissions: PermissionMap;
   }>,
->(view: T) {
+>(view: T, entryIdSig?: Signal<string>) {
   /**
    * Used to obtain a computed signal which returns an upload options object or `null` if the upload is not required
    *
@@ -336,9 +336,8 @@ export function createUploadOptionsFactory<
     options?: { initialDocuments?: Dokument[] },
   ) => {
     return computed<DokumentOptions | null>(() => {
-      const permissions = view().permissions;
-      const trancheId = view().trancheId;
-      const allowTypes = view().allowTypes;
+      const { permissions, trancheId, allowTypes } = view();
+      const entryId = entryIdSig?.();
       const dokumentTyp = lazyDokumentTyp(view);
       return dokumentTyp && trancheId && allowTypes
         ? {
@@ -352,6 +351,7 @@ export function createUploadOptionsFactory<
             dokument: {
               permissions,
               trancheId,
+              entryId,
               dokumentTyp,
               art: 'GESUCH_DOKUMENT',
             },
@@ -402,6 +402,7 @@ export function createDarlehenUploadOptionsFactory<
 
 export function createGesuchDokumentOptions(options: {
   trancheId: string;
+  entryId: string | undefined;
   allowTypes: string;
   dokumentTyp: DokumentTyp;
   gesuchDokument?: GesuchDokument;
@@ -410,6 +411,7 @@ export function createGesuchDokumentOptions(options: {
 }): StandardDokumentOptions {
   const {
     trancheId,
+    entryId,
     allowTypes,
     dokumentTyp,
     gesuchDokument,
@@ -428,6 +430,7 @@ export function createGesuchDokumentOptions(options: {
       permissions,
       dokumentTyp,
       trancheId,
+      entryId,
       gesuchDokument,
       art: 'GESUCH_DOKUMENT',
     },

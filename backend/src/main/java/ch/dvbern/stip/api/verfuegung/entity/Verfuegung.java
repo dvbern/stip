@@ -24,7 +24,11 @@ import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.stipdecision.type.Kanton;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,10 +41,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH;
 
 @Audited
 @Entity
@@ -69,6 +77,7 @@ public class Verfuegung extends AbstractMandantEntity {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Audited(withModifiedFlag = true, modifiedColumnName = "verfuegung_status_mod")
     @Column(name = "verfuegung_status", nullable = false)
     private VerfuegungStatus verfuegungStatus = VerfuegungStatus.AUSSTEHEND;
 
@@ -78,4 +87,20 @@ public class Verfuegung extends AbstractMandantEntity {
 
     @OneToMany(mappedBy = "verfuegung", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<VerfuegungDokument> dokumente = new ArrayList<>();
+
+    @Nullable
+    @Size(max = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
+    @Column(name = "berechnung_json_data", nullable = true, length = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
+    private String berechnungJsonData;
+
+    @Transient
+    public BerechnungsresultatDto parseBerechnungData() {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        try {
+            return mapper.readValue(berechnungJsonData, BerechnungsresultatDto.class);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Error parsing stored berechnungsresultat json data", e);
+        }
+    }
 }

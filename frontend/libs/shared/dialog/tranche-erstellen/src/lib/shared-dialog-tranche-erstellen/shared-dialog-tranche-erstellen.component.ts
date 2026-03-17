@@ -25,6 +25,7 @@ import { addDays } from 'date-fns';
 
 import { SharedDataAccessGesuchEvents } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { CreateAenderungsantragRequest } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
@@ -44,13 +45,20 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
 
 type GesuchTrancheErstellenData = {
-  type: 'createTranche' | 'createAenderung' | 'updateAenderungVonBis';
-  id: string;
+  gesuchId: string;
   minDate: Date;
   maxDate: Date;
   currentGueligAb?: Date;
   currentGueligBis?: Date;
-};
+} & (
+  | {
+      type: 'createTranche' | 'createAenderung';
+    }
+  | {
+      type: 'updateAenderungVonBis';
+      trancheId: string;
+    }
+);
 
 const titleKeysByTypeMap = {
   createTranche: {
@@ -97,6 +105,7 @@ export class SharedDialogTrancheErstellenComponent {
   private dialogRef: MatDialogRef<SharedDialogTrancheErstellenComponent> =
     inject(MatDialogRef);
   dialogData = inject<GesuchTrancheErstellenData>(MAT_DIALOG_DATA);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   store = inject(Store);
   config = inject(SharedModelCompileTimeConfig);
@@ -151,6 +160,9 @@ export class SharedDialogTrancheErstellenComponent {
     const servicePayload = {
       onSuccess: () => {
         this.dialogRef.close(null);
+        this.gesuchHeaderStore.loadHeader$({
+          gesuchId: this.dialogData.gesuchId,
+        });
       },
       onFailure: (error: unknown) => {
         const parsedError = sharedUtilFnErrorTransformer(error);
@@ -174,7 +186,7 @@ export class SharedDialogTrancheErstellenComponent {
       case 'createTranche': {
         this.gesuchAenderungStore.createGesuchTrancheCopy$({
           createGesuchTrancheRequest: createTrancheData,
-          gesuchId: this.dialogData.id,
+          gesuchId: this.dialogData.gesuchId,
           ...servicePayload,
         });
         break;
@@ -182,25 +194,28 @@ export class SharedDialogTrancheErstellenComponent {
       case 'createAenderung': {
         this.gesuchAenderungStore.createGesuchAenderung$({
           createAenderungsantragRequest: createTrancheData,
-          gesuchId: this.dialogData.id,
+          gesuchId: this.dialogData.gesuchId,
           ...servicePayload,
         });
         break;
       }
       case 'updateAenderungVonBis': {
         this.gesuchAenderungStore.updateAenderungVonBis$({
-          aenderungId: this.dialogData.id,
+          aenderungId: this.dialogData.trancheId,
           patchAenderungsInfoRequest: createTrancheData,
           onSuccess: () => {
             this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
             servicePayload.onSuccess();
+            this.gesuchHeaderStore.loadHeader$({
+              gesuchId: this.dialogData.gesuchId,
+            });
           },
           onFailure: servicePayload.onFailure,
         });
         break;
       }
       default: {
-        assertUnreachable(this.dialogData.type);
+        assertUnreachable(this.dialogData);
       }
     }
   }

@@ -204,7 +204,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         final StammdatenV1 stammdaten
     ) {
         final var einkommens = antragssteller.getEinkommens();
-        final var einkommenTotal = InputUtils.sumValues(einkommens);
+        var einkommenTotal = InputUtils.sumValues(einkommens);
         final var kinderAusbildungszulagens = antragssteller.getKinderAusbildungszulagens();
         final var kinderAusbildungszulagenTotal = InputUtils.sumValues(kinderAusbildungszulagens);
         final var unterhaltsbeitraeges = antragssteller.getUnterhaltsbeitraeges();

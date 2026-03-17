@@ -20,6 +20,7 @@ import {
   DokumenteToUpload,
   Dokumentstatus,
   GesuchDokument,
+  GesuchDokumentEntry,
   GesuchDokumentKommentar,
   GesuchService,
   GesuchTrancheService,
@@ -50,6 +51,7 @@ type DokumentsState = {
    * Contains all the uploaded required and custom documents
    */
   dokuments: CachedRemoteData<GesuchDokument[]>;
+  entrys: CachedRemoteData<GesuchDokumentEntry[]>;
   documentsToUpload: CachedRemoteData<DokumenteToUpload>;
   gesuchDokumentKommentare: RemoteData<GesuchDokumentKommentar[]>;
   dokument: CachedRemoteData<GesuchDokument | undefined>;
@@ -60,6 +62,7 @@ type DokumentsState = {
 const initialState: DokumentsState = {
   additionalDokumente: initial(),
   dokuments: initial(),
+  entrys: initial(),
   documentsToUpload: initial(),
   gesuchDokumentKommentare: initial(),
   dokument: initial(),
@@ -92,19 +95,23 @@ export class DokumentsStore extends signalStore(
   private getGesuchDokumentByAppType$({
     trancheId,
     dokumentTyp,
+    entryId,
   }: {
     trancheId: string;
     dokumentTyp: DokumentTyp;
+    entryId: string | undefined;
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.getGesuchDokumentForTypGS$({
           gesuchTrancheId: trancheId,
+          entryId,
           dokumentTyp,
         }),
       'sachbearbeitung-app': () =>
         this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
+          entryId,
           dokumentTyp,
         }),
       'demo-data-app': () =>
@@ -136,14 +143,10 @@ export class DokumentsStore extends signalStore(
   );
 
   dokumenteCanFlagsSig = computed(() => {
-    const {
-      gsCanDokumenteUebermitteln,
-      sbCanBearbeitungAbschliessen,
-      sbCanFehlendeDokumenteUebermitteln,
-    } = this.documentsToUpload.data() ?? {};
+    const { gsCanDokumenteUebermitteln, sbCanFehlendeDokumenteUebermitteln } =
+      this.documentsToUpload.data() ?? {};
     return {
       gsCanDokumenteUebermitteln,
-      sbCanBearbeitungAbschliessen,
       sbCanFehlendeDokumenteUebermitteln,
     };
   });
@@ -153,9 +156,11 @@ export class DokumentsStore extends signalStore(
     const dokuments = (this.dokuments().data ?? []).filter(
       (d) => d.dokumentTyp,
     );
+    const entrys = this.entrys().data ?? [];
 
     return {
       dokuments,
+      entrys,
       loading: isPending(this.dokuments()),
       requiredDocumentTypes:
         fromCachedDataSig(this.documentsToUpload)?.required?.filter(
@@ -163,6 +168,16 @@ export class DokumentsStore extends signalStore(
           // both the empty gesuch dokument and a gesuch dokument typ of the rejected document. So we need to filter
           // them out
           (required) => !dokuments.map((d) => d.dokumentTyp).includes(required),
+        ) ?? [],
+      requiredDocumentRefs:
+        fromCachedDataSig(this.documentsToUpload)?.requiredRefs?.filter(
+          (required) =>
+            !dokuments.some(
+              (d) =>
+                d.entryId &&
+                d.dokumentTyp === required.dokumentTyp &&
+                d.entryId === required.entryId,
+            ),
         ) ?? [],
     };
   });
@@ -279,6 +294,7 @@ export class DokumentsStore extends signalStore(
   getGesuchDokument$ = rxMethod<{
     trancheId: string;
     dokumentTyp: DokumentTyp;
+    entryId: string | undefined;
   }>(
     pipe(
       tap(() => {
@@ -286,9 +302,10 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, dokumentTyp }) => {
+      switchMap(({ trancheId, entryId, dokumentTyp }) => {
         return this.getGesuchDokumentByAppType$({
           trancheId,
+          entryId,
           dokumentTyp,
         });
       }),
@@ -324,9 +341,10 @@ export class DokumentsStore extends signalStore(
         ]),
       ),
       tapResponse({
-        next: ([dokuments, documentsToUpload]) => {
+        next: ([{ dokuments, entrys }, documentsToUpload]) => {
           patchState(this, () => ({
             // Patch both lists at the same time to avoid unecessary rerenders
+            entrys: success(entrys),
             dokuments: success(dokuments),
             documentsToUpload: success(documentsToUpload),
           }));
@@ -602,6 +620,11 @@ export class DokumentsStore extends signalStore(
     onSuccess: () => void;
   }>(
     pipe(
+      tap(() => {
+        patchState(this, () => ({
+          dokuments: cachedPending(this.dokuments()),
+        }));
+      }),
       switchMap(({ trancheId, trancheTyp, onSuccess }) => {
         const serviceMap$ = {
           TRANCHE: () =>
@@ -621,8 +644,11 @@ export class DokumentsStore extends signalStore(
           }),
           switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
           tapResponse({
-            next: (dokuments) => {
-              patchState(this, { dokuments: success(dokuments) });
+            next: ({ dokuments, entrys }) => {
+              patchState(this, {
+                dokuments: success(dokuments),
+                entrys: success(entrys),
+              });
               this.globalNotificationStore.createSuccessNotification({
                 messageKey: 'shared.dokumente.uebermitteln.success',
               });

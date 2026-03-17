@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.demo.util;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -26,22 +27,17 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
+import ch.dvbern.stip.api.demo.type.DemoDataParseContext;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoPartnerDto;
-import ch.dvbern.stip.generated.dto.DemoSteuerdatenDto;
-import ch.dvbern.stip.generated.dto.DemoSteuererklaerungDto;
 import jakarta.ws.rs.BadRequestException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.DataFormatter;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Row.MissingCellPolicy;
-import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.dhatim.fastexcel.reader.Cell;
+import org.dhatim.fastexcel.reader.CellType;
+import org.dhatim.fastexcel.reader.Row;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
@@ -52,21 +48,10 @@ public class ParseDemoDataUtil {
     public final DateTimeFormatter dmyFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     public final DateTimeFormatter dmFormatter = DateTimeFormatter.ofPattern("dd.MM");
 
-    public int getNumberOfCells(Row row, int startCol) {
-        int i;
-        for (i = startCol; i < row.getLastCellNum(); i++) {
-            final var cell = row.getCell(i);
-            if (isBlank(cell) || cell.getStringCellValue().trim().isEmpty()) {
-                break;
-            }
-        }
-        return i - startCol;
-    }
-
     public boolean isBlank(Cell cell) {
-        return cell == null || cell.getCellType() == CellType.BLANK
-        || (cell.getCellType() == CellType.STRING
-        && (cell.getStringCellValue().trim().isEmpty() || cell.getStringCellValue()
+        return cell == null || cell.getType() == CellType.EMPTY
+        || (cell.getType() == CellType.STRING
+        && (cell.asString().trim().isEmpty() || cell.asString()
             .trim()
             .equals(" ")));
     }
@@ -76,7 +61,7 @@ public class ParseDemoDataUtil {
             throw new BadRequestException("No description provided");
         }
 
-        final var fullText = cellToSimpleHtml(cell);
+        final var fullText = cell.getText();
         final var indexColon = fullText.indexOf(':');
         final var substringIndex = indexColon > 0 ? indexColon : fullText.indexOf('.');
 
@@ -91,53 +76,50 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             throw new BadRequestException("No Ja/Nein given");
         }
-        return cell.getStringCellValue().equals("Ja");
+        return cell.asString().equals("Ja");
     }
 
     public Integer parseIntegerNullable(Cell cell) {
         if (isBlank(cell)) {
             return null;
         }
-        return (int) cell.getNumericCellValue();
+        if (cell.getType() == CellType.FORMULA) {
+            try {
+                final var value = (BigDecimal) cell.getValue();
+                return value == null ? null : value.intValue();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return cell.asNumber().intValue();
     }
 
     public int parseInteger(Cell cell) {
         if (isBlank(cell)) {
             throw new BadRequestException("No integer given");
         }
-        return switch (cell.getCellType()) {
-            case NUMERIC -> (int) cell.getNumericCellValue();
-            case STRING -> Integer.parseInt(cell.getStringCellValue());
-            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
+        return switch (cell.getType()) {
+            case NUMBER -> cell.asNumber().intValue();
+            case STRING -> Integer.parseInt(cell.asString());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getType());
         };
-    }
-
-    public Integer parseBerechnung(Cell cell) {
-        if (isBlank(cell)) {
-            return null;
-        }
-        switch (cell.getCellType()) {
-            case STRING, ERROR -> {
-                return null;
-            }
-        }
-        return parseInteger(cell);
     }
 
     public static Integer parsePercentageNullable(Cell cell) {
         if (isBlank(cell)) {
             return null;
         }
-        return switch (cell.getCellType()) {
-            case NUMERIC -> {
-                final var value = cell.getNumericCellValue();
-                if (cell.getCellStyle().getDataFormatString().contains("%")) {
-                    yield (int) (value * 100);
+        return switch (cell.getType()) {
+            case NUMBER -> {
+                final var value = cell.asNumber();
+                if (value.compareTo(BigDecimal.ZERO) > 0 && value.compareTo(BigDecimal.ONE) <= 0) {
+                    yield value.multiply(BigDecimal.valueOf(100)).intValue();
+                } else {
+                    yield value.intValue();
                 }
-                yield (int) value;
             }
-            case STRING -> Integer.parseInt(cell.getStringCellValue().replace('%', ' ').trim());
-            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
+            case STRING -> Integer.parseInt(cell.asString().replace('%', ' ').trim());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getType());
         };
     }
 
@@ -156,7 +138,7 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             return null;
         }
-        return DateUtil.getLocalDateTime(cell.getNumericCellValue()).toLocalDate();
+        return cell.asDate().toLocalDate();
     }
 
     public Boolean parseBooleanNullable(Cell cell) {
@@ -170,10 +152,10 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             throw new BadRequestException("No string given");
         }
-        return switch (cell.getCellType()) {
-            case STRING -> cell.getStringCellValue();
-            case NUMERIC -> String.valueOf(cell.getNumericCellValue());
-            default -> throw new BadRequestException("Unexpected value: " + cell.getCellType());
+        return switch (cell.getType()) {
+            case STRING -> cell.asString();
+            case NUMBER -> String.valueOf(cell.asNumber());
+            default -> throw new BadRequestException("Unexpected value: " + cell.getType());
         };
     }
 
@@ -188,7 +170,7 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             return null;
         }
-        final var landIsoCode = cell.getStringCellValue();
+        final var landIsoCode = cell.asString();
         if (landIsoCode.length() != 2) {
             throw new BadRequestException("Invalid landIsoCode: " + landIsoCode);
         }
@@ -199,7 +181,7 @@ public class ParseDemoDataUtil {
         if (isBlank(cell)) {
             return null;
         }
-        final var date = cell.getLocalDateTimeCellValue().toLocalDate();
+        final var date = cell.asDate().toLocalDate();
         if (endOfMonth) {
             return date.with(lastDayOfMonth());
         }
@@ -217,12 +199,12 @@ public class ParseDemoDataUtil {
 
     public void checkCellContains(Row currentRow, String pattern, int column) {
         final var cell = currentRow.getCell(column);
-        final var value = cell.getStringCellValue();
+        final var value = cell.asString();
         final var matches = Pattern.compile(pattern, Pattern.DOTALL).matcher(value).matches();
         if (!matches) {
             throw new BadRequestException(
                 "Current cell did not match expected definition. Expected: \"%s\", got: \"%s\" [%s]"
-                    .formatted(pattern, value, cell.getAddress().formatAsString())
+                    .formatted(pattern, value, cell.getAddress().toString())
             );
         }
     }
@@ -234,15 +216,16 @@ public class ParseDemoDataUtil {
         int column,
         int amountOfEntries,
         String pattern,
-        Function<Cell, T> createValue
+        Function<DemoDataParseContext, T> createValue
     ) {
         final var listIterator = list.listIterator();
         checkCellContains(currentRow, pattern, column);
         for (int i = firstValueColumn; i < amountOfEntries; i++) {
             final var cell = currentRow.getCell(i);
+            final var index = i - firstValueColumn;
             tryParseData(
                 () -> {
-                    listIterator.add(createValue.apply(cell));
+                    listIterator.add(createValue.apply(new DemoDataParseContext(cell, index)));
                 },
                 cell
             );
@@ -256,19 +239,20 @@ public class ParseDemoDataUtil {
         int column,
         int amountOfEntries,
         String pattern,
-        BiConsumer<Cell, T> updateValue
+        BiConsumer<DemoDataParseContext, T> updateValue
     ) {
         final var listIterator = list.listIterator();
         checkCellContains(currentRow, pattern, column);
         for (int i = firstValueColumn; i < amountOfEntries; i++) {
-            final var cell = currentRow.getCell(i, MissingCellPolicy.CREATE_NULL_AS_BLANK);
+            final var cell = currentRow.getCell(i);
             if (!listIterator.hasNext()) {
                 throw new BadRequestException("List hast not enough entries");
             }
             final var listItem = listIterator.next();
+            final var index = i - firstValueColumn;
             tryParseData(
                 () -> {
-                    updateValue.accept(cell, listItem);
+                    updateValue.accept(new DemoDataParseContext(cell, index), listItem);
                 },
                 cell
             );
@@ -283,14 +267,6 @@ public class ParseDemoDataUtil {
         return Objects.nonNull(elternteilDto.getNachname());
     }
 
-    public boolean hasValue(DemoSteuererklaerungDto steuernerklaerungDto) {
-        return Objects.nonNull(steuernerklaerungDto.getSteuererklaerungInBern());
-    }
-
-    public boolean hasValue(DemoSteuerdatenDto steuerdatenDto) {
-        return Objects.nonNull(steuerdatenDto.getTotalEinkuenfte());
-    }
-
     public static boolean hasValue(DemoAuszahlungDto demoAuszahlungDto) {
         return Objects.nonNull(demoAuszahlungDto.getIban());
     }
@@ -300,75 +276,11 @@ public class ParseDemoDataUtil {
             parser.run();
         } catch (Exception e) {
             LOG.error("Parse error:", e);
-            final var formatter = new DataFormatter();
             throw new BadRequestException(
                 "Cell was not accessed correctly, value: '%s' [%s]\n%s"
-                    .formatted(formatter.formatCellValue(cell), cell.getAddress().formatAsString(), e.getMessage()),
+                    .formatted(cell.getRawValue(), cell.getAddress().toString(), e.getMessage()),
                 e
             );
         }
-    }
-
-    private static String cellToSimpleHtml(Cell cell) {
-        if (!(cell instanceof XSSFCell) || cell.getRichStringCellValue().numFormattingRuns() == 0) {
-            return cell.getStringCellValue();
-        }
-        final var rich = ((XSSFCell) cell).getRichStringCellValue();
-        String full = rich.getString();
-
-        StringBuilder taggedValue = new StringBuilder();
-
-        for (int i = 0; i < rich.numFormattingRuns(); i++) {
-            int start = rich.getIndexOfFormattingRun(i);
-            int length = rich.getLengthOfFormattingRun(i);
-
-            // If an empty formatting cell is found
-            if (length <= 0) {
-                continue;
-            }
-
-            final var text = full.substring(start, start + length);
-            final var font = rich.getFontOfFormattingRun(i);
-
-            if (Objects.isNull(font)) {
-                taggedValue.append(escape(text));
-                continue;
-            }
-
-            final var hasUnderline = font.getUnderline() > 0;
-            final var hasBold = font.getBold();
-            final var hasItalic = font.getItalic();
-
-            if (hasUnderline) {
-                taggedValue.append("<u>");
-            }
-            if (hasBold) {
-                taggedValue.append("<b>");
-            }
-            if (hasItalic) {
-                taggedValue.append("<i>");
-            }
-
-            taggedValue.append(escape(text));
-
-            if (hasItalic) {
-                taggedValue.append("</i>");
-            }
-            if (hasBold) {
-                taggedValue.append("</b>");
-            }
-            if (hasUnderline) {
-                taggedValue.append("</u>");
-            }
-        }
-
-        return taggedValue.toString();
-    }
-
-    // Simple HTML escaper
-    private static String escape(String s) {
-        return s.replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;");
     }
 }

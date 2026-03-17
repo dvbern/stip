@@ -140,17 +140,6 @@ describe('calculate differences', () => {
         },
         VATER: {},
       },
-      changesByIndex: [
-        {
-          geburtsdatum: '2000-01-01',
-          identischerZivilrechtlicherWohnsitz: true,
-          identischerZivilrechtlicherWohnsitzOrt: 'Musterort',
-          identischerZivilrechtlicherWohnsitzPLZ: '1234',
-          nachname: 'Sanchez',
-          vorname: 'Laura',
-        },
-        {},
-      ],
       hasChangesByIdentifier: {
         MUTTER: true,
         VATER: false,
@@ -173,11 +162,6 @@ describe('calculate differences', () => {
       changesByIdentifier: {
         MUTTER: { nachname: 'Sanchez' },
       },
-      changesByIndex: [
-        {
-          nachname: 'Sanchez',
-        },
-      ],
       hasChangesByIdentifier: {
         MUTTER: true,
       },

@@ -43,7 +43,6 @@ public class GesuchDokumentstatusService {
     public void triggerStatusChange(final GesuchDokument gesuchDokument, final GesuchDokumentStatusChangeEvent event) {
         final var sm = createStateMachine(gesuchDokument);
         sm.fire(GesuchDokumentstatusChangeEventTrigger.createTrigger(event), gesuchDokument);
-        dokumentKommentarService.createEmptyKommentarForGesuchDokument(gesuchDokument);
     }
 
     public void triggerStatusChangeWithComment(

@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchDokumentDtoSpec.JSON_PROPERTY_ID,
+  GesuchDokumentDtoSpec.JSON_PROPERTY_ENTRY_ID,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENT_TYP,
   GesuchDokumentDtoSpec.JSON_PROPERTY_CUSTOM_DOKUMENT_TYP,
   GesuchDokumentDtoSpec.JSON_PROPERTY_DOKUMENTE,
@@ -46,6 +47,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchDokumentDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  private UUID entryId;
 
   public static final String JSON_PROPERTY_DOKUMENT_TYP = "dokumentTyp";
   private DokumentTypDtoSpec dokumentTyp;
@@ -85,6 +89,32 @@ public class GesuchDokumentDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public GesuchDokumentDtoSpec entryId(UUID entryId) {
+    
+    this.entryId = entryId;
+    return this;
+  }
+
+   /**
+   * Get entryId
+   * @return entryId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
   }
 
 
@@ -209,6 +239,7 @@ public class GesuchDokumentDtoSpec {
     }
     GesuchDokumentDtoSpec gesuchDokument = (GesuchDokumentDtoSpec) o;
     return Objects.equals(this.id, gesuchDokument.id) &&
+        Objects.equals(this.entryId, gesuchDokument.entryId) &&
         Objects.equals(this.dokumentTyp, gesuchDokument.dokumentTyp) &&
         Objects.equals(this.customDokumentTyp, gesuchDokument.customDokumentTyp) &&
         Objects.equals(this.dokumente, gesuchDokument.dokumente) &&
@@ -217,7 +248,7 @@ public class GesuchDokumentDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dokumentTyp, customDokumentTyp, dokumente, status);
+    return Objects.hash(id, entryId, dokumentTyp, customDokumentTyp, dokumente, status);
   }
 
   @Override
@@ -225,6 +256,7 @@ public class GesuchDokumentDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchDokumentDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    dokumentTyp: ").append(toIndentedString(dokumentTyp)).append("\n");
     sb.append("    customDokumentTyp: ").append(toIndentedString(customDokumentTyp)).append("\n");
     sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");

@@ -1,0 +1,68 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.kind.entity;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
+@ApplicationScoped
+@RequiredArgsConstructor
+public class KindRequiredListDokumentsProducer implements RequiredRefDokumentsProducer {
+    @Override
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
+        final var kinds = formular.getKinds();
+        if (kinds == null) {
+            return ImmutablePair.of("", Set.of());
+        }
+
+        final var requiredDocs = new HashSet<Pair<DokumentTyp, UUID>>();
+        for (var kind : kinds) {
+            if (kind.getUnterhaltsbeitraege() != null) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ALIMENTENVERORDUNG, kind.getEntryId()));
+            }
+
+            if (greaterThanZero(kind.getErgaenzungsleistungen())) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ERGAENZUNGSLEISTUNGEN, kind.getEntryId()));
+            }
+            if (greaterThanZero(kind.getKinderUndAusbildungszulagen())) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_UND_AUSBILDUNGSZULAGEN, kind.getEntryId()));
+            }
+            if (greaterThanZero(kind.getRenten())) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_RENTEN, kind.getEntryId()));
+            }
+            if (greaterThanZero(kind.getAndereEinnahmen())) {
+                requiredDocs.add(Pair.of(DokumentTyp.KINDER_ANDERE_EINNAHMEN, kind.getEntryId()));
+            }
+        }
+
+        return ImmutablePair.of("kinds", requiredDocs);
+    }
+
+    private static boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
+    }
+}

@@ -19,12 +19,14 @@ package ch.dvbern.stip.api.dokument.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,6 +45,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.lang3.tuple.Pair;
 import org.hibernate.envers.Audited;
 import org.jilt.Builder;
 import org.jilt.BuilderStyle;
@@ -60,8 +63,8 @@ import org.jilt.BuilderStyle;
     },
     uniqueConstraints = {
         @UniqueConstraint(
-            name = "UC_gesuch_dokument_gesuch_tranche_id_dokument_typ",
-            columnNames = { "gesuch_tranche_id", "dokument_typ" }
+            name = "UC_gesuch_dokument_gesuch_tranche_id_dokument_typ_entry_id",
+            columnNames = { "gesuch_tranche_id", "dokument_typ", "entry_id" }
         )
     }
 )
@@ -76,6 +79,13 @@ public class GesuchDokument extends AbstractMandantEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))
     private GesuchTranche gesuchTranche;
+
+    /**
+     * A specific entry ID to refine the uniqueness of gesuchDokumente for list elements
+     */
+    @Nullable
+    @Column(name = "entry_id", nullable = true)
+    private UUID entryId;
 
     @NullableUnlessGenerated
     @Column(name = "dokument_typ", nullable = true)
@@ -111,5 +121,9 @@ public class GesuchDokument extends AbstractMandantEntity {
         // Bi-Directional associations must set both sides of the relation
         gesuchDokumentKommentare.add(kommentar);
         kommentar.setGesuchDokument(this);
+    }
+
+    public Pair<DokumentTyp, UUID> getReference() {
+        return Pair.of(getDokumentTyp(), getEntryId());
     }
 }

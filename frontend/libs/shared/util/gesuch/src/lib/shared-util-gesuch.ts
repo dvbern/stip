@@ -98,6 +98,7 @@ export type StatusUebergang =
   | 'SET_TO_BEARBEITUNG'
   | 'ANSPRUCH_PRUEFEN'
   | 'BEREIT_FUER_BEARBEITUNG'
+  | 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'
   | 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
   | 'BEARBEITUNG_ABSCHLIESSEN'
@@ -134,14 +135,20 @@ export const StatusUebergaengeMap: Partial<
   IN_FREIGABE: ['VERFUEGT', 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'],
   VERFUEGUNG_DRUCKBEREIT: ['VERSENDET'],
   DATENSCHUTZBRIEF_DRUCKBEREIT: ['BEREIT_FUER_BEARBEITUNG'],
+  STIPENDIENANSPRUCH: ['BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'],
+  KEIN_STIPENDIENANSPRUCH: ['BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'],
 };
+
+type UebergangDisabledReason =
+  | 'VALIDIERUNG_FEHLER'
+  | 'DOKUMENTE_OFFEN'
+  | 'CANNOT_NEGATIV_VERFUEGEN';
 
 type StatusUebergangOption = {
   icon: string;
-  titleKey: string;
   typ: StatusUebergang;
   allowedFor: AvailableBenutzerRole[];
-  disabledReason?: string;
+  disabledReason?: UebergangDisabledReason;
 };
 
 /**
@@ -158,7 +165,6 @@ export const StatusUebergaengeOptions: Record<
   SET_TO_BEARBEITUNG: () =>
     ({
       icon: 'edit_note',
-      titleKey: 'SET_TO_BEARBEITUNG',
       typ: 'SET_TO_BEARBEITUNG',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
@@ -166,7 +172,6 @@ export const StatusUebergaengeOptions: Record<
   ANSPRUCH_PRUEFEN: (context) =>
     ({
       icon: 'check_circle_outline',
-      titleKey: 'ANSPRUCH_PRUEFEN',
       typ: 'ANSPRUCH_PRUEFEN',
       allowedFor: ['V0_Jurist'],
       disabledReason: context?.isInvalid ? 'VALIDIERUNG_FEHLER' : undefined,
@@ -175,7 +180,7 @@ export const StatusUebergaengeOptions: Record<
     hasAcceptedAllDokuments: boolean;
     isInvalid: boolean;
   }) => {
-    let disabledReason = undefined;
+    let disabledReason: UebergangDisabledReason | undefined = undefined;
     if (!context?.hasAcceptedAllDokuments) {
       disabledReason = 'DOKUMENTE_OFFEN';
     }
@@ -184,7 +189,6 @@ export const StatusUebergaengeOptions: Record<
     }
     return {
       icon: 'check',
-      titleKey: 'BEARBEITUNG_ABSCHLIESSEN',
       typ: 'BEARBEITUNG_ABSCHLIESSEN',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: disabledReason,
@@ -193,7 +197,6 @@ export const StatusUebergaengeOptions: Record<
   ZURUECKWEISEN: () =>
     ({
       icon: 'undo',
-      titleKey: 'ZURUECKWEISEN',
       typ: 'ZURUECKWEISEN',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
@@ -201,7 +204,6 @@ export const StatusUebergaengeOptions: Record<
   VERFUEGT: () =>
     ({
       icon: 'done',
-      titleKey: 'VERFUEGT',
       typ: 'VERFUEGT',
       allowedFor: ['V0_Freigabestelle'],
       disabledReason: undefined,
@@ -209,15 +211,20 @@ export const StatusUebergaengeOptions: Record<
   BEREIT_FUER_BEARBEITUNG: () =>
     ({
       icon: 'play_arrow',
-      titleKey: 'BEREIT_FUER_BEARBEITUNG',
       typ: 'BEREIT_FUER_BEARBEITUNG',
+      allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
+    }) as const,
+  BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG: () =>
+    ({
+      icon: 'restart_alt',
+      typ: 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
   ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG: () =>
     ({
       icon: 'play_arrow',
-      titleKey: 'BEREIT_FUER_BEARBEITUNG',
       typ: 'BEREIT_FUER_BEARBEITUNG',
       allowedFor: ['V0_Freigabestelle'],
       disabledReason: undefined,
@@ -225,7 +232,6 @@ export const StatusUebergaengeOptions: Record<
   VERSENDET: () =>
     ({
       icon: 'mark_email_read',
-      titleKey: 'VERSENDET',
       typ: 'VERSENDET',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
@@ -233,7 +239,6 @@ export const StatusUebergaengeOptions: Record<
   NEGATIVE_VERFUEGUNG_ERSTELLEN: (context) =>
     ({
       icon: 'block',
-      titleKey: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       typ: 'NEGATIVE_VERFUEGUNG_ERSTELLEN',
       allowedFor: ['V0_Sachbearbeiter', 'V0_Jurist'],
       disabledReason: context?.permissions.canNegativVerfuegen
@@ -243,7 +248,6 @@ export const StatusUebergaengeOptions: Record<
   STATUS_PRUEFUNG_AUSLOESEN: () =>
     ({
       icon: 'check_circle',
-      titleKey: 'STATUS_PRUEFUNG_AUSLOESEN',
       typ: 'STATUS_PRUEFUNG_AUSLOESEN',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
@@ -251,7 +255,6 @@ export const StatusUebergaengeOptions: Record<
   SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: () =>
     ({
       icon: 'description',
-      titleKey: 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
       typ: 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,

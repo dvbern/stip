@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpec
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.entities.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestConstants;
@@ -58,6 +59,7 @@ import ch.dvbern.stip.generated.dto.ZivilstandDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.response.ResponseBody;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -100,6 +102,8 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
     private GesuchTrancheUpdateDtoSpec trancheUpdateDtoSpec;
     private PartnerUpdateDtoSpec partnerUpdateDtoSpec;
+    @Inject
+    DokumentGenerator dokumentGenerator;
 
     @Test
     @TestAsGesuchsteller
@@ -261,10 +265,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @TestAsGesuchsteller
     @Order(13)
     void addDokumente() {
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokTyp, file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(gesuchTrancheId);
     }
 
     @Test
@@ -361,6 +362,27 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
     @Test
     @TestAsGesuchsteller
     @Order(23)
+    void uploadPartnerDokument() {
+        final var ekPartnerDokumentTyps = new DokumentTypDtoSpec[] {
+            DokumentTypDtoSpec.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN,
+            DokumentTypDtoSpec.EK_PARTNER_BELEG_KINDERZULAGEN,
+            DokumentTypDtoSpec.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO,
+            DokumentTypDtoSpec.EK_PARTNER_BELEG_BEZAHLTE_RENTEN,
+            DokumentTypDtoSpec.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER,
+            DokumentTypDtoSpec.EK_PARTNER_BELEG_OV_ABONNEMENT,
+            DokumentTypDtoSpec.EK_PARTNER_VERMOEGEN,
+            DokumentTypDtoSpec.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION,
+            DokumentTypDtoSpec.EK_PARTNER_LOHNABRECHNUNG,
+        };
+        for (var dokumentTyp : ekPartnerDokumentTyps) {
+            final var file = TestUtil.getTestPng();
+            TestUtil.uploadFile(dokumentApiSpec, gesuchTrancheId, dokumentTyp, file);
+        }
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(24)
     void gesuchEinreichenValidationShouldSuccess() {
         final var validationReport = gesuchTrancheApiSpec.gesuchTrancheEinreichenValidierenGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
@@ -381,7 +403,7 @@ class GesuchFormularNullableFieldsByGesuchstatusTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(24)
+    @Order(25)
     void gesuchEinreichen() {
         gesuchApiSpec.gesuchEinreichenGs()
             .gesuchTrancheIdPath(gesuchTrancheId)

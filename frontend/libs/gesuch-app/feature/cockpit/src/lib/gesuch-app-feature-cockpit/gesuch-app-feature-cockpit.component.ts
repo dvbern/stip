@@ -26,6 +26,7 @@ import {
   selectLastUpdate,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
@@ -92,6 +93,7 @@ export class GesuchAppFeatureCockpitComponent {
   darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+  gesuchHeaderStore = inject(GesuchHeaderStore);
   globalNotificationStore = inject(GlobalNotificationStore);
   sozialdienstStore = inject(SozialdienstStore);
   cockpitViewSig = this.store.selectSignal(selectGesuchAppFeatureCockpitView);
@@ -114,8 +116,7 @@ export class GesuchAppFeatureCockpitComponent {
     const ausbildungUnterbruchPending = isPending(
       this.ausbildungStore.ausbildungUnterbrechenResponse(),
     );
-    const aenderungPending =
-      this.gesuchAenderungStore.aenderungenViewSig().loading;
+    const aenderungPending = isPending(this.gesuchHeaderStore.header());
     return ausbildungUnterbruchPending || aenderungPending;
   });
 
@@ -195,7 +196,7 @@ export class GesuchAppFeatureCockpitComponent {
     } = melden;
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createAenderung',
-      id,
+      gesuchId: id,
       minDate: new Date(startDate),
       maxDate: new Date(endDate),
     })

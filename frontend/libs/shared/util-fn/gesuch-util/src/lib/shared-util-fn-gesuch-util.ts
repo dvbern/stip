@@ -215,12 +215,16 @@ export function getChangesForList<
   changed: T[] | undefined,
   original: T[] | undefined,
   getIdentifier?: (value: T) => R | undefined,
+  identifierKey?: keyof T,
 ) {
   if (!original || !changed) {
     return null;
   }
   const _changes = diff(original, changed, {
     keysToSkip,
+    ...(identifierKey
+      ? { embeddedObjKeys: { '.': identifierKey as string } }
+      : {}),
   }); // We only care about the first change because the dataset is just a list
   const changes = _changes[0];
 
@@ -262,7 +266,6 @@ export function getChangesForList<
 
   return {
     // Group changes by identifier
-    changesByIndex: collectedChanges.map((c) => c.values),
     changesByIdentifier: collectedChanges.reduce(
       (acc, c) => ({
         ...acc,

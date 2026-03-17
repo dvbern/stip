@@ -20,15 +20,16 @@ import {
   RouterLink,
   RouterLinkActive,
 } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   selectRevision,
@@ -36,11 +37,7 @@ import {
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
-import {
-  AenderungCompletionState,
-  GesuchAenderungStore,
-} from '@dv/shared/data-access/gesuch-aenderung';
-import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -66,7 +63,6 @@ import { isPending } from '@dv/shared/util/remote-data';
   selector: 'dv-sachbearbeitung-app-pattern-gesuch-header',
   imports: [
     CommonModule,
-    TranslocoPipe,
     RouterLink,
     RouterLinkActive,
     MatChipsModule,
@@ -76,6 +72,7 @@ import { isPending } from '@dv/shared/util/remote-data';
     SharedPatternAppHeaderPartsDirective,
     SharedUiLoadingComponent,
     SharedUiDarlehenMenuComponent,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-pattern-gesuch-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,16 +84,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   private dialog = inject(MatDialog);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
-  private dokumentsStore = inject(DokumentsStore);
   private gesuchStore = inject(GesuchStore);
-  private gesuchInfoStore = inject(GesuchInfoStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private config = inject(SharedModelCompileTimeConfig);
 
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
   route = inject(ActivatedRoute);
-  gesuchAenderungStore = inject(GesuchAenderungStore);
   darlehenStore = inject(DarlehenStore);
 
   @Output() openSidenav = new EventEmitter<void>();
@@ -106,19 +101,21 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
-  private otherGesuchInfoSourceSig = toSignal(
+  private gesuchUpdatedSig = toSignal(
     this.store.select(selectSharedDataAccessGesuchCache).pipe(
       map(({ gesuch }) => gesuch),
       filter(isDefined),
     ),
   );
 
-  tranchenSig = this.gesuchAenderungStore.getRelativeTranchenViewSig(
-    this.gesuchIdSig,
-  );
   isTrancheRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes(`/${getTrancheRoute('tranche')}/`)),
+    ),
+  );
+  isInitialRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
     ),
   );
   isAenderungRouteSig = toSignal(
@@ -126,29 +123,51 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
+
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
-      this.gesuchInfoStore.gesuchInfo().data?.canGetBerechnung;
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.canGetBerechnung;
 
     return canViewBerechnung;
   });
   isBeschwerdeHaengigSig = computed(() => {
     const beschwerdeHaengig =
-      this.gesuchInfoStore.gesuchInfo().data?.beschwerdeHaengig;
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.beschwerdeHaengig;
     return beschwerdeHaengig;
+  });
+  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
+    this.gesuchIdSig,
+  );
+  historizedSig = computed(() => {
+    const {
+      abgelehnt: abgelehnteAenderungen,
+      akzeptiert: akzeptierteAenderungen,
+      offen: offeneAenderung,
+    } = this.gesuchHeaderStore.viewSig().aenderungs ?? {};
+    const initial = this.gesuchHeaderStore.viewSig().initial;
+    if (
+      !abgelehnteAenderungen?.length &&
+      !akzeptierteAenderungen?.length &&
+      !initial &&
+      !offeneAenderung
+    ) {
+      return null;
+    }
+    return {
+      abgelehnteAenderungen,
+      akzeptierteAenderungen,
+      initial,
+      offeneAenderung,
+      // TODO: Temporary solution until Header is changed
+      versions: this.gesuchHeaderStore.viewSig().versions,
+    };
   });
   isLoadingSig = computed(() => {
     return (
-      isPending(this.gesuchInfoStore.gesuchInfo()) ||
+      isPending(this.gesuchHeaderStore.header()) ||
       isPending(this.gesuchStore.lastStatusChange())
     );
   });
-  listedAenderungen: AenderungCompletionState[] = [
-    'open',
-    'completed',
-    'rejected',
-    'initial',
-  ];
 
   isInfosRouteSig = computed(() => {
     const isActive = this.router.isActive('infos', {
@@ -163,37 +182,17 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   constructor() {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
+      this.gesuchUpdatedSig();
       if (gesuchId) {
-        this.darlehenStore.getAllDarlehenSb$({ gesuchId });
-        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
-        this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-      }
-    });
-
-    effect(() => {
-      const gesuchTrancheId = this.gesuchTrancheIdSig();
-      if (gesuchTrancheId) {
-        this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
-          gesuchTrancheId,
-        });
-      }
-    });
-
-    effect(() => {
-      const gesuch = this.otherGesuchInfoSourceSig();
-
-      if (gesuch?.id) {
-        this.gesuchInfoStore.loadGesuchInfo$({ gesuchId: gesuch.id });
-        this.einreichenStore.validateSteps$({
-          gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
-        });
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
   }
 
   availableTrancheInteractionSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.gesuchStatus;
 
     if (gesuchStatus === 'IN_BEARBEITUNG_SB' && rolesMap.V0_Sachbearbeiter) {
       return 'CREATE_TRANCHE';
@@ -204,23 +203,21 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
 
   statusUebergaengeOptionsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const gesuchInfo = this.gesuchInfoStore.gesuchInfo().data;
-    const gesuchStatus = gesuchInfo?.gesuchStatus;
-
-    const sbCanBearbeitungAbschliessen =
-      this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen;
     const validations =
       this.einreichenStore.validationViewSig().invalidFormularProps.validations;
 
-    const canTriggerManuellPruefen =
-      this.gesuchInfoStore.gesuchInfo().data?.canTriggerManuellPruefen;
+    const {
+      gesuchStatus,
+      canTriggerManuellPruefen,
+      canBearbeitungAbschliessen,
+    } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
       return {};
     }
 
     const { permissions } = getGesuchPermissions(
-      gesuchInfo,
+      { gesuchStatus },
       this.config.appType,
       rolesMap,
     );
@@ -232,7 +229,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       ?.map((status) =>
         StatusUebergaengeOptions[status]({
           permissions,
-          hasAcceptedAllDokuments: !!sbCanBearbeitungAbschliessen,
+          hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
       )
@@ -262,23 +259,42 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       case 'STATUS_PRUEFUNG_AUSLOESEN':
       case 'BEREIT_FUER_BEARBEITUNG':
       case 'VERFUEGT':
+      case 'VERSENDET':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
-      case 'VERSENDET':
-        this.gesuchStore.setStatus$[nextStatus]({
-          gesuchTrancheId,
-          onSuccess: () => {
-            this.gesuchAenderungStore.getAllTranchenForGesuch$({ gesuchId });
-          },
-        });
+      case 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG':
+        SharedUiKommentarDialogComponent.open<
+          SachbearbeitungAppTranslationKey | SharedTranslationKey
+        >(this.dialog, {
+          titleKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.title',
+          messageKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.message',
+          placeholderKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.placeholder',
+          confirmKey: 'shared.ui.yes',
+        })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG({
+                gesuchTrancheId,
+                text: result.kommentar,
+              });
+            }
+          });
         break;
       case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm`,
-        })
+        SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
@@ -291,12 +307,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           });
         break;
       case 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG':
-        SharedUiKommentarDialogComponent.openOptional(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
-        })
+        SharedUiKommentarDialogComponent.openOptional<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
@@ -309,12 +328,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           });
         break;
       case 'ZURUECKWEISEN':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
-        })
+        SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
@@ -378,15 +400,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
   }
 
   createTranche() {
-    const id = this.gesuchIdSig();
-    const periode = this.gesuchInfoStore.gesuchInfo().data;
-    if (!id || !periode) return;
+    const gesuchId = this.gesuchIdSig();
+    const { gesuchInfo } = this.gesuchHeaderStore.header().data ?? {};
+    if (!gesuchId || !gesuchInfo) return;
 
     SharedDialogTrancheErstellenComponent.open(this.dialog, {
       type: 'createTranche',
-      id,
-      minDate: new Date(periode.startDate),
-      maxDate: new Date(periode.endDate),
+      gesuchId,
+      minDate: new Date(gesuchInfo.startDate),
+      maxDate: new Date(gesuchInfo.endDate),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

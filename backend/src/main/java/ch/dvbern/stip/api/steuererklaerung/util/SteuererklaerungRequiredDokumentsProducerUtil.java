@@ -1,0 +1,95 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.steuererklaerung.util;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class SteuererklaerungRequiredDokumentsProducerUtil {
+    public Set<DokumentTyp> getRequiredDokuments(
+        Set<Steuererklaerung> steuererklarungen,
+        SteuerdatenTyp steuerdatenTyp
+    ) {
+        final var requiredDocs = new HashSet<DokumentTyp>();
+        if (steuererklarungen.stream().map(Steuererklaerung::getSteuerdatenTyp).toList().contains(steuerdatenTyp)) {
+            final var steuererklarung = steuererklarungen.stream()
+                .filter(steuererklaerung -> steuererklaerung.getSteuerdatenTyp() == steuerdatenTyp)
+                .findFirst()
+                .orElseThrow();
+
+            if (Boolean.FALSE.equals(steuererklarung.getSteuererklaerungInBern())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_AUSBILDUNGSBEITRAEGE_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getUnterhaltsbeitraege())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getErgaenzungsleistungen())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getRenten())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_RENTEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_RENTEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_RENTEN_MUTTER;
+                });
+            }
+            if (greaterThanZero(steuererklarung.getEinnahmenBGSA())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER;
+                });
+            }
+
+            if (greaterThanZero(steuererklarung.getAndereEinnahmen())) {
+                requiredDocs.add(switch (steuerdatenTyp) {
+                    case FAMILIE -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE;
+                    case VATER -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER;
+                    case MUTTER -> DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER;
+                });
+            }
+        }
+
+        return requiredDocs;
+    }
+
+    private boolean greaterThanZero(final Integer base) {
+        return base != null && base > 0;
+    }
+}

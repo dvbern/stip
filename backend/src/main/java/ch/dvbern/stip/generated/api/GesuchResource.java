@@ -11,6 +11,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -49,6 +50,12 @@ public interface GesuchResource {
     @Path("/{gesuchId}/einreichedatum")
     @Produces({ "application/json", "text/plain" })
     EinreichedatumStatusDto canEinreichedatumAendern(@PathParam("gesuchId") UUID gesuchId);
+
+    @POST
+    @Path("/status/bearbeitung-as-aenderung/{gesuchTrancheId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto changeGesuchStatusToBearbeitungAsAenderung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull KommentarDto kommentarDto);
 
     @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
@@ -163,6 +170,11 @@ public interface GesuchResource {
     BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/berechnung/{verfuegungId}")
+    @Produces({ "application/json", "text/plain" })
+    BerechnungsresultatDto getBerechnungForVerfuegung(@PathParam("verfuegungId") UUID verfuegungId);
+
+    @GET
     @Path("/{gesuchId}/berechnungsblatt/token")
     @Produces({ "application/json", "text/plain" })
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
@@ -171,6 +183,16 @@ public interface GesuchResource {
     @Path("/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
+    @Path("/gs/header/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchHeaderDto getGesuchHeaderGs(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/sb/header/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchHeaderDto getGesuchHeaderSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/{gesuchId}/info")

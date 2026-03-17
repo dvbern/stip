@@ -230,6 +230,15 @@ Adresse:
       type: string
     ort:
       type: string
+GesuchDokumentRef:
+  required:
+    - dokumentTyp
+  type: object
+  properties:
+    dokumentTyp:
+      $ref: '#/DokumentTyp'
+    entryId:
+      $ref: '#/UUID'
 GesuchDokument:
   required:
     - id
@@ -239,6 +248,9 @@ GesuchDokument:
   properties:
     id:
       $ref: '#/UUID'
+    entryId:
+      $ref: '#/UUID'
+      description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
     dokumentTyp:
       $ref: '#/DokumentTyp'
     customDokumentTyp:
@@ -375,6 +387,28 @@ Gesuch:
     nachfristDokumente:
       $ref: '#/LocalDate'
     verfuegt:
+      type: boolean
+GesuchStateInfo:
+  required:
+    - gesuchStatus
+    - beschwerdeHaengig
+    - canGetBerechnung
+    - canChangeGesuchsperiode
+    - canTriggerManuellPruefen
+    - canBearbeitungAbschliessen
+  type: object
+  properties:
+    gesuchStatus:
+      $ref: '#/Gesuchstatus'
+    beschwerdeHaengig:
+      type: boolean
+    canGetBerechnung:
+      type: boolean
+    canChangeGesuchsperiode:
+      type: boolean
+    canTriggerManuellPruefen:
+      type: boolean
+    canBearbeitungAbschliessen:
       type: boolean
 PersoenlicheAngaben:
   required:
@@ -801,25 +835,6 @@ GesuchTranche:
       $ref: '#/GesuchTrancheStatus'
     typ:
       $ref: '#/GesuchTrancheTyp'
-GesuchTrancheList:
-  type: object
-  properties:
-    tranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    initialTranchen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    aenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
-    abgelehnteAenderungen:
-      type: array
-      items:
-        $ref: '#/GesuchTrancheSlim'
 GesuchTrancheSlim:
   type: object
   required:
@@ -920,6 +935,7 @@ NotificationType:
     - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
     - AENDERUNG_ABGELEHNT
     - AENDERUNG_EINGEREICHT
+    - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
     - NACHFRIST_DOKUMENTE_CHANGED
     - NEUE_VERFUEGUNG
     - FAILED_AUSZAHLUNG

@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * KindDtoSpec
  */
 @JsonPropertyOrder({
+  KindDtoSpec.JSON_PROPERTY_ENTRY_ID,
   KindDtoSpec.JSON_PROPERTY_VORNAME,
   KindDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   KindDtoSpec.JSON_PROPERTY_AUSBILDUNGSSITUATION,
@@ -45,6 +46,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("Kind")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class KindDtoSpec {
+  public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  private UUID entryId;
+
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
@@ -80,6 +84,32 @@ public class KindDtoSpec {
 
   public KindDtoSpec() {
   }
+
+  public KindDtoSpec entryId(UUID entryId) {
+    
+    this.entryId = entryId;
+    return this;
+  }
+
+   /**
+   * Get entryId
+   * @return entryId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
+
 
   public KindDtoSpec vorname(String vorname) {
     
@@ -375,7 +405,8 @@ public class KindDtoSpec {
       return false;
     }
     KindDtoSpec kind = (KindDtoSpec) o;
-    return Objects.equals(this.vorname, kind.vorname) &&
+    return Objects.equals(this.entryId, kind.entryId) &&
+        Objects.equals(this.vorname, kind.vorname) &&
         Objects.equals(this.geburtsdatum, kind.geburtsdatum) &&
         Objects.equals(this.ausbildungssituation, kind.ausbildungssituation) &&
         Objects.equals(this.id, kind.id) &&
@@ -390,13 +421,14 @@ public class KindDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
+    return Objects.hash(entryId, vorname, geburtsdatum, ausbildungssituation, id, wohnsitzAnteilPia, nachname, unterhaltsbeitraege, kinderUndAusbildungszulagen, renten, ergaenzungsleistungen, andereEinnahmen);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class KindDtoSpec {\n");
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");

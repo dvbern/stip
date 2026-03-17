@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -52,6 +53,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     private final SozialdienstService sozialdienstService;
     private final GesuchService gesuchService;
     private final RequiredDokumentService requiredDokumentService;
+    private final VerfuegungService verfuegungService;
 
     @Transactional
     public void sbCanChangeGesuchStatusToInBearbeitung(final UUID gesuchId) {
@@ -127,6 +129,12 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
+    public void canGetBerechnungOfVerfuegung(final UUID verfuegungId) {
+        final var verfuegung = verfuegungService.requireById(verfuegungId);
+        gsSbOrFreigabestelleOrJuristCanRead(verfuegung.getGesuch().getId());
+    }
+
+    @Transactional
     public void canGetBerechnung(final UUID gesuchId) {
         assertSBCanGetBerechnung(gesuchId);
     }
@@ -194,6 +202,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
             return;
         }
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
+    }
+
+    @Transactional
+    public void sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
     }
 
     public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(UUID gesuchId) {
@@ -270,8 +283,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanBearbeitungAbschliessen(final UUID gesuchId) {
-        assertGesuchIsInOneOfGesuchStatus(gesuchId, Gesuchstatus.SACHBEARBEITER_CAN_EDIT);
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.IN_FREIGABE);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!gesuchStatusService.canBearbeitungAbschliessen(gesuch)) {
+            forbidden();
+        }
     }
 
     public void assertCanPerformStatusChange(final UUID gesuchId, GesuchStatusChangeEvent gesuchStatusChangeEvent) {

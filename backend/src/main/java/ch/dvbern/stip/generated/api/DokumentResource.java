@@ -38,13 +38,13 @@ public interface DokumentResource {
     @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createDokumentGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+    io.smallrye.mutiny.Uni<Response> createDokumentGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@QueryParam("entryId")   UUID entryId);
 
     @POST
     @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
-    io.smallrye.mutiny.Uni<Response> createDokumentSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+    io.smallrye.mutiny.Uni<Response> createDokumentSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@QueryParam("entryId")   UUID entryId);
 
     @POST
     @Path("/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}")
@@ -106,12 +106,12 @@ public interface DokumentResource {
     @GET
     @Path("/gesuchDokument/gs/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getGesuchDokumentForTypGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    NullableGesuchDokumentDto getGesuchDokumentForTypGS(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("entryId")   UUID entryId);
 
     @GET
     @Path("/gesuchDokument/sb/{gesuchTrancheId}/{dokumentTyp}")
     @Produces({ "application/json", "text/plain" })
-    NullableGesuchDokumentDto getGesuchDokumentForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    NullableGesuchDokumentDto getGesuchDokumentForTypSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@QueryParam("entryId")   UUID entryId);
 
     @GET
     @Path("/gesuchDokument/{gesuchDokumentId}/kommentare/gs")

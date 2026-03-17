@@ -1490,6 +1490,34 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /demo-data/test-all-berechnung:
+    get:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DemoDataTestBerechnungResult'
+          description: The results of comparing all Berechnung tests
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: testAllDemoDataBerechnung
+      summary: >-
+        Tests the Berechnung of all testcases to their excepted
+        Stipendienanspruch values
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /datenschutzbrief/{trancheId}/download:
     parameters:
       - name: trancheId
@@ -2990,6 +3018,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -3032,6 +3068,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -3062,6 +3106,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           content:
@@ -3104,6 +3156,14 @@ paths:
             $ref: '#/components/schemas/UUID'
           in: path
           required: true
+        - name: entryId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
+          required: false
       responses:
         '200':
           description: OK
@@ -3986,6 +4046,66 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/gs/header/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchHeader'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchHeaderGs
+      summary: Get the GS Gesuch header information for the given gesuchTranche
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/sb/header/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchHeader'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchHeaderSb
+      summary: Get the SB Gesuch header information for the given gesuchTranche
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/benutzer/me/sb/{getGesucheSBQueryType}:
     get:
       tags:
@@ -4343,6 +4463,37 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: changeGesuchStatusToVerfuegungDruckbereit
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}:
+    parameters:
+      - $ref: '#/components/parameters/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Kommentar'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: changeGesuchStatusToBearbeitungAsAenderung
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -4770,6 +4921,38 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/berechnung/{verfuegungId}:
+    parameters:
+      - name: verfuegungId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Archivierte Stipendien Berechnung einer Verfügung
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForVerfuegung
+      summary: Holt die Berechnung für die angegebene Verfügung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/{gesuchId}/berechnung:
     parameters:
       - name: gesuchId
@@ -5069,9 +5252,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5098,9 +5279,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/GesuchDokument'
+                $ref: '#/components/schemas/GesuchDokumentList'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
@@ -5162,64 +5341,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDocumentsToUploadSB
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchtranche/gs/{gesuchId}:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuchGS
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /gesuchtranche/sb/{gesuchId}:
-    parameters:
-      - name: gesuchId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
-    get:
-      tags:
-        - GesuchTranche
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GesuchTrancheList'
-          description: Alle GesuchTranchen fuer ein Gesuch
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getAllTranchenForGesuchSB
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6551,6 +6672,7 @@ components:
         - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
         - AENDERUNG_ABGELEHNT
         - AENDERUNG_EINGEREICHT
+        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
         - NACHFRIST_DOKUMENTE_CHANGED
         - NEUE_VERFUEGUNG
         - FAILED_AUSZAHLUNG
@@ -7659,7 +7781,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         steuererklaerungInBern:
           type: boolean
         unterhaltsbeitraege:
@@ -7692,7 +7814,7 @@ components:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ElternTyp'
+          $ref: '#/components/schemas/SteuerdatenTyp'
         totalEinkuenfte:
           type: integer
         eigenmietwert:
@@ -7877,6 +7999,22 @@ components:
               type: integer
             betragDarlehenIst:
               type: integer
+    DemoDataTestBerechnungResult:
+      required:
+        - demoDataId
+        - valid
+      type: object
+      properties:
+        demoDataId:
+          $ref: '#/components/schemas/UUID'
+        valid:
+          type: boolean
+        soll:
+          type: integer
+        ist:
+          type: integer
+        message:
+          type: string
     ApplyDemoDataResponse:
       required:
         - gesuchId
@@ -8056,6 +8194,12 @@ components:
       type: string
     ElternTyp:
       enum:
+        - VATER
+        - MUTTER
+      type: string
+    SteuerdatenTyp:
+      enum:
+        - FAMILIE
         - VATER
         - MUTTER
       type: string
@@ -8787,8 +8931,6 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchDokumentId:
           $ref: '#/components/schemas/UUID'
-        dokumentStatus:
-          $ref: '#/components/schemas/Dokumentstatus'
         kommentar:
           type: string
         user_erstellt:
@@ -8973,6 +9115,11 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: >-
+            A specific entry ID to refine the uniqueness of gesuchDokumente for
+            list elements
         dokumentTyp:
           $ref: '#/components/schemas/DokumentTyp'
         customDokumentTyp:
@@ -9337,37 +9484,86 @@ components:
       properties:
         canAendern:
           type: boolean
+    GesuchAenderungs:
+      type: object
+      required:
+        - akzeptiert
+        - abgelehnt
+      properties:
+        offen:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        akzeptiert:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        abgelehnt:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+    VerfuegtGesuch:
+      type: object
+      required:
+        - timestamp
+        - tranchen
+        - berechnungId
+      properties:
+        timestamp:
+          type: string
+          format: date
+        tranchen:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        berechnungId:
+          $ref: '#/components/schemas/UUID'
     GesuchInfo:
       required:
         - id
+        - fallNummer
         - gesuchNummer
-        - gesuchStatus
         - startDate
         - endDate
-        - canGetBerechnung
-        - beschwerdeHaengig
-        - canTriggerManuellPruefen
-        - canChangeGesuchsperiode
+        - state
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
+        fallNummer:
+          type: string
         gesuchNummer:
           type: string
-        gesuchStatus:
-          $ref: '#/components/schemas/Gesuchstatus'
         startDate:
           $ref: '#/components/schemas/LocalDate'
         endDate:
           $ref: '#/components/schemas/LocalDate'
-        canGetBerechnung:
-          type: boolean
-        beschwerdeHaengig:
-          type: boolean
-        canTriggerManuellPruefen:
-          type: boolean
-        canChangeGesuchsperiode:
-          type: boolean
+        piaVorname:
+          type: string
+        piaNachname:
+          type: string
+        state:
+          $ref: '#/components/schemas/GesuchStateInfo'
+    GesuchHeader:
+      required:
+        - gesuchInfo
+        - versions
+        - aenderungs
+        - currentTranches
+      type: object
+      properties:
+        initial:
+          $ref: '#/components/schemas/VerfuegtGesuch'
+        versions:
+          type: array
+          items:
+            $ref: '#/components/schemas/VerfuegtGesuch'
+        aenderungs:
+          $ref: '#/components/schemas/GesuchAenderungs'
+        currentTranches:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
+        gesuchInfo:
+          $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
       type: object
       required:
@@ -10105,6 +10301,7 @@ components:
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
+        - entryId
         - wohnsitz
         - vorname
         - nachname
@@ -10112,6 +10309,9 @@ components:
         - ausbildungssituation
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -10167,8 +10367,9 @@ components:
           description: Required wenn taetigkeitsart != null
           type: string
     KindUpdate:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       required:
+        - entryId
         - vorname
         - nachname
         - geburtsdatum
@@ -10176,6 +10377,9 @@ components:
         - wohnsitzAnteilPia
       type: object
       properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+          description: A specific entry ID to refine the uniqueness
         vorname:
           type: string
         geburtsdatum:
@@ -10277,12 +10481,6 @@ components:
           type: integer
           minimum: 0
           maximum: 2147483647
-    SteuerdatenTyp:
-      enum:
-        - FAMILIE
-        - VATER
-        - MUTTER
-      type: string
     SteuererklaerungUpdate:
       title: Root Type for Steuererklaerung
       required:
@@ -10404,7 +10602,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/LebenslaufItemUpdate'
     Kind:
-      title: Root Type for Geschwister
+      title: Root Type for Kind
       type: object
       allOf:
         - $ref: '#/components/schemas/KindUpdate'
@@ -10555,6 +10753,28 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
         isInitial:
           type: boolean
+    GesuchStateInfo:
+      required:
+        - gesuchStatus
+        - beschwerdeHaengig
+        - canGetBerechnung
+        - canChangeGesuchsperiode
+        - canTriggerManuellPruefen
+        - canBearbeitungAbschliessen
+      type: object
+      properties:
+        gesuchStatus:
+          $ref: '#/components/schemas/Gesuchstatus'
+        beschwerdeHaengig:
+          type: boolean
+        canGetBerechnung:
+          type: boolean
+        canChangeGesuchsperiode:
+          type: boolean
+        canTriggerManuellPruefen:
+          type: boolean
+        canBearbeitungAbschliessen:
+          type: boolean
     GesuchTrancheSlim:
       type: object
       required:
@@ -10655,6 +10875,35 @@ components:
           required:
             - start
             - comment
+    GesuchDokumentEntry:
+      required:
+        - entryId
+        - name
+        - dokumentTyps
+      type: object
+      properties:
+        entryId:
+          $ref: '#/components/schemas/UUID'
+        name:
+          type: string
+        dokumentTyps:
+          type: array
+          items:
+            $ref: '#/components/schemas/DokumentTyp'
+    GesuchDokumentList:
+      required:
+        - entrys
+        - dokuments
+      type: object
+      properties:
+        entrys:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentEntry'
+        dokuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokument'
     DokumenteToUpload:
       type: object
       properties:
@@ -10666,6 +10915,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DokumentTyp'
+        requiredRefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchDokumentRef'
         unterschriftenblaetter:
           type: array
           items:
@@ -10674,29 +10927,17 @@ components:
           type: boolean
         gsCanDokumenteUebermitteln:
           type: boolean
-        sbCanBearbeitungAbschliessen:
-          type: boolean
         sbCanUploadUnterschriftenblatt:
           type: boolean
-    GesuchTrancheList:
+    GesuchDokumentRef:
+      required:
+        - dokumentTyp
       type: object
       properties:
-        tranchen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
-        initialTranchen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
-        aenderungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
-        abgelehnteAenderungen:
-          type: array
-          items:
-            $ref: '#/components/schemas/GesuchTrancheSlim'
+        dokumentTyp:
+          $ref: '#/components/schemas/DokumentTyp'
+        entryId:
+          $ref: '#/components/schemas/UUID'
     NeskoGetSteuerdatenRequest:
       required:
         - steuerdatenTyp

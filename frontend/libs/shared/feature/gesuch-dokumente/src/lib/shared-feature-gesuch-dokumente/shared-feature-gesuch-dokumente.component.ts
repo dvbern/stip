@@ -104,8 +104,13 @@ export class SharedFeatureGesuchDokumenteComponent {
       config: { isSachbearbeitungApp },
       gesuch,
     } = this.gesuchViewSig();
-    const { dokuments, requiredDocumentTypes, loading } =
-      this.dokumentsStore.dokumenteViewSig();
+    const {
+      dokuments,
+      entrys,
+      requiredDocumentTypes,
+      requiredDocumentRefs,
+      loading,
+    } = this.dokumentsStore.dokumenteViewSig();
     const stepsFlow = this.stepViewSig().stepsFlow;
 
     const kommentare = this.dokumentsStore.kommentareViewSig();
@@ -121,8 +126,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       allowTypes,
       stepsFlow,
       dokuments,
+      entrys,
       kommentare,
       requiredDocumentTypes,
+      requiredDocumentRefs,
       readonly,
       loading,
       gesuchStatus: gesuch?.gesuchStatus,
@@ -204,6 +211,12 @@ export class SharedFeatureGesuchDokumenteComponent {
     return permissions.canUploadUnterschriftenblatt && hasUnterschriftenblatt;
   });
 
+  allDocumentsAcceptedChangedSig = computed(() => {
+    return this.dokumentsStore
+      .dokuments()
+      .data?.every((i) => i.status !== 'AUSSTEHEND');
+  });
+
   constructor() {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(
@@ -225,12 +238,8 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
 
     effect(() => {
-      if (
-        this.config.isSachbearbeitungApp &&
-        this.dokumentsStore.dokumenteCanFlagsSig().sbCanBearbeitungAbschliessen
-      ) {
-        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
-      }
+      this.allDocumentsAcceptedChangedSig();
+      this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
     });
 
     this.store.dispatch(SharedEventGesuchDokumente.init());

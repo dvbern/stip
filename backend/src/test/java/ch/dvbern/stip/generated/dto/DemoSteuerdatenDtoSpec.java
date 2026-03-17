@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -48,7 +48,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DemoSteuerdatenDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
-  private ElternTypDtoSpec type;
+  private SteuerdatenTypDtoSpec type;
 
   public static final String JSON_PROPERTY_TOTAL_EINKUENFTE = "totalEinkuenfte";
   private Integer totalEinkuenfte;
@@ -95,7 +95,7 @@ public class DemoSteuerdatenDtoSpec {
   public DemoSteuerdatenDtoSpec() {
   }
 
-  public DemoSteuerdatenDtoSpec type(ElternTypDtoSpec type) {
+  public DemoSteuerdatenDtoSpec type(SteuerdatenTypDtoSpec type) {
     
     this.type = type;
     return this;
@@ -109,14 +109,14 @@ public class DemoSteuerdatenDtoSpec {
   @JsonProperty(JSON_PROPERTY_TYPE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public ElternTypDtoSpec getType() {
+  public SteuerdatenTypDtoSpec getType() {
     return type;
   }
 
 
   @JsonProperty(JSON_PROPERTY_TYPE)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setType(ElternTypDtoSpec type) {
+  public void setType(SteuerdatenTypDtoSpec type) {
     this.type = type;
   }
 

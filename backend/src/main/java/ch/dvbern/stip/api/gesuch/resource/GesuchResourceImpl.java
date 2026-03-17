@@ -54,6 +54,7 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchCreateResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
+import ch.dvbern.stip.generated.dto.GesuchHeaderDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -417,6 +418,13 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ, GS_GESUCH_READ })
+    public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {
+        gesuchAuthorizer.canGetBerechnungOfVerfuegung(verfuegungId);
+        return gesuchService.getBerechnungForVerfuegung(verfuegungId);
+    }
+
+    @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
         gesuchAuthorizer.canGetBerechnung(gesuchId);
@@ -447,6 +455,20 @@ public class GesuchResourceImpl implements GesuchResource {
 
         gesuchAuthorizer.gsCanRead(gesuchId);
         return gesuchService.getGesuchGS(gesuchTrancheId);
+    }
+
+    @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchId) {
+        gesuchAuthorizer.gsCanRead(gesuchId);
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchId) {
+        gesuchAuthorizer.sbOrJuristCanRead();
+        return gesuchService.getGesuchTrancheHeader(gesuchId);
     }
 
     @Override
@@ -501,6 +523,19 @@ public class GesuchResourceImpl implements GesuchResource {
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanChangeGesuchStatusToDatenschutzBriefDruckbereitIfStatusChangeRequired(gesuchId);
         gesuchService.gesuchStatusToDatenschutzbriefDruckbereit(gesuchId, kommentarDto);
+        return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
+    }
+
+    @RolesAllowed(SB_GESUCH_UPDATE)
+    @Override
+    public GesuchWithChangesDto changeGesuchStatusToBearbeitungAsAenderung(
+        UUID gesuchTrancheId,
+        KommentarDto kommentarDto
+    ) {
+        final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
+        final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
+        gesuchAuthorizer.sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(gesuchId);
+        gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuchId, kommentarDto);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 

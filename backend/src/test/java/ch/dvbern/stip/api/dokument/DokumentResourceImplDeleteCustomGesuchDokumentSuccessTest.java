@@ -183,7 +183,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
     @TestAsGesuchsteller
     @Order(7)
     void test_get_required_custom_gesuchdokuments_should_be_empty() {
-        final var requiredDocuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+        final var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -192,7 +192,7 @@ class DokumentResourceImplDeleteCustomGesuchDokumentSuccessTest {
             .extract()
             .body()
             .as(DokumenteToUploadDto.class);
-        assertThat(requiredDocuments.getCustomDokumentTyps().size(), is(0));
+        assertThat(requiredDokuments.getCustomDokumentTyps().size(), is(0));
     }
 
     @Test

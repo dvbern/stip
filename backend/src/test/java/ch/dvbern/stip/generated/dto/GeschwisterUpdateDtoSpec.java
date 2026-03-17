@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * GeschwisterUpdateDtoSpec
  */
 @JsonPropertyOrder({
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_ENTRY_ID,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_VORNAME,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ,
@@ -44,6 +45,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("GeschwisterUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GeschwisterUpdateDtoSpec {
+  public static final String JSON_PROPERTY_ENTRY_ID = "entryId";
+  private UUID entryId;
+
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
@@ -70,6 +74,32 @@ public class GeschwisterUpdateDtoSpec {
 
   public GeschwisterUpdateDtoSpec() {
   }
+
+  public GeschwisterUpdateDtoSpec entryId(UUID entryId) {
+    
+    this.entryId = entryId;
+    return this;
+  }
+
+   /**
+   * Get entryId
+   * @return entryId
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getEntryId() {
+    return entryId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ENTRY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setEntryId(UUID entryId) {
+    this.entryId = entryId;
+  }
+
 
   public GeschwisterUpdateDtoSpec vorname(String vorname) {
     
@@ -287,7 +317,8 @@ public class GeschwisterUpdateDtoSpec {
       return false;
     }
     GeschwisterUpdateDtoSpec geschwisterUpdate = (GeschwisterUpdateDtoSpec) o;
-    return Objects.equals(this.vorname, geschwisterUpdate.vorname) &&
+    return Objects.equals(this.entryId, geschwisterUpdate.entryId) &&
+        Objects.equals(this.vorname, geschwisterUpdate.vorname) &&
         Objects.equals(this.geburtsdatum, geschwisterUpdate.geburtsdatum) &&
         Objects.equals(this.wohnsitz, geschwisterUpdate.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, geschwisterUpdate.ausbildungssituation) &&
@@ -299,13 +330,14 @@ public class GeschwisterUpdateDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeschwisterUpdateDtoSpec {\n");
+    sb.append("    entryId: ").append(toIndentedString(entryId)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");

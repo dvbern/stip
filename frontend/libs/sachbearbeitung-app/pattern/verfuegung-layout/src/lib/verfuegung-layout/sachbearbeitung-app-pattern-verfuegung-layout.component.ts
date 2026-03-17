@@ -61,7 +61,8 @@ export class SachbearbeitungAppPatternVerfuegungLayoutComponent {
 
   gesuchIdSig = this.store.selectSignal(selectRouteId);
   gesuchPermissionsSig = computed(() => {
-    const gesuchStatus = this.gesuchInfoStore.gesuchInfo().data?.gesuchStatus;
+    const gesuchStatus =
+      this.gesuchInfoStore.gesuchInfo().data?.state.gesuchStatus;
     const rolesMap = this.permissionStore.rolesMapSig();
     if (!gesuchStatus) {
       return {};

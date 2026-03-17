@@ -41,12 +41,16 @@ export interface DokumentServiceCreateCustomDokumentTypRequestParams {
 export interface DokumentServiceCreateDokumentGSRequestParams {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    /** A specific entry ID to refine the uniqueness of gesuchDokumente for list elements */
+    entryId?: string;
     fileUpload: Blob;
 }
 
 export interface DokumentServiceCreateDokumentSBRequestParams {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    /** A specific entry ID to refine the uniqueness of gesuchDokumente for list elements */
+    entryId?: string;
     fileUpload: Blob;
 }
 
@@ -102,11 +106,15 @@ export interface DokumentServiceGetDokumentDownloadTokenRequestParams {
 export interface DokumentServiceGetGesuchDokumentForTypGSRequestParams {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    /** A specific entry ID to refine the uniqueness of gesuchDokumente for list elements */
+    entryId?: string;
 }
 
 export interface DokumentServiceGetGesuchDokumentForTypSBRequestParams {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
+    /** A specific entry ID to refine the uniqueness of gesuchDokumente for list elements */
+    entryId?: string;
 }
 
 export interface DokumentServiceGetGesuchDokumentKommentareGSRequestParams {
@@ -317,6 +325,7 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentGS$.');
         }
+        const entryId = requestParameters.entryId;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentGS$.');
@@ -325,6 +334,10 @@ export class DokumentService {
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (entryId !== undefined && entryId !== null) {
+          queryParams.append('entryId', entryId.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -350,9 +363,16 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentGS$.');
         }
+        const entryId = requestParameters.entryId;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentGS$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (entryId !== undefined && entryId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>entryId, 'entryId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -426,6 +446,7 @@ export class DokumentService {
             {
                 context: localVarHttpContext,
                 body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -444,6 +465,7 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentSB$.');
         }
+        const entryId = requestParameters.entryId;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentSB$.');
@@ -452,6 +474,10 @@ export class DokumentService {
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (entryId !== undefined && entryId !== null) {
+          queryParams.append('entryId', entryId.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -477,9 +503,16 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling createDokumentSB$.');
         }
+        const entryId = requestParameters.entryId;
         const fileUpload = requestParameters.fileUpload;
         if (fileUpload === null || fileUpload === undefined) {
             throw new Error('Required parameter fileUpload was null or undefined when calling createDokumentSB$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (entryId !== undefined && entryId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>entryId, 'entryId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -553,6 +586,7 @@ export class DokumentService {
             {
                 context: localVarHttpContext,
                 body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -1598,10 +1632,15 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypGS$.');
         }
+        const entryId = requestParameters.entryId;
         let path = `/api/v1/gesuchDokument/gs/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (entryId !== undefined && entryId !== null) {
+          queryParams.append('entryId', entryId.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -1626,6 +1665,13 @@ export class DokumentService {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypGS$.');
+        }
+        const entryId = requestParameters.entryId;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (entryId !== undefined && entryId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>entryId, 'entryId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1677,6 +1723,7 @@ export class DokumentService {
         return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -1695,10 +1742,15 @@ export class DokumentService {
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypSB$.');
         }
+        const entryId = requestParameters.entryId;
         let path = `/api/v1/gesuchDokument/sb/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/${this.configuration.encodeParam({name: "dokumentTyp", value: dokumentTyp, in: "path", style: "simple", explode: false, dataType: "DokumentTyp", dataFormat: undefined})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (entryId !== undefined && entryId !== null) {
+          queryParams.append('entryId', entryId.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -1723,6 +1775,13 @@ export class DokumentService {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
             throw new Error('Required parameter gesuchTrancheId was null or undefined when calling getGesuchDokumentForTypSB$.');
+        }
+        const entryId = requestParameters.entryId;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (entryId !== undefined && entryId !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>entryId, 'entryId');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1774,6 +1833,7 @@ export class DokumentService {
         return this.httpClient.request<NullableGesuchDokument>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

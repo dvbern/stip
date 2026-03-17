@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Input,
   Output,
+  computed,
   effect,
   inject,
   input,
@@ -113,6 +114,13 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   @Output() formIsUnsaved: Observable<boolean>;
 
   private store = inject(Store);
+  private entryIdSig = computed(() => {
+    const geschwister = this.geschwisterSig();
+
+    return geschwister.id && geschwister.entryId
+      ? geschwister.entryId
+      : self.crypto.randomUUID();
+  });
 
   protected readonly ausbildungssituationValues =
     Object.values(Ausbildungssituation);
@@ -122,7 +130,10 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   updateValidity$ = new Subject<unknown>();
 
   private gotReenabledSig = toSignal(this.gotReenabled$);
-  private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
+  private createUploadOptionsSig = createUploadOptionsFactory(
+    this.viewSig,
+    this.entryIdSig,
+  );
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -220,6 +231,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       this.saveTriggered.emit({
         ...this.form.getRawValue(),
         id: this.geschwisterSig().id,
+        entryId: this.entryIdSig(),
         geburtsdatum,
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
         ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
