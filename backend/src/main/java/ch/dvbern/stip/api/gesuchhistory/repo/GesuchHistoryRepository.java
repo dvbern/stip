@@ -173,26 +173,6 @@ public class GesuchHistoryRepository {
             .findFirst();
     }
 
-    @SuppressWarnings("unchecked")
-    public Optional<Integer> getEarliestRevisionWhereStatusChangedAfterRevision(
-        final UUID gesuchId,
-        final Integer revisionNumber
-    ) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, false, true)
-            .addProjection(AuditEntity.revisionNumber())
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.revisionNumber().gt(revisionNumber))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
-    }
-
     public Optional<Gesuch> getGesuchAtRevision(final UUID gesuchId, final Integer revisionNumber) {
         @SuppressWarnings("unchecked")
         final Optional<Gesuch> revision = AuditReaderFactory.get(entityManager)

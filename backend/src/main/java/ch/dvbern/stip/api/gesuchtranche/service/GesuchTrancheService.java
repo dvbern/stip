@@ -149,16 +149,13 @@ public class GesuchTrancheService {
     public GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
         final var offeneAenderung =
             gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
-        final var akzeptierteAenderungs =
-            gesuchTrancheHistoryRepository.getAllAkzeptierteAenderungTranches(gesuch.getId())
-                .stream()
-                .map(gesuchTrancheMapper::toSlimDto)
-                .toList();
-        final var abgelehnteAenderungs =
-            gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungTranches(gesuch.getId())
-                .stream()
-                .map(gesuchTrancheMapper::toSlimDto)
-                .toList();
+        final var akzeptierteAenderungs = gesuch.getAenderungs()
+            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT)
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
+        final var abgelehnteAenderungs = gesuchTrancheMapper.toSlimDtoWithRevision(
+            gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungTrancheHistory(gesuch.getId())
+        );
         return new GesuchAenderungsDto()
             .offen(offeneAenderung)
             .akzeptiert(akzeptierteAenderungs)
@@ -482,8 +479,12 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
+        final var lastFreigegebenTrancheRevision =
+            gesuchTrancheHistoryRepository.getLatestRevisionWhereStatusWasInBearbeitungGs(aenderungId).get();
+
         final var lastFreigegebenTranche =
-            gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+            gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, lastFreigegebenTrancheRevision + 1);
+
         final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 
         var gesuchTrancheUpdateDto = new GesuchTrancheUpdateDto().id(

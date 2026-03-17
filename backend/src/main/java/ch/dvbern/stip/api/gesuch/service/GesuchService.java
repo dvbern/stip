@@ -1170,11 +1170,13 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new)
             .getId();
 
-        final Integer revisionToResetTo =
-            gesuchTrancheHistoryRepository
-                .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
-                .orElseThrow()
-            - 1;
+        final Integer revisionToResetTo = gesuchTrancheHistoryRepository
+            .getLatestRevisionWhereStatusChangedToOneOf(
+                relevantAenderungId,
+                List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            )
+            .orElseThrow()
+        - 1;
 
         // Select the gesuch just before it changes from STIPENDIENANSPRUCH/KEIN_STIPENDIENANSPRUCH to IN_BEARBEITUNG_SB
         final var gesuchToRevertTo = gesuchHistoryRepository
@@ -1185,7 +1187,7 @@ public class GesuchService {
 
         // We need to fetch comments before making changes to the gesuch as otherwise hibernate would commit those
         // changes at the getGesuchDokumentKommentarOfGesuchDokumentAtRevision calls
-        for (var gesuchTranche : gesuchToRevertTo.getGesuchTranchen()) {
+        for (var gesuchTranche : gesuchToRevertTo.getTranchenTranchen().toList()) {
             List<GesuchDokumentKommentar> gesuchDokumentKommentars = gesuchTranche
                 .getGesuchDokuments()
                 .stream()
@@ -1198,9 +1200,11 @@ public class GesuchService {
             trancheIdGesuchDokumentKommentarsMap.put(gesuchTranche.getId(), gesuchDokumentKommentars);
         }
 
-        final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
+        final var tranchenIdsToDrop = gesuch.getTranchenTranchen().map(AbstractEntity::getId).toList();
 
-        for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
+        gesuchTrancheRepository.requireAenderungById(relevantAenderungId).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+
+        for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getTranchenTranchen().toList()) {
             final var newTranche = gesuchTrancheCopyService.copyTrancheExceptGesuchDokuments(
                 gesuchTrancheToRevertTo,
                 gesuchTrancheToRevertTo.getGueltigkeit(),

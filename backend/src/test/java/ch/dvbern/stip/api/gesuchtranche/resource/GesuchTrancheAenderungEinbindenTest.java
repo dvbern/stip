@@ -53,6 +53,7 @@ import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDtoSpec;
@@ -434,6 +435,14 @@ class GesuchTrancheAenderungEinbindenTest {
             gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches()).hasSize(1);
+
+        gesuchTrancheApiSpec.aenderungAblehnen()
+            .body(new KommentarDtoSpec().text("asd"))
+            .aenderungIdPath(aenderungId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test

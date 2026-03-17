@@ -90,7 +90,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Slf4j
 @Validated
 public class GesuchResourceImpl implements GesuchResource {
-
     private final GesuchService gesuchService;
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchAuthorizer gesuchAuthorizer;
