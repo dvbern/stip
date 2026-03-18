@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.tenancy.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.type.TenantFeature;
@@ -88,7 +89,10 @@ public class TenantService {
 
     public MandantIdentifier resolveTenant(final String subdomain) {
         for (final var perTenantSubdomain : perTenantSubdomains) {
-            if (perTenantSubdomain.subdomains().contains(subdomain)) {
+            if (perTenantSubdomain.subdomains().stream().anyMatch(subdomainPattern -> {
+                final var pattern = Pattern.compile(subdomainPattern, Pattern.CASE_INSENSITIVE);
+                return pattern.matcher(subdomain).matches();
+            })) {
                 return MandantIdentifier.of(perTenantSubdomain.tenant());
             }
         }

@@ -91,11 +91,11 @@ kstip:
   tenancy:
     bern:
       subdomains:
-        - 'dev-stip'
-        - 'dev-sb-stip'
+        - '^dev-.*'
+        - '^feature-kstip.*'
     dv:
       subdomains:
-        - 'dv'
+        - '^dv-.*'
   features:
     bern:
       nesko: true
