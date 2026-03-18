@@ -488,6 +488,9 @@
 
   "shared.form.delegation.email.label": "E-Mail",
   "shared.form.delegation.sprache.label": "Korrespondenzsprache",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix": "Ich übertrage der ausgewählten Institution (z.B. Sozialdienst) meine Gesuchdaten inkl. Auszahlungsdaten zu erfassen. Sämtliche Korrespondenz sowie die Verfügung geht an mich und in Kopie an die ausgewählte Institution. Mit der Delegation nehme ich die ",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link": "Nutzungsbedingungen",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix": " an.",
 
   "shared.person.title": "Person in Ausbildung",
   "shared.form.person.sozialversicherungsnummer.info": "Wenn Sie Ihre Sozialversicherungsnummer benötigen, prüfen Sie zunächst Ihre Krankenversicherungskarte. Die Nummer entspricht in der Regel der AHV-Nummer. Falls Sie die Nummer dort nicht finden, können Sie sie bei der Gemeindeverwaltung Ihrer Wohngemeinde erfragen. Wenn bei Ihnen keine Sozialversicherungsnummer vorhanden ist, kontaktieren Sie uns.",
