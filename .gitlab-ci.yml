@@ -146,7 +146,7 @@ package:frontend-app:
       artifacts: true
   parallel:
     matrix:
-      - APP_NAME: [ gesuch-app, sachbearbeitung-app, sozialdienst-app, demo-app ]
+      - APP_NAME: [ gesuch-app, sachbearbeitung-app, sozialdienst-app, demo-data-app ]
 
 package:api:
   needs:
