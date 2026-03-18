@@ -67,6 +67,7 @@ public class TenantService {
 
     public TenantFeature.Feature getFeatures() {
         final var features = tenantFeature;
+
         return switch (getCurrentMandantIdentifier()) {
             case BERN -> features.bern();
             case DV -> features.dv();

@@ -51,9 +51,6 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdate(UUID gesuchTrancheId) {
-        if (!tenantService.getFeatures().nesko()) {
-            forbidden();
-        }
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (isSachbearbeiter(currentBenutzer)) {
@@ -66,6 +63,16 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
                 geuchTrancheRepository.requireById(gesuchTrancheId).getGesuch().getGesuchStatus()
             )
         ) {
+            return;
+        }
+
+        forbidden();
+    }
+
+    @Transactional
+    public void canUpdateFromNesko(UUID gesuchTrancheId) {
+        canUpdate(gesuchTrancheId);
+        if (tenantService.getFeatures().nesko()) {
             return;
         }
 
