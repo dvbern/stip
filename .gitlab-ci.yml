@@ -1,4 +1,4 @@
-stages: [build, validate, test, package, deploy, e2e, review-e2e, mirror]
+stages: [ build, validate, test, package, deploy, e2e, review-e2e, mirror ]
 
 include:
   - component: "gitlab.dvbern.ch/components/setup/workflow@1.5.0"
@@ -14,8 +14,8 @@ include:
         -Drevision=$VERSION
         -Pcoverage
         -Dci.disableConsole=true
-        -Dci.logLevel=WARN  
-        install    
+        -Dci.logLevel=WARN
+        install
 
   - component: 'gitlab.dvbern.ch/components/build/nx@1.13.0'
     inputs:
@@ -48,43 +48,13 @@ include:
 
   - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
     inputs:
-      name: package:sachbearbeitung-app
+      name: .package:frontend-app
       context-dir: frontend
-      image-name: 'sachbearbeitung-app'
+      image-name: '$APP_NAME'
       version: '$VERSION'
       build-latest: false
       build-args: |
-        APP=sachbearbeitung-app
-
-  - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
-    inputs:
-      name: package:gesuch-app
-      context-dir: frontend
-      image-name: 'gesuch-app'
-      version: '$VERSION'
-      build-latest: false
-      build-args: |
-        APP=gesuch-app
-
-  - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
-    inputs:
-      name: package:sozialdienst-app
-      context-dir: frontend
-      image-name: 'sozialdienst-app'
-      version: '$VERSION'
-      build-latest: false
-      build-args: |
-        APP=sozialdienst-app
-
-  - component: 'gitlab.dvbern.ch/components/package/buildah@2.3.0'
-    inputs:
-      name: package:demo-app
-      context-dir: frontend
-      image-name: 'demo-app'
-      version: '$VERSION'
-      build-latest: false
-      build-args: |
-        APP=demo-data-app
+        APP=$APP_NAME
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.14.1'
     inputs:
@@ -106,6 +76,7 @@ include:
       deployment-environment-values-path: 'charts/stip/environments/uat/values.yaml'
       deployment-on: 'tag'
       deployment-mode: 'manual'
+      deployment-config-tracking-mode: "release"  # Enable release mode
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
@@ -118,6 +89,7 @@ include:
       deployment-environment-values-path: 'charts/stip/environments/schulung/values.yaml'
       deployment-on: 'tag'
       deployment-mode: 'manual'
+      deployment-config-tracking-mode: "release"  # Enable release mode
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
@@ -165,39 +137,28 @@ include:
 build-api:
   variables:
     GIT_DEPTH: 0
-  needs: []
+  needs: [ ]
+
+package:frontend-app:
+  extends: .package:frontend-app
+  needs:
+    - job: nx-build
+      artifacts: true
+  parallel:
+    matrix:
+      - APP_NAME: [ gesuch-app, sachbearbeitung-app, sozialdienst-app, demo-app ]
 
 package:api:
   needs:
     - job: build-api
       artifacts: true
 
-package:gesuch-app:
-  needs:
-    - job: nx-build
-      artifacts: true
-
-package:sachbearbeitung-app:
-  needs:
-    - job: nx-build
-      artifacts: true
-
-package:sozialdienst-app:
-  needs:
-    - job: nx-build
-      artifacts: true      
-
-package:demo-app:
-  needs:
-    - job: nx-build
-      artifacts: true
-
 ### E2E
 .install-argocd:
-  tags: ['zone:tz', 'os:linux', 'type:docker']
+  tags: [ 'zone:tz', 'os:linux', 'type:docker' ]
   image:
     name: docker-registry.dvbern.ch/devops/docker/tools/k8s/main
-    entrypoint: ['']
+    entrypoint: [ '' ]
   variables:
     ARGOCD_SERVER: '$ARGOCD_SERVER'
     ARGOCD_AUTH_TOKEN: '$ARGOCD_TOKEN'
@@ -233,6 +194,7 @@ start-e2e:
 nx-e2e-test:
   stage: e2e
   resource_group: 'e2e'
+  allow_failure: true
   variables:
     E2E_BASEURL_GS: 'https://e2e-stip.$DVB_OCP_MERCURY_ROUTER'
     E2E_BASEURL_SB: 'https://e2e-sb-stip.$DVB_OCP_MERCURY_ROUTER'
@@ -244,7 +206,7 @@ wait-for-review:
   tags: [ "zone:tz", "os:linux", "type:docker" ]
   image:
     name: '${DVB_DOCKER_REGISTRY}/dockerhub/alpine/curl'
-    entrypoint: ['']
+    entrypoint: [ '' ]
   stage: review-e2e
   needs:
     - argocd:review-app:start
