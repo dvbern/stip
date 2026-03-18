@@ -17,10 +17,10 @@
 
 package ch.dvbern.stip.api.common.type;
 
-import io.quarkus.arc.Unremovable;
+import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 
-@Unremovable
+@StaticInitSafe
 @ConfigMapping(prefix = "kstip.feature")
 public interface TenantFeature {
     interface Feature {
