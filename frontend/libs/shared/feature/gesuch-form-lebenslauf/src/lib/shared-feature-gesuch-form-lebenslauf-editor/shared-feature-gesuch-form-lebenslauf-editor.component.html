@@ -190,11 +190,29 @@
     <!-- Ausbildung abgeschlossen -->
     @if (itemSig().type === 'AUSBILDUNG') {
       <div class="col-12 col-md-6">
-        <mat-checkbox
+        <mat-radio-group
+          class="tw:w-full"
           [formControl]="form.controls.ausbildungAbgeschlossen"
           data-testid="lebenslauf-editor-ausbildung-abgeschlossen"
-          >{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | transloco }}</mat-checkbox
+          dvSharedUiFormField
         >
+          <div class="d-flex col-12">
+            <mat-label>{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | transloco }}</mat-label>
+          </div>
+          <div class="d-flex justify-content-between flex-column col-12 gap-2">
+            @for (value of [true, false]; track $index) {
+              <mat-radio-button [value]="value">{{
+                'shared.ui.' + (value ? 'yes' : 'no') | transloco
+              }}</mat-radio-button>
+            }
+          </div>
+
+          <div class="group-errors">
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </div>
+        </mat-radio-group>
       </div>
     }
   </div>
