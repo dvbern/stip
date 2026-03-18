@@ -636,10 +636,12 @@ public class GesuchService {
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, gesuchStatusChangeEvent, kommentarDto, true);
 
+        final var relevantTranche = gesuch.getGesuchTranchen().getFirst();
         // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
         return new GesuchZurueckweisenResponseDto()
             .gesuchId(gesuchId)
-            .gesuchTrancheId(gesuch.getGesuchTranchen().get(0).getId());
+            .gesuchTrancheId(relevantTranche.getId())
+            .gesuchTrancheTyp(relevantTranche.getTyp());
     }
 
     @Transactional
@@ -689,7 +691,7 @@ public class GesuchService {
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG,
             new KommentarDto().text(
                 translator.translate(
                     "stip.gesuch.status-change.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG",
@@ -1257,6 +1259,7 @@ public class GesuchService {
         } else {
             resetGesuchZurueckweisenToEingereicht(gesuch);
         }
+        gesuch.setInBearbeitungSbReason(null);
     }
 
     @Transactional

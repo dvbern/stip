@@ -22,10 +22,13 @@ import java.util.Arrays;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
@@ -33,6 +36,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
@@ -72,6 +76,10 @@ class GesuchStatusStateMachineTest {
     private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private StatusprotokollService statusprotokollService;
     private VerfuegtHandler verfuegtHandlerMock;
+    private AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
+    private AusbildungUnterbruchAkzeptierenHandler ausbildungUnterbruchAkzeptierenHandler;
+    private BeschwerdeErfolgreichAkzeptierenHandler beschwerdeErfolgreichAkzeptierenHandler;
+    private SbInitialisiertAenderungHandler sbInitialisiertAenderungHandler;
     private StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config;
 
     @BeforeEach
@@ -95,6 +103,10 @@ class GesuchStatusStateMachineTest {
         aenderungFehlendeDokumenteZurueckweisenHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
         verfuegtHandlerMock = Mockito.mock(VerfuegtHandler.class);
+        aenderungAkzeptierenHandler = Mockito.mock(AenderungAkzeptierenHandler.class);
+        ausbildungUnterbruchAkzeptierenHandler = Mockito.mock(AusbildungUnterbruchAkzeptierenHandler.class);
+        beschwerdeErfolgreichAkzeptierenHandler = Mockito.mock(BeschwerdeErfolgreichAkzeptierenHandler.class);
+        sbInitialisiertAenderungHandler = Mockito.mock(SbInitialisiertAenderungHandler.class);
 
         config = new GesuchStatusConfigProducer(
             gesuchFehlendeDokumenteNichtEingereichtHandlerSpy,
@@ -112,7 +124,11 @@ class GesuchStatusStateMachineTest {
             statusprotokollService,
             bereitFuerBearbeitungHandler,
             aenderungFehlendeDokumenteZurueckweisenHandlerMock,
-            verfuegtHandlerMock
+            verfuegtHandlerMock,
+            aenderungAkzeptierenHandler,
+            ausbildungUnterbruchAkzeptierenHandler,
+            beschwerdeErfolgreichAkzeptierenHandler,
+            sbInitialisiertAenderungHandler
         ).createStateMachineConfig();
     }
 

@@ -18,13 +18,17 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
+@Slf4j
+@RequiredArgsConstructor
+public class AusbildungUnterbruchAkzeptierenHandler implements GesuchStatusChangeHandler {
     @Override
     public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
+        gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.UNTERBRUCH);
     }
 }

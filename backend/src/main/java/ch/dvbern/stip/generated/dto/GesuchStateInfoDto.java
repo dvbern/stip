@@ -25,6 +25,7 @@ public class GesuchStateInfoDto  implements Serializable {
   private @Valid Boolean canChangeGesuchsperiode;
   private @Valid Boolean canTriggerManuellPruefen;
   private @Valid Boolean canBearbeitungAbschliessen;
+  private @Valid ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
 
   /**
    **/
@@ -140,6 +141,24 @@ public class GesuchStateInfoDto  implements Serializable {
     this.canBearbeitungAbschliessen = canBearbeitungAbschliessen;
   }
 
+  /**
+   **/
+  public GesuchStateInfoDto inBearbeitungSbReason(ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason) {
+    this.inBearbeitungSbReason = inBearbeitungSbReason;
+    return this;
+  }
+
+  
+  @JsonProperty("inBearbeitungSbReason")
+  public ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason getInBearbeitungSbReason() {
+    return inBearbeitungSbReason;
+  }
+
+  @JsonProperty("inBearbeitungSbReason")
+  public void setInBearbeitungSbReason(ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason) {
+    this.inBearbeitungSbReason = inBearbeitungSbReason;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -155,12 +174,13 @@ public class GesuchStateInfoDto  implements Serializable {
         Objects.equals(this.canGetBerechnung, gesuchStateInfo.canGetBerechnung) &&
         Objects.equals(this.canChangeGesuchsperiode, gesuchStateInfo.canChangeGesuchsperiode) &&
         Objects.equals(this.canTriggerManuellPruefen, gesuchStateInfo.canTriggerManuellPruefen) &&
-        Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen);
+        Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen) &&
+        Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen);
+    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, inBearbeitungSbReason);
   }
 
   @Override
@@ -174,6 +194,7 @@ public class GesuchStateInfoDto  implements Serializable {
     sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canBearbeitungAbschliessen: ").append(toIndentedString(canBearbeitungAbschliessen)).append("\n");
+    sb.append("    inBearbeitungSbReason: ").append(toIndentedString(inBearbeitungSbReason)).append("\n");
     sb.append("}");
     return sb.toString();
   }

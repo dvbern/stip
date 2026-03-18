@@ -39,6 +39,7 @@ public abstract class GesuchStateInfoMapper {
     @Mapping(source = ".", target = "canTriggerManuellPruefen", qualifiedByName = "getCanTriggerManuellPruefen")
     @Mapping(source = ".", target = "canBearbeitungAbschliessen", qualifiedByName = "canBearbeitungAbschliessen")
     @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
+    // @Mapping(source = ".", target = "inBearbeitungSbReason")
     public abstract GesuchStateInfoDto toDto(Gesuch gesuch);
 
     @Named("getCanGetBerechnung")

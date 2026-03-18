@@ -9577,11 +9577,14 @@ components:
       required:
         - gesuchId
         - gesuchTrancheId
+        - gesuchTrancheTyp
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
+        gesuchTrancheTyp:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     ManuelleVerfuegungCreate:
       required:
         - fileUpload
@@ -10755,6 +10758,13 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
         isInitial:
           type: boolean
+    InBearbeitungSbReason:
+      enum:
+        - INITIAL
+        - AENDERUNG
+        - UNTERBRUCH
+        - BESCHWERDE
+        - SB_AENDERUNG
     GesuchStateInfo:
       required:
         - gesuchStatus
@@ -10777,6 +10787,8 @@ components:
           type: boolean
         canBearbeitungAbschliessen:
           type: boolean
+        inBearbeitungSbReason:
+          $ref: '#/components/schemas/InBearbeitungSbReason'
     GesuchTrancheSlim:
       type: object
       required:
