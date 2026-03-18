@@ -131,16 +131,10 @@ public class PersoenlichesBudgetCalculatorV1 {
         var fahrkosten = antragssteller.getFahrkosten();
         var fahrkostenTotal = fahrkosten;
         var fahrkostenPartner = antragssteller.getFahrkostenPartner();
-        var fahrkostenPartnerTotal = fahrkostenPartner;
 
         if (antragssteller.isVerheiratetKonkubinat()) {
             fahrkostenTotal = roundHalfUp(
                 BigDecimal.valueOf(fahrkosten)
-                    .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
-            );
-
-            fahrkostenPartnerTotal = roundHalfUp(
-                BigDecimal.valueOf(fahrkostenPartner)
                     .multiply(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()))
             );
         }
@@ -175,7 +169,7 @@ public class PersoenlichesBudgetCalculatorV1 {
                 ausbildungskostenTotal,
                 steuern,
                 fahrkostenTotal,
-                fahrkostenPartnerTotal,
+                fahrkostenPartner,
                 verpflegung,
                 verpflegungPartner,
                 fremdbetreuung,
@@ -195,7 +189,6 @@ public class PersoenlichesBudgetCalculatorV1 {
             .medizinischeGrundversorgung(medizinischeGrundversorgungs)
             .medizinischeGrundversorgungTotal(medizinischeGrundversorgungTotal)
             .fahrkostenPartner(fahrkostenPartner)
-            .fahrkostenPartnerTotal(fahrkostenPartnerTotal)
             .verpflegungPartner(verpflegungPartner)
             .betreuungskostenKinder(fremdbetreuung)
             .kantonsGemeindesteuern(steuern)

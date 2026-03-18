@@ -9945,8 +9945,6 @@ components:
           type: integer
         fahrkostenPartner:
           type: integer
-        fahrkostenPartnerTotal:
-          type: integer
         verpflegungPartner:
           type: integer
         betreuungskostenKinder:
