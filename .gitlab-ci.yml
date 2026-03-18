@@ -162,6 +162,9 @@ include:
 
 
 ### Component Extensions
+build-api:
+  needs: []
+
 package:api:
   needs:
     - job: build-api
