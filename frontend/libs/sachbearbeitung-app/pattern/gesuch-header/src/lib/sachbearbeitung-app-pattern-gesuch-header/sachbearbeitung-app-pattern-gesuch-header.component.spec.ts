@@ -30,7 +30,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     NEGATIVE_VERFUEGUNG_ERSTELLEN: vitest.fn(),
     VERFUEGT: vitest.fn(),
     VERSENDET: vitest.fn(),
-    ZURUECKWEISEN: vitest.fn(),
+    ZURUECKWEISEN_OR_UNDO: vitest.fn(),
     STATUS_PRUEFUNG_AUSLOESEN: vitest.fn(),
     SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT: vitest.fn(),
   } satisfies Record<StatusUebergang, unknown>;
@@ -108,7 +108,7 @@ describe('SachbearbeitungAppPatternGesuchHeaderComponent', () => {
     },
   );
 
-  it.each([['ZURUECKWEISEN']] satisfies [StatusUebergang][])(
+  it.each([['ZURUECKWEISEN_OR_UNDO']] satisfies [StatusUebergang][])(
     'should call setStatus$[%s] when using setStatusUebergang with onSuccess',
     (nextStatus) => {
       component.setStatusUebergang(nextStatus, 'gesuchId', 'gesuchTrancheId');

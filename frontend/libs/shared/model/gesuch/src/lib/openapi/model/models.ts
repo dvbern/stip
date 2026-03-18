@@ -175,6 +175,7 @@ export * from './getFreiwilligDarlehenSbQueryType';
 export * from './getGesucheSBQueryType';
 export * from './getMassendruckJobQueryType';
 export * from './gueltigkeitStatus';
+export * from './inBearbeitungSbReason';
 export * from './juristischeAbklaerungNotizAntwort';
 export * from './kanton';
 export * from './kind';

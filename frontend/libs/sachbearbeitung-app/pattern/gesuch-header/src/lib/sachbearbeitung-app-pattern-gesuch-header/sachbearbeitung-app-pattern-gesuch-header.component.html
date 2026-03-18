@@ -64,7 +64,7 @@
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
-            [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
+            [class.active]="trancheId === offeneAenderung.id"
           >
             <span>
               {{
@@ -271,24 +271,26 @@
             }
 
             @for (uebergang of statusUebergaenge.list; track $index) {
-              <button
-                type="button"
-                class="btn fw-normal pe-auto px-2 shadow-none"
-                [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
-                [disabled]="uebergang.disabledReason || !trancheId"
-                [matTooltip]="
-                  uebergang.disabledReason
-                    ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
-                    : null
-                "
-                mat-menu-item
-                (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
-              >
-                <div class="d-flex align-items-center gap-2">
-                  <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-                  <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.typ}`) }}</span>
-                </div>
-              </button>
+              @if (uebergang.name) {
+                <button
+                  type="button"
+                  class="btn fw-normal pe-auto px-2 shadow-none"
+                  [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                  [disabled]="uebergang.disabledReason || !trancheId"
+                  [matTooltip]="
+                    uebergang.disabledReason
+                      ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                      : null
+                  "
+                  mat-menu-item
+                  (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                    <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
+                  </div>
+                </button>
+              }
             }
           </div>
         </mat-menu>

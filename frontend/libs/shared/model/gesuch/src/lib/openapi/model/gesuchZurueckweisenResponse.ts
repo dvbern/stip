@@ -9,9 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GesuchTrancheTyp } from './gesuchTrancheTyp';
 
 export interface GesuchZurueckweisenResponse { 
     gesuchId: string;
     gesuchTrancheId: string;
+    gesuchTrancheTyp: GesuchTrancheTyp;
 }
+
+
 
