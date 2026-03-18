@@ -163,6 +163,8 @@ include:
 
 ### Component Extensions
 build-api:
+  variables:
+    GIT_DEPTH: 0
   needs: []
 
 package:api:
