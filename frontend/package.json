@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "nx": "nx",
     "prepare": "cd .. && husky frontend/.husky",
     "start": "nx run-many --target=serve",
     "start:gs": "npm run serve:gs",
@@ -120,6 +121,7 @@
     "@nx/js": "22.4.4",
     "@nx/playwright": "22.4.4",
     "@nx/plugin": "22.4.4",
+    "@nx/shared-fs-cache": "^5.0.2",
     "@nx/vite": "22.4.4",
     "@nx/vitest": "22.4.4",
     "@nx/web": "22.4.4",
