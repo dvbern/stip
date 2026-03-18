@@ -9,15 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TenantAuthConfig } from './tenantAuthConfig';
-import { TenantFeature } from './tenantFeature';
 
-/**
- * Client Application Info about a `Tenant`
- */
-export interface TenantInfo { 
-    clientAuth: TenantAuthConfig;
-    features: TenantFeature;
-    identifier: string;
+export interface TenantFeature { 
+    nesko: boolean;
 }
 

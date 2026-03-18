@@ -1,6 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
+import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -22,27 +23,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class TenantInfoDto  implements Serializable {
-  private @Valid String identifier;
   private @Valid TenantAuthConfigDto clientAuth;
-
-  /**
-   **/
-  public TenantInfoDto identifier(String identifier) {
-    this.identifier = identifier;
-    return this;
-  }
-
-  
-  @JsonProperty("identifier")
-  @NotNull
-  public String getIdentifier() {
-    return identifier;
-  }
-
-  @JsonProperty("identifier")
-  public void setIdentifier(String identifier) {
-    this.identifier = identifier;
-  }
+  private @Valid TenantFeatureDto features;
+  private @Valid String identifier;
 
   /**
    **/
@@ -63,6 +46,44 @@ public class TenantInfoDto  implements Serializable {
     this.clientAuth = clientAuth;
   }
 
+  /**
+   **/
+  public TenantInfoDto features(TenantFeatureDto features) {
+    this.features = features;
+    return this;
+  }
+
+  
+  @JsonProperty("features")
+  @NotNull
+  public TenantFeatureDto getFeatures() {
+    return features;
+  }
+
+  @JsonProperty("features")
+  public void setFeatures(TenantFeatureDto features) {
+    this.features = features;
+  }
+
+  /**
+   **/
+  public TenantInfoDto identifier(String identifier) {
+    this.identifier = identifier;
+    return this;
+  }
+
+  
+  @JsonProperty("identifier")
+  @NotNull
+  public String getIdentifier() {
+    return identifier;
+  }
+
+  @JsonProperty("identifier")
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -73,13 +94,14 @@ public class TenantInfoDto  implements Serializable {
       return false;
     }
     TenantInfoDto tenantInfo = (TenantInfoDto) o;
-    return Objects.equals(this.identifier, tenantInfo.identifier) &&
-        Objects.equals(this.clientAuth, tenantInfo.clientAuth);
+    return Objects.equals(this.clientAuth, tenantInfo.clientAuth) &&
+        Objects.equals(this.features, tenantInfo.features) &&
+        Objects.equals(this.identifier, tenantInfo.identifier);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identifier, clientAuth);
+    return Objects.hash(clientAuth, features, identifier);
   }
 
   @Override
@@ -87,8 +109,9 @@ public class TenantInfoDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantInfoDto {\n");
     
-    sb.append("    identifier: ").append(toIndentedString(identifier)).append("\n");
     sb.append("    clientAuth: ").append(toIndentedString(clientAuth)).append("\n");
+    sb.append("    features: ").append(toIndentedString(features)).append("\n");
+    sb.append("    identifier: ").append(toIndentedString(identifier)).append("\n");
     sb.append("}");
     return sb.toString();
   }

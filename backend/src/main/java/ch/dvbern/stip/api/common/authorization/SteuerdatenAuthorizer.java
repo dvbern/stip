@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ import lombok.RequiredArgsConstructor;
 public class SteuerdatenAuthorizer extends BaseAuthorizer {
     private final BenutzerService benutzerService;
     private final GesuchTrancheRepository geuchTrancheRepository;
+    private final TenantService tenantService;
 
     @Transactional
     public void canRead() {
@@ -49,6 +51,9 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void canUpdate(UUID gesuchTrancheId) {
+        if (!tenantService.getFeatures().nesko()) {
+            forbidden();
+        }
         final var currentBenutzer = benutzerService.getCurrentBenutzer();
 
         if (isSachbearbeiter(currentBenutzer)) {

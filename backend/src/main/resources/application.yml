@@ -96,6 +96,11 @@ kstip:
     dv:
       subdomains:
         - 'dv'
+  features:
+    bern:
+      nesko: true
+    dv:
+      nesko: false
 
 quarkus:
   #  live-reload:

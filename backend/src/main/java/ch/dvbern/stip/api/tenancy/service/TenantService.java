@@ -20,9 +20,11 @@ package ch.dvbern.stip.api.tenancy.service;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantFeature;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.config.service.TenantSubdomainsProducer.PerTenantSubdomains;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
+import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
@@ -41,6 +43,7 @@ public class TenantService {
     private final RoutingContext context;
     private final ConfigService configService;
     private final List<PerTenantSubdomains> perTenantSubdomains;
+    private final TenantFeature tenantFeature;
 
     @ConfigProperty(name = "keycloak.frontend-url")
     String keycloakFrontendUrl;
@@ -57,8 +60,17 @@ public class TenantService {
         tenantAuthConfig.setRealm(tenantId);
 
         return new TenantInfoDto()
+            .features(new TenantFeatureDto(getFeatures().nesko()))
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
+    }
+
+    public TenantFeature.Feature getFeatures() {
+        final var features = tenantFeature;
+        return switch (getCurrentMandantIdentifier()) {
+            case BERN -> features.bern();
+            case DV -> features.dv();
+        };
     }
 
     public String getCurrentTenantIdentifier() {

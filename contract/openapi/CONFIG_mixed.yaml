@@ -121,18 +121,28 @@ components:
       example:
         authServerUrl: some text
         realm: some text
+    TenantFeature:
+      required:
+        - nesko
+      type: object
+      properties:
+        nesko:
+          type: boolean
     TenantInfo:
       title: Root Type for TenantInfo
       description: Client Application Info about a `Tenant`
       required:
         - clientAuth
+        - features
         - identifier
       type: object
       properties:
-        identifier:
-          type: string
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
+        features:
+          $ref: '#/components/schemas/TenantFeature'
+        identifier:
+          type: string
     StipDecisionText:
       type: object
       required:
