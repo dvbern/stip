@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import lombok.experimental.UtilityClass;
-import org.apache.poi.ss.usermodel.Cell;
+import org.dhatim.fastexcel.reader.Cell;
 
 @UtilityClass
 public class ParseDemoEnumUtil {
@@ -43,7 +43,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             GesuchTrancheTyp.class,
             (wohnsitz) -> switch (wohnsitz) {
                 case TRANCHE -> List.of("Gesuch");
@@ -57,7 +57,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Anrede.class,
             (anrede) -> switch (anrede) {
                 case HERR -> List.of("Herr");
@@ -71,7 +71,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Wohnsitz.class,
             (wohnsitz) -> switch (wohnsitz) {
                 case FAMILIE -> List.of("Familie");
@@ -86,7 +86,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Zivilstand.class,
             (zivilstand) -> switch (zivilstand) {
                 case LEDIG -> List.of("ledig");
@@ -105,7 +105,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Niederlassungsstatus.class,
             (niederlassungstatus) -> switch (niederlassungstatus) {
                 case SAISONARBEITEND_A -> List.of("Ausweis A");
@@ -133,7 +133,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             ZustaendigeKESB.class,
             (kesb) -> switch (kesb) {
                 case KESB_BERN -> List.of("Kanton Bern");
@@ -147,7 +147,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Taetigkeitsart.class,
             (taetigkeitsart) -> switch (taetigkeitsart) {
                 case ERWERBSTAETIGKEIT -> List.of("Erwerbstätigkeit");
@@ -162,7 +162,7 @@ public class ParseDemoEnumUtil {
         if (ParseDemoDataUtil.isBlank(cell)) {
             return null;
         }
-        return switch ((int) cell.getNumericCellValue()) {
+        return switch (cell.asNumber().intValue()) {
             case 100 -> AusbildungsPensum.VOLLZEIT;
             default -> AusbildungsPensum.TEILZEIT;
         };
@@ -173,7 +173,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Ausbildungssituation.class,
             (ausbildungssituation) -> switch (ausbildungssituation) {
                 case VORSCHULPFLICHTIG -> List.of("Vorschulpflichtig");
@@ -190,7 +190,7 @@ public class ParseDemoEnumUtil {
         }
         return Arrays
             .stream(WohnsitzKanton.values())
-            .filter(w -> w.name().equals(cell.getStringCellValue()))
+            .filter(w -> w.name().equals(cell.asString()))
             .findFirst()
             .orElseThrow(() -> invalidValue(cell));
     }
@@ -200,7 +200,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             Elternschaftsteilung.class,
             (eltenrschaftsteilung) -> switch (eltenrschaftsteilung) {
                 case VATER -> List.of("Vater");
@@ -215,7 +215,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             ElternUnbekanntheitsGrund.class,
             (elternUnbekanntheitsGrund) -> switch (elternUnbekanntheitsGrund) {
                 case FEHLENDE_ANERKENNUNG -> List
@@ -230,7 +230,7 @@ public class ParseDemoEnumUtil {
             return null;
         }
         return FindEnum.findEnumValue(
-            cell.getStringCellValue(),
+            cell.asString(),
             VerfuegungStatus.class,
             (verfuegungStatus) -> switch (verfuegungStatus) {
                 case ANSPRUCH -> List.of("Stipendienanspruch");
@@ -245,7 +245,7 @@ public class ParseDemoEnumUtil {
         if (ParseDemoDataUtil.isBlank(cell)) {
             return null;
         }
-        return switch (cell.getStringCellValue()) {
+        return switch (cell.asString()) {
             case "selbständig" -> Boolean.TRUE;
             case "unselbständig" -> Boolean.FALSE;
             default -> throw invalidValue(cell);
@@ -253,6 +253,6 @@ public class ParseDemoEnumUtil {
     }
 
     private IllegalStateException invalidValue(Cell cell) {
-        return new IllegalStateException("Cell type '%s' is not supported".formatted(cell.getStringCellValue()));
+        return new IllegalStateException("Cell type '%s' is not supported".formatted(cell.asString()));
     }
 }

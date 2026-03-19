@@ -123,7 +123,7 @@ const addUsersCommand = program
   .addOption(
     program
       .createOption(
-        '--realm realm',
+        '--realm <realm>',
         `realm to add users to, default is "${c.bold(known.realms[0])}"`,
       )
       .choices(known.realms)
@@ -522,7 +522,7 @@ addUsersCommand.action(async () => {
         );
         addUsersCommand.help({ error: true });
       }
-      const newUser = await kcAdminClient.users.create({
+      await kcAdminClient.users.create({
         realm,
         username,
         email: email ?? `stip-${username}@mailbucket.dvbern.ch`,
@@ -538,7 +538,13 @@ addUsersCommand.action(async () => {
           },
         ],
       });
-      usersToUpdate = [newUser];
+      usersToUpdate = await kcAdminClient.users.find({
+        username,
+        firstName,
+        lastName,
+        realm,
+        max: 1,
+      });
     } else {
       console.info(`User ${username} found, updating...`);
       usersToUpdate = [existingUser];

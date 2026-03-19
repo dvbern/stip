@@ -40,7 +40,6 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer bundessteuern;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
-  private @Valid Integer fahrkostenPartnerTotal;
   private @Valid Integer verpflegungPartner;
 
   /**
@@ -345,24 +344,6 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto fahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
-    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
-    return this;
-  }
-
-  
-  @JsonProperty("fahrkostenPartnerTotal")
-  public Integer getFahrkostenPartnerTotal() {
-    return fahrkostenPartnerTotal;
-  }
-
-  @JsonProperty("fahrkostenPartnerTotal")
-  public void setFahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
-    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
-  }
-
-  /**
-   **/
   public PersoenlichesBudgetresultatKostenDto verpflegungPartner(Integer verpflegungPartner) {
     this.verpflegungPartner = verpflegungPartner;
     return this;
@@ -404,13 +385,12 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
-        Objects.equals(this.fahrkostenPartnerTotal, persoenlichesBudgetresultatKosten.fahrkostenPartnerTotal) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, fahrkostenPartnerTotal, verpflegungPartner);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
   }
 
   @Override
@@ -433,7 +413,6 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
-    sb.append("    fahrkostenPartnerTotal: ").append(toIndentedString(fahrkostenPartnerTotal)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("}");
     return sb.toString();

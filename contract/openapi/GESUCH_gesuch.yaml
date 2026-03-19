@@ -608,6 +608,34 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: changeGesuchStatusToVerfuegungDruckbereit
+  /gesuch/status/bearbeitung-as-aenderung/{gesuchTrancheId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchTrancheId'
+    post:
+      tags:
+        - Gesuch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: './components/common.yaml#/Kommentar'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/GesuchWithChanges'
+          description: Returns gesuch in status
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: changeGesuchStatusToBearbeitungAsAenderung
   '/gesuch/{gesuchId}/einreichedatum':
     parameters:
       - $ref: './components/parameters.yaml#/gesuchId'
@@ -1874,8 +1902,6 @@ components:
         medizinischeGrundversorgungTotal:
           type: integer
         fahrkostenPartner:
-          type: integer
-        fahrkostenPartnerTotal:
           type: integer
         verpflegungPartner:
           type: integer

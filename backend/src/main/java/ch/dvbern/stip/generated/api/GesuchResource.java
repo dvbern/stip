@@ -52,6 +52,12 @@ public interface GesuchResource {
     EinreichedatumStatusDto canEinreichedatumAendern(@PathParam("gesuchId") UUID gesuchId);
 
     @POST
+    @Path("/status/bearbeitung-as-aenderung/{gesuchTrancheId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto changeGesuchStatusToBearbeitungAsAenderung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid @NotNull KommentarDto kommentarDto);
+
+    @POST
     @Path("/status/bereit-fuer-bearbeitung/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto changeGesuchStatusToBereitFuerBearbeitung(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
