@@ -139,7 +139,11 @@ class DelegierenResourceImplTest {
 
         Assertions.assertThrows(
             BadRequestException.class,
-            () -> delegierenApi.fallDelegieren(fall.getId(), sozialdienst.getId(), null)
+            () -> delegierenApi.fallDelegieren(
+                fall.getId(),
+                sozialdienst.getId(),
+                new DelegierungCreateDto().nutzungsbedingungenAkzeptiert(false)
+            )
         );
     }
 
@@ -160,7 +164,8 @@ class DelegierenResourceImplTest {
             .nachname("Mustermann")
             .vorname("Max")
             .geburtsdatum(LocalDate.of(1990, 1, 1))
-            .adresse(new AdresseDto());
+            .adresse(new AdresseDto())
+            .nutzungsbedingungenAkzeptiert(true);
 
         when(benutzerService.getCurrentBenutzer()).thenReturn(benutzer);
         when(fallRepository.requireById(any())).thenReturn(fall);
