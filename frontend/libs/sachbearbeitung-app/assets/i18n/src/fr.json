@@ -48,7 +48,6 @@
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.message": "Veuillez fournir une justification:",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.confirm": "Créer une décision négative",
   "sachbearbeitung-app.header.status-uebergang.dokumente-offen": "Documents ouverts",
-
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Enregistrer et publier",
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Centre de formation",
@@ -57,14 +56,12 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "Pays de l'UE/AELE",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Gestion des utilisateurs",
   "sachbearbeitung-app.admin.option.sozialdienst": "Service social",
-
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Gestionnaire",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter": "Filtre gestionnaire",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE": "Attribution des lettres Allemand",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR": "Attribution des lettres Français",
   "sachbearbeitung-app.admin.buchstabenZuteilung.route.overview": "Aperçu de l'attribution des lettres",
-
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.title": "Publier la période de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.description": "Les modifications ne sont plus possibles après la publication.",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.button": "Publier la période de demande",
@@ -82,7 +79,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Périodes de demande et années de demande Aperçu",
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Période de requête Vue détaillée",
-
   "sachbearbeitung-app.admin.euEftaLaender.edit": "Modifier un pays",
   "sachbearbeitung-app.admin.euEftaLaender.create": "Créer un pays",
   "sachbearbeitung-app.admin.euEftaLaender.description": "La liste de sélection suivante vous permet de gérer les pays de l'UE/AELE.",
@@ -114,7 +110,6 @@
   "sachbearbeitung-app.admin.euEftaLaender-dialog.submit": "Enregistrer",
   "sachbearbeitung-app.admin.euEftaLaender.edit.success": "Le pays a été modifié avec succès.",
   "sachbearbeitung-app.admin.euEftaLaender.create.success": "Le pays a été créé avec succès.",
-
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Publier l'année de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Les modifications ne sont plus possibles après la publication.",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.button": "Publier l'année de demande",
@@ -131,7 +126,6 @@
   "sachbearbeitung-app.admin.gesuchsjahr.saveSuccess": "Année de demande enregistrée avec succès",
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Créer une période de demande",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Année de la demande Détail Vue",
-
   "sachbearbeitung-app.admin.benutzerverwaltung.description": "Aperçu de la gestion des utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Utilisateurs",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Créer un utilisateur",
@@ -153,7 +147,6 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Supprimer l'utilisateur",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Voulez-vous vraiment supprimer l'utilisateur \"{{ name }}\" ?",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists": "Un utilisateur avec cette adresse e-mail existe déjà.",
-
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.ausbildungsstaette": "Centre de formation",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.ausbildungsgang": "Stage",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.abschluss": "Diplôme",
@@ -265,7 +258,6 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.success": "Le diplôme a été archivé avec succès.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title": "Informations sur le diplôme",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique": "Ce diplôme existe déjà.",
-
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Centre de formation Allemand",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Centre de formation Français",
   "sachbearbeitung-app.admin.ausbildungsstaette.ort": "Lieu",
@@ -282,7 +274,6 @@
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage": "Voulez-vous vraiment supprimer le centre \"{{ nameFr }}\" ?",
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle": "Supprimer centre de formation",
   "sachbearbeitung-app.admin.ausbildungsstaette.route.overview": "Aperçu des centres de formation",
-
   "sachbearbeitung-app.admin.ausbildungsgaenge.title": "Stage",
   "sachbearbeitung-app.admin.ausbildungsgaenge.description": "Table des stages au formations",
   "sachbearbeitung-app.admin.ausbildungsgaenge.delete": "Supprimer",
@@ -296,7 +287,6 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Annuler",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Voulez-vous vraiment supprimer le stage \"{{ bezeichnungFr }}\" ?",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle": "Supprimer stage",
-
   "sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title": "Méta données",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label": "Désignation (DE)",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label": "Désignation (FR)",
@@ -387,7 +377,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Délai de remise des documents",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label": "Date limite de majorité",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info": "Pour les soins médicaux de base",
-
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Service social",
   "sachbearbeitung-app.admin.sozialdienst.name.label": "Nom du service social",
   "sachbearbeitung-app.admin.sozialdienst.ort.label": "Lieu",
@@ -417,7 +406,6 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.INAKTIV": "Activer le service social",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.AKTIV": "Voulez-vous vraiment désactiver le service social \"{{ name }}\"?",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.INAKTIV": "Voulez-vous vraiment activer le service social \"{{ name }}\"?",
-
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.title": "Paiements échoués",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.description": "Aperçu de tous les paiements échoués",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer": "Numéro de dossier",
@@ -426,7 +414,6 @@
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname": "Prénom",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate": "Dernière tentative",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.pseudobuchhaltung": "Pseudo-comptabilité",
-
   "sachbearbeitung-app.massendruck.title": "Commandes d'impression",
   "sachbearbeitung-app.massendruck.table.description": "Aperçu de tous les ordres d'impression",
   "sachbearbeitung-app.massendruck.table.userErstellt": "Opérateur",
@@ -445,7 +432,6 @@
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_AKTIV": "Actifs ordres d'impression",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_ARCHIVIERT": "Ordres d'impression archivés",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_FEHLERHAFTE_GENERIERUNG": "Fehlerhafte ordres d'impression",
-
   "sachbearbeitung-app.massendruck-detail.title": "Ordre d'impression",
   "sachbearbeitung-app.massendruck-detail.userErstellt": "Opérateur:",
   "sachbearbeitung-app.massendruck-detail.timestampErstellt": "Date de commande:",
@@ -469,7 +455,6 @@
   "sachbearbeitung-app.massendruck-detail.table.adressat.MUTTER": "Mère",
   "sachbearbeitung-app.massendruck-detail.table.adressat.VATER": "Père",
   "sachbearbeitung-app.massendruck-detail.table.adressat.PIA": "PiA",
-
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche {{ index }}",
@@ -480,7 +465,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "de",
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",
-
   "sachbearbeitung-app.darlehen.title": "Prêts",
   "sachbearbeitung-app.darlehen-dashboard.title": "Dashboard prêts",
   "sachbearbeitung-app.darlehen-dashboard.quick-filter.ALLE_DARLEHEN": "Tous les prêts",
@@ -503,14 +487,12 @@
   "sachbearbeitung-app.darlehen.status.IN_FREIGABE": "En approbation",
   "sachbearbeitung-app.darlehen.status.AKZEPTIERT": "Accepté",
   "sachbearbeitung-app.darlehen.status.ABGELEHNT": "Refusé",
-
   "sachbearbeitung-app.infos.title": "Infos",
   "sachbearbeitung-app.infos.protokoll": "Parcours de la demande",
   "sachbearbeitung-app.infos.notizen": "Notes",
   "sachbearbeitung-app.infos.buchhaltung": "Comptabilité",
   "sachbearbeitung-app.infos.beschwerden": "Plaintes",
   "sachbearbeitung-app.infos.darlehen": "Prêts",
-
   "sachbearbeitung-app.infos.buchhaltung.title": "Comptabilité",
   "sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung": "Réessayer le paiement échoué",
   "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Correction du solde",
@@ -543,11 +525,9 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp": "Date",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId": "SAP ID",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "La correction du solde a été créée avec succès",
-
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.SUCCESS": "Réussir",
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.FAILURE": "Échec",
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.IN_PROGRESS": "En cours de traitement",
-
   "sachbearbeitung-app.infos.beschwerde.haengig.title": "Plainte en suspens",
   "sachbearbeitung-app.infos.beschwerde.haengig.text.false": "Vous pouvez activer la marque \"Plainte en suspens\"",
   "sachbearbeitung-app.infos.beschwerde.haengig.text.true": "Vous pouvez désactiver la marque \"Plainte en suspens\"",
@@ -589,7 +569,6 @@
   "sachbearbeitung-app.infos.beschwerde-entscheid.title": "Décision de plainte téléchargée",
   "sachbearbeitung-app.infos.beschwerde.entscheid-hochladen": "Télécharger la décision de la plainte",
   "sachbearbeitung-app.infos.beschwerde-entscheid.create.success": "La décision de la plainte a été créée avec succès",
-
   "sachbearbeitung-app.infos.protokoll.description": "Un aperçu de toutes les modifications apportées à la demande",
   "sachbearbeitung-app.infos.protokoll.text": "Voici un aperçu de toutes les actions de cette demande.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Date",
@@ -601,7 +580,6 @@
   "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Modification",
   "sachbearbeitung-app.infos.protokoll.table.typ.FREIWILLIG_DARLEHEN": "Prêt volontaire",
   "sachbearbeitung-app.infos.protokoll.table.typ.AUSBILDUNG_UNTERBRUCH_ANTRAG": "Demande d'interruption de formation",
-
   "sachbearbeitung-app.infos.notizen.description": "Un aperçu de toutes les notes",
   "sachbearbeitung-app.infos.notizen.title": "Notes",
   "sachbearbeitung-app.infos.notizen.table.datum": "Date",
@@ -626,7 +604,6 @@
   "sachbearbeitung-app.infos.notiz.delete.success": "La note a été supprimée avec succès",
   "sachbearbeitung-app.infos.notiz.delete.title": "Supprimer la note",
   "sachbearbeitung-app.infos.notiz.delete.text": "Voulez-vous vraiment supprimer la note?",
-
   "sachbearbeitung-app.infos.admin": "Admin",
   "sachbearbeitung-app.infos.admin-dokumente": "Documents de la décision",
   "sachbearbeitung-app.infos.admin.table.timestamp": "Date",
@@ -654,7 +631,6 @@
   "sachbearbeitung-app.infos.admin.ausbildung-abschliessen": "Terminer la formation",
   "sachbearbeitung-app.infos.admin.ausbildung-abschliessen.message": "Voulez-vous vraiment terminer la formation?",
   "sachbearbeitung-app.infos.admin.kommentar.placeholder": "Entrer un commentaire",
-
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.stipendien": "Bourses",
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.darlehen": "Prêts",
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.datenschutzbriefe": "Lettre de protection des données",
@@ -688,12 +664,10 @@
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen": "Total prêt volontaire",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen": "Total prêt légal",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total": "Total prêt",
-
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Budget familial",
   "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Budget du père",
   "sachbearbeitung-app.verfuegung.berechnung.mutter.title": "Budget de la mère",
-
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.sv-nummer": "Numéro AVS:",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Total des revenus annuels reconnus",
@@ -732,7 +706,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.steuern.info": "Les impôts a payer pendant l'année de formation.",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern": "Impôts fédéraux",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner": "Frais de déplacement du partenaire",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner.info": "Seulement si vous êtes actif professionnellement et pas en formation reconnue. Les frais de déplacement fiscalement reconnus de {{ fahrkosten }} sont pris en compte et multipliés par le nombre de personnes dans le ménage {{ anzahlPersonenImHaushalt }}, afin que la part par personne soit correctement indiquée.",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner.info": "Seulement si vous êtes actif professionnellement et pas en formation reconnue.",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner": "Coûts supplémentaires pour les repas externes de partenaire",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner.info": "Seulement si vous êtes actif professionnellement et pas en formation reconnue",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder": "Frais de garde d'enfants propres",
@@ -747,7 +721,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Répartition à partir de la 4e année d'études pour les étudiants du degré tertiaire",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Bourse : 2/3 du déficit",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Prêt : 1/3 du déficit",
-
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Revenus selon la procédure de décompte simplifiée (Loi fédérale contre le travail au noir)",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Les plafonds reconnus donnant droit à une bourse se trouvent dans l'appendice (Annexe 1) ou sur www.be.ch/ausbildungsbeitraege > Bases légales > Plafonds reconnus donnant droit à une bourse",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title": "Réductions Délai de dépôt",
@@ -756,7 +729,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info": "La demande a été interrompue pendant {{ anzahlMonate }} mois.<br>Cela entraîne une réduction de CHF {{ betrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Revenu propre sur le revenu professionnel",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info": "Le revenu propre maximal autorisé sur le revenu d'activité avec l'octroi du prêt correspond à l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}. Le revenu propre maximal autorisé sur le revenu d'activité sans octroi du prêt correspond au prêt + l'abattement sur le revenu de CHF {{ einkommensfreibetrag }}.",
-
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Aucune donnée de calcul disponible",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Revenu",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total": "Total des revenus annuels reconnus",
@@ -794,7 +766,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten.info": "Frais de déplacement reconnus fiscalement",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung": "Repas externes",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung.info": "Surcoûts fiscalement reconnus pour les repas pris à l'extérieur",
-
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmeueberschuss": "Excédent de revenus",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmeueberschuss.info": "Revenus moins coûts",
   "sachbearbeitung-app.verfuegung.berechnung.familien.anzahlKinderInAusbildung": "Divisé par le nombre d'enfants en formation",
@@ -807,7 +778,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Divisé par le nombre de personnes dans le ménage (répartition par tête)",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Part non couverte des coûts de subsistance",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Transféré comme coût dans le budget personnel - uniquement si vivant chez les parents",
-
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Montant total du budget",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Résultat",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Résultat : Bourse accordée",
@@ -822,10 +792,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Réduction pour cause d'interruption",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Montant total de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Montant total du prêt",
-
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Commentaire",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Télécharger la décision manuelle",
-
   "sachbearbeitung-app.cockpit.title": "Cockpit",
   "sachbearbeitung-app.cockpit.gesuch": "Demande",
   "sachbearbeitung-app.cockpit.gesuche": "Demandes",
@@ -853,12 +821,9 @@
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Agent",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Dernière activité",
   "sachbearbeitung-app.cockpit.table.typ": "Type",
-
   "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{anzahl, plural, one {1 lettre} other {# lettres}} de protection des données à imprimer",
   "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 décision} other {# décisions}} à imprimer",
-
   "sachbearbeitung-app.gesuch-form.title": "Demande",
-
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Charger les données de Nesko",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Mettre à jour les données fiscales via Nesko",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Voulez-vous vraiment charger les données de Nesko pour l'année définie?<br>Les champs du formulaire seront écrasés.",

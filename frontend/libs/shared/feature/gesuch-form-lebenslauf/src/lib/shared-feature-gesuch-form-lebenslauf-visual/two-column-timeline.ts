@@ -21,6 +21,7 @@ export interface TimelineRawItem {
   von: Date;
   bis: Date;
   editable: boolean;
+  wohnsitz?: string;
   ausbildungAbgeschlossen: boolean;
 }
 export interface TimelineMergedRawItem extends TimelineRawItem {
@@ -32,36 +33,38 @@ export interface TimelineAddCommand {
   bis: Date;
 }
 
-export class TimelineBlock {
-  col!: 'LEFT' | 'RIGHT' | 'BOTH';
-  positionStartRow!: number;
-  positionRowSpan!: number;
-  von!: Date;
-  bis!: Date;
-  positionStartCol!: number;
-  positionColSpan!: number;
+export interface TimelineBlock {
+  col: 'LEFT' | 'RIGHT' | 'BOTH';
+  positionStartRow: number;
+  positionRowSpan: number;
+  von: Date;
+  bis: Date;
+  positionStartCol: number;
+  positionColSpan: number;
 }
 
-export class TimelineBusyBlock extends TimelineBlock {
-  id!: string;
-  declare col: 'LEFT' | 'RIGHT';
-  label!: TimelineLabel;
-  editable!: boolean;
-  ausbildungAbgeschlossen!: boolean;
+export interface TimelineBusyBlock extends TimelineBlock {
+  id: string;
+  col: 'LEFT' | 'RIGHT';
+  label: TimelineLabel;
+  editable: boolean;
+  wohnsitz?: string;
+  ausbildungAbgeschlossen: boolean;
   children?: TimelineBusyBlockChild[];
 }
 
-export class TimelineBusyBlockChild {
-  id!: string;
-  label!: TimelineLabel;
-  von!: Date;
-  bis!: Date;
-  editable!: boolean;
-  ausbildungAbgeschlossen!: boolean;
+export interface TimelineBusyBlockChild {
+  id: string;
+  label: TimelineLabel;
+  von: Date;
+  bis: Date;
+  editable: boolean;
+  wohnsitz?: string;
+  ausbildungAbgeschlossen: boolean;
 }
 
-export class TimelineGapBlock extends TimelineBlock {
-  declare col: 'BOTH';
+export interface TimelineGapBlock extends TimelineBlock {
+  col: 'BOTH';
 }
 
 export function isTimelineBusyBlock(block: TimelineBlock) {

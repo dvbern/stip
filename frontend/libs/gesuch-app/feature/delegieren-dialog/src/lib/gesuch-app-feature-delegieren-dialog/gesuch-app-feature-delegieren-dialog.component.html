@@ -125,17 +125,29 @@
       </mat-radio-group>
     </div>
 
+    <div class="tw:col-start-1 tw:col-span-2 tw:w-full">
+      <mat-checkbox
+        [formControl]="form.controls.nutzungsbedingungenAkzeptiert"
+        data-testid="form-delegieren-nutzungsbedingungenAkzeptiert"
+        dvSharedUiFormField
+      >
+        {{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix' | transloco
+        }}<button class="btn btn-link tw:p-0! tw:align-baseline!" type="button" (click)="showNutzungsbedingungen()">
+          {{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link' | transloco }}</button
+        >{{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix' | transloco }}
+        <div class="group-errors">
+          <mat-error class="tw:absolute tw:left-0" *dvSharedUiFormMessageError="'required'">
+            {{ 'shared.form.error.required' | transloco }}
+          </mat-error>
+        </div>
+      </mat-checkbox>
+    </div>
+
     <div class="d-flex justify-content-between tw:col-span-full mt-4">
       <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button
-        type="submit"
-        data-testid="dialog-submit"
-        [disabled]="form.invalid"
-        class="btn btn-primary ms-2"
-        (click)="confirm()"
-      >
+      <button type="submit" data-testid="dialog-submit" class="btn btn-primary ms-2" (click)="confirm()">
         {{ 'gesuch-app.delegieren-dialog.submit' | transloco }}
       </button>
     </div>

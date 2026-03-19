@@ -23,9 +23,9 @@ import {
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -83,7 +83,7 @@ import { selectSharedFeatureGesuchFormLebenslaufVew } from '../shared-feature-ge
     MatSelectModule,
     MatButtonModule,
     MatAutocompleteModule,
-    MatCheckboxModule,
+    MatRadioModule,
     SharedUiStepFormButtonsComponent,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
@@ -143,7 +143,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     wohnsitz: this.formBuilder.control<WohnsitzKanton>('' as WohnsitzKanton, [
       Validators.required,
     ]),
-    ausbildungAbgeschlossen: [false, [Validators.required]],
+    ausbildungAbgeschlossen: [
+      <boolean | undefined>undefined,
+      [Validators.required],
+    ],
   });
 
   private abschlussIdSig = toSignal(

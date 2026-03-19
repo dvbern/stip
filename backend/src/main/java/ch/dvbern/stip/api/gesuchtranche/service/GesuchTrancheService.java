@@ -70,7 +70,6 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
-import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuererklaerung.service.SteuererklaerungMapper;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDto;
@@ -397,13 +396,6 @@ public class GesuchTrancheService {
 
         // Manually persist so that when mapping happens the IDs on the new objects are set
         gesuchRepository.persistAndFlush(gesuch);
-        statusprotokollService.createStatusprotokoll(
-            GesuchTrancheStatus.IN_BEARBEITUNG_GS.toString(),
-            null,
-            StatusprotokollEntryTyp.AENDERUNG,
-            null,
-            gesuch
-        );
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
