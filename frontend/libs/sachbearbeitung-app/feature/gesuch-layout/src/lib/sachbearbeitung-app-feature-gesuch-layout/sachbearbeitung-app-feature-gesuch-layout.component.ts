@@ -41,6 +41,7 @@ import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
+  FreiwilligDarlehen,
   GesuchHeader,
   aenderungRoutes,
   getTrancheRoute,
@@ -48,6 +49,10 @@ import {
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
+import {
+  DarlehenCompleteStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
@@ -101,7 +106,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   darlehenStore = inject(DarlehenStore);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  revisionSig = this.store.selectSignal(selectRevision);
+  // revisionSig = this.store.selectSignal(selectRevision);
 
   berechnungIdSig = toSignal(
     this.route.queryParamMap.pipe(
@@ -134,6 +139,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   isInfosRouteSig = computed(() => {
     const url = this.routeUrlSig();
     return url?.includes('/infos/');
+  });
+  isDarlehenRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes('/darlehen/');
   });
 
   // delete
@@ -245,6 +254,47 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   //     offeneAenderung,
   //   };
   // });
+
+  firstAenderungIdSig = computed(() => {
+    const aenderungen = this.headerViewSig().aenderungs;
+    const offeneAenderung = aenderungen?.offen;
+    const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const abgelehnteAenderungen = aenderungen?.abgelehnt;
+
+    const allAenderungen = [
+      ...(offeneAenderung ? [offeneAenderung] : []),
+      ...(akzeptierteAenderungen ?? []),
+      ...(abgelehnteAenderungen ?? []),
+    ];
+
+    return allAenderungen.length > 0 ? allAenderungen[0].id : undefined;
+  });
+
+  firstDarlehenIdSig = computed(() => {
+    const darlehen = this.darlehenStore.darlehenListSbViewSig().list ?? [];
+
+    const byType = darlehen.reduce(
+      (acc, darlehen) => {
+        const statusKey = darlehenStatusMapping[darlehen.status!];
+
+        if (!acc[statusKey]) {
+          acc[statusKey] = [];
+        }
+
+        acc[statusKey].push(darlehen);
+        return acc;
+      },
+      {} as Record<DarlehenCompleteStates, FreiwilligDarlehen[]>,
+    );
+
+    const orderedDarlehen = [
+      ...(byType.open ?? []),
+      ...(byType.accepted ?? []),
+      ...(byType.rejected ?? []),
+    ];
+
+    return orderedDarlehen.length > 0 ? orderedDarlehen[0].id : undefined;
+  });
 
   isLoadingSig = computed(() => {
     return (

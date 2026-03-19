@@ -6,9 +6,9 @@ import {
   Component,
   HostBinding,
   OnDestroy,
+  Signal,
   ViewChild,
   computed,
-  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -33,7 +33,7 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { GesuchUrlType, aenderungRoutes } from '@dv/shared/model/gesuch';
+import { GesuchHeader, GesuchUrlType } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -97,6 +97,10 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+
+  headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
+    this.gesuchHeaderStore.viewSig;
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(

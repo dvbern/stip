@@ -5,8 +5,8 @@
   <!-- side menu -->
   <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
-    @if (currentTranche && isGesuchRouteSig()) {
-      <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
+    <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
+      @if (currentTranche && isGesuchRouteSig()) {
         <button
           type="button"
           class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none tw:border-b tw:border-gray-300 tw:w-full"
@@ -48,19 +48,18 @@
             }
           </div>
         </mat-menu>
-      </div>
-    }
-
-    @if (isAenderungRouteSig()) {
-      <!-- <dv-shared-ui-aenderungen-menu
-        [aenderungenSig]="aenderungenSig()"
-        [isAenderungRouteSig]="isAenderungOrInitialRouteSig()"
-        [isInitialRouteSig]="isInitialRouteSig()"
-        [gesuchIdSig]="gesuchIdSig()"
-        [trancheIdSig]="trancheIdSig()"
-        [revisionSig]="revisionSig()"
-      ></dv-shared-ui-aenderungen-menu> -->
-    }
+      }
+      @if (isAenderungRouteSig()) {
+        <dv-shared-ui-aenderungen-menu
+          class="tw:w-full"
+          [aenderungenSig]="headerViewSig().aenderungs"
+          [isAenderungRouteSig]="isAenderungRouteSig()"
+          [gesuchIdSig]="gesuchIdSig()"
+          [trancheIdSig]="trancheIdSig()"
+          [revisionSig]="revisionSig()"
+        ></dv-shared-ui-aenderungen-menu>
+      }
+    </div>
 
     <dv-shared-pattern-gesuch-step-nav class="tw:p-3" [stepsSig]="stepsSig()" />
   </div>

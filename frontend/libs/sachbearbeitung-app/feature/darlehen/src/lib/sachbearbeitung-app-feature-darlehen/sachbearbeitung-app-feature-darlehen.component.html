@@ -1,5 +1,14 @@
-<ng-container *transloco="let t">
-  <div class="tw:relative tw:my-12 tw:justify-between container">
+<div class="tw:flex tw:h-full" *transloco="let t">
+  <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehenStore.darlehenListSbViewSig().list"
+      [canCreateDarlehenSig]="false"
+      [idTypeSig]="['gesuch', gesuchIdSig()]"
+    ></dv-shared-ui-darlehen-menu>
+  </div>
+
+  <!-- todo: padding top -->
+  <div class="tw:relative tw:py-12 tw:justify-between container tw:dv-pass-height tw:bg-white">
     <h1 class="tw:flex tw:!mb-8 tw:justify-between tw:items-center tw:w-1/2">
       {{ t('shared.darlehen.title') }}
       <dv-shared-ui-darlehen-verfuegung-download
@@ -11,4 +20,4 @@
       (formIsUnsavedSig)="hasUnsavedChanges = $event"
     ></dv-shared-pattern-darlehen-form>
   </div>
-</ng-container>
+</div>

@@ -29,7 +29,6 @@
 
     <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">
       <!-- Versionen Menu -->
-      <!-- todo-after-merge: in after merge of Task: KSTIP-2856 -->
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"
         [initialSig]="headerViewSig().initial"
@@ -41,36 +40,53 @@
         [berechnungIdSig]="berechnungIdSig()"
       ></dv-shared-ui-versionen-menu>
 
-      <!-- Änderungen -->
-      <dv-shared-ui-aenderungen-menu
-        [aenderungenSig]="headerViewSig().aenderungs"
-        [isAenderungRouteSig]="isAenderungRouteSig()"
-        [gesuchIdSig]="gesuchIdSig()"
-        [trancheIdSig]="trancheIdSig()"
-        [revisionSig]="revisionSig()"
-      ></dv-shared-ui-aenderungen-menu>
+      <!-- Aenderungen Link -->
+      @if (firstAenderungIdSig(); as firstAenderungId) {
+        <a
+          [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderungIdSig()]"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-aenderungen-nav-link"
+          [class.active]="isAenderungRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.aenderungen') }}</span>
+        </a>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-aenderungen-nav-link"
+          disabled
+        >
+          <span>{{ t('sachbearbeitung-app.header.aenderungen') }}</span>
+        </button>
+      }
 
+      <!-- Darlehen Link -->
+      @if (firstDarlehenIdSig(); as firstDarlehenId) {
+        <a
+          [routerLink]="['/gesuch', 'darlehen', firstDarlehenId, 'gesuch', gesuchId]"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="header-nav-darlehen-link"
+          [class.active]="isDarlehenRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.darlehen') }}</span>
+        </a>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="header-nav-darlehen-link"
+          disabled
+        >
+          <span>{{ t('sachbearbeitung-app.header.darlehen') }}</span>
+        </button>
+      }
+
+      <!-- infos -->
       <a
         [routerLink]="['/gesuch', 'infos', gesuchId]"
         class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-        data-testid="sb-gesuch-header-infos-link"
-        [class.active]="isInfosRouteSig()"
-      >
-        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
-      </a>
-
-      <!-- Darlehen Menu -->
-      <dv-shared-ui-darlehen-menu
-        [darlehenListSig]="view.list"
-        [canCreateDarlehenSig]="false"
-        [idTypeSig]="['gesuch', gesuchId]"
-      ></dv-shared-ui-darlehen-menu>
-
-      <!-- info -->
-      <a
-        [routerLink]="['/gesuch', 'infos', gesuchId]"
-        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
-        data-testid="sb-gesuch-header-infos-link"
+        data-testid="sb-gesuch-header-infos-nav-link"
         [class.active]="isInfosRouteSig()"
       >
         <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
@@ -88,7 +104,6 @@
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 
-  <!-- do combine into explilcit check? -->
   @if (berechnungIdSig()) {
     <div
       class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"

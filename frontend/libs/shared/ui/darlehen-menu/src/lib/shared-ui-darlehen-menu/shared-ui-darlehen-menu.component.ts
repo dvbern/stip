@@ -35,6 +35,7 @@ export class SharedUiDarlehenMenuComponent {
    * - The actual ID value.
    */
   idTypeSig = input.required<[IdType, string | undefined]>();
+  displayModeSig = input<'menu' | 'list'>('list');
   darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
   canCreateDarlehenSig = input<boolean | undefined>();
   createDarlehen = output<{ fallId: string }>();

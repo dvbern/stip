@@ -58,6 +58,7 @@ export const isHistorizedView = createSelector(
 );
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
+// todo: @scph where is it used?
 export const selectRevision = createSelector(
   selectQueryParam('revision'),
   (revision) => (revision ? +revision : undefined),

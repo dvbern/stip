@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -19,4 +24,22 @@ export class SharedUiAenderungenMenuComponent {
   revisionSig = input.required<number | undefined>();
   aenderungenSig = input.required<GesuchAenderungs | undefined>();
   isAenderungRouteSig = input.required<boolean | undefined>();
+
+  currentAenderungSig = computed(() => {
+    const aenderungen = this.aenderungenSig();
+    const trancheId = this.trancheIdSig();
+    const offeneAenderung = aenderungen?.offen;
+    const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const abgelehnteAenderungen = aenderungen?.abgelehnt;
+
+    const allAenderungen = [
+      ...(offeneAenderung
+        ? [offeneAenderung].map((a, index) => ({ ...a, index }))
+        : []),
+      ...(akzeptierteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
+      ...(abgelehnteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
+    ];
+
+    return allAenderungen.find((aenderung) => aenderung.id === trancheId);
+  });
 }

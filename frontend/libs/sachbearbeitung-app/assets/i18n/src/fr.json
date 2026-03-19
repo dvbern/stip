@@ -1,6 +1,7 @@
 {
   "app-name": "Stipends Online",
   "sachbearbeitung-app.header.antraege": "Demandes",
+  "sachbearbeitung-app.header.aenderungen": "Modifications",
   "sachbearbeitung-app.header.darlehen": "Prêts",
   "sachbearbeitung-app.header.administration": "Administration",
   "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Paiements échoués",

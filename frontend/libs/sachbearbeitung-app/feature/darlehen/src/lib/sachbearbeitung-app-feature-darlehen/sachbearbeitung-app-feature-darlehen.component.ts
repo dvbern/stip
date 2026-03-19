@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   effect,
   inject,
   input,
@@ -13,6 +14,7 @@ import { Store } from '@ngrx/store';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
@@ -23,12 +25,14 @@ import { SharedUtilFormService } from '@dv/shared/util/form';
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
     TranslocoDirective,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-darlehen.component.html',
   styleUrl: './sachbearbeitung-app-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureDarlehenComponent {
+  @HostBinding('class') klass = 'tw:dv-pass-height';
   private router = inject(Router);
   private store = inject(Store);
   private formUtils = inject(SharedUtilFormService);
