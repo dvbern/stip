@@ -20,22 +20,23 @@
             })
           }}
         </span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
+      } @else if (isInitialRouteSig()) {
+        <span>{{ t('shared.header.aenderungen.initial') }}</span>
       } @else {
         <span>{{ t('shared.header.versionen') }}</span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
       }
+      <i class="material-symbols-rounded ms-2">expand_more</i>
     </button>
 
     <mat-menu #versionenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
       <div class="d-flex flex-column gap-2">
-        <!-- todo: link and active state -->
+        <!-- todo: seems very brittle, for getting the active states, consider adding more router state -->
         <a
           type="button"
           class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="sb-gesuch-header-versionen-default"
           [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
-          [class.active]="trancheId === (trancheId ?? firstTrancheId) && isGesuchRouteSig() && !currentVersionSig()"
+          [class.active]="trancheId === (trancheId ?? firstTrancheId) && !currentVersionSig() && !isInitialRouteSig()"
         >
           <span>{{ t('shared.header.versionen') }}</span>
         </a>
@@ -44,11 +45,10 @@
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
             [queryParams]="{ berechnungId: version.berechnungId }"
-            [queryParamsHandling]="'merge'"
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="versionen-nav-menu-item"
             mat-menu-item
-            [class.active]="currentVersionSig()?.berechnungId === version.berechnungId"
+            [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
           >
             <span>
               {{
@@ -57,6 +57,20 @@
                 })
               }}
             </span>
+          </a>
+        }
+        <hr class="my-2" />
+        <!-- todo: check translation keys over all changes -->
+        @if (initialSig()) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialSig()?.tranchen?.[0]?.id]"
+            [queryParams]="{ berechnungId: initialSig()?.berechnungId }"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="versionen-nav-menu-initial-item"
+            mat-menu-item
+            [class.active]="isInitialRouteSig()"
+          >
+            <span>{{ t('shared.header.aenderungen.initial') }}</span>
           </a>
         }
       </div>

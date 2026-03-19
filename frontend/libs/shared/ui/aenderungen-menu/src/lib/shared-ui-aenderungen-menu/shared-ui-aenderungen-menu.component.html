@@ -17,7 +17,7 @@
   </button>
   <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
     <div class="d-flex flex-column gap-2">
-      @if (anederungen?.offeneAenderung; as offeneAenderung) {
+      @if (anederungen?.offen; as offeneAenderung) {
         <a
           [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
@@ -37,13 +37,13 @@
           </span>
         </a>
       }
-      @if (anederungen?.akzeptierteAenderungen?.length) {
+      @if (anederungen?.akzeptiert?.length) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.completed') }}
           <hr class="flex-grow-1" />
         </div>
-        @for (aenderung of anederungen?.akzeptierteAenderungen; track $index) {
+        @for (aenderung of anederungen?.akzeptiert; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
@@ -65,13 +65,13 @@
           </a>
         }
       }
-      @if (anederungen?.abgelehnteAenderungen?.length) {
+      @if (anederungen?.abgelehnt?.length) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.rejected') }}
           <hr class="flex-grow-1" />
         </div>
-        @for (aenderung of anederungen?.abgelehnteAenderungen; track $index) {
+        @for (aenderung of anederungen?.abgelehnt; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
@@ -93,7 +93,7 @@
           </a>
         }
       }
-      @if (anederungen?.initial; as initialTranchen) {
+      <!-- @if (anederungen?.initial; as initialTranchen) {
         <div class="d-flex align-items-center text-muted small gap-2">
           <hr class="flex-grow-1" />
           {{ t('shared.header.aenderungen.initial') }}
@@ -119,7 +119,7 @@
             </span>
           </a>
         }
-      }
+      } -->
     </div>
   </mat-menu>
 </ng-container>

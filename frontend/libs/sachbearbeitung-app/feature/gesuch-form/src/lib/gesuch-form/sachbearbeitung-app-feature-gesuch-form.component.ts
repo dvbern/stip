@@ -33,11 +33,13 @@ import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { GesuchUrlType } from '@dv/shared/model/gesuch';
+import { GesuchUrlType, aenderungRoutes } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
+import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
@@ -58,6 +60,8 @@ import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
     MatMenuModule,
     RouterLink,
     PortalModule,
+    SharedUiAenderungenMenuComponent,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,6 +104,24 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       startWith(this.router.routerState.snapshot.url),
     ),
   );
+
+  isAenderungRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes('/aenderung/') ?? false;
+  });
+
+  isInitialRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes('/initial/') ?? false;
+  });
+
+  noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];
+  isGesuchRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return !this.noGesuchActiveRoutes.some((route) =>
+      url?.includes(`/${route}/`),
+    );
+  });
 
   stepsSig = computed(() => {
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
@@ -152,11 +174,18 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const versions = this.gesuchHeaderStore.viewSig().versions;
     const berechnungId = this.berechnungIdSig();
 
-    const version = versions?.find(
-      (version) => version.berechnungId === berechnungId,
-    );
+    if (berechnungId) {
+      const version = versions?.find(
+        (version) => version.berechnungId === berechnungId,
+      );
+      return version?.tranchen;
+    }
 
-    return version?.tranchen ?? current ?? [];
+    if (this.isInitialRouteSig()) {
+      return this.gesuchHeaderStore.viewSig().initial?.tranchen;
+    }
+
+    return current;
   });
 
   currentTrancheSig = computed(() => {

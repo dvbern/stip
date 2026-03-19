@@ -4,7 +4,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
-import { GesuchTrancheSlim, VerfuegtGesuch } from '@dv/shared/model/gesuch';
+import { GesuchAenderungs } from '@dv/shared/model/gesuch';
 
 @Component({
   selector: 'dv-shared-ui-aenderungen-menu',
@@ -17,13 +17,6 @@ export class SharedUiAenderungenMenuComponent {
   gesuchIdSig = input.required<string | undefined>();
   trancheIdSig = input.required<string | undefined>();
   revisionSig = input.required<number | undefined>();
-  // todo: consider changing types
-  aenderungenSig = input.required<{
-    abgelehnteAenderungen: GesuchTrancheSlim[] | undefined;
-    akzeptierteAenderungen: GesuchTrancheSlim[] | undefined;
-    initial: VerfuegtGesuch | undefined;
-    offeneAenderung: GesuchTrancheSlim | undefined;
-  } | null>();
+  aenderungenSig = input.required<GesuchAenderungs | undefined>();
   isAenderungRouteSig = input.required<boolean | undefined>();
-  isInitialRouteSig = input.required<boolean | undefined>();
 }

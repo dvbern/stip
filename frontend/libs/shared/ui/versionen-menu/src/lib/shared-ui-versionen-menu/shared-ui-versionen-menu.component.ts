@@ -20,6 +20,8 @@ import { GesuchTrancheSlim, VerfuegtGesuch } from '@dv/shared/model/gesuch';
 })
 export class SharedUiVersionenMenuComponent {
   versionenSig = input.required<VerfuegtGesuch[]>();
+  initialSig = input.required<VerfuegtGesuch | undefined>();
+  isInitialRouteSig = input<boolean | undefined>();
   gesuchIdSig = input.required<string | undefined>();
   isGesuchRouteSig = input<boolean | undefined>();
   trancheIdSig = input.required<string | undefined>();

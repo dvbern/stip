@@ -124,7 +124,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     );
   });
 
-  noGesuchActiveRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
+  noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
     return !this.noGesuchActiveRoutes.some((route) =>
@@ -136,12 +136,13 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return url?.includes('/infos/');
   });
 
+  // delete
   isAenderungOrInitialRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
     ),
   );
-  // todo: needed?
+
   isAenderungRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map((url) => url.includes(`/${getTrancheRoute('aenderung')}/`)),
@@ -170,6 +171,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const trancheId = this.trancheIdSig();
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
+    const berechnungId = this.berechnungIdSig();
 
     if (!this.isGesuchRouteSig()) {
       return [];
@@ -180,13 +182,16 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', gesuchId, 'tranche', trancheId],
+      queryParams: { berechnungId },
       name: 'formular',
     };
 
     // todo-after-merge: implement verfuegungId as param to route directly to a verfuegung
+    // todo: typesafe!
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, 'tranche', trancheId],
+      queryParams: { berechnungId },
       name: 'verfuegung',
     };
 
@@ -218,28 +223,28 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
-  aenderungenSig = computed(() => {
-    const {
-      abgelehnt: abgelehnteAenderungen,
-      akzeptiert: akzeptierteAenderungen,
-      offen: offeneAenderung,
-    } = this.gesuchHeaderStore.viewSig().aenderungs ?? {};
-    const initial = this.gesuchHeaderStore.viewSig().initial;
-    if (
-      !abgelehnteAenderungen?.length &&
-      !akzeptierteAenderungen?.length &&
-      !initial &&
-      !offeneAenderung
-    ) {
-      return null;
-    }
-    return {
-      abgelehnteAenderungen,
-      akzeptierteAenderungen,
-      initial,
-      offeneAenderung,
-    };
-  });
+  // aenderungenSig = computed(() => {
+  //   const {
+  //     abgelehnt: abgelehnteAenderungen,
+  //     akzeptiert: akzeptierteAenderungen,
+  //     offen: offeneAenderung,
+  //   } = this.gesuchHeaderStore.viewSig().aenderungs ?? {};
+  //   const initial = this.gesuchHeaderStore.viewSig().initial;
+  //   if (
+  //     !abgelehnteAenderungen?.length &&
+  //     !akzeptierteAenderungen?.length &&
+  //     !initial &&
+  //     !offeneAenderung
+  //   ) {
+  //     return null;
+  //   }
+  //   return {
+  //     abgelehnteAenderungen,
+  //     akzeptierteAenderungen,
+  //     initial,
+  //     offeneAenderung,
+  //   };
+  // });
 
   isLoadingSig = computed(() => {
     return (

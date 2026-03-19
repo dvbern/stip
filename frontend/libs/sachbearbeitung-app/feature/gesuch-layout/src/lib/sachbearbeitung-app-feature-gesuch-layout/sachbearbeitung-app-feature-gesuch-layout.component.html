@@ -32,6 +32,8 @@
       <!-- todo-after-merge: in after merge of Task: KSTIP-2856 -->
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"
+        [initialSig]="headerViewSig().initial"
+        [isInitialRouteSig]="isInitialRouteSig()"
         [gesuchIdSig]="gesuchIdSig()"
         [isGesuchRouteSig]="isGesuchRouteSig()"
         [trancheIdSig]="trancheIdSig()"
@@ -40,15 +42,22 @@
       ></dv-shared-ui-versionen-menu>
 
       <!-- Änderungen -->
-      <!-- todo-after-merge: both menus are highlited in case of aenderung! -->
       <dv-shared-ui-aenderungen-menu
-        [aenderungenSig]="aenderungenSig()"
-        [isAenderungRouteSig]="isAenderungOrInitialRouteSig()"
-        [isInitialRouteSig]="isInitialRouteSig()"
+        [aenderungenSig]="headerViewSig().aenderungs"
+        [isAenderungRouteSig]="isAenderungRouteSig()"
         [gesuchIdSig]="gesuchIdSig()"
         [trancheIdSig]="trancheIdSig()"
         [revisionSig]="revisionSig()"
       ></dv-shared-ui-aenderungen-menu>
+
+      <a
+        [routerLink]="['/gesuch', 'infos', gesuchId]"
+        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+        data-testid="sb-gesuch-header-infos-link"
+        [class.active]="isInfosRouteSig()"
+      >
+        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+      </a>
 
       <!-- Darlehen Menu -->
       <dv-shared-ui-darlehen-menu
@@ -79,6 +88,7 @@
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 
+  <!-- do combine into explilcit check? -->
   @if (berechnungIdSig()) {
     <div
       class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
@@ -96,6 +106,7 @@
         <a
           mat-tab-link
           [routerLink]="tab.route"
+          [queryParams]="tab.queryParams"
           class="btn btn-nav tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
           [active]="tab.active"
           [class.active]="tab.active"
