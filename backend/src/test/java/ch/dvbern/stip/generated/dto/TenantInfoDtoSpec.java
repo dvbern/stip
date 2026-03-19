@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDtoSpec;
+import ch.dvbern.stip.generated.dto.TenantFeatureDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,46 +29,24 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Client Application Info about a &#x60;Tenant&#x60;
  */
 @JsonPropertyOrder({
-  TenantInfoDtoSpec.JSON_PROPERTY_IDENTIFIER,
-  TenantInfoDtoSpec.JSON_PROPERTY_CLIENT_AUTH
+  TenantInfoDtoSpec.JSON_PROPERTY_CLIENT_AUTH,
+  TenantInfoDtoSpec.JSON_PROPERTY_FEATURES,
+  TenantInfoDtoSpec.JSON_PROPERTY_IDENTIFIER
 })
 @JsonTypeName("TenantInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TenantInfoDtoSpec {
-  public static final String JSON_PROPERTY_IDENTIFIER = "identifier";
-  private String identifier;
-
   public static final String JSON_PROPERTY_CLIENT_AUTH = "clientAuth";
   private TenantAuthConfigDtoSpec clientAuth;
 
+  public static final String JSON_PROPERTY_FEATURES = "features";
+  private TenantFeatureDtoSpec features;
+
+  public static final String JSON_PROPERTY_IDENTIFIER = "identifier";
+  private String identifier;
+
   public TenantInfoDtoSpec() {
   }
-
-  public TenantInfoDtoSpec identifier(String identifier) {
-    
-    this.identifier = identifier;
-    return this;
-  }
-
-   /**
-   * Get identifier
-   * @return identifier
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getIdentifier() {
-    return identifier;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIdentifier(String identifier) {
-    this.identifier = identifier;
-  }
-
 
   public TenantInfoDtoSpec clientAuth(TenantAuthConfigDtoSpec clientAuth) {
     
@@ -94,6 +73,58 @@ public class TenantInfoDtoSpec {
     this.clientAuth = clientAuth;
   }
 
+
+  public TenantInfoDtoSpec features(TenantFeatureDtoSpec features) {
+    
+    this.features = features;
+    return this;
+  }
+
+   /**
+   * Get features
+   * @return features
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FEATURES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public TenantFeatureDtoSpec getFeatures() {
+    return features;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FEATURES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFeatures(TenantFeatureDtoSpec features) {
+    this.features = features;
+  }
+
+
+  public TenantInfoDtoSpec identifier(String identifier) {
+    
+    this.identifier = identifier;
+    return this;
+  }
+
+   /**
+   * Get identifier
+   * @return identifier
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getIdentifier() {
+    return identifier;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_IDENTIFIER)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setIdentifier(String identifier) {
+    this.identifier = identifier;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -103,21 +134,23 @@ public class TenantInfoDtoSpec {
       return false;
     }
     TenantInfoDtoSpec tenantInfo = (TenantInfoDtoSpec) o;
-    return Objects.equals(this.identifier, tenantInfo.identifier) &&
-        Objects.equals(this.clientAuth, tenantInfo.clientAuth);
+    return Objects.equals(this.clientAuth, tenantInfo.clientAuth) &&
+        Objects.equals(this.features, tenantInfo.features) &&
+        Objects.equals(this.identifier, tenantInfo.identifier);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(identifier, clientAuth);
+    return Objects.hash(clientAuth, features, identifier);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantInfoDtoSpec {\n");
-    sb.append("    identifier: ").append(toIndentedString(identifier)).append("\n");
     sb.append("    clientAuth: ").append(toIndentedString(clientAuth)).append("\n");
+    sb.append("    features: ").append(toIndentedString(features)).append("\n");
+    sb.append("    identifier: ").append(toIndentedString(identifier)).append("\n");
     sb.append("}");
     return sb.toString();
   }
