@@ -28,6 +28,7 @@ public class DelegierungCreateDto  implements Serializable {
   private @Valid String email;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
   private @Valid AdresseDto adresse;
+  private @Valid Boolean nutzungsbedingungenAkzeptiert;
 
   /**
    **/
@@ -162,6 +163,25 @@ public class DelegierungCreateDto  implements Serializable {
     this.adresse = adresse;
   }
 
+  /**
+   **/
+  public DelegierungCreateDto nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+  
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  @NotNull
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+  @JsonProperty("nutzungsbedingungenAkzeptiert")
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -178,12 +198,13 @@ public class DelegierungCreateDto  implements Serializable {
         Objects.equals(this.geburtsdatum, delegierungCreate.geburtsdatum) &&
         Objects.equals(this.email, delegierungCreate.email) &&
         Objects.equals(this.sprache, delegierungCreate.sprache) &&
-        Objects.equals(this.adresse, delegierungCreate.adresse);
+        Objects.equals(this.adresse, delegierungCreate.adresse) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, delegierungCreate.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse);
+    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -198,6 +219,7 @@ public class DelegierungCreateDto  implements Serializable {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    sprache: ").append(toIndentedString(sprache)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

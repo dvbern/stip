@@ -37,7 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierungCreateDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
   DelegierungCreateDtoSpec.JSON_PROPERTY_EMAIL,
   DelegierungCreateDtoSpec.JSON_PROPERTY_SPRACHE,
-  DelegierungCreateDtoSpec.JSON_PROPERTY_ADRESSE
+  DelegierungCreateDtoSpec.JSON_PROPERTY_ADRESSE,
+  DelegierungCreateDtoSpec.JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT
 })
 @JsonTypeName("DelegierungCreate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -62,6 +63,9 @@ public class DelegierungCreateDtoSpec {
 
   public static final String JSON_PROPERTY_ADRESSE = "adresse";
   private AdresseDtoSpec adresse;
+
+  public static final String JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT = "nutzungsbedingungenAkzeptiert";
+  private Boolean nutzungsbedingungenAkzeptiert;
 
   public DelegierungCreateDtoSpec() {
   }
@@ -247,6 +251,32 @@ public class DelegierungCreateDtoSpec {
     this.adresse = adresse;
   }
 
+
+  public DelegierungCreateDtoSpec nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+    return this;
+  }
+
+   /**
+   * Get nutzungsbedingungenAkzeptiert
+   * @return nutzungsbedingungenAkzeptiert
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getNutzungsbedingungenAkzeptiert() {
+    return nutzungsbedingungenAkzeptiert;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NUTZUNGSBEDINGUNGEN_AKZEPTIERT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setNutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+    this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -262,12 +292,13 @@ public class DelegierungCreateDtoSpec {
         Objects.equals(this.geburtsdatum, delegierungCreate.geburtsdatum) &&
         Objects.equals(this.email, delegierungCreate.email) &&
         Objects.equals(this.sprache, delegierungCreate.sprache) &&
-        Objects.equals(this.adresse, delegierungCreate.adresse);
+        Objects.equals(this.adresse, delegierungCreate.adresse) &&
+        Objects.equals(this.nutzungsbedingungenAkzeptiert, delegierungCreate.nutzungsbedingungenAkzeptiert);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse);
+    return Objects.hash(anrede, nachname, vorname, geburtsdatum, email, sprache, adresse, nutzungsbedingungenAkzeptiert);
   }
 
   @Override
@@ -281,6 +312,7 @@ public class DelegierungCreateDtoSpec {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    sprache: ").append(toIndentedString(sprache)).append("\n");
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
+    sb.append("    nutzungsbedingungenAkzeptiert: ").append(toIndentedString(nutzungsbedingungenAkzeptiert)).append("\n");
     sb.append("}");
     return sb.toString();
   }

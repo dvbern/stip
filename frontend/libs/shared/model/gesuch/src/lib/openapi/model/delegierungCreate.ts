@@ -21,6 +21,7 @@ export interface DelegierungCreate {
     email: string;
     sprache: Sprache;
     adresse: Adresse;
+    nutzungsbedingungenAkzeptiert: boolean;
 }
 
 

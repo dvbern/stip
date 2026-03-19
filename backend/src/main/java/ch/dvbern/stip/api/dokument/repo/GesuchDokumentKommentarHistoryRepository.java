@@ -45,7 +45,6 @@ public class GesuchDokumentKommentarHistoryRepository {
             .add(AuditEntity.relatedId("gesuchDokument").eq(gesuchDokumentId))
             .getResultList()
             .stream()
-            .map(GesuchDokumentKommentar.class::cast)
             .toList();
         return revisions;
     }

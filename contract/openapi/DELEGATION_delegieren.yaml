@@ -282,6 +282,7 @@ components:
         - email
         - sprache
         - adresse
+        - nutzungsbedingungenAkzeptiert
       type: object
       properties:
         anrede:
@@ -298,6 +299,8 @@ components:
           $ref: './components/common.yaml#/Sprache'
         adresse:
           $ref: './components/common.yaml#/Adresse'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     DelegierterMitarbeiterAendern:
       required:
         - mitarbeiterId

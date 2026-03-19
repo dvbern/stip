@@ -7066,6 +7066,7 @@ components:
         - email
         - sprache
         - adresse
+        - nutzungsbedingungenAkzeptiert
       type: object
       properties:
         anrede:
@@ -7082,6 +7083,8 @@ components:
           $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
+        nutzungsbedingungenAkzeptiert:
+          type: boolean
     DelegierterMitarbeiterAendern:
       required:
         - mitarbeiterId

@@ -161,6 +161,11 @@ form .readonly {
       $gesuch-app-warn
     )};
 }
+.mat-mdc-checkbox.ng-invalid.ng-touched {
+  --mat-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
+      $gesuch-app-warn
+    )};
+}
 .mat-mdc-form-field-error:not(:first-child) {
   display: none;
 }
