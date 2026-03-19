@@ -479,11 +479,12 @@ public class GesuchTrancheService {
             kommentarDto
         );
 
-        final var lastFreigegebenTrancheRevision =
-            gesuchTrancheHistoryRepository.getLatestRevisionWhereStatusWasInBearbeitungGs(aenderungId).get();
+        final var lastFreigegebenTrancheRevisionTimestamp =
+            gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId).get();
 
         final var lastFreigegebenTranche =
-            gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, lastFreigegebenTrancheRevision + 1);
+            gesuchTrancheHistoryRepository
+                .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp + 1);
 
         final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 

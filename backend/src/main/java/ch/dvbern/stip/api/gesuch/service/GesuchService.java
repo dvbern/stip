@@ -1179,10 +1179,15 @@ public class GesuchService {
             )
             .orElseThrow()
         - 1;
+        final var revisionTimestampToResetTo =
+            gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusChangedToOneOf(
+                relevantAenderungId,
+                List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            ).orElseThrow() - 1;
 
         // Select the gesuch just before it changes from STIPENDIENANSPRUCH/KEIN_STIPENDIENANSPRUCH to IN_BEARBEITUNG_SB
         final var gesuchToRevertTo = gesuchHistoryRepository
-            .getGesuchAtRevision(gesuch.getId(), revisionToResetTo)
+            .getGesuchAtRevisionTimestamp(gesuch.getId(), revisionTimestampToResetTo)
             .orElseThrow(NotFoundException::new);
 
         Map<UUID, List<GesuchDokumentKommentar>> trancheIdGesuchDokumentKommentarsMap = new HashMap<>();
@@ -1195,7 +1200,10 @@ public class GesuchService {
                 .stream()
                 .flatMap(
                     gesuchDokument -> gesuchDokumentKommentarHistoryRepository
-                        .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokument.getId(), revisionToResetTo)
+                        .getGesuchDokumentKommentarOfGesuchDokumentAtRevisionTimestamp(
+                            gesuchDokument.getId(),
+                            revisionTimestampToResetTo
+                        )
                         .stream()
                 )
                 .toList();

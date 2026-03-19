@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.repo;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,10 +44,17 @@ public class GesuchDokumentKommentarHistoryRepository {
             .forEntitiesAtRevision(GesuchDokumentKommentar.class, revision)
             .add(AuditEntity.revisionType().ne(RevisionType.DEL))
             .add(AuditEntity.relatedId("gesuchDokument").eq(gesuchDokumentId))
-            .getResultList()
-            .stream()
-            .map(GesuchDokumentKommentar.class::cast)
-            .toList();
+            .getResultList();
         return revisions;
+    }
+
+    public List<GesuchDokumentKommentar> getGesuchDokumentKommentarOfGesuchDokumentAtRevisionTimestamp(
+        final UUID gesuchDokumentId,
+        final Long revisionTimestamp
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        final var revision = reader.getRevisionNumberForDate(Instant.ofEpochMilli(revisionTimestamp));
+
+        return getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokumentId, revision.intValue());
     }
 }

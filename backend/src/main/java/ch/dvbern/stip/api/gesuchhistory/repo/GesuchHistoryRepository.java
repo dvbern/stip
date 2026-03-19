@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchhistory.repo;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -179,11 +180,19 @@ public class GesuchHistoryRepository {
             .createQuery()
             .forEntitiesAtRevision(Gesuch.class, revisionNumber)
             .add(AuditEntity.id().eq(gesuchId))
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
             .findFirst();
         return revision;
+    }
+
+    public Optional<Gesuch> getGesuchAtRevisionTimestamp(final UUID gesuchId, final Long revisionTimestamp) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        final var revision = reader.getRevisionNumberForDate(Instant.ofEpochMilli(revisionTimestamp));
+
+        return getGesuchAtRevision(gesuchId, revision.intValue());
     }
 
 }

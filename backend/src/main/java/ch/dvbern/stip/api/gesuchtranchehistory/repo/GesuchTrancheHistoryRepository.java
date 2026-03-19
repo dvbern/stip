@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchtranchehistory.repo;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -94,6 +95,24 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
+    @SuppressWarnings("unchecked")
+    public Optional<Long> getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(
+        final UUID gesuchTrancheId
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    @Transactional
     public GesuchTranche getByRevisionId(
         final UUID gesuchTrancheId,
         final @Nullable Integer revisionNumber
@@ -105,6 +124,16 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .getSingleResult();
         return revision;
+    }
+
+    @Transactional
+    public GesuchTranche getByRevisionTimestamp(
+        final UUID gesuchTrancheId,
+        final Long revisionTimestamp
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        final var revisionNumber = reader.getRevisionNumberForDate(Instant.ofEpochMilli(revisionTimestamp));
+        return getByRevisionId(gesuchTrancheId, revisionNumber.intValue());
     }
 
     @Transactional
@@ -137,6 +166,26 @@ public class GesuchTrancheHistoryRepository {
         return reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, false, false)
             .addProjection(AuditEntity.revisionNumber())
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").in(gesuchTrancheStatusToList))
+            .add(AuditEntity.property("status").hasChanged())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public Optional<Long> getLatestRevisionTimestampWhereStatusChangedToOneOf(
+        final UUID gesuchTrancheId,
+        final List<GesuchTrancheStatus> gesuchTrancheStatusToList
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, false, false)
+            .addProjection(AuditEntityUtil.revisionTimestamp())
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").in(gesuchTrancheStatusToList))
             .add(AuditEntity.property("status").hasChanged())
