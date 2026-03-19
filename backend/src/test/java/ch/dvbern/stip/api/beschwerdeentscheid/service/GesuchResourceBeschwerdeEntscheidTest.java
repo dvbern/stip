@@ -251,7 +251,7 @@ class GesuchResourceBeschwerdeEntscheidTest {
 
         Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
             .satisfiesAnyOf(
-                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG)
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.IN_BEARBEITUNG_SB)
             );
     }
 

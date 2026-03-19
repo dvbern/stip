@@ -145,10 +145,6 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
                 aenderungFehlendeDokumenteZurueckweisenHandler::handle
-            )
-            .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN),
-                beschwerdeErfolgreichAkzeptierenHandler::handle
             );
 
         config.configure(Gesuchstatus.IN_BEARBEITUNG_SB)
@@ -178,6 +174,10 @@ public class GesuchStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG),
                 sbInitialisiertAenderungHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN),
+                beschwerdeErfolgreichAkzeptierenHandler::handle
             );
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
@@ -268,7 +268,7 @@ public class GesuchStatusConfigProducer {
                 Gesuchstatus.IN_BEARBEITUNG_SB
             )
             .permit(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH
@@ -289,7 +289,7 @@ public class GesuchStatusConfigProducer {
                 Gesuchstatus.IN_BEARBEITUNG_SB
             )
             .permit(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG, Gesuchstatus.IN_BEARBEITUNG_SB)
-            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
                 stipendienAnspruchHandler::handle
