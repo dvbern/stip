@@ -6,6 +6,7 @@
   "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Paiements échoués",
   "sachbearbeitung-app.header.verfuegung": "Décision",
   "sachbearbeitung-app.header.infos": "Infos",
+  "sachbearbeitung-app.header.info.isHistorized": "Il s'agit d'une version plus ancienne de la demande.",
   "sachbearbeitung-app.header.massendruck": "Centre d'impression",
   "sachbearbeitung-app.header.tranche.erstellen": "Demande",
   "sachbearbeitung-app.header.aktion": "Action",

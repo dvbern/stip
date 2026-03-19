@@ -33,8 +33,10 @@
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"
         [gesuchIdSig]="gesuchIdSig()"
+        [isGesuchRouteSig]="isGesuchRouteSig()"
         [trancheIdSig]="trancheIdSig()"
-        [firstTrancheIdSig]="firstCurrentTranchenSig()?.id"
+        [currentTranchenSig]="this.headerViewSig().currentTranches"
+        [berechnungIdSig]="berechnungIdSig()"
       ></dv-shared-ui-versionen-menu>
 
       <!-- Änderungen -->
@@ -60,6 +62,7 @@
         [routerLink]="['/gesuch', 'infos', gesuchId]"
         class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
         data-testid="sb-gesuch-header-infos-link"
+        [class.active]="isInfosRouteSig()"
       >
         <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
       </a>
@@ -76,8 +79,19 @@
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 
+  @if (berechnungIdSig()) {
+    <div
+      class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
+    >
+      <i class="material-symbols-rounded me-1 tw:text-dv-warning">info</i>
+      <span class="tw:text-md tw:text-neutral-500">
+        {{ t('sachbearbeitung-app.header.info.isHistorized') }}
+      </span>
+    </div>
+  }
+
   <div class="tw:flex tw:justify-between">
-    <nav mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true" [class.tw:h-[48px]]="!isGesuchRouteSig()">
       @for (tab of tabsSig(); track tab.name) {
         <a
           mat-tab-link
@@ -93,72 +107,75 @@
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
-    <div>
-      <!-- Aktion Button -->
-      <button
-        type="button"
-        class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none tw:border-gray-300!"
-        data-testid="sb-gesuch-header-aktion-menu"
-        [class.active]="aktionTrigger.menuOpen"
-        [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
-        #aktionTrigger="matMenuTrigger"
-        [matMenuTriggerFor]="aktionMenu"
-      >
-        <span>{{ t('sachbearbeitung-app.header.aktion') }}</span>
-        <i class="material-symbols-rounded ms-2">expand_more</i>
-      </button>
-      <!-- Aktion Menu -->
-      <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
-        <div class="d-flex flex-column gap-2">
-          @switch (availableTrancheInteraction) {
-            @case ('CREATE_TRANCHE') {
-              <!-- Tranche erstellen -->
+    <!-- Aktion Button -->
+    @if (isActionRouteSig()) {
+      <div>
+        <button
+          type="button"
+          class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none tw:border-gray-300!"
+          data-testid="sb-gesuch-header-aktion-menu"
+          [class.active]="aktionTrigger.menuOpen"
+          [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
+          #aktionTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="aktionMenu"
+        >
+          <span>{{ t('sachbearbeitung-app.header.aktion') }}</span>
+          <i class="material-symbols-rounded ms-2">expand_more</i>
+        </button>
+        <!-- Aktion Menu -->
+        <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
+          <div class="d-flex flex-column gap-2">
+            @switch (availableTrancheInteraction) {
+              @case ('CREATE_TRANCHE') {
+                <!-- Tranche erstellen -->
+                <button
+                  type="button"
+                  class="btn fw-normal px-2 shadow-none"
+                  data-testid="aktion-tranche-erstellen"
+                  mat-menu-item
+                  (click)="createTranche()"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="material-symbols-rounded">add_circle</i>
+                    <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
+                  </div>
+                </button>
+              }
+            }
+
+            @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+              <hr class="my-1" />
+            }
+
+            @for (uebergang of statusUebergaenge.list; track $index) {
               <button
                 type="button"
-                class="btn fw-normal px-2 shadow-none"
-                data-testid="aktion-tranche-erstellen"
+                class="btn fw-normal pe-auto px-2 shadow-none"
+                [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                [disabled]="uebergang.disabledReason || !trancheId"
+                [matTooltip]="
+                  uebergang.disabledReason
+                    ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                    : null
+                "
                 mat-menu-item
-                (click)="createTranche()"
+                (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
               >
                 <div class="d-flex align-items-center gap-2">
-                  <i class="material-symbols-rounded">add_circle</i>
-                  <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
+                  <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                  <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.typ}`) }}</span>
                 </div>
               </button>
             }
-          }
-
-          @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
-            <hr class="my-1" />
-          }
-
-          @for (uebergang of statusUebergaenge.list; track $index) {
-            <button
-              type="button"
-              class="btn fw-normal pe-auto px-2 shadow-none"
-              [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
-              [disabled]="uebergang.disabledReason || !trancheId"
-              [matTooltip]="
-                uebergang.disabledReason
-                  ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
-                  : null
-              "
-              mat-menu-item
-              (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
-            >
-              <div class="d-flex align-items-center gap-2">
-                <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-                <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.typ}`) }}</span>
-              </div>
-            </button>
-          }
-        </div>
-      </mat-menu>
-    </div>
+          </div>
+        </mat-menu>
+      </div>
+    }
   </div>
 
   <mat-tab-nav-panel
     class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-4 tw:rounded-b-xl tw:rounded-tr-xl"
+    [class.tw:rounded-tl-xl]="!isGesuchRouteSig()"
     #tabPanel
   >
     <router-outlet></router-outlet>

@@ -15,7 +15,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, RouterLink, RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  Router,
+  RouterLink,
+  RouterOutlet,
+} from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
@@ -80,6 +85,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
 
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private store = inject(Store);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
@@ -97,8 +103,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   revisionSig = this.store.selectSignal(selectRevision);
 
-  // use or remove?
-  // trancheTypSig = this.store.selectSignal(selectTrancheTyp);
+  berechnungIdSig = toSignal(
+    this.route.queryParamMap.pipe(
+      map((params) => params.get('berechnungId') ?? undefined),
+    ),
+  );
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -106,6 +115,26 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       startWith(this.router.routerState.snapshot.url),
     ),
   );
+
+  noActionRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
+  isActionRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return !this.noActionRoutes.some(
+      (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
+    );
+  });
+
+  noGesuchActiveRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
+  isGesuchRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return !this.noGesuchActiveRoutes.some((route) =>
+      url?.includes(`/${route}/`),
+    );
+  });
+  isInfosRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes('/infos/');
+  });
 
   isAenderungOrInitialRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -132,15 +161,19 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return info ? `${info.piaVorname} ${info.piaNachname}` : '';
   });
 
-  firstCurrentTranchenSig = computed(() => {
-    return this.headerViewSig().currentTranches?.[0];
-  });
+  // firstCurrentTranchenSig = computed(() => {
+  //   return this.headerViewSig().currentTranches?.[0];
+  // });
 
   tabsSig = computed(() => {
     const gesuchId = this.gesuchIdSig();
     const trancheId = this.trancheIdSig();
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
+
+    if (!this.isGesuchRouteSig()) {
+      return [];
+    }
 
     // todo-after-merge: use correct tranche in KSTIP-2856 => solve routing issue with params in versionendropdown
     // use active url for route params!
@@ -217,10 +250,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
   constructor() {
     // log effect
-    // effect(() => {
-    //   // console.log('trancheTyp', this.trancheTypSig());
-    //   console.log('isAenderungRoute', this.isAenderungRouteSig());
-    // });
+    effect(() => {
+      // console.log('trancheTyp', this.trancheTypSig());
+      console.log('isAenderungRoute', this.isAenderungRouteSig());
+      console.log('isGesuchRoute', this.isGesuchRouteSig());
+    });
 
     effect(() => {
       const gesuchId = this.gesuchIdSig();

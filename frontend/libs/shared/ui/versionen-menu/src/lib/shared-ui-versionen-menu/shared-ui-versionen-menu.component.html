@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   @let gesuchId = gesuchIdSig();
   @let trancheId = trancheIdSig();
-  @let firstTrancheId = firstTrancheIdSig();
+  @let firstTrancheId = firstCurrentTrancheIdSig();
   @let versionen = versionenSig();
 
   @if (versionen.length) {
@@ -10,13 +10,36 @@
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="sb-gesuch-header-versionen-menu"
       [matMenuTriggerFor]="versionenMenu"
+      [class.active]="isGesuchRouteSig()"
     >
-      <span>{{ t('shared.header.versionen') }}</span>
-      <i class="material-symbols-rounded ms-2">expand_more</i>
+      @if (currentVersionSig()) {
+        <span>
+          {{
+            t('shared.header.versionen.item', {
+              date: currentVersionSig()?.timestamp | date: 'dd.MM.yyyy',
+            })
+          }}
+        </span>
+        <i class="material-symbols-rounded ms-2">expand_more</i>
+      } @else {
+        <span>{{ t('shared.header.versionen') }}</span>
+        <i class="material-symbols-rounded ms-2">expand_more</i>
+      }
     </button>
 
     <mat-menu #versionenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
       <div class="d-flex flex-column gap-2">
+        <!-- todo: link and active state -->
+        <a
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-versionen-default"
+          [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+          [class.active]="trancheId === (trancheId ?? firstTrancheId) && isGesuchRouteSig() && !currentVersionSig()"
+        >
+          <span>{{ t('shared.header.versionen') }}</span>
+        </a>
+        <hr class="my-2" />
         @for (version of versionen; track version.berechnungId) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
@@ -25,7 +48,7 @@
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="versionen-nav-menu-item"
             mat-menu-item
-            [class.active]="trancheId === version.tranchen[0].id"
+            [class.active]="currentVersionSig()?.berechnungId === version.berechnungId"
           >
             <span>
               {{
@@ -40,7 +63,8 @@
     </mat-menu>
   } @else {
     <!-- this is a fallback button that does not route to any versions, basically a reload button on current gesuch -->
-    <button
+    <!-- todo: link and active state -->
+    <a
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="sb-gesuch-header-versionen-default"
@@ -48,6 +72,6 @@
       [class.active]="trancheId === (trancheId ?? firstTrancheId)"
     >
       <span>{{ t('shared.header.versionen') }}</span>
-    </button>
+    </a>
   }
 </ng-container>
