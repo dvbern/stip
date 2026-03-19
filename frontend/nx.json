@@ -3,6 +3,7 @@
   "tui": {
     "enabled": false
   },
+  "cacheDirectory": ".nx/cache",
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build", "prepare"],
