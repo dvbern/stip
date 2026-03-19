@@ -14,10 +14,10 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 
 import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -35,6 +35,7 @@ import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchUrlType } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -79,6 +80,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   private navigationStore = inject(NavigationStore);
   private aenderungStore = inject(GesuchAenderungStore);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   revisionSig = this.store.selectSignal(selectRevision);
   headerService = inject(SharedUtilHeaderService);
@@ -92,23 +94,12 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
-  tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
-    this.gesuchIdSig,
+  routeUrlSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.router.routerState.snapshot.url),
+      startWith(this.router.routerState.snapshot.url),
+    ),
   );
-
-  // todo: could be integrated into tranchenSig?
-  currentVersionTranchenSig = computed(() => {
-    const berechnungId = this.berechnungIdSig();
-    const versions = this.gesuchHeaderStore.header().data?.versions;
-
-    if (berechnungId && versions) {
-      const version = versions.find(
-        (version) => version.berechnungId === berechnungId,
-      );
-      return version?.tranchen;
-    }
-    return undefined;
-  });
 
   stepsSig = computed(() => {
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
@@ -135,6 +126,37 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const currentStep = this.stepSig();
     const steps = this.stepsSig();
     return steps.find((step) => step.route === currentStep?.route);
+  });
+
+  // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
+  //   this.gesuchIdSig,
+  // );
+
+  // todo: could be integrated into tranchenSig?
+  // currentVersionTranchenSig = computed(() => {
+  //   const berechnungId = this.berechnungIdSig();
+  //   const versions = this.gesuchHeaderStore.header().data?.versions;
+
+  //   if (berechnungId && versions) {
+  //     const version = versions.find(
+  //       (version) => version.berechnungId === berechnungId,
+  //     );
+  //     return version?.tranchen;
+  //   }
+  //   return undefined;
+  // });
+
+  // testing without getRealativeTrancheViewSig
+  tranchenSig = computed(() => {
+    const current = this.gesuchHeaderStore.header().data?.currentTranches;
+    const versions = this.gesuchHeaderStore.viewSig().versions;
+    const berechnungId = this.berechnungIdSig();
+
+    const version = versions?.find(
+      (version) => version.berechnungId === berechnungId,
+    );
+
+    return version?.tranchen ?? current ?? [];
   });
 
   currentTrancheSig = computed(() => {
@@ -191,10 +213,10 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
 
   constructor() {
     // log effect
-    effect(() => {
-      console.log('berechnungId', this.berechnungIdSig());
-      console.log('relativeTranchen', this.tranchenSig());
-    });
+    // effect(() => {
+    //   console.log('berechnungId', this.berechnungIdSig());
+    //   console.log('relativeTranchen', this.tranchenSig());
+    // });
 
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())

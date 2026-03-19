@@ -41,15 +41,10 @@ export class SharedUiVersionenMenuComponent {
       return undefined;
     }
 
-    console.log('berechnungId in menu', berechnungId);
-
     const version = versionen.find(
       (version) => version.berechnungId === berechnungId,
     );
 
-    console.log('current version in menu', version);
-
-    // Find the version that matches the current trancheId and berechnungId
     return version;
   });
 }

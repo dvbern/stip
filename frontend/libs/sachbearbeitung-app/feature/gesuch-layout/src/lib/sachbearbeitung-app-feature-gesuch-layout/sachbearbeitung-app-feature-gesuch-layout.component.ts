@@ -186,7 +186,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     // todo-after-merge: implement verfuegungId as param to route directly to a verfuegung
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
-      route: ['/gesuch/verfuegung', gesuchId],
+      route: ['/gesuch/verfuegung', gesuchId, 'tranche', trancheId],
       name: 'verfuegung',
     };
 
@@ -250,11 +250,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
   constructor() {
     // log effect
-    effect(() => {
-      // console.log('trancheTyp', this.trancheTypSig());
-      console.log('isAenderungRoute', this.isAenderungRouteSig());
-      console.log('isGesuchRoute', this.isGesuchRouteSig());
-    });
+    // effect(() => {
+    //   // console.log('trancheTyp', this.trancheTypSig());
+    //   console.log('isAenderungRoute', this.isAenderungRouteSig());
+    //   console.log('isGesuchRoute', this.isGesuchRouteSig());
+    // });
 
     effect(() => {
       const gesuchId = this.gesuchIdSig();

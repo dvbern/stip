@@ -6,8 +6,7 @@
   <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
 
-    @if (currentVersionTranchenSig(); as tranchen) {
-      <!-- todo: could be versionen menu as well? -->
+    <!-- @if (currentVersionTranchenSig(); as tranchen) {
       <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
         <button
           type="button"
@@ -43,7 +42,8 @@
           </div>
         </mat-menu>
       </div>
-    } @else if (currentTranche) {
+    } @else -->
+    @if (currentTranche) {
       <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
         <button
           type="button"
@@ -69,7 +69,7 @@
           <div class="d-flex flex-column gap-2">
             @for (tranche of tranchenSig(); track $index) {
               <a
-                [routerLink]="tranche.url"
+                [routerLink]="['/', 'gesuch', gesuchIdSig(), 'tranche', tranche.id]"
                 class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
                 data-testid="tranche-nav-menu-item"
                 [class.active]="trancheId === tranche.id"

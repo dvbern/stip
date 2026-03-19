@@ -129,7 +129,7 @@
         },
       ],
     },
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "files.eol": "\n",
     "exportall.config.relExclusion": [],
     "testing.openTesting": "neverOpen",

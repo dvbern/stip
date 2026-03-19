@@ -8,7 +8,7 @@ import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feat
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
   {
-    path: ':gesuchId',
+    path: ':gesuchId/tranche/:trancheId',
     children: [
       {
         path: OPTION_ZUSAMMENFASSUNG.route,
