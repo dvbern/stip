@@ -488,6 +488,9 @@
 
   "shared.form.delegation.email.label": "Email",
   "shared.form.delegation.sprache.label": "Langue de correspondance",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix": "J'autorise l'organisme sélectionné (par exemple, les services sociaux) à saisir les données relatives à ma demande, y compris les informations de paiement. Toute la correspondance ainsi que la décision me seront adressées, avec copie à l'organisme sélectionné. En déliguant cette tâche, j'accepte les ",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link": "conditions d'utilisation",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix": ".",
 
   "shared.person.title": "Person in Education",
   "shared.form.person.sozialversicherungsnummer.info": "Le numéro d’assurance sociale correspond au numéro AVS. Ce numéro à 13 chiffres figure sur la carte d’assurance-maladie ou peut être obtenu auprès de l’administration communale de la commune de résidence. Si vous n’avez pas de numéro d’assurance sociale, veuillez nous contacter.",

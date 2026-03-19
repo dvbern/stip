@@ -4,6 +4,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +15,7 @@ import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import {
   Anrede,
   DelegierungCreate,
@@ -48,6 +50,7 @@ export type DelegierenDialogResult = DelegierungCreate;
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
+    MatCheckboxModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
@@ -58,6 +61,7 @@ export type DelegierenDialogResult = DelegierungCreate;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GesuchAppFeatureDelegierenDialogComponent {
+  private dialog = inject(MatDialog);
   private dialogRef =
     inject<
       MatDialogRef<
@@ -114,6 +118,7 @@ export class GesuchAppFeatureDelegierenDialogComponent {
     ],
     email: ['', [Validators.required, Validators.pattern(PATTERN_EMAIL)]],
     sprache: [<Sprache | undefined>undefined, [Validators.required]],
+    nutzungsbedingungenAkzeptiert: [false, [Validators.requiredTrue]],
   });
 
   onGeburtsdatumBlur() {
@@ -144,6 +149,12 @@ export class GesuchAppFeatureDelegierenDialogComponent {
         },
       });
     }
+  }
+
+  showNutzungsbedingungen() {
+    SharedDialogNutzungsbedingungenComponent.open(this.dialog, true)
+      .afterClosed()
+      .subscribe();
   }
 
   cancel() {

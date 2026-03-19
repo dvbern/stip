@@ -19,7 +19,11 @@
 
   <div class="tw:mt-5 tw:flex tw:justify-between">
     <button type="button" class="btn btn-secondary" (click)="cancel()">
-      {{ t('shared.cancel') }}
+      @if (dialogData.nutzungsbedingungenAkzeptiert) {
+        {{ t('shared.close') }}
+      } @else {
+        {{ t('shared.cancel') }}
+      }
     </button>
     @if (!dialogData.nutzungsbedingungenAkzeptiert) {
       <button type="button" class="btn btn-primary tw:ml-2" (click)="accept()">
