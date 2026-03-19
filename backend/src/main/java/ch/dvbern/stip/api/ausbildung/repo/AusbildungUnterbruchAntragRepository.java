@@ -46,6 +46,7 @@ public class AusbildungUnterbruchAntragRepository implements BaseRepository<Ausb
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_AUSBILDUNG_UNTERBRUCH_ANTRAG)
             .where(Q_AUSBILDUNG_UNTERBRUCH_ANTRAG.gesuch.id.eq(gesuchId))
+            .orderBy(Q_AUSBILDUNG_UNTERBRUCH_ANTRAG.timestampErstellt.desc())
             .stream()
             .toList();
     }

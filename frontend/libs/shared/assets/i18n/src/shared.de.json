@@ -322,7 +322,7 @@
   "shared.gesuch.periode.status.ARCHIVIERT": "Archiviert",
 
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.MANUELLE_AENDERUNG": "Manuell integrierte Änderung",
-  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
+  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.UEBERPRUEFEN": "Eingereicht",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.IN_BEARBEITUNG_GS": "Abgelehnt",
   "sachbearbeitung-app.gesuch.status.tranche.from.FEHLENDE_DOKUMENTE.to.IN_BEARBEITUNG_GS": "Fehlende Dokumente nicht eingereicht",
   "sachbearbeitung-app.gesuch.status.tranche.from.IN_BEARBEITUNG_GS.to.UEBERPRUEFEN": "Eingereicht",

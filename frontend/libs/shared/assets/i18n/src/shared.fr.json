@@ -322,7 +322,7 @@
   "shared.gesuch.periode.status.ARCHIVIERT": "Archivé",
 
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.MANUELLE_AENDERUNG": "Modification manuelle",
-  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.IN_BEARBEITUNG_GS": "Créé",
+  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.UEBERPRUEFEN": "Soumis",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.IN_BEARBEITUNG_GS": "Refusé",
   "sachbearbeitung-app.gesuch.status.tranche.from.FEHLENDE_DOKUMENTE.to.IN_BEARBEITUNG_GS": "Documents manquants non fournis",
   "sachbearbeitung-app.gesuch.status.tranche.from.IN_BEARBEITUNG_GS.to.UEBERPRUEFEN": "Fourni",
