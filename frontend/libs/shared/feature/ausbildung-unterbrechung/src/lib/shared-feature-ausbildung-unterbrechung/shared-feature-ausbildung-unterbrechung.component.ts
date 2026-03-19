@@ -47,6 +47,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 @Component({
   selector: 'dv-shared-feature-ausbildung-unterbrechung',
@@ -189,7 +190,11 @@ export class SharedFeatureAusbildungUnterbrechungComponent {
     const values = convertTempFormToRealValues(this.form);
     this.ausbildungStore.einreichenAusbildungUnterbruchAntrag$({
       ausbildungUnterbruchAntragId,
-      updateAusbildungUnterbruchAntragGS: values,
+      updateAusbildungUnterbruchAntragGS: {
+        ...values,
+        startDate: toBackendLocalDate(values.startDate),
+        endDate: toBackendLocalDate(values.endDate),
+      },
       onSuccess: () => {
         this.globalNotificationStore.createSuccessNotification<SharedTranslationKey>(
           {

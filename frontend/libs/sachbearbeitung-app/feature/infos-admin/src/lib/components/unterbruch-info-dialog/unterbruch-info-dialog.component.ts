@@ -41,6 +41,7 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 import { AusbildungUnterbruchAntragEntry } from '../../types';
 
@@ -127,7 +128,15 @@ export class UnterbruchInfoDialogComponent {
     }
     const values = convertTempFormToRealValues(this.form);
 
-    this.dialogRef.close({ data: { ...values, status }, status });
+    this.dialogRef.close({
+      data: {
+        ...values,
+        startDate: toBackendLocalDate(values.startDate),
+        endDate: toBackendLocalDate(values.endDate),
+        status,
+      },
+      status,
+    });
   }
 
   close() {
