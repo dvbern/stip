@@ -1172,13 +1172,6 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new)
             .getId();
 
-        final Integer revisionToResetTo = gesuchTrancheHistoryRepository
-            .getLatestRevisionWhereStatusChangedToOneOf(
-                relevantAenderungId,
-                List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.MANUELLE_AENDERUNG)
-            )
-            .orElseThrow()
-        - 1;
         final var revisionTimestampToResetTo =
             gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusChangedToOneOf(
                 relevantAenderungId,

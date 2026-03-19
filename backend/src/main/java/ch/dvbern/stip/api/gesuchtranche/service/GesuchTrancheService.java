@@ -476,7 +476,7 @@ public class GesuchTrancheService {
 
         final var lastFreigegebenTranche =
             gesuchTrancheHistoryRepository
-                .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp + 1);
+                .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
 
         final var lastFreigegebenFormular = lastFreigegebenTranche.getGesuchFormular();
 
