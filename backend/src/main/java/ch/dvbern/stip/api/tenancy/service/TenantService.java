@@ -44,7 +44,6 @@ public class TenantService {
     private final RoutingContext context;
     private final ConfigService configService;
     private final List<PerTenantSubdomains> perTenantSubdomains;
-    private final TenantFeature tenantFeature;
 
     @ConfigProperty(name = "keycloak.frontend-url")
     String keycloakFrontendUrl;
@@ -67,7 +66,7 @@ public class TenantService {
     }
 
     public TenantFeature.Feature getFeatures() {
-        final var features = tenantFeature;
+        final var features = configService.getTenantFeatures();
 
         return switch (getCurrentMandantIdentifier()) {
             case BERN -> features.bern();

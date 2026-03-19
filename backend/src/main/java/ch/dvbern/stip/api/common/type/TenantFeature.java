@@ -21,7 +21,7 @@ import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 
 @StaticInitSafe
-@ConfigMapping(prefix = "kstip.feature")
+@ConfigMapping(prefix = "kstip.features")
 public interface TenantFeature {
     interface Feature {
         boolean nesko();

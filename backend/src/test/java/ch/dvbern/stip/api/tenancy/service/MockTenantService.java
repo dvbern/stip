@@ -29,7 +29,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class MockTenantService extends TenantService {
     public MockTenantService() {
-        super(null, null, null, null);
+        super(null, null, null);
     }
 
     @Override
