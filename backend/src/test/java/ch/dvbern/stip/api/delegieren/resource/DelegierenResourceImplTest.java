@@ -142,7 +142,7 @@ class DelegierenResourceImplTest {
             () -> delegierenApi.fallDelegieren(
                 fall.getId(),
                 sozialdienst.getId(),
-                new DelegierungCreateDto().nutzungsbedingungenAkzeptiert(false)
+                new DelegierungCreateDto().nutzungsbedingungenAkzeptiert(true)
             )
         );
     }
