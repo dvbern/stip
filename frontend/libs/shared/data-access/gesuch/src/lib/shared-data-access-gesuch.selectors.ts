@@ -69,6 +69,7 @@ export const selectSharedDataAccessCachedGesuchChanges = createSelector(
   ({ gesuch }) => {
     return {
       tranchenChanges: prepareTranchenChanges(gesuch),
+      gesuch,
     };
   },
 );
@@ -89,7 +90,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessBenutzersView,
   (
     config,
-    { tranchenChanges },
+    { gesuch: cachedGesuch, tranchenChanges },
     lastUpdate,
     loading,
     { gesuch, gesuchFormular },
@@ -97,7 +98,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     trancheTyp,
     { rolesMap },
   ) => {
-    const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
+    const gesuchTranche = cachedGesuch?.gesuchTrancheToWorkWith;
     const trancheSetting = createTrancheSetting(trancheTyp, gesuchTranche);
 
     return {

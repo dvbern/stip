@@ -147,6 +147,7 @@ describe('selectSharedDataAccessGesuchsView', () => {
       },
       {
         tranchenChanges: null,
+        gesuch: null,
       },
       state.lastUpdate,
       state.loading,
