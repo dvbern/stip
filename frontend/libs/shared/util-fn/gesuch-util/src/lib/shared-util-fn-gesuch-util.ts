@@ -9,14 +9,17 @@ import {
   FamiliensituationUpdate,
   FormPropsExcluded,
   GSFormStepProps,
+  GesuchAenderungs,
   GesuchFormular,
   GesuchFormularType,
   GesuchTranche,
+  GesuchTrancheSlim,
   GesuchUrlType,
   SBFormStepProps,
   SharedModelGesuch,
   SteuerdatenTyp,
   TrancheSetting,
+  VerfuegtGesuch,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
@@ -27,7 +30,8 @@ import {
   GesuchFormStepView,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
-import { capitalized, lowercased } from '@dv/shared/model/type-util';
+import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
+import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -510,3 +514,38 @@ type FieldsThatContain<
 const formularPropsContaining = <T extends Record<string, unknown>>(
   obj: Record<FieldsThatContain<T>, null>,
 ) => Object.keys(obj) as FieldsThatContain<T>[];
+
+export const currentTrancheNumber = (
+  trancheSetting: TrancheSetting | null,
+  currentTranches: GesuchTrancheSlim[] | undefined,
+  aenderungs: GesuchAenderungs | undefined,
+  initial: VerfuegtGesuch | undefined,
+  currentTranche: GesuchTrancheSlim | undefined,
+  revision: number | undefined,
+  isLoading: boolean | undefined,
+) => {
+  if (!currentTranche || isLoading) {
+    return '…';
+  }
+
+  const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
+  const allTranchen = {
+    TRANCHE: [currentTranches ?? []],
+    AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
+    INITIAL: [initial?.tranchen ?? []],
+  } satisfies Record<GesuchUrlType, unknown>;
+  const index = gesuchUrlTyp
+    ? findIndexInOneOf(
+        (tranche) =>
+          tranche.id === currentTranche?.id &&
+          isDefined(tranche.revision) === isDefined(revision),
+        ...allTranchen[gesuchUrlTyp],
+      )
+    : -1;
+
+  const foundIndex = index >= 0 ? index + 1 : null;
+  if (foundIndex) {
+    return foundIndex;
+  }
+  return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
+};

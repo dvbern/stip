@@ -4,7 +4,7 @@
 @if (displayModeSig() === 'menu') {
   <button
     type="button"
-    class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+    class="btn btn-nav fw-normal d-flex align-items-center shadow-none"
     data-testid="header-nav-darlehen-menu"
     [matMenuTriggerFor]="darlehenMenu"
     [disabled]="!darlehenListSig()?.length && !canCreateDarlehenSig()"
@@ -65,7 +65,7 @@
     </div>
   </mat-menu>
 } @else {
-  <div class="tw:p-3 d-flex flex-column gap-2">
+  <div class="d-flex flex-column gap-2">
     @for (state of darlehenCompletedStates; track $index) {
       @if (darlehens[state] && darlehens[state].length) {
         <div class="d-flex align-items-center text-muted small gap-2">

@@ -31,7 +31,6 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
-  selectRevision,
   selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
@@ -43,7 +42,6 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   FreiwilligDarlehen,
   GesuchHeader,
-  aenderungRoutes,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
@@ -53,10 +51,12 @@ import {
   DarlehenCompleteStates,
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
+import {
+  noActionRoutes,
+  noGesuchActiveRoutes,
+} from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
-import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import {
@@ -64,9 +64,11 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
+import { TabNavItem } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
+  selector: 'dv-sachbearbeitung-app-feature-gesuch-layout',
   imports: [
     CommonModule,
     RouterOutlet,
@@ -74,12 +76,9 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatTabsModule,
     MatMenuModule,
     MatTooltipModule,
-    SharedUiAenderungenMenuComponent,
     SharedPatternGesuchInfoBarComponent,
-    SharedUiDarlehenMenuComponent,
     MatChip,
     SharedPatternGlobalHeaderPartsDirective,
-    SharedUiAenderungenMenuComponent,
     TranslocoDirective,
     SharedUiVersionenMenuComponent,
   ],
@@ -106,7 +105,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   darlehenStore = inject(DarlehenStore);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  // revisionSig = this.store.selectSignal(selectRevision);
 
   berechnungIdSig = toSignal(
     this.route.queryParamMap.pipe(
@@ -121,20 +119,16 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     ),
   );
 
-  noActionRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
   isActionRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !this.noActionRoutes.some(
+    return !noActionRoutes.some(
       (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
     );
   });
 
-  noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !this.noGesuchActiveRoutes.some((route) =>
-      url?.includes(`/${route}/`),
-    );
+    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
   });
   isInfosRouteSig = computed(() => {
     const url = this.routeUrlSig();
@@ -144,13 +138,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const url = this.routeUrlSig();
     return url?.includes('/darlehen/');
   });
-
-  // delete
-  isAenderungOrInitialRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => aenderungRoutes.some((route) => url.includes(`/${route}/`))),
-    ),
-  );
 
   isAenderungRouteSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -171,11 +158,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return info ? `${info.piaVorname} ${info.piaNachname}` : '';
   });
 
-  // firstCurrentTranchenSig = computed(() => {
-  //   return this.headerViewSig().currentTranches?.[0];
-  // });
-
-  tabsSig = computed(() => {
+  tabsSig = computed<TabNavItem[]>(() => {
     const gesuchId = this.gesuchIdSig();
     const trancheId = this.trancheIdSig();
     const { gesuchInfo } = this.headerViewSig();
@@ -186,8 +169,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       return [];
     }
 
-    // todo-after-merge: use correct tranche in KSTIP-2856 => solve routing issue with params in versionendropdown
-    // use active url for route params!
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', gesuchId, 'tranche', trancheId],
@@ -195,8 +176,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       name: 'formular',
     };
 
-    // todo-after-merge: implement verfuegungId as param to route directly to a verfuegung
-    // todo: typesafe!
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, 'tranche', trancheId],
@@ -232,28 +211,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
     this.gesuchIdSig,
   );
-  // aenderungenSig = computed(() => {
-  //   const {
-  //     abgelehnt: abgelehnteAenderungen,
-  //     akzeptiert: akzeptierteAenderungen,
-  //     offen: offeneAenderung,
-  //   } = this.gesuchHeaderStore.viewSig().aenderungs ?? {};
-  //   const initial = this.gesuchHeaderStore.viewSig().initial;
-  //   if (
-  //     !abgelehnteAenderungen?.length &&
-  //     !akzeptierteAenderungen?.length &&
-  //     !initial &&
-  //     !offeneAenderung
-  //   ) {
-  //     return null;
-  //   }
-  //   return {
-  //     abgelehnteAenderungen,
-  //     akzeptierteAenderungen,
-  //     initial,
-  //     offeneAenderung,
-  //   };
-  // });
 
   firstAenderungIdSig = computed(() => {
     const aenderungen = this.headerViewSig().aenderungs;
@@ -304,13 +261,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   });
 
   constructor() {
-    // log effect
-    // effect(() => {
-    //   // console.log('trancheTyp', this.trancheTypSig());
-    //   console.log('isAenderungRoute', this.isAenderungRouteSig());
-    //   console.log('isGesuchRoute', this.isGesuchRouteSig());
-    // });
-
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       this.gesuchUpdatedSig();

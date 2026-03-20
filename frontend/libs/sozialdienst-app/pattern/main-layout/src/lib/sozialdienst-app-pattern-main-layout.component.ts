@@ -153,7 +153,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
         );
       }
 
-      // todo-after-merge: check
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],

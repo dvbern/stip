@@ -354,9 +354,13 @@ dv-sachbearbeitung-app-feature-verfuegung {
   }
 }
 
-dv-sachbearbeitung-app-feature-gesuch-form {
-  .dv-table {
-    box-shadow: none !important;
+dv-sachbearbeitung-app-feature-gesuch-layout {
+  .tw\:dv-table {
+    box-shadow: none;
+    border: 1px solid var(--dv-gray-300);
+  }
+  .mat-mdc-tab-link.btn-nav {
+    box-shadow: none;
     border: 1px solid var(--dv-gray-300);
   }
 }

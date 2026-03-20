@@ -26,7 +26,6 @@ import {
 
 /**
  * Main layout for the gesuchsteller app.
- * todo-before-merge: make or share with sozialdienst since it is mostly the same for all apps?
  */
 @Component({
   selector: 'dv-gesuch-app-pattern-main-layout',
@@ -90,7 +89,7 @@ export class GesuchAppPatternMainLayoutComponent {
       }
     });
 
-    // naviation items effect
+    // navigation items effect
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();

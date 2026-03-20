@@ -14,7 +14,6 @@
         {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
-      <!-- todo-after-merge: move to aktionen => UX sammeltask notieren -->
       @if (exportValuesSig(); as exportValues) {
         <div class="tw:relative">
           @if (isExportingSig()) {

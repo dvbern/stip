@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
-import { TranslocoDirective, TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs';
 
@@ -43,7 +43,6 @@ import { SharedUtilHeaderService } from '@dv/shared/util/header';
   imports: [
     SharedUiRouterOutletWrapperComponent,
     CommonModule,
-    TranslocoPipe,
     SharedPatternGesuchStepNavComponent,
     SharedUiProgressBarComponent,
     SharedUiIconChipComponent,

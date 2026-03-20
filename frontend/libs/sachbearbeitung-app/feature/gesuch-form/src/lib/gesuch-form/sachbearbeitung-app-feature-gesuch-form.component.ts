@@ -29,24 +29,23 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { GesuchHeader, GesuchUrlType } from '@dv/shared/model/gesuch';
+import { GesuchHeader } from '@dv/shared/model/gesuch';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
+import { noGesuchActiveRoutes } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
+import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
@@ -61,7 +60,6 @@ import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
     RouterLink,
     PortalModule,
     SharedUiAenderungenMenuComponent,
-    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -82,7 +80,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   private steuerdatenStore = inject(SteuerdatenStore);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private navigationStore = inject(NavigationStore);
-  private aenderungStore = inject(GesuchAenderungStore);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -119,12 +116,9 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     return url?.includes('/initial/') ?? false;
   });
 
-  noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !this.noGesuchActiveRoutes.some((route) =>
-      url?.includes(`/${route}/`),
-    );
+    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
   });
 
   stepsSig = computed(() => {
@@ -154,25 +148,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     return steps.find((step) => step.route === currentStep?.route);
   });
 
-  // tranchenSig = this.gesuchHeaderStore.getRelativeTranchenViewSig(
-  //   this.gesuchIdSig,
-  // );
-
-  // todo: could be integrated into tranchenSig?
-  // currentVersionTranchenSig = computed(() => {
-  //   const berechnungId = this.berechnungIdSig();
-  //   const versions = this.gesuchHeaderStore.header().data?.versions;
-
-  //   if (berechnungId && versions) {
-  //     const version = versions.find(
-  //       (version) => version.berechnungId === berechnungId,
-  //     );
-  //     return version?.tranchen;
-  //   }
-  //   return undefined;
-  // });
-
-  // testing without getRealativeTrancheViewSig
   tranchenSig = computed(() => {
     const current = this.gesuchHeaderStore.header().data?.currentTranches;
     const versions = this.gesuchHeaderStore.viewSig().versions;
@@ -201,38 +176,23 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       : undefined;
   });
 
-  // todo-after-merge: by moving the header => make reusable
   currentTrancheNumberSig = computed(() => {
     const { trancheSetting } = this.viewSig();
     const currentTranche = this.currentTrancheSig();
+    const revision = this.revisionSig();
 
     const { currentTranches, aenderungs, initial, isLoading } =
       this.gesuchHeaderStore.viewSig();
 
-    if (!currentTranche || isLoading) {
-      return '…';
-    }
-
-    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
-    const allTranchen = {
-      TRANCHE: [currentTranches ?? []],
-      AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
-      INITIAL: [initial?.tranchen ?? []],
-    } satisfies Record<GesuchUrlType, unknown>;
-    const index = gesuchUrlTyp
-      ? findIndexInOneOf(
-          (tranche) =>
-            tranche.id === currentTranche.id &&
-            isDefined(tranche.revision) === isDefined(this.revisionSig()),
-          ...allTranchen[gesuchUrlTyp],
-        )
-      : -1;
-
-    const foundIndex = index >= 0 ? index + 1 : null;
-    if (foundIndex) {
-      return foundIndex;
-    }
-    return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
+    return currentTrancheNumber(
+      trancheSetting,
+      currentTranches,
+      aenderungs,
+      initial,
+      currentTranche,
+      revision,
+      isLoading,
+    );
   });
 
   ngAfterViewInit(): void {
@@ -245,12 +205,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   }
 
   constructor() {
-    // log effect
-    // effect(() => {
-    //   console.log('berechnungId', this.berechnungIdSig());
-    //   console.log('relativeTranchen', this.tranchenSig());
-    // });
-
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {

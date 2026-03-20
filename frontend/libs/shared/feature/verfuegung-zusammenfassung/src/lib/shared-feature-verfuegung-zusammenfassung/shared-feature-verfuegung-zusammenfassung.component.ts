@@ -42,6 +42,7 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
   dokumentService = inject(DokumentService);
   store = inject(Store);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  // todo-review: @scph wir haben noch eine vermischung von namen berechnungId und verfuegungId in den routes
   // eslint-disable-next-line @angular-eslint/no-input-rename
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
 

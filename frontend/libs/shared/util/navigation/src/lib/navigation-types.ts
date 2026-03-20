@@ -57,3 +57,11 @@ export type NavItem =
   | NavItemAction
   | NavItemGroup
   | NavItemSeparator;
+
+export interface TabNavItem {
+  active: boolean | undefined;
+  route: UrlTree | (string | undefined)[];
+  queryParams?: Record<string, string | undefined>;
+  name: string;
+  testId?: string;
+}

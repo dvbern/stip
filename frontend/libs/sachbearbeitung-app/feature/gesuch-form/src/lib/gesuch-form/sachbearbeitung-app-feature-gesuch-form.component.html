@@ -5,11 +5,11 @@
   <!-- side menu -->
   <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
-    <div class="tw:border-b tw:border-gray-300 tw:p-4 tw:w-full">
+    <div class="tw:w-full tw:p-6 tw:bg-gray-100">
       @if (currentTranche && isGesuchRouteSig()) {
         <button
           type="button"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none tw:border-b tw:border-gray-300 tw:w-full"
+          class="tw:dv-btn-tranche"
           data-testid="sb-gesuch-header-tranche-nav-menu"
           [matMenuTriggerFor]="gesuchMenu"
           [attr.aria-label]="t('shared.header.tranchenAuswahl')"
@@ -61,10 +61,12 @@
       }
     </div>
 
-    <dv-shared-pattern-gesuch-step-nav class="tw:p-3" [stepsSig]="stepsSig()" />
+    <hr class="m-0 p-0" />
+
+    <dv-shared-pattern-gesuch-step-nav class="tw:p-6" [stepsSig]="stepsSig()" />
   </div>
 
-  <div class="container pt-lg-4 px-lg-4 tw:dv-pass-height tw:bg-white">
+  <div class="tw:p-6 tw:dv-pass-height tw:bg-white">
     @if (currentStepSig(); as step) {
       <!-- step header (mobile) -->
       <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">

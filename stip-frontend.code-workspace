@@ -52,7 +52,6 @@
       "backend/**": true,
     },
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
-
     "tailwindCSS.files.exclude": [
       "**/.git/**",
       "**/node_modules/**",
@@ -150,5 +149,6 @@
     "eslint.validate": ["typescript", "json", "javascript"],
     "nxConsole.nxWorkspacePath": "frontend",
     "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "eslint.codeActionsOnSave.mode": "problems",
   },
 }

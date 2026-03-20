@@ -1,24 +1,23 @@
 <ng-container *transloco="let t">
-  <!-- todo: change directive -->
   <div class="d-flex h-100">
     <!-- left step nav (Desktop) -->
     <div class="d-none d-lg-block border-end bg-white">
       <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
     </div>
 
-    <div class="container tw:dv-pass-height pt-lg-4 px-lg-4">
+    <div class="tw:dv-pass-height tw:p-6">
       @if (currentStepSig(); as step) {
         <!-- step header (mobile) -->
         <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
           <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
           <div class="text-end">
             <h5 class="step-title">
-              {{ step.translationKey | transloco }}
+              {{ t(step.translationKey) }}
             </h5>
             @if (step.nextStep?.translationKey; as nextStepKey) {
               <p class="fst-italic mb-0">
-                {{ 'shared.form.next' | transloco }}:
-                {{ nextStepKey | transloco }}
+                {{ t('shared.form.next') }}:
+                {{ t(nextStepKey) }}
               </p>
             }
           </div>
@@ -31,7 +30,7 @@
           </dv-shared-ui-icon-chip>
 
           <h2 class="fw-bold" data-testid="step-title">
-            {{ step.titleTranslationKey | transloco }}
+            {{ t(step.titleTranslationKey) }}
           </h2>
           <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
         </div>

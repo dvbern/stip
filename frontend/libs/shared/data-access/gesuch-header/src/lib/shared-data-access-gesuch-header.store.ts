@@ -91,8 +91,8 @@ const prepareTranchenListSig =
   (gesuchIdSig: Signal<string | undefined>) => {
     const relativeRouteSig = getRelativeTrancheRoute(router, 'TRANCHE');
 
-    // todo: relative routeSich is always null
-    console.log('relativeRouteSig', relativeRouteSig());
+    // todo-review: @scph relative relativeRouteSig is always null! remove?
+    // console.log('relativeRouteSig', relativeRouteSig());
 
     return computed(() => {
       const gesuchId = gesuchIdSig();
