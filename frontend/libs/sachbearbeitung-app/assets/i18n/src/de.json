@@ -29,6 +29,10 @@
   "sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message": "Geben Sie eine Begründung an, warum das Gesuch Anspruchsberechtigt ist.",
   "sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder": "Begründung schreiben...",
   "sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm": "Anspruch Genehmigen",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG": "Änderung starten",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.title": "Änderung starten",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.message": "Möchten sie eine Änderung für dieses Gesuch starten?",
+  "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.placeholder": "Begründung schreiben...",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.DOKUMENTE_OFFEN": "Es sind noch nicht überprüfte Dokumente vorhanden.",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.VALIDIERUNG_FEHLER": "Das Gesuch enthält noch Fehler.",
   "sachbearbeitung-app.header.status-uebergang.disabled-reason.CANNOT_NEGATIV_VERFUEGEN": "Das Gesuch kann aktuell nicht negativ verfügt werden.",
@@ -45,7 +49,6 @@
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.message": "Bitte geben Sie eine Begründung an:",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN.confirm": "Negative Verfügung erstellen",
   "sachbearbeitung-app.header.status-uebergang.dokumente-offen": "Dokumente offen",
-
   "sachbearbeitung-app.admin.title": "Administration",
   "sachbearbeitung-app.admin.save-and-publish": "Speichern und publizieren",
   "sachbearbeitung-app.admin.option.ausbildungsstaette": "Ausbildungsstätte",
@@ -54,14 +57,12 @@
   "sachbearbeitung-app.admin.option.euEftaLaender": "EU/EFTA Länder",
   "sachbearbeitung-app.admin.option.benutzerverwaltung": "Benutzerverwaltung",
   "sachbearbeitung-app.admin.option.sozialdienst": "Sozialdienste",
-
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter": "Sachbearbeiter",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiterFilter": "Filtern nach Sachbearbeiter",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE": "Buchstaben-Zuteilung Deutsch",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR": "Buchstaben-Zuteilung Französisch",
   "sachbearbeitung-app.admin.buchstabenZuteilung.route.overview": "Buchstaben-Zuteilung Übersicht",
-
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.title": "Gesuchsperiode publizieren",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.description": "Änderungen sind nach der publizierung nicht mehr möglich.",
   "sachbearbeitung-app.admin.gesuchsperiode.publizieren.button": "Gesuchsperiode publizieren",
@@ -79,7 +80,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.route.overview": "Gesuchsperioden und Gesuchsjahre Übersicht",
   "sachbearbeitung-app.admin.gesuchsperiode.route.create": "Gesuchsperiode erstellen",
   "sachbearbeitung-app.admin.gesuchsperiode.route.detail": "Gesuchsperiode Detail Ansicht",
-
   "sachbearbeitung-app.admin.euEftaLaender.edit": "EU/EFTA Länder Bearbeiten",
   "sachbearbeitung-app.admin.euEftaLaender.create": "EU/EFTA Länder Erstellen",
   "sachbearbeitung-app.admin.euEftaLaender.description": "Mit der folgenden Auswahl-Liste können Sie die EU/EFTA Länder verwalten.",
@@ -111,7 +111,6 @@
   "sachbearbeitung-app.admin.euEftaLaender-dialog.submit": "Speichern",
   "sachbearbeitung-app.admin.euEftaLaender.edit.success": "Das Land wurde erfolgreich bearbeitet.",
   "sachbearbeitung-app.admin.euEftaLaender.create.success": "Das Land wurde erfolgreich erstellt.",
-
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.title": "Ausbildungsjahr publizieren",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.description": "Änderungen sind nach der publizierung nicht mehr möglich.",
   "sachbearbeitung-app.admin.gesuchsjahr.publizieren.button": "Ausbildungsjahr publizieren",
@@ -128,7 +127,6 @@
   "sachbearbeitung-app.admin.gesuchsjahr.saveSuccess": "Gesuchsjahr wurde erfolgreich gespeichert",
   "sachbearbeitung-app.admin.gesuchsjahr.route.create": "Gesuchsjahr erstellen",
   "sachbearbeitung-app.admin.gesuchsjahr.route.detail": "Gesuchsjahr Detail Ansicht",
-
   "sachbearbeitung-app.admin.benutzerverwaltung.description": "Benutzerverwaltungsübersicht",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.overview": "Benutzer",
   "sachbearbeitung-app.admin.benutzerverwaltung.route.create": "Benutzer Erstellen",
@@ -150,7 +148,6 @@
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.title": "Benutzer löschen",
   "sachbearbeitung-app.admin.benutzerverwaltung.confirmDelete.benutzer.text": "Wollen Sie die Benutzer \"{{ name }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists": "Ein Benutzer mit dieser E-Mail Adresse existiert bereits.",
-
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.ausbildungsstaette": "Ausbildungsstätte",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.ausbildungsgang": "Ausbildungsgang",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.abschluss": "Abschluss",
@@ -262,7 +259,6 @@
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.archiveDialog.success": "Der Abschluss wurde erfolgreich archiviert.",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.infoDialog.title": "Abschluss Info",
   "sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.bezeichnung.error.notUnique": "Dieser Abschluss existiert bereits.",
-
   "sachbearbeitung-app.admin.ausbildungsstaette.nameDe": "Ausbildungsstätte Deutsch",
   "sachbearbeitung-app.admin.ausbildungsstaette.nameFr": "Ausbildungsstätte Französisch",
   "sachbearbeitung-app.admin.ausbildungsstaette.ort": "Ort",
@@ -279,7 +275,6 @@
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteMessage": "Wollen Sie die Ausbildungsstätte \"{{ nameDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.ausbildungsstaette.deleteTitle": "Ausbildungsstätte löschen",
   "sachbearbeitung-app.admin.ausbildungsstaette.route.overview": "Ausbildungsstätten Übersicht",
-
   "sachbearbeitung-app.admin.ausbildungsgaenge.title": "Ausbildungsgänge",
   "sachbearbeitung-app.admin.ausbildungsgaenge.description": "Tabelle mit Ausbildungsgängen pro Ausbildungsstätte",
   "sachbearbeitung-app.admin.ausbildungsgaenge.delete": "Löschen",
@@ -293,7 +288,6 @@
   "sachbearbeitung-app.admin.ausbildungsgaenge.cancel": "Abbrechen",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteMessage": "Wollen Sie den Ausbildungsgang \"{{ bezeichnungDe }}\" wirklich löschen?",
   "sachbearbeitung-app.admin.ausbildungsgaenge.deleteTitle": "Ausbildungsgang löschen",
-
   "sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title": "Meta Daten",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungDe.label": "Bezeichnung (DE)",
   "sachbearbeitung-app.admin.gesuchsperiode.bezeichnungFr.label": "Bezeichnung (FR)",
@@ -384,7 +378,6 @@
   "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Nachreichefrist für Dokumente",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label": "Stichtag Volljährigkeit",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info": "Für die medizinische Grundversorgung",
-
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Sozialdienste",
   "sachbearbeitung-app.admin.sozialdienst.name.label": "Name Sozialdienst",
   "sachbearbeitung-app.admin.sozialdienst.ort.label": "Ort",
@@ -414,7 +407,6 @@
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.title.INAKTIV": "Sozialdienst aktivieren",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.AKTIV": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich deaktivieren?",
   "sachbearbeitung-app.admin.sozialdienst.confirmStatusChange.sozialdienst.text.INAKTIV": "Wollen Sie den Sozialdienst \"{{ name }}\" wirklich aktivieren?",
-
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.title": "Fehlgeschlagene Zahlungen",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.description": "Übersicht aller fehlgeschlagenen Zahlungen",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer": "Fallnummer",
@@ -423,7 +415,6 @@
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname": "Vorname",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate": "Letzter Versuch",
   "sachbearbeitung-app.fehlgeschlagene-zahlungen.table.pseudobuchhaltung": "Pseudobuchhaltung",
-
   "sachbearbeitung-app.massendruck.title": "Druckaufträge",
   "sachbearbeitung-app.massendruck.table.description": "Übersicht aller Druckaufträge",
   "sachbearbeitung-app.massendruck.table.userErstellt": "Bearbeiter",
@@ -443,7 +434,6 @@
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_AKTIV": "Aktive Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_ARCHIVIERT": "Archivierte Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_FEHLERHAFTE_GENERIERUNG": "Fehlerhafte Druckaufträge",
-
   "sachbearbeitung-app.massendruck-detail.title": "Druckauftrag",
   "sachbearbeitung-app.massendruck-detail.userErstellt": "Bearbeiter:",
   "sachbearbeitung-app.massendruck-detail.timestampErstellt": "Auftragsdatum:",
@@ -485,7 +475,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "Von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "Bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
-
   "sachbearbeitung-app.darlehen.title": "Darlehen",
   "sachbearbeitung-app.darlehen-dashboard.title": "Darlehen Dashboard",
   "sachbearbeitung-app.darlehen-dashboard.quick-filter.ALLE_DARLEHEN": "Alle Darlehen",
@@ -508,14 +497,12 @@
   "sachbearbeitung-app.darlehen.status.IN_FREIGABE": "In Freigabe",
   "sachbearbeitung-app.darlehen.status.AKZEPTIERT": "Akzeptiert",
   "sachbearbeitung-app.darlehen.status.ABGELEHNT": "Abgelehnt",
-
   "sachbearbeitung-app.infos.title": "Infos",
   "sachbearbeitung-app.infos.protokoll": "Gesuchsverlauf",
   "sachbearbeitung-app.infos.notizen": "Notizen",
   "sachbearbeitung-app.infos.buchhaltung": "Buchhaltung",
   "sachbearbeitung-app.infos.beschwerden": "Beschwerden",
   "sachbearbeitung-app.infos.darlehen": "Darlehen",
-
   "sachbearbeitung-app.infos.buchhaltung.title": "Buchhaltung",
   "sachbearbeitung-app.infos.buchhaltung.retryFailedAuszahlung": "Wiederholen der fehlgeschlagenen Auszahlung",
   "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Saldo manuell korrigieren",
@@ -548,11 +535,9 @@
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.timestamp": "Datum",
   "sachbearbeitung-app.infos.buchhaltung.infoDialog.sapId": "SAP ID",
   "sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess": "Saldokorrektur wurde erfolgreich erstellt",
-
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.SUCCESS": "Erfolgreich",
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.FAILURE": "Fehlgeschlagen",
   "sachbearbeitung-app.infos.buchhaltung.sapStatus.IN_PROGRESS": "In Bearbeitung",
-
   "sachbearbeitung-app.infos.beschwerde.haengig.title": "Beschwerde hängig",
   "sachbearbeitung-app.infos.beschwerde.haengig.text.false": "Sie können die Markierung \"Hängige Beschwerde\" aktivieren",
   "sachbearbeitung-app.infos.beschwerde.haengig.text.true": "Sie können die Markierung \"Hängige Beschwerde\" deaktivieren",
@@ -594,7 +579,6 @@
   "sachbearbeitung-app.infos.beschwerde-entscheid.title": "Beschwerdeentscheid hochgeladen",
   "sachbearbeitung-app.infos.beschwerde.entscheid-hochladen": "Beschwerdeeintscheid hochladen",
   "sachbearbeitung-app.infos.beschwerde-entscheid.create.success": "Beschwerdeentscheid wurde erfolgreich erstellt",
-
   "sachbearbeitung-app.infos.protokoll.description": "Eine Übersicht aller Änderungen am Gesuch",
   "sachbearbeitung-app.infos.protokoll.text": "Folgend eine Übersicht aller Aktionen in diesem Gesuch.",
   "sachbearbeitung-app.infos.protokoll.table.datum": "Datum",
@@ -606,7 +590,6 @@
   "sachbearbeitung-app.infos.protokoll.table.typ.AENDERUNG": "Änderung",
   "sachbearbeitung-app.infos.protokoll.table.typ.FREIWILLIG_DARLEHEN": "Freiwilliges Darlehen",
   "sachbearbeitung-app.infos.protokoll.table.typ.AUSBILDUNG_UNTERBRUCH_ANTRAG": "Ausbildungsunterbruchantrag",
-
   "sachbearbeitung-app.infos.notizen.description": "Eine Übersicht aller Notizen",
   "sachbearbeitung-app.infos.notizen.title": "Notizen",
   "sachbearbeitung-app.infos.notizen.table.datum": "Datum",
@@ -631,7 +614,6 @@
   "sachbearbeitung-app.infos.notiz.delete.success": "Notiz wurde erfolgreich gelöscht",
   "sachbearbeitung-app.infos.notiz.delete.title": "Notiz löschen",
   "sachbearbeitung-app.infos.notiz.delete.text": "Wollen Sie die Notiz wirklich löschen?",
-
   "sachbearbeitung-app.infos.admin": "Admin",
   "sachbearbeitung-app.infos.admin-dokumente": "Verfügungsdokumente",
   "sachbearbeitung-app.infos.admin.table.timestamp": "Datum",
@@ -659,7 +641,6 @@
   "sachbearbeitung-app.infos.admin.ausbildung-abschliessen": "Ausbildung beenden",
   "sachbearbeitung-app.infos.admin.ausbildung-abschliessen.message": "Wollen Sie die Ausbildung wirklich abschliessen?",
   "sachbearbeitung-app.infos.admin.kommentar.placeholder": "Kommentar eingeben",
-
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.stipendien": "Stipendien",
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.darlehen": "Darlehen",
   "sachbearbeitung-app.infos.gesuchsdokumente.tabs.datenschutzbriefe": "Datenschutzbriefe",
@@ -693,12 +674,10 @@
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen": "Total freiwilliges Darlehen",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen": "Total gesetzliches Darlehen",
   "sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total": "Total Darlehen",
-
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Familienbudget",
   "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Vaterbudget",
   "sachbearbeitung-app.verfuegung.berechnung.mutter.title": "Mutterbudget",
-
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.sv-nummer": "SV-Nr.:",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.einnahmen.total": "Total anrechenbare, jährliche Einnahmen",
@@ -737,7 +716,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.steuern.info": "Während des Ausbildungsjahres zu bezahlende Steuern",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.bundessteuern": "Bundessteuern",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner": "Fahrkosten der Partnerin / des Partners",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner.info": "Nur wenn erwerbstätig und nicht in anerkannter Ausbildung. Die steuerrechtlich anerkannten Fahrkosten von {{ fahrkosten }} werden berücksichtigt und mit der Anzahl Personen im Haushalt {{ anzahlPersonenImHaushalt }} multipliziert, damit der Anteil pro Person korrekt ausgewiesen wird.",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.fahrkostenPartner.info": "Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner": "Verpflegung der Partnerin / des Partners",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.verpflegungPartner.info": "Nur wenn erwerbstätig und nicht in anerkannter Ausbildung",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.kosten.betreuungskostenKinder": "Betreuungskosten für eigene Kinder",
@@ -752,7 +731,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende": "Aufteilung ab dem 4. Studienjahr für Studierende der Tertiärstufe",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Stipendium: 2/3 des Fehlbetrags",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Darlehen: 1/3 des Fehlbetrags",
-
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title": "Kürzungen Einreichefrist",
@@ -761,7 +739,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info": "Das Gesuch wurde {anzahlMonate, plural, one {1 Monat} other {# Monate}} Unterbrochen.<br>Dies ergibt eine Reduktion von CHF {{ betrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Eigenverdienst auf dem Erwerbseinkommen",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info": "Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen mit Bezug des Darlehens entspricht dem Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}. Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen ohne Bezug des Darlehens entspricht dem Darlehen + Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}.",
-
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.title": "Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.total": "Total anrechenbare, jährliche Einnahmen",
@@ -799,7 +776,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.fahrkosten.info": "Steuerrechtlich anerkannte Fahrkosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung": "Verpflegung auswärts",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.verpflegung.info": "Steuerrechtlich anerkannte Mehrkosten für auswärtige Verpflegung",
-
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmeueberschuss": "Einnahmeüberschuss",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmeueberschuss.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.anzahlKinderInAusbildung": "Geteilt durch die Anzahl in Ausbildung stehender Kinder",
@@ -812,7 +788,6 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Geteilt durch die Anzahl Personen im Haushalt (Pro-Kopf-Teilung)",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Ungedeckter Anteil Lebenshaltungskosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend",
-
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title": "Resultat",
   "sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen": "Resultat: Stipendium gewährt",
@@ -827,7 +802,6 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Kürzung wegen Unterbruch",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium": "Total Betrag Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
-
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Kommentar",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Manuelle Verfügung hochladen",
 
@@ -847,7 +821,6 @@
   "sachbearbeitung-app.cockpit.quick-filter.MEINE_DRUCKBAR_VERFUEGUNGEN": "Meine Druckbaren Verfügungen",
   "sachbearbeitung-app.cockpit.quick-filter.ALLE_DRUCKBAR_DATENSCHUTZBRIEFE": "Alle Druckbaren Datenschutzbriefe",
   "sachbearbeitung-app.cockpit.quick-filter.MEINE_DRUCKBAR_DATENSCHUTZBRIEFE": "Meine Druckbaren Datenschutzbriefe",
-
   "sachbearbeitung-app.cockpit.table.description": "Übersicht aller Gesuche",
   "sachbearbeitung-app.cockpit.table.fall": "Fall",
   "sachbearbeitung-app.cockpit.table.sv-nummer": "SV-Nummer",
@@ -859,12 +832,9 @@
   "sachbearbeitung-app.cockpit.table.bearbeiter": "Bearbeiter",
   "sachbearbeitung-app.cockpit.table.letzteAktivitaet": "Letzte Aktivität",
   "sachbearbeitung-app.cockpit.table.typ": "Typ",
-
   "sachbearbeitung-app.cockpit.button.create-massendruck.DATENSCHUTZBRIEFE": "{anzahl, plural, one {1 Datenschutzbrief} other {# Datenschutzbriefe}} drucken",
   "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 Verfügung} other {# Verfügungen }} drucken",
-
   "sachbearbeitung-app.gesuch-form.title": "Gesuch",
-
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Daten aus Nesko laden",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Wollen sie wirklich die Daten für das definierte Jahr aus Nesko laden?<br>Die Formularfelder werden überschrieben.",

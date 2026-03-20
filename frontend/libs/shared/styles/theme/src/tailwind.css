@@ -18,6 +18,8 @@
   --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
   --color-dv-warning: var(--dv-warning);
   --color-dv-warning-subtle: color-mix(in srgb, var(--dv-warning) 20%, white);
+  --color-dv-green: var(--dv-green);
+  --color-dv-yellow: var(--dv-yellow);
 }
 
 /*

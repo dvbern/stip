@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataListDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
@@ -64,7 +65,8 @@ public class DemoDataApiSpec {
                 createNewDemoDataImport(),
                 getAllDemoData(),
                 getDemoDataDokument(),
-                getDemoDataDokumentDownloadToken()
+                getDemoDataDokumentDownloadToken(),
+                testAllDemoDataBerechnung()
         );
     }
 
@@ -86,6 +88,10 @@ public class DemoDataApiSpec {
 
     public GetDemoDataDokumentDownloadTokenOper getDemoDataDokumentDownloadToken() {
         return new GetDemoDataDokumentDownloadTokenOper(createReqSpec());
+    }
+
+    public TestAllDemoDataBerechnungOper testAllDemoDataBerechnung() {
+        return new TestAllDemoDataBerechnungOper(createReqSpec());
     }
 
     /**
@@ -472,6 +478,67 @@ public class DemoDataApiSpec {
          * @return operation
          */
         public GetDemoDataDokumentDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Tests the Berechnung of all testcases to their excepted Stipendienanspruch values
+     * 
+     *
+     * return List&lt;DemoDataTestBerechnungResultDtoSpec&gt;
+     */
+    public static class TestAllDemoDataBerechnungOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/demo-data/test-all-berechnung";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public TestAllDemoDataBerechnungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /demo-data/test-all-berechnung
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /demo-data/test-all-berechnung
+         * @param handler handler
+         * @return List&lt;DemoDataTestBerechnungResultDtoSpec&gt;
+         */
+        public List<DemoDataTestBerechnungResultDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DemoDataTestBerechnungResultDtoSpec>> type = new TypeRef<List<DemoDataTestBerechnungResultDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public TestAllDemoDataBerechnungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public TestAllDemoDataBerechnungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

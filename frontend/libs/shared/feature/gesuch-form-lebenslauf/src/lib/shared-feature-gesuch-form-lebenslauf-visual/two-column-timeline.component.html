@@ -54,9 +54,14 @@
                           {{ subTitle.key | transloco }}: {{ subTitle.value }}
                         </small>
                       }
-                      <small class="d-block">{{
-                        printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis)
-                      }}</small>
+                      @if (child.wohnsitz) {
+                        <small class="d-block">
+                          {{ 'shared.kanton.' + child.wohnsitz | transloco }}
+                        </small>
+                      }
+                      <small class="d-block">
+                        {{ printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis) }}
+                      </small>
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
                         <small class="d-flex align-items-center mt-2 gap-1">
                           <i

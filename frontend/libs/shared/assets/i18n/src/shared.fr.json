@@ -284,6 +284,7 @@
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_EINREICHEN": "Les documents manquants ont été transmis",
   "shared.nachrichten.type.AENDERUNG_ABGELEHNT": "Changement rejeté",
   "shared.nachrichten.type.AENDERUNG_EINGEREICHT": "Changement soumis",
+  "shared.nachrichten.type.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG": "Modification créée",
   "shared.nachrichten.type.GESUCH_STATUS_CHANGE_WITH_COMMENT": "Changement de statut avec commentaire",
   "shared.nachrichten.type.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT": "Documents manquants non soumis",
   "shared.nachrichten.type.NACHFRIST_DOKUMENTE_CHANGED": "Délai pour soumettre les documents modifié",
@@ -325,7 +326,7 @@
   "shared.gesuch.periode.status.ARCHIVIERT": "Archivé",
 
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.MANUELLE_AENDERUNG": "Modification manuelle",
-  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.IN_BEARBEITUNG_GS": "Créé",
+  "sachbearbeitung-app.gesuch.status.tranche.from.null.to.UEBERPRUEFEN": "Soumis",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.IN_BEARBEITUNG_GS": "Refusé",
   "sachbearbeitung-app.gesuch.status.tranche.from.FEHLENDE_DOKUMENTE.to.IN_BEARBEITUNG_GS": "Documents manquants non fournis",
   "sachbearbeitung-app.gesuch.status.tranche.from.IN_BEARBEITUNG_GS.to.UEBERPRUEFEN": "Fourni",
@@ -491,6 +492,9 @@
 
   "shared.form.delegation.email.label": "Email",
   "shared.form.delegation.sprache.label": "Langue de correspondance",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix": "J'autorise l'organisme sélectionné (par exemple, les services sociaux) à saisir les données relatives à ma demande, y compris les informations de paiement. Toute la correspondance ainsi que la décision me seront adressées, avec copie à l'organisme sélectionné. En déliguant cette tâche, j'accepte les ",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link": "conditions d'utilisation",
+  "shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix": ".",
 
   "shared.person.title": "Person in Education",
   "shared.form.person.sozialversicherungsnummer.info": "Le numéro d’assurance sociale correspond au numéro AVS. Ce numéro à 13 chiffres figure sur la carte d’assurance-maladie ou peut être obtenu auprès de l’administration communale de la commune de résidence. Si vous n’avez pas de numéro d’assurance sociale, veuillez nous contacter.",

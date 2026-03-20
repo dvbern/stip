@@ -18,7 +18,9 @@
 package ch.dvbern.stip.api.tenancy.service;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantFeature;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
+import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -34,11 +36,17 @@ public class MockTenantService extends TenantService {
     public TenantInfoDto getCurrentTenant() {
         return new TenantInfoDto()
             .identifier("bern")
+            .features(new TenantFeatureDto().nesko(false))
             .clientAuth(
                 new TenantAuthConfigDto()
                     .authServerUrl(keycloakFrontendUrl)
                     .realm("bern")
             );
+    }
+
+    @Override
+    public TenantFeature.Feature getFeatures() {
+        return () -> false;
     }
 
     @Override

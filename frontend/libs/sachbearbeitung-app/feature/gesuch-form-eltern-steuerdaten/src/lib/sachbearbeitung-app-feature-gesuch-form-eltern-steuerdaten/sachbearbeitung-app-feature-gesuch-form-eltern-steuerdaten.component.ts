@@ -47,6 +47,7 @@ import {
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
 import { maskitoMaxNumber, maskitoNumber } from '@dv/shared/util/maskito-util';
+import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
 @Component({
@@ -81,6 +82,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   // eslint-disable-next-line @angular-eslint/no-input-rename
   stepSig = input.required<{ type: SteuerdatenTyp }>({ alias: 'step' });
   formUtils = inject(SharedUtilFormService);
+  tenantConfigService = inject(SharedUtilTenantConfigService);
   elementRef = inject(ElementRef);
   gotReenabled$ = new Subject<object>();
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -127,14 +129,9 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   });
 
   canCheckNeskoSig = computed(() => {
-    const { gesuchFormular, permissions } = this.viewSig();
+    const { permissions } = this.viewSig();
 
-    return (
-      permissions.canApprove &&
-      gesuchFormular?.steuererklaerung?.find(
-        (s) => s.steuerdatenTyp === this.stepSig().type,
-      )?.steuererklaerungInBern
-    );
+    return permissions.canApprove;
   });
 
   private numberConverter = this.formUtils.createNumberConverter(this.form, [

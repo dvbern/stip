@@ -18,11 +18,14 @@
 package ch.dvbern.stip.api.tenancy.service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantFeature;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.config.service.TenantSubdomainsProducer.PerTenantSubdomains;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
+import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
@@ -57,8 +60,18 @@ public class TenantService {
         tenantAuthConfig.setRealm(tenantId);
 
         return new TenantInfoDto()
+            .features(new TenantFeatureDto(getFeatures().nesko()))
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
+    }
+
+    public TenantFeature.Feature getFeatures() {
+        final var features = configService.getTenantFeatures();
+
+        return switch (getCurrentMandantIdentifier()) {
+            case BERN -> features.bern();
+            case DV -> features.dv();
+        };
     }
 
     public String getCurrentTenantIdentifier() {
@@ -75,7 +88,10 @@ public class TenantService {
 
     public MandantIdentifier resolveTenant(final String subdomain) {
         for (final var perTenantSubdomain : perTenantSubdomains) {
-            if (perTenantSubdomain.subdomains().contains(subdomain)) {
+            if (perTenantSubdomain.subdomains().stream().anyMatch(subdomainPattern -> {
+                final var pattern = Pattern.compile(subdomainPattern, Pattern.CASE_INSENSITIVE);
+                return pattern.matcher(subdomain).matches();
+            })) {
                 return MandantIdentifier.of(perTenantSubdomain.tenant());
             }
         }

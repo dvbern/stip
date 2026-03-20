@@ -15,16 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.demo.type;
+package ch.dvbern.stip.api.common.type;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.dhatim.fastexcel.reader.Cell;
+import io.quarkus.runtime.annotations.StaticInitSafe;
+import io.smallrye.config.ConfigMapping;
 
-@RequiredArgsConstructor
-public class DemoDataParseContext {
-    @Getter
-    private final Cell cell;
-    @Getter
-    private final int index;
+@StaticInitSafe
+@ConfigMapping(prefix = "kstip.features")
+public interface TenantFeature {
+    interface Feature {
+        boolean nesko();
+    }
+
+    Feature bern();
+
+    Feature dv();
 }

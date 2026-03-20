@@ -119,7 +119,6 @@ public class AusbildungUnterbruchAntragService {
         ausbildungUnterbruchAntrag.setGesuch(gesuch);
         ausbildungUnterbruchAntrag.setAusbildung(gesuch.getAusbildung());
         ausbildungUnterbruchAntragRepository.persistAndFlush(ausbildungUnterbruchAntrag);
-        createStatusprotokollEntry(ausbildungUnterbruchAntrag, null, ausbildungUnterbruchAntrag.getKommentarGS());
         return ausbildungUnterbruchAntrag;
     }
 
@@ -215,15 +214,17 @@ public class AusbildungUnterbruchAntragService {
         final UpdateAusbildungUnterbruchAntragGSDto updateAusbildungUnterbruchAntragGSDto
     ) {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
+        final var previousStatus = antrag.getStatus();
+        ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
         notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         createStatusprotokollEntry(
             antrag,
             AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
-            antrag.getStatus().toString(),
+            previousStatus.toString(),
             antrag.getKommentarGS()
         );
         return ausbildungUnterbruchAntragMapper
-            .toGsDto(ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag));
+            .toGsDto(antrag);
     }
 
     @Transactional

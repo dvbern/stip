@@ -161,6 +161,20 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
+    BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG: rxMethod<{
+      gesuchTrancheId: string;
+      text: string;
+    }>(
+      pipe(
+        this.handleStatusChange(({ gesuchTrancheId, text }) =>
+          this.gesuchService.changeGesuchStatusToBearbeitungAsAenderung$({
+            gesuchTrancheId,
+            kommentar: { text },
+          }),
+        ),
+      ),
+    ),
+
     BEARBEITUNG_ABSCHLIESSEN: rxMethod<{ gesuchTrancheId: string }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>

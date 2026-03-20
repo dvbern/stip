@@ -98,6 +98,7 @@ export type StatusUebergang =
   | 'SET_TO_BEARBEITUNG'
   | 'ANSPRUCH_PRUEFEN'
   | 'BEREIT_FUER_BEARBEITUNG'
+  | 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'
   | 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'
   | 'ZURUECKWEISEN'
   | 'BEARBEITUNG_ABSCHLIESSEN'
@@ -134,6 +135,8 @@ export const StatusUebergaengeMap: Partial<
   IN_FREIGABE: ['VERFUEGT', 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'],
   VERFUEGUNG_DRUCKBEREIT: ['VERSENDET'],
   DATENSCHUTZBRIEF_DRUCKBEREIT: ['BEREIT_FUER_BEARBEITUNG'],
+  STIPENDIENANSPRUCH: ['BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'],
+  KEIN_STIPENDIENANSPRUCH: ['BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'],
 };
 
 type UebergangDisabledReason =
@@ -209,6 +212,13 @@ export const StatusUebergaengeOptions: Record<
     ({
       icon: 'play_arrow',
       typ: 'BEREIT_FUER_BEARBEITUNG',
+      allowedFor: ['V0_Sachbearbeiter'],
+      disabledReason: undefined,
+    }) as const,
+  BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG: () =>
+    ({
+      icon: 'restart_alt',
+      typ: 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,

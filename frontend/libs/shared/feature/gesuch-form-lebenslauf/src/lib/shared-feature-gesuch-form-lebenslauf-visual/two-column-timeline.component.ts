@@ -94,6 +94,7 @@ export class TwoColumnTimelineComponent {
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
           editable: true,
+          wohnsitz: lebenslaufItem.wohnsitz,
           ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
         }) as TimelineRawItem,
     );

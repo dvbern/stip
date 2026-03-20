@@ -204,6 +204,11 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 
+    @Transactional
+    public void sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(UUID gesuchId) {
+        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+    }
+
     public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(UUID gesuchId) {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }

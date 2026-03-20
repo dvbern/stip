@@ -59,6 +59,10 @@ public class DelegierenService {
 
     @Transactional
     public void delegateFall(final UUID fallId, final UUID sozialdienstId, final DelegierungCreateDto dto) {
+        if (!Boolean.TRUE.equals(dto.getNutzungsbedingungenAkzeptiert())) {
+            throw new BadRequestException();
+        }
+
         final var fall = fallRepository.requireById(fallId);
         if (fall.getDelegierung() != null) {
             throw new BadRequestException();

@@ -9,20 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Adresse } from './adresse';
-import { Sprache } from './sprache';
-import { Anrede } from './anrede';
 
-export interface DelegierungCreate { 
-    anrede: Anrede;
-    nachname: string;
-    vorname: string;
-    geburtsdatum: string;
-    email: string;
-    sprache: Sprache;
-    adresse: Adresse;
-    nutzungsbedingungenAkzeptiert: boolean;
+export interface DemoDataTestBerechnungResult { 
+    demoDataId: string;
+    valid: boolean;
+    soll?: number;
+    ist?: number;
+    message?: string;
 }
-
-
 

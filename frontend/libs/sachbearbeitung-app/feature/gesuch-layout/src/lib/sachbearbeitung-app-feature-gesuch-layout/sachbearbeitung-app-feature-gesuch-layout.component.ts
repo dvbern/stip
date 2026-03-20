@@ -25,8 +25,10 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -344,13 +346,39 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       case 'VERSENDET':
         this.gesuchStore.setStatus$[nextStatus]({ gesuchTrancheId });
         break;
-      case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm`,
+      case 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG':
+        SharedUiKommentarDialogComponent.open<
+          SachbearbeitungAppTranslationKey | SharedTranslationKey
+        >(this.dialog, {
+          titleKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.title',
+          messageKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.message',
+          placeholderKey:
+            'sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG.placeholder',
+          confirmKey: 'shared.ui.yes',
         })
+          .afterClosed()
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe((result) => {
+            if (result) {
+              this.gesuchStore.setStatus$.BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG({
+                gesuchTrancheId,
+                text: result.kommentar,
+              });
+            }
+          });
+        break;
+      case 'SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT':
+        SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.SET_TO_DATENSCHUTZBRIEF_DRUCKBEREIT.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
@@ -363,12 +391,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
           });
         break;
       case 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG':
-        SharedUiKommentarDialogComponent.openOptional(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
-        })
+        SharedUiKommentarDialogComponent.openOptional<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
@@ -381,12 +412,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
           });
         break;
       case 'ZURUECKWEISEN':
-        SharedUiKommentarDialogComponent.open(this.dialog, {
-          titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
-          messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
-          placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
-          confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
-        })
+        SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+          this.dialog,
+          {
+            titleKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.title`,
+            messageKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.message`,
+            placeholderKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.placeholder`,
+            confirmKey: `sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN.confirm`,
+          },
+        )
           .afterClosed()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {

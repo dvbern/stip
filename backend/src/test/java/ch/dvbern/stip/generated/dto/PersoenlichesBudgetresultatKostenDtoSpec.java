@@ -42,7 +42,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_MEDIZINISCHE_GRUNDVERSORGUNG_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
-  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_KANTONS_GEMEINDESTEUERN,
@@ -84,9 +83,6 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
 
   public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER = "fahrkostenPartner";
   private Integer fahrkostenPartner;
-
-  public static final String JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL = "fahrkostenPartnerTotal";
-  private Integer fahrkostenPartnerTotal;
 
   public static final String JSON_PROPERTY_VERPFLEGUNG_PARTNER = "verpflegungPartner";
   private Integer verpflegungPartner;
@@ -400,32 +396,6 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatKostenDtoSpec fahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
-    
-    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
-    return this;
-  }
-
-   /**
-   * Get fahrkostenPartnerTotal
-   * @return fahrkostenPartnerTotal
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getFahrkostenPartnerTotal() {
-    return fahrkostenPartnerTotal;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_FAHRKOSTEN_PARTNER_TOTAL)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFahrkostenPartnerTotal(Integer fahrkostenPartnerTotal) {
-    this.fahrkostenPartnerTotal = fahrkostenPartnerTotal;
-  }
-
-
   public PersoenlichesBudgetresultatKostenDtoSpec verpflegungPartner(Integer verpflegungPartner) {
     
     this.verpflegungPartner = verpflegungPartner;
@@ -575,7 +545,6 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
-        Objects.equals(this.fahrkostenPartnerTotal, persoenlichesBudgetresultatKosten.fahrkostenPartnerTotal) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
         Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
@@ -585,7 +554,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, fahrkostenPartnerTotal, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -603,7 +572,6 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
-    sb.append("    fahrkostenPartnerTotal: ").append(toIndentedString(fahrkostenPartnerTotal)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
     sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
