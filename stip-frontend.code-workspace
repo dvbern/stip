@@ -77,7 +77,7 @@
       "titleBar.activeBackground": "#075fa4",
       "titleBar.activeForeground": "#e7e7e7",
       "titleBar.inactiveBackground": "#075fa499",
-      "titleBar.inactiveForeground": "#e7e7e799",
+      "titleBar.inactiveForeground": "#e7e7e799"
     },
     "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",
@@ -128,7 +128,7 @@
         },
       ],
     },
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "files.eol": "\n",
     "exportall.config.relExclusion": [],
     "testing.openTesting": "neverOpen",

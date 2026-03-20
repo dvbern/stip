@@ -12,7 +12,7 @@
       [matMenuTriggerFor]="versionenMenu"
       [class.active]="isGesuchRouteSig()"
     >
-      @if (currentVersionSig()) {
+      @if (currentVersionSig() && !isInitialRouteSig()) {
         <span>
           {{
             t('shared.header.versionen.item', {
@@ -21,7 +21,7 @@
           }}
         </span>
       } @else if (isInitialRouteSig()) {
-        <span>{{ t('shared.header.aenderungen.initial') }}</span>
+        <span>{{ t('shared.header.versionen.initial') }}</span>
       } @else {
         <span>{{ t('shared.header.versionen') }}</span>
       }
@@ -43,7 +43,7 @@
         @for (version of versionen; track version.berechnungId) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
-            [queryParams]="{ berechnungId: version.berechnungId }"
+            [queryParams]="{ berechnungId: version.berechnungId, revision: version.tranchen[0].revision }"
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="versionen-nav-menu-item"
             mat-menu-item
@@ -59,24 +59,25 @@
           </a>
         }
         <hr class="my-2" />
-        <!-- todo: check translation keys over all changes -->
         @if (initialSig()) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialSig()?.tranchen?.[0]?.id]"
-            [queryParams]="{ berechnungId: initialSig()?.berechnungId }"
+            [queryParams]="{
+              berechnungId: initialSig()?.berechnungId,
+              revision: initialSig()?.tranchen?.[0]?.revision,
+            }"
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="versionen-nav-menu-initial-item"
             mat-menu-item
             [class.active]="isInitialRouteSig()"
           >
-            <span>{{ t('shared.header.aenderungen.initial') }}</span>
+            <span>{{ t('shared.header.versionen.initial') }}</span>
           </a>
         }
       </div>
     </mat-menu>
   } @else {
-    <!-- this is a fallback button that does not route to any versions, basically a reload button on current gesuch -->
-    <!-- todo: link and active state -->
+    <!-- fallback button that -->
     <a
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"

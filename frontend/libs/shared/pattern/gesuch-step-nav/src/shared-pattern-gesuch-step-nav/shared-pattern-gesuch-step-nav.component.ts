@@ -7,7 +7,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, isActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
@@ -51,7 +51,7 @@ export class SharedPatternGesuchStepNavComponent {
             ...trancheSetting.routesSuffix,
           ]
         : null,
-      isActive: this.route.isActive(`gesuch/${step.route}`, {
+      active: isActive(`gesuch/${step.route}`, this.route, {
         paths: 'subset',
         queryParams: 'ignored',
         fragment: 'ignored',

@@ -54,7 +54,7 @@ export const selectTrancheTyp = createSelector(
 );
 export const isHistorizedView = createSelector(
   selectTrancheTyp,
-  (trancheTyp) => trancheTyp !== 'TRANCHE',
+  (trancheTyp) => trancheTyp === 'AENDERUNG',
 );
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');

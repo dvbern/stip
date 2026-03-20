@@ -2,6 +2,8 @@
   <!-- left step nav (Desktop) -->
   @let trancheId = gesuchTrancheIdSig();
   @let currentTranche = currentTrancheSig();
+  @let initialRoute = isInitialRouteSig();
+
   <!-- side menu -->
   <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
@@ -31,7 +33,9 @@
           <div class="d-flex flex-column gap-2">
             @for (tranche of tranchenSig(); track $index) {
               <a
-                [routerLink]="['/', 'gesuch', gesuchIdSig(), 'tranche', tranche.id]"
+                [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
+                [queryParams]="{ revision: tranche.revision }"
+                [queryParamsHandling]="'merge'"
                 class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
                 data-testid="tranche-nav-menu-item"
                 [class.active]="trancheId === tranche.id"
