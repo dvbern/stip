@@ -210,7 +210,7 @@ public class GesuchTrancheHistoryRepository {
             .add(AuditEntity.revisionType().ne(RevisionType.DEL))
             .add(AuditEntity.revisionType().ne(RevisionType.ADD))
             .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.AKZEPTIERT))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
             .add(AuditEntity.property("status").hasChanged())
             .getResultList();
 
