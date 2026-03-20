@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.config.service;
 import java.util.List;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.type.TenantFeature;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.Getter;
@@ -29,6 +30,9 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class ConfigService {
+    @Getter
+    private final TenantFeature tenantFeatures;
+
     @ConfigProperty(name = "kstip.environment", defaultValue = "local")
     String environment;
 
