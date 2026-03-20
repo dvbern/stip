@@ -5,10 +5,11 @@ import {
   OPTION_ZUSAMMENFASSUNG,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { SharedFeatureVerfuegungZusammenfassungComponent } from '@dv/shared/feature/verfuegung-zusammenfassung';
+import { trancheRoutes } from '@dv/shared/model/gesuch';
 
 export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
-  {
-    path: ':gesuchId/tranche/:trancheId',
+  ...trancheRoutes.map((route) => ({
+    path: `:gesuchId/${route}/:trancheId`,
     children: [
       {
         path: OPTION_ZUSAMMENFASSUNG.route,
@@ -23,9 +24,9 @@ export const sachbearbeitungAppFeatureVerfuegungRoutes: Route[] = [
       },
       {
         path: '',
-        pathMatch: 'prefix',
+        pathMatch: 'prefix' as const,
         redirectTo: OPTION_ZUSAMMENFASSUNG.route,
       },
     ],
-  },
+  })),
 ];

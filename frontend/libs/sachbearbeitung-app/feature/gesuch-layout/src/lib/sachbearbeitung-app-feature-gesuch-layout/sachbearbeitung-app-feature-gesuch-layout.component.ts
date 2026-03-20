@@ -166,6 +166,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
+    const isIntitial = this.isInitialRouteSig();
+    const isAenderung = this.isAenderungRouteSig();
+
+    // todo-review: @scph oder lieber mit trancheSetting und ngrx store?
+    const trancheTyp = isIntitial
+      ? 'initial'
+      : isAenderung
+        ? 'aenderung'
+        : 'tranche';
 
     if (!this.isGesuchRouteSig()) {
       return [];
@@ -173,14 +182,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
-      route: ['/gesuch', gesuchId, 'tranche', trancheId],
+      route: ['/gesuch', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
       name: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
-      route: ['/gesuch/verfuegung', gesuchId, 'tranche', trancheId],
+      route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
       name: 'verfuegung',
     };
