@@ -9,7 +9,6 @@ import {
   FamiliensituationUpdate,
   FormPropsExcluded,
   GSFormStepProps,
-  GesuchAenderungs,
   GesuchFormular,
   GesuchFormularType,
   GesuchHeader,
@@ -20,7 +19,6 @@ import {
   SharedModelGesuch,
   SteuerdatenTyp,
   TrancheSetting,
-  VerfuegtGesuch,
 } from '@dv/shared/model/gesuch';
 import {
   ABSCHLUSS,
