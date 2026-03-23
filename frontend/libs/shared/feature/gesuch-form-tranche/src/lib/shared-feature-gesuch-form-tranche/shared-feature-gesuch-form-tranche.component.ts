@@ -188,6 +188,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       // Also used to react to language change
       // if not used anymore, still call it if this.translate is still used
       const language = this.languageSig();
+      const isAbgelehnteAenderung = this.revisionSig() && isEditingAenderung;
 
       const defaultComment = this.defaultCommentSig();
       if (!tranche || !gesuch) {
@@ -205,7 +206,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         status:
           overridenStatus ??
           this.translate.translate(
-            `${appPrefix}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
+            `${appPrefix}.gesuch.status.${type}.${isAbgelehnteAenderung ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
           ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,
