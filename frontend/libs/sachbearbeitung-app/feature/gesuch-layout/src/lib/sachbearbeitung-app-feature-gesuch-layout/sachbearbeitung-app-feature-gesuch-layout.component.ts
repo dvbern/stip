@@ -21,14 +21,6 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import {
-  DarlehenCompleteStates,
-  darlehenStatusMapping,
-} from '@dv/shared/model/ui';
-import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
-import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
-import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
-import { TabNavItem } from '@dv/shared/util/navigation';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
@@ -63,15 +55,23 @@ import {
   lowercased,
 } from '@dv/shared/model/type-util';
 import {
+  DarlehenCompleteStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
+import {
   noActionRoutes,
   noGesuchActiveRoutes,
 } from '@dv/shared/model/ui-constants';
+import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
+import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
+import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
+import { TabNavItem } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
