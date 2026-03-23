@@ -20,10 +20,13 @@ package ch.dvbern.stip.api.common.statemachines.gesuch;
 import java.util.EnumMap;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
@@ -31,6 +34,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
@@ -67,6 +71,10 @@ public class GesuchStatusConfigProducer {
     private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
     private final VerfuegtHandler verfuegtHandler;
+    private final AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
+    private final AusbildungUnterbruchAkzeptierenHandler ausbildungUnterbruchAkzeptierenHandler;
+    private final BeschwerdeErfolgreichAkzeptierenHandler beschwerdeErfolgreichAkzeptierenHandler;
+    private final SbInitialisiertAenderungHandler sbInitialisiertAenderungHandler;
 
     public StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> createStateMachineConfig() {
         final StateMachineConfig<Gesuchstatus, GesuchStatusChangeEvent> config = new StateMachineConfig<>();
@@ -154,6 +162,22 @@ public class GesuchStatusConfigProducer {
             .permit(
                 GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_STIPENDIENANSPRUCH,
                 Gesuchstatus.STIPENDIENANSPRUCH
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN),
+                aenderungAkzeptierenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH),
+                ausbildungUnterbruchAkzeptierenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG),
+                sbInitialisiertAenderungHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN),
+                beschwerdeErfolgreichAkzeptierenHandler::handle
             );
 
         config.configure(Gesuchstatus.FEHLENDE_DOKUMENTE)
@@ -243,7 +267,8 @@ public class GesuchStatusConfigProducer {
                 GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH,
                 Gesuchstatus.IN_BEARBEITUNG_SB
             )
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
             .onEntryFrom(
                 triggers.get(
                     GesuchStatusChangeEvent.GESUCH_AENDERUNG_ZURUECKWEISEN_KEIN_STIPENDIENANSPRUCH
@@ -263,7 +288,8 @@ public class GesuchStatusConfigProducer {
                 GesuchStatusChangeEvent.AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIEREN_REDUZIERTER_ANSPRUCH,
                 Gesuchstatus.IN_BEARBEITUNG_SB
             )
-            .permit(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG, Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
+            .permit(GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG, Gesuchstatus.IN_BEARBEITUNG_SB)
+            .permit(GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN, Gesuchstatus.IN_BEARBEITUNG_SB)
             .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.STIPENDIENANSPRUCH),
                 stipendienAnspruchHandler::handle

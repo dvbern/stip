@@ -15,16 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.gesuch.type;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-    }
+public enum InBearbeitungSbReason {
+    INITIAL,
+    AENDERUNG,
+    UNTERBRUCH,
+    BESCHWERDE,
+    SB_AENDERUNG;
 }

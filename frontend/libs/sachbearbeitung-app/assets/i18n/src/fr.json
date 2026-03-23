@@ -18,6 +18,7 @@
   "sachbearbeitung-app.header.status-uebergang.ANSPRUCH_PRUEFEN": "Vérification des droits",
   "sachbearbeitung-app.header.status-uebergang.BEARBEITUNG_ABSCHLIESSEN": "Clôturer le traitement",
   "sachbearbeitung-app.header.status-uebergang.ZURUECKWEISEN": "Rejeter la demande",
+  "sachbearbeitung-app.header.status-uebergang.UNDO": "Rejeter la modification",
   "sachbearbeitung-app.header.status-uebergang.BEREIT_FUER_BEARBEITUNG": "Prêt pour traitement",
   "sachbearbeitung-app.header.status-uebergang.ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG": "Retour à Prêt pour le traitement",
   "sachbearbeitung-app.header.status-uebergang.NEGATIVE_VERFUEGUNG_ERSTELLEN": "Créer une décision négative",

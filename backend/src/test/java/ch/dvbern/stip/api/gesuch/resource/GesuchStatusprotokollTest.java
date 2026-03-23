@@ -155,7 +155,7 @@ class GesuchStatusprotokollTest {
     @TestAsSachbearbeiter
     @Order(6)
     void gesuchZurueckweisen() {
-        gesuchApiSpec.gesuchZurueckweisen()
+        gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
                 new KommentarDtoSpec()

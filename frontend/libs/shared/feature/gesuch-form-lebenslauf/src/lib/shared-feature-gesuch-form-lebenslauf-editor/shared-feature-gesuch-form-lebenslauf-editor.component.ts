@@ -143,10 +143,7 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
     wohnsitz: this.formBuilder.control<WohnsitzKanton>('' as WohnsitzKanton, [
       Validators.required,
     ]),
-    ausbildungAbgeschlossen: [
-      <boolean | undefined>undefined,
-      [Validators.required],
-    ],
+    ausbildungAbgeschlossen: [<boolean | undefined>undefined],
   });
 
   private abschlussIdSig = toSignal(
@@ -301,6 +298,10 @@ export class SharedFeatureGesuchFormLebenslaufEditorComponent {
           false,
         );
         this.formUtils.setRequired(this.form.controls.abschlussId, true);
+        this.formUtils.setRequired(
+          this.form.controls.ausbildungAbgeschlossen,
+          true,
+        );
       }
 
       if (item.type === 'TAETIGKEIT') {

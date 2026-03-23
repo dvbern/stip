@@ -21,6 +21,14 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
+import {
+  DarlehenCompleteStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
+import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
+import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
+import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
+import { TabNavItem } from '@dv/shared/util/navigation';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map, startWith } from 'rxjs';
@@ -44,29 +52,26 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   FreiwilligDarlehen,
   GesuchHeader,
+  InBearbeitungSbReason,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
-import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import {
-  DarlehenCompleteStates,
-  darlehenStatusMapping,
-} from '@dv/shared/model/ui';
+  assertUnreachable,
+  isDefined,
+  lowercased,
+} from '@dv/shared/model/type-util';
 import {
   noActionRoutes,
   noGesuchActiveRoutes,
 } from '@dv/shared/model/ui-constants';
-import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
-import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
-import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import {
   StatusUebergaengeMap,
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { TabNavItem } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 
 @Component({
@@ -303,6 +308,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       gesuchStatus,
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
+      inBearbeitungSbReason,
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
@@ -319,13 +325,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const hasValidationWarnings = !!validations.warnings?.length;
     const list = StatusUebergaengeMap[gesuchStatus]
       ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
-      ?.map((status) =>
-        StatusUebergaengeOptions[status]({
+      ?.map((status) => ({
+        ...StatusUebergaengeOptions[status]({
           permissions,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
-      )
+        name: getUebergangName(status, inBearbeitungSbReason),
+      }))
       .filter((uebergang) =>
         uebergang.allowedFor.some((role) => rolesMap[role]),
       );
@@ -420,7 +427,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
             }
           });
         break;
-      case 'ZURUECKWEISEN':
+      case 'ZURUECKWEISEN_OR_UNDO':
         SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
           this.dialog,
           {
@@ -434,15 +441,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$.ZURUECKWEISEN({
+              this.gesuchStore.setStatus$.ZURUECKWEISEN_OR_UNDO({
                 gesuchTrancheId,
                 text: result.kommentar,
-                onSuccess: (newGesuchTrancheId) => {
+                onSuccess: (newGesuchTrancheId, trancheTyp) => {
                   this.router.navigate([
                     'gesuch',
                     'info',
                     gesuchId,
-                    'tranche',
+                    lowercased(trancheTyp),
                     newGesuchTrancheId,
                   ]);
                   this.einreichenStore.validateSteps$({ gesuchTrancheId });
@@ -508,3 +515,27 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       .subscribe();
   }
 }
+
+const getUebergangName = (
+  uebergang: StatusUebergang,
+  bearbeitungStatus?: InBearbeitungSbReason,
+):
+  | Exclude<StatusUebergang, 'ZURUECKWEISEN_OR_UNDO'>
+  | 'ZURUECKWEISEN'
+  | 'UNDO'
+  | null => {
+  switch (uebergang) {
+    case 'ZURUECKWEISEN_OR_UNDO': {
+      switch (bearbeitungStatus) {
+        case 'INITIAL':
+          return 'ZURUECKWEISEN';
+        case 'AENDERUNG':
+          return 'UNDO';
+        default:
+          return null;
+      }
+    }
+    default:
+      return uebergang;
+  }
+};

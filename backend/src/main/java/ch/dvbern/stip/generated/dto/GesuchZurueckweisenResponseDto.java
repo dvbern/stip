@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchZurueckweisenResponseDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid UUID gesuchTrancheId;
+  private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp;
 
   /**
    **/
@@ -61,6 +62,25 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
+  /**
+   **/
+  public GesuchZurueckweisenResponseDto gesuchTrancheTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp) {
+    this.gesuchTrancheTyp = gesuchTrancheTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("gesuchTrancheTyp")
+  @NotNull
+  public ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp getGesuchTrancheTyp() {
+    return gesuchTrancheTyp;
+  }
+
+  @JsonProperty("gesuchTrancheTyp")
+  public void setGesuchTrancheTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp) {
+    this.gesuchTrancheTyp = gesuchTrancheTyp;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -72,12 +92,13 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
     }
     GesuchZurueckweisenResponseDto gesuchZurueckweisenResponse = (GesuchZurueckweisenResponseDto) o;
     return Objects.equals(this.gesuchId, gesuchZurueckweisenResponse.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, gesuchZurueckweisenResponse.gesuchTrancheId);
+        Objects.equals(this.gesuchTrancheId, gesuchZurueckweisenResponse.gesuchTrancheId) &&
+        Objects.equals(this.gesuchTrancheTyp, gesuchZurueckweisenResponse.gesuchTrancheTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, gesuchTrancheId);
+    return Objects.hash(gesuchId, gesuchTrancheId, gesuchTrancheTyp);
   }
 
   @Override
@@ -87,6 +108,7 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
     
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    gesuchTrancheTyp: ").append(toIndentedString(gesuchTrancheTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -26,12 +26,15 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.service.FallMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
+import jakarta.annotation.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -68,14 +71,16 @@ public abstract class GesuchMapper {
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
     public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
 
+    @Nullable
     @Named("getPiaVorname")
     String getPiaVorname(final Gesuch gesuch) {
-        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getVorname();
+        return GesuchMapperUtil.getLatestPia(gesuch).map(PersonInAusbildung::getVorname).orElse(null);
     }
 
+    @Nullable
     @Named("getPiaNachname")
     String getPiaNachname(final Gesuch gesuch) {
-        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getNachname();
+        return GesuchMapperUtil.getLatestPia(gesuch).map(PersonInAusbildung::getNachname).orElse(null);
     }
 
     @Mapping(source = "ausbildungId", target = "ausbildung.id")

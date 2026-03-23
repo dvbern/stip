@@ -100,7 +100,7 @@ export type StatusUebergang =
   | 'BEREIT_FUER_BEARBEITUNG'
   | 'BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG'
   | 'ZURUECK_ZU_BEREIT_FUER_BEARBEITUNG'
-  | 'ZURUECKWEISEN'
+  | 'ZURUECKWEISEN_OR_UNDO'
   | 'BEARBEITUNG_ABSCHLIESSEN'
   | 'VERFUEGT'
   | 'VERSENDET'
@@ -121,7 +121,7 @@ export const StatusUebergaengeMap: Partial<
   ],
   IN_BEARBEITUNG_SB: [
     'BEARBEITUNG_ABSCHLIESSEN',
-    'ZURUECKWEISEN',
+    'ZURUECKWEISEN_OR_UNDO',
     'NEGATIVE_VERFUEGUNG_ERSTELLEN',
   ],
   NICHT_ANSPRUCHSBERECHTIGT: [
@@ -194,10 +194,10 @@ export const StatusUebergaengeOptions: Record<
       disabledReason: disabledReason,
     } as const;
   },
-  ZURUECKWEISEN: () =>
+  ZURUECKWEISEN_OR_UNDO: () =>
     ({
       icon: 'undo',
-      typ: 'ZURUECKWEISEN',
+      typ: 'ZURUECKWEISEN_OR_UNDO',
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,

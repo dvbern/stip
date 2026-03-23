@@ -64,6 +64,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @RequiredArgsConstructor
 public class UnterschriftenblattService {
     public static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
+    public static final int DAYS_TO_WAIT_FOR_UNTERSCHRIFTENBLATT = 7;
 
     private final GesuchRepository gesuchRepository;
     private final UnterschriftenblattRepository unterschriftenblattRepository;
@@ -162,7 +163,7 @@ public class UnterschriftenblattService {
             gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
                 gesuche.stream().map(AbstractEntity::getId).toList(),
                 Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-                LocalDateTime.now().minusDays(7)
+                LocalDateTime.now().minusDays(DAYS_TO_WAIT_FOR_UNTERSCHRIFTENBLATT)
             ).map(AbstractEntity::getId).toList()
         );
 

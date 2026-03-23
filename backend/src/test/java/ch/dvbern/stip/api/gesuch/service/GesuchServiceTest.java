@@ -1155,7 +1155,7 @@ class GesuchServiceTest {
             () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuch.getId(), new KommentarDto().text("Test"))
         );
         assertEquals(
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }
@@ -1172,7 +1172,7 @@ class GesuchServiceTest {
             () -> gesuchService.gesuchStatusToBearbeitungAsAenderung(gesuch.getId(), new KommentarDto().text("Test"))
         );
         assertEquals(
-            Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+            Gesuchstatus.IN_BEARBEITUNG_SB,
             gesuchRepository.requireById(gesuch.getId()).getGesuchStatus()
         );
     }

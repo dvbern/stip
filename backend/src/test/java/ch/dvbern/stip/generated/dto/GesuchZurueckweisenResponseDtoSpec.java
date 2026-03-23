@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.GesuchTrancheTypDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchZurueckweisenResponseDtoSpec.JSON_PROPERTY_GESUCH_ID,
-  GesuchZurueckweisenResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID
+  GesuchZurueckweisenResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
+  GesuchZurueckweisenResponseDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TYP
 })
 @JsonTypeName("GesuchZurueckweisenResponse")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -39,6 +41,9 @@ public class GesuchZurueckweisenResponseDtoSpec {
 
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
+
+  public static final String JSON_PROPERTY_GESUCH_TRANCHE_TYP = "gesuchTrancheTyp";
+  private GesuchTrancheTypDtoSpec gesuchTrancheTyp;
 
   public GesuchZurueckweisenResponseDtoSpec() {
   }
@@ -94,6 +99,32 @@ public class GesuchZurueckweisenResponseDtoSpec {
     this.gesuchTrancheId = gesuchTrancheId;
   }
 
+
+  public GesuchZurueckweisenResponseDtoSpec gesuchTrancheTyp(GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
+    
+    this.gesuchTrancheTyp = gesuchTrancheTyp;
+    return this;
+  }
+
+   /**
+   * Get gesuchTrancheTyp
+   * @return gesuchTrancheTyp
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public GesuchTrancheTypDtoSpec getGesuchTrancheTyp() {
+    return gesuchTrancheTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESUCH_TRANCHE_TYP)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setGesuchTrancheTyp(GesuchTrancheTypDtoSpec gesuchTrancheTyp) {
+    this.gesuchTrancheTyp = gesuchTrancheTyp;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +135,13 @@ public class GesuchZurueckweisenResponseDtoSpec {
     }
     GesuchZurueckweisenResponseDtoSpec gesuchZurueckweisenResponse = (GesuchZurueckweisenResponseDtoSpec) o;
     return Objects.equals(this.gesuchId, gesuchZurueckweisenResponse.gesuchId) &&
-        Objects.equals(this.gesuchTrancheId, gesuchZurueckweisenResponse.gesuchTrancheId);
+        Objects.equals(this.gesuchTrancheId, gesuchZurueckweisenResponse.gesuchTrancheId) &&
+        Objects.equals(this.gesuchTrancheTyp, gesuchZurueckweisenResponse.gesuchTrancheTyp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchId, gesuchTrancheId);
+    return Objects.hash(gesuchId, gesuchTrancheId, gesuchTrancheTyp);
   }
 
   @Override
@@ -118,6 +150,7 @@ public class GesuchZurueckweisenResponseDtoSpec {
     sb.append("class GesuchZurueckweisenResponseDtoSpec {\n");
     sb.append("    gesuchId: ").append(toIndentedString(gesuchId)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
+    sb.append("    gesuchTrancheTyp: ").append(toIndentedString(gesuchTrancheTyp)).append("\n");
     sb.append("}");
     return sb.toString();
   }

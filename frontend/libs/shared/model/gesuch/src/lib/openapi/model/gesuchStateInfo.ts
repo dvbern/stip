@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { InBearbeitungSbReason } from './inBearbeitungSbReason';
 import { Gesuchstatus } from './gesuchstatus';
 
 export interface GesuchStateInfo { 
@@ -18,6 +19,7 @@ export interface GesuchStateInfo {
     canChangeGesuchsperiode: boolean;
     canTriggerManuellPruefen: boolean;
     canBearbeitungAbschliessen: boolean;
+    inBearbeitungSbReason?: InBearbeitungSbReason;
 }
 
 

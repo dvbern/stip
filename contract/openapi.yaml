@@ -4830,7 +4830,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchTrancheId}/gesuchZurueckweisen:
+  /gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo:
     parameters:
       - $ref: '#/components/parameters/gesuchTrancheId'
     patch:
@@ -4856,7 +4856,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: gesuchZurueckweisen
+      operationId: gesuchZurueckweisenAenderungUndo
       summary: Gas Gesuch an den GS zurueckweisen
       security:
         - auth-uat-bern: []
@@ -9590,11 +9590,14 @@ components:
       required:
         - gesuchId
         - gesuchTrancheId
+        - gesuchTrancheTyp
       properties:
         gesuchId:
           $ref: '#/components/schemas/UUID'
         gesuchTrancheId:
           $ref: '#/components/schemas/UUID'
+        gesuchTrancheTyp:
+          $ref: '#/components/schemas/GesuchTrancheTyp'
     ManuelleVerfuegungCreate:
       required:
         - fileUpload
@@ -10766,6 +10769,13 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
         isInitial:
           type: boolean
+    InBearbeitungSbReason:
+      enum:
+        - INITIAL
+        - AENDERUNG
+        - UNTERBRUCH
+        - BESCHWERDE
+        - SB_AENDERUNG
     GesuchStateInfo:
       required:
         - gesuchStatus
@@ -10788,6 +10798,8 @@ components:
           type: boolean
         canBearbeitungAbschliessen:
           type: boolean
+        inBearbeitungSbReason:
+          $ref: '#/components/schemas/InBearbeitungSbReason'
     GesuchTrancheSlim:
       type: object
       required:

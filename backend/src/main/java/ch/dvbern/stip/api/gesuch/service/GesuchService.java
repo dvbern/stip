@@ -53,7 +53,6 @@ import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
-import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -188,7 +187,6 @@ public class GesuchService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
-    private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
@@ -636,10 +634,12 @@ public class GesuchService {
         gesuchStatusService
             .triggerStateMachineEventWithComment(gesuch, gesuchStatusChangeEvent, kommentarDto, true);
 
+        final var relevantTranche = gesuch.getGesuchTranchen().getFirst();
         // After zurueckweisen we now have only 1 GesuchTranche left, the Frontend should redirect there
         return new GesuchZurueckweisenResponseDto()
             .gesuchId(gesuchId)
-            .gesuchTrancheId(gesuch.getGesuchTranchen().get(0).getId());
+            .gesuchTrancheId(relevantTranche.getId())
+            .gesuchTrancheTyp(relevantTranche.getTyp());
     }
 
     @Transactional
@@ -689,7 +689,7 @@ public class GesuchService {
         final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
         gesuchStatusService.triggerStateMachineEventWithComment(
             gesuch,
-            GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG,
+            GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG,
             new KommentarDto().text(
                 translator.translate(
                     "stip.gesuch.status-change.GESUCH_IN_BEARBEITUNG_AS_AENDERUNG",
@@ -901,7 +901,13 @@ public class GesuchService {
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE
         );
         if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
-            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+            final var lastFreigegebenTrancheRevisionTimestamp =
+                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId)
+                    .get();
+
+            aenderung =
+                gesuchTrancheHistoryRepository
+                    .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -1042,79 +1048,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void resetGesuchTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
-        final var formularOfFromTranche = fromTranche.getGesuchFormular();
-
-        gesuchDokumentKommentarService.deleteForGesuchTrancheId(toTranche.getId());
-
-        toTranche.setGueltigkeit(fromTranche.getGueltigkeit());
-
-        gesuchTrancheCopyService.overrideGesuchFormular(toTranche.getGesuchFormular(), formularOfFromTranche);
-
-        // Dokumente
-        // Remove doks that exist now but didn't exist then (i.e. past)
-        final var dokumentIdsNow = toTranche
-            .getGesuchDokuments()
-            .stream()
-            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
-            .toList();
-
-        final var dokumentIdsThen = fromTranche
-            .getGesuchDokuments()
-            .stream()
-            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
-            .toList();
-
-        final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
-
-        dokumentIdsNowButNotThen.forEach(gesuchDokumentService::deleteDokument);
-
-        // Remove doks that existed then (i.e. past) but not now
-        toTranche
-            .getGesuchDokuments()
-            .removeIf(gesuchDokument -> !fromTranche.getGesuchDokuments().contains(gesuchDokument));
-
-        final var targetGesuchDokumente = toTranche.getGesuchDokuments();
-
-        for (var sourceGesuchDokument : fromTranche.getGesuchDokuments()) {
-            if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
-                final var replacement = targetGesuchDokumente
-                    .stream()
-                    .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
-                    .findFirst();
-                replacement.ifPresent(gesuchDokument -> {
-                    GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument, toTranche);
-                    if (Objects.nonNull(gesuchDokument.getCustomDokumentTyp())) {
-                        customDokumentTypRepository.persist(gesuchDokument.getCustomDokumentTyp());
-                    }
-                    gesuchDokumentRepository.persist(gesuchDokument);
-                    sourceGesuchDokument
-                        .getDokumente()
-                        .forEach(dokument -> {
-                            if (!gesuchDokument.getDokumente().contains(dokument)) {
-                                final var newDokument = new Dokument();
-                                GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                                gesuchDokument.addDokument(newDokument);
-                                dokumentRepository.persist(newDokument);
-                            }
-                        });
-                });
-            } else {
-                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
-                gesuchDokumentRepository.persist(newGesuchDokument);
-                sourceGesuchDokument
-                    .getDokumente()
-                    .forEach(dokument -> {
-                        final var newDokument = new Dokument();
-                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                        newGesuchDokument.addDokument(newDokument);
-                        dokumentRepository.persist(newDokument);
-                    });
-            }
-        }
-    }
-
-    @Transactional
     public void resetGesuchZurueckweisenToEingereicht(Gesuch gesuch) {
         final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId())
             .orElseThrow(NotFoundException::new);
@@ -1134,7 +1067,7 @@ public class GesuchService {
 
         datenschutzbriefService.deleteDatenschutzbriefeOfGesuch(gesuch.getId());
 
-        resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
+        gesuchTrancheService.resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
         if (gesuch.hasNeverBeenVerfuegt()) {
             gesuchTrancheCopyService
                 .overrideAusbildung(gesuchOfStateEingereicht.getAusbildung(), gesuch.getAusbildung());
@@ -1153,14 +1086,14 @@ public class GesuchService {
 
     @Transactional
     public void resetGesuchZurueckweisenToVerfuegt(Gesuch gesuch) {
-        final var tranchenIdsToDrop = doResetGesuchZurueckweisenToEingereicht(gesuch.getId());
+        final var tranchenIdsToDrop = undoAcceptedAenderung(gesuch.getId());
         for (final var trancheIdToDrop : tranchenIdsToDrop) {
             gesuchTrancheService.dropGesuchTranche(trancheIdToDrop);
         }
     }
 
     @Transactional
-    public List<UUID> doResetGesuchZurueckweisenToEingereicht(final UUID gesuchId) {
+    public List<UUID> undoAcceptedAenderung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var relevantAenderungId = gesuch
             .getGesuchTranchen()
@@ -1170,37 +1103,42 @@ public class GesuchService {
             .orElseThrow(NotFoundException::new)
             .getId();
 
-        final Integer revisionToResetTo =
-            gesuchTrancheHistoryRepository
-                .getEarliestRevisionWhereStatusChangedTo(relevantAenderungId, GesuchTrancheStatus.UEBERPRUEFEN)
-                .orElseThrow()
-            - 1;
+        final var revisionTimestampToResetTo =
+            gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusChangedToOneOf(
+                relevantAenderungId,
+                List.of(GesuchTrancheStatus.AKZEPTIERT, GesuchTrancheStatus.MANUELLE_AENDERUNG)
+            ).orElseThrow() - 1;
 
         // Select the gesuch just before it changes from STIPENDIENANSPRUCH/KEIN_STIPENDIENANSPRUCH to IN_BEARBEITUNG_SB
         final var gesuchToRevertTo = gesuchHistoryRepository
-            .getGesuchAtRevision(gesuch.getId(), revisionToResetTo)
+            .getGesuchAtRevisionTimestamp(gesuch.getId(), revisionTimestampToResetTo)
             .orElseThrow(NotFoundException::new);
 
         Map<UUID, List<GesuchDokumentKommentar>> trancheIdGesuchDokumentKommentarsMap = new HashMap<>();
 
         // We need to fetch comments before making changes to the gesuch as otherwise hibernate would commit those
         // changes at the getGesuchDokumentKommentarOfGesuchDokumentAtRevision calls
-        for (var gesuchTranche : gesuchToRevertTo.getGesuchTranchen()) {
+        for (var gesuchTranche : gesuchToRevertTo.getTranchenTranchen().toList()) {
             List<GesuchDokumentKommentar> gesuchDokumentKommentars = gesuchTranche
                 .getGesuchDokuments()
                 .stream()
                 .flatMap(
                     gesuchDokument -> gesuchDokumentKommentarHistoryRepository
-                        .getGesuchDokumentKommentarOfGesuchDokumentAtRevision(gesuchDokument.getId(), revisionToResetTo)
+                        .getGesuchDokumentKommentarOfGesuchDokumentAtRevisionTimestamp(
+                            gesuchDokument.getId(),
+                            revisionTimestampToResetTo
+                        )
                         .stream()
                 )
                 .toList();
             trancheIdGesuchDokumentKommentarsMap.put(gesuchTranche.getId(), gesuchDokumentKommentars);
         }
 
-        final var tranchenIdsToDrop = gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList();
+        final var tranchenIdsToDrop = gesuch.getTranchenTranchen().map(AbstractEntity::getId).toList();
 
-        for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getGesuchTranchen()) {
+        gesuchTrancheRepository.requireAenderungById(relevantAenderungId).setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
+
+        for (var gesuchTrancheToRevertTo : gesuchToRevertTo.getTranchenTranchen().toList()) {
             final var newTranche = gesuchTrancheCopyService.copyTrancheExceptGesuchDokuments(
                 gesuchTrancheToRevertTo,
                 gesuchTrancheToRevertTo.getGueltigkeit(),
@@ -1253,6 +1191,7 @@ public class GesuchService {
         } else {
             resetGesuchZurueckweisenToEingereicht(gesuch);
         }
+        gesuch.setInBearbeitungSbReason(null);
     }
 
     @Transactional
