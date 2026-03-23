@@ -58,7 +58,7 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           ),
       },
       {
-        path: DARLEHEN_ROUTE.route + '/:id',
+        path: DARLEHEN_ROUTE.route + '/:gesuchId',
         component: SharedUiCommingSoonComponent,
       },
       {
