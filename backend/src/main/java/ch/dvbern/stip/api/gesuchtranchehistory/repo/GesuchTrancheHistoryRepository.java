@@ -199,50 +199,6 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
-    public List<GesuchTranche> getAllAbgelehnteAenderungTranches(final UUID gesuchId) {
-        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
-        // List<GesuchTranche>
-        @SuppressWarnings("unchecked")
-        final List<GesuchTranche> abgehlenteAenderungen = AuditReaderFactory.get(em)
-            .createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, true, true)
-            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
-            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
-            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
-            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-            .add(AuditEntity.property("status").hasChanged())
-            .getResultList();
-
-        return abgehlenteAenderungen;
-    }
-
-    @Transactional
-    public List<Pair<GesuchTranche, List<GesuchTranche>>> getAllAkzeptierteAenderungenAndRelatedTranchen(
-        final UUID gesuchId
-    ) {
-        @SuppressWarnings("unchecked")
-        final Stream<GesuchTranche> akzeptierteAenderungs = AuditReaderFactory.get(em)
-            .createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, true, true)
-            .add(AuditEntity.property("gesuch_id").eq(gesuchId))
-            .add(AuditEntity.revisionType().ne(RevisionType.DEL))
-            .add(AuditEntity.revisionType().ne(RevisionType.ADD))
-            .add(AuditEntity.property("typ").eq(GesuchTrancheTyp.AENDERUNG))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.AKZEPTIERT))
-            .add(AuditEntity.property("status").hasChanged())
-            .getResultList()
-            .stream();
-
-        return akzeptierteAenderungs.map(
-            aenderung -> Pair.of(
-                aenderung,
-                aenderung.getGesuch().getTranchenTranchen().toList()
-            )
-        ).toList();
-    }
-
-    @Transactional
     public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
         // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
         // List<GesuchTranche>

@@ -78,14 +78,16 @@ public abstract class GesuchTrancheMapper {
         return toDtoWithoutVersteckteEltern(gesuch, gesuch);
     }
 
-    @Named("toSlimDto")
     @ToDtoDefaultMapping
     public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
 
-    @Named("toSlimDtoWithRevision")
-    public List<GesuchTrancheSlimDto> toSlimDtoWithRevision(List<Pair<GesuchTranche, DefaultRevisionEntity>> value) {
-        return value.stream()
-            .map(pair -> toSlimDto(pair.getLeft()).revision(pair.getRight().getId()))
+    @Mapping(source = "gesuchTranche.gueltigkeit.gueltigAb", target = "gueltigAb")
+    @Mapping(source = "gesuchTranche.gueltigkeit.gueltigBis", target = "gueltigBis")
+    public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche, int revision);
+
+    public List<GesuchTrancheSlimDto> toSlimDto(List<GesuchTranche> gesuchTranches, int revision) {
+        return gesuchTranches.stream()
+            .map(gesuchTranche -> toSlimDto(gesuchTranche, revision))
             .toList();
     }
 
