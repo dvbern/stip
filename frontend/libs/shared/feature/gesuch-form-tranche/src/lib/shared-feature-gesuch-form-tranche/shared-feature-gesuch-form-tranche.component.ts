@@ -144,15 +144,12 @@ export class SharedFeatureGesuchFormTrancheComponent {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
     const revision = this.revisionSig();
 
-    const { currentTranches, aenderungs, initial, isLoading } =
-      this.gesuchHeaderStore.viewSig();
+    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
 
     return currentTrancheNumber(
       trancheSetting,
-      currentTranches,
-      aenderungs,
-      initial,
       currentTranche,
+      header,
       revision,
       isLoading,
     );
@@ -187,7 +184,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
         sachbearbeiter,
         appType,
       } = this.viewSig();
-      const isAbgelehnt = this.revisionSig();
 
       // Also used to react to language change
       // if not used anymore, still call it if this.translate is still used
@@ -209,7 +205,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         status:
           overridenStatus ??
           this.translate.translate(
-            `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
+            `${appPrefix}.gesuch.status.${type}.${status ?? 'IN_BEARBEITUNG_GS'}`,
           ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,

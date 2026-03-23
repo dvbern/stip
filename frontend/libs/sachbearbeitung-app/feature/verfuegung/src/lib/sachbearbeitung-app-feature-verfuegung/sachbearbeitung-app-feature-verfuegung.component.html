@@ -7,8 +7,9 @@
           type="button"
           class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
           [attr.data-testid]="'option-nav-' + option.route"
-          [routerLink]="['/gesuch', 'verfuegung', gesuchId, option.route]"
+          [routerLink]="['/gesuch', 'verfuegung', gesuchId, trancheTypSig(), trancheIdSig(), option.route]"
           routerLinkActive="active"
+          queryParamsHandling="merge"
           (click)="navClicked$.emit()"
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
@@ -27,6 +28,7 @@
           [class.shadow-none]="!option.active"
           [routerLink]="option.fullRoute"
           routerLinkActive="active"
+          queryParamsHandling="merge"
           (click)="navClicked$.emit()"
         >
           <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>

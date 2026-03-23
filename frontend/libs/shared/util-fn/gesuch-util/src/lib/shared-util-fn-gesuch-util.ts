@@ -12,6 +12,7 @@ import {
   GesuchAenderungs,
   GesuchFormular,
   GesuchFormularType,
+  GesuchHeader,
   GesuchTranche,
   GesuchTrancheSlim,
   GesuchUrlType,
@@ -517,23 +518,26 @@ const formularPropsContaining = <T extends Record<string, unknown>>(
 
 export const currentTrancheNumber = (
   trancheSetting: TrancheSetting | null,
-  currentTranches: GesuchTrancheSlim[] | undefined,
-  aenderungs: GesuchAenderungs | undefined,
-  initial: VerfuegtGesuch | undefined,
   currentTranche: GesuchTrancheSlim | undefined,
+  header: Partial<GesuchHeader>,
   revision: number | undefined,
   isLoading: boolean | undefined,
 ) => {
-  if (!currentTranche || isLoading) {
+  const { currentTranches, initial, aenderungs, versions } = header;
+  if (!currentTranches || isLoading) {
     return '…';
   }
 
-  const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
+  const gesuchUrlTyp =
+    revision && trancheSetting?.gesuchUrlTyp === 'TRANCHE'
+      ? ('VERSION' as const)
+      : trancheSetting?.gesuchUrlTyp;
   const allTranchen = {
     TRANCHE: [currentTranches ?? []],
+    VERSION: versions?.map((v) => v.tranchen) ?? [],
     AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
     INITIAL: [initial?.tranchen ?? []],
-  } satisfies Record<GesuchUrlType, unknown>;
+  } satisfies Record<Exclude<typeof gesuchUrlTyp, undefined>, unknown>;
   const index = gesuchUrlTyp
     ? findIndexInOneOf(
         (tranche) =>

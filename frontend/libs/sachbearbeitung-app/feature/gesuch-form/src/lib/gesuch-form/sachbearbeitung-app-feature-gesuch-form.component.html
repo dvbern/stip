@@ -7,65 +7,67 @@
   <!-- side menu -->
   <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
-    <div class="tw:w-full tw:p-6 tw:bg-gray-100">
-      @if (currentTranche && isGesuchRouteSig()) {
-        <button
-          type="button"
-          class="tw:dv-btn-tranche"
-          data-testid="sb-gesuch-header-tranche-nav-menu"
-          [matMenuTriggerFor]="gesuchMenu"
-          [attr.aria-label]="t('shared.header.tranchenAuswahl')"
-        >
-          <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
-            @if (currentTranche) {
-              @if (currentTrancheNumberSig(); as currentTrancheNumber) {
-                {{ t(`shared.form.title.suffix.${currentTranche.typ}`, { position: currentTrancheNumber }) }}
-              } @else {
-                {{ t(`shared.form.title.suffix.AENDERUNG.new`) }}
+    @if (tranchenSig()?.length || isAenderungRouteSig()) {
+      <div class="tw:w-full tw:p-6 tw:bg-gray-100">
+        @if (currentTranche && isGesuchRouteSig()) {
+          <button
+            type="button"
+            class="tw:dv-btn-tranche"
+            data-testid="sb-gesuch-header-tranche-nav-menu"
+            [matMenuTriggerFor]="gesuchMenu"
+            [attr.aria-label]="t('shared.header.tranchenAuswahl')"
+          >
+            <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
+              @if (currentTranche) {
+                @if (currentTrancheNumberSig(); as currentTrancheNumber) {
+                  {{ t(`shared.form.title.suffix.${currentTranche.typ}`, { position: currentTrancheNumber }) }}
+                } @else {
+                  {{ t(`shared.form.title.suffix.AENDERUNG.new`) }}
+                }
+                {{ currentTranche.gueltigAb | date: 'MM.yyyy' }} -
+                {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
               }
-              {{ currentTranche.gueltigAb | date: 'MM.yyyy' }} -
-              {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
-            }
-          </span>
-          <i class="material-symbols-rounded ms-2">expand_more</i>
-        </button>
-        <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
-          <div class="d-flex flex-column gap-2">
-            @for (tranche of tranchenSig(); track $index) {
-              <a
-                [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
-                [queryParams]="{ revision: tranche.revision }"
-                [queryParamsHandling]="'merge'"
-                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
-                data-testid="tranche-nav-menu-item"
-                [class.active]="trancheId === tranche.id"
-                mat-menu-item
-              >
-                <span>
-                  {{
-                    t('shared.header.tranche.item', { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 })
-                  }}
-                  -
-                  {{ tranche.gueltigBis | date: 'MM.yyyy' }}
-                </span>
-              </a>
-            }
-          </div>
-        </mat-menu>
-      }
-      @if (isAenderungRouteSig()) {
-        <dv-shared-ui-aenderungen-menu
-          class="tw:w-full"
-          [aenderungenSig]="headerViewSig().aenderungs"
-          [isAenderungRouteSig]="isAenderungRouteSig()"
-          [gesuchIdSig]="gesuchIdSig()"
-          [trancheIdSig]="trancheIdSig()"
-          [revisionSig]="revisionSig()"
-        ></dv-shared-ui-aenderungen-menu>
-      }
-    </div>
+            </span>
+            <i class="material-symbols-rounded ms-2">expand_more</i>
+          </button>
+          <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
+            <div class="d-flex flex-column gap-2">
+              @for (tranche of tranchenSig(); track $index) {
+                <a
+                  [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
+                  [queryParams]="{ revision: tranche.revision }"
+                  [queryParamsHandling]="'merge'"
+                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  data-testid="tranche-nav-menu-item"
+                  [class.active]="trancheId === tranche.id"
+                  mat-menu-item
+                >
+                  <span>
+                    {{
+                      t('shared.header.tranche.item', { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 })
+                    }}
+                    -
+                    {{ tranche.gueltigBis | date: 'MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            </div>
+          </mat-menu>
+        }
+        @if (isAenderungRouteSig()) {
+          <dv-shared-ui-aenderungen-menu
+            class="tw:w-full"
+            [aenderungenSig]="headerViewSig().aenderungs"
+            [isAenderungRouteSig]="isAenderungRouteSig()"
+            [gesuchIdSig]="gesuchIdSig()"
+            [trancheIdSig]="trancheIdSig()"
+            [revisionSig]="revisionSig()"
+          ></dv-shared-ui-aenderungen-menu>
+        }
+      </div>
 
-    <hr class="m-0 p-0" />
+      <hr class="m-0 p-0" />
+    }
 
     <dv-shared-pattern-gesuch-step-nav class="tw:p-6" [stepsSig]="stepsSig()" />
   </div>

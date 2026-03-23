@@ -181,15 +181,12 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const currentTranche = this.currentTrancheSig();
     const revision = this.revisionSig();
 
-    const { currentTranches, aenderungs, initial, isLoading } =
-      this.gesuchHeaderStore.viewSig();
+    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
 
     return currentTrancheNumber(
       trancheSetting,
-      currentTranches,
-      aenderungs,
-      initial,
       currentTranche,
+      header,
       revision,
       isLoading,
     );

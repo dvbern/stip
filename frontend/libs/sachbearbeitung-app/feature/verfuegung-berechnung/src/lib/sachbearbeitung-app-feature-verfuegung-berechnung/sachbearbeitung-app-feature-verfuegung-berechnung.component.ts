@@ -60,6 +60,8 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     },
   };
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
   berechnungStore = inject(BerechnungStore);
 
   berechnungenRawSig = computed<BerechnungView>(() => {
@@ -99,10 +101,17 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
 
+      const verfuegungId = this.verfuegungIdSig();
+
       if (!gesuchId) {
         return;
       }
-      this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+
+      if (verfuegungId) {
+        this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
+      } else {
+        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+      }
     });
   }
 }

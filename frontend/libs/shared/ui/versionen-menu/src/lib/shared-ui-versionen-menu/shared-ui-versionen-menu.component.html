@@ -35,7 +35,9 @@
           class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
           data-testid="sb-gesuch-header-versionen-default"
           [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
-          [class.active]="trancheId === (trancheId ?? firstTrancheId) && !currentVersionSig() && !isInitialRouteSig()"
+          [class.active]="
+            trancheId === firstTrancheId && isGesuchRouteSig() && !currentVersionSig() && !isInitialRouteSig()
+          "
         >
           <span>{{ t('shared.header.versionen') }}</span>
         </a>
@@ -82,8 +84,8 @@
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
       data-testid="sb-gesuch-header-versionen-default"
-      [routerLink]="['/gesuch/info', gesuchId, 'tranche', trancheId ?? firstTrancheId]"
-      [class.active]="trancheId === (trancheId ?? firstTrancheId)"
+      [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+      [class.active]="isGesuchRouteSig()"
     >
       <span>{{ t('shared.header.versionen') }}</span>
     </a>

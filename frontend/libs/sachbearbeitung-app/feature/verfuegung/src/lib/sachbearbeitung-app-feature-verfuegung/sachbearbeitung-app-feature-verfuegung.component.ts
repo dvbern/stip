@@ -23,12 +23,17 @@ import {
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
+import {
+  selectRouteGesuchId,
+  selectRouteTrancheId,
+  selectTrancheTyp,
+} from '@dv/shared/data-access/gesuch';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
+import { lowercased } from '@dv/shared/model/type-util';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
 import { isPending } from '@dv/shared/util/remote-data';
@@ -69,6 +74,13 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
   private config = inject(SharedModelCompileTimeConfig);
 
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  private trancheTypRawSig = this.store.selectSignal(selectTrancheTyp);
+  trancheTypSig = computed(() => {
+    const typ = this.trancheTypRawSig();
+
+    return lowercased(typ ?? 'tranche');
+  });
   gesuchPermissionsSig = computed(() => {
     const gesuchStatus =
       this.gesuchInfoStore.gesuchInfo().data?.state.gesuchStatus;
@@ -88,6 +100,8 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
 
   berechnungenSig = computed(() => {
     const gesuchId = this.gesuchIdSig();
+    const trancheId = this.trancheIdSig();
+    const trancheTyp = this.trancheTypSig();
     const berechnungenOptions: VerfuegungOption[] = [];
 
     const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
@@ -111,6 +125,8 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
         '/gesuch',
         'verfuegung',
         gesuchId,
+        trancheTyp,
+        trancheId,
         ...option.route.split('/'),
       ],
     }));
