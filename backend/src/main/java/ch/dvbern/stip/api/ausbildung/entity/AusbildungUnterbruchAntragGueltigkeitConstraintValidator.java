@@ -35,6 +35,12 @@ public class AusbildungUnterbruchAntragGueltigkeitConstraintValidator
         if (Objects.isNull(gesuch) || Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit())) {
             return true;
         }
+        if (
+            Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb())
+            && Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis())
+        ) {
+            return true;
+        }
 
         final var gesuchRange = DateUtil.getGesuchDateRange(gesuch);
 
