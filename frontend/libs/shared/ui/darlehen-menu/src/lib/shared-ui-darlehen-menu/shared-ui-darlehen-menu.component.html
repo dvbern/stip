@@ -26,7 +26,7 @@
           @for (darlehen of darlehens[state]; track $index) {
             @if (idType.id) {
               <a
-                [routerLink]="['/', 'darlehen', darlehen.id, idType.type, idType.id]"
+                [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
                 class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
                 data-testid="header-nav-darlehen-menu-item"
                 [class.active]="darlehenRouteIdSig() === darlehen.id"
@@ -76,7 +76,7 @@
         @for (darlehen of darlehens[state]; track $index) {
           @if (idType.id) {
             <a
-              [routerLink]="['/', 'darlehen', darlehen.id, idType.type, idType.id]"
+              [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
               class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
               data-testid="header-nav-darlehen-menu-item"
               [class.active]="darlehenRouteIdSig() === darlehen.id"
