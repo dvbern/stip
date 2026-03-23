@@ -98,7 +98,7 @@
         <input
           matInput
           [formControl]="form.controls.endDate"
-          [min]="dialogData.unterbruchEarliestStartDate"
+          [min]="oneDayAfterStartDateSig() ?? dialogData.unterbruchEarliestStartDate"
           [max]="dialogData.unterbruchLatestEndDate"
           [matDatepicker]="endDatepicker"
           data-testid="form-ausbildung-unterbrechung-endDate"
@@ -109,7 +109,11 @@
           {{ t('shared.form.error.required') }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMin'">
-          {{ t('shared.form.error.minDate', { date: dialogData.unterbruchEarliestStartDate | date: 'dd.MM.yyyy' }) }}
+          {{
+            t('shared.form.error.minDate', {
+              date: oneDayAfterStartDateSig() ?? dialogData.unterbruchEarliestStartDate | date: 'dd.MM.yyyy',
+            })
+          }}
         </mat-error>
         <mat-error *dvSharedUiFormMessageError="'matDatepickerMax'">
           {{ t('shared.form.error.maxDate', { date: dialogData.unterbruchLatestEndDate | date: 'dd.MM.yyyy' }) }}

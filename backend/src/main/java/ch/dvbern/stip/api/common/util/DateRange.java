@@ -19,10 +19,12 @@ package ch.dvbern.stip.api.common.util;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.Objects;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,13 +34,12 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @Getter
 @Setter
 public class DateRange implements Serializable, Comparable<DateRange> {
-
-    @NotNull
-    @Column(name = "gueltig_ab", nullable = false)
+    @Nullable
+    @Column(name = "gueltig_ab")
     private LocalDate gueltigAb;
 
-    @NotNull
-    @Column(name = "gueltig_bis", nullable = false)
+    @Nullable
+    @Column(name = "gueltig_bis")
     private LocalDate gueltigBis;
 
     public DateRange(LocalDate gueltigAb, LocalDate gueltigBis) {
@@ -47,7 +48,8 @@ public class DateRange implements Serializable, Comparable<DateRange> {
     }
 
     public DateRange() {
-        this(LocalDate.now(), LocalDate.now());
+        this.gueltigAb = null;
+        this.gueltigBis = null;
     }
 
     public int months() {
@@ -83,9 +85,9 @@ public class DateRange implements Serializable, Comparable<DateRange> {
 
     @Override
     public int compareTo(DateRange o) {
-        int cmp = getGueltigAb().compareTo(o.getGueltigAb());
+        int cmp = Objects.compare(getGueltigAb(), o.getGueltigAb(), Comparator.nullsFirst(LocalDate::compareTo));
         if (cmp == 0) {
-            cmp = getGueltigBis().compareTo(o.getGueltigBis());
+            cmp = Objects.compare(getGueltigBis(), o.getGueltigBis(), Comparator.nullsFirst(LocalDate::compareTo));
         }
         return cmp;
     }

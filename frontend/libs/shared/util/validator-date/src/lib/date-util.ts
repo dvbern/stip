@@ -27,7 +27,7 @@ export function printDate(
   return format(date, getFormatDef(locale, dateFormatVariant).niceInput);
 }
 
-export function toBackendLocalDate(date: Date) {
+export function toBackendLocalDate(date: Date | string) {
   return format(date, 'yyyy-MM-dd');
 }
 

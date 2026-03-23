@@ -144,6 +144,39 @@ public class AusbildungUnterbruchAntragResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(5)
+    void unterbruchAntragEinreichenFail() {
+        final var updateAusbildungUnterbruchAntragGSDtoSpec = new UpdateAusbildungUnterbruchAntragGSDtoSpec();
+        updateAusbildungUnterbruchAntragGSDtoSpec
+            .setStartDate(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
+        updateAusbildungUnterbruchAntragGSDtoSpec
+            .setEndDate(gesuch.getGesuchTrancheToWorkWith().getGueltigBis().minusMonths(1));
+
+        ausbildungApiSpec.einreichenAusbildungUnterbruchAntrag()
+            .ausbildungUnterbruchAntragIdPath(ausbildungUnterbruchAntragGs.getId())
+            .body(updateAusbildungUnterbruchAntragGSDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+
+        updateAusbildungUnterbruchAntragGSDtoSpec
+            .setStartDate(gesuch.getGesuchTrancheToWorkWith().getGueltigAb().plusMonths(1));
+        updateAusbildungUnterbruchAntragGSDtoSpec
+            .setEndDate(updateAusbildungUnterbruchAntragGSDtoSpec.getStartDate().minusMonths(1));
+        updateAusbildungUnterbruchAntragGSDtoSpec.setKommentarGS("asd");
+
+        ausbildungApiSpec.einreichenAusbildungUnterbruchAntrag()
+            .ausbildungUnterbruchAntragIdPath(ausbildungUnterbruchAntragGs.getId())
+            .body(updateAusbildungUnterbruchAntragGSDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(6)
     void unterbruchAntragEinreichen() {
         ausbildungApiSpec.createAusbildungUnterbruchAntragDokument()
             .ausbildungUnterbruchAntragIdPath(ausbildungUnterbruchAntragGs.getId())
@@ -172,7 +205,7 @@ public class AusbildungUnterbruchAntragResourceTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(6)
+    @Order(7)
     @Test
     void makeGesuchInBearbeitung() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
@@ -209,7 +242,7 @@ public class AusbildungUnterbruchAntragResourceTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(7)
+    @Order(8)
     @Test
     void antragAblehnen() {
         final var updateAusbildungUnterbruchAntragSBDtoSpec = new UpdateAusbildungUnterbruchAntragSBDtoSpec();
@@ -235,7 +268,7 @@ public class AusbildungUnterbruchAntragResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(8)
+    @Order(9)
     void unterbruchAntragErstellenAgain() {
         ausbildungUnterbruchAntragGs = ausbildungApiSpec.createAusbildungUnterbruchAntrag()
             .ausbildungIdPath(gesuch.getAusbildungId())
@@ -292,7 +325,7 @@ public class AusbildungUnterbruchAntragResourceTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(9)
+    @Order(10)
     @Test
     void antragAkzeptieren() {
         final var updateAusbildungUnterbruchAntragSBDtoSpec = new UpdateAusbildungUnterbruchAntragSBDtoSpec();
@@ -317,7 +350,7 @@ public class AusbildungUnterbruchAntragResourceTest {
     }
 
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(10)
+    @Order(11)
     @Test
     void berechnungReturnsAntragValues() {
         final var berechnung = gesuchApiSpec.getBerechnungForGesuch()
