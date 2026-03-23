@@ -32,8 +32,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import jakarta.inject.Inject;
-import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;

@@ -1357,7 +1357,11 @@ public class GesuchService {
                 gesuchHistoryRepository.getGesuchAtRevision(gesuch.getId(), revision).orElseThrow();
             return new VerfuegtGesuchDto()
                 .berechnungId(verfuegung.getId())
-                .tranchen(gesuchAtRevision.getTranchenTranchen().map((tranche) -> gesuchTrancheMapper.toSlimDto(tranche, revision)).toList())
+                .tranchen(
+                    gesuchAtRevision.getTranchenTranchen()
+                        .map((tranche) -> gesuchTrancheMapper.toSlimDto(tranche, revision))
+                        .toList()
+                )
                 .timestamp(gesuchAtRevision.getTimestampMutiert().toLocalDate());
         }).sorted(Comparator.comparing(VerfuegtGesuchDto::getTimestamp).reversed()).toList();
     }
