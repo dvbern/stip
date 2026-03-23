@@ -35,12 +35,23 @@ public class AusbildungUnterbruchAntragGueltigkeitConstraintValidator
         if (Objects.isNull(gesuch) || Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit())) {
             return true;
         }
+        if (
+            Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb())
+            && Objects.isNull(ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis())
+        ) {
+            return true;
+        }
 
         final var gesuchRange = DateUtil.getGesuchDateRange(gesuch);
 
         return DateUtil
             .beforeOrEqual(gesuchRange.getGueltigAb(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb())
         && DateUtil
-            .afterOrEqual(gesuchRange.getGueltigBis(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis());
+            .afterOrEqual(gesuchRange.getGueltigBis(), ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis())
+        && DateUtil
+            .afterOrEqual(
+                ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigBis(),
+                ausbildungUnterbruchAntrag.getGueltigkeit().getGueltigAb()
+            );
     }
 }

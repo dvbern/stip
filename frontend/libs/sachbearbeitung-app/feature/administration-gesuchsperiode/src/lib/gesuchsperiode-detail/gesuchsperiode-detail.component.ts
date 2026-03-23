@@ -56,6 +56,7 @@ import {
 import { maskitoNumber, maskitoYear } from '@dv/shared/util/maskito-util';
 import { isPending, pending, success } from '@dv/shared/util/remote-data';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
+import { toBackendLocalDate } from '@dv/shared/util/validator-date';
 
 import { PublishComponent } from '../publish/publish.component';
 
@@ -317,6 +318,20 @@ export class GesuchsperiodeDetailComponent {
       gesuchsperiodenDaten: {
         ...formValues,
         ...this.numberConverter.toNumber(formValues),
+        gesuchsperiodeStart: toBackendLocalDate(formValues.gesuchsperiodeStart),
+        gesuchsperiodeStopp: toBackendLocalDate(formValues.gesuchsperiodeStopp),
+        aufschaltterminStart: toBackendLocalDate(
+          formValues.aufschaltterminStart,
+        ),
+        einreichefristNormal: toBackendLocalDate(
+          formValues.einreichefristNormal,
+        ),
+        einreichefristReduziert: toBackendLocalDate(
+          formValues.einreichefristReduziert,
+        ),
+        stichtagVolljaehrigkeitMedizinischeGrundversorgung: toBackendLocalDate(
+          formValues.stichtagVolljaehrigkeitMedizinischeGrundversorgung,
+        ),
       },
       onAfterSave: (gesuchsjahr) => {
         this.form.markAsPristine();

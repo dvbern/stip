@@ -223,8 +223,7 @@ public class AusbildungUnterbruchAntragService {
             previousStatus.toString(),
             antrag.getKommentarGS()
         );
-        return ausbildungUnterbruchAntragMapper
-            .toGsDto(antrag);
+        return ausbildungUnterbruchAntragMapper.toGsDto(antrag);
     }
 
     @Transactional

@@ -30,7 +30,7 @@ class DateRangeTest {
     private final LocalDate von = LocalDate.of(2022, 12, 1);
     private final LocalDate bis = LocalDate.of(2023, 8, 31);
 
-    private final DateRange dateRange = new DateRange();
+    private final DateRange dateRange = new DateRange(LocalDate.now(), LocalDate.now());
     private final DateRange otherDateRange = new DateRange(von, bis);
     private final DateRange sameOtherDateRange = new DateRange(von, bis);
 
