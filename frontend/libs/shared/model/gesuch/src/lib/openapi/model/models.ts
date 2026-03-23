@@ -267,6 +267,7 @@ export * from './stipDecision';
 export * from './stipDecisionText';
 export * from './taetigkeitsart';
 export * from './tenantAuthConfig';
+export * from './tenantFeature';
 export * from './tenantInfo';
 export * from './tranchenBerechnungsresultat';
 export * from './unterschriftenblattDokument';
