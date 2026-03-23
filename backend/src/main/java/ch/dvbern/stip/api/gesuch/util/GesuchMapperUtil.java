@@ -19,11 +19,13 @@ package ch.dvbern.stip.api.gesuch.util;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
+import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
@@ -115,5 +117,9 @@ public class GesuchMapperUtil {
         } else {
             return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
         }
+    }
+
+    public static Optional<PersonInAusbildung> getLatestPia(final Gesuch gesuch) {
+        return Optional.ofNullable(gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung());
     }
 }
