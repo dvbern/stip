@@ -259,6 +259,7 @@ public class Gesuch extends AbstractMandantEntity {
     public Stream<GesuchTranche> getTranchenTranchen() {
         return getGesuchTranchen()
             .stream()
+            .sorted(Comparator.comparing(GesuchTranche::getGueltigkeit))
             .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.TRANCHE);
     }
 
