@@ -90,7 +90,6 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Slf4j
 @Validated
 public class GesuchResourceImpl implements GesuchResource {
-
     private final GesuchService gesuchService;
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchAuthorizer gesuchAuthorizer;
@@ -542,7 +541,10 @@ public class GesuchResourceImpl implements GesuchResource {
     @Transactional
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
-    public GesuchZurueckweisenResponseDto gesuchZurueckweisen(UUID gesuchTrancheId, KommentarDto kommentarDto) {
+    public GesuchZurueckweisenResponseDto gesuchZurueckweisenAenderungUndo(
+        UUID gesuchTrancheId,
+        KommentarDto kommentarDto
+    ) {
         final var gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchTrancheId);
         final var gesuchId = gesuchTrancheService.getGesuchIdOfTranche(gesuchTranche);
         gesuchAuthorizer.sbCanGesuchZurueckweisen(gesuchId);

@@ -152,7 +152,8 @@ public class BeschwerdeEntscheidService {
     }
 
     private void setGesuchToBereitFuerBearbeitung(Gesuch gesuch) {
-        gesuchStatusService.triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG);
+        gesuchStatusService
+            .triggerStateMachineEvent(gesuch, GesuchStatusChangeEvent.BESCHWERDE_ERFOLGREICH_AKZEPTIEREN);
     }
 
 }

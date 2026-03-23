@@ -154,10 +154,10 @@ public interface GesuchResource {
     GesuchDto gesuchTrancheFehlendeDokumenteEinreichen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
 
     @PATCH
-    @Path("/{gesuchTrancheId}/gesuchZurueckweisen")
+    @Path("/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo")
     @Consumes({ "application/json" })
     @Produces({ "application/json", "text/plain" })
-    GesuchZurueckweisenResponseDto gesuchZurueckweisen(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
+    GesuchZurueckweisenResponseDto gesuchZurueckweisenAenderungUndo(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
     @Path("/{gesuchId}/beschwerde")

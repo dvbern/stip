@@ -388,6 +388,13 @@ Gesuch:
       $ref: '#/LocalDate'
     verfuegt:
       type: boolean
+InBearbeitungSbReason:
+  enum:
+    - INITIAL
+    - AENDERUNG
+    - UNTERBRUCH
+    - BESCHWERDE
+    - SB_AENDERUNG
 GesuchStateInfo:
   required:
     - gesuchStatus
@@ -410,6 +417,8 @@ GesuchStateInfo:
       type: boolean
     canBearbeitungAbschliessen:
       type: boolean
+    inBearbeitungSbReason:
+      $ref: '#/InBearbeitungSbReason'
 PersoenlicheAngaben:
   required:
     - anrede

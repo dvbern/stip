@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
+import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -210,6 +211,11 @@ public class Gesuch extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "pending_sap_action")
     private BuchhaltungType pendingSapAction;
+
+    @Nullable
+    @Enumerated(EnumType.STRING)
+    @Column(name = "in_bearbeitung_sb_reason")
+    private InBearbeitungSbReason inBearbeitungSbReason;
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

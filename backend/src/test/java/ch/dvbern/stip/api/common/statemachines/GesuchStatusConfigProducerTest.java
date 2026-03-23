@@ -18,10 +18,13 @@
 package ch.dvbern.stip.api.common.statemachines;
 
 import ch.dvbern.stip.api.common.statemachines.gesuch.GesuchStatusConfigProducer;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteHandler;
@@ -29,6 +32,7 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchFehlendeDok
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.GesuchZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.JuristischeAbklaerungDurchPruefungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.KomplettEingereichtHandler;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.SbInitialisiertAenderungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.StipendienAnspruchHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegtHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
@@ -65,7 +69,11 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(StatusprotokollService.class),
             Mockito.mock(BereitFuerBearbeitungHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class),
-            Mockito.mock(VerfuegtHandler.class)
+            Mockito.mock(VerfuegtHandler.class),
+            Mockito.mock(AenderungAkzeptierenHandler.class),
+            Mockito.mock(AusbildungUnterbruchAkzeptierenHandler.class),
+            Mockito.mock(BeschwerdeErfolgreichAkzeptierenHandler.class),
+            Mockito.mock(SbInitialisiertAenderungHandler.class)
         )
             .createStateMachineConfig();
 
