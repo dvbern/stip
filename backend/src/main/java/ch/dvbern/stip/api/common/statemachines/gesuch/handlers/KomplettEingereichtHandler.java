@@ -22,6 +22,7 @@ import java.time.ZonedDateTime;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -49,6 +50,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
         // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
         final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
         gesuch.setEinreichedatum(todayInZuerich);
+        gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.INITIAL);
     }
 
 }

@@ -104,7 +104,7 @@ public class GesuchApiSpec {
                 gesuchManuellPruefenJur(),
                 gesuchManuellPruefenSB(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
-                gesuchZurueckweisen(),
+                gesuchZurueckweisenAenderungUndo(),
                 getAllBeschwerdeVerlaufEntrys(),
                 getBerechnungForGesuch(),
                 getBerechnungForVerfuegung(),
@@ -213,8 +213,8 @@ public class GesuchApiSpec {
         return new GesuchTrancheFehlendeDokumenteEinreichenOper(createReqSpec());
     }
 
-    public GesuchZurueckweisenOper gesuchZurueckweisen() {
-        return new GesuchZurueckweisenOper(createReqSpec());
+    public GesuchZurueckweisenAenderungUndoOper gesuchZurueckweisenAenderungUndo() {
+        return new GesuchZurueckweisenAenderungUndoOper(createReqSpec());
     }
 
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
@@ -1946,15 +1946,15 @@ public class GesuchApiSpec {
      * @see #body  (optional)
      * return GesuchZurueckweisenResponseDtoSpec
      */
-    public static class GesuchZurueckweisenOper implements Oper {
+    public static class GesuchZurueckweisenAenderungUndoOper implements Oper {
 
         public static final Method REQ_METHOD = PATCH;
-        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/gesuchZurueckweisen";
+        public static final String REQ_URI = "/gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GesuchZurueckweisenOper(RequestSpecBuilder reqSpec) {
+        public GesuchZurueckweisenAenderungUndoOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -1962,7 +1962,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
+         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1973,7 +1973,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisen
+         * PATCH /gesuch/{gesuchTrancheId}/gesuchZurueckweisenAenderungUndo
          * @param handler handler
          * @return GesuchZurueckweisenResponseDtoSpec
          */
@@ -1986,7 +1986,7 @@ public class GesuchApiSpec {
          * @param kommentarDtoSpec (KommentarDtoSpec)  (optional)
          * @return operation
          */
-        public GesuchZurueckweisenOper body(KommentarDtoSpec kommentarDtoSpec) {
+        public GesuchZurueckweisenAenderungUndoOper body(KommentarDtoSpec kommentarDtoSpec) {
             reqSpec.setBody(kommentarDtoSpec);
             return this;
         }
@@ -1997,7 +1997,7 @@ public class GesuchApiSpec {
          * @param gesuchTrancheId (UUID) Die ID von der GesuchTranche (required)
          * @return operation
          */
-        public GesuchZurueckweisenOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public GesuchZurueckweisenAenderungUndoOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -2007,7 +2007,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GesuchZurueckweisenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GesuchZurueckweisenAenderungUndoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2017,7 +2017,7 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GesuchZurueckweisenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GesuchZurueckweisenAenderungUndoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

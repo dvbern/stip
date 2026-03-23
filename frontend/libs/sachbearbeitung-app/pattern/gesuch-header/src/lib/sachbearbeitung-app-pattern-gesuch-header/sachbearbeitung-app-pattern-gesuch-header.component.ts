@@ -41,10 +41,18 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { aenderungRoutes, getTrancheRoute } from '@dv/shared/model/gesuch';
+import {
+  InBearbeitungSbReason,
+  aenderungRoutes,
+  getTrancheRoute,
+} from '@dv/shared/model/gesuch';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
-import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
+import {
+  assertUnreachable,
+  isDefined,
+  lowercased,
+} from '@dv/shared/model/type-util';
 import {
   SharedPatternAppHeaderComponent,
   SharedPatternAppHeaderPartsDirective,
@@ -210,6 +218,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       gesuchStatus,
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
+      inBearbeitungSbReason,
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
@@ -226,13 +235,14 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
     const hasValidationWarnings = !!validations.warnings?.length;
     const list = StatusUebergaengeMap[gesuchStatus]
       ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
-      ?.map((status) =>
-        StatusUebergaengeOptions[status]({
+      ?.map((status) => ({
+        ...StatusUebergaengeOptions[status]({
           permissions,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
-      )
+        name: getUebergangName(status, inBearbeitungSbReason),
+      }))
       .filter((uebergang) =>
         uebergang.allowedFor.some((role) => rolesMap[role]),
       );
@@ -327,7 +337,7 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
             }
           });
         break;
-      case 'ZURUECKWEISEN':
+      case 'ZURUECKWEISEN_OR_UNDO':
         SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
           this.dialog,
           {
@@ -341,15 +351,15 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe((result) => {
             if (result) {
-              this.gesuchStore.setStatus$.ZURUECKWEISEN({
+              this.gesuchStore.setStatus$.ZURUECKWEISEN_OR_UNDO({
                 gesuchTrancheId,
                 text: result.kommentar,
-                onSuccess: (newGesuchTrancheId) => {
+                onSuccess: (newGesuchTrancheId, trancheTyp) => {
                   this.router.navigate([
                     'gesuch',
                     'info',
                     gesuchId,
-                    'tranche',
+                    lowercased(trancheTyp),
                     newGesuchTrancheId,
                   ]);
                   this.einreichenStore.validateSteps$({ gesuchTrancheId });
@@ -415,3 +425,27 @@ export class SachbearbeitungAppPatternGesuchHeaderComponent {
       .subscribe();
   }
 }
+
+const getUebergangName = (
+  uebergang: StatusUebergang,
+  bearbeitungStatus?: InBearbeitungSbReason,
+):
+  | Exclude<StatusUebergang, 'ZURUECKWEISEN_OR_UNDO'>
+  | 'ZURUECKWEISEN'
+  | 'UNDO'
+  | null => {
+  switch (uebergang) {
+    case 'ZURUECKWEISEN_OR_UNDO': {
+      switch (bearbeitungStatus) {
+        case 'INITIAL':
+          return 'ZURUECKWEISEN';
+        case 'AENDERUNG':
+          return 'UNDO';
+        default:
+          return null;
+      }
+    }
+    default:
+      return uebergang;
+  }
+};

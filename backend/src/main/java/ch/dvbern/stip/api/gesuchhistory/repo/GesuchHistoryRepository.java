@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchhistory.repo;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -85,7 +86,7 @@ public class GesuchHistoryRepository {
         final var reader = AuditReaderFactory.get(entityManager);
         return reader
             .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .forRevisionsOfEntity(Gesuch.class, true, false)
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
@@ -173,37 +174,25 @@ public class GesuchHistoryRepository {
             .findFirst();
     }
 
-    @SuppressWarnings("unchecked")
-    public Optional<Integer> getEarliestRevisionWhereStatusChangedAfterRevision(
-        final UUID gesuchId,
-        final Integer revisionNumber
-    ) {
-        final var reader = AuditReaderFactory.get(entityManager);
-        return reader
-            .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, false, true)
-            .addProjection(AuditEntity.revisionNumber())
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.revisionNumber().gt(revisionNumber))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
-            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
-    }
-
     public Optional<Gesuch> getGesuchAtRevision(final UUID gesuchId, final Integer revisionNumber) {
         @SuppressWarnings("unchecked")
         final Optional<Gesuch> revision = AuditReaderFactory.get(entityManager)
             .createQuery()
             .forEntitiesAtRevision(Gesuch.class, revisionNumber)
             .add(AuditEntity.id().eq(gesuchId))
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()
             .stream()
             .findFirst();
         return revision;
+    }
+
+    public Optional<Gesuch> getGesuchAtRevisionTimestamp(final UUID gesuchId, final Long revisionTimestamp) {
+        final var reader = AuditReaderFactory.get(entityManager);
+        final var revision = reader.getRevisionNumberForDate(Instant.ofEpochMilli(revisionTimestamp));
+
+        return getGesuchAtRevision(gesuchId, revision.intValue());
     }
 
 }

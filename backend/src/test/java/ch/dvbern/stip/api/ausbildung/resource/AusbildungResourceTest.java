@@ -195,7 +195,7 @@ class AusbildungResourceTest {
             .as(AusbildungDto.class);
 
         assertThat(updatedAusbildung.getAusbildungsort(), is(ausbildungsOrtToSet));
-        gesuchApiSpec.gesuchZurueckweisen()
+        gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
                 new KommentarDtoSpec()

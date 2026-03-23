@@ -133,7 +133,7 @@ class GesuchZurueckweisenTest {
     @Order(5)
     void gesuchZurueckweisen() {
         TestUtil.executeAndAssertOk(
-            gesuchApiSpec.gesuchZurueckweisen()
+            gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
                 .body(new KommentarDtoSpec().text("Reset Gesuch for Testing"))
         );

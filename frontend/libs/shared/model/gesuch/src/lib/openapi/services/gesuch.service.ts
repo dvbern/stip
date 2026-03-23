@@ -150,7 +150,7 @@ export interface GesuchServiceGesuchTrancheFehlendeDokumenteEinreichenRequestPar
     gesuchTrancheId: string;
 }
 
-export interface GesuchServiceGesuchZurueckweisenRequestParams {
+export interface GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams {
     /** Die ID von der GesuchTranche */
     gesuchTrancheId: string;
     kommentar?: Kommentar;
@@ -2362,13 +2362,13 @@ export class GesuchService {
         );
     }
 
-    public gesuchZurueckweisenPath = (requestParameters: GesuchServiceGesuchZurueckweisenRequestParams) => {
+    public gesuchZurueckweisenAenderungUndoPath = (requestParameters: GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams) => {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisen$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisenAenderungUndo$.');
         }
         const kommentar = requestParameters.kommentar;
-        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
+        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisenAenderungUndo`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -2385,13 +2385,13 @@ export class GesuchService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchZurueckweisenResponse>;
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchZurueckweisenResponse>>;
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchZurueckweisenResponse>>;
-     public gesuchZurueckweisen$(requestParameters: GesuchServiceGesuchZurueckweisenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public gesuchZurueckweisenAenderungUndo$(requestParameters: GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<GesuchZurueckweisenResponse>;
+     public gesuchZurueckweisenAenderungUndo$(requestParameters: GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<GesuchZurueckweisenResponse>>;
+     public gesuchZurueckweisenAenderungUndo$(requestParameters: GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<GesuchZurueckweisenResponse>>;
+     public gesuchZurueckweisenAenderungUndo$(requestParameters: GesuchServiceGesuchZurueckweisenAenderungUndoRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisen$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling gesuchZurueckweisenAenderungUndo$.');
         }
         const kommentar = requestParameters.kommentar;
 
@@ -2449,7 +2449,7 @@ export class GesuchService {
             }
         }
 
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisen`;
+        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/gesuchZurueckweisenAenderungUndo`;
         return this.httpClient.request<GesuchZurueckweisenResponse>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

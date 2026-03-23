@@ -9,6 +9,7 @@ import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import {
   GesuchService,
   GesuchServiceGetGesucheSbRequestParams,
+  GesuchTrancheTyp,
   Kanton,
   PaginatedSbGesucheDashboard,
   SharedModelGesuch,
@@ -225,15 +226,18 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    ZURUECKWEISEN: rxMethod<{
+    ZURUECKWEISEN_OR_UNDO: rxMethod<{
       gesuchTrancheId: string;
       text: string;
-      onSuccess?: (newGesuchTrancheId: string) => void;
+      onSuccess?: (
+        newGesuchTrancheId: string,
+        trancheTyp: GesuchTrancheTyp,
+      ) => void;
     }>(
       pipe(
         switchMap(({ gesuchTrancheId, text, onSuccess }) =>
           this.gesuchService
-            .gesuchZurueckweisen$({
+            .gesuchZurueckweisenAenderungUndo$({
               gesuchTrancheId,
               kommentar: { text },
             })
@@ -243,8 +247,11 @@ export class GesuchStore extends signalStore(
                   patchState(this, { lastStatusChange: success(null) });
                 },
                 {
-                  onSuccess: ({ gesuchTrancheId: newGesuchTrancheId }) => {
-                    onSuccess?.(newGesuchTrancheId);
+                  onSuccess: ({
+                    gesuchTrancheId: newGesuchTrancheId,
+                    gesuchTrancheTyp,
+                  }) => {
+                    onSuccess?.(newGesuchTrancheId, gesuchTrancheTyp);
                   },
                 },
               ),
