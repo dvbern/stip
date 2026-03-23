@@ -53,7 +53,6 @@ import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokumentKommentar;
-import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarHistoryRepository;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
@@ -188,7 +187,6 @@ public class GesuchService {
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
     private final GesuchHistoryService gesuchHistoryService;
     private final GesuchDokumentKommentarHistoryRepository gesuchDokumentKommentarHistoryRepository;
-    private final CustomDokumentTypRepository customDokumentTypRepository;
     private final VerfuegungService verfuegungService;
     private final StatusprotokollService statusprotokollService;
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
@@ -903,7 +901,13 @@ public class GesuchService {
             GesuchTrancheStatus.FEHLENDE_DOKUMENTE
         );
         if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
-            aenderung = gesuchTrancheHistoryRepository.getLatestWhereStatusChangedToUeberpruefen(aenderungId);
+            final var lastFreigegebenTrancheRevisionTimestamp =
+                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId)
+                    .get();
+
+            aenderung =
+                gesuchTrancheHistoryRepository
+                    .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -1044,79 +1048,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public void resetGesuchTrancheToTranche(final GesuchTranche fromTranche, final GesuchTranche toTranche) {
-        final var formularOfFromTranche = fromTranche.getGesuchFormular();
-
-        gesuchDokumentKommentarService.deleteForGesuchTrancheId(toTranche.getId());
-
-        toTranche.setGueltigkeit(fromTranche.getGueltigkeit());
-
-        gesuchTrancheCopyService.overrideGesuchFormular(toTranche.getGesuchFormular(), formularOfFromTranche);
-
-        // Dokumente
-        // Remove doks that exist now but didn't exist then (i.e. past)
-        final var dokumentIdsNow = toTranche
-            .getGesuchDokuments()
-            .stream()
-            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
-            .toList();
-
-        final var dokumentIdsThen = fromTranche
-            .getGesuchDokuments()
-            .stream()
-            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream().map(Dokument::getId))
-            .toList();
-
-        final var dokumentIdsNowButNotThen = dokumentIdsNow.stream().filter(s -> !dokumentIdsThen.contains(s)).toList();
-
-        dokumentIdsNowButNotThen.forEach(gesuchDokumentService::deleteDokument);
-
-        // Remove doks that existed then (i.e. past) but not now
-        toTranche
-            .getGesuchDokuments()
-            .removeIf(gesuchDokument -> !fromTranche.getGesuchDokuments().contains(gesuchDokument));
-
-        final var targetGesuchDokumente = toTranche.getGesuchDokuments();
-
-        for (var sourceGesuchDokument : fromTranche.getGesuchDokuments()) {
-            if (targetGesuchDokumente.contains(sourceGesuchDokument)) {
-                final var replacement = targetGesuchDokumente
-                    .stream()
-                    .filter(gesuchDokument -> sourceGesuchDokument.getId().equals(gesuchDokument.getId()))
-                    .findFirst();
-                replacement.ifPresent(gesuchDokument -> {
-                    GesuchDokumentCopyUtil.copyValues(sourceGesuchDokument, gesuchDokument, toTranche);
-                    if (Objects.nonNull(gesuchDokument.getCustomDokumentTyp())) {
-                        customDokumentTypRepository.persist(gesuchDokument.getCustomDokumentTyp());
-                    }
-                    gesuchDokumentRepository.persist(gesuchDokument);
-                    sourceGesuchDokument
-                        .getDokumente()
-                        .forEach(dokument -> {
-                            if (!gesuchDokument.getDokumente().contains(dokument)) {
-                                final var newDokument = new Dokument();
-                                GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                                gesuchDokument.addDokument(newDokument);
-                                dokumentRepository.persist(newDokument);
-                            }
-                        });
-                });
-            } else {
-                final var newGesuchDokument = GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, toTranche);
-                gesuchDokumentRepository.persist(newGesuchDokument);
-                sourceGesuchDokument
-                    .getDokumente()
-                    .forEach(dokument -> {
-                        final var newDokument = new Dokument();
-                        GesuchDokumentCopyUtil.copyValues(dokument, newDokument);
-                        newGesuchDokument.addDokument(newDokument);
-                        dokumentRepository.persist(newDokument);
-                    });
-            }
-        }
-    }
-
-    @Transactional
     public void resetGesuchZurueckweisenToEingereicht(Gesuch gesuch) {
         final var gesuchOfStateEingereicht = getLatestEingereichtVersion(gesuch.getId())
             .orElseThrow(NotFoundException::new);
@@ -1136,7 +1067,7 @@ public class GesuchService {
 
         datenschutzbriefService.deleteDatenschutzbriefeOfGesuch(gesuch.getId());
 
-        resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
+        gesuchTrancheService.resetGesuchTrancheToTranche(trancheOfStateEingereicht, trancheToReset);
         if (gesuch.hasNeverBeenVerfuegt()) {
             gesuchTrancheCopyService
                 .overrideAusbildung(gesuchOfStateEingereicht.getAusbildung(), gesuch.getAusbildung());

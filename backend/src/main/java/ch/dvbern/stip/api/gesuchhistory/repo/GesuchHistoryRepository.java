@@ -86,7 +86,7 @@ public class GesuchHistoryRepository {
         final var reader = AuditReaderFactory.get(entityManager);
         return reader
             .createQuery()
-            .forRevisionsOfEntity(Gesuch.class, true, true)
+            .forRevisionsOfEntity(Gesuch.class, true, false)
             .add(AuditEntity.property("id").eq(gesuchId))
             .add(AuditEntity.property("gesuchStatus").eq(gesuchStatus))
             .add(AuditEntity.property("gesuchStatus").hasChanged())
