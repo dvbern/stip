@@ -122,6 +122,7 @@ public class DemoDataService {
             try {
                 final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
                 final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+                ret.testFall(demoData.getTestFall());
                 ret.valid(stipendienanspruchDto.getSuccess());
                 ret.ist(stipendienanspruchDto.getBetragStipendienIst());
                 ret.soll(stipendienanspruchDto.getBetragStipendienSoll());

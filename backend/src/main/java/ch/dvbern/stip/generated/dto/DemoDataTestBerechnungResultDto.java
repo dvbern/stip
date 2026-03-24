@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class DemoDataTestBerechnungResultDto  implements Serializable {
   private @Valid UUID demoDataId;
+  private @Valid String testFall;
   private @Valid Boolean valid;
   private @Valid Integer soll;
   private @Valid Integer ist;
@@ -43,6 +44,25 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
   @JsonProperty("demoDataId")
   public void setDemoDataId(UUID demoDataId) {
     this.demoDataId = demoDataId;
+  }
+
+  /**
+   **/
+  public DemoDataTestBerechnungResultDto testFall(String testFall) {
+    this.testFall = testFall;
+    return this;
+  }
+
+  
+  @JsonProperty("testFall")
+  @NotNull
+  public String getTestFall() {
+    return testFall;
+  }
+
+  @JsonProperty("testFall")
+  public void setTestFall(String testFall) {
+    this.testFall = testFall;
   }
 
   /**
@@ -129,6 +149,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     }
     DemoDataTestBerechnungResultDto demoDataTestBerechnungResult = (DemoDataTestBerechnungResultDto) o;
     return Objects.equals(this.demoDataId, demoDataTestBerechnungResult.demoDataId) &&
+        Objects.equals(this.testFall, demoDataTestBerechnungResult.testFall) &&
         Objects.equals(this.valid, demoDataTestBerechnungResult.valid) &&
         Objects.equals(this.soll, demoDataTestBerechnungResult.soll) &&
         Objects.equals(this.ist, demoDataTestBerechnungResult.ist) &&
@@ -137,7 +158,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, valid, soll, ist, message);
+    return Objects.hash(demoDataId, testFall, valid, soll, ist, message);
   }
 
   @Override
@@ -146,6 +167,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     sb.append("class DemoDataTestBerechnungResultDto {\n");
     
     sb.append("    demoDataId: ").append(toIndentedString(demoDataId)).append("\n");
+    sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
     sb.append("    ist: ").append(toIndentedString(ist)).append("\n");

@@ -8015,11 +8015,14 @@ components:
     DemoDataTestBerechnungResult:
       required:
         - demoDataId
+        - testFall
         - valid
       type: object
       properties:
         demoDataId:
           $ref: '#/components/schemas/UUID'
+        testFall:
+          type: string
         valid:
           type: boolean
         soll:

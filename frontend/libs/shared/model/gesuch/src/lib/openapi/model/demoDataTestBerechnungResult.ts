@@ -12,6 +12,7 @@
 
 export interface DemoDataTestBerechnungResult { 
     demoDataId: string;
+    testFall: string;
     valid: boolean;
     soll?: number;
     ist?: number;

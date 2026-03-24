@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_DEMO_DATA_ID,
+  DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_TEST_FALL,
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_VALID,
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_SOLL,
   DemoDataTestBerechnungResultDtoSpec.JSON_PROPERTY_IST,
@@ -39,6 +40,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class DemoDataTestBerechnungResultDtoSpec {
   public static final String JSON_PROPERTY_DEMO_DATA_ID = "demoDataId";
   private UUID demoDataId;
+
+  public static final String JSON_PROPERTY_TEST_FALL = "testFall";
+  private String testFall;
 
   public static final String JSON_PROPERTY_VALID = "valid";
   private Boolean valid;
@@ -78,6 +82,32 @@ public class DemoDataTestBerechnungResultDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setDemoDataId(UUID demoDataId) {
     this.demoDataId = demoDataId;
+  }
+
+
+  public DemoDataTestBerechnungResultDtoSpec testFall(String testFall) {
+    
+    this.testFall = testFall;
+    return this;
+  }
+
+   /**
+   * Get testFall
+   * @return testFall
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getTestFall() {
+    return testFall;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TEST_FALL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTestFall(String testFall) {
+    this.testFall = testFall;
   }
 
 
@@ -194,6 +224,7 @@ public class DemoDataTestBerechnungResultDtoSpec {
     }
     DemoDataTestBerechnungResultDtoSpec demoDataTestBerechnungResult = (DemoDataTestBerechnungResultDtoSpec) o;
     return Objects.equals(this.demoDataId, demoDataTestBerechnungResult.demoDataId) &&
+        Objects.equals(this.testFall, demoDataTestBerechnungResult.testFall) &&
         Objects.equals(this.valid, demoDataTestBerechnungResult.valid) &&
         Objects.equals(this.soll, demoDataTestBerechnungResult.soll) &&
         Objects.equals(this.ist, demoDataTestBerechnungResult.ist) &&
@@ -202,7 +233,7 @@ public class DemoDataTestBerechnungResultDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, valid, soll, ist, message);
+    return Objects.hash(demoDataId, testFall, valid, soll, ist, message);
   }
 
   @Override
@@ -210,6 +241,7 @@ public class DemoDataTestBerechnungResultDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class DemoDataTestBerechnungResultDtoSpec {\n");
     sb.append("    demoDataId: ").append(toIndentedString(demoDataId)).append("\n");
+    sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
     sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
