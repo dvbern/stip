@@ -56,7 +56,7 @@ include:
       build-args: |
         APP=$APP_NAME
 
-  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.14.1'
+  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:dev'
       deployment-environment: 'dev'
@@ -68,7 +68,7 @@ include:
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
 
-  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.14.1'
+  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:uat'
       deployment-environment: 'uat'
@@ -81,7 +81,7 @@ include:
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
 
-  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.14.1'
+  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:schulung'
       deployment-environment: 'schulung'
@@ -94,7 +94,7 @@ include:
       argocd-token: '$ARGOCD_TOKEN'
       argocd-app-name: '$ARGOCD_APP'
 
-  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.14.1'
+  - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: "deploy:prod"
       deployment-environment: "prod"
