@@ -33,7 +33,6 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.GesetzlichDarlehen;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
@@ -708,7 +707,6 @@ public class DarlehensVerfuegungPdfService {
                 heimatort = land.getDeKurzform();
             }
         }
-
 
         calculationTable.addCell(
             PdfUtils.createCell(
