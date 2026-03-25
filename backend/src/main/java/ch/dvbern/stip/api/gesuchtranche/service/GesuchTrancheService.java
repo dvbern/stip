@@ -526,11 +526,14 @@ public class GesuchTrancheService {
         );
 
         final var lastFreigegebenTrancheRevisionTimestamp =
-            gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId).get();
+            gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId);
 
         final var lastFreigegebenTranche =
             gesuchTrancheHistoryRepository
-                .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
+                .getEarliestTrancheAfterTimestampWhereStatusWasUeberprufen(
+                    aenderungId,
+                    lastFreigegebenTrancheRevisionTimestamp
+                );
 
         resetGesuchTrancheToTranche(lastFreigegebenTranche, aenderung);
         notificationService
