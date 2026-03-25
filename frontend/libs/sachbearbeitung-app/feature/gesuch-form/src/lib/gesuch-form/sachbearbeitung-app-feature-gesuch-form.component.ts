@@ -153,15 +153,15 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const versions = this.gesuchHeaderStore.viewSig().versions;
     const berechnungId = this.berechnungIdSig();
 
+    if (this.isInitialRouteSig()) {
+      return this.gesuchHeaderStore.viewSig().initial?.tranchen;
+    }
+
     if (berechnungId) {
       const version = versions?.find(
         (version) => version.berechnungId === berechnungId,
       );
       return version?.tranchen;
-    }
-
-    if (this.isInitialRouteSig()) {
-      return this.gesuchHeaderStore.viewSig().initial?.tranchen;
     }
 
     return current;

@@ -3,8 +3,9 @@
   @let trancheId = trancheIdSig();
   @let firstTrancheId = firstCurrentTrancheIdSig();
   @let versionen = versionenSig();
+  @let initial = initialSig();
 
-  @if (versionen.length) {
+  @if (versionen.length || initial?.tranchen?.length) {
     <button
       type="button"
       class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
@@ -60,13 +61,15 @@
             </span>
           </a>
         }
-        <hr class="my-2" />
-        @if (initialSig()) {
+        @if (versionen.length) {
+          <hr class="my-2" />
+        }
+        @if (initial) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initialSig()?.tranchen?.[0]?.id]"
+            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initial.tranchen?.[0]?.id]"
             [queryParams]="{
-              berechnungId: initialSig()?.berechnungId,
-              revision: initialSig()?.tranchen?.[0]?.revision,
+              berechnungId: initial.berechnungId,
+              revision: initial.tranchen?.[0]?.revision,
             }"
             class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
             data-testid="versionen-nav-menu-initial-item"
