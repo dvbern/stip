@@ -41,7 +41,7 @@
     <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     <sonar.customAssertionMethods>ch.dvbern.stip.api.util.TestUtil#executeAndAssert</sonar.customAssertionMethods>
     <spotless.eclipse.version>4.29</spotless.eclipse.version>
-    <spotless.version>3.1.0</spotless.version>
+    <spotless.version>3.4.0</spotless.version>
     <surefire-plugin.version>3.5.3</surefire-plugin.version>
     <testcontainers.version>2.0.3</testcontainers.version>
     <apache.commons-lang.version>3.20.0</apache.commons-lang.version>
@@ -518,7 +518,6 @@
           </execution>
         </executions>
         <configuration>
-          <ratchetFrom>origin/main</ratchetFrom>
           <java>
             <toggleOffOn />
             <excludes>
