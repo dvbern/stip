@@ -1,0 +1,96 @@
+<ng-container *transloco="let t">
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = trancheIdSig();
+  @let firstTrancheId = firstCurrentTrancheIdSig();
+  @let versionen = versionenSig();
+  @let initial = initialSig();
+
+  @if (versionen.length || initial?.tranchen?.length) {
+    <button
+      type="button"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-versionen-menu"
+      [matMenuTriggerFor]="versionenMenu"
+      [class.active]="isGesuchRouteSig()"
+    >
+      @if (currentVersionSig() && !isInitialRouteSig()) {
+        <span>
+          {{
+            t('shared.header.versionen.item', {
+              date: currentVersionSig()?.timestamp | date: 'dd.MM.yyyy',
+            })
+          }}
+        </span>
+      } @else if (isInitialRouteSig()) {
+        <span>{{ t('shared.header.versionen.initial') }}</span>
+      } @else {
+        <span>{{ t('shared.header.versionen') }}</span>
+      }
+      <i class="material-symbols-rounded ms-2">expand_more</i>
+    </button>
+
+    <mat-menu #versionenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
+      <div class="d-flex flex-column gap-2">
+        <a
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-versionen-default"
+          [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+          mat-menu-item
+          [class.active]="
+            trancheId === firstTrancheId && isGesuchRouteSig() && !currentVersionSig() && !isInitialRouteSig()
+          "
+        >
+          <span>{{ t('shared.header.versionen') }}</span>
+        </a>
+        <hr class="my-2" />
+        @for (version of versionen; track version.berechnungId) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
+            [queryParams]="{ berechnungId: version.berechnungId, revision: version.tranchen[0].revision }"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="versionen-nav-menu-item"
+            mat-menu-item
+            [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
+          >
+            <span>
+              {{
+                t('shared.header.versionen.item', {
+                  date: version.timestamp | date: 'dd.MM.yyyy',
+                })
+              }}
+            </span>
+          </a>
+        }
+        @if (versionen.length) {
+          <hr class="my-2" />
+        }
+        @if (initial) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initial.tranchen?.[0]?.id]"
+            [queryParams]="{
+              berechnungId: initial.berechnungId,
+              revision: initial.tranchen?.[0]?.revision,
+            }"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="versionen-nav-menu-initial-item"
+            mat-menu-item
+            [class.active]="isInitialRouteSig()"
+          >
+            <span>{{ t('shared.header.versionen.initial') }}</span>
+          </a>
+        }
+      </div>
+    </mat-menu>
+  } @else {
+    <!-- fallback button that -->
+    <a
+      type="button"
+      class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+      data-testid="sb-gesuch-header-versionen-default"
+      [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+      [class.active]="isGesuchRouteSig()"
+    >
+      <span>{{ t('shared.header.versionen') }}</span>
+    </a>
+  }
+</ng-container>

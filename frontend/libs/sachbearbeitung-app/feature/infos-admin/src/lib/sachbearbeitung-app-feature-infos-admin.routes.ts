@@ -7,7 +7,7 @@ import { SachbearbeitungAppFeatureInfosAdminComponent } from './sachbearbeitung-
 
 export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
   {
-    path: ':id',
+    path: ':gesuchId',
     pathMatch: 'prefix',
     data: { option: INFO_ADMIN_ROUTE },
     providers: [],

@@ -61,7 +61,7 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'sachbearbeitung-app-feature-cockpit',
+        path: 'dashboard',
         canActivate: [
           hasBenutzer,
           hasRoles(
@@ -76,30 +76,24 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'sachbearbeitung-app-feature-gesuch-layout',
+        loadChildren: () =>
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
+          ),
+      },
+      {
         path: 'gesuch',
         canActivate: [hasBenutzer],
         providers: [SteuerdatenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
-            (m) => m.SachbearbeitungAppFeatureGesuchFormComponent,
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.SachbearbeitungAppFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuch-form').then(
-            (m) => m.sachbearbeitungAppFeatureGesuchFormRoutes,
-          ),
-      },
-      {
-        path: 'verfuegung',
-        canActivate: [hasBenutzer],
-        title: 'sachbearbeitung-app.verfuegung.title',
-        loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/verfuegung').then(
-            (m) => m.SachbearbeitungAppFeatureVerfuegungComponent,
-          ),
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/verfuegung').then(
-            (m) => m.sachbearbeitungAppFeatureVerfuegungRoutes,
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+            (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
           ),
       },
       {
@@ -115,28 +109,6 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
           ),
       },
-      {
-        path: 'darlehen',
-        canActivate: [hasBenutzer],
-        title: 'sachbearbeitung-app.darlehen.title',
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen').then(
-            (m) => m.sachbearbeitungAppFeatureDarlehenRoutes,
-          ),
-      },
-      {
-        path: 'infos',
-        canActivate: [hasBenutzer],
-        title: 'sachbearbeitung-app.infos.title',
-        loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/infos').then(
-            (m) => m.SachbearbeitungAppFeatureInfosComponent,
-          ),
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/infos').then(
-            (m) => m.sachbearbeitungAppFeatureInfosRoutes,
-          ),
-      },
     ],
   },
 ];
@@ -145,11 +117,11 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'sachbearbeitung-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'sachbearbeitung-app-feature-cockpit',
+    redirectTo: 'dashboard',
   },
 ];

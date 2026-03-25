@@ -1,0 +1,87 @@
+<!-- HEADER -->
+@let tenant = tenantSig()?.identifier;
+@if (tenant && tenant !== 'bern') {
+  @defer {
+    @switch (tenant) {
+      @case ('dv') {
+        <dv-shared-ui-mandant-styles-dv></dv-shared-ui-mandant-styles-dv>
+      }
+    }
+  }
+}
+
+<header
+  class="border-bottom tw:fixed tw:top-0 z-3 w-100"
+  [class.shadow-sm]="isScroll && !compactHeader"
+  *transloco="let t"
+>
+  <ng-template #logoOrBackLink>
+    @if (logoSig(); as logo) {
+      <a routerLink="/">
+        <img [src]="logo.src" [alt]="t('shared.logo.tenant', { logo })" class="tw:h-[60px] tw:max-w-[135px]" />
+      </a>
+    }
+  </ng-template>
+
+  <!-- Small screens Header -->
+  <div class="container-md d-lg-none">
+    <div class="py-lg-4 d-flex justify-content-between gap-2 py-2">
+      <ng-container *ngTemplateOutlet="logoOrBackLink"></ng-container>
+
+      <!-- search and burgermenu -->
+      <div class="d-flex align-items-center gap-2">
+        <button class="dv-icon-button" type="button" [attr.aria-label]="t('shared.menu')" (click)="openSidenav.emit()">
+          <span class="material-symbols-rounded">menu</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Large screens Header -->
+  <div class="d-none d-lg-block">
+    <div class="d-flex justify-content-between gap-2 p-4">
+      <ng-container *ngTemplateOutlet="logoOrBackLink"></ng-container>
+
+      <!-- top left -->
+      <dv-shared-ui-nav-items class="tw:ml-6" [navItemsSig]="navItemsSig()"></dv-shared-ui-nav-items>
+
+      <!-- top right -->
+      <div class="d-flex justify-content-end align-items-center ms-3 flex-grow-1">
+        <div class="d-flex align-items-center gap-4">
+          <button
+            type="button"
+            class="btn btn-nav fw-normal d-flex align-items-center pe-1 shadow-none"
+            data-testid="header-nav-user-menu"
+            [matMenuTriggerFor]="profileMenu"
+          >
+            <span class="text-truncate text-nowrap">{{ benutzerNameSig() }}</span>
+            <i class="material-symbols-rounded ms-2">expand_more</i>
+          </button>
+
+          <mat-menu #profileMenu="matMenu" xPosition="before">
+            <button type="button" data-testid="button-profile" mat-menu-item>
+              {{ t('shared.menu.profile') }}
+            </button>
+            <button
+              type="button"
+              data-testid="button-nutzungsbedingungen"
+              mat-menu-item
+              (click)="showNutzungsbedingungen()"
+            >
+              {{ t('shared.menu.nutzungsbedingungen') }}
+            </button>
+            <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">
+              {{ t('shared.menu.logout') }}
+            </button>
+            <hr class="my-1" />
+            <dv-shared-ui-language-selector
+              class="d-flex justify-content-center px-2"
+              [language]="languageSig()"
+              (languageChange)="handleLanguageChangeHeader($event)"
+            />
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

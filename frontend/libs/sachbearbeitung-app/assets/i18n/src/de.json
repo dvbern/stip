@@ -1,11 +1,13 @@
 {
   "app-name": "Stipendien Online",
   "sachbearbeitung-app.header.antraege": "Anträge",
+  "sachbearbeitung-app.header.aenderungen": "Änderungen",
   "sachbearbeitung-app.header.darlehen": "Darlehen",
   "sachbearbeitung-app.header.administration": "Administration",
   "sachbearbeitung-app.header.fehlgeschlageneZahlungen": "Fehlgeschlagene Zahlungen",
   "sachbearbeitung-app.header.verfuegung": "Verfügung",
   "sachbearbeitung-app.header.infos": "Infos",
+  "sachbearbeitung-app.header.info.isHistorized": "Dies ist eine ältere Version des Gesuchs.",
   "sachbearbeitung-app.header.massendruck": "Massendruck",
   "sachbearbeitung-app.header.tranche.erstellen": "Tranchen",
   "sachbearbeitung-app.header.aktion": "Aktion",
@@ -428,6 +430,7 @@
   "sachbearbeitung-app.massendruck.table.typ.filter.alle": "Alle",
   "sachbearbeitung-app.massendruck.table.typ.filter.VERFUEGUNG": "Verfügung",
   "sachbearbeitung-app.massendruck.table.typ.filter.DATENSCHUTZBRIEF": "Datenschutzbrief",
+  "sachbearbeitung-app.massendruck.table.noData": "Keine Druckaufträge vorhanden",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE": "Alle Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_AKTIV": "Aktive Druckaufträge",
   "sachbearbeitung-app.massendruck.quick-filter.ALLE_ARCHIVIERT": "Archivierte Druckaufträge",
@@ -455,6 +458,14 @@
   "sachbearbeitung-app.massendruck-detail.table.adressat.MUTTER": "Mutter",
   "sachbearbeitung-app.massendruck-detail.table.adressat.VATER": "Vater",
   "sachbearbeitung-app.massendruck-detail.table.adressat.PIA": "PiA",
+  "sachbearbeitung-app.massendruck-detail.table.status": "Status",
+  "sachbearbeitung-app.massendruck-detail.table.status.filter.alle": "Alle",
+  "sachbearbeitung-app.massendruck-detail.table.status.filter.IN_PROGRESS": "In Bearbeitung",
+  "sachbearbeitung-app.massendruck-detail.table.status.filter.SUCCESS": "Erfolgreich",
+  "sachbearbeitung-app.massendruck-detail.table.status.filter.FAILED": "Fehlgeschlagen",
+  "sachbearbeitung-app.massendruck-detail.table.status.filter.ARCHIVED": "Archiviert",
+  "sachbearbeitung-app.massendruck-detail.table.noData": "Keine Dokumente in diesem Druckauftrag",
+
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
   "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
@@ -794,7 +805,8 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Kommentar",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Manuelle Verfügung hochladen",
-  "sachbearbeitung-app.cockpit.title": "Cockpit",
+
+  "sachbearbeitung-app.cockpit.title": "Dashboard",
   "sachbearbeitung-app.cockpit.gesuch": "Gesuch",
   "sachbearbeitung-app.cockpit.gesuche": "Gesuche",
   "sachbearbeitung-app.cockpit.no-status-filter": "Alle Gesuche",
@@ -828,5 +840,7 @@
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Wollen sie wirklich die Daten für das definierte Jahr aus Nesko laden?<br>Die Formularfelder werden überschrieben.",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.steuerjahr.label": "Steuerjahr um die Daten aus Nesko zu laden",
-  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Daten laden"
+  "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm": "Daten laden",
+  "sachbearbeitung-app.gesuch.tabs.verfuegung": "Berechnung",
+  "sachbearbeitung-app.gesuch.tabs.formular": "Gesuch"
 }

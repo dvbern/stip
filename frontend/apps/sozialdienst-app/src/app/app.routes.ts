@@ -11,7 +11,7 @@ export const appRoutes: Route[] = [
     providers: [DashboardStore],
     children: [
       {
-        path: '',
+        path: 'dashboard',
         title: 'sozialdienst-app.dashboard.title',
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/cockpit').then(
@@ -19,7 +19,7 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'fall/:id',
+        path: 'fall/:fallId',
         loadComponent: () =>
           import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
             (m) => m.SozialdienstAppFeatureGesuchCockpitComponent,
@@ -32,12 +32,12 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         loadComponent: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-form').then(
-            (m) => m.SozialdienstAppFeatureGesuchFormComponent,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.SharedFeatureGesuchFormComponent,
           ),
         loadChildren: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-form').then(
-            (m) => m.sozialdienstAppFeatureGesuchFormRoutes,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.sharedFeatureGesuchFormRoutes,
           ),
       },
       {
@@ -50,14 +50,14 @@ export const appRoutes: Route[] = [
       {
         path: 'administration',
         canActivate: [hasBenutzer, hasRoles(['V0_Sozialdienst-Admin'])],
-        title: 'sachbearbeitung-app.admin.title',
+        title: 'sozialdienst-app.admin.title',
         loadComponent: () =>
           import('@dv/sozialdienst-app/feature/administration').then(
-            (m) => m.SachbearbeitungAppFeatureAdministrationComponent,
+            (m) => m.SozialdienstAppFeatureAdministrationComponent,
           ),
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/administration').then(
-            (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
+            (m) => m.sozialdienstAppFeatureAdministrationRoutes,
           ),
       },
       {
@@ -68,5 +68,18 @@ export const appRoutes: Route[] = [
           ),
       },
     ],
+  },
+];
+
+export const routes: Route[] = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
+  ...appRoutes,
+  {
+    path: '**',
+    redirectTo: 'dashboard',
   },
 ];

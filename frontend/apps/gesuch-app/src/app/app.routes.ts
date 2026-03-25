@@ -10,8 +10,7 @@ export const appRoutes: Route[] = [
     providers: [DashboardStore],
     children: [
       {
-        path: '',
-        pathMatch: 'full',
+        path: 'dashboard',
         title: 'gesuch-app.dashboard.title',
         loadChildren: () =>
           import('@dv/gesuch-app/feature/cockpit').then(
@@ -28,12 +27,12 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         loadComponent: () =>
-          import('@dv/gesuch-app/feature/gesuch-form').then(
-            (m) => m.GesuchAppFeatureGesuchFormComponent,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.SharedFeatureGesuchFormComponent,
           ),
         loadChildren: () =>
-          import('@dv/gesuch-app/feature/gesuch-form').then(
-            (m) => m.gesuchAppFeatureGesuchFormRoutes,
+          import('@dv/shared/feature/gesuch-form').then(
+            (m) => m.sharedFeatureGesuchFormRoutes,
           ),
       },
       {
@@ -55,9 +54,14 @@ export const appRoutes: Route[] = [
 ];
 
 export const routes: Route[] = [
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard',
+  },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'dashboard',
   },
 ];

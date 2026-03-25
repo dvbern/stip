@@ -182,7 +182,7 @@ export const baseGesuchFormRoutes: Routes = [
       ),
   },
   ...trancheRoutes.map((route) => ({
-    path: `:id/${route}/:trancheId`,
-    redirectTo: `${TRANCHE.route}/:id/${route}/:trancheId`,
+    path: `:gesuchId/${route}/:trancheId`,
+    redirectTo: `${TRANCHE.route}/:gesuchId/${route}/:trancheId`,
   })),
 ];

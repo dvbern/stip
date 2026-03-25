@@ -1,4 +1,4 @@
-<dv-shared-pattern-main-layout *dvTranslocoShared="let t">
+<ng-container *dvTranslocoShared="let t">
   <div class="tw:relative tw:my-12 tw:justify-between container">
     <form class="tw:dv-form-grid" [formGroup]="form" [dvSharedUiFormReadonly]="!viewSig().canEdit">
       <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
@@ -112,4 +112,4 @@
       </div>
     </form>
   </div>
-</dv-shared-pattern-main-layout>
+</ng-container>

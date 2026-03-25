@@ -28,7 +28,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import {
   differenceInCalendarMonths,
@@ -38,7 +38,6 @@ import {
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -124,7 +123,6 @@ type AvailableFilters = {
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
@@ -148,8 +146,8 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiFilterMenuButtonComponent,
+    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-darlehen-dashboard.component.html',

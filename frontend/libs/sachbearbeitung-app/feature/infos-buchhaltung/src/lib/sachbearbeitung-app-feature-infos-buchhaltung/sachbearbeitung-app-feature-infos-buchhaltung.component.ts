@@ -21,7 +21,7 @@ import {
 } from '@dv/sachbearbeitung-app/data-access/buchhaltung';
 import { SachbearbeitungAppDialogBuchhaltungInfoComponent } from '@dv/sachbearbeitung-app/dialog/buchhaltung-info';
 import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { BuchhaltungEntry } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
@@ -63,7 +63,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 export class SachbearbeitungAppFeatureInfosBuchhaltungComponent {
   private store = inject(Store);
   private dialog = inject(MatDialog);
-  private gesuchIdSig = this.store.selectSignal(selectRouteId);
+  private gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
 
   buchhaltungStore = inject(BuchhaltungStore);
   sortSig = viewChild(MatSort);

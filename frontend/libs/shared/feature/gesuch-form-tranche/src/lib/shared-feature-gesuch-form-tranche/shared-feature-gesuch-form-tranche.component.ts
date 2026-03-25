@@ -42,7 +42,7 @@ import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/ei
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { GesuchUrlType, SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
@@ -61,7 +61,7 @@ import {
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
-import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
+import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -139,36 +139,20 @@ export class SharedFeatureGesuchFormTrancheComponent {
 
     return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
   });
+
   currentTrancheNumberSig = computed(() => {
     const { tranche: currentTranche, trancheSetting } = this.viewSig();
+    const revision = this.revisionSig();
 
-    const { currentTranches, aenderungs, initial, isLoading } =
-      this.gesuchHeaderStore.viewSig();
+    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
 
-    if (!currentTranche || isLoading) {
-      return '…';
-    }
-
-    const gesuchUrlTyp = trancheSetting?.gesuchUrlTyp;
-    const allTranchen = {
-      TRANCHE: [currentTranches ?? []],
-      AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
-      INITIAL: [initial?.tranchen ?? []],
-    } satisfies Record<GesuchUrlType, unknown>;
-    const index = gesuchUrlTyp
-      ? findIndexInOneOf(
-          (tranche) =>
-            tranche.id === currentTranche.id &&
-            isDefined(tranche.revision) === isDefined(this.revisionSig()),
-          ...allTranchen[gesuchUrlTyp],
-        )
-      : -1;
-
-    const foundIndex = index >= 0 ? index + 1 : null;
-    if (foundIndex) {
-      return foundIndex;
-    }
-    return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
+    return currentTrancheNumber(
+      trancheSetting,
+      currentTranche,
+      header,
+      revision,
+      isLoading,
+    );
   });
 
   currentGesuchSig = computed(
@@ -200,11 +184,11 @@ export class SharedFeatureGesuchFormTrancheComponent {
         sachbearbeiter,
         appType,
       } = this.viewSig();
-      const isAbgelehnt = this.revisionSig();
 
       // Also used to react to language change
       // if not used anymore, still call it if this.translate is still used
       const language = this.languageSig();
+      const isAbgelehnteAenderung = this.revisionSig() && isEditingAenderung;
 
       const defaultComment = this.defaultCommentSig();
       if (!tranche || !gesuch) {
@@ -222,7 +206,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         status:
           overridenStatus ??
           this.translate.translate(
-            `${appPrefix}.gesuch.status.${type}.${isAbgelehnt ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
+            `${appPrefix}.gesuch.status.${type}.${isAbgelehnteAenderung ? 'ABGELEHNT' : (status ?? 'IN_BEARBEITUNG_GS')}`,
           ),
         pia: pia ? `${pia.vorname} ${pia.nachname}` : '',
         gesuchsnummer: gesuchsNummer,

@@ -240,9 +240,9 @@ public class GesuchTrancheHistoryRepository {
     }
 
     @Transactional
-    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungTrancheHistory(
-        final UUID gesuchId
-    ) {
+    public List<Pair<GesuchTranche, DefaultRevisionEntity>> getAllAbgelehnteAenderungs(final UUID gesuchId) {
+        // Reason: forRevisionsOfEntity with GesuchTranche.class and selectEntitiesOnly will always return a
+        // List<GesuchTranche>
         final var reader = AuditReaderFactory.get(em);
         @SuppressWarnings("unchecked")
         final List<Pair<GesuchTranche, DefaultRevisionEntity>> abgelehntAenderungHistory = reader

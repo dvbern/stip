@@ -19,5 +19,5 @@ export class SharedUiLoadingComponent {
   @Input() overlay = false;
   @Input() loadingTextKey = 'shared.ui.loading.text';
 
-  @HostBinding('class') class = 'd-flex';
+  @HostBinding('class') klass = 'd-flex';
 }

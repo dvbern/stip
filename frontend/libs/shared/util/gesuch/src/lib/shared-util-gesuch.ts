@@ -82,11 +82,11 @@ export function idAndTrancheIdRoutes<T extends Route>(route: T) {
   return [
     {
       ...baseConfig,
-      path: ':id',
+      path: ':gesuchId',
     },
     {
       ...baseConfig,
-      path: ':id/:trancheTyp/:trancheId',
+      path: ':gesuchId/:trancheTyp/:trancheId',
     },
   ];
 }

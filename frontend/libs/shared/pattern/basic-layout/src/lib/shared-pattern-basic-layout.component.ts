@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
 
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
+import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 
 @Component({
   selector: 'dv-shared-pattern-basic-layout',
-  imports: [SharedPatternAppHeaderComponent],
+  imports: [SharedPatternGlobalHeaderComponent],
   templateUrl: './shared-pattern-basic-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedPatternBasicLayoutComponent {
-  @HostBinding('class') class = 'tw:flex tw:flex-col';
+  @HostBinding('class') klass = 'tw:flex tw:flex-col';
 }

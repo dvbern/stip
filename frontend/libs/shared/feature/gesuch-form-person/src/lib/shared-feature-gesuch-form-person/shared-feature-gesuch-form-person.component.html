@@ -541,7 +541,7 @@
               </div>
               <mat-hint
                 *dvZuvorHint="
-                  niederlassungstatusChangesSig()?.fluechtlingsstatus
+                  niederlassungstatusChangesSig().fluechtlingsstatus
                     | dvTranslateChange: 'shared.form.person.fluechtlingsstatus.$VALUE'
                     | async
                 "
@@ -576,7 +576,7 @@
             </mat-select>
             <mat-hint
               *dvZuvorHint="
-                niederlassungstatusChangesSig()?.zustaendigerKanton
+                niederlassungstatusChangesSig().zustaendigerKanton
                   | dvTranslateChange: 'shared.form.person.zustaendigerKanton.$VALUE'
                   | async
               "

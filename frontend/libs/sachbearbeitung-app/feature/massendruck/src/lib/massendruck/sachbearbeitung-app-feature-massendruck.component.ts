@@ -28,10 +28,9 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import {
   GetMassendruckJobQueryType,
   MassendruckJobSortColumn,
@@ -71,7 +70,6 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
@@ -92,8 +90,8 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiIconChipComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-massendruck.component.html',
   styleUrl: './sachbearbeitung-app-feature-massendruck.component.scss',

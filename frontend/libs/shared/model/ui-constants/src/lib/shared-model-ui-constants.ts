@@ -14,3 +14,7 @@ export const INPUT_DELAY = 600;
 export const BFSCODE_SCHWEIZ = '8100';
 
 export const MAX_EINKOMMEN = 9_999_999;
+
+export const noActionRoutes = ['aenderung', 'initial', 'infos', 'darlehen'];
+
+export const noGesuchActiveRoutes = ['aenderung', 'infos', 'darlehen'];

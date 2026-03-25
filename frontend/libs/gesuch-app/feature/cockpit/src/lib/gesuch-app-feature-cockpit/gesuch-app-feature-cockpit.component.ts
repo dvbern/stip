@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +9,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { GesuchAppFeatureDelegierenDialogComponent } from '@dv/gesuch-app/feature/delegieren-dialog';
@@ -18,7 +19,6 @@ import {
   SharedDataAccessBenutzerApiEvents,
   selectSharedDataAccessBenutzer,
 } from '@dv/shared/data-access/benutzer';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -27,7 +27,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
-import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
@@ -39,13 +39,9 @@ import {
   Gesuchsperiode,
   Sozialdienst,
 } from '@dv/shared/model/gesuch';
-import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
-import { SharedPatternAppHeaderPartsDirective } from '@dv/shared/pattern/app-header';
-import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -61,17 +57,14 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
 @Component({
   selector: 'dv-gesuch-app-feature-cockpit',
   imports: [
+    CommonModule,
     MatSelectModule,
-    RouterLink,
-    SharedPatternMainLayoutComponent,
-    SharedPatternAppHeaderPartsDirective,
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
-    SharedUiDarlehenMenuComponent,
     GesuchAppUiAdvTranslocoDirective,
     MatMenuModule,
   ],
@@ -89,8 +82,11 @@ export class GesuchAppFeatureCockpitComponent {
   private ausbildungStore = inject(AusbildungStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  route = inject(ActivatedRoute);
+
+  navigationStore = inject(NavigationStore);
+
   fallStore = inject(FallStore);
-  darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
   gesuchHeaderStore = inject(GesuchHeaderStore);
@@ -134,7 +130,6 @@ export class GesuchAppFeatureCockpitComponent {
       const fallId = this.gotNewFallSig();
 
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadDashboard$();
       }
     });
@@ -182,12 +177,6 @@ export class GesuchAppFeatureCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  handleLanguageChangeHeader(language: Language) {
-    this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
-    );
   }
 
   aenderungMelden(melden: AenderungMelden) {

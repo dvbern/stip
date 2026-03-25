@@ -1,9 +1,9 @@
 @for (step of stepsViewSig(); track $index; let index = $index) {
   <a
     class="btn btn-nav btn-warning d-flex justify-content-start align-items-center fw-normal position-relative mb-3 w-100 overflow-visible"
-    [class.btn-light]="!step.isActive"
-    [class.shadow-none]="!step.isActive"
-    [class.active]="step.isActive"
+    [class.btn-light]="!step.active()"
+    [class.shadow-none]="!step.active()"
+    [class.active]="step.active()"
     [class.disabled]="step.disabled"
     [class.tw:dv-historized]="isHistorizedSig()"
     [class.tw:pointer-events-none]="!step.route"

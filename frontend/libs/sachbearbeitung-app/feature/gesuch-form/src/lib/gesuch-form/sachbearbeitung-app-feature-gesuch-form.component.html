@@ -1,3 +1,117 @@
-<dv-sachbearbeitung-app-pattern-gesuch-step-layout [step]="step">
-  <dv-shared-ui-router-outlet-wrapper attribute="step" (data)="step = $event"></dv-shared-ui-router-outlet-wrapper>
-</dv-sachbearbeitung-app-pattern-gesuch-step-layout>
+<div class="d-flex h-100" *transloco="let t">
+  <!-- left step nav (Desktop) -->
+  @let trancheId = gesuchTrancheIdSig();
+  @let currentTranche = currentTrancheSig();
+  @let initialRoute = isInitialRouteSig();
+
+  <!-- side menu -->
+  <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
+    <!-- Gesuch -->
+    @if (tranchenSig()?.length || isAenderungRouteSig()) {
+      <div class="tw:w-full tw:p-6 tw:bg-gray-100">
+        @if (currentTranche && isGesuchRouteSig()) {
+          <button
+            type="button"
+            class="tw:dv-btn-tranche"
+            data-testid="sb-gesuch-header-tranche-nav-menu"
+            [matMenuTriggerFor]="gesuchMenu"
+            [attr.aria-label]="t('shared.header.tranchenAuswahl')"
+          >
+            <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
+              @if (currentTranche) {
+                @if (currentTrancheNumberSig(); as currentTrancheNumber) {
+                  {{ t(`shared.form.title.suffix.${currentTranche.typ}`, { position: currentTrancheNumber }) }}
+                } @else {
+                  {{ t(`shared.form.title.suffix.AENDERUNG.new`) }}
+                }
+                {{ currentTranche.gueltigAb | date: 'MM.yyyy' }} -
+                {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
+              }
+            </span>
+            <i class="material-symbols-rounded ms-2">expand_more</i>
+          </button>
+          <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
+            <div class="d-flex flex-column gap-2">
+              @for (tranche of tranchenSig(); track $index) {
+                <a
+                  [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
+                  [queryParams]="{ revision: tranche.revision }"
+                  [queryParamsHandling]="'merge'"
+                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  data-testid="tranche-nav-menu-item"
+                  [class.active]="trancheId === tranche.id"
+                  mat-menu-item
+                >
+                  <span>
+                    {{
+                      t('shared.header.tranche.item', { date: tranche.gueltigAb | date: 'MM.yyyy', index: $index + 1 })
+                    }}
+                    -
+                    {{ tranche.gueltigBis | date: 'MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            </div>
+          </mat-menu>
+        }
+        @if (isAenderungRouteSig()) {
+          <dv-shared-ui-aenderungen-menu
+            class="tw:w-full"
+            [aenderungenSig]="headerViewSig().aenderungs"
+            [isAenderungRouteSig]="isAenderungRouteSig()"
+            [gesuchIdSig]="gesuchIdSig()"
+            [trancheIdSig]="trancheIdSig()"
+            [revisionSig]="revisionSig()"
+          ></dv-shared-ui-aenderungen-menu>
+        }
+      </div>
+
+      <hr class="m-0 p-0" />
+    }
+
+    <dv-shared-pattern-gesuch-step-nav class="tw:p-6" [stepsSig]="stepsSig()" />
+  </div>
+
+  <div class="tw:p-6 tw:dv-pass-height tw:bg-white">
+    @if (currentStepSig(); as step) {
+      <!-- step header (mobile) -->
+      <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+        <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
+        <div class="text-end">
+          <h5 class="step-title">
+            {{ t(step.translationKey) }}
+          </h5>
+          @if (step.nextStep?.translationKey; as nextStepKey) {
+            <p class="fst-italic mb-0">
+              {{ t('shared.form.next') }}:
+              {{ t(nextStepKey) }}
+            </p>
+          }
+        </div>
+      </div>
+
+      <!-- title (desktop) -->
+      <div class="d-none d-lg-flex justify-content-start">
+        <dv-shared-ui-icon-chip class="step-icon me-3">
+          <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
+        </dv-shared-ui-icon-chip>
+
+        <h2 class="fw-bold" data-testid="step-title">
+          {{ t(step.titleTranslationKey) }}
+        </h2>
+        <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+      </div>
+    }
+
+    <div class="mt-4 tw:pb-10">
+      <dv-shared-ui-router-outlet-wrapper
+        attribute="step"
+        (data)="stepSig.set($event)"
+      ></dv-shared-ui-router-outlet-wrapper>
+    </div>
+  </div>
+
+  <ng-template cdkPortal>
+    <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()"></dv-shared-pattern-gesuch-step-nav>
+  </ng-template>
+</div>

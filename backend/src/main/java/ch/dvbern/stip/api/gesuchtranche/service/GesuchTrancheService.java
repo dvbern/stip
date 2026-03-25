@@ -131,9 +131,11 @@ public class GesuchTrancheService {
             .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT)
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
-        final var abgelehnteAenderungs = gesuchTrancheMapper.toSlimDtoWithRevision(
-            gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungTrancheHistory(gesuch.getId())
-        );
+        final var abgelehnteAenderungs =
+            gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungs(gesuch.getId())
+                .stream()
+                .map(pair -> gesuchTrancheMapper.toSlimDto(pair.getLeft(), pair.getRight().getId()))
+                .toList();
         return new GesuchAenderungsDto()
             .offen(offeneAenderung)
             .akzeptiert(akzeptierteAenderungs)

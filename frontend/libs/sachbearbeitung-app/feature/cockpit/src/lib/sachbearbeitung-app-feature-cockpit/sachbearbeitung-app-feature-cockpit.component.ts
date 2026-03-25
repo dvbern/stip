@@ -29,7 +29,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import {
   differenceInCalendarMonths,
@@ -41,7 +41,6 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { BenutzerRole } from '@dv/shared/model/benutzer';
@@ -147,7 +146,6 @@ type AvailableFilters = {
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
@@ -172,8 +170,8 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
     SharedUiFilterMenuButtonComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
   styleUrls: ['./sachbearbeitung-app-feature-cockpit.component.scss'],

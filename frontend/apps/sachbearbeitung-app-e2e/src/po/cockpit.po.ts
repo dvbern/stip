@@ -24,6 +24,6 @@ export class SbCockpitPO {
   }
 
   public async goToDashBoard() {
-    await this.elems.page.goto('/sachbearbeitung-app-feature-cockpit');
+    await this.elems.page.goto('/dashboard');
   }
 }

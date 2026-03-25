@@ -31,7 +31,6 @@ import {
   SharedPatternDocumentUploadComponent,
   createSimpleDokumentOptions,
 } from '@dv/shared/pattern/document-upload';
-import { SharedPatternMainLayoutComponent } from '@dv/shared/pattern/main-layout';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -59,7 +58,6 @@ import { toBackendLocalDate } from '@dv/shared/util/validator-date';
     SharedUiMaxLengthDirective,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    SharedPatternMainLayoutComponent,
     SharedUiAdvTranslocoDirective,
     SharedUiInfoContainerComponent,
     SharedPatternDocumentUploadComponent,

@@ -6,8 +6,7 @@ import {
 
 export type TeilberechnungsArt = 'a' | 'b' | '';
 
-export interface PersoenlichesBudgetresultatView
-  extends PersoenlichesBudgetresultat {
+export interface PersoenlichesBudgetresultatView extends PersoenlichesBudgetresultat {
   typ: 'persoenlich';
   yearRange: string;
   name: string;

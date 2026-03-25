@@ -34,6 +34,7 @@ const baseFormStepsArray = Object.values(BaseFormSteps);
 const { selectRouteParam, selectQueryParam } = getRouterSelectors();
 
 export const selectRouteId = selectRouteParam('id');
+export const selectRouteGesuchId = selectRouteParam('gesuchId');
 export const selectRouteDarlehenId = selectRouteParam('darlehenId');
 
 const isExistingTrancheTyp = (
@@ -53,10 +54,11 @@ export const selectTrancheTyp = createSelector(
 );
 export const isHistorizedView = createSelector(
   selectTrancheTyp,
-  (trancheTyp) => trancheTyp !== 'TRANCHE',
+  (trancheTyp) => trancheTyp === 'AENDERUNG',
 );
 
 export const selectRouteTrancheId = selectRouteParam('trancheId');
+
 export const selectRevision = createSelector(
   selectQueryParam('revision'),
   (revision) => (revision ? +revision : undefined),
@@ -67,6 +69,7 @@ export const selectSharedDataAccessCachedGesuchChanges = createSelector(
   ({ gesuch }) => {
     return {
       tranchenChanges: prepareTranchenChanges(gesuch),
+      gesuch,
     };
   },
 );
@@ -87,7 +90,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
   selectSharedDataAccessBenutzersView,
   (
     config,
-    { tranchenChanges },
+    { gesuch: cachedGesuch, tranchenChanges },
     lastUpdate,
     loading,
     { gesuch, gesuchFormular },
@@ -95,7 +98,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
     trancheTyp,
     { rolesMap },
   ) => {
-    const gesuchTranche = gesuch?.gesuchTrancheToWorkWith;
+    const gesuchTranche = cachedGesuch?.gesuchTrancheToWorkWith;
     const trancheSetting = createTrancheSetting(trancheTyp, gesuchTranche);
 
     return {

@@ -7,7 +7,7 @@ import { SachbearbeitungAppFeatureInfosGesuchsDokumenteComponent } from './sachb
 
 export const sachbearbeitungAppFeatureInfosGesuchsdokumenteRoutes: Route[] = [
   {
-    path: ':id',
+    path: ':gesuchId',
     pathMatch: 'prefix',
     data: { option: INFO_ADMIN_DOKUMENTE_ROUTE },
     providers: [InfosGesuchsdokumenteStore],
