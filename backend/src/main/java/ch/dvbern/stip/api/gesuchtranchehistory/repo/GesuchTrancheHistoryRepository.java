@@ -78,38 +78,36 @@ public class GesuchTrancheHistoryRepository {
 
     @Transactional
     @SuppressWarnings("unchecked")
-    public Optional<Integer> getLatestRevisionWhereStatusWasInBearbeitungGs(
+    public Long getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(
         final UUID gesuchTrancheId
     ) {
         final var reader = AuditReaderFactory.get(em);
-        return reader.createQuery()
-            .forRevisionsOfEntity(GesuchTranche.class, false, false)
-            .addProjection(AuditEntity.revisionNumber())
-            .add(AuditEntity.id().eq(gesuchTrancheId))
-            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
-            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
-            .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
-    }
-
-    @Transactional
-    @SuppressWarnings("unchecked")
-    public Optional<Long> getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(
-        final UUID gesuchTrancheId
-    ) {
-        final var reader = AuditReaderFactory.get(em);
-        return reader.createQuery()
+        return (Long) reader.createQuery()
             .forRevisionsOfEntity(GesuchTranche.class, false, false)
             .addProjection(AuditEntityUtil.revisionTimestamp())
             .add(AuditEntity.id().eq(gesuchTrancheId))
             .add(AuditEntity.property("status").eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
             .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
-            .getResultList()
-            .stream()
-            .findFirst();
+            .getSingleResult();
+    }
+
+    @Transactional
+    @SuppressWarnings("unchecked")
+    public GesuchTranche getEarliestTrancheAfterTimestampWhereStatusWasUeberprufen(
+        final UUID gesuchTrancheId,
+        final Long shouldBeAfterTimestamp
+    ) {
+        final var reader = AuditReaderFactory.get(em);
+        return (GesuchTranche) reader.createQuery()
+            .forRevisionsOfEntity(GesuchTranche.class, true, false)
+            .add(AuditEntity.id().eq(gesuchTrancheId))
+            .add(AuditEntity.property("status").eq(GesuchTrancheStatus.UEBERPRUEFEN))
+            .add(AuditEntity.revisionType().eq(RevisionType.MOD))
+            .add(AuditEntityUtil.revisionTimestamp().gt(shouldBeAfterTimestamp))
+            .addOrder(AuditEntityUtil.revisionTimestamp().asc())
+            .setMaxResults(1)
+            .getSingleResult();
     }
 
     @Transactional

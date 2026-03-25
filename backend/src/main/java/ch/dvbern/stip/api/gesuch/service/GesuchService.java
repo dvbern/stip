@@ -902,12 +902,14 @@ public class GesuchService {
         );
         if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
             final var lastFreigegebenTrancheRevisionTimestamp =
-                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId)
-                    .get();
+                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId);
 
             aenderung =
                 gesuchTrancheHistoryRepository
-                    .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
+                    .getEarliestTrancheAfterTimestampWhereStatusWasUeberprufen(
+                        aenderungId,
+                        lastFreigegebenTrancheRevisionTimestamp
+                    );
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
