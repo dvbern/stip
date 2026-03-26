@@ -595,6 +595,174 @@ paths:
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
+  '/sachbearbeiterGesuchDokument/{gesuchId}':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterGesuchDokumentCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachbearbeiterGesuchDokument'
+          description: Returns created SachbearbeiterGesuchDokument
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createSachbearbeiterGesuchDokument
+      summary: create SachbearbeiterGesuchDokument
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SachbearbeiterGesuchDokument'
+          description: Returns SachbearbeiterGesuchDokuments of gesuch
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllSachbearbeiterGesuchDokumentsOfGesuch
+      summary: getAllSachbearbeiterGesuchDokumentsOfGesuch
+  '/sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}':
+    parameters:
+      - name: sachbearbeiterGesuchDokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: SachbearbeiterGesuchDokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteSachbearbeiterGesuchDokument
+      summary: deletes a SachbearbeiterGesuchDokument
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: uploadSachbearbeiterGesuchDokument
+      summary: upload SachbearbeiterGesuchDokument dokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+  '/sachbearbeiterGesuchDokument/dokument/{dokumentId}':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: SachbearbeiterGesuchDokument dokument deleted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: deleteSachbearbeiterGesuchDokumentDokument
+      summary: deletes a SachbearbeiterGesuchDokumentDokument
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: File returned
+      operationId: getSachbearbeiterGesuchDokumentDokumentDownloadToken
+      summary: get SachbearbeiterGesuchDokumentDokument Download Token
+  '/sachbearbeiterGesuchDokument/dokument/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: getSachbearbeiterGesuchDokumentDokument
+      summary: getSachbearbeiterGesuchDokumentDokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
@@ -683,5 +851,32 @@ components:
         - CUSTOM_DOKUMENT
         - BESCHWERDE_ENTSCHEID
       type: string
+    SachbearbeiterGesuchDokumentCreate:
+      required:
+        - type
+        - description
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+    SachbearbeiterGesuchDokument:
+      required:
+        - id
+        - gesuchId
+        - dokuments
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SachbearbeiterGesuchDokumentCreate'
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        gesuchId:
+          $ref: './components/common.yaml#/UUID'
+        dokuments:
+          type: array
+          items:
+            $ref: './components/common.yaml#/Dokument'
 security:
   $ref: './components/security.yaml#/security'
