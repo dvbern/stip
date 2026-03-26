@@ -16,7 +16,7 @@ export const sachbearbeitungAppFeatureInfosProtokollRoutes: Route[] = [
     ],
     children: [
       {
-        path: ':id',
+        path: ':gesuchId',
         data: {
           option: PROTOKOLL_ROUTE,
         },

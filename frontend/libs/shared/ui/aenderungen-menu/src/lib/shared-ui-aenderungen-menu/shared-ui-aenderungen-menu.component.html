@@ -1,0 +1,111 @@
+<ng-container *transloco="let t">
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = trancheIdSig();
+  @let anederungen = aenderungenSig();
+
+  <button
+    type="button"
+    class="tw:dv-btn-tranche"
+    data-testid="sb-gesuch-header-aenderungen-nav-menu"
+    [class.tw:dv-historized]="isAenderungRouteSig()"
+    [disabled]="!anederungen"
+    [matMenuTriggerFor]="aenderungenMenu"
+  >
+    @if (currentAenderungSig(); as currentAenderung) {
+      <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
+        {{
+          t('shared.header.aenderungen.item', {
+            date: currentAenderung.gueltigAb | date: 'dd.MM.yyyy',
+            index: currentAenderung.index + 1,
+          })
+        }}
+        -
+        {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+      </span>
+    }
+    <i class="material-symbols-rounded ms-2">expand_more</i>
+  </button>
+  <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
+    <div class="d-flex flex-column gap-2">
+      @if (anederungen?.offen; as offeneAenderung) {
+        <a
+          [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
+          [queryParams]="{ revision: offeneAenderung.revision }"
+          [queryParamsHandling]="'merge'"
+          class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+          data-testid="aenderungen-nav-menu-item"
+          mat-menu-item
+          [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
+        >
+          <span>
+            {{
+              t('shared.header.aenderung.item', {
+                date: offeneAenderung.gueltigAb | date: 'dd.MM.yyyy',
+              })
+            }}
+            -
+            {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+          </span>
+        </a>
+      }
+      @if (anederungen?.akzeptiert?.length) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ t('shared.header.aenderungen.completed') }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (aenderung of anederungen?.akzeptiert; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [queryParams]="{ revision: aenderung.revision }"
+            [queryParamsHandling]="'merge'"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === aenderung.id"
+          >
+            <span>
+              {{
+                t('shared.header.aenderungen.item', {
+                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+      @if (anederungen?.abgelehnt?.length) {
+        <div class="d-flex align-items-center text-muted small gap-2">
+          <hr class="flex-grow-1" />
+          {{ t('shared.header.aenderungen.rejected') }}
+          <hr class="flex-grow-1" />
+        </div>
+        @for (aenderung of anederungen?.abgelehnt; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [queryParams]="{ revision: aenderung.revision }"
+            [queryParamsHandling]="'merge'"
+            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
+          >
+            <span>
+              {{
+                t('shared.header.aenderungen.item', {
+                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+    </div>
+  </mat-menu>
+</ng-container>

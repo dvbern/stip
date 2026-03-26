@@ -32,8 +32,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
 import jakarta.inject.Inject;
-import org.apache.commons.lang3.tuple.Pair;
-import org.hibernate.envers.DefaultRevisionEntity;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
@@ -78,14 +76,16 @@ public abstract class GesuchTrancheMapper {
         return toDtoWithoutVersteckteEltern(gesuch, gesuch);
     }
 
-    @Named("toSlimDto")
     @ToDtoDefaultMapping
     public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
 
-    @Named("toSlimDtoWithRevision")
-    public List<GesuchTrancheSlimDto> toSlimDtoWithRevision(List<Pair<GesuchTranche, DefaultRevisionEntity>> value) {
-        return value.stream()
-            .map(pair -> toSlimDto(pair.getLeft()).revision(pair.getRight().getId()))
+    @Mapping(source = "gesuchTranche.gueltigkeit.gueltigAb", target = "gueltigAb")
+    @Mapping(source = "gesuchTranche.gueltigkeit.gueltigBis", target = "gueltigBis")
+    public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche, int revision);
+
+    public List<GesuchTrancheSlimDto> toSlimDto(List<GesuchTranche> gesuchTranches, int revision) {
+        return gesuchTranches.stream()
+            .map(gesuchTranche -> toSlimDto(gesuchTranche, revision))
             .toList();
     }
 

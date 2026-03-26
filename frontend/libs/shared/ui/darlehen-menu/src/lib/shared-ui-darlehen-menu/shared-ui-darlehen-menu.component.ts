@@ -13,18 +13,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { map } from 'rxjs';
 
-import { DarlehenStatus, FreiwilligDarlehen } from '@dv/shared/model/gesuch';
+import { FreiwilligDarlehen } from '@dv/shared/model/gesuch';
+import {
+  DarlehenCompleteStates,
+  darlehenStatusMapping,
+} from '@dv/shared/model/ui';
 
 export type IdType = 'gesuch' | 'fall';
-
-type DarlehenCompleteStates = 'open' | 'rejected' | 'accepted';
-const darlehenStatusMapping: Record<DarlehenStatus, DarlehenCompleteStates> = {
-  IN_BEARBEITUNG_GS: 'open',
-  EINGEGEBEN: 'open',
-  IN_FREIGABE: 'open',
-  ABGELEHNT: 'rejected',
-  AKZEPTIERT: 'accepted',
-};
 
 @Component({
   selector: 'dv-shared-ui-darlehen-menu',
@@ -40,6 +35,7 @@ export class SharedUiDarlehenMenuComponent {
    * - The actual ID value.
    */
   idTypeSig = input.required<[IdType, string | undefined]>();
+  displayModeSig = input<'menu' | 'list'>('list');
   darlehenListSig = input.required<FreiwilligDarlehen[] | undefined>();
   canCreateDarlehenSig = input<boolean | undefined>();
   createDarlehen = output<{ fallId: string }>();

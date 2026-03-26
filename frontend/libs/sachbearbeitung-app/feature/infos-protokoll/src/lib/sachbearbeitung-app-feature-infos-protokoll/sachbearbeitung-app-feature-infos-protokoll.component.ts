@@ -44,7 +44,7 @@ export class SachbearbeitungAppFeatureInfosProtokollComponent {
   statusprotokollStore = inject(StatusprotokollStore);
   store = inject(Store);
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchIdSig = input.required<string>({ alias: 'id' });
+  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
 
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);

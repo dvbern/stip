@@ -308,8 +308,7 @@ $dv-all-colors: (
 }
 
 .mat-mdc-tab-links {
-  gap: 0 24px;
-  padding-bottom: 6px;
+  gap: 0;
 
   .mat-mdc-tab-link:not(.active) {
     background: white;
@@ -317,6 +316,19 @@ $dv-all-colors: (
   .mat-mdc-tab-link {
     -webkit-font-smoothing: initial;
   }
+}
+
+.mat-mdc-tab-nav-bar.nav-style-tabs {
+  .mat-mdc-tab-links {
+    gap: 0 24px;
+  }
+}
+
+.mat-mdc-tab-link {
+  margin-bottom: 6px;
+}
+.mat-mdc-tab-link.form-tabs {
+  margin-bottom: 0;
 }
 
 .btn.active {
@@ -336,4 +348,24 @@ $dv-all-colors: (
 
 form:not(.readonly) .mat-mdc-form-field-required-marker {
   color: var(--dv-red);
+}
+
+dv-sachbearbeitung-app-feature-verfuegung {
+  .mat-mdc-card {
+    border-width: 1px !important;
+    border-color: var(--dv-gray-300) !important;
+    border-style: solid !important;
+    box-shadow: none !important;
+  }
+}
+
+dv-sachbearbeitung-app-feature-gesuch-layout {
+  .tw\:dv-table {
+    box-shadow: none;
+    border: 1px solid var(--dv-gray-300);
+  }
+  .mat-mdc-tab-link.btn-nav {
+    box-shadow: none;
+    border: 1px solid var(--dv-gray-300);
+  }
 }

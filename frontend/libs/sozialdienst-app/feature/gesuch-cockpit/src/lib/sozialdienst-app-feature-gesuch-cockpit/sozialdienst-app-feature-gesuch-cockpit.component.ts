@@ -6,36 +6,29 @@ import {
   effect,
   inject,
   input,
-  viewChild,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { AusbildungStore } from '@dv/shared/data-access/ausbildung';
 import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import {
   SharedDataAccessGesuchEvents,
   selectLastUpdate,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchAenderungStore } from '@dv/shared/data-access/gesuch-aenderung';
-import { SharedDataAccessLanguageEvents } from '@dv/shared/data-access/language';
 import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-ausbildung';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
-import { Language } from '@dv/shared/model/language';
 import { compareById } from '@dv/shared/model/type-util';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
-import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import {
   SharedUiDashboardAusbildungComponent,
   SharedUiDashboardCompactAusbildungComponent,
@@ -46,26 +39,20 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
   imports: [
-    RouterLink,
     MatSidenavModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    TranslocoPipe,
     MatSelectModule,
     MatMenuModule,
     SharedUiIconChipComponent,
     SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
-    SharedUiDarlehenMenuComponent,
+    TranslocoDirective,
   ],
   templateUrl: './sozialdienst-app-feature-gesuch-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SozialdienstAppFeatureGesuchCockpitComponent {
-  private sidenavSig = viewChild.required(MatSidenav);
-  closeMenuSig = input<{ value: boolean } | null>(null, { alias: 'closeMenu' });
-  fallIdSig = input<string | undefined>(undefined, { alias: 'id' });
+  fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
 
   private store = inject(Store);
   private router = inject(Router);
@@ -74,8 +61,8 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
   dashboardStore = inject(DashboardStore);
-  darlehenStore = inject(DarlehenStore);
   gesuchAenderungStore = inject(GesuchAenderungStore);
+
   benutzerNameSig = computed(() => {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
@@ -84,19 +71,12 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
   constructor() {
-    effect(() => {
-      if (this.closeMenuSig()?.value) {
-        this.sidenavSig().close();
-      }
-    });
-
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
 
     effect(() => {
       const fallId = this.fallIdSig();
 
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.dashboardStore.loadSozialdienstDashboard$({ fallId });
       }
     });
@@ -125,12 +105,6 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
     periode: Gesuchsperiode & { gesuchLoading: boolean },
   ) {
     return periode.id + periode.gesuchLoading;
-  }
-
-  handleLanguageChangeHeader(language: Language) {
-    this.store.dispatch(
-      SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
-    );
   }
 
   aenderungMelden(melden: AenderungMelden) {

@@ -1,0 +1,49 @@
+<ng-container *transloco="let t">
+  <div class="d-flex h-100">
+    <!-- left step nav (Desktop) -->
+    <div class="d-none d-lg-block border-end bg-white">
+      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
+    </div>
+
+    <div class="tw:dv-pass-height tw:p-6">
+      @if (currentStepSig(); as step) {
+        <!-- step header (mobile) -->
+        <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+          <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
+          <div class="text-end">
+            <h5 class="step-title">
+              {{ t(step.translationKey) }}
+            </h5>
+            @if (step.nextStep?.translationKey; as nextStepKey) {
+              <p class="fst-italic mb-0">
+                {{ t('shared.form.next') }}:
+                {{ t(nextStepKey) }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <!-- title (desktop) -->
+        <div class="d-none d-lg-flex justify-content-start">
+          <dv-shared-ui-icon-chip class="step-icon me-3">
+            <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
+          </dv-shared-ui-icon-chip>
+
+          <h2 class="fw-bold" data-testid="step-title">
+            {{ t(step.titleTranslationKey) }}
+          </h2>
+          <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+        </div>
+      }
+
+      <dv-shared-ui-router-outlet-wrapper
+        attribute="step"
+        (data)="stepSig.set($event)"
+      ></dv-shared-ui-router-outlet-wrapper>
+    </div>
+  </div>
+
+  <ng-template cdkPortal>
+    <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()"></dv-shared-pattern-gesuch-step-nav>
+  </ng-template>
+</ng-container>

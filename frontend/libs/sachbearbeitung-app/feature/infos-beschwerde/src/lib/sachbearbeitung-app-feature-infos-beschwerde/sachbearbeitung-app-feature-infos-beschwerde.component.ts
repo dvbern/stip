@@ -37,7 +37,7 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
   gesuchInfoStore = inject(GesuchInfoStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchIdSig = input.required<string>({ alias: 'id' });
+  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
 
   activeTabSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(

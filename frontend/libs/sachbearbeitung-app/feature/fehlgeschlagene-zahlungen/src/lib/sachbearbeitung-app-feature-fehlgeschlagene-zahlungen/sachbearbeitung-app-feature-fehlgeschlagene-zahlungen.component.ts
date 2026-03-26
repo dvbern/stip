@@ -21,10 +21,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
-import { SachbearbeitungAppPatternOverviewLayoutComponent } from '@dv/sachbearbeitung-app/pattern/overview-layout';
 import { FailedAuszahlungBuchhaltung } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import {
@@ -44,7 +43,6 @@ import { restrictNumberParam } from '@dv/shared/util/table';
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatTableModule,
     MatSortModule,
     MatSlideToggleModule,
@@ -63,7 +61,7 @@ import { restrictNumberParam } from '@dv/shared/util/table';
     SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
-    SachbearbeitungAppPatternOverviewLayoutComponent,
+    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-fehlgeschlagene-zahlungen.component.html',

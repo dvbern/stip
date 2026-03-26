@@ -1,0 +1,16 @@
+{
+  "name": "shared-ui-nav-items",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/ui/nav-items/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:ui", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/ui/nav-items/tsconfig.lib.json"
+      }
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import { PortalModule } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,12 +18,18 @@ import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
+import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { Language } from '@dv/shared/model/language';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 
 @Component({
   selector: 'dv-shared-pattern-mobile-sidenav',
-  imports: [MatSidenavModule, TranslocoPipe, SharedUiLanguageSelectorComponent],
+  imports: [
+    MatSidenavModule,
+    TranslocoPipe,
+    SharedUiLanguageSelectorComponent,
+    PortalModule,
+  ],
   templateUrl: './shared-pattern-mobile-sidenav.component.html',
   styleUrl: './shared-pattern-mobile-sidenav.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +38,7 @@ export class SharedPatternMobileSidenavComponent {
   private store = inject(Store);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
   private oauthService = inject(OAuthService);
+  navigationStore = inject(NavigationStore);
 
   @Output() closeSidenav = new EventEmitter<void>();
 

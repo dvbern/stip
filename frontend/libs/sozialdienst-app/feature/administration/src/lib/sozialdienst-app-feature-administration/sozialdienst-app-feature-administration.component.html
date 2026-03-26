@@ -1,3 +1,68 @@
-<dv-sozialdienst-app-pattern-administration-layout [option]="option">
-  <dv-shared-ui-router-outlet-wrapper attribute="option" (data)="option = $event"></dv-shared-ui-router-outlet-wrapper>
-</dv-sozialdienst-app-pattern-administration-layout>
+<ng-container *transloco="let t">
+  <ng-template #navigation cdkPortal>
+    <div class="sidenav p-4">
+      @for (option of options; track $index) {
+        @let isActive = route.isActive(option.route, false);
+        <a
+          *dvHasRoles="option.allowedRoles"
+          type="button"
+          class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
+          [class.btn-light]="!isActive"
+          [class.shadow-none]="!isActive"
+          [routerLink]="['/', 'administration', option.route]"
+          routerLinkActive="active"
+          [attr.data-testid]="'option-nav-' + option.route"
+        >
+          <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+          <span class="text-start">
+            {{ t(option.translationKey) }}
+          </span>
+        </a>
+      }
+    </div>
+  </ng-template>
+
+  <div class="d-flex h-100">
+    <!-- left step nav (Desktop) -->
+    <div class="d-none d-lg-block border-end bg-white">
+      <ng-container *ngTemplateOutlet="navigation"></ng-container>
+    </div>
+    <div class="pt-lg-4 px-lg-4 container tw:dv-pass-height">
+      <!-- step header (mobile) -->
+      <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
+        <ng-container *ngTemplateOutlet="navigation"></ng-container>
+      </div>
+
+      <!-- title (desktop) -->
+      @if (option) {
+        <div class="d-none d-lg-flex justify-content-start align-items-center">
+          @if (option.type === 'PARENT') {
+            <dv-shared-ui-icon-chip class="step-icon me-3">
+              <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
+            </dv-shared-ui-icon-chip>
+          } @else {
+            <a
+              [routerLink]="option.parentRoute"
+              class="btn btn-link text-decoration-none fw-normal d-flex align-items-center tw:mr-2 tw:border-none p-2 shadow-none"
+              data-testid="gesuch-step-nav-overview"
+            >
+              <i class="material-symbols-rounded me-2 text-black">arrow_back</i>
+            </a>
+          }
+
+          <h2 class="fw-bold m-0" data-testid="step-title">
+            {{ t(option.titleTranslationKey) }}
+            <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+          </h2>
+        </div>
+      }
+
+      <div>
+        <dv-shared-ui-router-outlet-wrapper
+          attribute="option"
+          (data)="option = $event"
+        ></dv-shared-ui-router-outlet-wrapper>
+      </div>
+    </div>
+  </div>
+</ng-container>

@@ -1,26 +1,22 @@
-<mat-sidenav-container>
-  <mat-sidenav #sidenav mode="over" position="end">
-    <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
-      <ng-content select="[dvMobileNavContent]" ngProjectAs="[dvMobileNavContent]"></ng-content>
-    </dv-shared-pattern-mobile-sidenav>
-  </mat-sidenav>
-  <mat-sidenav-content class="d-flex flex-column">
-    <dv-sachbearbeitung-app-pattern-gesuch-header></dv-sachbearbeitung-app-pattern-gesuch-header>
+<div class="tw:flex tw:h-full" *transloco="let t">
+  <div class="d-none d-lg-block border-end tw:p-6 tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
+    <dv-shared-ui-darlehen-menu
+      [darlehenListSig]="darlehenStore.darlehenListSbViewSig().list"
+      [canCreateDarlehenSig]="false"
+      [idTypeSig]="['gesuch', gesuchIdSig()]"
+    ></dv-shared-ui-darlehen-menu>
+  </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="page-body">
-      <div class="h-100 pt-lg-4 px-lg-4 tw:overflow-hidden container mb-5">
-        <h1 class="tw:flex tw:!mb-8 tw:justify-between tw:items-center tw:w-1/2">
-          {{ 'shared.darlehen.title' | transloco }}
-          <dv-shared-ui-darlehen-verfuegung-download
-            [darlehenSig]="darlehenStore.cachedDarlehen().data"
-          ></dv-shared-ui-darlehen-verfuegung-download>
-        </h1>
-        <dv-shared-pattern-darlehen-form
-          (darlehenUpdatedSig)="reloadDarlehenList()"
-          (formIsUnsavedSig)="hasUnsavedChanges = $event"
-        ></dv-shared-pattern-darlehen-form>
-      </div>
-    </main>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <div class="tw:relative tw:p-6 tw:dv-pass-height tw:bg-white">
+    <h1 class="tw:flex tw:mb-8! tw:justify-between tw:items-center tw:w-1/2">
+      {{ t('shared.darlehen.title') }}
+      <dv-shared-ui-darlehen-verfuegung-download
+        [darlehenSig]="darlehenStore.cachedDarlehen().data"
+      ></dv-shared-ui-darlehen-verfuegung-download>
+    </h1>
+    <dv-shared-pattern-darlehen-form
+      (darlehenUpdatedSig)="reloadDarlehenList()"
+      (formIsUnsavedSig)="hasUnsavedChanges = $event"
+    ></dv-shared-pattern-darlehen-form>
+  </div>
+</div>

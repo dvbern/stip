@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 import { OPTION_SOZIALDIENST_BENUTZER } from '@dv/sozialdienst-app/model/administration';
 
-export const sachbearbeitungAppFeatureAdministrationRoutes: Route[] = [
+export const sozialdienstAppFeatureAdministrationRoutes: Route[] = [
   {
     path: OPTION_SOZIALDIENST_BENUTZER.route,
     canActivate: [hasRoles(['V0_Sozialdienst-Admin'], '/unauthorized')],

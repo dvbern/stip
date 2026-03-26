@@ -902,12 +902,14 @@ public class GesuchService {
         );
         if (!statesWhereCurrentIsReturned.contains(aenderung.getStatus())) {
             final var lastFreigegebenTrancheRevisionTimestamp =
-                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId)
-                    .get();
+                gesuchTrancheHistoryRepository.getLatestRevisionTimestampWhereStatusWasInBearbeitungGs(aenderungId);
 
             aenderung =
                 gesuchTrancheHistoryRepository
-                    .getByRevisionTimestamp(aenderungId, lastFreigegebenTrancheRevisionTimestamp);
+                    .getEarliestTrancheAfterTimestampWhereStatusWasUeberprufen(
+                        aenderungId,
+                        lastFreigegebenTrancheRevisionTimestamp
+                    );
         }
 
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -1296,9 +1298,13 @@ public class GesuchService {
                 gesuchHistoryRepository.getGesuchAtRevision(gesuch.getId(), revision).orElseThrow();
             return new VerfuegtGesuchDto()
                 .berechnungId(verfuegung.getId())
-                .tranchen(gesuchAtRevision.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+                .tranchen(
+                    gesuchAtRevision.getTranchenTranchen()
+                        .map((tranche) -> gesuchTrancheMapper.toSlimDto(tranche, revision))
+                        .toList()
+                )
                 .timestamp(gesuchAtRevision.getTimestampMutiert().toLocalDate());
-        }).toList();
+        }).sorted(Comparator.comparing(VerfuegtGesuchDto::getTimestamp).reversed()).toList();
     }
 
     @Transactional

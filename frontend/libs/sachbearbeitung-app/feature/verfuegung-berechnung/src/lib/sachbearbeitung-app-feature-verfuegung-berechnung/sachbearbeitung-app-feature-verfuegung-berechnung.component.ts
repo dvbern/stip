@@ -12,7 +12,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -59,7 +59,9 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       kosten: false,
     },
   };
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
   berechnungStore = inject(BerechnungStore);
 
   berechnungenRawSig = computed<BerechnungView>(() => {
@@ -99,10 +101,17 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
 
+      const verfuegungId = this.verfuegungIdSig();
+
       if (!gesuchId) {
         return;
       }
-      this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+
+      if (verfuegungId) {
+        this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
+      } else {
+        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
+      }
     });
   }
 }

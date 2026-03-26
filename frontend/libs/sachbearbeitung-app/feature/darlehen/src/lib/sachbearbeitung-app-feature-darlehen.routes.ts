@@ -6,7 +6,7 @@ import { SachbearbeitungAppFeatureDarlehenComponent } from './sachbearbeitung-ap
 
 export const sachbearbeitungAppFeatureDarlehenRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
-    path: ':darlehenId/gesuch/:id',
+    path: ':darlehenId/gesuch/:gesuchId',
     pathMatch: 'prefix',
     component: SachbearbeitungAppFeatureDarlehenComponent,
     title: 'shared.darlehen.title',

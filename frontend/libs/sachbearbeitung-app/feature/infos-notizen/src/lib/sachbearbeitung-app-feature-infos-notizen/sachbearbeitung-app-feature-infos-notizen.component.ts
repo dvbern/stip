@@ -81,7 +81,7 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   notizStore = inject(NotizStore);
   permissionStore = inject(PermissionStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchIdSig = input.required<string>({ alias: 'id' });
+  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
   sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
 

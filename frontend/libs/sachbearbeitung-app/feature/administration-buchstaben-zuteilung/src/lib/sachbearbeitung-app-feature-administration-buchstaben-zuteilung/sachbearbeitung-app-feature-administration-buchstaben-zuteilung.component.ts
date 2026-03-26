@@ -79,6 +79,7 @@ export class SachbearbeitungAppFeatureAdministrationBuchstabenZuteilungComponent
   private formUtils = inject(SharedUtilFormService);
   private sortSig = viewChild(MatSort);
   private paginatorSig = viewChild(MatPaginator);
+
   store = inject(SachbearbeiterStore);
   filterChangedSig = signal<string | null>(null);
   displayedColumns = ['fullName', 'buchstabenDe', 'buchstabenFr'] as const;

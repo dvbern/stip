@@ -1,12 +1,16 @@
 import { Component, HostBinding, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { SozialdienstAppPatternMainLayoutComponent } from '@dv/sozialdienst-app/pattern/main-layout';
 
 @Component({
-  imports: [RouterOutlet, GlobalNotificationsComponent],
+  imports: [
+    GlobalNotificationsComponent,
+    SozialdienstAppPatternMainLayoutComponent,
+  ],
   selector: 'dv-root',
   templateUrl: './app.component.html',
 })

@@ -79,7 +79,7 @@ export class SharedPatternDocumentUploadEntryComponent {
   @Output() cancelUpload = new EventEmitter<{ dokumentId: string }>();
   @Output() removeUpload: Observable<{ dokumentId: string }>;
 
-  @HostBinding('class') class = 'd-flex flex-row mt-3';
+  @HostBinding('class') klass = 'd-flex flex-row mt-3';
 
   private dialog = inject(MatDialog);
 

@@ -142,6 +142,7 @@ export class DarlehenStore extends signalStore(
               },
               {
                 onSuccess: (data) => {
+                  this.getAllDarlehenGs$({ fallId: req.fallId });
                   this.router.navigate([
                     '/darlehen',
                     data.id,

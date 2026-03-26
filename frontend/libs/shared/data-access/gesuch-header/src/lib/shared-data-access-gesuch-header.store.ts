@@ -38,8 +38,12 @@ export class GesuchHeaderStore extends signalStore(
   private config = inject(SharedModelCompileTimeConfig);
 
   viewSig = computed(() => {
+    const headerData = this.header().data;
     return {
-      ...this.header().data,
+      ...headerData,
+      // The initial tranchen are also returned as version, but they are already handled with header.initial
+      // so we can skip the last element as it is always the initial tranchen
+      versions: headerData?.versions?.slice(0, -1),
       isLoading: isPendingWithoutCache(this.header()),
     };
   });
@@ -90,6 +94,9 @@ const prepareTranchenListSig =
   ) =>
   (gesuchIdSig: Signal<string | undefined>) => {
     const relativeRouteSig = getRelativeTrancheRoute(router, 'TRANCHE');
+
+    // todo-review: @scph relative relativeRouteSig is always null! remove?
+    // console.log('relativeRouteSig', relativeRouteSig());
 
     return computed(() => {
       const gesuchId = gesuchIdSig();

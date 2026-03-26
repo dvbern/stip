@@ -26,7 +26,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs';
 
@@ -43,14 +43,11 @@ import {
   INPUT_DELAY,
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
-import { SharedPatternAppHeaderComponent } from '@dv/shared/pattern/app-header';
-import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
 } from '@dv/shared/ui/focusable-list';
-import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -90,7 +87,6 @@ type DisplayColumns =
   imports: [
     A11yModule,
     CommonModule,
-    TranslocoPipe,
     MatSidenavModule,
     MatTableModule,
     MatSortModule,
@@ -102,9 +98,6 @@ type DisplayColumns =
     ReactiveFormsModule,
     RouterModule,
     MatPaginatorModule,
-    SharedPatternMobileSidenavComponent,
-    SharedPatternAppHeaderComponent,
-    SharedUiHasRolesDirective,
     SharedUiIconChipComponent,
     SharedUiFocusableListItemDirective,
     SharedUiFocusableListDirective,
@@ -115,6 +108,7 @@ type DisplayColumns =
     SharedUiTruncateTooltipDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
+    TranslocoDirective,
   ],
   templateUrl: './sozialdienst-app-feature-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

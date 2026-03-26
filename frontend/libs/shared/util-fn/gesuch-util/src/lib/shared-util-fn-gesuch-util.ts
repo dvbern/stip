@@ -11,7 +11,9 @@ import {
   GSFormStepProps,
   GesuchFormular,
   GesuchFormularType,
+  GesuchHeader,
   GesuchTranche,
+  GesuchTrancheSlim,
   GesuchUrlType,
   SBFormStepProps,
   SharedModelGesuch,
@@ -27,7 +29,8 @@ import {
   GesuchFormStepView,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
-import { capitalized, lowercased } from '@dv/shared/model/type-util';
+import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
+import { findIndexInOneOf } from '@dv/shared/util-fn/array-helper';
 
 export interface ElternSituation {
   expectVater: boolean;
@@ -510,3 +513,41 @@ type FieldsThatContain<
 const formularPropsContaining = <T extends Record<string, unknown>>(
   obj: Record<FieldsThatContain<T>, null>,
 ) => Object.keys(obj) as FieldsThatContain<T>[];
+
+export const currentTrancheNumber = (
+  trancheSetting: TrancheSetting | null,
+  currentTranche: GesuchTrancheSlim | undefined,
+  header: Partial<GesuchHeader>,
+  revision: number | undefined,
+  isLoading: boolean | undefined,
+) => {
+  const { currentTranches, initial, aenderungs, versions } = header;
+  if (!currentTranches || isLoading) {
+    return '…';
+  }
+
+  const gesuchUrlTyp =
+    revision && trancheSetting?.gesuchUrlTyp === 'TRANCHE'
+      ? ('VERSION' as const)
+      : trancheSetting?.gesuchUrlTyp;
+  const allTranchen = {
+    TRANCHE: [currentTranches ?? []],
+    VERSION: versions?.map((v) => v.tranchen) ?? [],
+    AENDERUNG: [aenderungs?.akzeptiert ?? [], aenderungs?.abgelehnt ?? []],
+    INITIAL: [initial?.tranchen ?? []],
+  } satisfies Record<Exclude<typeof gesuchUrlTyp, undefined>, unknown>;
+  const index = gesuchUrlTyp
+    ? findIndexInOneOf(
+        (tranche) =>
+          tranche.id === currentTranche?.id &&
+          isDefined(tranche.revision) === isDefined(revision),
+        ...allTranchen[gesuchUrlTyp],
+      )
+    : -1;
+
+  const foundIndex = index >= 0 ? index + 1 : null;
+  if (foundIndex) {
+    return foundIndex;
+  }
+  return gesuchUrlTyp !== 'AENDERUNG' ? '...' : null;
+};

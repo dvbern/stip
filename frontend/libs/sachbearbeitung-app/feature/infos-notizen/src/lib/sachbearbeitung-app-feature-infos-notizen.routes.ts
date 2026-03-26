@@ -7,7 +7,7 @@ import { SachbearbeitungAppFeatureInfosNotizenComponent } from './sachbearbeitun
 
 export const sachbearbeitungAppFeatureInfosNotizenRoutes: Route[] = [
   {
-    path: ':id',
+    path: ':gesuchId',
     pathMatch: 'prefix',
     providers: [
       {

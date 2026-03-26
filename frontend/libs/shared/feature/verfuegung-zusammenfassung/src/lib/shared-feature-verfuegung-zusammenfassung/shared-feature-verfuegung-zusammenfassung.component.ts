@@ -11,8 +11,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
-import { selectRouteId } from '@dv/shared/data-access/gesuch';
-import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
+import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -42,10 +41,10 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
   gesuchService = inject(GesuchService);
   dokumentService = inject(DokumentService);
   store = inject(Store);
-  gesuchHeaderStore = inject(GesuchHeaderStore);
-  gesuchIdSig = this.store.selectSignal(selectRouteId);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
+  // todo-review: @scph wir haben noch eine vermischung von namen berechnungId und verfuegungId in den routes
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  verfuegungIdSig = input<string | null>(null, { alias: 'verfuegungId' });
+  verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
 
   constructor() {
     effect(() => {
@@ -56,7 +55,6 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
         return;
       }
 
-      this.gesuchHeaderStore.loadHeader$({ gesuchId });
       if (verfuegungId) {
         this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
       } else {

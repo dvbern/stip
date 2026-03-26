@@ -1,0 +1,210 @@
+<ng-container *transloco="let t">
+  @let gesuchId = gesuchIdSig();
+  @let trancheId = trancheIdSig();
+
+  <dv-shared-pattern-gesuch-info-bar>
+    <!-- Gesuch Info -->
+    <div dvGesuchStatusIndication class="tw:flex tw:items-center">
+      <a
+        class="btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
+        [routerLink]="['/']"
+        data-testid="header-nav-backlink"
+      >
+        <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
+        <span>{{ t('shared.header.backToDashboard') }}</span>
+      </a>
+      <span>|</span>
+      <div class="tw:font-semibold tw:ml-4">
+        @if (headerViewSig().gesuchInfo; as gesuchInfo) {
+          <span>{{ gesuchInfo.fallNummer }} / </span>
+          <span>{{ gesuchInfo.gesuchNummer }} - </span>
+        }
+        <span>{{ gesuchstellerNameSig() }}, </span>
+        @if (headerViewSig().gesuchInfo?.state?.gesuchStatus; as gesuchStatus) {
+          <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${gesuchStatus}`) }}</span>
+        }
+      </div>
+    </div>
+
+    <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">
+      <!-- Versionen Menu -->
+      <dv-shared-ui-versionen-menu
+        [versionenSig]="headerViewSig().versions ?? []"
+        [initialSig]="headerViewSig().initial"
+        [isInitialRouteSig]="isInitialRouteSig()"
+        [gesuchIdSig]="gesuchIdSig()"
+        [isGesuchRouteSig]="isGesuchRouteSig()"
+        [trancheIdSig]="trancheIdSig()"
+        [currentTranchenSig]="this.headerViewSig().currentTranches"
+        [berechnungIdSig]="berechnungIdSig()"
+      ></dv-shared-ui-versionen-menu>
+
+      <!-- Aenderungen Link -->
+      @if (firstAenderungIdSig(); as firstAenderungId) {
+        <a
+          [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderungIdSig()]"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-aenderungen-nav-link"
+          [class.active]="isAenderungRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.aenderungen') }}</span>
+        </a>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="sb-gesuch-header-aenderungen-nav-link"
+          disabled
+        >
+          <span>{{ t('sachbearbeitung-app.header.aenderungen') }}</span>
+        </button>
+      }
+
+      <!-- Darlehen Link -->
+      @if (firstDarlehenIdSig(); as firstDarlehenId) {
+        <a
+          [routerLink]="['/gesuch', 'darlehen', firstDarlehenId, 'gesuch', gesuchId]"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="header-nav-darlehen-link"
+          [class.active]="isDarlehenRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.darlehen') }}</span>
+        </a>
+      } @else {
+        <button
+          type="button"
+          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          data-testid="header-nav-darlehen-link"
+          disabled
+        >
+          <span>{{ t('sachbearbeitung-app.header.darlehen') }}</span>
+        </button>
+      }
+
+      <!-- infos -->
+      <a
+        [routerLink]="['/gesuch', 'infos', gesuchId]"
+        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+        data-testid="sb-gesuch-header-infos-nav-link"
+        [class.active]="isInfosRouteSig()"
+      >
+        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+      </a>
+
+      <!-- Beschwerden -->
+      @if (isBeschwerdeHaengigSig()) {
+        <div class="tw:w-full tw:grow"></div>
+        <div class="tw:text-sm">
+          <mat-chip [color]="'info'" highlighted>
+            {{ t('sachbearbeitung-app.infos.beschwerde.haengig.title') }}
+          </mat-chip>
+        </div>
+      }
+    </div>
+  </dv-shared-pattern-gesuch-info-bar>
+
+  @if (berechnungIdSig()) {
+    <div
+      class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
+    >
+      <i class="material-symbols-rounded me-1 tw:text-dv-warning">info</i>
+      <span class="tw:text-md tw:text-neutral-500">
+        {{ t('sachbearbeitung-app.header.info.isHistorized') }}
+      </span>
+    </div>
+  }
+
+  <div class="tw:flex tw:justify-between">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true" [class.tw:h-[48px]]="!isGesuchRouteSig()">
+      @for (tab of tabsSig(); track tab.name) {
+        <a
+          mat-tab-link
+          [routerLink]="tab.route"
+          [queryParams]="tab.queryParams"
+          class="btn btn-nav tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
+          [active]="tab.active"
+          [class.active]="tab.active"
+        >
+          {{ t(`sachbearbeitung-app.gesuch.tabs.${tab.name}`) }}
+        </a>
+      }
+    </nav>
+
+    @let statusUebergaenge = statusUebergaengeOptionsSig();
+    @let availableTrancheInteraction = availableTrancheInteractionSig();
+    <!-- Aktion Button -->
+    @if (isActionRouteSig()) {
+      <div>
+        <button
+          type="button"
+          class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none tw:border-gray-300!"
+          data-testid="sb-gesuch-header-aktion-menu"
+          [class.active]="aktionTrigger.menuOpen"
+          [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
+          #aktionTrigger="matMenuTrigger"
+          [matMenuTriggerFor]="aktionMenu"
+        >
+          <span>{{ t('sachbearbeitung-app.header.aktion') }}</span>
+          <i class="material-symbols-rounded ms-2">expand_more</i>
+        </button>
+        <!-- Aktion Menu -->
+        <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
+          <div class="d-flex flex-column gap-2">
+            @switch (availableTrancheInteraction) {
+              @case ('CREATE_TRANCHE') {
+                <!-- Tranche erstellen -->
+                <button
+                  type="button"
+                  class="btn fw-normal px-2 shadow-none"
+                  data-testid="aktion-tranche-erstellen"
+                  mat-menu-item
+                  (click)="createTranche()"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="material-symbols-rounded">add_circle</i>
+                    <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
+                  </div>
+                </button>
+              }
+            }
+
+            @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+              <hr class="my-1" />
+            }
+
+            @for (uebergang of statusUebergaenge.list; track $index) {
+              @if (uebergang.name) {
+                <button
+                  type="button"
+                  class="btn fw-normal pe-auto px-2 shadow-none"
+                  [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                  [disabled]="uebergang.disabledReason || !trancheId"
+                  [matTooltip]="
+                    uebergang.disabledReason
+                      ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                      : null
+                  "
+                  mat-menu-item
+                  (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
+                >
+                  <div class="d-flex align-items-center gap-2">
+                    <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                    <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
+                  </div>
+                </button>
+              }
+            }
+          </div>
+        </mat-menu>
+      </div>
+    }
+  </div>
+
+  <mat-tab-nav-panel
+    class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-4 tw:rounded-b-xl tw:rounded-tr-xl"
+    [class.tw:rounded-tl-xl]="!isGesuchRouteSig()"
+    #tabPanel
+  >
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
+</ng-container>

@@ -31,7 +31,7 @@
     }
   </div>
 
-  <div class="tw:dv-table">
+  <div class="tw:dv-table dv-table">
     <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
       <caption class="cdk-visually-hidden">
         {{
@@ -59,10 +59,10 @@
 
       <!-- required document -->
       <ng-container matColumnDef="documentName">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-full tw:min-w-96">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-full tw:min-w-80">
           {{ t('shared.dokumente.table.documentName') }}
         </th>
-        <td mat-cell class="tw:w-full tw:min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+        <td mat-cell class="tw:w-full" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
           <div class="tw:py-3">
             <span [innerHTML]="t(dokument.dokumentOptions.info.title)"></span>
             @if (dokument.entryName) {

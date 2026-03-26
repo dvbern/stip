@@ -16,6 +16,8 @@
 @theme {
   --color-dv-red: var(--dv-red);
   --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
+  --color-dv-warning: var(--dv-warning);
+  --color-dv-warning-subtle: color-mix(in srgb, var(--dv-warning) 20%, white);
   --color-dv-green: var(--dv-green);
   --color-dv-yellow: var(--dv-yellow);
 }
@@ -48,6 +50,17 @@
   @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
 }
 
+@utility dv-pass-height {
+  @apply tw:flex tw:flex-col tw:overflow-y-auto tw:flex-1;
+}
+
 @utility dv-historized {
   @apply tw:bg-[repeating-linear-gradient(45deg,_#ffffff00_0,_#ffffff50_3px,_transparent_0,_transparent_50%)] tw:bg-[size:20px_20px];
+}
+
+@utility dv-btn-tranche {
+  @apply tw:flex tw:items-center tw:bg-white tw:px-4 tw:py-[10px] tw:border tw:border-gray-300 tw:rounded-xl! tw:w-full;
+  &:hover {
+    @apply tw:bg-dv-red tw:text-white;
+  }
 }
