@@ -7,6 +7,8 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
+import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDto;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDto;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -47,6 +49,12 @@ public interface DokumentResource {
     io.smallrye.mutiny.Uni<Response> createDokumentSB(@PathParam("dokumentTyp") ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp,@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload,@QueryParam("entryId")   UUID entryId);
 
     @POST
+    @Path("/sachbearbeiterGesuchDokument/{gesuchId}")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    SachbearbeiterGesuchDokumentDto createSachbearbeiterGesuchDokument(@PathParam("gesuchId") UUID gesuchId,@Valid SachbearbeiterGesuchDokumentCreateDto sachbearbeiterGesuchDokumentCreateDto);
+
+    @POST
     @Path("/unterschriftenblatt/{gesuchId}/{unterschriftenblattTyp}")
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
@@ -68,6 +76,16 @@ public interface DokumentResource {
     void deleteDokumentSB(@PathParam("dokumentId") UUID dokumentId);
 
     @DELETE
+    @Path("/sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}")
+    @Produces({ "text/plain" })
+    void deleteSachbearbeiterGesuchDokument(@PathParam("sachbearbeiterGesuchDokumentId") UUID sachbearbeiterGesuchDokumentId);
+
+    @DELETE
+    @Path("/sachbearbeiterGesuchDokument/dokument/{dokumentId}")
+    @Produces({ "text/plain" })
+    void deleteSachbearbeiterGesuchDokumentDokument(@PathParam("dokumentId") UUID dokumentId);
+
+    @DELETE
     @Path("/unterschriftenblatt/dokument/{dokumentId}")
     @Produces({ "text/plain" })
     void deleteUnterschriftenblattDokument(@PathParam("dokumentId") UUID dokumentId);
@@ -82,6 +100,11 @@ public interface DokumentResource {
     @Path("/gesuchDokument/{gesuchDokumentId}/akzeptieren")
     @Produces({ "text/plain" })
     void gesuchDokumentAkzeptieren(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
+
+    @GET
+    @Path("/sachbearbeiterGesuchDokument/{gesuchId}")
+    @Produces({ "application/json", "text/plain" })
+    List<SachbearbeiterGesuchDokumentDto> getAllSachbearbeiterGesuchDokumentsOfGesuch(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/customGesuchDokument/gs/{customDokumentTypId}")
@@ -124,6 +147,16 @@ public interface DokumentResource {
     List<GesuchDokumentKommentarDto> getGesuchDokumentKommentareSB(@PathParam("gesuchDokumentId") UUID gesuchDokumentId);
 
     @GET
+    @Path("/sachbearbeiterGesuchDokument/dokument/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getSachbearbeiterGesuchDokumentDokument(@QueryParam("token") @NotNull   String token);
+
+    @GET
+    @Path("/sachbearbeiterGesuchDokument/dokument/{dokumentId}")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getSachbearbeiterGesuchDokumentDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
+
+    @GET
     @Path("/unterschriftenblatt/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     List<UnterschriftenblattDokumentDto> getUnterschriftenblaetterForGesuch(@PathParam("gesuchId") UUID gesuchId);
@@ -139,4 +172,10 @@ public interface DokumentResource {
     @Consumes({ "multipart/form-data" })
     @Produces({ "text/plain" })
     io.smallrye.mutiny.Uni<Response> uploadCustomGesuchDokumentSB(@PathParam("customDokumentTypId") UUID customDokumentTypId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
+
+    @POST
+    @Path("/sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "text/plain" })
+    io.smallrye.mutiny.Uni<Response> uploadSachbearbeiterGesuchDokument(@PathParam("sachbearbeiterGesuchDokumentId") UUID sachbearbeiterGesuchDokumentId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 }

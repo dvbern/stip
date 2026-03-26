@@ -65,6 +65,8 @@ public final class OidcPermissions {
     public static final String CUSTOM_DOKUMENT_READ = "V0_CUSTOM_DOKUMENT_READ";
     public static final String CUSTOM_DOKUMENT_DELETE = "V0_CUSTOM_DOKUMENT_DELETE";
 
+    public static final String SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE = "V0_SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE";
+
     public static final String DOKUMENT_ABLEHNEN_AKZEPTIEREN = "V0_DOKUMENT_ABLEHNEN_AKZEPTIEREN";
     public static final String DOKUMENT_READ = "V0_DOKUMENT_READ";
     public static final String DOKUMENT_UPLOAD_GS = "V0_DOKUMENT_UPLOAD_GS";
