@@ -1,0 +1,64 @@
+<ng-container *dvTranslocoDemo="let t">
+  <button
+    type="button"
+    class="dv-icon-button dv-icon-button-lg m-2 position-absolute top-0 end-0"
+    [attr.aria-label]="t('shared.close')"
+    (click)="close()"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <div class="tw:max-h-[90vh] tw:p-4 tw:flex tw:flex-col">
+    <h3 class="tw:mb-4 tw:mr-4">
+      {{ t(`demo-data-app.overview.apply-demo-data.changes.${data.length ? 'found' : 'none'}`) }}
+    </h3>
+    <div class="tw:overflow-auto tw:shrink tw:min-h-0">
+      <table class="tw:table-auto tw:select-all tw:w-full">
+        <tr>
+          <th class="tw:p-4">{{ t('demo-data-app.overview.apply-demo-data.changes.table.testfall') }}</th>
+          <th class="tw:p-4 tw:select-none">{{ t('demo-data-app.overview.apply-demo-data.changes.table.type') }}</th>
+          <th class="tw:p-4">{{ t('demo-data-app.overview.apply-demo-data.changes.table.property') }}</th>
+          <th class="tw:p-4">{{ t('demo-data-app.overview.apply-demo-data.changes.table.previous') }}</th>
+          <th class="tw:p-4">{{ t('demo-data-app.overview.apply-demo-data.changes.table.current') }}</th>
+        </tr>
+        @for (change of data; track $index; let rowIndex = $index) {
+          @for (propChange of change.changes; track $index) {
+            <tr [class.tw:bg-gray-100]="rowIndex % 2 !== 0">
+              <td class="tw:px-4 tw:font-bold tw:align-top">
+                @if ($first) {
+                  {{ change.berechnung?.testFall }}
+                }
+              </td>
+              <td class="tw:px-4 tw:select-none">
+                <i class="material-symbols-rounded tw:text-sm tw:text-gray-500" [matTooltip]="propChange.type">
+                  @switch (propChange.type) {
+                    @case ('REMOVE') {
+                      remove_circle_outline
+                    }
+                    @case ('ADD') {
+                      add_circle_outline
+                    }
+                    @case ('UPDATE') {
+                      cached
+                    }
+                  }
+                </i>
+              </td>
+              <td class="tw:px-4 tw:font-semibold">{{ propChange.key }}</td>
+              <td class="tw:px-4 tw:whitespace-nowrap">
+                <dv-comparison-value [valueSig]="propChange.oldValue"></dv-comparison-value>
+              </td>
+              <td class="tw:px-4 tw:whitespace-nowrap">
+                <dv-comparison-value [valueSig]="propChange.value"></dv-comparison-value>
+              </td>
+            </tr>
+          }
+        }
+      </table>
+    </div>
+    <div class="d-flex mt-4 justify-content-end">
+      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-cancel">
+        {{ t('shared.close') }}
+      </button>
+    </div>
+  </div>
+</ng-container>

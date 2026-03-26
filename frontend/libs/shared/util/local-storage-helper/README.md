@@ -1,3 +1,3 @@
-# shared-util-fn-local-storage-helper
+# shared-util-local-storage-helper
 
 This library was generated with [Nx](https://nx.dev).

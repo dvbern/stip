@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
+import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
@@ -200,7 +201,14 @@ public class DemoDataService {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
-        final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+        ApplyDemoDataResponseStipendienanspruchDto stipendienanspruchDto;
+        try {
+            stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+        } catch (Exception e) {
+            stipendienanspruchDto = new ApplyDemoDataResponseStipendienanspruchDto()
+                .success(false);
+            LOG.error("Unable to calculate berechnung for{}\n{}", demoData.getTestFall(), e.getMessage());
+        }
 
         return demoDataMapper.toDto(gesuch, stipendienanspruchDto);
     }
