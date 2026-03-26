@@ -76,13 +76,6 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'sachbearbeitung-app-feature-gesuch-layout',
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
-            (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
-          ),
-      },
-      {
         path: 'gesuch',
         canActivate: [hasBenutzer],
         providers: [SteuerdatenStore],
