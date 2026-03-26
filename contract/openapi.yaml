@@ -9217,7 +9217,7 @@ components:
       required:
         - id
         - gesuchId
-        - dokuments
+        - dokumente
       type: object
       allOf:
         - $ref: '#/components/schemas/SachbearbeiterGesuchDokumentCreate'
@@ -9226,7 +9226,7 @@ components:
           $ref: '#/components/schemas/UUID'
         gesuchId:
           $ref: '#/components/schemas/UUID'
-        dokuments:
+        dokumente:
           type: array
           items:
             $ref: '#/components/schemas/Dokument'
