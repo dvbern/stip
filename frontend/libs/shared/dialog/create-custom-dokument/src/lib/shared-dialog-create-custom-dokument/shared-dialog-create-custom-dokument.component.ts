@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -11,8 +12,8 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslocoPipe } from '@jsverse/transloco';
 
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -21,6 +22,7 @@ import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
 export type DialogOptions = {
   hideDescription?: boolean;
+  alreadyUsedTypes?: string[];
 };
 
 export type CustomDokumentDialogResult = {
@@ -31,13 +33,13 @@ export type CustomDokumentDialogResult = {
 @Component({
   selector: 'dv-shared-dialog-create-custom-dokument',
   imports: [
-    TranslocoPipe,
     MatFormFieldModule,
+    ReactiveFormsModule,
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SharedUiMaxLengthDirective,
-    ReactiveFormsModule,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-dialog-create-custom-dokument.component.html',
   styleUrl: './shared-dialog-create-custom-dokument.component.scss',
@@ -52,7 +54,7 @@ export class SharedDialogCreateCustomDokumentComponent {
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
-  data = inject<DialogOptions>(MAT_DIALOG_DATA);
+  data = inject<DialogOptions>(MAT_DIALOG_DATA, { optional: true });
 
   static open(dialog: MatDialog, options?: DialogOptions) {
     return dialog.open<
@@ -63,7 +65,10 @@ export class SharedDialogCreateCustomDokumentComponent {
   }
 
   form = this.formBuilder.group({
-    name: ['', [Validators.required]],
+    name: [
+      '',
+      [Validators.required, uniqueValidator(this.data?.alreadyUsedTypes ?? [])],
+    ],
     kommentar: ['', [Validators.required]],
   });
 
@@ -78,3 +83,13 @@ export class SharedDialogCreateCustomDokumentComponent {
     this.dialogRef.close();
   }
 }
+
+const uniqueValidator =
+  (allowed: string[]) => (control: AbstractControl<string>) => {
+    if (allowed.includes(control.value)) {
+      return {
+        notUnique: true,
+      };
+    }
+    return null;
+  };

@@ -99,9 +99,11 @@ export class SachbearbeiterGesuchDokumentComponent {
     if (!gesuchId) {
       return;
     }
+    const dokuments = this.dokumentStore.sachbearbeiterDokuments().data ?? [];
 
     SharedDialogCreateCustomDokumentComponent.open(this.dialog, {
       hideDescription: true,
+      alreadyUsedTypes: dokuments.map(({ type }) => type),
     })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))

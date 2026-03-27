@@ -1,23 +1,23 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="d-flex flex-column position-relative p-4 rounded" *dvTranslocoShared="let t">
   <button
     type="button"
     (click)="cancel()"
     class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
-    [attr.aria-label]="'shared.close' | transloco"
+    [attr.aria-label]="t('shared.close')"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
   <h1 class="title h5 mb-4 d-flex">
-    {{ 'shared.dokumente.createCustomDokumentTyp.dialog.title' | transloco }}
+    {{ t('shared.dokumente.createCustomDokumentTyp.dialog.title') }}
   </h1>
-  @if (!data.hideDescription) {
-    <p class="content mb-0" [innerHTML]="'shared.dokumente.createCustomDokumentTyp.dialog.message' | transloco"></p>
+  @if (!data?.hideDescription) {
+    <p class="content mb-0" [innerHTML]="t('shared.dokumente.createCustomDokumentTyp.dialog.message')"></p>
   }
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">
-      <mat-label>{{ 'shared.dokumente.createCustomDokumentTyp.dialog.name.label' | transloco }}</mat-label>
+      <mat-label>{{ t('shared.dokumente.createCustomDokumentTyp.dialog.name.label') }}</mat-label>
       <input
         type="text"
         matInput
@@ -26,31 +26,34 @@
         data-testid="create-custom-dokument-dialog-name"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'notUnique'">
+        {{ t('shared.form.error.notUnique') }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field dvSharedUiFormField class="col-12 mt-4">
-      <mat-label>{{ 'shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label' | transloco }}</mat-label>
+      <mat-label>{{ t('shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label') }}</mat-label>
       <textarea
         rows="4"
         matInput
         dvMaxLength="large"
         formControlName="kommentar"
         data-testid="create-custom-dokument-dialog-kommentar"
-        [placeholder]="'shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder' | transloco"
+        [placeholder]="t('shared.dokumente.createCustomDokumentTyp.dialog.kommentar.placeholder')"
       ></textarea>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
       </mat-error>
     </mat-form-field>
 
     <div class="d-flex mt-4 justify-content-between">
       <button type="button" class="btn btn-secondary" (click)="cancel()">
-        {{ 'shared.cancel' | transloco }}
+        {{ t('shared.cancel') }}
       </button>
       <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
-        {{ 'shared.dokumente.createCustomDokumentTyp.dialog.create' | transloco }}
+        {{ t('shared.dokumente.createCustomDokumentTyp.dialog.create') }}
       </button>
     </div>
   </form>
