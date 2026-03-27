@@ -298,7 +298,9 @@
       "@dv/shared/feature/gesuch-form": ["libs/shared/feature/gesuch-form/src/index.ts"],
       "@dv/shared/util/navigation": ["libs/shared/util/navigation/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-layout": ["libs/sachbearbeitung-app/feature/gesuch-layout/src/index.ts"],
-      "@dv/shared/ui/versionen-menu": ["libs/shared/ui/versionen-menu/src/index.ts"]
+      "@dv/shared/ui/versionen-menu": ["libs/shared/ui/versionen-menu/src/index.ts"],
+      "@dv/sachbearbeitung-app/feature/dashboard": ["libs/sachbearbeitung-app/feature/dashboard/src/index.ts"],
+      "@dv/sachbearbeitung-app/feature/gesuche": ["libs/sachbearbeitung-app/feature/gesuche/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

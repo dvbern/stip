@@ -6,6 +6,13 @@ import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
+    path: 'sachbearbeitung-app-feature-gesuche',
+    loadChildren: () =>
+      import('@dv/sachbearbeitung-app/feature/gesuche').then(
+        (m) => m.sachbearbeitungAppFeatureGesucheRoutes,
+      ),
+  },
+  {
     path: 'unauthorized',
     loadChildren: () =>
       import('@dv/shared/feature/unauthorized').then(
@@ -44,14 +51,14 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
           ),
       },
-      {
-        path: 'fehlgeschlagene-zahlungen',
-        title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen').then(
-            (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
-          ),
-      },
+      // {
+      //   path: 'fehlgeschlagene-zahlungen',
+      //   title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
+      //   loadChildren: () =>
+      //     import('@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen').then(
+      //       (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
+      //     ),
+      // },
       {
         path: 'massendruck',
         title: 'sachbearbeitung-app.massendruck.title',
@@ -69,11 +76,16 @@ export const appRoutes: Route[] = [
             '/administration',
           ),
         ],
+        // todo: rename!
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/cockpit').then(
-            (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
+          import('@dv/sachbearbeitung-app/feature/dashboard').then(
+            (m) => m.sachbearbeitungAppFeatureDashboardRoutes,
           ),
+        // loadChildren: () =>
+        //   import('@dv/sachbearbeitung-app/feature/cockpit').then(
+        //     (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
+        //   ),
       },
       {
         path: 'gesuch',
@@ -89,19 +101,19 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
           ),
       },
-      {
-        path: 'darlehen-dashboard',
-        canActivate: [hasBenutzer],
-        title: 'sachbearbeitung-app.darlehen-dashboard.title',
-        loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-            (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
-          ),
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-            (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
-          ),
-      },
+      // {
+      //   path: 'darlehen-dashboard',
+      //   canActivate: [hasBenutzer],
+      //   title: 'sachbearbeitung-app.darlehen-dashboard.title',
+      //   loadComponent: () =>
+      //     import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+      //       (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
+      //     ),
+      //   loadChildren: () =>
+      //     import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
+      //       (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
+      //     ),
+      // },
     ],
   },
 ];
