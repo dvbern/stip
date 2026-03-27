@@ -11,7 +11,9 @@
   <h1 class="title h5 mb-4 d-flex">
     {{ 'shared.dokumente.createCustomDokumentTyp.dialog.title' | transloco }}
   </h1>
-  <p class="content mb-0" [innerHTML]="'shared.dokumente.createCustomDokumentTyp.dialog.message' | transloco"></p>
+  @if (!data.hideDescription) {
+    <p class="content mb-0" [innerHTML]="'shared.dokumente.createCustomDokumentTyp.dialog.message' | transloco"></p>
+  }
 
   <form [formGroup]="form" class="mt-4" novalidate>
     <mat-form-field dvSharedUiFormField class="col-12">

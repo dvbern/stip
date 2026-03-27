@@ -19,6 +19,7 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { SharedDialogCreateCustomDokumentComponent } from '@dv/shared/dialog/create-custom-dokument';
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -45,7 +46,6 @@ import {
 } from '@dv/shared/util/gesuch';
 
 import { AdditionalDokumenteComponent } from './components/additional-dokumente/additional-dokumente.component';
-import { CreateCustomDokumentDialogComponent } from './components/create-custom-dokument-dialog/create-custom-dokument-dialog.component';
 import { CustomDokumenteComponent } from './components/custom-dokumente/custom-dokumente.component';
 import { RequiredDokumenteComponent } from './components/required-dokumente/required-dokumente.component';
 
@@ -381,7 +381,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   }
 
   createCustomDokumentTyp() {
-    CreateCustomDokumentDialogComponent.open(this.dialog)
+    SharedDialogCreateCustomDokumentComponent.open(this.dialog)
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {

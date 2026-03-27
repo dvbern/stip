@@ -183,6 +183,7 @@
   "shared.dokumente.table.title.requiredDocuments": "Benötigte Dokumente",
   "shared.dokumente.table.title.additionalDocuments": "Unterschriftenblätter",
   "shared.dokumente.table.title.customDocuments": "Generische Dokumente",
+  "shared.dokumente.table.title.sachbearbeitungGesuchDokuments": "Dokumente",
   "shared.dokumente.table.documentName": "Dokument",
   "shared.dokumente.table.description": "Beschreibung",
   "shared.dokumente.table.formStep": "Schritt",

@@ -54,6 +54,10 @@ export type DownloadOptions =
   | {
       type: 'ausbildungUnterbruch';
       id: string;
+    }
+  | {
+      type: 'sachbearbeiterGesuchDokument';
+      id: string;
     };
 
 @Directive({
@@ -192,6 +196,19 @@ const getDownloadObservable$ = (
         .pipe(
           map(({ token }) =>
             ausbildungService.downloadAusbildungUnterbruchAntragDokumentPath({
+              token,
+            }),
+          ),
+        );
+    }
+    case 'sachbearbeiterGesuchDokument': {
+      return dokumentService
+        .getSachbearbeiterGesuchDokumentDokumentDownloadToken$({
+          dokumentId: id,
+        })
+        .pipe(
+          map(({ token }) =>
+            dokumentService.getSachbearbeiterGesuchDokumentDokumentPath({
               token,
             }),
           ),

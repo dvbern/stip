@@ -183,6 +183,7 @@
   "shared.dokumente.table.title.requiredDocuments": "Documents requis",
   "shared.dokumente.table.title.additionalDocuments": "Documents signées",
   "shared.dokumente.table.title.customDocuments": "Documents génériques",
+  "shared.dokumente.table.title.sachbearbeitungGesuchDokuments": "Documents",
   "shared.dokumente.table.documentName": "Document",
   "shared.dokumente.table.description": "Description",
   "shared.dokumente.table.formStep": "Étape",

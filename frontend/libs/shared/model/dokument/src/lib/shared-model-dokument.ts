@@ -20,6 +20,7 @@ import { Extends, assertUnreachable } from '@dv/shared/model/type-util';
 
 type AvailableDokumentArt =
   | DokumentArt
+  | 'SACHBEARBEITER_GESUCH_DOKUMENT'
   | 'DARLEHEN_DOKUMENT'
   | 'GENERIC_DOKUMENT';
 
@@ -48,6 +49,13 @@ export type SharedModelCustomGesuchDokument = {
   gesuchId: string;
   trancheId: string;
   gesuchDokument?: GesuchDokument;
+};
+
+export type SharedModelSachbearbeiterGesuchDokument = {
+  art: Extends<AvailableDokumentArt, 'SACHBEARBEITER_GESUCH_DOKUMENT'>;
+  dokumentTyp: CustomDokumentTyp;
+  dokumentId: string;
+  gesuchId: string;
 };
 
 export type SharedModelDarlehenDokument = {
@@ -86,6 +94,15 @@ export interface SharedModelTableCustomDokument {
   kommentarePending: boolean;
 }
 
+export interface SharedModelTableSachbearbeiterDokument {
+  id: string;
+  type: string;
+  description: string;
+  dokumente: Array<Dokument>;
+  canDelete: boolean;
+  dokumentOptions: SachbearbeiterDokumentOptions;
+}
+
 export type SharedModelTableAdditionalDokument = {
   dokumentTyp: UnterschriftenblattDokumentTyp;
   gesuchDokument?: UnterschriftenblattDokument;
@@ -96,6 +113,7 @@ export type SharedModelGesuchDokument =
   | SharedModelStandardGesuchDokument
   | SharedModelAdditionalGesuchDokument
   | SharedModelCustomGesuchDokument
+  | SharedModelSachbearbeiterGesuchDokument
   | SharedModelDarlehenDokument
   | SharedModelGenericDokument;
 
@@ -129,6 +147,10 @@ export interface DarlehenDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoTranslatable;
 }
 
+export interface SachbearbeiterDokumentOptions extends BaseDocumentOptions {
+  info: DokumentInfoText;
+}
+
 export interface CustomDokumentOptions extends BaseDocumentOptions {
   info: DokumentInfoText;
 }
@@ -139,6 +161,7 @@ export interface GenericDokumentOptions extends BaseDocumentOptions {
 
 export type DokumentOptions =
   | StandardDokumentOptions
+  | SachbearbeiterDokumentOptions
   | CustomDokumentOptions
   | DarlehenDokumentOptions
   | GenericDokumentOptions;
@@ -203,6 +226,9 @@ export const isUploadable = (
     }
     case 'GENERIC_DOKUMENT': {
       return !dokumentModel.readonly;
+    }
+    case 'SACHBEARBEITER_GESUCH_DOKUMENT': {
+      return true;
     }
     default:
       assertUnreachable(dokumentModel);

@@ -4,7 +4,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -15,13 +19,17 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 
+export type DialogOptions = {
+  hideDescription?: boolean;
+};
+
 export type CustomDokumentDialogResult = {
   name: string;
   kommentar: string;
 };
 
 @Component({
-  selector: 'dv-create-custom-dokument-dialog',
+  selector: 'dv-shared-dialog-create-custom-dokument',
   imports: [
     TranslocoPipe,
     MatFormFieldModule,
@@ -31,25 +39,27 @@ export type CustomDokumentDialogResult = {
     SharedUiMaxLengthDirective,
     ReactiveFormsModule,
   ],
-  templateUrl: './create-custom-dokument-dialog.component.html',
-  styleUrl: './create-custom-dokument-dialog.component.scss',
+  templateUrl: './shared-dialog-create-custom-dokument.component.html',
+  styleUrl: './shared-dialog-create-custom-dokument.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateCustomDokumentDialogComponent {
+export class SharedDialogCreateCustomDokumentComponent {
   private dialogRef =
     inject<
       MatDialogRef<
-        CreateCustomDokumentDialogComponent,
+        SharedDialogCreateCustomDokumentComponent,
         CustomDokumentDialogResult
       >
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
+  data = inject<DialogOptions>(MAT_DIALOG_DATA);
 
-  static open(dialog: MatDialog) {
+  static open(dialog: MatDialog, options?: DialogOptions) {
     return dialog.open<
-      CreateCustomDokumentDialogComponent,
+      SharedDialogCreateCustomDokumentComponent,
+      DialogOptions,
       CustomDokumentDialogResult
-    >(CreateCustomDokumentDialogComponent);
+    >(SharedDialogCreateCustomDokumentComponent, { data: options });
   }
 
   form = this.formBuilder.group({

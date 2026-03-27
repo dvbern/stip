@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { AusbildungAdminStore } from '@dv/sachbearbeitung-app/data-access/ausbildung-admin';
+import { SachbearbeiterDokumentsStore } from '@dv/sachbearbeitung-app/data-access/sachbearbeiter-dokuments';
 import { INFO_ADMIN_ROUTE } from '@dv/sachbearbeitung-app/model/infos';
 
 import { SachbearbeitungAppFeatureInfosAdminComponent } from './sachbearbeitung-app-feature-infos-admin/sachbearbeitung-app-feature-infos-admin.component';
@@ -33,6 +34,14 @@ export const sachbearbeitungAppFeatureInfosAdminRoutes: Route[] = [
         loadComponent: () =>
           import('./components/ausbildung-abschliessen.component').then(
             (m) => m.AusbildungAbschliessenComponent,
+          ),
+      },
+      {
+        path: 'sachbearbeiter-dokumente',
+        providers: [SachbearbeiterDokumentsStore],
+        loadComponent: () =>
+          import('./components/sachbearbeiter-dokumente.component').then(
+            (m) => m.SachbearbeiterGesuchDokumentComponent,
           ),
       },
       {
