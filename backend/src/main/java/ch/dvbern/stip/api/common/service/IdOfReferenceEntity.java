@@ -15,32 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.common.service;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Authorizer
-@ApplicationScoped
-@RequiredArgsConstructor
-public class SachbearbeiterGesuchDokumentAuthorizer extends BaseAuthorizer {
-    public void sbOrJuristCanCreate() {
-        permitAll();
-    }
+import org.mapstruct.Qualifier;
 
-    public void sbOrJuristCanUpload() {
-        permitAll();
-    }
-
-    public void sbOrJuristCanDelete() {
-        permitAll();
-    }
-
-    public void sbOrJuristCanDeleteDokument() {
-        permitAll();
-    }
-
-    public void sbOrJuristCanGet() {
-        permitAll();
-    }
+@Qualifier
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.CLASS)
+public @interface IdOfReferenceEntity {
 }

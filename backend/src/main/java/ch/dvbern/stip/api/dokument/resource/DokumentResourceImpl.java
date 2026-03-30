@@ -311,12 +311,11 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID gesuchId,
         SachbearbeiterGesuchDokumentCreateDto sachbearbeiterGesuchDokumentCreateDto
     ) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanCreate();
-        final var ret = sachbearbeiterGesuchDokumentService.createSachbearbeiterGesuchDokument(
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanCreate();
+        return sachbearbeiterGesuchDokumentService.createSachbearbeiterGesuchDokument(
             gesuchId,
             sachbearbeiterGesuchDokumentCreateDto
         );
-        return ret;
     }
 
     @Blocking
@@ -326,7 +325,7 @@ public class DokumentResourceImpl implements DokumentResource {
         UUID sachbearbeiterGesuchDokumentId,
         FileUpload fileUpload
     ) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanUpload();
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanUpload();
         return sachbearbeiterGesuchDokumentService.getUploadSachbearbeiterGesuchDokumentDokumentUni(
             sachbearbeiterGesuchDokumentId,
             fileUpload
@@ -336,21 +335,21 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE)
     public void deleteSachbearbeiterGesuchDokument(UUID sachbearbeiterGesuchDokumentId) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanDelete();
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanDelete();
         sachbearbeiterGesuchDokumentService.deleteSachbearbeiterGesuchDokument(sachbearbeiterGesuchDokumentId);
     }
 
     @Override
     @RolesAllowed(SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE)
     public void deleteSachbearbeiterGesuchDokumentDokument(UUID dokumentId) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanDeleteDokument();
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanDeleteDokument();
         sachbearbeiterGesuchDokumentService.deleteSachbearbeiterGesuchDokumentDokument(dokumentId);
     }
 
     @Override
     @RolesAllowed(SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE)
     public List<SachbearbeiterGesuchDokumentDto> getAllSachbearbeiterGesuchDokumentsOfGesuch(UUID gesuchId) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanGet();
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanGet();
         return sachbearbeiterGesuchDokumentService.getAllByGesuchId(gesuchId);
     }
 
@@ -370,7 +369,7 @@ public class DokumentResourceImpl implements DokumentResource {
     @Override
     @RolesAllowed(SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE)
     public FileDownloadTokenDto getSachbearbeiterGesuchDokumentDokumentDownloadToken(UUID dokumentId) {
-        sachbearbeiterGesuchDokumentAuthorizer.sbCanGet();
+        sachbearbeiterGesuchDokumentAuthorizer.sbOrJuristCanGet();
         return sachbearbeiterGesuchDokumentService.getSachbearbeiterGesuchDokumentDokumentDownloadToken(dokumentId);
     }
 }

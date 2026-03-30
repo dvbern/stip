@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.EntityIdReference;
 import ch.dvbern.stip.api.common.service.EntityReferenceMapper;
+import ch.dvbern.stip.api.common.service.IdOfReferenceEntity;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDto;
@@ -43,6 +44,8 @@ public interface SachbearbeiterGesuchDokumentMapper {
         final SachbearbeiterGesuchDokumentCreateDto sachbearbeiterGesuchDokumentCreateDto
     );
 
-    @Mapping(source = "gesuch.id", target = "gesuchId")
+    @Mapping(
+        source = "gesuch", target = "gesuchId", qualifiedBy = { EntityReferenceMapper.class, IdOfReferenceEntity.class }
+    )
     SachbearbeiterGesuchDokumentDto toDto(final SachbearbeiterGesuchDokument sachbearbeiterGesuchDokument);
 }
