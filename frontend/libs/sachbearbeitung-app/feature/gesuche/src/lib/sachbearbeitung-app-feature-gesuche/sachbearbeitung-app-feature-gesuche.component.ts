@@ -36,13 +36,12 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { BenutzerRole } from '@dv/shared/model/benutzer';
 import {
   GesuchFilter,
   GesuchServiceGetGesucheSbRequestParams,
@@ -61,7 +60,6 @@ import {
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
-import { SharedUiFilterMenuButtonComponent } from '@dv/shared/ui/filter-menu-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -76,6 +74,12 @@ import {
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
+import {
+  FilterGesucheQueryParam,
+  QueryTypePrefix,
+  WorkableQueryParam,
+  getGesuchQueryFromParams,
+} from '@dv/shared/util/navigation';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import {
   getSortAndPageInputs,
@@ -93,13 +97,9 @@ import {
   toBackendLocalDate,
 } from '@dv/shared/util/validator-date';
 
-const DEFAULT_FILTER = {
-  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG',
-  other: 'MEINE_BEARBEITBAR',
-} satisfies Record<string, GesuchFilter>;
-
-const DEFAULT_WORK = 'GESUCHE';
-const DEFAULT_SCOPE = 'MEINE';
+// todo: eventually move!
+const DEFAULT_SCOPE: QueryTypePrefix = 'MEINE';
+const DEFAULT_FILTER_TAB: FilterGesucheQueryParam = 'GESUCHE';
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -127,21 +127,6 @@ type DashboardFormStartEndFields = AppendFromTo<StartEndFields>;
 type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
-
-type QuickFilterGroup =
-  | 'GESUCHE'
-  | 'BEARBEITBAR'
-  | 'JURIST'
-  | 'DRUCKBAR_VERFUEGUNGEN'
-  | 'DRUCKBAR_DATENSCHUTZBRIEFE';
-
-type AvailableFilters = {
-  group: QuickFilterGroup;
-  filters: {
-    typ: GesuchFilter;
-    roles: BenutzerRole[];
-  }[];
-}[];
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuche',
@@ -172,7 +157,6 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SharedUiFilterMenuButtonComponent,
     TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuche.component.html',
@@ -194,9 +178,9 @@ export class SachbearbeitungAppFeatureGesucheComponent
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
 
   // think about better types
-  filterTab = input<string | undefined>(undefined);
-  scope = input<string | undefined>(undefined);
-  work = input<string | undefined>(undefined);
+  filterTab = input<FilterGesucheQueryParam | undefined>(undefined);
+  scope = input<QueryTypePrefix | undefined>(undefined);
+  workable = input<WorkableQueryParam | undefined>(undefined);
 
   fallNummer = input<string | undefined>(undefined);
   typ = input<string | undefined>(undefined);
@@ -249,16 +233,10 @@ export class SachbearbeitungAppFeatureGesucheComponent
   versionSig = this.store.selectSignal(selectVersion);
 
   queryFromInputsSig = computed<GesuchFilter>(() => {
-    // const filterTab = this.filterTab();
-    const scope = this.scope();
-    const work = this.work();
+    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB;
+    const scope = this.scope() ?? DEFAULT_SCOPE;
 
-    // todo: not the right place?
-    // if (!scope || !work) {
-    //   return
-    // }
-
-    return `${scope ?? DEFAULT_SCOPE}_${work ?? DEFAULT_WORK}` as GesuchFilter;
+    return getGesuchQueryFromParams(scope, filterTab);
   });
 
   sortList = sortList(this.router, this.route);
@@ -462,13 +440,13 @@ export class SachbearbeitungAppFeatureGesucheComponent
 
       // todo: converter function, eventually to not navigate if not toggled?, or keep the other value, then set on { emitEvent: false } and only navigate on actual change
       const meineValue = meine ? 'MEINE' : 'ALLE';
-      const bearbeitbarValue = bearbeitbar ? 'BEARBEITBAR' : 'GESUCHE';
+      const bearbeitbarValue = bearbeitbar ? 'TRUE' : 'FALSE';
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
           scope: meineValue,
-          work: bearbeitbarValue,
+          workable: bearbeitbarValue,
         },
         queryParamsHandling: 'merge',
       });
@@ -517,7 +495,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
   }
 
   ngOnInit() {
-    const { query, filter, startEndFilter } = this.getInputs();
+    const { filter, startEndFilter } = this.getInputs();
     const sortOrder = this.sortOrder();
     const sortColumn = this.sortColumn();
     this.filterForm.reset(
@@ -539,12 +517,11 @@ export class SachbearbeitungAppFeatureGesucheComponent
     );
 
     const scope = this.scope();
-    const work = this.work();
-    const filterTab = this.filterTab();
+    const workable = this.workable();
     // todo: what to do here?
     // this.quickFilterForm.reset({ query });
     this.togglesGroup.controls.meine.setValue(scope === 'MEINE');
-    this.togglesGroup.controls.bearbeitbar.setValue(work === 'BEARBEITBAR');
+    this.togglesGroup.controls.bearbeitbar.setValue(workable === 'TRUE');
 
     if (sortColumn && sortOrder) {
       this.sortSig().sort({

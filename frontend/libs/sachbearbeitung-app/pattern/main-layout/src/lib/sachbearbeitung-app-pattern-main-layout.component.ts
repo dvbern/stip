@@ -12,10 +12,10 @@ import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-acce
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
-import { NavItem } from '@dv/shared/util/navigation';
+import { DashQueryParams, NavItem } from '@dv/shared/util/navigation';
 
 // Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
-const baseNavItems: NavItem[] = [
+const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
   {
     type: 'link',
     id: 'dashboard',
@@ -24,9 +24,9 @@ const baseNavItems: NavItem[] = [
     route: ['/dashboard/gesuche'],
     // Default filter state
     queryParams: {
-      filterTab: 'GESUCHE',
+      filterTab: 'BEARBEITBAR',
       scope: 'MEINE',
-      work: 'BEARBEITBAR',
+      workable: 'TRUE',
     },
   },
   {

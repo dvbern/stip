@@ -845,6 +845,8 @@
   "sachbearbeitung-app.dashboard.tabs.datenschutz-briefe-druck": "Lettres de protection des données imprimables",
   "sachbearbeitung-app.dashboard.tabs.darlehen": "Prêts",
   "sachbearbeitung-app.dashboard.tabs.fehlgeschlagene-zahlungen": "Paiements échoués",
+  "sachbearbeitung-app.dashboard.tabs.juristische-abklaerung": "Clarifications juridiques",
+  "sachbearbeitung-app.dashboard.tabs.abklaerung-durch-rechtsabteilung": "Investigations par le service juridique",
 
   "sachbearbeitung-app.gesuch-form.title": "Demande",
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Charger les données de Nesko",
