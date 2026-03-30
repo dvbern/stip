@@ -139,7 +139,8 @@ public class GesuchTrancheService {
         return new GesuchAenderungsDto()
             .offen(offeneAenderung)
             .akzeptiert(akzeptierteAenderungs)
-            .abgelehnt(abgelehnteAenderungs);
+            .abgelehnt(abgelehnteAenderungs)
+            .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+  private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
 
   /**
@@ -99,6 +100,25 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
+  public GesuchAenderungsDto canAenderungEinreichen(Boolean canAenderungEinreichen) {
+    this.canAenderungEinreichen = canAenderungEinreichen;
+    return this;
+  }
+
+  
+  @JsonProperty("canAenderungEinreichen")
+  @NotNull
+  public Boolean getCanAenderungEinreichen() {
+    return canAenderungEinreichen;
+  }
+
+  @JsonProperty("canAenderungEinreichen")
+  public void setCanAenderungEinreichen(Boolean canAenderungEinreichen) {
+    this.canAenderungEinreichen = canAenderungEinreichen;
+  }
+
+  /**
+   **/
   public GesuchAenderungsDto offen(GesuchTrancheSlimDto offen) {
     this.offen = offen;
     return this;
@@ -127,12 +147,13 @@ public class GesuchAenderungsDto  implements Serializable {
     GesuchAenderungsDto gesuchAenderungs = (GesuchAenderungsDto) o;
     return Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
+        Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
         Objects.equals(this.offen, gesuchAenderungs.offen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(akzeptiert, abgelehnt, offen);
+    return Objects.hash(akzeptiert, abgelehnt, canAenderungEinreichen, offen);
   }
 
   @Override
@@ -142,6 +163,7 @@ public class GesuchAenderungsDto  implements Serializable {
     
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
+    sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
     sb.append("}");
     return sb.toString();

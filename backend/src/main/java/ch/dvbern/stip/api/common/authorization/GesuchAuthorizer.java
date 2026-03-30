@@ -206,6 +206,10 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void sbCanChangeGesuchStatusToBearbeitungAsAenderungIfStatusChangeRequired(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (!GesuchUtil.canSbInitAendererung(gesuch)) {
+            forbidden();
+        }
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG);
     }
 

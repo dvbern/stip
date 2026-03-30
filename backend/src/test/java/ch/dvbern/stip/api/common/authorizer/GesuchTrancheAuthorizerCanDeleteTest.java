@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -242,6 +243,7 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         ausbildung.setGesuchs(List.of(gesuch));
         gesuch.setAusbildung(ausbildung);
         fall.setAusbildungs(Set.of(ausbildung));
+        gesuch.setGesuchStatus(Gesuchstatus.STIPENDIENANSPRUCH);
 
         final var uuid = UUID.randomUUID();
         // assert
