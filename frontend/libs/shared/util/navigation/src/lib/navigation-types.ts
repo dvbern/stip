@@ -3,7 +3,7 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
-import { UrlTree } from '@angular/router';
+import { QueryParamsHandling, UrlTree } from '@angular/router';
 
 import {
   BenutzerRole,
@@ -62,6 +62,7 @@ export interface TabNavItem {
   active: boolean | undefined;
   route: UrlTree | (string | undefined)[];
   queryParams?: Record<string, string | undefined>;
+  queryParamsHandling?: QueryParamsHandling;
   name: string;
   testId?: string;
 }

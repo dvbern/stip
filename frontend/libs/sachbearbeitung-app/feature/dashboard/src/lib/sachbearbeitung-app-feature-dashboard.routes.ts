@@ -29,21 +29,10 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
           ),
       },
-      // {
-      //   path: ':tab',
-      //   title: 'sachbearbeitung-app.gesuche.title',
-      //   loadComponent: () =>
-      //     import('@dv/sachbearbeitung-app/feature/gesuche').then(
-      //       (m) => m.SachbearbeitungAppFeatureGesucheComponent,
-      //     ),
-      //   loadChildren: () =>
-      //     import('@dv/sachbearbeitung-app/feature/gesuche').then(
-      //       (m) => m.sachbearbeitungAppFeatureGesucheRoutes,
-      //     ),
-      // },
       {
         path: 'gesuche',
-        title: 'sachbearbeitung-app.gesuche.title',
+        // todo: translation keys
+        title: 'sachbearbeitung-app.cockpit.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/gesuche').then(
             (m) => m.SachbearbeitungAppFeatureGesucheComponent,
@@ -52,10 +41,6 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
           import('@dv/sachbearbeitung-app/feature/gesuche').then(
             (m) => m.sachbearbeitungAppFeatureGesucheRoutes,
           ),
-      },
-      {
-        path: ':tab',
-        redirectTo: '',
       },
     ],
   },

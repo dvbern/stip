@@ -21,14 +21,13 @@ const baseNavItems: NavItem[] = [
     id: 'dashboard',
     label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
-    route: ['/dashboard'],
-  },
-  {
-    type: 'link',
-    id: 'darlehen-dashboard',
-    label: { key: 'sachbearbeitung-app.header.darlehen' },
-    icon: 'payments',
-    route: ['/darlehen-dashboard'],
+    route: ['/dashboard/gesuche'],
+    // Default filter state
+    queryParams: {
+      filterTab: 'GESUCHE',
+      scope: 'MEINE',
+      work: 'BEARBEITBAR',
+    },
   },
   {
     type: 'link',

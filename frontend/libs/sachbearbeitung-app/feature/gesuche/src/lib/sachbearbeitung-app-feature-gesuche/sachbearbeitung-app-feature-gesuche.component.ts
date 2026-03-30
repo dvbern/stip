@@ -12,7 +12,6 @@ import {
   effect,
   inject,
   input,
-  signal,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -37,9 +36,8 @@ import {
   differenceInDays,
   format,
 } from 'date-fns';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
-import { object } from 'zod';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
@@ -99,6 +97,9 @@ const DEFAULT_FILTER = {
   jurist: 'ALLE_JURISTISCHE_ABKLAERUNG',
   other: 'MEINE_BEARBEITBAR',
 } satisfies Record<string, GesuchFilter>;
+
+const DEFAULT_WORK = 'GESUCHE';
+const DEFAULT_SCOPE = 'MEINE';
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -191,7 +192,12 @@ export class SachbearbeitungAppFeatureGesucheComponent
   private formBuilder = inject(NonNullableFormBuilder);
   massendruckStore = inject(MassendruckStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
-  show = input<GesuchFilter | undefined>(undefined);
+
+  // think about better types
+  filterTab = input<string | undefined>(undefined);
+  scope = input<string | undefined>(undefined);
+  work = input<string | undefined>(undefined);
+
   fallNummer = input<string | undefined>(undefined);
   typ = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
@@ -217,13 +223,6 @@ export class SachbearbeitungAppFeatureGesucheComponent
   items?: QueryList<SharedUiFocusableListItemDirective>;
   displayedColumns = Object.keys(SbGesucheDashboardColumn);
 
-  refreshQuickfilterSig = signal<unknown>(null);
-
-  private defaultFilterSig = computed(() => {
-    const rolesMap = this.permissionStore.rolesMapSig();
-
-    return rolesMap.V0_Jurist ? DEFAULT_FILTER.jurist : DEFAULT_FILTER.other;
-  });
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
     typ: [<GesuchTrancheTyp | undefined>undefined],
@@ -244,95 +243,29 @@ export class SachbearbeitungAppFeatureGesucheComponent
     bearbeitbar: [<boolean | undefined>undefined],
   });
 
-  quickFilterForm = this.formBuilder.group({
-    query: [<GesuchFilter | undefined>undefined],
-  });
-
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
   availableTypes = Object.values(GesuchTrancheTyp);
   versionSig = this.store.selectSignal(selectVersion);
-  showViewSig = computed<GesuchFilter>(() => {
-    const show = this.show();
-    return show ?? this.defaultFilterSig();
+
+  queryFromInputsSig = computed<GesuchFilter>(() => {
+    // const filterTab = this.filterTab();
+    const scope = this.scope();
+    const work = this.work();
+
+    // todo: not the right place?
+    // if (!scope || !work) {
+    //   return
+    // }
+
+    return `${scope ?? DEFAULT_SCOPE}_${work ?? DEFAULT_WORK}` as GesuchFilter;
   });
+
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
   gesuchStore = inject(GesuchStore);
-
-  private readonly quickFilterConfig: {
-    filter: GesuchFilter;
-    roles: BenutzerRole[];
-    group: QuickFilterGroup;
-  }[] = [
-    {
-      filter: 'MEINE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'ALLE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'MEINE_PENDENTE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'ALLE_PENDENTE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'MEINE_BEARBEITBAR',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'BEARBEITBAR',
-    },
-    {
-      filter: 'ALLE_BEARBEITBAR',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'BEARBEITBAR',
-    },
-    {
-      filter: 'MEINE_DRUCKBAR_VERFUEGUNGEN',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_VERFUEGUNGEN',
-    },
-    {
-      filter: 'ALLE_DRUCKBAR_VERFUEGUNGEN',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_VERFUEGUNGEN',
-    },
-    {
-      filter: 'MEINE_DRUCKBAR_DATENSCHUTZBRIEFE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
-    },
-    {
-      filter: 'ALLE_DRUCKBAR_DATENSCHUTZBRIEFE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
-    },
-    {
-      filter: 'ALLE_JURISTISCHE_ABKLAERUNG',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-    {
-      filter: 'ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-    {
-      filter: 'ALLE_GESUCHE',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-  ];
 
   // Signals and computed values for form changes and filtering
   private letzteAktivitaetFromChangedSig = toSignal(
@@ -341,38 +274,6 @@ export class SachbearbeitungAppFeatureGesucheComponent
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
-
-  availableQuickFiltersSig = computed<AvailableFilters>(() => {
-    const activeRoles = this.permissionStore.rolesMapSig();
-
-    const filters = this.quickFilterConfig
-      .filter(({ roles }) => roles.some((r) => activeRoles?.[r]))
-      .map(({ filter, roles, group }) => ({
-        typ: filter,
-        roles,
-        group,
-      }));
-
-    return filters.reduce((groups, { typ, roles, group }) => {
-      const existingGroup = groups.find((g) => g.group === group);
-      if (existingGroup) {
-        existingGroup.filters.push({ typ, roles });
-      } else {
-        groups.push({ group, filters: [{ typ, roles }] });
-      }
-
-      return groups;
-    }, [] as AvailableFilters);
-  });
-
-  handleQuickFilterClick(filter: GesuchFilter) {
-    if (filter === this.quickFilterForm.controls.query.value) {
-      // Refresh the quick filter even if the same filter is selected again
-      this.refreshQuickfilterSig.set({});
-    } else {
-      this.quickFilterForm.controls.query.setValue(filter);
-    }
-  }
 
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
@@ -458,7 +359,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
   });
 
   canCreateMassendruckSig: Signal<boolean> = computed(() => {
-    const quickFilter = this.show();
+    const quickFilter = this.filterTab();
     const isQuickfilterDruck = quickFilter?.includes('DRUCKBAR');
     this.filterFormChangedSig();
 
@@ -482,7 +383,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
 
   createMassendruckJobForQueryType$() {
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: this.showViewSig() },
+      req: { getGesucheSBQueryType: this.queryFromInputsSig() },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -531,18 +432,15 @@ export class SachbearbeitungAppFeatureGesucheComponent
             : undefined,
       });
 
+      const params = makeEmptyStringPropertiesNull(query);
+
       this.router.navigate(['.'], {
         relativeTo: this.route,
-        queryParams: makeEmptyStringPropertiesNull(query),
+        queryParams: params,
         queryParamsHandling: 'merge',
         replaceUrl: true,
       });
     });
-
-    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
-    const quickFilterChanged = toSignal(
-      this.quickFilterForm.controls.query.valueChanges,
-    );
 
     const toggleMeineChanged = toSignal(
       this.togglesGroup.controls.meine.valueChanges,
@@ -551,13 +449,20 @@ export class SachbearbeitungAppFeatureGesucheComponent
       this.togglesGroup.controls.bearbeitbar.valueChanges,
     );
 
+    // Handle toggle changes for 'meine' and 'bearbeitbar'
     effect(() => {
+      // const filterTab = this.filterTab();
       const meine = toggleMeineChanged();
       const bearbeitbar = toggleBearbeitbarChanged();
+      // const filterTab = this.filterTab();
 
+      // if (!filterTab) {
+      //   return;
+      // }
+
+      // todo: converter function, eventually to not navigate if not toggled?, or keep the other value, then set on { emitEvent: false } and only navigate on actual change
       const meineValue = meine ? 'MEINE' : 'ALLE';
       const bearbeitbarValue = bearbeitbar ? 'BEARBEITBAR' : 'GESUCHE';
-      const query: GesuchFilter = `${meineValue}_${bearbeitbarValue}`;
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
@@ -566,29 +471,13 @@ export class SachbearbeitungAppFeatureGesucheComponent
           work: bearbeitbarValue,
         },
         queryParamsHandling: 'merge',
-        replaceUrl: true,
       });
     });
 
+    // Load effect - When the route param inputs change, load the gesuche
     effect(() => {
-      const query = quickFilterChanged();
-
-      if (!query) {
-        return;
-      }
-      this.router.navigate(['.'], {
-        relativeTo: this.route,
-        queryParams: {
-          show: query,
-        },
-        queryParamsHandling: 'merge',
-        replaceUrl: true,
-      });
-    });
-
-    // When the route param inputs change, load the gesuche
-    effect(() => {
-      this.refreshQuickfilterSig();
+      // toggleMeineChanged();
+      // toggleBearbeitbarChanged();
       const { query, filter, startEndFilter } = this.getInputs();
 
       this.gesuchStore.loadGesuche$({
@@ -601,7 +490,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
   }
 
   private getInputs() {
-    const query = this.showViewSig();
+    const query = this.queryFromInputsSig();
     const filter = {
       fallNummer: this.fallNummer(),
       typ: parseTyp(this.typ()) ?? 'TRANCHE',
@@ -631,19 +520,31 @@ export class SachbearbeitungAppFeatureGesucheComponent
     const { query, filter, startEndFilter } = this.getInputs();
     const sortOrder = this.sortOrder();
     const sortColumn = this.sortColumn();
+    this.filterForm.reset(
+      {
+        ...filter,
+        piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
+      },
+      { emitEvent: false },
+    );
+    this.filterStartEndForm.reset(
+      {
+        ...startEndFilter,
+        letzteAktivitaetFrom: parseDate(
+          startEndFilter.letzteAktivitaetFrom ?? '',
+        ),
+        letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
+      },
+      { emitEvent: false },
+    );
 
-    this.filterForm.reset({
-      ...filter,
-      piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
-    });
-    this.filterStartEndForm.reset({
-      ...startEndFilter,
-      letzteAktivitaetFrom: parseDate(
-        startEndFilter.letzteAktivitaetFrom ?? '',
-      ),
-      letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
-    });
-    this.quickFilterForm.reset({ query });
+    const scope = this.scope();
+    const work = this.work();
+    const filterTab = this.filterTab();
+    // todo: what to do here?
+    // this.quickFilterForm.reset({ query });
+    this.togglesGroup.controls.meine.setValue(scope === 'MEINE');
+    this.togglesGroup.controls.bearbeitbar.setValue(work === 'BEARBEITBAR');
 
     if (sortColumn && sortOrder) {
       this.sortSig().sort({

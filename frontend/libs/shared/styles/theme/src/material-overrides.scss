@@ -369,3 +369,26 @@ dv-sachbearbeitung-app-feature-gesuch-layout {
     border: 1px solid var(--dv-gray-300);
   }
 }
+
+.mat-mdc-slide-toggle {
+  .mdc-switch__track {
+    height: 20px;
+    border-radius: 10px;
+  }
+
+  &.mat-accent {
+    --mat-slide-toggle-selected-icon-color: white;
+    --mat-slide-toggle-disabled-selected-icon-color: white;
+    --mat-slide-toggle-selected-focus-state-layer-color: var(--dv-red);
+    --mat-slide-toggle-selected-handle-color: var(--dv-red);
+    --mat-slide-toggle-selected-hover-state-layer-color: var(--dv-red);
+    --mat-slide-toggle-selected-pressed-state-layer-color: var(--dv-red);
+    --mat-slide-toggle-selected-focus-handle-color: var(--dv-red);
+    --mat-slide-toggle-selected-hover-handle-color: var(--dv-red);
+    --mat-slide-toggle-selected-pressed-handle-color: var(--dv-red);
+    --mat-slide-toggle-selected-focus-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-selected-hover-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-selected-pressed-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-selected-track-color: var(--dv-gray-500);
+  }
+}

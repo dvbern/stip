@@ -1,24 +1,12 @@
 <ng-container *transloco="let t">
   <div class="container">
     <div class="tw:my-6" [formGroup]="togglesGroup">
-      <mat-slide-toggle class="" [formControl]="togglesGroup.controls.meine">{{
+      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.meine">{{
         t('sachbearbeitung-app.cockpit.toggle.meine')
       }}</mat-slide-toggle>
-      <mat-slide-toggle class="tw:ml-4" [formControl]="togglesGroup.controls.bearbeitbar">{{
+      <mat-slide-toggle [hideIcon]="true" class="tw:ml-4" [formControl]="togglesGroup.controls.bearbeitbar">{{
         t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
       }}</mat-slide-toggle>
-    </div>
-
-    <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
-      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
-        <dv-shared-ui-filter-menu-button
-          [activeFilter]="show()"
-          [defaultFilter]="quickFilterGroup.filters[0].typ"
-          (filterChange)="handleQuickFilterClick($event)"
-          [filters]="quickFilterGroup.filters"
-          baseTranslationKey="sachbearbeitung-app.cockpit.quick-filter."
-        ></dv-shared-ui-filter-menu-button>
-      }
     </div>
 
     <div class="tw:flex tw:justify-between tw:mt-6! tw:mt-8!">
@@ -34,7 +22,7 @@
           class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap"
           (click)="createMassendruckJobForQueryType$()"
         >
-          @if (show()?.includes('VERFUEGUNGEN')) {
+          @if (queryFromInputsSig().includes('VERFUEGUNGEN')) {
             <span>{{
               t('sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN', { anzahl: totalEntriesSig() })
             }}</span>
