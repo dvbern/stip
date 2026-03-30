@@ -46,6 +46,7 @@ class AuthorizerAnnotationTest {
         List.of(
             "ch.dvbern.stip.api.tenancy.resource.TenantResourceImpl.getCurrentTenant",
             "ch.dvbern.stip.api.dokument.resource.DokumentResourceImpl.getDokument",
+            "ch.dvbern.stip.api.dokument.resource.DokumentResourceImpl.getSachbearbeiterGesuchDokumentDokument",
             "ch.dvbern.stip.api.verfuegung.resource.VerfuegungResourceImpl.getVerfuegungDokument",
             "ch.dvbern.stip.api.config.resource.ConfigResourceImpl.getDeploymentConfig",
             "ch.dvbern.stip.api.massendruck.resource.MassendruckJobResourceImpl.downloadMassendruckDocument",
