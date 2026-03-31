@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapper;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentMapperImpl;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.entities.service;
+package ch.dvbern.stip.api.generator.depricated.entities.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
@@ -25,6 +25,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
+@Deprecated
 @Mapper(config = MappingConfig.class)
 public interface GesuchUpdateDtoMapper {
     GesuchUpdateDto toEntity(GesuchUpdateDtoSpec gesuchUpdateDtoSpec);

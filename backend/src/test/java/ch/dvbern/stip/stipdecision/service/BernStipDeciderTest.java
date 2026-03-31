@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
-import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB;

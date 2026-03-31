@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.GeschwisterUpdateDtoSpecMod
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuererklaerungUpdateTabsDtoSpecModel;
-import ch.dvbern.stip.api.generator.entities.service.DokumentGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
