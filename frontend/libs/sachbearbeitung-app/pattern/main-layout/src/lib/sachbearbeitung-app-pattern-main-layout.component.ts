@@ -22,9 +22,8 @@ const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
     label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
     route: ['/dashboard/gesuche'],
-    // Default filter state
     queryParams: {
-      filterTab: 'BEARBEITBAR',
+      filterTab: 'GESUCHE',
       scope: 'MEINE',
       workable: 'TRUE',
     },
@@ -79,6 +78,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
+  // todo: move this logic into the new dashboard!c
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
   navItemsSig = computed(() => {

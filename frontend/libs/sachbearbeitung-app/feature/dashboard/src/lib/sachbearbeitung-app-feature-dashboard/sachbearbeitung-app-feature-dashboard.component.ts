@@ -3,7 +3,6 @@ import {
   Component,
   HostBinding,
   computed,
-  effect,
   inject,
   input,
 } from '@angular/core';
@@ -51,7 +50,7 @@ const tabs: DashboardFilterTabItem[] = [
   },
   {
     name: 'juristische-abklaerung',
-    route: ['juristische-abklaerung'],
+    route: ['gesuche'],
     queryParams: { filterTab: 'JURISTISCHE_ABKLAERUNG' },
     queryParamsHandling: 'merge',
     active: false,
@@ -59,7 +58,7 @@ const tabs: DashboardFilterTabItem[] = [
   },
   {
     name: 'abklaerung-durch-rechtsabteilung',
-    route: ['abklaerung-durch-rechtsabteilung'],
+    route: ['gesuche'],
     queryParams: { filterTab: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' },
     queryParamsHandling: 'merge',
     active: false,
@@ -68,6 +67,7 @@ const tabs: DashboardFilterTabItem[] = [
   {
     name: 'darlehen',
     route: ['darlehen'],
+    queryParams: { filterTab: 'DARLEHEN' },
     queryParamsHandling: 'merge',
     active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
@@ -96,7 +96,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   route = inject(ActivatedRoute);
   filterTab = input<string | undefined>(undefined);
 
-  filterTabQueryParam = toSignal(
+  filterTabQueryParamSig = toSignal(
     this.route.queryParamMap.pipe(
       map((params) => params.get('filterTab') ?? undefined),
     ),
@@ -104,7 +104,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
 
   tabsSig = computed<TabNavItem[]>(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const filterTab = this.filterTabQueryParam();
+    const filterTab = this.filterTabQueryParamSig();
     return tabs
       .filter((tab) => {
         if (!tab.roles || tab.roles.length === 0) {

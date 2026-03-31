@@ -12,6 +12,7 @@ import {
   effect,
   inject,
   input,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -48,6 +49,7 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
+  GetGesucheSBQueryType,
   SbDashboardGesuch,
   SbGesucheDashboardColumn,
   SortOrder,
@@ -79,6 +81,7 @@ import {
   QueryTypePrefix,
   WorkableQueryParam,
   getGesuchQueryFromParams,
+  getGesucheQueryFromValues,
 } from '@dv/shared/util/navigation';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import {
@@ -100,6 +103,7 @@ import {
 // todo: eventually move!
 const DEFAULT_SCOPE: QueryTypePrefix = 'MEINE';
 const DEFAULT_FILTER_TAB: FilterGesucheQueryParam = 'GESUCHE';
+const DEFAULT_WORKABLE: WorkableQueryParam = 'TRUE';
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -223,8 +227,8 @@ export class SachbearbeitungAppFeatureGesucheComponent
   } satisfies Record<DashboardFormStartEndFields, unknown>);
 
   togglesGroup = this.formBuilder.group({
-    meine: [<boolean | undefined>undefined],
-    bearbeitbar: [<boolean | undefined>undefined],
+    scope: [<boolean | undefined>undefined],
+    workable: [<boolean | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
@@ -232,11 +236,34 @@ export class SachbearbeitungAppFeatureGesucheComponent
   availableTypes = Object.values(GesuchTrancheTyp);
   versionSig = this.store.selectSignal(selectVersion);
 
-  queryFromInputsSig = computed<GesuchFilter>(() => {
-    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB;
+  queryFromInputsSig = computed<{
+    query: GetGesucheSBQueryType;
+    scopeControl: { show: boolean; value: boolean };
+    workableControl: { show: boolean; value: boolean };
+  }>(() => {
+    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB; // move default?
     const scope = this.scope() ?? DEFAULT_SCOPE;
+    const workable = this.workable() ?? DEFAULT_WORKABLE;
 
-    return getGesuchQueryFromParams(scope, filterTab);
+    return getGesuchQueryFromParams(scope, filterTab, workable);
+  });
+
+  showScopeToggleSig = computed(() => {
+    const { scopeControl } = this.queryFromInputsSig();
+    this.togglesGroup.controls.scope.setValue(scopeControl.value, {
+      emitEvent: false,
+    });
+
+    return scopeControl.show;
+  });
+
+  showWorkableToggleSig = computed(() => {
+    const { workableControl } = this.queryFromInputsSig();
+    this.togglesGroup.controls.workable.setValue(workableControl.value, {
+      emitEvent: false,
+    });
+
+    return workableControl.show;
   });
 
   sortList = sortList(this.router, this.route);
@@ -361,7 +388,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
 
   createMassendruckJobForQueryType$() {
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: this.queryFromInputsSig() },
+      req: { getGesucheSBQueryType: this.queryFromInputsSig().query },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -420,33 +447,30 @@ export class SachbearbeitungAppFeatureGesucheComponent
       });
     });
 
-    const toggleMeineChanged = toSignal(
-      this.togglesGroup.controls.meine.valueChanges,
+    const scopeChangedSig = toSignal(
+      this.togglesGroup.controls.scope.valueChanges,
     );
-    const toggleBearbeitbarChanged = toSignal(
-      this.togglesGroup.controls.bearbeitbar.valueChanges,
+    const workableChangedSig = toSignal(
+      this.togglesGroup.controls.workable.valueChanges,
     );
 
-    // Handle toggle changes for 'meine' and 'bearbeitbar'
+    // Handle toggle changes for 'scope' and 'workable'
     effect(() => {
-      // const filterTab = this.filterTab();
-      const meine = toggleMeineChanged();
-      const bearbeitbar = toggleBearbeitbarChanged();
-      // const filterTab = this.filterTab();
+      const scopeChanged = scopeChangedSig();
+      const workableChanged = workableChangedSig();
+      const filterTabChanged = untracked(this.filterTab);
 
-      // if (!filterTab) {
-      //   return;
-      // }
-
-      // todo: converter function, eventually to not navigate if not toggled?, or keep the other value, then set on { emitEvent: false } and only navigate on actual change
-      const meineValue = meine ? 'MEINE' : 'ALLE';
-      const bearbeitbarValue = bearbeitbar ? 'TRUE' : 'FALSE';
+      const { scope, workable } = getGesucheQueryFromValues(
+        scopeChanged,
+        workableChanged,
+        filterTabChanged,
+      );
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
-          scope: meineValue,
-          workable: bearbeitbarValue,
+          scope,
+          workable,
         },
         queryParamsHandling: 'merge',
       });
@@ -454,12 +478,10 @@ export class SachbearbeitungAppFeatureGesucheComponent
 
     // Load effect - When the route param inputs change, load the gesuche
     effect(() => {
-      // toggleMeineChanged();
-      // toggleBearbeitbarChanged();
       const { query, filter, startEndFilter } = this.getInputs();
 
       this.gesuchStore.loadGesuche$({
-        getGesucheSBQueryType: query,
+        getGesucheSBQueryType: query.query,
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -495,7 +517,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
   }
 
   ngOnInit() {
-    const { filter, startEndFilter } = this.getInputs();
+    const { query, filter, startEndFilter } = this.getInputs();
     const sortOrder = this.sortOrder();
     const sortColumn = this.sortColumn();
     this.filterForm.reset(
@@ -516,12 +538,8 @@ export class SachbearbeitungAppFeatureGesucheComponent
       { emitEvent: false },
     );
 
-    const scope = this.scope();
-    const workable = this.workable();
-    // todo: what to do here?
-    // this.quickFilterForm.reset({ query });
-    this.togglesGroup.controls.meine.setValue(scope === 'MEINE');
-    this.togglesGroup.controls.bearbeitbar.setValue(workable === 'TRUE');
+    this.togglesGroup.controls.scope.setValue(query.scopeControl.value);
+    this.togglesGroup.controls.workable.setValue(query.workableControl.value);
 
     if (sortColumn && sortOrder) {
       this.sortSig().sort({

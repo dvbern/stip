@@ -3,7 +3,10 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
+import { FormControl } from '@angular/forms';
 import { QueryParamsHandling, UrlTree } from '@angular/router';
+import { is } from 'date-fns/locale';
+import { filter } from 'rxjs';
 
 import {
   BenutzerRole,
@@ -76,6 +79,16 @@ export interface TabNavItem {
   testId?: string;
 }
 
+export type GetGesucheSBQueryWithoutBearbeiter = Exclude<
+  GetGesucheSBQueryType,
+  'ALLE_BEARBEITBAR' | 'MEINE_BEARBEITBAR'
+>;
+
+export type GetFreiwilligDarlehenSbQueryWithoutBearbeiter = Exclude<
+  GetFreiwilligDarlehenSbQueryType,
+  'ALLE_BEARBEITBAR' | 'MEINE_BEARBEITBAR'
+>;
+
 export type WorkableQueryParam = 'TRUE' | 'FALSE';
 export const workableEnabledTabFilters = [
   'GESUCHE',
@@ -87,12 +100,19 @@ export type WorkableEnabledTabFilters =
 export type QueryTypePrefix =
   DashboardQueryType extends `${infer Prefix}_${string}` ? Prefix : never;
 
-type QueryTypeSuffix<T extends string> =
+export type QueryTypeSuffix<T extends string> =
   T extends `${QueryTypePrefix}_${infer Suffix}` ? Suffix : never;
 
-export type FilterGesucheQueryParam = QueryTypeSuffix<GetGesucheSBQueryType>;
+export type FilterGesucheQueryParam =
+  QueryTypeSuffix<GetGesucheSBQueryWithoutBearbeiter>;
+
+export type ToQueryFilterInputGesucheParam =
+  QueryTypeSuffix<GetGesucheSBQueryType>;
 
 export type FilterFreiwilligDarlehenQueryParam =
+  QueryTypeSuffix<GetFreiwilligDarlehenSbQueryWithoutBearbeiter>;
+
+export type ToQueryFilterInputFreiwilligDarlehenParam =
   QueryTypeSuffix<GetFreiwilligDarlehenSbQueryType>;
 
 export type FilterTabQueryParam =
@@ -100,14 +120,25 @@ export type FilterTabQueryParam =
   | FilterFreiwilligDarlehenQueryParam;
 
 type FilterGesucheScopeSelectableQueryParam = QueryTypeSuffix<
-  Extract<GetGesucheSBQueryType, `MEINE_${string}`>
+  Extract<GetGesucheSBQueryWithoutBearbeiter, `MEINE_${string}`>
 >;
 
 type FilterGesucheAlleOnlyQueryParam = Exclude<
   FilterGesucheQueryParam,
   FilterGesucheScopeSelectableQueryParam
 >;
+export const filterGesucheAlleOnlyTabFilters: FilterGesucheAlleOnlyQueryParam[] =
+  ['JURISTISCHE_ABKLAERUNG', 'ABKLAERUNG_DURCH_RECHSTABTEILUNG'];
 
+const isFilterGesucheAlleOnlyQueryParam = (
+  param: FilterGesucheQueryParam,
+): param is FilterGesucheAlleOnlyQueryParam => {
+  return filterGesucheAlleOnlyTabFilters.includes(
+    param as FilterGesucheAlleOnlyQueryParam,
+  );
+};
+
+// todo: make non optional
 type GesucheDashQueryParams =
   | {
       filterTab?: FilterGesucheScopeSelectableQueryParam;
@@ -132,21 +163,16 @@ export interface DashboardFilterTabItem extends TabNavItem {
   queryParams?: DashQueryParams;
 }
 
-type GesuchQueryCandidate = `${QueryTypePrefix}_${FilterGesucheQueryParam}`;
-type FreiwilligDarlehenQueryCandidate =
-  `${QueryTypePrefix}_${FilterFreiwilligDarlehenQueryParam}`;
-
 export const isGesuchQueryValid = (
-  query: GesuchQueryCandidate,
+  query: string,
 ): query is GetGesucheSBQueryType => {
-  const valid = Object.values(GetGesucheSBQueryType).includes(
+  return Object.values(GetGesucheSBQueryType).includes(
     query as GetGesucheSBQueryType,
   );
-  return valid;
 };
 
 export const isFreiwilligDarlehenQueryValid = (
-  query: FreiwilligDarlehenQueryCandidate,
+  query: string,
 ): query is GetFreiwilligDarlehenSbQueryType => {
   return Object.values(GetFreiwilligDarlehenSbQueryType).includes(
     query as GetFreiwilligDarlehenSbQueryType,
@@ -156,13 +182,83 @@ export const isFreiwilligDarlehenQueryValid = (
 export const getGesuchQueryFromParams = (
   scope: QueryTypePrefix,
   filterTab: FilterGesucheQueryParam,
-): GetGesucheSBQueryType => {
-  const query = `${scope}_${filterTab}` as GesuchQueryCandidate;
-
-  if (isGesuchQueryValid(query)) {
-    return query;
+  workable?: WorkableQueryParam,
+): {
+  query: GetGesucheSBQueryType;
+  scopeControl: { show: boolean; value: boolean };
+  workableControl: { show: boolean; value: boolean };
+} => {
+  if (
+    workableEnabledTabFilters.includes(filterTab as WorkableEnabledTabFilters)
+  ) {
+    if (workable === 'TRUE') {
+      const workableQuery = `${scope}_BEARBEITBAR`;
+      if (isGesuchQueryValid(workableQuery)) {
+        return {
+          query: workableQuery,
+          scopeControl: { show: true, value: scope === 'MEINE' },
+          workableControl: { show: true, value: true },
+        };
+      }
+    } else {
+      const nonWorkableQuery = `${scope}_${filterTab}`;
+      if (isGesuchQueryValid(nonWorkableQuery)) {
+        return {
+          query: nonWorkableQuery,
+          scopeControl: { show: true, value: scope === 'MEINE' },
+          workableControl: { show: true, value: false },
+        };
+      }
+    }
   }
 
-  // Some gesuche tabs only exist with ALLE_* variants.
-  return `ALLE_${filterTab}` as GetGesucheSBQueryType;
+  if (isFilterGesucheAlleOnlyQueryParam(filterTab)) {
+    const alleOnlyQuery = `ALLE_${filterTab}`;
+    if (isGesuchQueryValid(alleOnlyQuery)) {
+      return {
+        query: alleOnlyQuery,
+        scopeControl: { show: false, value: false },
+        workableControl: { show: false, value: false },
+      };
+    }
+  }
+
+  const query = `${scope}_${filterTab}`;
+
+  if (!isGesuchQueryValid(query)) {
+    throw new Error(`Invalid query generated from params: ${query}`);
+  }
+
+  return {
+    query,
+    scopeControl: { show: true, value: scope === 'MEINE' },
+    workableControl: { show: false, value: false },
+  };
+};
+
+export const getGesucheQueryFromValues = (
+  scopeValue: boolean | undefined,
+  workableValue: boolean | undefined,
+  // filterTab is just returned for convenicence, but not changed
+  filterTab?: FilterGesucheQueryParam,
+): GesucheDashQueryParams => {
+  if (!filterTab) {
+    throw new Error('filterTab is required to determine query params');
+  }
+
+  const scope = scopeValue ? 'MEINE' : 'ALLE';
+  const workable = workableValue ? 'TRUE' : 'FALSE';
+
+  if (isFilterGesucheAlleOnlyQueryParam(filterTab)) {
+    return { scope: 'ALLE', workable: 'FALSE', filterTab };
+  }
+
+  if (
+    workable === 'TRUE' &&
+    !workableEnabledTabFilters.includes(filterTab as WorkableEnabledTabFilters)
+  ) {
+    return { scope, workable: 'FALSE', filterTab };
+  }
+
+  return { scope, workable, filterTab };
 };
