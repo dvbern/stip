@@ -1,10 +1,20 @@
 <div class="container">
   <div class="row">
     @let gesuch = gesuchViewSig().gesuch;
+    @let isEditingAenderung = gesuchViewSig().isEditingAenderung;
     @let permissions = gesuchViewSig().permissions;
     @let einreichenView = einreichenStore.einreichenViewSig();
     @if (gesuchViewSig().loading || einreichenView.loading) {
       <dv-shared-ui-loading data-testid="abschluss-loading"></dv-shared-ui-loading>
+    } @else if (isEditingAenderung && !canAenderungEinreichenSig()) {
+      <div class="col-12 col-xl-8 mt-4 d-flex flex-column align-items-start">
+        <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
+          <span class="text-warning material-symbols-rounded me-3">warning</span>
+          <div class="ms-3">
+            <span [innerHTML]="'shared.form.abschluss.aenderungNichtEinreichbar' | transloco"></span>
+          </div>
+        </dv-shared-ui-info-container>
+      </div>
     } @else {
       @if (gesuch; as gesuch) {
         <div class="col-12 col-xl-8 mt-4 d-flex flex-column align-items-start">
