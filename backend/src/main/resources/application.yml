@@ -172,7 +172,7 @@ quarkus:
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
-#      sql: true
+      sql: true
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'
