@@ -108,6 +108,7 @@ import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
@@ -175,8 +176,7 @@ public class GenerateDemoDataService {
     }
 
     private LocalDate getGeburtsdatum(DemoData demoData, String geburtsdatum, int alter) {
-        final var targetYear =
-            LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter).getYear() - alter;
+        final var targetYear = demoData.getGesuchsjahr() - alter;
         return LocalDate.parse("%s.%d".formatted(geburtsdatum, targetYear), ParseDemoDataUtil.dmyFormatter);
     }
 
@@ -675,33 +675,42 @@ public class GenerateDemoDataService {
         }
 
         final var demoDataDto = demoData.parseDemoDataDto();
-        final var berechnungsresultat = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
-        );
+        BerechnungsresultatDto berechnungsresultat;
+        try {
+            berechnungsresultat = berechnungService.getBerechnungsresultatFromGesuch(
+                gesuch,
+                configService.getCurrentDmnMajorVersion(),
+                configService.getCurrentDmnMinorVersion()
+            );
+        } finally {
+            if (Objects.isNull(initialEinreicheDatum)) {
+                gesuch.setEinreichedatum(null);
+            }
+        }
         final var stipendienanspruchDto = demoDataDto.getStipendienanspruch();
 
-        if (Objects.isNull(initialEinreicheDatum)) {
-            gesuch.setEinreichedatum(null);
-        }
-
         final var total = berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
-        final var stipendienSoll = Objects.requireNonNullElse(
-            stipendienanspruchDto.getBetragStipendienSoll(),
-            stipendienanspruchDto.getBetragStipendienIst()
-        );
-        final var darlehenSoll = Objects.requireNonNullElse(
-            stipendienanspruchDto.getBetragDarlehenSoll(),
-            stipendienanspruchDto.getBetragDarlehenIst()
-        );
+        final var stipendienSoll = Objects.nonNull(stipendienanspruchDto.getBetragStipendienSoll())
+            ? stipendienanspruchDto.getBetragStipendienSoll()
+            : stipendienanspruchDto.getBetragStipendienIst();
+        final var darlehenSoll = Objects.nonNull(stipendienanspruchDto.getBetragDarlehenSoll())
+            ? stipendienanspruchDto.getBetragDarlehenSoll()
+            : stipendienanspruchDto.getBetragDarlehenIst();
+        final var stipendienIst = Objects.requireNonNullElse(berechnungsresultat.getBerechnungDarlehen(), 0) != 0
+        || Objects.equals(
+            berechnungsresultat.getBerechnungStipendium(),
+            berechnungsresultat
+                .getBerechnungVorKuerzungUndTeilung()
+        )
+            ? berechnungsresultat.getBerechnungStipendium()
+            : berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
 
         return new ApplyDemoDataResponseStipendienanspruchDto()
-            .success(berechnungsresultat.getBerechnungStipendium().equals(stipendienSoll))
+            .success(stipendienIst.equals(stipendienSoll))
             .statusSoll(stipendienanspruchDto.getStatus())
             .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)
             .betragStipendienSoll(stipendienSoll)
-            .betragStipendienIst(berechnungsresultat.getBerechnungStipendium())
+            .betragStipendienIst(stipendienIst)
             .betragDarlehenSoll(darlehenSoll)
             .betragDarlehenIst(berechnungsresultat.getBerechnungDarlehen());
     }

@@ -1,0 +1,27 @@
+<ng-container *dvTranslocoDemo="let t">
+  @let rawValue = valueSig();
+  @switch (rawValue.type) {
+    @case ('number') {
+      <span class="tw:w-full tw:text-right">{{ rawValue.value | formatChf }}</span>
+    }
+    @case ('boolean') {
+      <div class="tw:w-full tw:justify-center tw:flex tw:py-1">
+        <span class="tw:w-0 tw:overflow-hidden tw:inline-block">{{
+          t(`shared.ui.${rawValue.value ? 'yes' : 'no'}`)
+        }}</span>
+        <i
+          class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:select-none"
+          [ngClass]="{ 'tw:text-dv-red!': !rawValue.value, 'tw:text-dv-green!': rawValue.value }"
+          [matTooltip]="t(`shared.ui.${rawValue.value ? 'yes' : 'no'}`)"
+        >
+          <span>{{ rawValue.value ? 'check_circle' : 'cancel' }}</span>
+        </i>
+      </div>
+    }
+    @default {
+      @if (!!rawValue.value) {
+        <i class="material-symbols-rounded tw:text-sm tw:text-dv-warning" [matTooltip]="rawValue.value"> warning </i>
+      }
+    }
+  }
+</ng-container>
