@@ -35,4 +35,11 @@ public class DatenschutzbriefAuthorizer extends BaseAuthorizer {
         }
         forbidden();
     }
+
+    public void canGetDatenschutzbriefs() {
+        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+        forbidden();
+    }
 }

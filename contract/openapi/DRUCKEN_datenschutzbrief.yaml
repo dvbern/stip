@@ -11,12 +11,8 @@ servers:
       port:
         default: '8080'
 paths:
-  '/datenschutzbrief/{trancheId}/download':
+  '/datenschutzbrief/download':
     parameters:
-      - name: trancheId
-        schema:
-          $ref: './components/common.yaml#/UUID'
-        in: path
       - name: token
         schema:
           type: string
@@ -36,14 +32,20 @@ paths:
       operationId: getDatenschutzbrief
       summary: get Datenschutzbrief
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
-  '/datenschutzbrief/{elternId}/token':
+  '/datenschutzbrief/{gesuchId}/token':
     parameters:
-      - name: elternId
+      - name: gesuchId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
+      parameters:
+        - name: datenschutzbriefId
+          schema:
+            $ref: './components/common.yaml#/UUID'
+          in: query
+          required: true
       tags:
         - Datenschutzbrief
       responses:
@@ -66,8 +68,110 @@ paths:
           description: Datenschutzbrief File Download Token returned
       operationId: getDatenschutzbriefDownloadToken
       summary: get Token to downlaod Verfuegung
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatenschutzbriefCreate'
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: Datenschutzbrief File Download Token returned
+      operationId: createAndGetDatenschutzbriefDownloadToken
+      summary: get Token to downlaod Verfuegung
+  '/datenschutzbrief/{gesuchId}/all':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatenschutzbriefOverview'
+          description: The list of related DatenschutzbriefOverview
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+          description: Get all Datenschutzbriefs for given Gesuch
+      operationId: getAllDatenschutzbriefs
+      summary: Get all Datenschutzbriefs for given Gesuch
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
+  schemas:
+    DatenschutzbriefCreate:
+      required:
+        - elternId
+      type: object
+      properties:
+        elternId:
+          $ref: './components/common.yaml#/UUID'
+    DatenschutzbriefTyp:
+      enum:
+        - MANUELL
+        - MASSENDRUCK
+      type: string
+    DatenschutzbriefOverview:
+      required:
+        - id
+        - userErstellt
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - elternTyp
+      type: object
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        timestampErstellt:
+          $ref: './components/common.yaml#/LocalDate'
+        userErstellt:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        elternTyp:
+          $ref: './components/common.yaml#/ElternTyp'
+        dokument:
+          $ref: './components/common.yaml#/Dokument'
+        massendruckJobId:
+          $ref: './components/common.yaml#/UUID'
+
 security:
   $ref: './components/security.yaml#/security'

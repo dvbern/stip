@@ -282,6 +282,14 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
+    public Stream<Datenschutzbrief> getAllPendingDatenschutschbriefsForMassendruck() {
+        return datenschutzbriefs.stream().filter(d -> !d.isVersendet());
+    }
+
+    public Stream<Verfuegung> getAllPendingVerfuegungsForMassendruck() {
+        return verfuegungs.stream().filter(d -> !d.isVersendet());
+    }
+
     public boolean isFirstVerfuegung() {
         return verfuegungs.size() < 2;
     }

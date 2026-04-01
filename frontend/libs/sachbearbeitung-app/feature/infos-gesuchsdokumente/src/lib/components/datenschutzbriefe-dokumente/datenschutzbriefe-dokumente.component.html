@@ -1,4 +1,4 @@
-<div class="tw:dv-table tw:my-3">
+<div class="tw:dv-table tw:my-3" *dvTranslocoSb="let t">
   <div class="tw:relative tw:overflow-auto">
     @if (infosStore.datenschutzbriefeDokumenteViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
@@ -11,62 +11,141 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.description' | transloco
+          t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.description')
         }}
       </caption>
 
       <!-- Datum -->
       <ng-container matColumnDef="datum">
         <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.table.datum' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.table.datum') }}
         </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.datum | date: 'dd.MM.yyyy' }}
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+        >
+          {{ datenschutzbrief.timestampErstellt | date: 'dd.MM.yyyy' }}
         </td>
       </ng-container>
 
-      <!-- Kategorie -->
-      <ng-container matColumnDef="kategorie">
+      <!-- Typ -->
+      <ng-container matColumnDef="typ">
         <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.kategorie' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.typ') }}
         </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.kategorie }}
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+          [dvTruncateTooltip]="
+            t(`sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.typ.${datenschutzbrief.typ}`)
+          "
+        >
+          {{ t(`sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.typ.${datenschutzbrief.typ}`) }}
         </td>
       </ng-container>
 
-      <!-- Sachbearbeiter -->
-      <ng-container matColumnDef="sachbearbeiter">
+      <!-- UserErstellt -->
+      <ng-container matColumnDef="userErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.sachbearbeiter' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.userErstellt') }}
         </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.sachbearbeiter }}
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+          [dvTruncateTooltip]="datenschutzbrief.userErstellt"
+        >
+          {{ datenschutzbrief.userErstellt }}
         </td>
       </ng-container>
 
-      <!-- Person -->
-      <ng-container matColumnDef="person">
+      <!-- Sozialversicherungsnummer -->
+      <ng-container matColumnDef="sozialversicherungsnummer">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.person' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.sozialversicherungsnummer') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.person }}
+          {{ dokument.sozialversicherungsnummer }}
         </td>
       </ng-container>
 
-      <!-- Link zum Massendruck -->
-      <ng-container matColumnDef="massendruck">
+      <!-- Vorname -->
+      <ng-container matColumnDef="vorname">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck' | transloco }}
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.vorname') }}
         </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          @if (dokument.massendruckJobId) {
-            <a class="tw:text-gray-400 btn btn-link tw:!p-0">
-              {{ 'sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link' | transloco }}
-            </a>
-          } @else {
-            <span class="tw:text-gray-400">-</span>
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+          [dvTruncateTooltip]="datenschutzbrief.vorname"
+        >
+          {{ datenschutzbrief.vorname }}
+        </td>
+      </ng-container>
+
+      <!-- Nachname -->
+      <ng-container matColumnDef="nachname">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.nachname') }}
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+          [dvTruncateTooltip]="datenschutzbrief.nachname"
+        >
+          {{ datenschutzbrief.nachname }}
+        </td>
+      </ng-container>
+
+      <!-- Link zum Dokument -->
+      <ng-container matColumnDef="dokument">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.dokument') }}
+        </th>
+        <td
+          mat-cell
+          *dvMatCellDef="let datenschutzbrief; dataSource: paginatedDokumenteSig()"
+          class="tw:whitespace-nowrap"
+        >
+          @switch (datenschutzbrief.typ) {
+            @case ('MANUELL') {
+              <button
+                type="button"
+                class="btn btn-link tw:!flex tw:max-w-full tw:!p-0 tw:items-center"
+                [dvDownloadButton]="{
+                  type: 'datenschutzbrief',
+                  id: datenschutzbrief.id,
+                  gesuchId: gesuchIdSig(),
+                }"
+              >
+                <span class="tw:truncate" [matTooltip]="datenschutzbrief.dokument.filename">{{
+                  t(
+                    `sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.elternTyp.${datenschutzbrief.elternTyp}`
+                  )
+                }}</span>
+                <span class="material-symbols-rounded tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
+              </button>
+            }
+            @case ('MASSENDRUCK') {
+              <a
+                class="tw:text-gray-400 btn btn-link tw:!p-0 tw:max-w-full tw:flex!"
+                [routerLink]="['/massendruck/druckauftrag', datenschutzbrief.massendruckJobId]"
+              >
+                <span
+                  class="tw:text-ellipsis tw:whitespace-nowrap tw:overflow-hidden tw:shrink tw:min-w-0"
+                  [dvTruncateTooltip]="
+                    t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link')
+                  "
+                >
+                  {{ t('sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.massendruck.link') }}
+                </span>
+                <i class="material-symbols-rounded tw:text-sm!">open_in_new</i>
+              </a>
+            }
           }
         </td>
       </ng-container>
@@ -75,7 +154,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | transloco }}
+          {{ t('shared.table.noData') }}
         </td>
       </tr>
     </table>
