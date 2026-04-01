@@ -49,6 +49,7 @@ import static ch.dvbern.stip.api.util.TestConstants.JURIST_ID;
         OidcPermissions.AUSBILDUNG_DELETE,
         OidcPermissions.JURIST_GESUCH_READ,
         OidcPermissions.JURIST_GESUCH_UPDATE,
+        OidcPermissions.SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE,
         "default-roles-bern"
     }
 )

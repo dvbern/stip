@@ -33,6 +33,7 @@ import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
+import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -216,6 +217,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "in_bearbeitung_sb_reason")
     private InBearbeitungSbReason inBearbeitungSbReason;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
+    private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
     public Optional<GesuchTranche> getGesuchTrancheById(UUID id) {
         return gesuchTranchen.stream()

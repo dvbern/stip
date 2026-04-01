@@ -81,6 +81,18 @@ export class SharedPatternDocumentUploadComponent {
     { equal: (a, b) => a.dokument.dokumentTyp === b.dokument.dokumentTyp },
   );
 
+  private hasDocumentsChangedSig = computed(
+    () => {
+      const hasEntries = this.uploadStore.hasEntriesSig();
+      const isLoading = this.uploadStore.isLoading();
+
+      return { hasEntries, isLoading };
+    },
+    {
+      equal: (a, b) => a.hasEntries === b.hasEntries || b.isLoading,
+    },
+  );
+
   @HostBinding('class') klass = 'tw:block tw:self-start tw:relative tw:h-14';
 
   constructor() {
@@ -108,7 +120,7 @@ export class SharedPatternDocumentUploadComponent {
     });
 
     effect(() => {
-      const hasEntries = this.uploadStore.hasEntriesSig();
+      const { hasEntries } = this.hasDocumentsChangedSig();
 
       this.hasDocuments.emit(hasEntries);
     });
@@ -134,6 +146,7 @@ export class SharedPatternDocumentUploadComponent {
     switch (dokument.art) {
       case 'DARLEHEN_DOKUMENT':
       case 'GENERIC_DOKUMENT':
+      case 'SACHBEARBEITER_GESUCH_DOKUMENT':
         return;
     }
 

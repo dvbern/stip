@@ -77,6 +77,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SACHBEARBEITER_ADMIN_ID;
         OidcPermissions.SB_GESUCH_UPDATE,
         OidcPermissions.CUSTOM_DOKUMENT_DELETE,
         OidcPermissions.SOZIALDIENST_READ,
+        OidcPermissions.SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE,
         "default-roles-bern"
     }
 )

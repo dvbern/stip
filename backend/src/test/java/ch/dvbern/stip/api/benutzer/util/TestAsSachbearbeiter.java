@@ -65,6 +65,7 @@ import static ch.dvbern.stip.api.util.TestConstants.SACHBEARBEITER_ID;
         OidcPermissions.AUSBILDUNGSSTAETTE_UPDATE,
         OidcPermissions.FREIWILLIG_DARLEHEN_READ,
         OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_SB,
+        OidcPermissions.SACHBEARBEITER_GESUCH_DOKUMENT_MANAGE,
         "default-roles-bern"
     }
 )

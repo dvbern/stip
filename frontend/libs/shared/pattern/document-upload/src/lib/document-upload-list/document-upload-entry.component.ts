@@ -56,19 +56,24 @@ export class SharedPatternDocumentUploadEntryComponent {
   });
   downloadOptionsSig = computed<DownloadOptions>(() => {
     const upload = this.uploadViewSig();
-    const document = this.documentViewSig();
+    const dokument = this.documentViewSig();
     switch (upload.dokumentModel.art) {
       case 'DARLEHEN_DOKUMENT':
-        return { type: 'darlehen', id: document.file.id };
+        return { type: 'darlehen', id: dokument.file.id };
       case 'GENERIC_DOKUMENT':
-        return { type: 'ausbildungUnterbruch', id: document.file.id };
+        return { type: 'ausbildungUnterbruch', id: dokument.file.id };
       case 'CUSTOM_DOKUMENT':
       case 'GESUCH_DOKUMENT':
       case 'UNTERSCHRIFTENBLATT':
         return {
           type: 'dokument',
-          id: document.file.id,
+          id: dokument.file.id,
           dokumentArt: upload.dokumentModel.art,
+        };
+      case 'SACHBEARBEITER_GESUCH_DOKUMENT':
+        return {
+          type: 'sachbearbeiterGesuchDokument',
+          id: dokument.file.id,
         };
       default:
         assertUnreachable(upload.dokumentModel);

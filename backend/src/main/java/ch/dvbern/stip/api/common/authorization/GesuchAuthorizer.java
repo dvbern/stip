@@ -209,10 +209,6 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.SB_INITIALISIERT_AENDERUNG);
     }
 
-    public void sbCanChangeGesuchStatusToDatenschutzBriefDruckbereit(UUID gesuchId) {
-        assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT);
-    }
-
     @Transactional
     public void gsCanCreate() {
         final var currentBenutzer = benutzerService.getCurrentBenutzer();

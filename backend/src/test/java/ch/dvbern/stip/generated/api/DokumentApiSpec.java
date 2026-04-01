@@ -22,6 +22,8 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.SachbearbeiterGesuchDokumentDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
@@ -71,13 +73,17 @@ public class DokumentApiSpec {
                 createCustomDokumentTyp(),
                 createDokumentGS(),
                 createDokumentSB(),
+                createSachbearbeiterGesuchDokument(),
                 createUnterschriftenblatt(),
                 deleteCustomDokumentTyp(),
                 deleteDokumentGS(),
                 deleteDokumentSB(),
+                deleteSachbearbeiterGesuchDokument(),
+                deleteSachbearbeiterGesuchDokumentDokument(),
                 deleteUnterschriftenblattDokument(),
                 gesuchDokumentAblehnen(),
                 gesuchDokumentAkzeptieren(),
+                getAllSachbearbeiterGesuchDokumentsOfGesuch(),
                 getCustomGesuchDokumentForTypGS(),
                 getCustomGesuchDokumentForTypSB(),
                 getDokument(),
@@ -86,9 +92,12 @@ public class DokumentApiSpec {
                 getGesuchDokumentForTypSB(),
                 getGesuchDokumentKommentareGS(),
                 getGesuchDokumentKommentareSB(),
+                getSachbearbeiterGesuchDokumentDokument(),
+                getSachbearbeiterGesuchDokumentDokumentDownloadToken(),
                 getUnterschriftenblaetterForGesuch(),
                 uploadCustomGesuchDokumentGS(),
-                uploadCustomGesuchDokumentSB()
+                uploadCustomGesuchDokumentSB(),
+                uploadSachbearbeiterGesuchDokument()
         );
     }
 
@@ -102,6 +111,10 @@ public class DokumentApiSpec {
 
     public CreateDokumentSBOper createDokumentSB() {
         return new CreateDokumentSBOper(createReqSpec());
+    }
+
+    public CreateSachbearbeiterGesuchDokumentOper createSachbearbeiterGesuchDokument() {
+        return new CreateSachbearbeiterGesuchDokumentOper(createReqSpec());
     }
 
     public CreateUnterschriftenblattOper createUnterschriftenblatt() {
@@ -120,6 +133,14 @@ public class DokumentApiSpec {
         return new DeleteDokumentSBOper(createReqSpec());
     }
 
+    public DeleteSachbearbeiterGesuchDokumentOper deleteSachbearbeiterGesuchDokument() {
+        return new DeleteSachbearbeiterGesuchDokumentOper(createReqSpec());
+    }
+
+    public DeleteSachbearbeiterGesuchDokumentDokumentOper deleteSachbearbeiterGesuchDokumentDokument() {
+        return new DeleteSachbearbeiterGesuchDokumentDokumentOper(createReqSpec());
+    }
+
     public DeleteUnterschriftenblattDokumentOper deleteUnterschriftenblattDokument() {
         return new DeleteUnterschriftenblattDokumentOper(createReqSpec());
     }
@@ -130,6 +151,10 @@ public class DokumentApiSpec {
 
     public GesuchDokumentAkzeptierenOper gesuchDokumentAkzeptieren() {
         return new GesuchDokumentAkzeptierenOper(createReqSpec());
+    }
+
+    public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper getAllSachbearbeiterGesuchDokumentsOfGesuch() {
+        return new GetAllSachbearbeiterGesuchDokumentsOfGesuchOper(createReqSpec());
     }
 
     public GetCustomGesuchDokumentForTypGSOper getCustomGesuchDokumentForTypGS() {
@@ -164,6 +189,14 @@ public class DokumentApiSpec {
         return new GetGesuchDokumentKommentareSBOper(createReqSpec());
     }
 
+    public GetSachbearbeiterGesuchDokumentDokumentOper getSachbearbeiterGesuchDokumentDokument() {
+        return new GetSachbearbeiterGesuchDokumentDokumentOper(createReqSpec());
+    }
+
+    public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper getSachbearbeiterGesuchDokumentDokumentDownloadToken() {
+        return new GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper(createReqSpec());
+    }
+
     public GetUnterschriftenblaetterForGesuchOper getUnterschriftenblaetterForGesuch() {
         return new GetUnterschriftenblaetterForGesuchOper(createReqSpec());
     }
@@ -174,6 +207,10 @@ public class DokumentApiSpec {
 
     public UploadCustomGesuchDokumentSBOper uploadCustomGesuchDokumentSB() {
         return new UploadCustomGesuchDokumentSBOper(createReqSpec());
+    }
+
+    public UploadSachbearbeiterGesuchDokumentOper uploadSachbearbeiterGesuchDokument() {
+        return new UploadSachbearbeiterGesuchDokumentOper(createReqSpec());
     }
 
     /**
@@ -457,6 +494,90 @@ public class DokumentApiSpec {
         }
     }
     /**
+     * create SachbearbeiterGesuchDokument
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * @see #body  (optional)
+     * return SachbearbeiterGesuchDokumentDtoSpec
+     */
+    public static class CreateSachbearbeiterGesuchDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateSachbearbeiterGesuchDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /sachbearbeiterGesuchDokument/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /sachbearbeiterGesuchDokument/{gesuchId}
+         * @param handler handler
+         * @return SachbearbeiterGesuchDokumentDtoSpec
+         */
+        public SachbearbeiterGesuchDokumentDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<SachbearbeiterGesuchDokumentDtoSpec> type = new TypeRef<SachbearbeiterGesuchDokumentDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param sachbearbeiterGesuchDokumentCreateDtoSpec (SachbearbeiterGesuchDokumentCreateDtoSpec)  (optional)
+         * @return operation
+         */
+        public CreateSachbearbeiterGesuchDokumentOper body(SachbearbeiterGesuchDokumentCreateDtoSpec sachbearbeiterGesuchDokumentCreateDtoSpec) {
+            reqSpec.setBody(sachbearbeiterGesuchDokumentCreateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public CreateSachbearbeiterGesuchDokumentOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateSachbearbeiterGesuchDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateSachbearbeiterGesuchDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * 
      * 
      *
@@ -730,6 +851,130 @@ public class DokumentApiSpec {
         }
     }
     /**
+     * deletes a SachbearbeiterGesuchDokument
+     * 
+     *
+     * @see #sachbearbeiterGesuchDokumentIdPath  (required)
+     */
+    public static class DeleteSachbearbeiterGesuchDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteSachbearbeiterGesuchDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String SACHBEARBEITER_GESUCH_DOKUMENT_ID_PATH = "sachbearbeiterGesuchDokumentId";
+
+        /**
+         * @param sachbearbeiterGesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentOper sachbearbeiterGesuchDokumentIdPath(Object sachbearbeiterGesuchDokumentId) {
+            reqSpec.addPathParam(SACHBEARBEITER_GESUCH_DOKUMENT_ID_PATH, sachbearbeiterGesuchDokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * deletes a SachbearbeiterGesuchDokumentDokument
+     * 
+     *
+     * @see #dokumentIdPath  (required)
+     */
+    public static class DeleteSachbearbeiterGesuchDokumentDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = DELETE;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/dokument/{dokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DeleteSachbearbeiterGesuchDokumentDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * DELETE /sachbearbeiterGesuchDokument/dokument/{dokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentDokumentOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DeleteSachbearbeiterGesuchDokumentDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * deletes a Unterschriftenblatt Dokument
      * 
      *
@@ -922,6 +1167,79 @@ public class DokumentApiSpec {
          * @return operation
          */
         public GesuchDokumentAkzeptierenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * getAllSachbearbeiterGesuchDokumentsOfGesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;SachbearbeiterGesuchDokumentDtoSpec&gt;
+     */
+    public static class GetAllSachbearbeiterGesuchDokumentsOfGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/{gesuchId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/{gesuchId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/{gesuchId}
+         * @param handler handler
+         * @return List&lt;SachbearbeiterGesuchDokumentDtoSpec&gt;
+         */
+        public List<SachbearbeiterGesuchDokumentDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<SachbearbeiterGesuchDokumentDtoSpec>> type = new TypeRef<List<SachbearbeiterGesuchDokumentDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllSachbearbeiterGesuchDokumentsOfGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1571,6 +1889,152 @@ public class DokumentApiSpec {
         }
     }
     /**
+     * getSachbearbeiterGesuchDokumentDokument
+     * 
+     *
+     * @see #tokenQuery  (required)
+     * return File
+     */
+    public static class GetSachbearbeiterGesuchDokumentDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/dokument/download";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSachbearbeiterGesuchDokumentDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/octet-stream");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/dokument/download
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/dokument/download
+         * @param handler handler
+         * @return File
+         */
+        public File executeAs(Function<Response, Response> handler) {
+            TypeRef<File> type = new TypeRef<File>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String TOKEN_QUERY = "token";
+
+        /**
+         * @param token (String)  (required)
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentOper tokenQuery(Object... token) {
+            reqSpec.addQueryParam(TOKEN_QUERY, token);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * get SachbearbeiterGesuchDokumentDokument Download Token
+     * 
+     *
+     * @see #dokumentIdPath  (required)
+     * return FileDownloadTokenDtoSpec
+     */
+    public static class GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/dokument/{dokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/dokument/{dokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /sachbearbeiterGesuchDokument/dokument/{dokumentId}
+         * @param handler handler
+         * @return FileDownloadTokenDtoSpec
+         */
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetSachbearbeiterGesuchDokumentDokumentDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * 
      * 
      *
@@ -1789,6 +2253,81 @@ public class DokumentApiSpec {
          * @return operation
          */
         public UploadCustomGesuchDokumentSBOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * upload SachbearbeiterGesuchDokument dokument
+     * 
+     *
+     * @see #sachbearbeiterGesuchDokumentIdPath  (required)
+     * @see #fileUploadMultiPart  (required)
+     */
+    public static class UploadSachbearbeiterGesuchDokumentOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UploadSachbearbeiterGesuchDokumentOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String SACHBEARBEITER_GESUCH_DOKUMENT_ID_PATH = "sachbearbeiterGesuchDokumentId";
+
+        /**
+         * @param sachbearbeiterGesuchDokumentId (UUID)  (required)
+         * @return operation
+         */
+        public UploadSachbearbeiterGesuchDokumentOper sachbearbeiterGesuchDokumentIdPath(Object sachbearbeiterGesuchDokumentId) {
+            reqSpec.addPathParam(SACHBEARBEITER_GESUCH_DOKUMENT_ID_PATH, sachbearbeiterGesuchDokumentId);
+            return this;
+        }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public UploadSachbearbeiterGesuchDokumentOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UploadSachbearbeiterGesuchDokumentOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UploadSachbearbeiterGesuchDokumentOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

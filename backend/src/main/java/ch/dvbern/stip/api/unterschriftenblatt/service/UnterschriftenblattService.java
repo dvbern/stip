@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,7 +39,6 @@ import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.gesuchtranchehistory.repo.GesuchTrancheHistoryRepository;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
@@ -72,7 +70,6 @@ public class UnterschriftenblattService {
     private final Antivirus antivirus;
     private final ConfigService configService;
     private final S3AsyncClient s3;
-    private final GesuchTrancheHistoryRepository gesuchTrancheHistoryRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
     private final GesuchStatusService gesuchStatusService;
@@ -255,14 +252,6 @@ public class UnterschriftenblattService {
             configService.getBucketName(),
             toRemoveFromS3
         );
-    }
-
-    @Transactional
-    public Set<UnterschriftenblattDokumentTyp> getExistingUnterschriftenblattTypsForGesuch(final UUID gesuchId) {
-        return unterschriftenblattRepository.requireForGesuch(gesuchId)
-            .filter(unterschriftenblatt -> !unterschriftenblatt.getDokumente().isEmpty())
-            .map(Unterschriftenblatt::getDokumentTyp)
-            .collect(Collectors.toSet());
     }
 
     private Stream<UnterschriftenblattDokumentTyp> getRequiredUnterschriftenblaetter(final Gesuch gesuch) {
