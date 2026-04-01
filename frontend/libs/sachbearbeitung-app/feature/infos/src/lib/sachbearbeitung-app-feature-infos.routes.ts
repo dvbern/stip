@@ -3,13 +3,11 @@ import { Route } from '@angular/router';
 import {
   BESCHWERDEN_ROUTE,
   BUCHHALTUNG_ROUTE,
-  DARLEHEN_ROUTE,
   INFO_ADMIN_DOKUMENTE_ROUTE,
   INFO_ADMIN_ROUTE,
   NOTIZEN_ROUTE,
   PROTOKOLL_ROUTE,
 } from '@dv/sachbearbeitung-app/model/infos';
-import { SharedUiCommingSoonComponent } from '@dv/shared/ui/comming-soon';
 
 export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
   {
@@ -56,10 +54,6 @@ export const sachbearbeitungAppFeatureInfosRoutes: Route[] = [
           import('@dv/sachbearbeitung-app/feature/infos-buchhaltung').then(
             (m) => m.sachbearbeitungAppFeatureInfosBuchhaltungRoutes,
           ),
-      },
-      {
-        path: DARLEHEN_ROUTE.route + '/:gesuchId',
-        component: SharedUiCommingSoonComponent,
       },
       {
         path: ':gesuchId',
