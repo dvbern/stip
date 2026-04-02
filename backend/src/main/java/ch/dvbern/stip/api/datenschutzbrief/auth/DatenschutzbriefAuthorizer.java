@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.auth;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.Authorizer;
 import ch.dvbern.stip.api.common.authorization.BaseAuthorizer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -27,19 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class DatenschutzbriefAuthorizer extends BaseAuthorizer {
-    private final BenutzerService benutzerService;
 
     public void canGetDokumentDownloadToken() {
-        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
-            return;
-        }
-        forbidden();
+        permitAll();
     }
 
     public void canGetDatenschutzbriefs() {
-        if (isSachbearbeiter(benutzerService.getCurrentBenutzer())) {
-            return;
-        }
-        forbidden();
+        permitAll();
     }
 }

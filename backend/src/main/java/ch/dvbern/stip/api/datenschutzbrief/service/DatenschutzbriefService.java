@@ -40,7 +40,6 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
@@ -64,7 +63,6 @@ public class DatenschutzbriefService {
     private final DatenschutzbriefRepository datenschutzbriefRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final DokumentRepository dokumentRepository;
-    private final GesuchTrancheRepository gesuchTrancheRepository;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3;
