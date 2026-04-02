@@ -91,6 +91,7 @@ public class GesuchsperiodeSeeding extends Seeder {
                         "Frühling",
                         "Printemps",
                         gesuchsjahr,
+                        periodeToSeed.getLeft(),
                         periodeToSeed.getRight(),
                         LocalDate.of(yearToSeed, 1, 1),
                         LocalDate.of(yearToSeed, 12, 31),
@@ -103,6 +104,7 @@ public class GesuchsperiodeSeeding extends Seeder {
                         "Herbst",
                         "Automne",
                         gesuchsjahr,
+                        periodeToSeed.getLeft(),
                         periodeToSeed.getRight(),
                         LocalDate.of(yearToSeed, 7, 1),
                         LocalDate.of(yearToSeed + 1, 6, 30),
@@ -138,15 +140,20 @@ public class GesuchsperiodeSeeding extends Seeder {
         final String prefixDe,
         final String prefixFr,
         final Gesuchsjahr jahr,
+        final Season season,
         final GueltigkeitStatus gueltigkeitStatus,
         final LocalDate from,
         final LocalDate to,
-        final LocalDate aufschaltterminStart,
+        LocalDate aufschaltterminStart,
         final LocalDate einreichefristNormal,
         final LocalDate einreichefristReduziert,
         final LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung
     ) {
         String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
+
+        if (season.equals(Season.FALL) && jahr.getTechnischesJahr() == 2026) {
+            aufschaltterminStart = LocalDate.of(2026, 4, 27);
+        }
 
         return new Gesuchsperiode()
             .setBezeichnungDe(prefixDe + ' ' + jahrAsString)
@@ -200,8 +207,15 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setReduzierungDesGrundbedarfs(2838)
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
-            .setFristNachreichenDokumente(30)
+            .setFristNachreichenDokumente(getFristNachreichenDokumente(jahr.getTechnischesJahr(), season))
             .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+    }
+
+    private int getFristNachreichenDokumente(int year, Season season) {
+        if ((year == 2025 && season.equals(Season.FALL)) || (year == 2026 && season.equals(Season.SPRING))) {
+            return 1;
+        }
+        return 30;
     }
 
     private int getMaxSaeule3a(int year) {
