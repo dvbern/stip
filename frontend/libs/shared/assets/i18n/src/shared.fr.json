@@ -26,7 +26,6 @@
   "shared.ui.loading.text": "Charger le contenu...",
   "shared.ui.saving.text": "Enregistrement...",
   "shared.ui.open-datepicker": "Sélectionner la date",
-  "shared.comming-soon": "Cette fonctionnalité est en cours de développement",
   "shared.language.DEUTSCH": "Allemand",
   "shared.language.FRANZOESISCH": "Français",
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",
@@ -1062,6 +1061,8 @@
   "shared.form.abschluss.submitted": "La demande a été validée. Vous avez maintenant un accès en lecture seule à la demande.",
   "shared.form.abschluss.abschliessen": "Valider",
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Informer le demandeur des documents manquants",
+  "shared.form.abschluss.aenderungNichtEinreichbar": "Vous ne pouvez pas saisir de modification pour le moment. Veuillez contacter le gestionnaire de dossier responsable.",
+
   "shared.form.tranche-abschluss.notReady": "Il manque encore des informations. Veuillez remplir tous les champs obligatoires.",
 
   "shared.protokoll.title": "Parcours de la demande",

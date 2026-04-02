@@ -26,7 +26,6 @@
   "shared.ui.loading.text": "Inhalte laden...",
   "shared.ui.saving.text": "Wird gespeichert...",
   "shared.ui.open-datepicker": "Datum auswählen",
-  "shared.comming-soon": "Diese Funktion ist noch in Entwicklung",
   "shared.language.DEUTSCH": "Deutsch",
   "shared.language.FRANZOESISCH": "Französisch",
   "shared.genericError.validation": "Es wurde versucht, ungültige Werte abzuspeichern.",
@@ -1062,6 +1061,8 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
+  "shared.form.abschluss.aenderungNichtEinreichbar": "Momentan können sie keine Änderung eingeben. Kontaktieren sie den zuständigen Sachbearbeiter",
+
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Gesuchsverlauf",

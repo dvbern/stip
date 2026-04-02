@@ -186,7 +186,7 @@ public class MassendruckJobService {
         final List<Gesuch> gesuche
     ) {
         final var toPersist = gesuche.stream()
-            .flatMap(gesuch -> gesuch.getDatenschutzbriefs().stream())
+            .flatMap(Gesuch::getAllPendingDatenschutschbriefsForMassendruck)
             .map(
                 datenschutzbrief -> new DatenschutzbriefMassendruck()
                     .setDatenschutzbrief(datenschutzbrief)
@@ -205,11 +205,7 @@ public class MassendruckJobService {
         final List<Gesuch> gesuche
     ) {
         final var toPersist = gesuche.stream()
-            .flatMap(
-                gesuch -> gesuch.getVerfuegungs()
-                    .stream()
-                    .filter(verfuegung -> !verfuegung.isVersendet())
-            )
+            .flatMap(Gesuch::getAllPendingVerfuegungsForMassendruck)
             .map(
                 verfuegung -> {
                     final var gesuchsteller = verfuegung.getGesuch().getAusbildung().getFall().getGesuchsteller();

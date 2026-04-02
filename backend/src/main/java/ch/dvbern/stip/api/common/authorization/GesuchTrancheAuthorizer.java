@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -85,6 +86,12 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             gesuchTrancheId,
             GesuchTrancheStatus.GESUCHSTELLER_CAN_AENDERUNG_EINREICHEN
         );
+
+        final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
+        if (!GesuchUtil.canGsAendererungEinreichen(gesuchTranche.getGesuch())) {
+            forbidden();
+        }
+
         if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }

@@ -19,6 +19,7 @@ import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
@@ -43,14 +44,21 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   private store = inject(Store);
   private dialog = inject(MatDialog);
   destroyRef = inject(DestroyRef);
-
   einreichenStore = inject(EinreichenStore);
   dokumentsStore = inject(DokumentsStore);
+  headerStore = inject(GesuchHeaderStore);
+
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   canGSSendMissingDocumentsSig = computed(() => {
     return !!this.dokumentsStore.dokumenteCanFlagsSig()
       .gsCanDokumenteUebermitteln;
+  });
+
+  canAenderungEinreichenSig = computed(() => {
+    const aenderungs = this.headerStore.viewSig()?.aenderungs;
+
+    return aenderungs?.canAenderungEinreichen;
   });
 
   dokumenteRouteSig = computed(() => {

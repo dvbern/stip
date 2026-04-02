@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -39,6 +40,7 @@ public abstract class GesuchStateInfoMapper {
     @Mapping(source = ".", target = "canTriggerManuellPruefen", qualifiedByName = "getCanTriggerManuellPruefen")
     @Mapping(source = ".", target = "canBearbeitungAbschliessen", qualifiedByName = "canBearbeitungAbschliessen")
     @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
+    @Mapping(source = ".", target = "canSBInitAenderung", qualifiedByName = "canSBInitAenderung")
     public abstract GesuchStateInfoDto toDto(Gesuch gesuch);
 
     @Named("getCanGetBerechnung")
@@ -60,6 +62,11 @@ public abstract class GesuchStateInfoMapper {
     @Named("canChangeGesuchsperiode")
     boolean canChangeGesuchsperiode(Gesuch gesuch) {
         return gesuchStatusService.canChangeGesuchsperiode(gesuch);
+    }
+
+    @Named("canSBInitAenderung")
+    boolean canSBInitAenderung(Gesuch gesuch) {
+        return GesuchUtil.canSbInitAendererung(gesuch);
     }
 
 }

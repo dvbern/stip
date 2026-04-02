@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="philipp.schaerer (generated)" id="1774959700614-529">
+    <addColumn tableName="datenschutzbrief">
+      <column name="dokument_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1774959700614-530">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="dokument_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1774959700614-531">
+    <addColumn tableName="datenschutzbrief">
+      <column name="sozialversicherungsnummer" type="VARCHAR(20)">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1774959700614-532">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="sozialversicherungsnummer" type="VARCHAR(20)"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1774959700614-533">
+    <addForeignKeyConstraint baseColumnNames="dokument_id"
+                             baseTableName="datenschutzbrief"
+                             constraintName="FK_datenschutzbrief_dokument_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="dokument"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="philipp.schaerer (generated)" id="1775043687290-525">
+    <dropTable tableName="datenschutzbrief_download"/>
+  </changeSet>
+</databaseChangeLog>
