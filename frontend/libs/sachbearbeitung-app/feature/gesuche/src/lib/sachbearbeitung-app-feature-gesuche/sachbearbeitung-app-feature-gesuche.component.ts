@@ -47,7 +47,6 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
-  GetGesucheSBQueryType,
   SbDashboardGesuch,
   SbGesucheDashboardColumn,
   SortOrder,
@@ -75,11 +74,14 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import {
-  FilterGesucheQueryParam,
-  QueryTypePrefix,
-  WorkableQueryParam,
-  getGesuchQueryFromParams,
-  getGesucheQueryFromValues,
+  DashboardQuery,
+  FilterTabParam,
+  ScopeParam,
+  WorkableParam,
+  getControlVisibility,
+  getQueryFromParams,
+  getQueryParamsFromToggleValues,
+  isGesuchQuery,
 } from '@dv/shared/util/navigation';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import {
@@ -99,9 +101,9 @@ import {
 } from '@dv/shared/util/validator-date';
 
 // todo: eventually move!
-const DEFAULT_SCOPE: QueryTypePrefix = 'MEINE';
-const DEFAULT_FILTER_TAB: FilterGesucheQueryParam = 'GESUCHE';
-const DEFAULT_WORKABLE: WorkableQueryParam = 'TRUE';
+const DEFAULT_SCOPE: ScopeParam = 'MEINE' as const;
+const DEFAULT_FILTER_TAB: FilterTabParam = 'GESUCHE' as const;
+const DEFAULT_WORKABLE: WorkableParam = 'TRUE';
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -180,9 +182,9 @@ export class SachbearbeitungAppFeatureGesucheComponent
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
 
   // think about better types
-  filterTab = input<FilterGesucheQueryParam | undefined>(undefined);
-  scope = input<QueryTypePrefix | undefined>(undefined);
-  workable = input<WorkableQueryParam | undefined>(undefined);
+  filterTab = input<FilterTabParam | undefined>(undefined);
+  scope = input<ScopeParam | undefined>(undefined);
+  workable = input<WorkableParam | undefined>(undefined);
 
   fallNummer = input<string | undefined>(undefined);
   typ = input<string | undefined>(undefined);
@@ -235,15 +237,27 @@ export class SachbearbeitungAppFeatureGesucheComponent
   versionSig = this.store.selectSignal(selectVersion);
 
   queryFromInputsSig = computed<{
-    query: GetGesucheSBQueryType;
+    query: DashboardQuery;
     scopeControl: { show: boolean; value: boolean };
     workableControl: { show: boolean; value: boolean };
   }>(() => {
-    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB; // move default?
+    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB;
     const scope = this.scope() ?? DEFAULT_SCOPE;
     const workable = this.workable() ?? DEFAULT_WORKABLE;
 
-    return getGesuchQueryFromParams(scope, filterTab, workable);
+    const query = getQueryFromParams(scope, filterTab, workable);
+
+    const { scopeControl, workableControl } = getControlVisibility(
+      scope,
+      filterTab,
+      workable,
+    );
+
+    return {
+      query,
+      scopeControl,
+      workableControl,
+    };
   });
 
   showScopeToggleSig = computed(() => {
@@ -385,8 +399,12 @@ export class SachbearbeitungAppFeatureGesucheComponent
   });
 
   createMassendruckJobForQueryType$() {
+    const query = this.queryFromInputsSig().query;
+    if (!isGesuchQuery(query)) {
+      throw new Error('Invalid query type for Gesuch context');
+    }
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: this.queryFromInputsSig().query },
+      req: { getGesucheSBQueryType: query },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -456,12 +474,16 @@ export class SachbearbeitungAppFeatureGesucheComponent
     effect(() => {
       const scopeChanged = scopeChangedSig();
       const workableChanged = workableChangedSig();
-      const filterTabChanged = untracked(this.filterTab);
+      const filterTab = untracked(this.filterTab);
 
-      const { scope, workable } = getGesucheQueryFromValues(
+      if (!filterTab) {
+        return;
+      }
+
+      const { scope, workable } = getQueryParamsFromToggleValues(
         scopeChanged,
         workableChanged,
-        filterTabChanged,
+        filterTab,
       );
 
       this.router.navigate(['.'], {
@@ -477,6 +499,11 @@ export class SachbearbeitungAppFeatureGesucheComponent
     // Load effect - When the route param inputs change, load the gesuche
     effect(() => {
       const { query, filter, startEndFilter } = this.getInputs();
+
+      if (!isGesuchQuery(query.query)) {
+        // Skip loading if the query is not a Gesuch query
+        return;
+      }
 
       this.gesuchStore.loadGesuche$({
         getGesucheSBQueryType: query.query,

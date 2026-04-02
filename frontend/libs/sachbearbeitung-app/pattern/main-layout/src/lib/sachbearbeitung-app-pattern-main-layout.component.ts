@@ -5,10 +5,13 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { map, startWith } from 'rxjs';
 
 import { PermissionStore } from '@dv/shared/global/permission';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { DashQueryParams, NavItem } from '@dv/shared/util/navigation';
@@ -19,7 +22,9 @@ const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
     id: 'dashboard',
     label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
-    route: ['/dashboard/gesuche'],
+    route: ['/dashboard', 'gesuche'],
+    testId: 'dashboard-nav-item',
+    //todo: add default query
     queryParams: {
       filterTab: 'GESUCHE',
       scope: 'MEINE',
@@ -72,22 +77,39 @@ const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
 })
 export class SachbearbeitungAppPatternMainLayoutComponent {
   private permissionStore = inject(PermissionStore);
+  private router = inject(Router);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
+
+  routeUrlSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.router.routerState.snapshot.url),
+      startWith(this.router.routerState.snapshot.url),
+    ),
+  );
 
   navItemsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
 
     const navItems: NavItem[] = baseNavItems;
 
-    const filtered: NavItem[] = navItems.filter((item) => {
-      if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-        return true;
-      }
+    const filtered: NavItem[] = navItems
+      .filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
 
-      return item.rolesAllowed.some((role) => rolesMap[role]);
-    });
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      })
+      .map((item) => {
+        // todo: not quite working perfectly, does not work for darlehen, of course
+        if (item.type === 'link' && item.route && item.route) {
+          const isActive = this.routeUrlSig()?.includes(item.route[0] ?? '');
+          return { ...item, active: isActive };
+        }
+        return item;
+      });
 
     return filtered;
   });

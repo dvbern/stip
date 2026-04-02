@@ -98,11 +98,11 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'dashboard',
+    redirectTo: 'dashboard/gesuche',
   },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'dashboard',
+    redirectTo: 'dashboard/gesuche',
   },
 ];

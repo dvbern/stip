@@ -14,10 +14,6 @@ import {
   GetGesucheSBQueryType,
 } from '@dv/shared/model/gesuch';
 
-type DashboardQueryType =
-  | GetFreiwilligDarlehenSbQueryType
-  | GetGesucheSBQueryType;
-
 export type Portal<T = unknown> =
   | TemplatePortal
   | ComponentPortal<T>
@@ -40,7 +36,7 @@ interface NavItemBase {
 
 export interface NavItemLink extends NavItemBase {
   type: 'link';
-  route: UrlTree | (string | undefined)[];
+  route: (string | undefined)[];
   queryParams?: Record<string, string>;
 }
 
@@ -76,186 +72,151 @@ export interface TabNavItem {
   testId?: string;
 }
 
-export type GetGesucheSBQueryWithoutBearbeiter = Exclude<
-  GetGesucheSBQueryType,
-  'ALLE_BEARBEITBAR' | 'MEINE_BEARBEITBAR'
->;
+export type WorkableParam = 'TRUE' | 'FALSE';
+export type ScopeParam = 'ALLE' | 'MEINE';
+export type DashboardQuery =
+  | keyof typeof GetGesucheSBQueryType
+  | keyof typeof GetFreiwilligDarlehenSbQueryType;
 
-export type GetFreiwilligDarlehenSbQueryWithoutBearbeiter = Exclude<
-  GetFreiwilligDarlehenSbQueryType,
-  'ALLE_BEARBEITBAR' | 'MEINE_BEARBEITBAR'
->;
+export type FilterConfig = {
+  scope: ScopeParam;
+  workable: WorkableParam[];
+  filterTab: FilterTabParam[];
+};
 
-export type WorkableQueryParam = 'TRUE' | 'FALSE';
-export const workableEnabledTabFilters = [
-  'GESUCHE',
-  'DARLEHEN',
-] as const satisfies readonly FilterTabQueryParam[];
-export type WorkableEnabledTabFilters =
-  (typeof workableEnabledTabFilters)[number];
+// prettier-ignore
+export const dashboardFilterQueryWithParamsMap: Record<DashboardQuery, FilterConfig> = {
+  ALLE_DARLEHEN                         : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DARLEHEN'] },
+  MEINE_DARLEHEN                        : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DARLEHEN'] },
+  ALLE_BEARBEITBAR                      : { scope: 'ALLE',  workable: ['TRUE', 'FALSE'], filterTab: ['GESUCHE', 'DARLEHEN']},
+  MEINE_BEARBEITBAR                     : { scope: 'MEINE', workable: ['TRUE', 'FALSE'], filterTab: ['GESUCHE', 'DARLEHEN'] },
+  ALLE_GESUCHE                          : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['GESUCHE'] },
+  MEINE_GESUCHE                         : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['GESUCHE'] },
+  ALLE_PENDENTE_GESUCHE                 : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['PENDENTE_GESUCHE'] },
+  MEINE_PENDENTE_GESUCHE                : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['PENDENTE_GESUCHE'] },
+  ALLE_JURISTISCHE_ABKLAERUNG           : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['JURISTISCHE_ABKLAERUNG'] },
+  ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['ABKLAERUNG_DURCH_RECHSTABTEILUNG'] },
+  ALLE_DRUCKBAR_VERFUEGUNGEN            : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
+  MEINE_DRUCKBAR_VERFUEGUNGEN           : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
+  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE       : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
+  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE      : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
+}
 
-export type QueryTypePrefix =
-  DashboardQueryType extends `${infer Prefix}_${string}` ? Prefix : never;
+export const dashboardQueries = Object.keys(
+  dashboardFilterQueryWithParamsMap,
+) as Array<keyof typeof dashboardFilterQueryWithParamsMap>;
 
 export type QueryTypeSuffix<T extends string> =
-  T extends `${QueryTypePrefix}_${infer Suffix}` ? Suffix : never;
+  T extends `${ScopeParam}_${infer Suffix}` ? Suffix : never;
 
-export type FilterGesucheQueryParam =
-  QueryTypeSuffix<GetGesucheSBQueryWithoutBearbeiter>;
+export type FilterTabParam = QueryTypeSuffix<DashboardQuery>;
 
-export type ToQueryFilterInputGesucheParam =
-  QueryTypeSuffix<GetGesucheSBQueryType>;
+export type ControlVisibility = { show: boolean; value: boolean };
 
-export type FilterFreiwilligDarlehenQueryParam =
-  QueryTypeSuffix<GetFreiwilligDarlehenSbQueryWithoutBearbeiter>;
-
-export type ToQueryFilterInputFreiwilligDarlehenParam =
-  QueryTypeSuffix<GetFreiwilligDarlehenSbQueryType>;
-
-export type FilterTabQueryParam =
-  | FilterGesucheQueryParam
-  | FilterFreiwilligDarlehenQueryParam;
-
-type FilterGesucheScopeSelectableQueryParam = QueryTypeSuffix<
-  Extract<GetGesucheSBQueryWithoutBearbeiter, `MEINE_${string}`>
->;
-
-type FilterGesucheAlleOnlyQueryParam = Exclude<
-  FilterGesucheQueryParam,
-  FilterGesucheScopeSelectableQueryParam
->;
-export const filterGesucheAlleOnlyTabFilters: FilterGesucheAlleOnlyQueryParam[] =
-  ['JURISTISCHE_ABKLAERUNG', 'ABKLAERUNG_DURCH_RECHSTABTEILUNG'];
-
-const isFilterGesucheAlleOnlyQueryParam = (
-  param: FilterGesucheQueryParam,
-): param is FilterGesucheAlleOnlyQueryParam => {
-  return filterGesucheAlleOnlyTabFilters.includes(
-    param as FilterGesucheAlleOnlyQueryParam,
-  );
+export type DashQueryParams = {
+  filterTab?: FilterTabParam;
+  scope?: ScopeParam;
+  workable?: WorkableParam;
 };
-
-// todo: make non optional
-type GesucheDashQueryParams =
-  | {
-      filterTab?: FilterGesucheScopeSelectableQueryParam;
-      scope?: QueryTypePrefix;
-      workable?: WorkableQueryParam;
-    }
-  | {
-      filterTab?: FilterGesucheAlleOnlyQueryParam;
-      scope?: 'ALLE';
-      workable?: WorkableQueryParam;
-    };
-
-type DarlehenDashQueryParams = {
-  filterTab?: FilterFreiwilligDarlehenQueryParam;
-  scope?: QueryTypePrefix;
-  workable?: WorkableQueryParam;
-};
-
-export type DashQueryParams = GesucheDashQueryParams | DarlehenDashQueryParams;
 
 export interface DashboardFilterTabItem extends TabNavItem {
   queryParams?: DashQueryParams;
 }
 
-export const isGesuchQueryValid = (
+export const isValidDashboardQuery = (
   query: string,
-): query is GetGesucheSBQueryType => {
-  return Object.values(GetGesucheSBQueryType).includes(
-    query as GetGesucheSBQueryType,
-  );
+): query is DashboardQuery => {
+  return dashboardQueries.some((q) => q === query);
 };
 
-export const isFreiwilligDarlehenQueryValid = (
-  query: string,
-): query is GetFreiwilligDarlehenSbQueryType => {
-  return Object.values(GetFreiwilligDarlehenSbQueryType).includes(
-    query as GetFreiwilligDarlehenSbQueryType,
-  );
+export const isWorkableEnabledTab = (filterTab: FilterTabParam): boolean => {
+  return ['GESUCHE', 'DARLEHEN'].includes(filterTab);
 };
 
-export const getGesuchQueryFromParams = (
-  scope: QueryTypePrefix,
-  filterTab: FilterGesucheQueryParam,
-  workable?: WorkableQueryParam,
+export const isAlleOnlyTab = (filterTab: FilterTabParam): boolean => {
+  return [
+    'JURISTISCHE_ABKLAERUNG',
+    'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
+  ].includes(filterTab);
+};
+
+export const extractConfigFromQuery = (query: DashboardQuery): FilterConfig => {
+  return dashboardFilterQueryWithParamsMap[query];
+};
+
+export const getQueryFromParams = (
+  scope: ScopeParam,
+  filterTab: FilterTabParam,
+  workable: WorkableParam,
+): DashboardQuery => {
+  let worableVal = workable;
+
+  if (!isWorkableEnabledTab(filterTab)) {
+    worableVal = 'FALSE';
+  }
+
+  const query = dashboardQueries.find((q) => {
+    const config = dashboardFilterQueryWithParamsMap[q];
+    return (
+      config.scope === scope &&
+      config.workable.includes(worableVal) &&
+      config.filterTab.includes(filterTab)
+    );
+  });
+
+  if (!query) {
+    const message = `No matching query found for scope=${scope}, filterTab=${filterTab}, workable=${workable}`;
+    console.error(message);
+    throw new Error(message);
+  }
+
+  return query;
+};
+
+export const getControlVisibility = (
+  scope: ScopeParam,
+  filterTab: FilterTabParam,
+  workable: WorkableParam,
 ): {
-  query: GetGesucheSBQueryType;
-  scopeControl: { show: boolean; value: boolean };
-  workableControl: { show: boolean; value: boolean };
+  scopeControl: ControlVisibility;
+  workableControl: ControlVisibility;
 } => {
-  if (
-    workableEnabledTabFilters.includes(filterTab as WorkableEnabledTabFilters)
-  ) {
-    if (workable === 'TRUE') {
-      const workableQuery = `${scope}_BEARBEITBAR`;
-      if (isGesuchQueryValid(workableQuery)) {
-        return {
-          query: workableQuery,
-          scopeControl: { show: true, value: scope === 'MEINE' },
-          workableControl: { show: true, value: true },
-        };
-      }
-    } else {
-      const nonWorkableQuery = `${scope}_${filterTab}`;
-      if (isGesuchQueryValid(nonWorkableQuery)) {
-        return {
-          query: nonWorkableQuery,
-          scopeControl: { show: true, value: scope === 'MEINE' },
-          workableControl: { show: true, value: false },
-        };
-      }
-    }
-  }
-
-  if (isFilterGesucheAlleOnlyQueryParam(filterTab)) {
-    const alleOnlyQuery = `ALLE_${filterTab}`;
-    if (isGesuchQueryValid(alleOnlyQuery)) {
-      return {
-        query: alleOnlyQuery,
-        scopeControl: { show: false, value: false },
-        workableControl: { show: false, value: false },
-      };
-    }
-  }
-
-  const query = `${scope}_${filterTab}`;
-
-  if (!isGesuchQueryValid(query)) {
-    throw new Error(`Invalid query generated from params: ${query}`);
-  }
+  const isWorkableEnabled = isWorkableEnabledTab(filterTab);
 
   return {
-    query,
-    scopeControl: { show: true, value: scope === 'MEINE' },
-    workableControl: { show: false, value: false },
+    scopeControl: {
+      show: !isAlleOnlyTab(filterTab),
+      value: scope === 'MEINE',
+    },
+    workableControl: {
+      show: isWorkableEnabled,
+      value: workable === 'TRUE',
+    },
   };
 };
 
-export const getGesucheQueryFromValues = (
+export const isGesuchQuery = (
+  query: DashboardQuery,
+): query is Exclude<DashboardQuery, 'ALLE_DARLEHEN' | 'MEINE_DARLEHEN'> => {
+  return !query.includes('DARLEHEN') || query.includes('BEARBEITBAR');
+};
+
+export const isDarlehenQuery = (
+  query: DashboardQuery,
+): query is Extract<DashboardQuery, 'ALLE_DARLEHEN' | 'MEINE_DARLEHEN'> => {
+  return query === 'ALLE_DARLEHEN' || query === 'MEINE_DARLEHEN';
+};
+
+export const getQueryParamsFromToggleValues = (
   scopeValue: boolean | undefined,
   workableValue: boolean | undefined,
-  // filterTab is just returned for convenicence, but not changed
-  filterTab?: FilterGesucheQueryParam,
-): GesucheDashQueryParams => {
-  if (!filterTab) {
-    throw new Error('filterTab is required to determine query params');
-  }
-
+  filterTab: FilterTabParam,
+): DashQueryParams => {
   const scope = scopeValue ? 'MEINE' : 'ALLE';
   const workable = workableValue ? 'TRUE' : 'FALSE';
 
-  if (isFilterGesucheAlleOnlyQueryParam(filterTab)) {
-    return { scope: 'ALLE', workable: 'FALSE', filterTab };
-  }
+  // additional check
+  getQueryFromParams(scope, filterTab, workable);
 
-  if (
-    workable === 'TRUE' &&
-    !workableEnabledTabFilters.includes(filterTab as WorkableEnabledTabFilters)
-  ) {
-    return { scope, workable: 'FALSE', filterTab };
-  }
-
-  return { scope, workable, filterTab };
+  return { scope, filterTab, workable };
 };
