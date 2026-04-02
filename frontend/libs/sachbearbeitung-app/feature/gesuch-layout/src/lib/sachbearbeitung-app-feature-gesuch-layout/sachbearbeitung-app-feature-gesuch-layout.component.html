@@ -13,17 +13,17 @@
         <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
         <span>{{ t('shared.header.backToDashboard') }}</span>
       </a>
-      <span>|</span>
-      <div class="tw:font-semibold tw:ml-4">
-        @if (headerViewSig().gesuchInfo; as gesuchInfo) {
-          <span>{{ gesuchInfo.fallNummer }} / </span>
-          <span>{{ gesuchInfo.gesuchNummer }} - </span>
-        }
-        <span>{{ gesuchstellerNameSig() }}, </span>
-        @if (headerViewSig().gesuchInfo?.state?.gesuchStatus; as gesuchStatus) {
-          <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${gesuchStatus}`) }}</span>
-        }
-      </div>
+      @if (gesuchInfoDataSig(); as infoData) {
+        <span>|</span>
+        <div class="tw:font-semibold tw:ml-4">
+          <span>{{ infoData.fallNummer }} / </span>
+          <span>{{ infoData.gesuchNummer }} - </span>
+          <span>{{ infoData.name }}, </span>
+          <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${infoData.status}`) }}</span>
+        </div>
+      } @else {
+        &nbsp;
+      }
     </div>
 
     <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">

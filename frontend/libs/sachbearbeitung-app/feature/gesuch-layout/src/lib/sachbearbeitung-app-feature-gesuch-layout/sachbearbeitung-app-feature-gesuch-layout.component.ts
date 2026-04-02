@@ -160,9 +160,18 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
 
-  gesuchstellerNameSig = computed(() => {
+  gesuchInfoDataSig = computed(() => {
     const info = this.headerViewSig().gesuchInfo;
-    return info ? `${info.piaVorname} ${info.piaNachname}` : '';
+    if (!info) {
+      return;
+    }
+
+    return {
+      name: `${info.piaVorname} ${info.piaNachname}`,
+      fallNummer: info.fallNummer,
+      gesuchNummer: info.gesuchNummer,
+      status: info.state.gesuchStatus,
+    };
   });
 
   tabsSig = computed<TabNavItem[]>(() => {
