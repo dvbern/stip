@@ -26,7 +26,6 @@
   "shared.ui.loading.text": "Charger le contenu...",
   "shared.ui.saving.text": "Enregistrement...",
   "shared.ui.open-datepicker": "Sélectionner la date",
-  "shared.comming-soon": "Cette fonctionnalité est en cours de développement",
   "shared.language.DEUTSCH": "Allemand",
   "shared.language.FRANZOESISCH": "Français",
   "shared.genericError.validation": "Une tentative d'enregistrement de valeurs non valables a été effectuée.",

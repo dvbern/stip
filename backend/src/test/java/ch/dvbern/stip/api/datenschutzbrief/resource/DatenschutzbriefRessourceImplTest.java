@@ -33,6 +33,9 @@ import ch.dvbern.stip.generated.api.DatenschutzbriefApiSpec;
 import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDtoSpec;
+import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -45,6 +48,8 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -69,6 +74,7 @@ class DatenschutzbriefRessourceImplTest {
     @Order(1)
     void gesuchErstellen() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+        gesuchId = gesuch.getId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
     }
@@ -88,7 +94,7 @@ class DatenschutzbriefRessourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(3)
-    void test_read_datenschutzbrief_for_gesuch() throws IOException {
+    void test_create_and_get_datenschutzbrief_token() throws IOException {
         final var gesuch = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -97,8 +103,9 @@ class DatenschutzbriefRessourceImplTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
         var elternId = gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getElterns().get(0).getId();
-        final var token = datenschutzbriefApiSpec.getDatenschutzbriefDownloadToken()
-            .elternIdPath(elternId)
+        final var token = datenschutzbriefApiSpec.createAndGetDatenschutzbriefDownloadToken()
+            .gesuchIdPath(gesuchId)
+            .body(new DatenschutzbriefCreateDtoSpec().elternId(elternId))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -107,9 +114,25 @@ class DatenschutzbriefRessourceImplTest {
             .as(FileDownloadTokenDtoSpec.class)
             .getToken();
 
-        TestUtil.executeAndAssertOk(
-            datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token).trancheIdPath(gesuchTrancheId)
-        );
+        TestUtil.executeAndAssertOk(datenschutzbriefApiSpec.getDatenschutzbrief().tokenQuery(token));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(3)
+    void test_gesuch_has_datenschutzbriefs() throws IOException {
+        final var datenschutzbriefs = datenschutzbriefApiSpec.getAllDatenschutzbriefs()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(DatenschutzbriefOverviewDtoSpec[].class);
+
+        assertEquals(2, datenschutzbriefs.length);
+        assertEquals(ElternTypDtoSpec.VATER, datenschutzbriefs[0].getElternTyp());
+        assertEquals(ElternTypDtoSpec.MUTTER, datenschutzbriefs[1].getElternTyp());
     }
 
     @Test

@@ -17,12 +17,13 @@
 
 package ch.dvbern.stip.api.massendruck.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -79,15 +80,15 @@ public class MassendruckJobPdfService {
 
         // Download all PDFs from S3 if Verfuegung, otherwise generate the Datenschutzbriefe PDFs
         LOG.info("Gathering PDFs to merge");
-        final List<PdfDocument> pdfsToMerge = switch (massendruckJob.getMassendruckTyp()) {
-            case VERFUEGUNG -> getAllVerfuegungen(massendruckJob.getVerfuegungMassendrucks());
+        Iterator<PdfDocument> pdfsToMerge = switch (massendruckJob.getMassendruckTyp()) {
+            case VERFUEGUNG -> getAllVerfuegungen(massendruckJob.getVerfuegungMassendrucks()).iterator();
             case DATENSCHUTZBRIEF -> generateAllDatenschutzbriefDocuments(
                 massendruckJob.getDatenschutzbriefMassendrucks()
-            );
+            ).iterator();
         };
 
         // Merge them using an iText PdfMerger
-        if (pdfsToMerge.isEmpty()) {
+        if (!pdfsToMerge.hasNext()) {
             // This should never happen, just a sanity check
             LOG.warn(
                 "Massendruck Job of type {} with ID {} tried to merge PDFs but no PDFs were found",
@@ -102,7 +103,8 @@ public class MassendruckJobPdfService {
         final var out = new ByteArrayOutputStream();
         try (final var targetPdf = new PdfDocument(new PdfWriter(out))) {
             final var merger = new PdfMerger(targetPdf);
-            for (final var pdfToMerge : pdfsToMerge) {
+            while (pdfsToMerge.hasNext()) {
+                final var pdfToMerge = pdfsToMerge.next();
                 merger.merge(pdfToMerge, 1, pdfToMerge.getNumberOfPages());
             }
         }
@@ -165,33 +167,17 @@ public class MassendruckJobPdfService {
         );
     }
 
-    private List<PdfDocument> generateAllDatenschutzbriefDocuments(
+    private Stream<PdfDocument> generateAllDatenschutzbriefDocuments(
         final List<DatenschutzbriefMassendruck> datenschutzbriefMassendrucks
     ) {
         return datenschutzbriefMassendrucks.stream()
             .map(datenschutzbriefMassendruck -> {
-                final var tranche =
-                    datenschutzbriefMassendruck.getDatenschutzbrief().getGesuch().getLatestGesuchTranche();
-                final var elternteil = tranche.getGesuchFormular()
-                    .getElternteilOfTyp(
-                        datenschutzbriefMassendruck.getDatenschutzbrief().getDatenschutzbriefEmpfaenger()
-                    )
-                    .orElseThrow(IllegalStateException::new);
-                try (
-                    final var out =
-                        datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternteil, tranche.getId());
-                ) {
-                    final var in = new ByteArrayInputStream(out.toByteArray());
-                    final var reader = new PdfReader(in);
-                    return new PdfDocument(reader);
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            })
-            .toList();
+                final var dokument = datenschutzbriefMassendruck.getDatenschutzbrief().getDokument();
+                return getPdf(dokument.getFilepath() + dokument.getObjectId());
+            });
     }
 
-    private List<PdfDocument> getAllVerfuegungen(final List<VerfuegungMassendruck> verfuegungMassendrucks) {
+    private Stream<PdfDocument> getAllVerfuegungen(final List<VerfuegungMassendruck> verfuegungMassendrucks) {
         return verfuegungMassendrucks.stream()
             .map(verfuegungMassendruck -> {
                 final var verfuegung = verfuegungMassendruck.getVerfuegung();
@@ -203,22 +189,24 @@ public class MassendruckJobPdfService {
                     )
                     .findFirst()
                     .orElseThrow(IllegalStateException::new);
+                return getPdf(dokument.getFilepath() + dokument.getObjectId());
+            });
+    }
 
-                final var bytes = s3async.getObject(
-                    GetObjectRequest.builder()
-                        .bucket(configService.getBucketName())
-                        .key(dokument.getFilepath() + dokument.getObjectId())
-                        .build(),
-                    AsyncResponseTransformer.toBytes()
-                );
+    private PdfDocument getPdf(final String s3Key) {
+        final var bytes = s3async.getObject(
+            GetObjectRequest.builder()
+                .bucket(configService.getBucketName())
+                .key(s3Key)
+                .build(),
+            AsyncResponseTransformer.toBytes()
+        );
 
-                try {
-                    final var input = bytes.get().asInputStream();
-                    return new PdfDocument(new PdfReader(input));
-                } catch (InterruptedException | ExecutionException | IOException e) {
-                    throw new RuntimeException(e);
-                }
-            })
-            .toList();
+        try {
+            final var input = bytes.get().asInputStream();
+            return new PdfDocument(new PdfReader(input));
+        } catch (InterruptedException | ExecutionException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
