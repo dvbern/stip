@@ -39,12 +39,12 @@ import {
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import {
-  GesuchFilter,
   GesuchServiceGetGesucheSbRequestParams,
   GesuchTrancheStatus,
   GesuchTrancheTyp,
@@ -178,6 +178,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
+
   massendruckStore = inject(MassendruckStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
 
@@ -403,7 +404,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
       this.route,
     );
 
-    // Handle normal filter form control changes
+    // Handle table filter form control changes
     effect(() => {
       this.filterFormChangedSig();
       const formValue = this.filterForm.getRawValue();
@@ -454,7 +455,7 @@ export class SachbearbeitungAppFeatureGesucheComponent
       this.togglesGroup.controls.workable.valueChanges,
     );
 
-    // Handle toggle changes for 'scope' and 'workable'
+    // Handle switch changes for 'scope' and 'workable'
     effect(() => {
       const scopeChanged = scopeChangedSig();
       const workableChanged = workableChangedSig();

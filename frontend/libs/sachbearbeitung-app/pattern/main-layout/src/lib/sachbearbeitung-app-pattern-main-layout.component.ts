@@ -8,13 +8,11 @@ import {
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 
-import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import { DashQueryParams, NavItem } from '@dv/shared/util/navigation';
 
-// Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
 const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
   {
     type: 'link',
@@ -78,23 +76,10 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
-  // todo: move this logic into the new dashboard!c
-  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
-
   navItemsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
 
     const navItems: NavItem[] = baseNavItems;
-
-    if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
-      navItems.push({
-        type: 'link',
-        id: 'fehlgeschlagene-zahlungen',
-        label: { key: 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' },
-        icon: 'error_outline',
-        route: ['/fehlgeschlagene-zahlungen'],
-      });
-    }
 
     const filtered: NavItem[] = navItems.filter((item) => {
       if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
@@ -106,11 +91,4 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
     return filtered;
   });
-
-  constructor() {
-    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
-      page: 1,
-      pageSize: 10,
-    });
-  }
 }

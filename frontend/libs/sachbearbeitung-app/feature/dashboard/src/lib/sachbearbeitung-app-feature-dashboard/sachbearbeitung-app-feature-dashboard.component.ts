@@ -6,16 +6,15 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
-import { map } from 'rxjs';
 
+import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { DashboardFilterTabItem, TabNavItem } from '@dv/shared/util/navigation';
 
-const tabs: DashboardFilterTabItem[] = [
+const baseFilterTabs: DashboardFilterTabItem[] = [
   {
     name: 'gesuche',
     route: ['gesuche'],
@@ -91,31 +90,44 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
 
   private permissionStore = inject(PermissionStore);
+  private fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
   router = inject(Router);
   route = inject(ActivatedRoute);
   filterTab = input<string | undefined>(undefined);
 
-  filterTabQueryParamSig = toSignal(
-    this.route.queryParamMap.pipe(
-      map((params) => params.get('filterTab') ?? undefined),
-    ),
-  );
-
   tabsSig = computed<TabNavItem[]>(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const filterTab = this.filterTabQueryParamSig();
-    return tabs
-      .filter((tab) => {
-        if (!tab.roles || tab.roles.length === 0) {
-          return true;
-        }
+    const filterTab = this.filterTab();
 
-        return tab.roles.some((role) => rolesMap[role]);
-      })
-      .map((tab) => ({
-        ...tab,
-        active: tab.queryParams?.['filterTab'] === filterTab,
-      }));
+    const tabs = baseFilterTabs.filter((tab) => {
+      if (!tab.roles || tab.roles.length === 0) {
+        return true;
+      }
+
+      return tab.roles.some((role) => rolesMap[role]);
+    });
+
+    if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
+      tabs.push({
+        name: 'fehlgeschlagene-zahlungen',
+        route: ['fehlgeschlagene-zahlungen'],
+        queryParamsHandling: 'merge',
+        active: false,
+        roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+      });
+    }
+
+    return tabs.map((tab) => ({
+      ...tab,
+      active: tab.queryParams?.['filterTab'] === filterTab,
+    }));
   });
+
+  constructor() {
+    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
+      page: 1,
+      pageSize: 10,
+    });
+  }
 }

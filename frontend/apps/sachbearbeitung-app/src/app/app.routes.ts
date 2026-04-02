@@ -51,14 +51,6 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureAdministrationRoutes,
           ),
       },
-      // {
-      //   path: 'fehlgeschlagene-zahlungen',
-      //   title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
-      //   loadChildren: () =>
-      //     import('@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen').then(
-      //       (m) => m.sachbearbeitungAppFeatureFehlgeschlageneZahlungenRoutes,
-      //     ),
-      // },
       {
         path: 'massendruck',
         title: 'sachbearbeitung-app.massendruck.title',
@@ -76,16 +68,12 @@ export const appRoutes: Route[] = [
             '/administration',
           ),
         ],
-        // todo: rename!
+        // todo: rename! and what is the difference of loading the component here as well?
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/dashboard').then(
             (m) => m.sachbearbeitungAppFeatureDashboardRoutes,
           ),
-        // loadChildren: () =>
-        //   import('@dv/sachbearbeitung-app/feature/cockpit').then(
-        //     (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
-        //   ),
       },
       {
         path: 'gesuch',
@@ -101,23 +89,11 @@ export const appRoutes: Route[] = [
             (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
           ),
       },
-      // {
-      //   path: 'darlehen-dashboard',
-      //   canActivate: [hasBenutzer],
-      //   title: 'sachbearbeitung-app.darlehen-dashboard.title',
-      //   loadComponent: () =>
-      //     import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-      //       (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
-      //     ),
-      //   loadChildren: () =>
-      //     import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-      //       (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
-      //     ),
-      // },
     ],
   },
 ];
 
+// todo: default tab and query params
 export const routes: Route[] = [
   {
     path: '',
