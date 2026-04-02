@@ -1,11 +1,13 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   HostBinding,
   computed,
   inject,
   input,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -71,13 +73,6 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
-  {
-    name: 'fehlgeschlagene-zahlungen',
-    route: ['fehlgeschlagene-zahlungen'],
-    queryParamsHandling: 'merge',
-    active: false,
-    roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-  },
 ];
 
 @Component({
@@ -94,11 +89,14 @@ export class SachbearbeitungAppFeatureDashboardComponent {
 
   router = inject(Router);
   route = inject(ActivatedRoute);
+  destroyRef = inject(DestroyRef);
   filterTab = input<string | undefined>(undefined);
 
   tabsSig = computed<TabNavItem[]>(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
     const filterTab = this.filterTab();
+    const hasfehlgeschlageneZahlungen =
+      this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig();
 
     const tabs = baseFilterTabs.filter((tab) => {
       if (!tab.roles || tab.roles.length === 0) {
@@ -108,7 +106,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
       return tab.roles.some((role) => rolesMap[role]);
     });
 
-    if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
+    if (hasfehlgeschlageneZahlungen) {
       tabs.push({
         name: 'fehlgeschlagene-zahlungen',
         route: ['fehlgeschlagene-zahlungen'],
@@ -127,7 +125,26 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   constructor() {
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
       page: 1,
-      pageSize: 10,
+      // todo: look at this number!
+      pageSize: 100,
     });
+
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((params) => {
+        if (!params['filterTab']) {
+          // todo: move to defaults and typesafe
+          this.router.navigate(['gesuche'], {
+            relativeTo: this.route,
+            queryParams: {
+              filterTab: 'GESUCHE',
+              scope: 'MEINE',
+              workable: 'TRUE',
+            },
+            queryParamsHandling: 'merge',
+            replaceUrl: true,
+          });
+        }
+      });
   }
 }

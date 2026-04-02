@@ -3,10 +3,7 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
-import { FormControl } from '@angular/forms';
 import { QueryParamsHandling, UrlTree } from '@angular/router';
-import { is } from 'date-fns/locale';
-import { filter } from 'rxjs';
 
 import {
   BenutzerRole,

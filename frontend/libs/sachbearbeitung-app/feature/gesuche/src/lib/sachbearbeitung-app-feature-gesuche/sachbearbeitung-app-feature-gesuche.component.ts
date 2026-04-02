@@ -39,11 +39,9 @@ import {
 } from 'date-fns';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
-import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
-import { PermissionStore } from '@dv/shared/global/permission';
 import {
   GesuchServiceGetGesucheSbRequestParams,
   GesuchTrancheStatus,
@@ -176,7 +174,6 @@ export class SachbearbeitungAppFeatureGesucheComponent
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-  private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
 
   massendruckStore = inject(MassendruckStore);
