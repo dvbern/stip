@@ -151,7 +151,7 @@ public class GesuchsperiodeSeeding extends Seeder {
     ) {
         String jahrAsString = String.valueOf(jahr.getTechnischesJahr());
 
-        if (season.equals(Season.FALL)&&jahr.getTechnischesJahr()==2026) {
+        if (season.equals(Season.FALL) && jahr.getTechnischesJahr() == 2026) {
             aufschaltterminStart = LocalDate.of(2026, 4, 27);
         }
 
