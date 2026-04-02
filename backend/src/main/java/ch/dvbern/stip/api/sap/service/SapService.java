@@ -187,13 +187,8 @@ public class SapService {
             Objects.isNull(businessPartnerActionBuchhaltung)
             || businessPartnerActionBuchhaltung.getSapStatus() == SapStatus.FAILURE
         ) {
-            switch (buchhaltungBusinessPartnerType) {
-                case BUSINESSPARTNER_CREATE -> businessPartnerActionBuchhaltung =
-                    buchhaltungService.createBuchhaltungForBusinessPartnerCreate(gesuch.getId());
-                case BUSINESSPARTNER_CHANGE -> businessPartnerActionBuchhaltung =
-                    buchhaltungService.createBuchhaltungForBusinessPartnerChange(gesuch.getId());
-                case null, default -> throw new IllegalStateException();
-            }
+            businessPartnerActionBuchhaltung = buchhaltungService
+                .createBuchhaltungForBusinessPartnerAction(gesuch.getId(), buchhaltungBusinessPartnerType);
             fall.setFailedBuchhaltungAuszahlungType(null);
         }
 
@@ -690,6 +685,7 @@ public class SapService {
                     .findGesuchsByGesuchsperiodeIdWithPendingRemainderPayment(gesuchsperiode.getId())
                     .stream()
             )
+            .filter(Gesuch::isVerfuegt)
             .filter(this::isPastSecondPaymentDate)
             .forEach(gesuch -> {
                 try {

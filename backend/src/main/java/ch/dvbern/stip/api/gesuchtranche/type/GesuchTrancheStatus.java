@@ -41,16 +41,6 @@ public enum GesuchTrancheStatus {
         EnumSet.of(UEBERPRUEFEN)
     );
 
-    public static final Set<GesuchTrancheStatus> ADMIN_CAN_EDIT = Collections.unmodifiableSet(
-        EnumSet.of(
-            IN_BEARBEITUNG_GS,
-            UEBERPRUEFEN,
-            AKZEPTIERT,
-            ABGELEHNT,
-            FEHLENDE_DOKUMENTE
-        )
-    );
-
     public static final Set<GesuchTrancheStatus> SACHBEARBEITER_CAN_UPDATE_NACHFRIST = Collections.unmodifiableSet(
         EnumSet.of(UEBERPRUEFEN, FEHLENDE_DOKUMENTE)
     );
