@@ -69,9 +69,9 @@ public class PersoenlichesBudgetCalculatorV1 {
             total = einnahmenMinusKosten;
             fehlbetrag = total;
             if (antragssteller.isVerheiratetKonkubinat() && antragssteller.isEigenerHaushalt()) {
-                proKopfTeilung = 1; // TODO: Check if 1? Can it even be more?
+                proKopfTeilung = antragssteller.getAnzahlPersonenImHaushalt();
                 total = total
-                    .divide(BigDecimal.valueOf(antragssteller.getAnzahlPersonenImHaushalt()), RoundingMode.HALF_UP);;
+                    .divide(BigDecimal.valueOf(proKopfTeilung), RoundingMode.HALF_UP);;
             }
             budgetTranche = total;
             if (anzahlMonate != 12) {
