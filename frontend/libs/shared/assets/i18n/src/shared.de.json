@@ -1062,6 +1062,8 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
+  "shared.form.abschluss.aenderungNichtEinreichbar": "Momentan können sie keine Änderung eingeben. Kontaktieren sie den zuständigen Sachbearbeiter",
+
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Gesuchsverlauf",

@@ -33,7 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   GesuchAenderungsDtoSpec.JSON_PROPERTY_OFFEN,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_AKZEPTIERT,
-  GesuchAenderungsDtoSpec.JSON_PROPERTY_ABGELEHNT
+  GesuchAenderungsDtoSpec.JSON_PROPERTY_ABGELEHNT,
+  GesuchAenderungsDtoSpec.JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN
 })
 @JsonTypeName("GesuchAenderungs")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -46,6 +47,9 @@ public class GesuchAenderungsDtoSpec {
 
   public static final String JSON_PROPERTY_ABGELEHNT = "abgelehnt";
   private List<GesuchTrancheSlimDtoSpec> abgelehnt;
+
+  public static final String JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN = "canAenderungEinreichen";
+  private Boolean canAenderungEinreichen;
 
   public GesuchAenderungsDtoSpec() {
   }
@@ -143,6 +147,32 @@ public class GesuchAenderungsDtoSpec {
     this.abgelehnt = abgelehnt;
   }
 
+
+  public GesuchAenderungsDtoSpec canAenderungEinreichen(Boolean canAenderungEinreichen) {
+    
+    this.canAenderungEinreichen = canAenderungEinreichen;
+    return this;
+  }
+
+   /**
+   * Get canAenderungEinreichen
+   * @return canAenderungEinreichen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanAenderungEinreichen() {
+    return canAenderungEinreichen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanAenderungEinreichen(Boolean canAenderungEinreichen) {
+    this.canAenderungEinreichen = canAenderungEinreichen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -154,12 +184,13 @@ public class GesuchAenderungsDtoSpec {
     GesuchAenderungsDtoSpec gesuchAenderungs = (GesuchAenderungsDtoSpec) o;
     return Objects.equals(this.offen, gesuchAenderungs.offen) &&
         Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
-        Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt);
+        Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
+        Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(offen, akzeptiert, abgelehnt);
+    return Objects.hash(offen, akzeptiert, abgelehnt, canAenderungEinreichen);
   }
 
   @Override
@@ -169,6 +200,7 @@ public class GesuchAenderungsDtoSpec {
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
+    sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

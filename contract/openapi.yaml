@@ -9722,6 +9722,7 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - canAenderungEinreichen
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
@@ -9733,6 +9734,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        canAenderungEinreichen:
+          type: boolean
     VerfuegtGesuch:
       type: object
       required:
@@ -11004,6 +11007,7 @@ components:
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
+        - canSBInitAenderung
       type: object
       properties:
         gesuchStatus:
@@ -11017,6 +11021,8 @@ components:
         canTriggerManuellPruefen:
           type: boolean
         canBearbeitungAbschliessen:
+          type: boolean
+        canSBInitAenderung:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'

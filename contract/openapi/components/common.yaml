@@ -403,6 +403,7 @@ GesuchStateInfo:
     - canChangeGesuchsperiode
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
+    - canSBInitAenderung
   type: object
   properties:
     gesuchStatus:
@@ -416,6 +417,8 @@ GesuchStateInfo:
     canTriggerManuellPruefen:
       type: boolean
     canBearbeitungAbschliessen:
+      type: boolean
+    canSBInitAenderung:
       type: boolean
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
