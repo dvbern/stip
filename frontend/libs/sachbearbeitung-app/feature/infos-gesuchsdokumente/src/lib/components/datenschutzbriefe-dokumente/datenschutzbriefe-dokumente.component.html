@@ -115,7 +115,7 @@
             @case ('MANUELL') {
               <button
                 type="button"
-                class="btn btn-link tw:!flex tw:max-w-full tw:!p-0 tw:items-center"
+                class="btn btn-link tw:flex! tw:max-w-full tw:!p-0 tw:items-center tw:gap-1"
                 [dvDownloadButton]="{
                   type: 'datenschutzbrief',
                   id: datenschutzbrief.id,
@@ -127,12 +127,12 @@
                     `sachbearbeitung-app.infos.gesuchsdokumente.datenschutzbriefe.table.elternTyp.${datenschutzbrief.elternTyp}`
                   )
                 }}</span>
-                <span class="material-symbols-rounded tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
+                <span class="material-symbols-rounded tw:align-middle tw:!text-lg/none">download</span>
               </button>
             }
             @case ('MASSENDRUCK') {
               <a
-                class="tw:text-gray-400 btn btn-link tw:!p-0 tw:max-w-full tw:flex!"
+                class="btn btn-link tw:flex! tw:!p-0 tw:max-w-full tw:items-center tw:gap-1"
                 [routerLink]="['/massendruck/druckauftrag', datenschutzbrief.massendruckJobId]"
               >
                 <span
