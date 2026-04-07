@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.demo.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -106,11 +108,15 @@ import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
+import ch.dvbern.stip.berechnung.dto.InputUtils;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
+import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -210,7 +216,8 @@ public class GenerateDemoDataService {
             .build();
         fall.setAuszahlung(auszahlung);
         final var ausbildungDto = demoDataDto.getAusbildung();
-        // Reuse a existing Ausbildung if it exists and is not completed, otherwise create a new one
+
+        // Reuse an existing Ausbildung if it exists and is not completed, otherwise create a new one
         final var ausbildung = fall.getAusbildungs()
             .stream()
             .filter(a -> !a.getStatus().isCompleted())
@@ -667,52 +674,96 @@ public class GenerateDemoDataService {
         return gesuch.getId();
     }
 
-    public ApplyDemoDataResponseStipendienanspruchDto getStipendienanspruchDto(Gesuch gesuch, DemoData demoData) {
+    public DemoDataTestBerechnungResultatDto getBerechnungResultatDto(Gesuch gesuch, DemoData demoData) {
         final var initialEinreicheDatum = gesuch.getEinreichedatum();
         // Temporarily set the einreichedatum to the gesuchseingang date from demoData and reset it afterwards
         if (Objects.isNull(initialEinreicheDatum)) {
             gesuch.setEinreichedatum(LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter));
         }
 
-        final var demoDataDto = demoData.parseDemoDataDto();
-        BerechnungsresultatDto berechnungsresultat;
+        final var berechnungResultatSoll = demoData.parseDemoDataDto().getBerechnungValues();
+        var berechnungsResultat = new BerechnungsresultatDto();
+        var berechnungsResultatIst = new DemoDataTestBerechnungValuesDto();
+        String message = null;
+        VerfuegungStatus statusIst = null;
         try {
-            berechnungsresultat = berechnungService.getBerechnungsresultatFromGesuch(
+            berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch,
                 configService.getCurrentDmnMajorVersion(),
                 configService.getCurrentDmnMinorVersion()
             );
+            statusIst = InputUtils.sumNullables(
+                berechnungsResultat.getBerechnungStipendium(),
+                berechnungsResultat.getBerechnungDarlehen()
+            ) > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH;
+            var stipendien = berechnungsResultat.getBerechnungStipendium();
+            var darlehen = berechnungsResultat.getBerechnungDarlehen();
+            if (demoData.getAnzahlMonate() != 12) {
+                if (Objects.nonNull(stipendien)) {
+                    stipendien = BigDecimal.valueOf(stipendien)
+                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
+                        .intValue();
+                }
+                if (Objects.nonNull(darlehen)) {
+                    darlehen = BigDecimal.valueOf(darlehen)
+                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP)
+                        .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
+                        .intValue();
+                }
+            }
+            berechnungsResultatIst = new DemoDataTestBerechnungValuesDto()
+                .status(statusIst)
+                .ungekuerztStipendien(berechnungsResultat.getUngekuerztStipendien())
+                .ungekuerztDarlehen(berechnungsResultat.getUngekuerztDarlehen())
+                .stipendien(stipendien)
+                .darlehen(darlehen);
+        } catch (Exception e) {
+            message = e.getMessage();
         } finally {
             if (Objects.isNull(initialEinreicheDatum)) {
                 gesuch.setEinreichedatum(null);
             }
         }
-        final var stipendienanspruchDto = demoDataDto.getStipendienanspruch();
 
-        final var total = berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
-        final var stipendienSoll = Objects.nonNull(stipendienanspruchDto.getBetragStipendienSoll())
-            ? stipendienanspruchDto.getBetragStipendienSoll()
-            : stipendienanspruchDto.getBetragStipendienIst();
-        final var darlehenSoll = Objects.nonNull(stipendienanspruchDto.getBetragDarlehenSoll())
-            ? stipendienanspruchDto.getBetragDarlehenSoll()
-            : stipendienanspruchDto.getBetragDarlehenIst();
-        final var stipendienIst = Objects.requireNonNullElse(berechnungsresultat.getBerechnungDarlehen(), 0) != 0
-        || Objects.equals(
-            berechnungsresultat.getBerechnungStipendium(),
-            berechnungsresultat
-                .getBerechnungVorKuerzungUndTeilung()
-        )
-            ? berechnungsresultat.getBerechnungStipendium()
-            : berechnungsresultat.getBerechnungVorKuerzungUndTeilung();
-
-        return new ApplyDemoDataResponseStipendienanspruchDto()
-            .success(stipendienIst.equals(stipendienSoll))
-            .statusSoll(stipendienanspruchDto.getStatus())
-            .statusIst(total > 0 ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH)
-            .betragStipendienSoll(stipendienSoll)
-            .betragStipendienIst(stipendienIst)
-            .betragDarlehenSoll(darlehenSoll)
-            .betragDarlehenIst(berechnungsresultat.getBerechnungDarlehen());
+        return new DemoDataTestBerechnungResultatDto()
+            .demoDataId(demoData.getId())
+            .testFall(demoData.getTestFall())
+            .valid(
+                new DemoDataTestBerechnungValidDto()
+                    .status(Objects.equals(berechnungResultatSoll.getStatus(), statusIst))
+                    .ungekuerztStipendien(
+                        BerechnungUtil.nullableCompare(
+                            berechnungResultatSoll.getUngekuerztStipendien(),
+                            berechnungsResultatIst.getUngekuerztStipendien(),
+                            0
+                        )
+                    )
+                    .ungekuerztDarlehen(
+                        BerechnungUtil.nullableCompare(
+                            berechnungResultatSoll.getUngekuerztDarlehen(),
+                            berechnungsResultatIst.getUngekuerztDarlehen(),
+                            0
+                        )
+                    )
+                    .stipendien(
+                        BerechnungUtil.nullableCompare(
+                            berechnungResultatSoll.getStipendien(),
+                            berechnungsResultatIst.getStipendien(),
+                            0
+                        )
+                    )
+                    .darlehen(
+                        BerechnungUtil.nullableCompare(
+                            berechnungResultatSoll.getDarlehen(),
+                            berechnungsResultatIst.getDarlehen(),
+                            0
+                        )
+                    )
+            )
+            .soll(berechnungResultatSoll)
+            .ist(berechnungsResultatIst)
+            .message(message);
     }
 
     private ElternAbwesenheitsGrund getAbwesenheitsGrund(DemoFamiliensituationDto dto, ElternTyp elternTyp) {

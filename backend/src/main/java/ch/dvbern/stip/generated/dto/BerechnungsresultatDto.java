@@ -29,6 +29,8 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer berechnungVorKuerzungUndTeilung;
   private @Valid Integer berechnungStipendium;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
+  private @Valid Integer ungekuerztStipendien;
+  private @Valid Integer ungekuerztDarlehen;
   private @Valid Integer totalNachKuerzungNachEinreichefrist;
   private @Valid Integer anzahlMonateEinreichefrist;
   private @Valid Integer totalNachKuerzungUnterbruch;
@@ -130,6 +132,44 @@ public class BerechnungsresultatDto  implements Serializable {
 
     return this;
   }
+  /**
+   * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
+   **/
+  public BerechnungsresultatDto ungekuerztStipendien(Integer ungekuerztStipendien) {
+    this.ungekuerztStipendien = ungekuerztStipendien;
+    return this;
+  }
+
+  
+  @JsonProperty("ungekuerztStipendien")
+  public Integer getUngekuerztStipendien() {
+    return ungekuerztStipendien;
+  }
+
+  @JsonProperty("ungekuerztStipendien")
+  public void setUngekuerztStipendien(Integer ungekuerztStipendien) {
+    this.ungekuerztStipendien = ungekuerztStipendien;
+  }
+
+  /**
+   * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
+   **/
+  public BerechnungsresultatDto ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
+    return this;
+  }
+
+  
+  @JsonProperty("ungekuerztDarlehen")
+  public Integer getUngekuerztDarlehen() {
+    return ungekuerztDarlehen;
+  }
+
+  @JsonProperty("ungekuerztDarlehen")
+  public void setUngekuerztDarlehen(Integer ungekuerztDarlehen) {
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
+  }
+
   /**
    * Die Summe nach der Kürzung der verspäteten Eingabe
    **/
@@ -239,6 +279,8 @@ public class BerechnungsresultatDto  implements Serializable {
         Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
+        Objects.equals(this.ungekuerztStipendien, berechnungsresultat.ungekuerztStipendien) &&
+        Objects.equals(this.ungekuerztDarlehen, berechnungsresultat.ungekuerztDarlehen) &&
         Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
         Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
         Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
@@ -248,7 +290,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungStipendium, tranchenBerechnungsresultate, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungStipendium, tranchenBerechnungsresultate, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
   }
 
   @Override
@@ -260,6 +302,8 @@ public class BerechnungsresultatDto  implements Serializable {
     sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
+    sb.append("    ungekuerztStipendien: ").append(toIndentedString(ungekuerztStipendien)).append("\n");
+    sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
     sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
     sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");

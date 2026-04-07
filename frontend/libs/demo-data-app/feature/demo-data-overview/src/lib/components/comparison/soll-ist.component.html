@@ -1,0 +1,77 @@
+@let values = valuesSig();
+@if (values) {
+  <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2" *dvTranslocoDemo="let t">
+    <span></span>
+    @for (value of sollIst; track value) {
+      <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${value}`) }}</span>
+    }
+
+    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.status === false">
+      <span class="tw:font-bold">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
+      </span>
+      @for (value of sollIst; track value) {
+        <span class="tw:break-normal">
+          @let status = values[value]?.status;
+          {{ status ? t(`shared.verfuegung.status.${status}`) : '' }}
+        </span>
+      }
+    </div>
+
+    <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
+      {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.ungekuerzt') }}
+    </div>
+    <div
+      class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
+      [class.tw:bg-red-100]="values.valid?.ungekuerztStipendien === false"
+    >
+      <span class="tw:font-bold">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
+      </span>
+      @for (value of sollIst; track value) {
+        <span>
+          {{ (values[value]?.ungekuerztStipendien | formatChfNullable) ?? 'N/A' }}
+        </span>
+      }
+    </div>
+
+    <div
+      class="tw:grid tw:grid-cols-subgrid tw:col-span-3"
+      [class.tw:bg-red-100]="values.valid?.ungekuerztDarlehen === false"
+    >
+      <span class="tw:font-bold">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
+      </span>
+      @for (value of sollIst; track value) {
+        <span>
+          {{ (values[value]?.ungekuerztDarlehen | formatChfNullable) ?? 'N/A' }}
+        </span>
+      }
+    </div>
+
+    <div class="tw:col-span-3 tw:font-bold tw:mt-2 tw:text-gray-500">
+      {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.gekuerzt') }}
+    </div>
+    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.stipendien === false">
+      <span class="tw:font-bold">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
+      </span>
+      @for (value of sollIst; track value) {
+        <span>
+          {{ (values[value]?.stipendien | formatChfNullable) ?? 'N/A' }}
+        </span>
+      }
+    </div>
+
+    <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.darlehen === false">
+      <span class="tw:font-bold">
+        {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
+      </span>
+      @for (value of sollIst; track value) {
+        <span>
+          {{ (values[value]?.darlehen | formatChfNullable) ?? 'N/A' }}
+        </span>
+      }
+    </div>
+  </div>
+}

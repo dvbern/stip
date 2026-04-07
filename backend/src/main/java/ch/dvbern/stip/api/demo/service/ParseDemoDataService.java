@@ -39,7 +39,7 @@ import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDto;
 import ch.dvbern.stip.generated.dto.DemoDarlehenGruendeDto;
-import ch.dvbern.stip.generated.dto.DemoDataStipendienanspruchDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDto;
 import ch.dvbern.stip.generated.dto.DemoElternteilDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
@@ -109,7 +109,7 @@ public class ParseDemoDataService {
         final var geschwisters = prepareGeschwisters();
         final var auszahlungs = prepareAuszahlungs();
         final var darlehens = prepareDarlehens();
-        final var stipendienanspruchs = prepareStipendienanspruchs(ignoreBerechnungErrors);
+        final var berechnungValues = prepareBerechnungValues(ignoreBerechnungErrors);
 
         for (int i = 0; i < demoDataList.size(); i++) {
             final var demoData = demoDataList.get(i);
@@ -128,7 +128,7 @@ public class ParseDemoDataService {
             dto.setGeschwister(geschwisters.get(i));
             auszahlungs.get(i).ifPresent(dto::setAuszahlung);
             darlehens.get(i).ifPresent(dto::setDarlehen);
-            dto.setStipendienanspruch(stipendienanspruchs.get(i));
+            dto.setBerechnungValues(berechnungValues.get(i));
 
             demoData.serializeDemoData();
         }
@@ -792,21 +792,21 @@ public class ParseDemoDataService {
         return darlehens;
     }
 
-    private List<DemoDataStipendienanspruchDto> prepareStipendienanspruchs(final Boolean ignoreBerechnungErrors) {
-        final List<DemoDataStipendienanspruchDto> list = new ArrayList<>();
+    private List<DemoDataTestBerechnungValuesDto> prepareBerechnungValues(final Boolean ignoreBerechnungErrors) {
+        final List<DemoDataTestBerechnungValuesDto> list = new ArrayList<>();
         initList(
             list,
             "Stipendienanspruch \\(Status\\)",
             0,
-            (c) -> new DemoDataStipendienanspruchDto().status(ParseDemoEnumUtil.parseVerfuegungstatus(c.getCell()))
+            (c) -> new DemoDataTestBerechnungValuesDto().status(ParseDemoEnumUtil.parseVerfuegungstatus(c.getCell()))
         );
         try {
             // spotless:off
-            updateList(list, "Stipendienanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragStipendienSoll(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
-            updateList(list, "Darlehensanspruch \\(Betrag\\) soll", 0, (c, d) -> d.setBetragDarlehenSoll(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Stipendienanspruch.*", 0, (c, d) -> d.ungekuerztStipendien(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Darlehensanspruch.*", 0, (c, d) -> d.ungekuerztDarlehen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             skipRows(1);
-            updateList(list, "Stipendienanspruch berechnet", 0, (c, d) -> d.setBetragStipendienIst(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
-            updateList(list, "Darlehensanspruch berechnet", 0, (c, d) -> d.setBetragDarlehenIst(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Stipendienanspruch.*", 0, (c, d) -> d.stipendien(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "Darlehensanspruch.*", 0, (c, d) -> d.darlehen(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             // spotless:on
         } catch (Exception e) {
             if (Boolean.TRUE.equals(ignoreBerechnungErrors)) {

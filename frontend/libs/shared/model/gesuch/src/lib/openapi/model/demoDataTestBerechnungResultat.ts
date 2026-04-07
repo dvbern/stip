@@ -12,12 +12,12 @@
 import { DemoDataTestBerechnungValid } from './demoDataTestBerechnungValid';
 import { DemoDataTestBerechnungValues } from './demoDataTestBerechnungValues';
 
-export interface DemoDataTestBerechnungResult { 
+export interface DemoDataTestBerechnungResultat { 
     demoDataId: string;
     testFall: string;
-    valid: DemoDataTestBerechnungValid;
+    valid?: DemoDataTestBerechnungValid;
     message?: string;
-    soll: DemoDataTestBerechnungValues;
-    ist: DemoDataTestBerechnungValues;
+    soll?: DemoDataTestBerechnungValues;
+    ist?: DemoDataTestBerechnungValues;
 }
 
