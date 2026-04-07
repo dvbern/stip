@@ -652,39 +652,38 @@
         </div>
 
         <!-- VORMUNDSCHAFT -->
-
-        @if (nationalitaetBfsCodeSig() === bfsCodeSchweiz) {
-          <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-            <div>
-              <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
-                'shared.form.person.guardianship.label' | transloco
-              }}</mat-checkbox>
-              @if (vormundschaftDocumentOptionsSig(); as options) {
-                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-              }
-              <dv-shared-ui-form-zuvor-hint
-                [changes]="
-                  view.formChanges.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-                "
-              ></dv-shared-ui-form-zuvor-hint>
-            </div>
-            <button
-              type="button"
-              (click)="vormundSchaftInfoDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info mt-2"
-              [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-            >
-              <span class="material-symbols-rounded"> info </span>
-            </button>
+        <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
+          <div>
+            <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
+              'shared.form.person.vormundschaft.label' | transloco
+            }}</mat-checkbox>
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="
+                view.formChanges.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+              "
+            ></dv-shared-ui-form-zuvor-hint>
           </div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.guardianship.label'"
-            [dialogMessageKey]="'shared.form.person.guardianship.info'"
-            #vormundSchaftInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-4"
-          ></div>
-        }
+          <button
+            type="button"
+            (click)="vormundSchaftInfoDialog.toggle()"
+            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+          >
+            <span class="material-symbols-rounded"> info </span>
+          </button>
+          @if (vormundschaftDocumentOptionsSig(); as options) {
+            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+          }
+        </div>
+      </div>
+      <div class="col-md-12 col-xl-4 col-12">
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.person.vormundschaft.label'"
+          [dialogMessageKey]="'shared.form.person.vormundschaft.info'"
+          #vormundSchaftInfoDialog="dvSharedUiInfoDialog"
+          class="d-none d-xl-block col-xl-4"
+        ></div>
       </div>
 
       <!-- ZUSTAENDIGE KESB -->
