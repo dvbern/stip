@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -36,7 +35,6 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentRepository;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatusChangeEvent;
-import ch.dvbern.stip.api.dokument.util.DokumentOfJahreswertUtil;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -163,8 +161,6 @@ public class GesuchDokumentService {
                     fileUpload,
                     objectId
                 );
-
-                synchroniseGesuchDokumente(gesuchTrancheId, dokumentTyp, entryId);
             },
             throwable -> LOG.error(throwable.getMessage())
         );
@@ -310,38 +306,6 @@ public class GesuchDokumentService {
             );
     }
 
-    @Transactional
-    public void removeAllDokumentsOfTypeAndObjectIdForAllTranchen(
-        final Gesuch gesuch,
-        final DokumentTyp dokumentTyp,
-        final String objectId
-    ) {
-        gesuchDokumentRepository.getAllOfTypeForGesuch(gesuch.getId(), dokumentTyp)
-            .forEach(
-                gesuchDokument -> {
-                    gesuchDokument.getGesuchDokumentKommentare().clear();
-                    gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
-
-                    final var dokumenteToDelete = new ArrayList<Dokument>();
-                    for (final var dokument : gesuchDokument.getDokumente()) {
-                        if (!dokument.getObjectId().equals(objectId)) {
-                            continue;
-                        }
-
-                        // On removal of a Dokument we always reset the Status to AUSSTEHEND
-                        dokument.getGesuchDokument().setStatus(GesuchDokumentStatus.AUSSTEHEND);
-                        dokumenteToDelete.add(dokument);
-                    }
-
-                    dokumenteToDelete.forEach(this::removeDokument);
-
-                    if (gesuchDokument.getDokumente().isEmpty()) {
-                        removeGesuchDokument(gesuchDokument.getId());
-                    }
-                }
-            );
-    }
-
     private static void validateGesuchAndTrancheAreInCorrectStateOrElseThrow(final GesuchDokument gesuchDokument) {
         if (gesuchDokument.getGesuchTranche().getTyp() == GesuchTrancheTyp.AENDERUNG) {
             gesuchTrancheStatusIsOrElseThrow(gesuchDokument.getGesuchTranche(), GesuchTrancheStatus.UEBERPRUEFEN);
@@ -483,18 +447,7 @@ public class GesuchDokumentService {
         // Set GesuchDokument to ausstehend
         final var dokument = dokumentRepository.requireById(dokumentId);
         dokument.getGesuchDokument().setStatus(GesuchDokumentStatus.AUSSTEHEND);
-
-        // Remove Dokument on all Tranchen if Jahreswert Dokument, otherwise only this
-        final var gesuchDokument = dokument.getGesuchDokument();
-        if (DokumentOfJahreswertUtil.isDokumentOfJahreswert(gesuchDokument.getDokumentTyp())) {
-            removeAllDokumentsOfTypeAndObjectIdForAllTranchen(
-                gesuchDokument.getGesuchTranche().getGesuch(),
-                gesuchDokument.getDokumentTyp(),
-                dokument.getObjectId()
-            );
-        } else {
-            removeDokument(dokument);
-        }
+        removeDokument(dokument);
     }
 
     @Transactional
@@ -628,62 +581,6 @@ public class GesuchDokumentService {
         return gesuchDokument;
     }
 
-    @Transactional
-    public void synchroniseGesuchDokumente(
-        final UUID gesuchTrancheId,
-        final DokumentTyp dokumentTyp,
-        final UUID entryId
-    ) {
-        if (!isDokumentOfJahreswert(dokumentTyp)) {
-            // No synchronisation is needed if not a Dokument on a Jahreswert field
-            return;
-        }
-
-        final var sourceTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        if (sourceTranche.getTyp() == GesuchTrancheTyp.AENDERUNG) {
-            // No synchronisation is needed for Aenderungen
-            return;
-        }
-
-        final var targetTranchen = sourceTranche.getGesuch()
-            .getTranchenTranchen()
-            .filter(gesuchTranche -> !gesuchTranche.getId().equals(sourceTranche.getId()))
-            .toList();
-
-        final var sourceGesuchDokumentOpt = gesuchDokumentRepository.findByGesuchTrancheAndDokumentTypAndEntryIdIfSet(
-            gesuchTrancheId,
-            dokumentTyp,
-            entryId
-        );
-
-        for (final var targetTranche : targetTranchen) {
-            final var targetGesuchDokument = targetTranche.getGesuchDokuments()
-                .stream()
-                .filter(
-                    gesuchDokument -> gesuchDokument.getDokumentTyp() == dokumentTyp && Objects.equals(
-                        gesuchDokument.getEntryId(),
-                        entryId
-                    )
-                )
-                .findFirst();
-
-            targetGesuchDokument.ifPresent(gesuchDokument -> {
-                // This is needed, otherwise we're modifying the same list during iteration
-                final var dokumente = gesuchDokument.getDokumente().stream().toList();
-                dokumente.forEach(this::removeDokument);
-            });
-
-            sourceGesuchDokumentOpt.ifPresent(sourceGesuchDokument -> {
-                // Find GesuchDokument for this type on targetTranche, if none exists create a new one
-                final var newGesuchDokument = targetGesuchDokument
-                    .orElseGet(() -> GesuchDokumentCopyUtil.createCopy(sourceGesuchDokument, targetTranche));
-
-                GesuchDokumentCopyUtil.copyDokumente(newGesuchDokument, sourceGesuchDokument.getDokumente());
-                targetTranche.getGesuchDokuments().add(newGesuchDokument);
-            });
-        }
-    }
-
     public GesuchDokument copyGesuchDokument(final GesuchDokument sourceDokument, final GesuchTranche forTranche) {
         final var newDokument = GesuchDokumentCopyUtil.createCopy(sourceDokument, forTranche);
         gesuchDokumentRepository.persistAndFlush(newDokument);
@@ -692,13 +589,5 @@ public class GesuchDokumentService {
 
     public List<Dokument> copyDokumente(final GesuchDokument targetGesuchDokument, List<Dokument> toCopy) {
         return GesuchDokumentCopyUtil.copyDokumente(targetGesuchDokument, toCopy);
-    }
-
-    public boolean isDokumentOfJahreswert(final DokumentTyp dokumentTyp) {
-        return DokumentOfJahreswertUtil.isDokumentOfJahreswert(dokumentTyp);
-    }
-
-    public Set<DokumentTyp> getDokumentTypsOfJahreswerte() {
-        return DokumentOfJahreswertUtil.getDokumentTypsOfJahreswerte();
     }
 }
