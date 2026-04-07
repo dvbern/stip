@@ -14,9 +14,15 @@ import { PermissionStore } from '@dv/shared/global/permission';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
-import { DashQueryParams, NavItem } from '@dv/shared/util/navigation';
+import {
+  NavItem,
+  NullableDashFilterQueryParams,
+  getDefaultQueryForRole,
+} from '@dv/shared/util/navigation';
 
-const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
+const baseNavItems: (NavItem & {
+  queryParams?: NullableDashFilterQueryParams;
+})[] = [
   {
     type: 'link',
     id: 'dashboard',
@@ -24,12 +30,6 @@ const baseNavItems: (NavItem & { queryParams?: DashQueryParams })[] = [
     icon: 'dashboard',
     route: ['/dashboard', 'gesuche'],
     testId: 'dashboard-nav-item',
-    //todo: add default query
-    queryParams: {
-      filterTab: 'GESUCHE',
-      scope: 'MEINE',
-      workable: 'TRUE',
-    },
   },
   {
     type: 'link',
@@ -92,6 +92,8 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
   navItemsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
 
+    const defaultFilter = getDefaultQueryForRole(rolesMap);
+
     const navItems: NavItem[] = baseNavItems;
 
     const filtered: NavItem[] = navItems
@@ -103,11 +105,23 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
         return item.rolesAllowed.some((role) => rolesMap[role]);
       })
       .map((item) => {
-        // todo: not quite working perfectly, does not work for darlehen, of course
         if (item.type === 'link' && item.route && item.route) {
           const isActive = this.routeUrlSig()?.includes(item.route[0] ?? '');
           return { ...item, active: isActive };
         }
+
+        if (item.id === 'dashboard') {
+          return {
+            ...item,
+            route: ['/dashboard', 'gesuche'],
+            queryParams: {
+              filterTab: defaultFilter.filterTab,
+              scope: defaultFilter.scope,
+              workable: defaultFilter.workable,
+            },
+          };
+        }
+
         return item;
       });
 

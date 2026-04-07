@@ -1,14 +1,15 @@
 <ng-container *transloco="let t">
-  <div class="container">
-    <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
-      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
-        <dv-shared-ui-filter-menu-button
-          [activeFilter]="show()"
-          [defaultFilter]="quickFilterGroup.filters[0].typ"
-          (filterChange)="handleQuickFilterClick($event)"
-          [filters]="quickFilterGroup.filters"
-          baseTranslationKey="sachbearbeitung-app.darlehen-dashboard.quick-filter."
-        ></dv-shared-ui-filter-menu-button>
+  <div class="tw:p-6">
+    <div class="tw:mb-6" [formGroup]="togglesGroup">
+      @if (showScopeToggleSig()) {
+        <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.scope">{{
+          t('sachbearbeitung-app.cockpit.toggle.meine')
+        }}</mat-slide-toggle>
+      }
+      @if (showWorkableToggleSig()) {
+        <mat-slide-toggle [hideIcon]="true" class="tw:ml-4" [formControl]="togglesGroup.controls.workable">{{
+          t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
+        }}</mat-slide-toggle>
       }
     </div>
 

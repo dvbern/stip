@@ -14,7 +14,11 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { DashboardFilterTabItem, TabNavItem } from '@dv/shared/util/navigation';
+import {
+  DashboardFilterTabItem,
+  TabNavItem,
+  getDefaultQueryForRole,
+} from '@dv/shared/util/navigation';
 
 const baseFilterTabs: DashboardFilterTabItem[] = [
   {
@@ -129,17 +133,20 @@ export class SachbearbeitungAppFeatureDashboardComponent {
       pageSize: 100,
     });
 
+    const defaultFilter = getDefaultQueryForRole(
+      this.permissionStore.rolesMapSig(),
+    );
+
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
         if (!params['filterTab']) {
-          // todo: move to defaults and typesafe
           this.router.navigate(['gesuche'], {
             relativeTo: this.route,
             queryParams: {
-              filterTab: 'GESUCHE',
-              scope: 'MEINE',
-              workable: 'TRUE',
+              filterTab: defaultFilter.filterTab,
+              scope: defaultFilter.scope,
+              workable: defaultFilter.workable,
             },
             queryParamsHandling: 'merge',
             replaceUrl: true,

@@ -42,6 +42,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
+import { PermissionStore } from '@dv/shared/global/permission';
 import {
   GesuchServiceGetGesucheSbRequestParams,
   GesuchTrancheStatus,
@@ -79,6 +80,7 @@ import {
   ScopeParam,
   WorkableParam,
   getControlVisibility,
+  getDefaultQueryForRole,
   getQueryFromParams,
   getQueryParamsFromToggleValues,
   isGesuchQuery,
@@ -99,11 +101,6 @@ import {
   parseDate,
   toBackendLocalDate,
 } from '@dv/shared/util/validator-date';
-
-// todo: eventually move!
-const DEFAULT_SCOPE: ScopeParam = 'MEINE' as const;
-const DEFAULT_FILTER_TAB: FilterTabParam = 'GESUCHE' as const;
-const DEFAULT_WORKABLE: WorkableParam = 'TRUE';
 
 const statusByTyp = {
   TRANCHE: Object.values(Gesuchstatus).filter(
@@ -177,11 +174,10 @@ export class SachbearbeitungAppFeatureGesucheComponent
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private formBuilder = inject(NonNullableFormBuilder);
-
+  private permissionStore = inject(PermissionStore);
   massendruckStore = inject(MassendruckStore);
-  // Due to lack of space, the following inputs are not suffixed with 'Sig'
 
-  // think about better types
+  // Due to lack of space, the following inputs are not suffixed with 'Sig'
   filterTab = input<FilterTabParam | undefined>(undefined);
   scope = input<ScopeParam | undefined>(undefined);
   workable = input<WorkableParam | undefined>(undefined);
@@ -236,18 +232,20 @@ export class SachbearbeitungAppFeatureGesucheComponent
   availableTypes = Object.values(GesuchTrancheTyp);
   versionSig = this.store.selectSignal(selectVersion);
 
+  defaultFilter = getDefaultQueryForRole(this.permissionStore.rolesMapSig());
+
   queryFromInputsSig = computed<{
     query: DashboardQuery;
-    scopeControl: { show: boolean; value: boolean };
-    workableControl: { show: boolean; value: boolean };
+    scopeConfig: { show: boolean; value: boolean };
+    workableConfig: { show: boolean; value: boolean };
   }>(() => {
-    const filterTab = this.filterTab() ?? DEFAULT_FILTER_TAB;
-    const scope = this.scope() ?? DEFAULT_SCOPE;
-    const workable = this.workable() ?? DEFAULT_WORKABLE;
+    const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
+    const scope = this.scope() ?? this.defaultFilter.scope;
+    const workable = this.workable() ?? this.defaultFilter.workable;
 
     const query = getQueryFromParams(scope, filterTab, workable);
 
-    const { scopeControl, workableControl } = getControlVisibility(
+    const { scopeConfig, workableConfig } = getControlVisibility(
       scope,
       filterTab,
       workable,
@@ -255,27 +253,27 @@ export class SachbearbeitungAppFeatureGesucheComponent
 
     return {
       query,
-      scopeControl,
-      workableControl,
+      scopeConfig,
+      workableConfig,
     };
   });
 
   showScopeToggleSig = computed(() => {
-    const { scopeControl } = this.queryFromInputsSig();
-    this.togglesGroup.controls.scope.setValue(scopeControl.value, {
+    const { scopeConfig } = this.queryFromInputsSig();
+    this.togglesGroup.controls.scope.setValue(scopeConfig.value, {
       emitEvent: false,
     });
 
-    return scopeControl.show;
+    return scopeConfig.show;
   });
 
   showWorkableToggleSig = computed(() => {
-    const { workableControl } = this.queryFromInputsSig();
-    this.togglesGroup.controls.workable.setValue(workableControl.value, {
+    const { workableConfig } = this.queryFromInputsSig();
+    this.togglesGroup.controls.workable.setValue(workableConfig.value, {
       emitEvent: false,
     });
 
-    return workableControl.show;
+    return workableConfig.show;
   });
 
   sortList = sortList(this.router, this.route);
@@ -563,8 +561,8 @@ export class SachbearbeitungAppFeatureGesucheComponent
       { emitEvent: false },
     );
 
-    this.togglesGroup.controls.scope.setValue(query.scopeControl.value);
-    this.togglesGroup.controls.workable.setValue(query.workableControl.value);
+    this.togglesGroup.controls.scope.setValue(query.scopeConfig.value);
+    this.togglesGroup.controls.workable.setValue(query.workableConfig.value);
 
     if (sortColumn && sortOrder) {
       this.sortSig().sort({
