@@ -79,6 +79,7 @@ public class SapScheduledTaskFilterTest {
         final var testGesuch = new Gesuch();
         testGesuch.setGesuchsperiode(gesuchsperiode);
         final var testGesuchTranche = new GesuchTranche();
+        testGesuch.setVerfuegt(true);
         testGesuchTranche.setGueltigkeit(
             new DateRange().setGueltigAb(now.minusMonths(gesuchsperiode.getZweiterAuszahlungsterminMonat()))
         );
