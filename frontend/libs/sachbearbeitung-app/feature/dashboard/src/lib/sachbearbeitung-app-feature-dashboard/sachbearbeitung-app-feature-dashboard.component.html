@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   <!-- <mat-slide-toggle class=""> Slide me! </mat-slide-toggle> -->
   <nav class="tw:mt-6" mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true">
-    @for (tab of tabsSig(); track tab.name) {
+    @for (tab of tabsSig(); track tab.key) {
       <a
         mat-tab-link
         [routerLink]="tab.route"
@@ -11,7 +11,7 @@
         [active]="tab.active"
         [class.active]="tab.active"
       >
-        {{ t(`sachbearbeitung-app.dashboard.tabs.${tab.name}`) }}
+        {{ t(`sachbearbeitung-app.dashboard.tabs.${tab.key}`) }}
       </a>
     }
   </nav>

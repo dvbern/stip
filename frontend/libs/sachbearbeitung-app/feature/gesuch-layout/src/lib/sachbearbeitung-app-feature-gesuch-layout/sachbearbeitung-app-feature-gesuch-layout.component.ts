@@ -189,14 +189,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
-      name: 'formular',
+      key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
-      name: 'verfuegung',
+      key: 'verfuegung',
     };
 
     if (gesuchInfo?.state.canGetBerechnung) {

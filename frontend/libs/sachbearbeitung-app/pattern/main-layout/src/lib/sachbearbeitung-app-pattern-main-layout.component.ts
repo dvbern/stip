@@ -15,10 +15,10 @@ import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
-  NavItem,
   NullableDashFilterQueryParams,
   getDefaultQueryForRole,
-} from '@dv/shared/util/navigation';
+} from '@dv/shared/util/dashboard';
+import { NavItem } from '@dv/shared/util/navigation';
 
 const baseNavItems: (NavItem & {
   queryParams?: NullableDashFilterQueryParams;
@@ -28,7 +28,7 @@ const baseNavItems: (NavItem & {
     id: 'dashboard',
     label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
-    route: ['/dashboard', 'gesuche'],
+    route: ['/dashboard', 'antraege'],
     testId: 'dashboard-nav-item',
   },
   {
@@ -113,7 +113,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
         if (item.id === 'dashboard') {
           return {
             ...item,
-            route: ['/dashboard', 'gesuche'],
+            route: ['/dashboard', 'antraege'],
             queryParams: {
               filterTab: defaultFilter.filterTab,
               scope: defaultFilter.scope,

@@ -6,13 +6,6 @@ import { hasRoles } from '@dv/shared/pattern/status-guard';
 
 export const appRoutes: Route[] = [
   {
-    path: 'sachbearbeitung-app-feature-gesuche',
-    loadChildren: () =>
-      import('@dv/sachbearbeitung-app/feature/gesuche').then(
-        (m) => m.sachbearbeitungAppFeatureGesucheRoutes,
-      ),
-  },
-  {
     path: 'unauthorized',
     loadChildren: () =>
       import('@dv/shared/feature/unauthorized').then(
@@ -98,11 +91,11 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'dashboard/gesuche',
+    redirectTo: 'dashboard/antraege',
   },
   ...appRoutes,
   {
     path: '**',
-    redirectTo: 'dashboard/gesuche',
+    redirectTo: 'dashboard/antraege',
   },
 ];

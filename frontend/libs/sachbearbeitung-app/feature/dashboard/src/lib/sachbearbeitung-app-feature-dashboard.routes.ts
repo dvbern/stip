@@ -10,18 +10,6 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
     providers: [],
     children: [
       {
-        path: 'darlehen',
-        title: 'sachbearbeitung-app.darlehen-dashboard.title',
-        loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-            (m) => m.SachbearbeitungAppFeatureDarlehenDashboardComponent,
-          ),
-        loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/darlehen-dashboard').then(
-            (m) => m.sachbearbeitungAppFeatureDarlehenDashboardRoutes,
-          ),
-      },
-      {
         path: 'fehlgeschlagene-zahlungen',
         title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
         loadChildren: () =>
@@ -30,16 +18,16 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
           ),
       },
       {
-        path: 'gesuche',
+        path: 'antraege',
         // todo: translation keys
         title: 'sachbearbeitung-app.cockpit.title',
         loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuche').then(
-            (m) => m.SachbearbeitungAppFeatureGesucheComponent,
+          import('@dv/sachbearbeitung-app/feature/cockpit').then(
+            (m) => m.SachbearbeitungAppFeatureCockpitComponent,
           ),
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuche').then(
-            (m) => m.sachbearbeitungAppFeatureGesucheRoutes,
+          import('@dv/sachbearbeitung-app/feature/cockpit').then(
+            (m) => m.sachbearbeitungAppFeatureCockpitRoutes,
           ),
       },
     ],

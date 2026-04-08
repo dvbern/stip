@@ -59,7 +59,6 @@
       "@dv/sachbearbeitung-app/feature/administration-sozialdienst": ["libs/sachbearbeitung-app/feature/administration-sozialdienst/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/cockpit": ["libs/sachbearbeitung-app/feature/cockpit/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/darlehen": ["libs/sachbearbeitung-app/feature/darlehen/src/index.ts"],
-      "@dv/sachbearbeitung-app/feature/darlehen-dashboard": ["libs/sachbearbeitung-app/feature/darlehen-dashboard/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen": ["libs/sachbearbeitung-app/feature/fehlgeschlagene-zahlungen/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form": ["libs/sachbearbeitung-app/feature/gesuch-form/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten": ["libs/sachbearbeitung-app/feature/gesuch-form-eltern-steuerdaten/src/index.ts"],
@@ -300,7 +299,7 @@
       "@dv/sachbearbeitung-app/feature/gesuch-layout": ["libs/sachbearbeitung-app/feature/gesuch-layout/src/index.ts"],
       "@dv/shared/ui/versionen-menu": ["libs/shared/ui/versionen-menu/src/index.ts"],
       "@dv/sachbearbeitung-app/feature/dashboard": ["libs/sachbearbeitung-app/feature/dashboard/src/index.ts"],
-      "@dv/sachbearbeitung-app/feature/gesuche": ["libs/sachbearbeitung-app/feature/gesuche/src/index.ts"]
+      "@dv/shared/util/dashboard": ["libs/shared/util/dashboard/src/index.ts"]
     }
   },
   "exclude": ["tmp", "node_modules", "libs/tooling/nx-plugin/src/generators/lib/files"]

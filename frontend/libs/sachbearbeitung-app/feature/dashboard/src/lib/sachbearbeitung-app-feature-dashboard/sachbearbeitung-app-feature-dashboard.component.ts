@@ -16,13 +16,25 @@ import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-acce
 import { PermissionStore } from '@dv/shared/global/permission';
 import {
   DashboardFilterTabItem,
-  TabNavItem,
+  DashboardTableEntryFields,
   getDefaultQueryForRole,
-} from '@dv/shared/util/navigation';
+} from '@dv/shared/util/dashboard';
+import { TabNavItem } from '@dv/shared/util/navigation';
+
+const resetTableFilterObj: Record<DashboardTableEntryFields, undefined> = {
+  fallNummer: undefined,
+  typ: undefined,
+  piaNachname: undefined,
+  piaVorname: undefined,
+  piaGeburtsdatum: undefined,
+  bearbeiter: undefined,
+  letzteAktivitaet: undefined,
+  status: undefined,
+};
 
 const baseFilterTabs: DashboardFilterTabItem[] = [
   {
-    name: 'gesuche',
+    key: 'gesuche',
     route: ['gesuche'],
     queryParams: { filterTab: 'GESUCHE' },
     queryParamsHandling: 'merge',
@@ -30,7 +42,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
   {
-    name: 'pendent',
+    key: 'pendent',
     route: ['gesuche'],
     queryParams: { filterTab: 'PENDENTE_GESUCHE' },
     queryParamsHandling: 'merge',
@@ -38,7 +50,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
   {
-    name: 'verfuegungen-druck',
+    key: 'verfuegungen-druck',
     route: ['gesuche'],
     queryParams: { filterTab: 'DRUCKBAR_VERFUEGUNGEN' },
     queryParamsHandling: 'merge',
@@ -46,7 +58,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
   {
-    name: 'datenschutz-briefe-druck',
+    key: 'datenschutz-briefe-druck',
     route: ['gesuche'],
     queryParams: { filterTab: 'DRUCKBAR_DATENSCHUTZBRIEFE' },
     queryParamsHandling: 'merge',
@@ -54,7 +66,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
   {
-    name: 'juristische-abklaerung',
+    key: 'juristische-abklaerung',
     route: ['gesuche'],
     queryParams: { filterTab: 'JURISTISCHE_ABKLAERUNG' },
     queryParamsHandling: 'merge',
@@ -62,7 +74,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Jurist'],
   },
   {
-    name: 'abklaerung-durch-rechtsabteilung',
+    key: 'abklaerung-durch-rechtsabteilung',
     route: ['gesuche'],
     queryParams: { filterTab: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' },
     queryParamsHandling: 'merge',
@@ -70,8 +82,8 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
     roles: ['V0_Jurist'],
   },
   {
-    name: 'darlehen',
-    route: ['darlehen'],
+    key: 'darlehen',
+    route: ['gesuche'],
     queryParams: { filterTab: 'DARLEHEN' },
     queryParamsHandling: 'merge',
     active: false,
@@ -112,7 +124,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
 
     if (hasfehlgeschlageneZahlungen) {
       tabs.push({
-        name: 'fehlgeschlagene-zahlungen',
+        key: 'fehlgeschlagene-zahlungen',
         route: ['fehlgeschlagene-zahlungen'],
         queryParamsHandling: 'merge',
         active: false,
@@ -123,13 +135,15 @@ export class SachbearbeitungAppFeatureDashboardComponent {
     return tabs.map((tab) => ({
       ...tab,
       active: tab.queryParams?.['filterTab'] === filterTab,
+      // reset table filters when switching tabs
+      // queryParams: { ...resetTableFilterObj, ...tab.queryParams },
     }));
   });
 
   constructor() {
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
       page: 1,
-      // todo: look at this number!
+      // todo: @scph is this assumption "good" it used to be 10!
       pageSize: 100,
     });
 
@@ -137,11 +151,12 @@ export class SachbearbeitungAppFeatureDashboardComponent {
       this.permissionStore.rolesMapSig(),
     );
 
+    // ensure that a default query is present
     this.route.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((params) => {
         if (!params['filterTab']) {
-          this.router.navigate(['gesuche'], {
+          this.router.navigate(['antraege'], {
             relativeTo: this.route,
             queryParams: {
               filterTab: defaultFilter.filterTab,
