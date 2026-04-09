@@ -344,9 +344,7 @@
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Rejeté",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Libéré",
 
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Créé",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Soumis",
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Supprimé",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Accepté",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Refusé",
 
