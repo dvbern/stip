@@ -1,18 +1,5 @@
 <ng-container *transloco="let t">
-  <div class="tw:mb-6" [formGroup]="togglesGroup">
-    @if (showScopeToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.scope">{{
-        t('sachbearbeitung-app.cockpit.toggle.meine')
-      }}</mat-slide-toggle>
-    }
-    @if (showWorkableToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" class="tw:ml-4" [formControl]="togglesGroup.controls.workable">{{
-        t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
-      }}</mat-slide-toggle>
-    }
-  </div>
-
-  <div class="tw:flex tw:justify-between">
+  <div class="tw:flex tw:justify-between tw:mb-6">
     <h1 class="tw:text-2xl!" data-testid="cockpit-title">
       @if (isDarlehenModeSig()) {
         {{ t('sachbearbeitung-app.darlehen.title') }}
@@ -41,6 +28,19 @@
           }}</span>
         }
       </button>
+    }
+  </div>
+
+  <div class="tw:flex tw:gap-8" [formGroup]="togglesGroup">
+    @if (showScopeToggleSig()) {
+      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.scope">{{
+        t('sachbearbeitung-app.cockpit.toggle.meine')
+      }}</mat-slide-toggle>
+    }
+    @if (showWorkableToggleSig()) {
+      <mat-slide-toggle [hideIcon]="true" class="tw:ml-4" [formControl]="togglesGroup.controls.workable">{{
+        t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
+      }}</mat-slide-toggle>
     }
   </div>
 

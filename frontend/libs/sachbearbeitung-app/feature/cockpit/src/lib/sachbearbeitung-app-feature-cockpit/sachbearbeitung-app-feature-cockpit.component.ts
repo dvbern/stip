@@ -452,6 +452,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
   }
 
+  // todo: @scph hier muss noch nachgebessert werden!
   // ngAfterViewInit() {
   //   runInInjectionContext(this.injector, () => {
   //     effect(() => {
@@ -547,7 +548,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
     });
 
-    // Handle start-end filter form control changes seperately
+    // Handle start-end filter form control changes separately
     effect(() => {
       this.filterStartEndFormChangedSig();
       const formValue = this.filterStartEndForm.getRawValue();

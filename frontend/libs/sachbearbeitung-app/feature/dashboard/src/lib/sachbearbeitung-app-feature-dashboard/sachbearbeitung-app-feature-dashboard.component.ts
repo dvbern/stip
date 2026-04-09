@@ -16,6 +16,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SortAndPageInputs } from '@dv/shared/model/table';
+import { DEFAULT_PAGE_SIZE } from '@dv/shared/model/ui-constants';
 import {
   DashboardFilterTabItem,
   DashboardTableEntryFields,
@@ -156,8 +157,7 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   constructor() {
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
       page: 1,
-      // todo: @scph is this assumption "good" it used to be 10!
-      pageSize: 100,
+      pageSize: DEFAULT_PAGE_SIZE,
     });
 
     const defaultFilter = getDefaultQueryForRole(
