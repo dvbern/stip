@@ -169,12 +169,16 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         final List<String> objectIds =
             antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
-        createStatusprotokollEntry(
-            antrag,
-            AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED,
-            antrag.getStatus().toString(),
-            antrag.getKommentarGS()
-        );
+
+        if (antrag.getStatus() != AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
+            createStatusprotokollEntry(
+                antrag,
+                AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED,
+                antrag.getStatus().toString(),
+                antrag.getKommentarGS()
+            );
+        }
+
         ausbildungUnterbruchAntragRepository.delete(antrag);
         dokumentDeleteService.executeDeleteDokumentsFromS3(s3, configService.getBucketName(), objectIds);
     }
