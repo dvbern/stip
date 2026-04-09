@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.swisstopoapi.service;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -66,7 +65,6 @@ public class SwisstopoService {
                 .findFirst()
                 .ifPresentOrElse(
                     swisstopoApiFindAddrResponseElementAttributes -> {
-                        gesuch.setStatisticsdata(new Statisticsdata());
                         gesuch.getStatisticsdata()
                             .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttributes.getCom_fosnr());
                         gesuch.getStatisticsdata()
