@@ -1,10 +1,11 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  Injector,
   InputSignal,
-  OnInit,
   QueryList,
   Signal,
   ViewChildren,
@@ -12,6 +13,7 @@ import {
   effect,
   inject,
   input,
+  runInInjectionContext,
   untracked,
   viewChild,
 } from '@angular/core';
@@ -88,7 +90,6 @@ import {
   getControlVisibility,
   getDefaultQueryForRole,
   getQueryFromParams,
-  getQueryParamsFromToggleValues,
   isDarlehenQuery,
   isGesuchQuery,
 } from '@dv/shared/util/dashboard';
@@ -148,17 +149,18 @@ import {
 })
 export class SachbearbeitungAppFeatureCockpitComponent
   implements
-    OnInit,
     Record<DashboardFormFields, InputSignal<string | undefined>>,
     SortAndPageInputs<
       SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn
-    >
+    >,
+    AfterViewInit
 {
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
+  private injector = inject(Injector);
   massendruckStore = inject(MassendruckStore);
   gesuchStore = inject(GesuchStore);
   darlehenStore = inject(DarlehenStore);
@@ -221,21 +223,40 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   defaultFilter = getDefaultQueryForRole(this.permissionStore.rolesMapSig());
 
+  filterInputsSig = computed(() => {
+    return {
+      fallNummer: this.fallNummer(),
+      typ: parseTyp(this.typ()) ?? 'TRANCHE',
+      piaNachname: this.piaNachname(),
+      piaVorname: this.piaVorname(),
+      piaGeburtsdatum: this.piaGeburtsdatum(),
+      status: parseStatus(this.status()),
+      bearbeiter: this.bearbeiter(),
+    };
+  });
+
+  startEndFilterInputsSig = computed(() => {
+    return {
+      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
+      letzteAktivitaetTo: this.letzteAktivitaetTo(),
+    };
+  });
+
   queryFromInputsSig = computed<{
     query: DashboardQuery;
     scopeConfig: { show: boolean; value: boolean };
     workableConfig: { show: boolean; value: boolean };
   }>(() => {
-    const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
     const scope = this.scope() ?? this.defaultFilter.scope;
     const workable = this.workable() ?? this.defaultFilter.workable;
+    const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
 
-    const query = getQueryFromParams(scope, filterTab, workable);
+    const query = getQueryFromParams(scope, workable, filterTab);
 
     const { scopeConfig, workableConfig } = getControlVisibility(
       scope,
-      filterTab,
       workable,
+      filterTab,
     );
 
     return {
@@ -249,18 +270,12 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   showScopeToggleSig = computed(() => {
     const { scopeConfig } = this.queryFromInputsSig();
-    // this.togglesGroup.controls.scope.setValue(scopeConfig.value, {
-    //   emitEvent: false,
-    // });
 
     return scopeConfig.show;
   });
 
   showWorkableToggleSig = computed(() => {
     const { workableConfig } = this.queryFromInputsSig();
-    // this.togglesGroup.controls.workable.setValue(workableConfig.value, {
-    //   emitEvent: false,
-    // });
 
     return workableConfig.show;
   });
@@ -438,6 +453,36 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
   }
 
+  // ngAfterViewInit() {
+  //   runInInjectionContext(this.injector, () => {
+  //     effect(() => {
+  //       this.filterTab();
+
+  //       const sortOrder = untracked(this.sortOrder);
+  //       const sortColumn = untracked(this.sortColumn);
+
+  //       const sorter = untracked(this.sortSig);
+  //       sorter.active = '';
+  //       sorter.direction = '';
+
+  //       sorter.sortChange.emit({ active: '', direction: '' });
+
+  //       // if (sortColumn && sortOrder) {
+  //       //   // sorter.sort({
+  //       //   //   id: sortColumn,
+  //       //   //   start: inverseSortMap[sortOrder],
+  //       //   //   disableClear: false,
+  //       //   // });
+  //       //   sorter.active = sortColumn;
+  //       //   sorter.direction = inverseSortMap[sortOrder];
+  //       // } else {
+  //       //   sorter.active = '';
+  //       //   sorter.direction = '';
+  //       // }
+  //     });
+  //   });
+  // }
+
   constructor() {
     limitPageToNumberOfEntriesEffect(
       this,
@@ -446,16 +491,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
       this.route,
     );
 
-    // effect to set form values
+    // effect to set form values on tab change and init of component
     effect(() => {
-      // const sortOrder = this.sortOrder();
-      // const sortColumn = this.sortColumn();
+      this.filterTab();
 
-      const { scopeConfig, workableConfig } = this.queryFromInputsSig();
-      this.togglesGroup.controls.scope.setValue(scopeConfig.value);
-      this.togglesGroup.controls.workable.setValue(workableConfig.value);
+      const { scopeConfig, workableConfig } = untracked(
+        this.queryFromInputsSig,
+      );
+      const filter = untracked(this.filterInputsSig);
+      const startEndFilter = untracked(this.startEndFilterInputsSig);
 
-      const { filter, startEndFilter } = this.getInputs();
+      this.togglesGroup.controls.scope.setValue(scopeConfig.value, {
+        emitEvent: false,
+      });
+      this.togglesGroup.controls.workable.setValue(workableConfig.value, {
+        emitEvent: false,
+      });
 
       this.filterForm.patchValue(
         {
@@ -476,14 +527,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
         },
         { emitEvent: false },
       );
-
-      // if (sortColumn && sortOrder) {
-      //   this.sortSig().sort({
-      //     id: sortColumn,
-      //     start: inverseSortMap[sortOrder],
-      //     disableClear: false,
-      //   });
-      // }
     });
 
     // Handle normal filter form control changes
@@ -535,27 +578,38 @@ export class SachbearbeitungAppFeatureCockpitComponent
       this.togglesGroup.controls.workable.valueChanges,
     );
 
-    // Handle toggle switch changes for 'scope' and 'workable' => take appart!
-    // then we do not need to emit on form value setting!
+    // scope changed
     effect(() => {
       const scopeChanged = scopeChangedSig();
-      const workableChanged = workableChangedSig();
-      const filterTab = untracked(this.filterTab);
 
-      if (!filterTab) {
+      if (scopeChanged === undefined) {
         return;
       }
 
-      const { scope, workable } = getQueryParamsFromToggleValues(
-        scopeChanged,
-        workableChanged,
-        filterTab,
-      );
+      const scope = scopeChanged === true ? 'MEINE' : 'ALLE';
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
           scope,
+        },
+        queryParamsHandling: 'merge',
+      });
+    });
+
+    // workable changed
+    effect(() => {
+      const workableChanged = workableChangedSig();
+
+      if (workableChanged === undefined) {
+        return;
+      }
+
+      const workable = workableChanged === true ? 'TRUE' : 'FALSE';
+
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: {
           workable,
         },
         queryParamsHandling: 'merge',
@@ -564,14 +618,16 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // Load Gesuche effect
     effect(() => {
-      const { query, filter, startEndFilter } = this.getInputs();
+      const query = this.queryFromInputsSig().query;
+      const filter = this.filterInputsSig();
+      const startEndFilter = this.startEndFilterInputsSig();
 
-      if (this.isDarlehenModeSig() || !isGesuchQuery(query.query)) {
+      if (untracked(this.isDarlehenModeSig) || !isGesuchQuery(query)) {
         return;
       }
 
       this.gesuchStore.loadGesuche$({
-        getGesucheSBQueryType: query.query,
+        getGesucheSBQueryType: query,
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -580,9 +636,11 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // Load Darlehen effect
     effect(() => {
-      const { query, filter, startEndFilter } = this.getInputs();
+      const query = this.queryFromInputsSig().query;
+      const filter = this.filterInputsSig();
+      const startEndFilter = this.startEndFilterInputsSig();
 
-      if (!this.isDarlehenModeSig() || !isDarlehenQuery(query.query)) {
+      if (!untracked(this.isDarlehenModeSig) || !isDarlehenQuery(query)) {
         return;
       }
 
@@ -596,7 +654,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       }
 
       this.darlehenStore.getDarlehenDashboardSb$({
-        getFreiwilligDarlehenSbQueryType: query.query,
+        getFreiwilligDarlehenSbQueryType: query,
         ...darlehenFilter,
         status: parseDarlehenStatus(this.status()),
         ...startEndFilter,
@@ -606,78 +664,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
   }
 
-  private getInputs() {
-    const query = this.queryFromInputsSig();
-    const filter = {
-      fallNummer: this.fallNummer(),
-      typ: parseTyp(this.typ()) ?? 'TRANCHE',
-      piaNachname: this.piaNachname(),
-      piaVorname: this.piaVorname(),
-      piaGeburtsdatum: this.piaGeburtsdatum(),
-      status: parseStatus(this.status()),
-      bearbeiter: this.bearbeiter(),
-    };
-    const startEndFilter = {
-      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
-      letzteAktivitaetTo: this.letzteAktivitaetTo(),
-    };
-
-    return {
-      query,
-      filter,
-      startEndFilter,
-    };
-  }
-
   resetStatus() {
     this.filterForm.controls.status.reset();
-  }
-
-  ngOnInit() {
-    const sortOrder = this.sortOrder();
-    const sortColumn = this.sortColumn();
-    // const { query, filter, startEndFilter } = this.getInputs();
-    // const sortOrder = this.sortOrder();
-    // const sortColumn = this.sortColumn();
-    // this.filterForm.reset(
-    //   {
-    //     ...filter,
-    //     piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
-    //   },
-    //   { emitEvent: false },
-    // );
-    // this.filterStartEndForm.reset(
-    //   {
-    //     ...startEndFilter,
-    //     letzteAktivitaetFrom: parseDate(
-    //       startEndFilter.letzteAktivitaetFrom ?? '',
-    //     ),
-    //     letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
-    //   },
-    //   { emitEvent: false },
-    // );
-    // this.togglesGroup.controls.scope.setValue(query.scopeConfig.value, {
-    //   emitEvent: false,
-    // });
-    // this.togglesGroup.controls.workable.setValue(query.workableConfig.value, {
-    //   emitEvent: false,
-    // });
-    // if (sortColumn && sortOrder) {
-    //   this.sortSig().sort({
-    //     id: sortColumn,
-    //     start: inverseSortMap[sortOrder],
-    //     disableClear: false,
-    //   });
-    // }
-    // Enable validation from the beginning
-    // this.filterForm.markAllAsTouched();
-    if (sortColumn && sortOrder) {
-      this.sortSig().sort({
-        id: sortColumn,
-        start: inverseSortMap[sortOrder],
-        disableClear: false,
-      });
-    }
   }
 }
 

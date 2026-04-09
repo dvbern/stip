@@ -41,7 +41,7 @@ export type DashboardTableEntryFields =
 /**
  * Special date fields which are treated as start-end fields only during filtering
  */
-type StartEndFields = keyof Pick<
+export type StartEndFields = keyof Pick<
   DashboardGesuchEntry | DashboardDarlehenEntry,
   'letzteAktivitaet'
 >;
@@ -138,8 +138,8 @@ export const extractConfigFromQuery = (query: DashboardQuery): FilterConfig => {
 
 export const getQueryFromParams = (
   scope: ScopeParam,
-  filterTab: FilterTabParam,
   workable: WorkableParam,
+  filterTab: FilterTabParam,
 ): DashboardQuery => {
   let worableVal = workable;
 
@@ -152,9 +152,9 @@ export const getQueryFromParams = (
   const query = dashboardQueries.find((q) => {
     const config = dashboardFilterQueryWithParamsMap[q];
     return (
-      config.scope === scope &&
+      config.filterTab.includes(filterTab) &&
       config.workable.includes(worableVal) &&
-      config.filterTab.includes(filterTab)
+      config.scope === scope
     );
   });
 
@@ -169,8 +169,8 @@ export const getQueryFromParams = (
 
 export const getControlVisibility = (
   scope: ScopeParam,
-  filterTab: FilterTabParam,
   workable: WorkableParam,
+  filterTab: FilterTabParam,
 ): {
   scopeConfig: ToggleConfig;
   workableConfig: ToggleConfig;
@@ -199,20 +199,6 @@ export const isDarlehenQuery = (
   query: DashboardQuery,
 ): query is Extract<DashboardQuery, 'ALLE_DARLEHEN' | 'MEINE_DARLEHEN'> => {
   return query.includes('DARLEHEN') || query.includes('BEARBEITBAR');
-};
-
-export const getQueryParamsFromToggleValues = (
-  scopeValue: boolean | undefined,
-  workableValue: boolean | undefined,
-  filterTab: FilterTabParam,
-): DashFilterQueryParams => {
-  const scope = scopeValue ? 'MEINE' : 'ALLE';
-  const workable = workableValue ? 'TRUE' : 'FALSE';
-
-  // additional check, not strictly necessary
-  getQueryFromParams(scope, filterTab, workable);
-
-  return { scope, filterTab, workable };
 };
 
 export const SachbearbeiterDefaultQery: DashFilterQueryParams = {

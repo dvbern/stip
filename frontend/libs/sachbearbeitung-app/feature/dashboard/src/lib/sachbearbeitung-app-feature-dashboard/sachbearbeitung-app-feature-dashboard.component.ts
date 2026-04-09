@@ -14,6 +14,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SortAndPageInputs } from '@dv/shared/model/table';
 import {
   DashboardFilterTabItem,
   DashboardTableEntryFields,
@@ -21,7 +22,10 @@ import {
 } from '@dv/shared/util/dashboard';
 import { TabNavItem } from '@dv/shared/util/navigation';
 
-const resetTableFilterObj: Record<DashboardTableEntryFields, undefined> = {
+const resetTableFilterObj: Record<
+  DashboardTableEntryFields | keyof SortAndPageInputs<unknown>,
+  undefined
+> = {
   fallNummer: undefined,
   typ: undefined,
   piaNachname: undefined,
@@ -30,6 +34,10 @@ const resetTableFilterObj: Record<DashboardTableEntryFields, undefined> = {
   bearbeiter: undefined,
   letzteAktivitaet: undefined,
   status: undefined,
+  sortColumn: undefined,
+  sortOrder: undefined,
+  page: undefined,
+  pageSize: undefined,
 };
 
 const baseFilterTabs: DashboardFilterTabItem[] = [
@@ -135,8 +143,8 @@ export class SachbearbeitungAppFeatureDashboardComponent {
     return tabs.map((tab) => ({
       ...tab,
       active: tab.queryParams?.['filterTab'] === filterTab,
-      // reset table filters when switching tabs
-      // queryParams: { ...resetTableFilterObj, ...tab.queryParams },
+      // reset table filters when switching filter tabs
+      queryParams: { ...resetTableFilterObj, ...tab.queryParams },
     }));
   });
 
