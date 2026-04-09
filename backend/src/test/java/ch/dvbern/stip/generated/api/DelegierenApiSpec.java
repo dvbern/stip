@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDtoSpec;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.DelegierungDtoSpec;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeAdminDtoSpec;
 import ch.dvbern.stip.generated.dto.GetDelegierungSozQueryTypeMitarbeiterDtoSpec;
 import java.time.LocalDate;
@@ -68,6 +69,7 @@ public class DelegierenApiSpec {
                 delegierungAblehnen(),
                 delegierungAufloesen(),
                 fallDelegieren(),
+                getAllDelegierungsForGesuch(),
                 getDelegierungsOfSozialdienstAdmin(),
                 getDelegierungsOfSozialdienstMitarbeiter()
         );
@@ -87,6 +89,10 @@ public class DelegierenApiSpec {
 
     public FallDelegierenOper fallDelegieren() {
         return new FallDelegierenOper(createReqSpec());
+    }
+
+    public GetAllDelegierungsForGesuchOper getAllDelegierungsForGesuch() {
+        return new GetAllDelegierungsForGesuchOper(createReqSpec());
     }
 
     public GetDelegierungsOfSozialdienstAdminOper getDelegierungsOfSozialdienstAdmin() {
@@ -390,6 +396,79 @@ public class DelegierenApiSpec {
         }
     }
     /**
+     * Returns all delegierungs for a given gesuch
+     * 
+     *
+     * @see #gesuchIdPath Die ID vom Gesuch (required)
+     * return List&lt;DelegierungDtoSpec&gt;
+     */
+    public static class GetAllDelegierungsForGesuchOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/delegierung/{gesuchId}/all";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllDelegierungsForGesuchOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /delegierung/{gesuchId}/all
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /delegierung/{gesuchId}/all
+         * @param handler handler
+         * @return List&lt;DelegierungDtoSpec&gt;
+         */
+        public List<DelegierungDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DelegierungDtoSpec>> type = new TypeRef<List<DelegierungDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID) Die ID vom Gesuch (required)
+         * @return operation
+         */
+        public GetAllDelegierungsForGesuchOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllDelegierungsForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllDelegierungsForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Returns a list of all Faelle with Delegierung
      * 
      *
@@ -401,7 +480,7 @@ public class DelegierenApiSpec {
      * @see #vornameQuery  (optional)
      * @see #geburtsdatumQuery  (optional)
      * @see #wohnortQuery  (optional)
-     * @see #delegierungAngenommenQuery  (optional)
+     * @see #statusQuery  (optional)
      * @see #sortColumnQuery  (optional)
      * @see #sortOrderQuery  (optional)
      * return PaginatedSozDashboardDtoSpec
@@ -507,14 +586,14 @@ public class DelegierenApiSpec {
             return this;
         }
 
-        public static final String DELEGIERUNG_ANGENOMMEN_QUERY = "delegierungAngenommen";
+        public static final String STATUS_QUERY = "status";
 
         /**
-         * @param delegierungAngenommen (Boolean)  (optional)
+         * @param status (String)  (optional)
          * @return operation
          */
-        public GetDelegierungsOfSozialdienstAdminOper delegierungAngenommenQuery(Object... delegierungAngenommen) {
-            reqSpec.addQueryParam(DELEGIERUNG_ANGENOMMEN_QUERY, delegierungAngenommen);
+        public GetDelegierungsOfSozialdienstAdminOper statusQuery(Object... status) {
+            reqSpec.addQueryParam(STATUS_QUERY, status);
             return this;
         }
 

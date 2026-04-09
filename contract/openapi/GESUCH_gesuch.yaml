@@ -1235,7 +1235,7 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/Notification'
-        delegierung:
+        currentDelegierung:
           $ref: './components/common.yaml#/DelegierungSlim'
     AusbildungDashboardItem:
       type: object

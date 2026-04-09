@@ -12,7 +12,11 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { isHistorizedView } from '@dv/shared/data-access/gesuch';
-import { GesuchFormStepView, StepState } from '@dv/shared/model/gesuch-form';
+import {
+  GesuchFormStepView,
+  PERSON,
+  StepState,
+} from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
 import { stepHasChanges } from '@dv/shared/util-fn/gesuch-util';
 
@@ -42,6 +46,7 @@ export class SharedPatternGesuchStepNavComponent {
       ...step,
       hasChanges: stepHasChanges(tranchenChanges, step),
       name: step.route,
+      prependLine: step.route === PERSON.route,
       route: trancheSetting
         ? [
             '/',

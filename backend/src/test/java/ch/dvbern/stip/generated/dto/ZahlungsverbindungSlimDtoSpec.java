@@ -25,26 +25,19 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * ZahlungsverbindungUpdateDtoSpec
+ * ZahlungsverbindungSlimDtoSpec
  */
 @JsonPropertyOrder({
-  ZahlungsverbindungUpdateDtoSpec.JSON_PROPERTY_VORNAME,
-  ZahlungsverbindungUpdateDtoSpec.JSON_PROPERTY_ADRESSE,
-  ZahlungsverbindungUpdateDtoSpec.JSON_PROPERTY_IBAN,
-  ZahlungsverbindungUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
-  ZahlungsverbindungUpdateDtoSpec.JSON_PROPERTY_INSTITUTION
+  ZahlungsverbindungSlimDtoSpec.JSON_PROPERTY_VORNAME,
+  ZahlungsverbindungSlimDtoSpec.JSON_PROPERTY_NACHNAME,
+  ZahlungsverbindungSlimDtoSpec.JSON_PROPERTY_INSTITUTION,
+  ZahlungsverbindungSlimDtoSpec.JSON_PROPERTY_ADRESSE
 })
-@JsonTypeName("ZahlungsverbindungUpdate")
+@JsonTypeName("ZahlungsverbindungSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class ZahlungsverbindungUpdateDtoSpec {
+public class ZahlungsverbindungSlimDtoSpec {
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
-
-  public static final String JSON_PROPERTY_ADRESSE = "adresse";
-  private AdresseDtoSpec adresse;
-
-  public static final String JSON_PROPERTY_IBAN = "iban";
-  private String iban;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
@@ -52,10 +45,13 @@ public class ZahlungsverbindungUpdateDtoSpec {
   public static final String JSON_PROPERTY_INSTITUTION = "institution";
   private String institution;
 
-  public ZahlungsverbindungUpdateDtoSpec() {
+  public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  private AdresseDtoSpec adresse;
+
+  public ZahlungsverbindungSlimDtoSpec() {
   }
 
-  public ZahlungsverbindungUpdateDtoSpec vorname(String vorname) {
+  public ZahlungsverbindungSlimDtoSpec vorname(String vorname) {
     
     this.vorname = vorname;
     return this;
@@ -81,59 +77,7 @@ public class ZahlungsverbindungUpdateDtoSpec {
   }
 
 
-  public ZahlungsverbindungUpdateDtoSpec adresse(AdresseDtoSpec adresse) {
-    
-    this.adresse = adresse;
-    return this;
-  }
-
-   /**
-   * Get adresse
-   * @return adresse
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AdresseDtoSpec getAdresse() {
-    return adresse;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
-    this.adresse = adresse;
-  }
-
-
-  public ZahlungsverbindungUpdateDtoSpec iban(String iban) {
-    
-    this.iban = iban;
-    return this;
-  }
-
-   /**
-   * Get iban
-   * @return iban
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public String getIban() {
-    return iban;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_IBAN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-
-  public ZahlungsverbindungUpdateDtoSpec nachname(String nachname) {
+  public ZahlungsverbindungSlimDtoSpec nachname(String nachname) {
     
     this.nachname = nachname;
     return this;
@@ -159,7 +103,7 @@ public class ZahlungsverbindungUpdateDtoSpec {
   }
 
 
-  public ZahlungsverbindungUpdateDtoSpec institution(String institution) {
+  public ZahlungsverbindungSlimDtoSpec institution(String institution) {
     
     this.institution = institution;
     return this;
@@ -184,6 +128,32 @@ public class ZahlungsverbindungUpdateDtoSpec {
     this.institution = institution;
   }
 
+
+  public ZahlungsverbindungSlimDtoSpec adresse(AdresseDtoSpec adresse) {
+    
+    this.adresse = adresse;
+    return this;
+  }
+
+   /**
+   * Get adresse
+   * @return adresse
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AdresseDtoSpec getAdresse() {
+    return adresse;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAdresse(AdresseDtoSpec adresse) {
+    this.adresse = adresse;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -192,28 +162,26 @@ public class ZahlungsverbindungUpdateDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ZahlungsverbindungUpdateDtoSpec zahlungsverbindungUpdate = (ZahlungsverbindungUpdateDtoSpec) o;
-    return Objects.equals(this.vorname, zahlungsverbindungUpdate.vorname) &&
-        Objects.equals(this.adresse, zahlungsverbindungUpdate.adresse) &&
-        Objects.equals(this.iban, zahlungsverbindungUpdate.iban) &&
-        Objects.equals(this.nachname, zahlungsverbindungUpdate.nachname) &&
-        Objects.equals(this.institution, zahlungsverbindungUpdate.institution);
+    ZahlungsverbindungSlimDtoSpec zahlungsverbindungSlim = (ZahlungsverbindungSlimDtoSpec) o;
+    return Objects.equals(this.vorname, zahlungsverbindungSlim.vorname) &&
+        Objects.equals(this.nachname, zahlungsverbindungSlim.nachname) &&
+        Objects.equals(this.institution, zahlungsverbindungSlim.institution) &&
+        Objects.equals(this.adresse, zahlungsverbindungSlim.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname, institution);
+    return Objects.hash(vorname, nachname, institution, adresse);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ZahlungsverbindungUpdateDtoSpec {\n");
+    sb.append("class ZahlungsverbindungSlimDtoSpec {\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    institution: ").append(toIndentedString(institution)).append("\n");
+    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }

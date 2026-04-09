@@ -25,8 +25,8 @@ public class SozialdienstDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
   private @Valid Boolean aktiv;
-  private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
+  private @Valid SozialdienstBenutzerDto sozialdienstAdmin;
 
   /**
    **/
@@ -87,25 +87,6 @@ public class SozialdienstDto  implements Serializable {
 
   /**
    **/
-  public SozialdienstDto sozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
-    this.sozialdienstAdmin = sozialdienstAdmin;
-    return this;
-  }
-
-  
-  @JsonProperty("sozialdienstAdmin")
-  @NotNull
-  public SozialdienstBenutzerDto getSozialdienstAdmin() {
-    return sozialdienstAdmin;
-  }
-
-  @JsonProperty("sozialdienstAdmin")
-  public void setSozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
-    this.sozialdienstAdmin = sozialdienstAdmin;
-  }
-
-  /**
-   **/
   public SozialdienstDto zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
     this.zahlungsverbindung = zahlungsverbindung;
     return this;
@@ -123,6 +104,25 @@ public class SozialdienstDto  implements Serializable {
     this.zahlungsverbindung = zahlungsverbindung;
   }
 
+  /**
+   **/
+  public SozialdienstDto sozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
+    return this;
+  }
+
+  
+  @JsonProperty("sozialdienstAdmin")
+  @NotNull
+  public SozialdienstBenutzerDto getSozialdienstAdmin() {
+    return sozialdienstAdmin;
+  }
+
+  @JsonProperty("sozialdienstAdmin")
+  public void setSozialdienstAdmin(SozialdienstBenutzerDto sozialdienstAdmin) {
+    this.sozialdienstAdmin = sozialdienstAdmin;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -136,13 +136,13 @@ public class SozialdienstDto  implements Serializable {
     return Objects.equals(this.id, sozialdienst.id) &&
         Objects.equals(this.name, sozialdienst.name) &&
         Objects.equals(this.aktiv, sozialdienst.aktiv) &&
-        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin) &&
-        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung);
+        Objects.equals(this.zahlungsverbindung, sozialdienst.zahlungsverbindung) &&
+        Objects.equals(this.sozialdienstAdmin, sozialdienst.sozialdienstAdmin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, aktiv, sozialdienstAdmin, zahlungsverbindung);
+    return Objects.hash(id, name, aktiv, zahlungsverbindung, sozialdienstAdmin);
   }
 
   @Override
@@ -153,8 +153,8 @@ public class SozialdienstDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
-    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
+    sb.append("    sozialdienstAdmin: ").append(toIndentedString(sozialdienstAdmin)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -161,7 +161,7 @@ public class NotificationService {
         final NotificationType notificationType,
         final Delegierung delegierung
     ) {
-        final var fall = delegierung.getDelegierterFall();
+        final var fall = delegierung.getFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
         final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
 
@@ -186,7 +186,7 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
         mailService.sendStandardNotificationEmailForFall(
             delegierung.getPersoenlicheAngaben(),
-            delegierung.getDelegierterFall()
+            delegierung.getFall()
         );
     }
 

@@ -1048,6 +1048,19 @@
   "shared.form.darlehen.zurueckweisen.failure": "Beim zurückweisen des Darlehens ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "shared.form.darlehen.error.missingDocuments": "Es müssen noch Dokumente hochgeladen werden, bevor das Darlehen beantragt werden kann.",
 
+  "shared.delegierungen.title": "Delegation",
+  "shared.form.delegierung.list.label": "Bisherige Delegationen",
+  "shared.form.delegierung.start.label": "Startdatum der Delegation",
+  "shared.form.delegierung.end.label": "Enddatum der Delegation",
+  "shared.form.delegierung.range.ongoing": "seit {{startDate}}",
+  "shared.form.delegierung.range.startAndEnd": "von {{startDate}} bis {{endDate}}",
+  "shared.form.delegierung.name.label": "Name des Sozialdienstes",
+  "shared.form.delegierung.status.label": "Status",
+  "shared.form.delegierung.telefonnummer.label": "Telefonnummer",
+  "shared.form.delegierung.email.label": "Mail-Adresse",
+  "shared.form.delegierung.vorname.label": "Vorname",
+  "shared.form.delegierung.nachname.label": "Nachname",
+
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",
   "shared.form.gesuchsjahr.jahr.label": "Jahr",
@@ -1112,6 +1125,11 @@
   "shared.ausbildungskategorie.BRUECKENANGEBOT": "Brückenangebot",
   "shared.ausbildungskategorie.HOEHERE_FACHPRUEFUNG": "Höhere Fachprüfung",
   "shared.ausbildungskategorie.BERUFSPRUEFUNG": "Berufsprüfung",
+
+  "shared.delegierung.status.EINGEREICHT": "Eingereicht",
+  "shared.delegierung.status.AKZEPTIERT": "Akzeptiert",
+  "shared.delegierung.status.ABGELEHNT": "Abgelehnt",
+  "shared.delegierung.status.BEENDET": "Beendet",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",

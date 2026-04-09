@@ -64,13 +64,13 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canReadFallDashboard(final UUID fallId) {
         final Fall fall = fallRepository.requireById(fallId);
-        if (fall.getDelegierung() == null) {
+        if (fall.getActiveDelegierung() == null) {
             forbidden();
         }
 
         if (
             sozialdienstService
-                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getDelegierung().getSozialdienst().getId())
+                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getCurrentDelegierung().getSozialdienst().getId())
         ) {
             return;
         }
@@ -85,6 +85,24 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
         if (!AuthorizerUtil.isGesuchstellerOfWithoutDelegierung(currentBenutzer, fall)) {
             forbidden();
         }
+    }
+
+    @Transactional
+    public void canReadAll(final UUID gesuchId) {
+        final var currentBenutzer = benutzerService.getCurrentBenutzer();
+        final var fall = fallRepository.findFallForGesuch(gesuchId);
+
+        if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
+            return;
+        }
+        if (
+            AuthorizerUtil
+                .canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(fall, currentBenutzer, sozialdienstService)
+        ) {
+            return;
+        }
+
+        forbidden();
     }
 
     public void canDelegierterMitarbeiterAendern(

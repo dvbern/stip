@@ -23,10 +23,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
@@ -367,7 +369,7 @@ public class PdfUtils {
         }
 
         if (isDeckblatt && elternteilOptional.isEmpty()) {
-            final var sozialdienst = gesuch.getAusbildung().getFall().getDelegierung().getSozialdienst();
+            final var sozialdienst = gesuch.getAusbildung().getFall().getCurrentDelegierung().getSozialdienst();
             final Cell receiver = PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_MEDIUM,
@@ -476,13 +478,12 @@ public class PdfUtils {
         float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
-        final List<Anhangs> anhangs,
-        final boolean addKopieAn
+        final List<Anhangs> anhangs
     ) {
-        final float[] columnWidths = { 50, 50 };
+        final float[] columnWidths = { 48, 2, 50 };
         final Table signatureTable = PdfUtils.createTable(columnWidths, leftMargin);
         signatureTable.setMarginTop(SPACING_MEDIUM);
-        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
+        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 2));
         signatureTable.addCell(
             PdfUtils.createCell(
                 pdfFont,
@@ -493,13 +494,21 @@ public class PdfUtils {
                 translator.translate("stip.pdf.header.abteilung")
             )
         );
-        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
 
         final var sachbearbeiterBenutzer =
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
 
         final var locale = LocaleUtil.getLocale(gesuch);
 
+        final var anhangsText = Stream.concat(
+            // Collect all anhangs Make List unique
+            new LinkedHashSet<>(anhangs).stream()
+                .map(anhang -> "- %s".formatted(translator.translate(anhang.getTranslationKey()))),
+            // Append "Kopie an" if needed (not null)
+            Stream.ofNullable(getKopieAnText(gesuch, translator))
+        );
+        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1, anhangsText.toArray(String[]::new)));
+        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
         signatureTable.addCell(
             PdfUtils.createCell(
                 pdfFont,
@@ -510,23 +519,8 @@ public class PdfUtils {
                 sachbearbeiterBenutzer.getFunktion(locale)
             )
         );
+
         document.add(signatureTable);
-
-        anhangs.forEach(anhang -> {
-            document.add(
-                PdfUtils.createParagraph(
-                    pdfFont,
-                    FONT_SIZE_BIG,
-                    leftMargin,
-                    "- ",
-                    translator.translate(anhang.getTranslationKey())
-                )
-            );
-        });
-
-        if (addKopieAn) {
-            addCopieAnParagraph(gesuch, translator, leftMargin, document, pdfFont);
-        }
     }
 
     public String getDelegierungKopieAnText(
@@ -551,28 +545,14 @@ public class PdfUtils {
         return String.join(", ", kopieAn);
     }
 
-    private void addCopieAnParagraph(
-        final Gesuch gesuch,
-        final TL translator,
-        final float leftMargin,
-        final Document document,
-        final PdfFont pdfFont
-    ) {
-        if (gesuch.getAusbildung().getFall().getDelegierung() == null) {
-            return;
+    private String getKopieAnText(final Gesuch gesuch, final TL translator) {
+        if (!gesuch.getAusbildung().getFall().isDelegiert()) {
+            return null;
         }
 
-        final String kopieAn = getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getDelegierung());
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.pdf.footer.kopieAn") + " ",
-                kopieAn
-            )
-        );
+        final String kopieAn = getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getActiveDelegierung());
+        return "- %s %s"
+            .formatted(translator.translate("stip.pdf.footer.kopieAn"), kopieAn);
     }
 
     public void rechtsmittelbelehrung(

@@ -12,12 +12,17 @@
 import { SozialdienstSlim } from './sozialdienstSlim';
 import { PersoenlicheAngaben } from './persoenlicheAngaben';
 import { SozialdienstBenutzer } from './sozialdienstBenutzer';
+import { DelegierungStatus } from './delegierungStatus';
 
 export interface Delegierung { 
     id: string;
-    sozialdienst?: SozialdienstSlim;
+    sozialdienst: SozialdienstSlim;
     delegierterMitarbeiter?: SozialdienstBenutzer;
-    delegierungAngenommen?: boolean;
-    persoenlicheAngaben?: PersoenlicheAngaben;
+    persoenlicheAngaben: PersoenlicheAngaben;
+    status: DelegierungStatus;
+    startDate?: string;
+    endDate?: string;
 }
+
+
 

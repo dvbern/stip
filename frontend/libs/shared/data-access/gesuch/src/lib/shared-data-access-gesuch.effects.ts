@@ -20,6 +20,7 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { SharedEventGesuchDokumente } from '@dv/shared/event/gesuch-dokumente';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { SharedEventGesuchFormAuszahlung } from '@dv/shared/event/gesuch-form-auszahlung';
+import { SharedEventGesuchFormDelegierungen } from '@dv/shared/event/gesuch-form-delegierungen';
 import { SharedEventGesuchFormEinnahmenkosten } from '@dv/shared/event/gesuch-form-einnahmenkosten';
 import { SharedEventGesuchFormEltern } from '@dv/shared/event/gesuch-form-eltern';
 import { SharedEventGesuchFormElternSteuerdaten } from '@dv/shared/event/gesuch-form-eltern-steuererklaerung';
@@ -109,6 +110,7 @@ export const loadGesuch = createEffect(
         SharedEventGesuchFormElternSteuerdaten.init,
         SharedEventGesuchFormFamiliensituation.init,
         SharedEventGesuchFormAuszahlung.init,
+        SharedEventGesuchFormDelegierungen.init,
         SharedEventGesuchFormGeschwister.init,
         SharedEventGesuchFormKinder.init,
         SharedEventGesuchFormLebenslauf.init,

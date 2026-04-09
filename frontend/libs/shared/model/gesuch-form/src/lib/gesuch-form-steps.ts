@@ -19,11 +19,18 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
-export const TRANCHE: GesuchFormStep = {
+export const TRANCHE = {
   route: 'info',
   translationKey: 'shared.tranche.title',
   titleTranslationKey: 'shared.nothing',
   iconSymbolName: 'info',
+} satisfies GesuchFormStep;
+
+export const DELEGIERUNGEN = {
+  route: 'delegierungen',
+  translationKey: 'shared.delegierungen.title',
+  titleTranslationKey: 'shared.delegierungen.title',
+  iconSymbolName: 'interpreter_mode',
 } satisfies GesuchFormStep;
 
 export const PERSON = {
@@ -33,98 +40,98 @@ export const PERSON = {
   iconSymbolName: 'person',
 } satisfies GesuchFormStep;
 
-export const AUSBILDUNG: GesuchFormStep = {
+export const AUSBILDUNG = {
   route: 'ausbildung',
   translationKey: 'shared.ausbildung.title',
   titleTranslationKey: 'shared.ausbildung.title',
   iconSymbolName: 'school',
 } satisfies GesuchFormStep;
 
-export const LEBENSLAUF: GesuchFormStep = {
+export const LEBENSLAUF = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
   titleTranslationKey: 'shared.lebenslauf.title',
   iconSymbolName: 'news',
 } satisfies GesuchFormStep;
 
-export const FAMILIENSITUATION: GesuchFormStep = {
+export const FAMILIENSITUATION = {
   route: 'familiensituation',
   translationKey: 'shared.familiensituation.title',
   titleTranslationKey: 'shared.familiensituation.title',
   iconSymbolName: 'family_restroom',
 } satisfies GesuchFormStep;
 
-export const ELTERN: GesuchFormStep = {
+export const ELTERN = {
   route: 'eltern',
   translationKey: 'shared.eltern.title',
   titleTranslationKey: 'shared.eltern.title',
   iconSymbolName: 'escalator_warning',
 } satisfies GesuchFormStep;
 
-export const GESCHWISTER: GesuchFormStep = {
+export const GESCHWISTER = {
   route: 'geschwister',
   translationKey: 'shared.geschwister.title',
   titleTranslationKey: 'shared.geschwister.title',
   iconSymbolName: 'group',
 } satisfies GesuchFormStep;
 
-export const PARTNER: GesuchFormStep = {
+export const PARTNER = {
   route: 'partner',
   translationKey: 'shared.partner.title',
   titleTranslationKey: 'shared.partner.page.title',
   iconSymbolName: 'favorite',
 } satisfies GesuchFormStep;
 
-export const KINDER: GesuchFormStep = {
+export const KINDER = {
   route: 'kinder',
   translationKey: 'shared.kinder.title',
   titleTranslationKey: 'shared.kinder.title',
   iconSymbolName: 'emoji_people',
 } satisfies GesuchFormStep;
 
-export const AUSZAHLUNG: GesuchFormStep = {
+export const AUSZAHLUNG = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
   titleTranslationKey: 'shared.auszahlung.title',
   iconSymbolName: 'payments',
 } satisfies GesuchFormStep;
 
-export const EINNAHMEN_KOSTEN: GesuchFormStep = {
+export const EINNAHMEN_KOSTEN = {
   route: 'einnahmenkosten',
   translationKey: 'shared.einnahmenkosten.title',
   titleTranslationKey: 'shared.einnahmenkosten.page.title',
   iconSymbolName: 'call_missed_outgoing',
 } satisfies GesuchFormStep;
 
-export const EINNAHMEN_KOSTEN_PARTNER: GesuchFormStep = {
+export const EINNAHMEN_KOSTEN_PARTNER = {
   route: 'einnahmenkosten-partner',
   translationKey: 'shared.einnahmenkosten-partner.title',
   titleTranslationKey: 'shared.einnahmenkosten-partner.page.title',
   iconSymbolName: 'credit_card_heart',
-};
+} satisfies GesuchFormStep;
 
-export const DOKUMENTE: GesuchFormStep = {
+export const DOKUMENTE = {
   route: 'dokumente',
   translationKey: 'shared.dokumente.title',
   titleTranslationKey: 'shared.dokumente.title',
   iconSymbolName: 'description',
 } satisfies GesuchFormStep;
 
-export const ABSCHLUSS: GesuchFormStep = {
+export const ABSCHLUSS = {
   route: 'abschluss',
   translationKey: 'shared.abschluss.title',
   titleTranslationKey: 'shared.abschluss.title',
   iconSymbolName: 'check_circle',
 } satisfies GesuchFormStep;
 
-export const RETURN_TO_HOME: GesuchFormStep = {
+export const RETURN_TO_HOME = {
   route: '/',
   translationKey: 'shared.nothing',
   titleTranslationKey: 'shared.nothing',
   iconSymbolName: '',
 } satisfies GesuchFormStep;
 
-export const PROTOKOLL: GesuchFormStep = {
+export const PROTOKOLL = {
   route: 'protokoll',
   translationKey: 'shared.protokoll.title',
   titleTranslationKey: 'shared.protokoll.title',

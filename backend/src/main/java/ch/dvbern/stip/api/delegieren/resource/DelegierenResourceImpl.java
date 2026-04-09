@@ -18,17 +18,20 @@
 package ch.dvbern.stip.api.delegieren.resource;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeMitarbeiter;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.DelegierenResource;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -38,6 +41,8 @@ import lombok.RequiredArgsConstructor;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_CREATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.DELEGIERUNG_UPDATE;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 
 @Validated
 @RequestScoped
@@ -51,6 +56,13 @@ public class DelegierenResourceImpl implements DelegierenResource {
     public void fallDelegieren(UUID fallId, UUID sozialdienstId, DelegierungCreateDto delegierungCreateDto) {
         delegierenAuthorizer.canDelegate(fallId);
         delegierenService.delegateFall(fallId, sozialdienstId, delegierungCreateDto);
+    }
+
+    @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ })
+    public List<DelegierungDto> getAllDelegierungsForGesuch(UUID gesuchId) {
+        delegierenAuthorizer.canReadAll(gesuchId);
+        return delegierenService.getAllDelegierungsForGesuch(gesuchId);
     }
 
     @Override
@@ -78,7 +90,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
             vorname,
             geburtsdatum,
             wohnort,
-            true,
+            DelegierungStatus.AKZEPTIERT.toString(),
             sortColumn,
             sortOrder
         );
@@ -119,7 +131,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        Boolean delegierungAngenommen,
+        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -134,7 +146,7 @@ public class DelegierenResourceImpl implements DelegierenResource {
             vorname,
             geburtsdatum,
             wohnort,
-            delegierungAngenommen,
+            status,
             sortColumn,
             sortOrder
         );
