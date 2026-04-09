@@ -7,7 +7,8 @@
         [routerLink]="tab.route"
         [queryParams]="tab.queryParams"
         [queryParamsHandling]="tab.queryParamsHandling"
-        class="btn btn-nav tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
+        class="btn btn-nav tw:rounded-b-none! tw:border! tw:flex-none! tw:border-gray-300! tw:border-b-0! form-tabs"
+        [ngClass]="tab.class"
         [active]="tab.active"
         [class.active]="tab.active"
       >
@@ -16,10 +17,7 @@
     }
   </nav>
 
-  <mat-tab-nav-panel
-    class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-4 tw:rounded-b-xl tw:rounded-tr-xl"
-    #tabPanel
-  >
+  <mat-tab-nav-panel class="tw:dv-pass-height tw:border tw:border-gray-300 tw:mb-6 tw:rounded-b-xl" #tabPanel>
     <router-outlet></router-outlet>
   </mat-tab-nav-panel>
 </ng-container>

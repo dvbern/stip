@@ -1,9 +1,9 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   Injector,
   InputSignal,
   QueryList,
@@ -13,7 +13,6 @@ import {
   effect,
   inject,
   input,
-  runInInjectionContext,
   untracked,
   viewChild,
 } from '@angular/core';
@@ -97,7 +96,6 @@ import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 import {
   getSortAndPageInputs,
-  inverseSortMap,
   limitPageToNumberOfEntriesEffect,
   makeEmptyStringPropertiesNull,
   paginateList,
@@ -152,9 +150,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
     Record<DashboardFormFields, InputSignal<string | undefined>>,
     SortAndPageInputs<
       SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn
-    >,
-    AfterViewInit
+    >
 {
+  @HostBinding('class') klass = 'tw:p-6 tw:bg-white tw:dv-pass-height';
+
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);

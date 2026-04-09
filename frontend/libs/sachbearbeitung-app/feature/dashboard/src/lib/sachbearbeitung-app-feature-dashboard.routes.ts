@@ -19,7 +19,6 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
       },
       {
         path: 'antraege',
-        // todo: translation keys
         title: 'sachbearbeitung-app.cockpit.title',
         loadComponent: () =>
           import('@dv/sachbearbeitung-app/feature/cockpit').then(

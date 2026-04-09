@@ -109,6 +109,7 @@ export type NullableDashFilterQueryParams = {
 
 export interface DashboardFilterTabItem extends TabNavItem {
   queryParams?: NullableDashFilterQueryParams;
+  class?: string;
 }
 
 export const isValidDashboardQuery = (

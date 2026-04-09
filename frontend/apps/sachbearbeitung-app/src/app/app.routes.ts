@@ -61,7 +61,6 @@ export const appRoutes: Route[] = [
             '/administration',
           ),
         ],
-        // todo: rename! and what is the difference of loading the component here as well?
         title: 'sachbearbeitung-app.cockpit.title',
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/dashboard').then(
@@ -86,7 +85,6 @@ export const appRoutes: Route[] = [
   },
 ];
 
-// todo: default tab and query params
 export const routes: Route[] = [
   {
     path: '',

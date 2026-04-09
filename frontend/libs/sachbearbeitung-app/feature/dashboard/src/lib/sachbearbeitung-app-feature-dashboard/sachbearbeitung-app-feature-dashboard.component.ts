@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +21,6 @@ import {
   DashboardTableEntryFields,
   getDefaultQueryForRole,
 } from '@dv/shared/util/dashboard';
-import { TabNavItem } from '@dv/shared/util/navigation';
 
 const resetTableFilterObj: Record<
   DashboardTableEntryFields | keyof SortAndPageInputs<unknown>,
@@ -101,7 +101,7 @@ const baseFilterTabs: DashboardFilterTabItem[] = [
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-dashboard',
-  imports: [TranslocoDirective, MatTabsModule, RouterModule],
+  imports: [CommonModule, TranslocoDirective, MatTabsModule, RouterModule],
   templateUrl: './sachbearbeitung-app-feature-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -116,29 +116,34 @@ export class SachbearbeitungAppFeatureDashboardComponent {
   destroyRef = inject(DestroyRef);
   filterTab = input<string | undefined>(undefined);
 
-  tabsSig = computed<TabNavItem[]>(() => {
+  tabsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
     const filterTab = this.filterTab();
     const hasfehlgeschlageneZahlungen =
       this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig();
 
-    const tabs = baseFilterTabs.filter((tab) => {
-      if (!tab.roles || tab.roles.length === 0) {
-        return true;
-      }
+    const tabs = baseFilterTabs
+      .concat(
+        hasfehlgeschlageneZahlungen
+          ? [
+              {
+                key: 'fehlgeschlagene-zahlungen',
+                route: ['fehlgeschlagene-zahlungen'],
+                queryParamsHandling: 'merge',
+                class: 'tw:border-3! tw:border-red-500! tw-ml-auto!',
+                active: false,
+                roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+              },
+            ]
+          : [],
+      )
+      .filter((tab) => {
+        if (!tab.roles || tab.roles.length === 0) {
+          return true;
+        }
 
-      return tab.roles.some((role) => rolesMap[role]);
-    });
-
-    if (hasfehlgeschlageneZahlungen) {
-      tabs.push({
-        key: 'fehlgeschlagene-zahlungen',
-        route: ['fehlgeschlagene-zahlungen'],
-        queryParamsHandling: 'merge',
-        active: false,
-        roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+        return tab.roles.some((role) => rolesMap[role]);
       });
-    }
 
     return tabs.map((tab) => ({
       ...tab,
