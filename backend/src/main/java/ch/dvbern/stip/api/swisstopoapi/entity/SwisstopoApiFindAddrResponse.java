@@ -15,24 +15,29 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.swisstopoapi.entity;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 
-@ApplicationScoped
-@Slf4j
-@RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Getter;
 
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.getGemeindeDataOfGesuch(gesuch);
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Getter
+public class SwisstopoApiFindAddrResponse {
+    List<SwisstopoApiFindAddrResponseElement> results;
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Getter
+    public static class SwisstopoApiFindAddrResponseElement {
+        SwisstopoApiFindAddrResponseElementAttributes attributes;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Getter
+    public static class SwisstopoApiFindAddrResponseElementAttributes {
+        String zip_label;
+        Integer com_fosnr;
+        String com_name;
     }
 }

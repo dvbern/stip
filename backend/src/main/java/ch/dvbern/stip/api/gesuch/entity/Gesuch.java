@@ -47,6 +47,7 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -217,6 +218,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "in_bearbeitung_sb_reason")
     private InBearbeitungSbReason inBearbeitungSbReason;
+
+    @Embedded
+    private @Valid Statisticsdata statisticsdata = new Statisticsdata();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();

@@ -15,24 +15,33 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.Serializable;
 
-@ApplicationScoped
-@Slf4j
-@RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
+import ch.dvbern.stip.api.common.validation.NullOrNotBlank;
+import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.validation.Valid;
+import lombok.Getter;
+import lombok.Setter;
 
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.getGemeindeDataOfGesuch(gesuch);
+@Getter
+@Setter
+@Embeddable
+public class Statisticsdata implements Serializable {
+    @Nullable
+    @NullOrNotBlank
+    @Column(name = "com_name")
+    private @Valid String gemeindeName;
+
+    @Nullable
+    @Column(name = "com_fosnr")
+    private @Valid Integer gemeindeBfsNr;
+
+    public Statisticsdata() {
+        this.gemeindeName = null;
+        this.gemeindeBfsNr = null;
     }
 }
