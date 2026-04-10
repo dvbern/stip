@@ -35,6 +35,7 @@ import {
   SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
+import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
@@ -65,6 +66,7 @@ import { ibanValidator } from '@dv/shared/util/validator-iban';
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
     SharedUiInfoDialogDirective,
+    SharedUiIfGesuchstellerDirective,
   ],
   templateUrl: './shared-ui-auszahlung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
