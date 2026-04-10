@@ -324,7 +324,10 @@ public class DarlehenService {
     @Transactional
     public List<FreiwilligDarlehenDto> getFreiwilligDarlehenAllSb(final UUID gesuchId) {
         final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
-        return darlehenList.stream().map(freiwilligDarlehenMapper::toDto).toList();
+        return darlehenList.stream()
+            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
+            .map(freiwilligDarlehenMapper::toDto)
+            .toList();
     }
 
     @Transactional
@@ -361,7 +364,7 @@ public class DarlehenService {
             return false;
         }
 
-        final var gesuchFormular = gesuchRepository.getLatestGesuchFormularWithPiaForBenutzer(benutzer.getId());
+        final var gesuchFormular = gesuchRepository.getLatestGesuchFormularWithPiaForFall(fallId);
         if (
             gesuchFormular.isEmpty()
             || !GesuchFormularCalculationUtil.isPersonInAusbildungVolljaehrig(gesuchFormular.get())
@@ -378,7 +381,10 @@ public class DarlehenService {
         final var darlehenDto = new FreiwilligDarlehenGsResponseDto();
         darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
         darlehenDto.setDarlehenList(
-            darlehenList.stream().map(freiwilligDarlehenMapper::toDto).toList()
+            darlehenList.stream()
+                .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
+                .map(freiwilligDarlehenMapper::toDto)
+                .toList()
         );
         return darlehenDto;
     }
