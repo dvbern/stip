@@ -66,7 +66,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
             jwtParser,
             token,
             configService.getSecret(),
-            DokumentDownloadConstants.VERFUEGUN_DOKUMENT_ID_CLAIM
+            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
         return verfuegungService.getVerfuegungDokument(verfuegungDokumentId);
     }
@@ -78,7 +78,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
 
         return dokumentDownloadService.getFileDownloadToken(
             verfuegungDokumentId,
-            DokumentDownloadConstants.VERFUEGUN_DOKUMENT_ID_CLAIM,
+            DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
             benutzerService,
             configService
         );

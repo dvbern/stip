@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_CHANGE_GESUCHSPERIODE,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN,
+  GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON
 })
 @JsonTypeName("GesuchStateInfo")
@@ -57,6 +58,9 @@ public class GesuchStateInfoDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN = "canBearbeitungAbschliessen";
   private Boolean canBearbeitungAbschliessen;
+
+  public static final String JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG = "canSBInitAenderung";
+  private Boolean canSBInitAenderung;
 
   public static final String JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON = "inBearbeitungSbReason";
   private InBearbeitungSbReasonDtoSpec inBearbeitungSbReason;
@@ -220,6 +224,32 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
+  public GesuchStateInfoDtoSpec canSBInitAenderung(Boolean canSBInitAenderung) {
+    
+    this.canSBInitAenderung = canSBInitAenderung;
+    return this;
+  }
+
+   /**
+   * Get canSBInitAenderung
+   * @return canSBInitAenderung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanSBInitAenderung() {
+    return canSBInitAenderung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanSBInitAenderung(Boolean canSBInitAenderung) {
+    this.canSBInitAenderung = canSBInitAenderung;
+  }
+
+
   public GesuchStateInfoDtoSpec inBearbeitungSbReason(InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
     
     this.inBearbeitungSbReason = inBearbeitungSbReason;
@@ -260,12 +290,13 @@ public class GesuchStateInfoDtoSpec {
         Objects.equals(this.canChangeGesuchsperiode, gesuchStateInfo.canChangeGesuchsperiode) &&
         Objects.equals(this.canTriggerManuellPruefen, gesuchStateInfo.canTriggerManuellPruefen) &&
         Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen) &&
+        Objects.equals(this.canSBInitAenderung, gesuchStateInfo.canSBInitAenderung) &&
         Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, inBearbeitungSbReason);
+    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, inBearbeitungSbReason);
   }
 
   @Override
@@ -278,6 +309,7 @@ public class GesuchStateInfoDtoSpec {
     sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canBearbeitungAbschliessen: ").append(toIndentedString(canBearbeitungAbschliessen)).append("\n");
+    sb.append("    canSBInitAenderung: ").append(toIndentedString(canSBInitAenderung)).append("\n");
     sb.append("    inBearbeitungSbReason: ").append(toIndentedString(inBearbeitungSbReason)).append("\n");
     sb.append("}");
     return sb.toString();

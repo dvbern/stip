@@ -171,6 +171,13 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 ) {
                     elternImHaushalt1 = 2;
                 }
+            } else if (familiensituation.getGerichtlicheAlimentenregelung()) {
+                elternImHaushalt1 = switch (familiensituation.getWerZahltAlimente()) {
+                    case "VATER" -> familiensituation.getMutterWiederverheiratet() ? 2 : 1;
+                    case "MUTTER" -> familiensituation.getVaterWiederverheiratet() ? 2 : 1;
+                    case "GEMEINSAM" -> 0;
+                    default -> throw new IllegalStateException();
+                };
             } else {
                 elternImHaushalt1 = 1;
                 elternImHaushalt2 = 1;

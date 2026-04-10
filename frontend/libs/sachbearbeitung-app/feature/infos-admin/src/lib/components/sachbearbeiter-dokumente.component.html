@@ -1,0 +1,89 @@
+@if (dokumentStore.sachbearbeiterDokuments() | rdIsPending: { ignoreInitial: true }) {
+  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+}
+<ng-container *dvTranslocoSb="let t">
+  <h3>
+    {{ t('shared.dokumente.table.title.sachbearbeitungGesuchDokuments') }}
+  </h3>
+
+  <div class="tw:dv-table">
+    <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn">
+      <caption class="cdk-visually-hidden">
+        {{
+          t('shared.dokumente.table.title.sachbearbeitungGesuchDokuments')
+        }}
+      </caption>
+
+      <!-- required document -->
+      <ng-container matColumnDef="documentName">
+        <th mat-header-cell *matHeaderCellDef class="tw:min-w-52">
+          {{ t('shared.dokumente.table.documentName') }}
+        </th>
+        <td mat-cell class="tw:min-w-52" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <div class="tw:py-3">
+            {{ dokument.type }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- description -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-full tw:min-w-96">
+          {{ t('shared.dokumente.table.description') }}
+        </th>
+        <td mat-cell class="tw:w-full tw:min-w-96" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <div class="tw:py-3">
+            {{ dokument.description }}
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <button
+            [matTooltip]="t('shared.dokumente.createCustomDokumentTyp')"
+            type="button"
+            class="btn btn-outline-primary btn-sm"
+            data-testid="dokumente-button-createCustomDokumentTyp"
+            (click)="createSachbearbeiterDokument()"
+          >
+            <i class="material-symbols-rounded fs-4">add</i>
+          </button>
+        </th>
+        <td mat-cell class="tw:w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
+          <div class="tw:flex tw:items-center tw:justify-end">
+            <!-- delete custom documentType -->
+            @if (dokument.canDelete) {
+              <button
+                type="button"
+                class="dv-icon-button delete-icon tw:shrink-0"
+                [attr.aria-label]="t('shared.form.delete')"
+                [matTooltip]="t('shared.dokumente.deleteCustomDokumentTyp.title')"
+                (click)="deleteSachbearbeiterDokument(dokument.id)"
+              >
+                <span class="material-symbols-rounded tw:!text-xl tw:text-gray-500">delete</span>
+              </button>
+            }
+            <dv-shared-pattern-document-upload
+              class="tw:max-h-11"
+              (click)="$event.stopPropagation()"
+              (hasDocuments)="documentsChanged()"
+              [optionsSig]="dokument.dokumentOptions"
+            ></dv-shared-pattern-document-upload>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <tr mat-row *matRowDef="let dokument; columns: displayedColumns"></tr>
+
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3 tw:text-center" [colSpan]="displayedColumns.length">
+          {{ t('shared.dokumente.table.noData') }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</ng-container>

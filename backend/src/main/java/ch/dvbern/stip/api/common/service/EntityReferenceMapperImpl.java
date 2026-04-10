@@ -21,12 +21,16 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import org.mapstruct.Mapper;
 import org.mapstruct.TargetType;
 
 @EntityReferenceMapper
 @Mapper(config = MappingQualifierConfig.class)
 public class EntityReferenceMapperImpl {
+    @Inject
+    EntityManager entityManager;
 
     @EntityIdReference
     public <T extends AbstractEntity> T getReference(UUID id, @TargetType Class<T> entityClass)
@@ -37,5 +41,10 @@ public class EntityReferenceMapperImpl {
         T reference = entityClass.getDeclaredConstructor().newInstance();
         reference.setId(id);
         return reference;
+    }
+
+    @IdOfReferenceEntity
+    public <T extends AbstractEntity> UUID getIdOfReference(T entity) {
+        return (UUID) entityManager.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entity);
     }
 }

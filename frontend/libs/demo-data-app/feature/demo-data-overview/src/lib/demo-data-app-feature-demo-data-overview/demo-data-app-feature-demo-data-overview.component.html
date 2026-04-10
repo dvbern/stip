@@ -1,273 +1,295 @@
 <dv-shared-pattern-basic-layout *dvTranslocoDemo="let t">
-  @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
-  <div class="tw:p-8 tw:flex">
-    <dv-shared-ui-icon-chip class="tw:mr-3">
-      <i class="material-symbols-rounded title-icon">science</i>
-    </dv-shared-ui-icon-chip>
-    <h1 class="tw:mb-4! tw:flex tw:justify-between tw:w-3/5">
-      {{ t('demo-data-app.overview.title') }}
-      @if (demoDataList?.demoDatas?.length) {
-        <button
-          class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
-          type="button"
-          (click)="testDemoDataBerechnung()"
-        >
-          {{ t('demo-data-app.overview.apply-demo-data.button') }}
-        </button>
-      }
-    </h1>
-  </div>
-  @if (demoDataStore.lastDemoDataRun() | rdIsPending: { ignoreInitial: true }) {
-    <dv-shared-ui-loading [type]="'compact'" [overlay]="true"></dv-shared-ui-loading>
-  }
-  @if (demoDataStore.cachedDemoDataListViewSig() | rdIsPending: { ignoreInitial: true }) {
-    <dv-shared-ui-loading></dv-shared-ui-loading>
-  } @else {
-    <div
-      class="tw:grid tw:grid-cols-3 tw:gap-6 tw:px-8 tw:items-start"
-      [class.busy]="demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }"
-    >
-      @if (demoDataList?.demoDatas?.length) {
-        <div class="tw:col-span-2">
-          <mat-form-field [subscriptSizing]="'dynamic'" class="dense-control">
-            <input type="text" matInput [formControl]="filterText" dvMaxLength [placeholder]="t('shared.search')" />
-            <span matSuffix class="material-symbols-rounded tw:align-middle tw:mr-2">search</span>
-          </mat-form-field>
-        </div>
-      }
-      @if (demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }) {
-        <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
-      }
-      <ul
-        class="tw:mb-4 tw:list-none tw:col-span-2 tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6"
-      >
-        @for (demoData of demoDatasSig(); track $index) {
-          <li
-            class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center tw:items-start"
-          >
-            <div class="tw:flex tw:flex-col">
-              <span class="tw:font-bold">{{ demoData.testFall }}</span>
-              <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
-            </div>
-            <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
-            <div class="tw:flex tw:gap-2 tw:items-center">
-              <button
-                class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
-                type="button"
-                (click)="applyDemoData(demoData.id)"
-                [matTooltip]="t('demo-data-app.overview.apply-demo-data.button')"
-              >
-                <i class="material-symbols-rounded tw:text-sm">add</i>
-              </button>
-              @if (demoData.testResult) {
-                @let info =
-                  t('demo-data-app.overview.test-berechnung.soll-ist', {
-                    soll: demoData.testResult.soll | formatChfNullable,
-                    ist: demoData.testResult.ist | formatChfNullable,
-                  });
-                @if (demoData.testResult.valid) {
-                  <i
-                    class="material-symbols-rounded tw:text-sm tw:text-dv-green"
-                    [matTooltip]="info"
-                    [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
-                    >check_circle</i
-                  >
-                } @else if (demoData.testResult.valid !== false) {
-                  <i
-                    class="material-symbols-rounded tw:text-sm tw:text-dv-yellow"
-                    [matTooltip]="t('demo-data-app.overview.test-berechnung.gesuch-invalid')"
-                    >warning</i
-                  >
-                  <button
-                    type="button"
-                    (click)="copyToClipboard(demoData.testResult?.message ?? 'error')"
-                    [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
-                  >
-                    <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
-                  </button>
-                } @else {
-                  <i
-                    class="material-symbols-rounded tw:text-sm tw:text-dv-red"
-                    [matTooltip]="info"
-                    [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
-                    >cancel</i
-                  >
-                  <button
-                    type="button"
-                    (click)="copyToClipboard(info)"
-                    [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
-                  >
-                    <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
-                  </button>
-                }
-              }
-            </div>
-          </li>
-        } @empty {
-          <li>
-            <dv-shared-ui-info-container [type]="'info'">
-              <span class="text-info material-symbols-rounded me-3">info</span>
-              <div class="ms-3">{{ t('demo-data-app.overview.no-data') }}</div>
-            </dv-shared-ui-info-container>
-          </li>
-        }
-      </ul>
-      <aside>
-        @if (demoDataList) {
-          <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
-          <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
-            <dt class="tw:whitespace-nowrap tw:!font-semibold">
-              {{ t('demo-data-app.overview.import-details.imported-by') }}:
-            </dt>
-            <dd class="tw:mb-0!">{{ demoDataList.importiertVon }}</dd>
-            <dt class="tw:whitespace-nowrap tw:!font-semibold">
-              {{ t('demo-data-app.overview.import-details.last-updated') }}:
-            </dt>
-            <dd class="tw:mb-0!">{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
-            <dt class="tw:whitespace-nowrap tw:!font-semibold">
-              {{ t('demo-data-app.overview.import-details.total') }}:
-            </dt>
-            <dd class="tw:mb-0!">{{ demoDataList.demoDatas.length }}</dd>
-            <dt class="tw:whitespace-nowrap tw:!font-semibold">
-              {{ t('demo-data-app.overview.import-details.comment') }}:
-            </dt>
-            <dd class="tw:mb-0!">{{ demoDataList.kommentar }}</dd>
-            <dt class="tw:whitespace-nowrap tw:!font-semibold">
-              {{ t('demo-data-app.overview.import-details.file') }}:
-            </dt>
-            <dd class="tw:mb-0 tw:min-w-0">
-              <button
-                type="button"
-                class="btn btn-link tw:flex! tw:max-w-full tw:p-0! tw:items-center"
-                [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
-                [dvDownloadButton]="{
-                  type: 'demoData',
-                  id: demoDataList.documentId,
-                }"
-              >
-                <span
-                  class="tw:grow-0 tw:whitespace-nowrap tw:truncate"
-                  [title]="demoDataList.filename"
-                  [dvTruncateTooltip]="`${demoDataList.filename}`"
+  <div class="tw:flex tw:flex-col tw:relative tw:min-h-0">
+    @if (
+      (demoDataStore.lastDemoDataRun() | rdIsPending: { ignoreInitial: true }) ||
+      (demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true })
+    ) {
+      <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+    }
+    @let demoDataList = demoDataStore.cachedDemoDataListViewSig().data;
+    <div class="tw:p-8 tw:flex tw:items-start">
+      <dv-shared-ui-icon-chip class="tw:mr-3">
+        <i class="material-symbols-rounded title-icon">science</i>
+      </dv-shared-ui-icon-chip>
+      <h1 class="tw:mb-4! tw:flex tw:justify-between tw:w-3/5">
+        {{ t('demo-data-app.overview.title') }}
+        <div class="tw:flex tw:gap-1">
+          @if (demoDataList?.demoDatas?.length) {
+            @if (demoDataStore.demoDataTestBerechnungResults().data; as berechnungResults) {
+              @if (previousBerechnungsResult.valueSig(); as previousValue) {
+                <button
+                  class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                  type="button"
+                  (click)="compareResults(previousValue, berechnungResults)"
+                  [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-compare')"
                 >
-                  {{ demoDataList.filename }} {{ demoDataList.filesize | filesize }}
-                </span>
-                <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-xl/1!">download</span>
+                  <i class="material-symbols-rounded tw:text-sm">alt_route</i>
+                </button>
+              }
+              <button
+                class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                type="button"
+                (click)="saveResult(berechnungResults)"
+                [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-save')"
+              >
+                <i class="material-symbols-rounded tw:text-sm">add_to_photos</i>
               </button>
-            </dd>
-          </dl>
-        }
-        <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.file-upload.title') }}</h2>
-        <dv-shared-ui-file-upload
-          class="tw:mb-6"
-          [allowedFileTypesSig]="['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']"
-          (selectedFileSig)="selectedFileSig.set($event)"
-        ></dv-shared-ui-file-upload>
-
-        @if (selectedFileSig()?.size) {
-          <button
-            type="button"
-            class="btn btn-primary"
-            data-testid="button-save"
-            (click)="createDemoDataImport()"
-            [disabled]="selectedFileSig()?.size === 0"
-          >
-            {{ t('demo-data-app.overview.file-upload.confirm.button') }}
-          </button>
-        }
-
-        @if (demoDataStore.lastDemoDataRun().data; as lastApply) {
-          <dv-shared-ui-info-container
-            [type]="lastApply.stipendienanspruch.success ? 'success' : 'warning'"
-            class="tw:mt-4 tw:flex-col"
-          >
+            }
+            <button
+              class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+              type="button"
+              (click)="testDemoDataBerechnung()"
+            >
+              {{ t('demo-data-app.overview.apply-demo-data.test-all-berechnung') }}
+            </button>
+          }
+        </div>
+      </h1>
+    </div>
+    @if (demoDataStore.cachedDemoDataListViewSig() | rdIsPending: { ignoreInitial: true }) {
+      <dv-shared-ui-loading></dv-shared-ui-loading>
+    } @else {
+      <div
+        class="tw:grid tw:grid-cols-[2fr_1fr] tw:gap-6 tw:px-8 tw:items-start tw:dv-pass-height tw:min-h-0 tw:relative"
+        [class.busy]="demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }"
+      >
+        <div class="tw:flex tw:flex-col">
+          @if (demoDataList?.demoDatas?.length) {
+            <mat-form-field [subscriptSizing]="'dynamic'" class="dense-control tw:mb-6">
+              <input type="text" matInput [formControl]="filterText" dvMaxLength [placeholder]="t('shared.search')" />
+              <span matSuffix class="material-symbols-rounded tw:align-middle tw:mr-2">search</span>
+            </mat-form-field>
+          }
+          <ul class="tw:mb-4 tw:list-none tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6">
+            @for (demoData of demoDatasSig(); track $index) {
+              <li
+                class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center tw:items-start"
+              >
+                <div class="tw:flex tw:flex-col">
+                  <span class="tw:font-bold">{{ demoData.testFall }}</span>
+                  <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
+                </div>
+                <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
+                <div class="tw:flex tw:gap-2 tw:items-center">
+                  <button
+                    class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
+                    type="button"
+                    (click)="applyDemoData(demoData.id)"
+                    [matTooltip]="t('demo-data-app.overview.apply-demo-data.apply')"
+                  >
+                    <i class="material-symbols-rounded tw:text-sm">add</i>
+                  </button>
+                  @if (demoData.testResult) {
+                    @let info =
+                      t('demo-data-app.overview.test-berechnung.soll-ist', {
+                        soll: demoData.testResult.soll | formatChfNullable,
+                        ist: demoData.testResult.ist | formatChfNullable,
+                      });
+                    @if (demoData.testResult.valid) {
+                      <i
+                        class="material-symbols-rounded tw:text-sm tw:text-dv-green"
+                        [matTooltip]="info"
+                        [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
+                        >check_circle</i
+                      >
+                    } @else if (demoData.testResult.valid !== false) {
+                      <i
+                        class="material-symbols-rounded tw:text-sm tw:text-dv-yellow"
+                        [matTooltip]="t('demo-data-app.overview.test-berechnung.gesuch-invalid')"
+                        >warning</i
+                      >
+                      <button
+                        type="button"
+                        (click)="copyToClipboard(demoData.testResult?.message ?? 'error')"
+                        [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
+                      >
+                        <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
+                      </button>
+                    } @else {
+                      <i
+                        class="material-symbols-rounded tw:text-sm tw:text-dv-red"
+                        [matTooltip]="info"
+                        [matTooltipClass]="'tw:whitespace-pre tw:font-mono'"
+                        >cancel</i
+                      >
+                      <button
+                        type="button"
+                        (click)="copyToClipboard(info)"
+                        [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
+                      >
+                        <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
+                      </button>
+                    }
+                  }
+                </div>
+              </li>
+            } @empty {
+              <li>
+                <dv-shared-ui-info-container [type]="'info'">
+                  <span class="text-info material-symbols-rounded me-3">info</span>
+                  <div class="ms-3">{{ t('demo-data-app.overview.no-data') }}</div>
+                </dv-shared-ui-info-container>
+              </li>
+            }
+          </ul>
+        </div>
+        <aside class="tw:sticky tw:top-0">
+          @if (demoDataList) {
+            <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
             <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
               <dt class="tw:whitespace-nowrap tw:!font-semibold">
-                {{ t('shared.form.tranche.status.label.GESUCH') }}:
+                {{ t('demo-data-app.overview.import-details.imported-by') }}:
               </dt>
-              <dd class="tw:mb-0!">
-                {{ t(`sachbearbeitung-app.gesuch.status.contract.${lastApply.gesuchStatus}`) }}
+              <dd class="tw:mb-0!">{{ demoDataList.importiertVon }}</dd>
+              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                {{ t('demo-data-app.overview.import-details.last-updated') }}:
+              </dt>
+              <dd class="tw:mb-0!">{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
+              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                {{ t('demo-data-app.overview.import-details.total') }}:
+              </dt>
+              <dd class="tw:mb-0!">{{ demoDataList.demoDatas.length }}</dd>
+              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                {{ t('demo-data-app.overview.import-details.comment') }}:
+              </dt>
+              <dd class="tw:mb-0!">{{ demoDataList.kommentar }}</dd>
+              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                {{ t('demo-data-app.overview.import-details.file') }}:
+              </dt>
+              <dd class="tw:mb-0 tw:min-w-0">
+                <button
+                  type="button"
+                  class="btn btn-link tw:flex! tw:max-w-full tw:p-0! tw:items-center"
+                  [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
+                  [dvDownloadButton]="{
+                    type: 'demoData',
+                    id: demoDataList.documentId,
+                  }"
+                >
+                  <span
+                    class="tw:grow-0 tw:whitespace-nowrap tw:truncate"
+                    [title]="demoDataList.filename"
+                    [dvTruncateTooltip]="`${demoDataList.filename}`"
+                  >
+                    {{ demoDataList.filename }} {{ demoDataList.filesize | filesize }}
+                  </span>
+                  <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-xl/1!">download</span>
+                </button>
               </dd>
             </dl>
-            <div
-              class="tw:mb-3"
-              [innerHTML]="
-                t(
-                  `demo-data-app.overview.apply-demo-data.info.stipendienanspruch.check.${lastApply.stipendienanspruch.success}`
-                )
-              "
-            ></div>
-            <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2">
-              <span></span>
-              @for (value of sollIst; track value) {
-                <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${value}`) }}</span>
-              }
-              <span class="tw:font-bold">
-                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
-              </span>
-              @for (value of sollIst; track value) {
-                <span class="tw:break-normal">
-                  @let status = lastApply.stipendienanspruch[`status${value}`];
-                  {{ status ? t(`shared.verfuegung.status.${status}`) : '' }}
-                </span>
-              }
+          }
+          <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.file-upload.title') }}</h2>
+          <dv-shared-ui-file-upload
+            class="tw:mb-6"
+            [allowedFileTypesSig]="['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']"
+            (selectedFileSig)="selectedFileSig.set($event)"
+          ></dv-shared-ui-file-upload>
 
-              <span class="tw:font-bold">
-                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.betrag') }}:
-              </span>
-              @for (value of sollIst; track value) {
-                <span>
-                  {{ (lastApply.stipendienanspruch[`betragStipendien${value}`] | formatChfNullable) ?? 'N/A' }}
-                </span>
-              }
+          @if (selectedFileSig()?.size) {
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-testid="button-save"
+              (click)="createDemoDataImport()"
+              [disabled]="selectedFileSig()?.size === 0"
+            >
+              {{ t('demo-data-app.overview.file-upload.confirm.button') }}
+            </button>
+          }
 
-              <span class="tw:font-bold">
-                {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
-              </span>
-              @for (value of sollIst; track value) {
-                <span>
-                  {{ (lastApply.stipendienanspruch[`betragDarlehen${value}`] | formatChfNullable) ?? 'N/A' }}
+          @if (demoDataStore.lastDemoDataRun().data; as lastApply) {
+            <dv-shared-ui-info-container
+              [type]="lastApply.stipendienanspruch.success ? 'success' : 'warning'"
+              class="tw:mt-4 tw:flex-col"
+            >
+              <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
+                <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                  {{ t('shared.form.tranche.status.label.GESUCH') }}:
+                </dt>
+                <dd class="tw:mb-0!">
+                  {{ t(`sachbearbeitung-app.gesuch.status.contract.${lastApply.gesuchStatus}`) }}
+                </dd>
+              </dl>
+              <div
+                class="tw:mb-3"
+                [innerHTML]="
+                  t(
+                    `demo-data-app.overview.apply-demo-data.info.stipendienanspruch.check.${lastApply.stipendienanspruch.success}`
+                  )
+                "
+              ></div>
+              <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2">
+                <span></span>
+                @for (value of sollIst; track value) {
+                  <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${value}`) }}</span>
+                }
+                <span class="tw:font-bold">
+                  {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
                 </span>
-              }
-            </div>
-          </dv-shared-ui-info-container>
-        }
+                @for (value of sollIst; track value) {
+                  <span class="tw:break-normal">
+                    @let status = lastApply.stipendienanspruch[`status${value}`];
+                    {{ status ? t(`shared.verfuegung.status.${status}`) : '' }}
+                  </span>
+                }
 
-        @if (demoDataStore.demoDataErrorViewSig(); as error) {
-          <div class="tw:mt-4 tw:flex">
-            <dv-shared-ui-info-container [type]="'danger'" class="tw:flex-col tw:grow">
-              <div class="tw:flex tw:font-bold">
-                <span class="material-symbols-rounded tw:mr-3">error</span>
-                <div class="tw:mr-3">
-                  {{ t(`demo-data-app.overview.${error.demoErrorType ?? 'apply-demo-data'}.error`) }}
-                </div>
+                <span class="tw:font-bold">
+                  {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.betrag') }}:
+                </span>
+                @for (value of sollIst; track value) {
+                  <span>
+                    {{ (lastApply.stipendienanspruch[`betragStipendien${value}`] | formatChfNullable) ?? 'N/A' }}
+                  </span>
+                }
+
+                <span class="tw:font-bold">
+                  {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
+                </span>
+                @for (value of sollIst; track value) {
+                  <span>
+                    {{ (lastApply.stipendienanspruch[`betragDarlehen${value}`] | formatChfNullable) ?? 'N/A' }}
+                  </span>
+                }
               </div>
-              @if (error.type === 'demoDataError') {
-                <div class="tw:mr-3 tw:whitespace-pre-wrap">{{ error.internalMessage }}</div>
-              }
-              @if (error.allErrors?.length) {
-                <div class="tw:mr-3">
-                  {{ t('demo-data-app.overview.apply-demo-data.error.validation') }}
-                </div>
-                <ul class="tw:list-none tw:pl-0! tw:mb-0!">
-                  @for (item of error.allErrors; track $index) {
-                    <li>
-                      <details>
-                        <summary>{{ item.origin }}</summary>
-                        {{ item.message }}
-                        @if (item.technical) {
-                          <br />
-                          <span class="tw:italic">{{ item.technical }}</span>
-                        }
-                      </details>
-                    </li>
-                  }
-                </ul>
-              }
             </dv-shared-ui-info-container>
-          </div>
-        }
-      </aside>
-    </div>
-  }
+          }
+
+          @if (demoDataStore.demoDataErrorViewSig(); as error) {
+            <div class="tw:mt-4 tw:flex">
+              <dv-shared-ui-info-container [type]="'danger'" class="tw:flex-col tw:grow">
+                <div class="tw:flex tw:font-bold">
+                  <span class="material-symbols-rounded tw:mr-3">error</span>
+                  <div class="tw:mr-3">
+                    {{ t(`demo-data-app.overview.${error.demoErrorType ?? 'apply-demo-data'}.error`) }}
+                  </div>
+                </div>
+                @if (error.type === 'demoDataError') {
+                  <div class="tw:mr-3 tw:whitespace-pre-wrap">{{ error.internalMessage }}</div>
+                }
+                @if (error.allErrors?.length) {
+                  <div class="tw:mr-3">
+                    {{ t('demo-data-app.overview.apply-demo-data.error.validation') }}
+                  </div>
+                  <ul class="tw:list-none tw:pl-0! tw:mb-0!">
+                    @for (item of error.allErrors; track $index) {
+                      <li>
+                        <details>
+                          <summary>{{ item.origin }}</summary>
+                          {{ item.message }}
+                          @if (item.technical) {
+                            <br />
+                            <span class="tw:italic">{{ item.technical }}</span>
+                          }
+                        </details>
+                      </li>
+                    }
+                  </ul>
+                }
+              </dv-shared-ui-info-container>
+            </div>
+          }
+        </aside>
+      </div>
+    }
+  </div>
 </dv-shared-pattern-basic-layout>

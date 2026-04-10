@@ -174,8 +174,8 @@ public class BerechnungService {
         final var berechnungStipendium =
             berechnungDarlehen != null
                 ? BigDecimal.valueOf(totalVorTeilungDarlehen)
-                    .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
                     .multiply(BigDecimal.valueOf(2))
+                    .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
                     .intValue()
                 : totalVorTeilungDarlehen;
 
@@ -223,7 +223,7 @@ public class BerechnungService {
             // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
             // stipendium
             darlehen = BigDecimal.valueOf(stipendium)
-                .divide(BigDecimal.valueOf(300), 0, RoundingMode.HALF_UP)
+                .divide(BigDecimal.valueOf(300), 0, RoundingMode.UP)
                 .multiply(BigDecimal.valueOf(100))
                 .intValue();
         }

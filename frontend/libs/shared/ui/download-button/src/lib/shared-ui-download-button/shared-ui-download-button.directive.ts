@@ -24,7 +24,12 @@ export type DownloadOptions =
   | {
       type: 'datenschutzbrief';
       id: string;
-      gesuchTrancheId: string;
+      gesuchId: string;
+    }
+  | {
+      type: 'datenschutzbriefCreate';
+      id: string;
+      gesuchId: string;
     }
   | {
       type: 'darlehen';
@@ -53,6 +58,10 @@ export type DownloadOptions =
     }
   | {
       type: 'ausbildungUnterbruch';
+      id: string;
+    }
+  | {
+      type: 'sachbearbeiterGesuchDokument';
       id: string;
     };
 
@@ -108,14 +117,26 @@ const getDownloadObservable$ = (
     case 'datenschutzbrief': {
       return datenschutzbriefService
         .getDatenschutzbriefDownloadToken$({
-          elternId: id,
+          gesuchId: downloadOptions.gesuchId,
+          datenschutzbriefId: id,
         })
         .pipe(
           map(({ token }) =>
-            datenschutzbriefService.getDatenschutzbriefPath({
-              token,
-              trancheId: downloadOptions.gesuchTrancheId,
-            }),
+            datenschutzbriefService.getDatenschutzbriefPath({ token }),
+          ),
+        );
+    }
+    case 'datenschutzbriefCreate': {
+      return datenschutzbriefService
+        .createAndGetDatenschutzbriefDownloadToken$({
+          gesuchId: downloadOptions.gesuchId,
+          datenschutzbriefCreate: {
+            elternId: id,
+          },
+        })
+        .pipe(
+          map(({ token }) =>
+            datenschutzbriefService.getDatenschutzbriefPath({ token }),
           ),
         );
     }
@@ -192,6 +213,19 @@ const getDownloadObservable$ = (
         .pipe(
           map(({ token }) =>
             ausbildungService.downloadAusbildungUnterbruchAntragDokumentPath({
+              token,
+            }),
+          ),
+        );
+    }
+    case 'sachbearbeiterGesuchDokument': {
+      return dokumentService
+        .getSachbearbeiterGesuchDokumentDokumentDownloadToken$({
+          dokumentId: id,
+        })
+        .pipe(
+          map(({ token }) =>
+            dokumentService.getSachbearbeiterGesuchDokumentDokumentPath({
               token,
             }),
           ),

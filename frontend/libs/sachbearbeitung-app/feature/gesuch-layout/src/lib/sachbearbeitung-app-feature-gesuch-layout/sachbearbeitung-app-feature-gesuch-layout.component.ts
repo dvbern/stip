@@ -160,9 +160,18 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
 
-  gesuchstellerNameSig = computed(() => {
+  gesuchInfoDataSig = computed(() => {
     const info = this.headerViewSig().gesuchInfo;
-    return info ? `${info.piaVorname} ${info.piaNachname}` : '';
+    if (!info) {
+      return;
+    }
+
+    return {
+      name: `${info.piaVorname} ${info.piaNachname}`,
+      fallNummer: info.fallNummer,
+      gesuchNummer: info.gesuchNummer,
+      status: info.state.gesuchStatus,
+    };
   });
 
   tabsSig = computed<TabNavItem[]>(() => {
@@ -309,6 +318,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
       inBearbeitungSbReason,
+      canSBInitAenderung,
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
@@ -323,9 +333,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
-    const list = StatusUebergaengeMap[gesuchStatus]
-      ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
-      ?.map((status) => ({
+
+    const statusAbhaengigUebergange = StatusUebergaengeMap[gesuchStatus] ?? [];
+
+    const flagAbhaengigUebergange: StatusUebergang[] = [];
+    if (canSBInitAenderung) {
+      flagAbhaengigUebergange.push('BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG');
+    }
+    if (canTriggerManuellPruefen) {
+      flagAbhaengigUebergange.push('STATUS_PRUEFUNG_AUSLOESEN');
+    }
+
+    const list = [...statusAbhaengigUebergange, ...flagAbhaengigUebergange]
+      .filter(isDefined)
+      .map((status) => ({
         ...StatusUebergaengeOptions[status]({
           permissions,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,

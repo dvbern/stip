@@ -26,7 +26,6 @@
   "shared.ui.loading.text": "Inhalte laden...",
   "shared.ui.saving.text": "Wird gespeichert...",
   "shared.ui.open-datepicker": "Datum auswählen",
-  "shared.comming-soon": "Diese Funktion ist noch in Entwicklung",
   "shared.language.DEUTSCH": "Deutsch",
   "shared.language.FRANZOESISCH": "Französisch",
   "shared.genericError.validation": "Es wurde versucht, ungültige Werte abzuspeichern.",
@@ -101,6 +100,7 @@
   "shared.form-field.close-info-message": "Info schliessen",
   "shared.form.error.required": "Dieses Feld ist erforderlich",
   "shared.form.error.requiredShort": "Erforderlich",
+  "shared.form.error.notUnique": "Der angegebene Wert wurde bereits verwendet",
   "shared.form.error.invalidIBAN": "Die eingebene IBAN ist ungültig",
   "shared.form.error.ahv": "Bitte geben Sie eine gültige AHV-Nummer ein",
   "shared.form.error.notUniqueAhv": "Die angegebene AHV-Nummer wurde bereits in diesem Gesuch verwendet",
@@ -183,6 +183,7 @@
   "shared.dokumente.table.title.requiredDocuments": "Benötigte Dokumente",
   "shared.dokumente.table.title.additionalDocuments": "Unterschriftenblätter",
   "shared.dokumente.table.title.customDocuments": "Generische Dokumente",
+  "shared.dokumente.table.title.sachbearbeitungGesuchDokuments": "Dokumente",
   "shared.dokumente.table.documentName": "Dokument",
   "shared.dokumente.table.description": "Beschreibung",
   "shared.dokumente.table.formStep": "Schritt",
@@ -343,9 +344,7 @@
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Zurückgewiesen",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Freigegeben",
 
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingereicht",
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Akzeptiert",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
 
@@ -541,8 +540,8 @@
   "shared.form.person.zivilstand.label": "Zivilstand",
   "shared.form.person.zivilstand.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
   "shared.form.person.zivilstand.konkubinat.info": "Konkubinat bedeutet: Unverheiratete Paare, die zusammenleben, entweder seit mindestens 5 Jahren oder mit einem gemeinsamen Kind im selben Haushalt. Sie werden wie verheiratete Auszubildende behandelt.",
-  "shared.form.person.guardianship.label": "Es besteht eine umfassende Beistandschaft",
-  "shared.form.person.guardianship.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
+  "shared.form.person.vormundschaft.label": "Es besteht eine umfassende Beistandschaft",
+  "shared.form.person.vormundschaft.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
   "shared.form.person.vermoegenVorjahr.label": "Vermögen per 31.12. des Vorjahrs",
   "shared.form.person.sozialhilfebeitraege.label": "Werden Sozialhilfebeiträge ausbezahlt?",
   "shared.form.person.sozialhilfebeitraege.infoTitle": "Werden Sozialhilfebeiträge ausbezahlt?",
@@ -1060,6 +1059,8 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
+  "shared.form.abschluss.aenderungNichtEinreichbar": "Momentan können sie keine Änderung eingeben. Kontaktieren sie den zuständigen Sachbearbeiter",
+
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Gesuchsverlauf",

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1774538744733-529">
+    <createTable tableName="sachbearbeiter_gesuch_dokument">
+      <column name="id" type="UUID">
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="sachbearbeiter_gesuch_dokumentPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="description" type="VARCHAR(2000)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="type" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-530">
+    <createTable tableName="sachbearbeiter_gesuch_dokument_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="description" type="VARCHAR(2000)"/>
+      <column name="type" type="VARCHAR(255)"/>
+      <column name="gesuch_id" type="UUID"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-531">
+    <createTable tableName="sachbearbeiter_gesuch_dokument_dokument">
+      <column name="sachbearbeiter_gesuch_dokument_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="dokument_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-532">
+    <createTable tableName="sachbearbeiter_gesuch_dokument_dokument_aud">
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="sachbearbeiter_gesuch_dokument_dokument_audPK"/>
+      </column>
+      <column name="sachbearbeiter_gesuch_dokument_id" type="UUID">
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="sachbearbeiter_gesuch_dokument_dokument_audPK"/>
+      </column>
+      <column name="dokument_id" type="UUID">
+        <constraints nullable="false"
+                     primaryKey="true"
+                     primaryKeyName="sachbearbeiter_gesuch_dokument_dokument_audPK"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-533">
+    <addPrimaryKey columnNames="rev, id"
+                   constraintName="sachbearbeiter_gesuch_dokument_audPK"
+                   tableName="sachbearbeiter_gesuch_dokument_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-534">
+    <addUniqueConstraint columnNames="dokument_id"
+                         constraintName="UC_SACHBEARBEITER_GESUCH_DOKUMENT_DOKUMENTDOKUMENT_ID_COL"
+                         tableName="sachbearbeiter_gesuch_dokument_dokument"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-535">
+    <addUniqueConstraint columnNames="gesuch_id, type"
+                         constraintName="UC_sachbearbeiter_gesuch_dokument_gesuch_type"
+                         tableName="sachbearbeiter_gesuch_dokument"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-536">
+    <createIndex indexName="IX_sachbearbeiter_gesuch_dokument_gesuch_id"
+                 tableName="sachbearbeiter_gesuch_dokument">
+      <column name="gesuch_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-537">
+    <createIndex indexName="IX_sachbearbeiter_gesuch_dokument_mandant"
+                 tableName="sachbearbeiter_gesuch_dokument">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-538">
+    <createIndex indexName="sachbearbeiter_gesuch_dokument_dokument_sachbearbeiter_gesuch_dokument_id"
+                 tableName="sachbearbeiter_gesuch_dokument_dokument">
+      <column name="sachbearbeiter_gesuch_dokument_id"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-539">
+    <addForeignKeyConstraint baseColumnNames="dokument_id"
+                             baseTableName="sachbearbeiter_gesuch_dokument_dokument"
+                             constraintName="FK_dokument_sachbearbeiter_gesuch_dokumente"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="dokument"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-540">
+    <addForeignKeyConstraint baseColumnNames="sachbearbeiter_gesuch_dokument_id"
+                             baseTableName="sachbearbeiter_gesuch_dokument_dokument"
+                             constraintName="FK_sachbearbeiter_gesuch_dokument_dokumente"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="sachbearbeiter_gesuch_dokument"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-541">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                             baseTableName="sachbearbeiter_gesuch_dokument"
+                             constraintName="FK_sachbearbeiter_gesuch_dokument_gesuch_id"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-542">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="sachbearbeiter_gesuch_dokument_aud"
+                             constraintName="FKpft4xc94914kcjwub53yln5xd"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1774538744733-543">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="sachbearbeiter_gesuch_dokument_dokument_aud"
+                             constraintName="FKsm89fcijlte100j23wgdplseo"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"
+                             validate="true"/>
+  </changeSet>
+</databaseChangeLog>

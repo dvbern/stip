@@ -9,6 +9,7 @@ import {
   ApplyDemoDataResponse,
   DemoDataList,
   DemoDataService,
+  DemoDataSlim,
   DemoDataTestBerechnungResult,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
@@ -55,17 +56,19 @@ export class DemoDataStore extends signalStore(
   private demoDataService = inject(DemoDataService);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  cachedDemoDataListViewSig = computed(() => {
-    return mapCachedData(this.demoData(), (demoData) => {
-      return !demoData?.demoDatas
+  cachedDemoDataListViewSig = computed(() =>
+    mapCachedData(this.demoData(), (demoData) =>
+      !demoData?.demoDatas
         ? undefined
         : {
             ...demoData,
             demoDatas:
-              demoData.demoDatas.filter((item) => item.typ === 'TRANCHE') ?? [],
-          };
-    });
-  });
+              demoData.demoDatas
+                .filter((item) => item.typ === 'TRANCHE')
+                .sort(sortByTestfall) ?? [],
+          },
+    ),
+  );
 
   demoDataTestBerechnungResultsSig = computed(() => {
     const testResults = this.demoDataTestBerechnungResults().data ?? [];
@@ -204,7 +207,7 @@ export class DemoDataStore extends signalStore(
     ),
   );
 
-  testBerechnung$ = rxMethod<void>(
+  testAllDemoDataBerechnung$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -233,3 +236,21 @@ export class DemoDataStore extends signalStore(
     ),
   );
 }
+
+const TESTFALL_REGEX = /^(ST|TF)-([0-9]+)(\.([0-9]+))?$/;
+const sortByTestfall = (a: DemoDataSlim, b: DemoDataSlim) => {
+  const matchesA = TESTFALL_REGEX.exec(a.testFall);
+  const matchesB = TESTFALL_REGEX.exec(b.testFall);
+  if (!matchesA || !matchesB) {
+    return a.testFall.localeCompare(b.testFall);
+  }
+
+  const comparingPrefix = matchesA[1].localeCompare(matchesB[1]);
+  if (comparingPrefix != 0) {
+    return comparingPrefix;
+  }
+
+  const totalA = parseInt(matchesA[2]) + parseInt(matchesA[4] ?? 0) / 100;
+  const totalB = parseInt(matchesB[2]) + parseInt(matchesB[4] ?? 0) / 100;
+  return totalA - totalB;
+};

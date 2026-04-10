@@ -13,11 +13,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { diff } from 'json-diff-ts';
 
 import { DemoDataAppTranslationKey } from '@dv/demo-data-app/assets/i18n';
 import { DemoDataStore } from '@dv/demo-data-app/data-access/demo-data';
 import { DemoDataAppUiAdvTranslocoDirective } from '@dv/demo-data-app/ui/adv-transloco-directive';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { DemoDataTestBerechnungResult } from '@dv/shared/model/gesuch';
+import { type } from '@dv/shared/model/type-util';
 import { SharedPatternBasicLayoutComponent } from '@dv/shared/pattern/basic-layout';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
@@ -31,6 +35,9 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
+import { localStorageValue } from '@dv/shared/util/local-storage-helper';
+
+import { BerechnungComparisonDialogComponent } from '../components/comparison/berechnung-comparison-dialog.component';
 
 @Component({
   selector: 'dv-demo-data-app-feature-demo-data-overview',
@@ -58,6 +65,10 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 })
 export class DemoDataAppFeatureDemoDataOverviewComponent {
   private dialog = inject(MatDialog);
+  private globalNotificationStore = inject(GlobalNotificationStore);
+  previousBerechnungsResult = localStorageValue<DemoDataTestBerechnungResult[]>(
+    'DEMO_DATA_PREVIOUS_BERECHNUNG_RESULT',
+  );
   demoDataStore = inject(DemoDataStore);
   fallStore = inject(FallStore);
   filterText = new FormControl<string | null>(null);
@@ -149,7 +160,35 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   }
 
   testDemoDataBerechnung() {
-    this.demoDataStore.testBerechnung$();
+    this.demoDataStore.testAllDemoDataBerechnung$();
+  }
+
+  saveResult(results: DemoDataTestBerechnungResult[]) {
+    this.previousBerechnungsResult.set(results);
+    this.globalNotificationStore.createSuccessNotification({
+      messageKey:
+        'demo-data-app.overview.apply-demo-data.berechnung-save.success',
+    });
+  }
+
+  compareResults<T extends DemoDataTestBerechnungResult>(
+    previous: T[],
+    current: T[],
+  ) {
+    const changes = diff(previous, current, {
+      keysToSkip: ['demoDataId'],
+      treatTypeChangeAsReplace: true,
+    })
+      .flatMap((c) => c.changes ?? [])
+      .map((c) => ({
+        ...c,
+        berechnung: c?.key
+          ? type<DemoDataTestBerechnungResult>(
+              previous[+c.key] ?? current[+c.key],
+            )
+          : null,
+      }));
+    BerechnungComparisonDialogComponent.open(this.dialog, changes);
   }
 
   copyToClipboard(text: string) {

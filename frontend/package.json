@@ -23,7 +23,7 @@
     "e2e:gs": "nx e2e gesuch-app-e2e",
     "e2e:sb": "nx e2e sachbearbeitung-app-e2e",
     "e2e:soz": "nx e2e sozialdienst-app-e2e",
-    "build": "nx run-many --target=build",
+    "build": "nx run-many --target=build --parallel=4",
     "build:gs": "nx build gesuch-app",
     "prebuild:gs": "npm run set-version",
     "build:sb": "nx build sachbearbeitung-app",

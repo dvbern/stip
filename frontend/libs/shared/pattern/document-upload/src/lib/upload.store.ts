@@ -102,7 +102,7 @@ export class UploadStore {
     };
   });
 
-  private documentService = inject(DokumentService);
+  private dokumentService = inject(DokumentService);
   private darlehenService = inject(DarlehenService);
   private ausbildungService = inject(AusbildungService);
   private config = inject(SharedModelCompileTimeConfig);
@@ -128,9 +128,9 @@ export class UploadStore {
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.getGesuchDokumentForTypGS$(params),
+        this.dokumentService.getGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
-        this.documentService.getGesuchDokumentForTypSB$(params),
+        this.dokumentService.getGesuchDokumentForTypSB$(params),
       'demo-data-app': () =>
         throwError(() => new Error('Not implemented for this AppType')),
     });
@@ -141,9 +141,9 @@ export class UploadStore {
   }) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.getCustomGesuchDokumentForTypGS$(params),
+        this.dokumentService.getCustomGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
-        this.documentService.getCustomGesuchDokumentForTypSB$(params),
+        this.dokumentService.getCustomGesuchDokumentForTypSB$(params),
       'demo-data-app': () =>
         throwError(() => new Error('Not implemented for this AppType')),
     });
@@ -161,9 +161,9 @@ export class UploadStore {
 
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.deleteDokumentGS$(...deleteCallParams),
+        this.dokumentService.deleteDokumentGS$(...deleteCallParams),
       'sachbearbeitung-app': () =>
-        this.documentService.deleteDokumentSB$(...deleteCallParams),
+        this.dokumentService.deleteDokumentSB$(...deleteCallParams),
       'demo-data-app': () =>
         throwError(() => new Error('Not implemented for this AppType')),
     });
@@ -176,7 +176,7 @@ export class UploadStore {
   ) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.createDokumentGS$(
+        this.dokumentService.createDokumentGS$(
           {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
@@ -186,7 +186,7 @@ export class UploadStore {
           ...serviceDefaultParams,
         ),
       'sachbearbeitung-app': () =>
-        this.documentService.createDokumentSB$(
+        this.dokumentService.createDokumentSB$(
           {
             fileUpload,
             gesuchTrancheId: dokument.trancheId,
@@ -207,7 +207,7 @@ export class UploadStore {
   ) {
     return byAppType(this.config.appType, {
       'gesuch-app': () =>
-        this.documentService.uploadCustomGesuchDokumentGS$(
+        this.dokumentService.uploadCustomGesuchDokumentGS$(
           {
             fileUpload,
             customDokumentTypId: dokument.dokumentTyp.id,
@@ -215,7 +215,7 @@ export class UploadStore {
           ...serviceDefaultParams,
         ),
       'sachbearbeitung-app': () =>
-        this.documentService.uploadCustomGesuchDokumentSB$(
+        this.dokumentService.uploadCustomGesuchDokumentSB$(
           {
             fileUpload,
             customDokumentTypId: dokument.dokumentTyp.id,
@@ -289,7 +289,7 @@ export class UploadStore {
                   ),
                 );
               case 'UNTERSCHRIFTENBLATT':
-                return this.documentService
+                return this.dokumentService
                   .getUnterschriftenblaetterForGesuch$({
                     gesuchId: dokument.gesuchId,
                   })
@@ -310,6 +310,7 @@ export class UploadStore {
                         }) satisfies SharedModelAdditionalGesuchDokument,
                     ),
                   );
+              case 'SACHBEARBEITER_GESUCH_DOKUMENT':
               case 'GENERIC_DOKUMENT':
                 return EMPTY;
               default:
@@ -382,7 +383,11 @@ export class UploadStore {
                   ...deleteCallParams,
                 );
               case 'UNTERSCHRIFTENBLATT':
-                return this.documentService.deleteUnterschriftenblattDokument$(
+                return this.dokumentService.deleteUnterschriftenblattDokument$(
+                  ...deleteCallParams,
+                );
+              case 'SACHBEARBEITER_GESUCH_DOKUMENT':
+                return this.dokumentService.deleteSachbearbeiterGesuchDokumentDokument$(
                   ...deleteCallParams,
                 );
               case 'GENERIC_DOKUMENT':
@@ -586,11 +591,19 @@ export class UploadStore {
             serviceDefaultParams,
           );
         case 'UNTERSCHRIFTENBLATT':
-          return this.documentService.createUnterschriftenblatt$(
+          return this.dokumentService.createUnterschriftenblatt$(
             {
               ...action,
               gesuchId: dokument.gesuchId,
               unterschriftenblattTyp: dokument.dokumentTyp,
+            },
+            ...serviceDefaultParams,
+          );
+        case 'SACHBEARBEITER_GESUCH_DOKUMENT':
+          return this.dokumentService.uploadSachbearbeiterGesuchDokument$(
+            {
+              ...action,
+              sachbearbeiterGesuchDokumentId: dokument.dokumentId,
             },
             ...serviceDefaultParams,
           );

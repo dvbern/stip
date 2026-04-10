@@ -18,6 +18,7 @@ const ALL_TABS = [
   'ausbildung-abbrechen',
   'ausbildung-unterbrechen',
   'ausbildung-abschliessen',
+  'sachbearbeiter-dokumente',
 ] as const;
 @Component({
   imports: [RouterLink, RouterOutlet, TranslocoPipe, MatTabsModule],

@@ -178,7 +178,8 @@ public class AusbildungResourceImpl implements AusbildungResource {
         UUID ausbildungUnterbruchAntragId,
         UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
     ) {
-        ausbildungUnterbruchAntragAuthorizer.sbCanWrite(ausbildungUnterbruchAntragId);
+        ausbildungUnterbruchAntragAuthorizer
+            .sbCanWrite(ausbildungUnterbruchAntragId, updateAusbildungUnterbruchAntragSBDto);
         return ausbildungUnterbruchAntragService
             .updateAusbildungUnterbruchAntrag(ausbildungUnterbruchAntragId, updateAusbildungUnterbruchAntragSBDto);
     }

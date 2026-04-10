@@ -1518,12 +1518,8 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /datenschutzbrief/{trancheId}/download:
+  /datenschutzbrief/download:
     parameters:
-      - name: trancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
       - name: token
         schema:
           type: string
@@ -1547,14 +1543,20 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /datenschutzbrief/{elternId}/token:
+  /datenschutzbrief/{gesuchId}/token:
     parameters:
-      - name: elternId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
     get:
+      parameters:
+        - name: datenschutzbriefId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          required: true
       tags:
         - Datenschutzbrief
       responses:
@@ -1577,6 +1579,72 @@ paths:
           description: Datenschutzbrief File Download Token returned
       operationId: getDatenschutzbriefDownloadToken
       summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatenschutzbriefCreate'
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Datenschutzbrief File Download Token returned
+      operationId: createAndGetDatenschutzbriefDownloadToken
+      summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /datenschutzbrief/{gesuchId}/all:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatenschutzbriefOverview'
+          description: The list of related DatenschutzbriefOverview
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Get all Datenschutzbriefs for given Gesuch
+      operationId: getAllDatenschutzbriefs
+      summary: Get all Datenschutzbriefs for given Gesuch
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -3621,6 +3689,196 @@ paths:
           description: File returned
       operationId: getDokumentDownloadToken
       summary: get Dokument Download Token
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /sachbearbeiterGesuchDokument/{gesuchId}:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SachbearbeiterGesuchDokumentCreate'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SachbearbeiterGesuchDokument'
+          description: Returns created SachbearbeiterGesuchDokument
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createSachbearbeiterGesuchDokument
+      summary: create SachbearbeiterGesuchDokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SachbearbeiterGesuchDokument'
+          description: Returns SachbearbeiterGesuchDokuments of gesuch
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllSachbearbeiterGesuchDokumentsOfGesuch
+      summary: getAllSachbearbeiterGesuchDokumentsOfGesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /sachbearbeiterGesuchDokument/sachbearbeiterGesuchDokument/{sachbearbeiterGesuchDokumentId}:
+    parameters:
+      - name: sachbearbeiterGesuchDokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: SachbearbeiterGesuchDokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSachbearbeiterGesuchDokument
+      summary: deletes a SachbearbeiterGesuchDokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      tags:
+        - Dokument
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DokumentCreate'
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: uploadSachbearbeiterGesuchDokument
+      summary: upload SachbearbeiterGesuchDokument dokument
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /sachbearbeiterGesuchDokument/dokument/{dokumentId}:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    delete:
+      tags:
+        - Dokument
+      responses:
+        '204':
+          description: SachbearbeiterGesuchDokument dokument deleted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: deleteSachbearbeiterGesuchDokumentDokument
+      summary: deletes a SachbearbeiterGesuchDokumentDokument
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: File returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: File returned
+      operationId: getSachbearbeiterGesuchDokumentDokumentDownloadToken
+      summary: get SachbearbeiterGesuchDokumentDokument Download Token
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /sachbearbeiterGesuchDokument/dokument/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Dokument
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: getSachbearbeiterGesuchDokumentDokument
+      summary: getSachbearbeiterGesuchDokumentDokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -8219,6 +8477,46 @@ components:
         - VATER
         - MUTTER
       type: string
+    DatenschutzbriefCreate:
+      required:
+        - elternId
+      type: object
+      properties:
+        elternId:
+          $ref: '#/components/schemas/UUID'
+    DatenschutzbriefTyp:
+      enum:
+        - MANUELL
+        - MASSENDRUCK
+      type: string
+    DatenschutzbriefOverview:
+      required:
+        - id
+        - userErstellt
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - elternTyp
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+        userErstellt:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        elternTyp:
+          $ref: '#/components/schemas/ElternTyp'
+        dokument:
+          $ref: '#/components/schemas/Dokument'
+        massendruckJobId:
+          $ref: '#/components/schemas/UUID'
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -9013,6 +9311,33 @@ components:
         - CUSTOM_DOKUMENT
         - BESCHWERDE_ENTSCHEID
       type: string
+    SachbearbeiterGesuchDokumentCreate:
+      required:
+        - type
+        - description
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+    SachbearbeiterGesuchDokument:
+      required:
+        - id
+        - gesuchId
+        - dokumente
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/SachbearbeiterGesuchDokumentCreate'
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        gesuchId:
+          $ref: '#/components/schemas/UUID'
+        dokumente:
+          type: array
+          items:
+            $ref: '#/components/schemas/Dokument'
     DokumentTyp:
       enum:
         - AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE
@@ -9505,6 +9830,7 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - canAenderungEinreichen
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
@@ -9516,6 +9842,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        canAenderungEinreichen:
+          type: boolean
     VerfuegtGesuch:
       type: object
       required:
@@ -10787,6 +11115,7 @@ components:
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
+        - canSBInitAenderung
       type: object
       properties:
         gesuchStatus:
@@ -10800,6 +11129,8 @@ components:
         canTriggerManuellPruefen:
           type: boolean
         canBearbeitungAbschliessen:
+          type: boolean
+        canSBInitAenderung:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
