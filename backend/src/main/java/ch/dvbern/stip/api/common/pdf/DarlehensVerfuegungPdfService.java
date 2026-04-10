@@ -284,28 +284,19 @@ public class DarlehensVerfuegungPdfService {
 
         final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
 
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs);
-
         String kopieAnSozialdienst = getKopieAnSozialdienstString(gesuch, translator);
-
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
+        PdfUtils.footer(
+            gesuch,
+            document,
+            leftMargin,
+            translator,
+            pdfFont,
+            anhangs,
+            "- %s %s".formatted(
                 translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
                 kopieAnSozialdienst
-            )
-        );
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFontItalic,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis")
-            )
+            ),
+            "- %s".formatted(translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis"))
         );
 
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);

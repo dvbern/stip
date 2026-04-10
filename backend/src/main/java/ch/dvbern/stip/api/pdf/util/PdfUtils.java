@@ -23,11 +23,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
@@ -55,6 +57,7 @@ import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
@@ -239,10 +242,23 @@ public class PdfUtils {
             .setFont(font)
             .setFontSize(fontSize)
             .setPaddingBottom(SPACING_SMALL);
+
         for (final String text : paragraphs) {
             cell.add(createParagraph(font, fontSize, 0, text));
         }
         return cell;
+    }
+
+    public Div createDiv(
+        final PdfFont font,
+        final float fontSize,
+        final String... paragraphs
+    ) {
+        final var div = new Div();
+        for (final String text : paragraphs) {
+            div.add(createParagraph(font, fontSize, 0, text));
+        }
+        return div;
     }
 
     public void header(
@@ -475,15 +491,28 @@ public class PdfUtils {
     public void footer(
         final Gesuch gesuch,
         final Document document,
-        float leftMargin,
+        final float leftMargin,
         final TL translator,
         final PdfFont pdfFont,
         final List<Anhangs> anhangs
     ) {
-        final float[] columnWidths = { 48, 2, 50 };
+        footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, new String[0]);
+    }
+
+    public void footer(
+        final Gesuch gesuch,
+        final Document document,
+        final float leftMargin,
+        final TL translator,
+        final PdfFont pdfFont,
+        final List<Anhangs> anhangs,
+        final String... additionalAnhangs
+    ) {
+        final float[] columnWidths = { 55, 45 };
         final Table signatureTable = PdfUtils.createTable(columnWidths, leftMargin);
         signatureTable.setMarginTop(SPACING_MEDIUM);
-        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 2));
+
+        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
         signatureTable.addCell(
             PdfUtils.createCell(
                 pdfFont,
@@ -499,15 +528,6 @@ public class PdfUtils {
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter();
 
         final var locale = LocaleUtil.getLocale(gesuch);
-
-        final var anhangsText = Stream.concat(
-            // Collect all anhangs Make List unique
-            new LinkedHashSet<>(anhangs).stream()
-                .map(anhang -> "- %s".formatted(translator.translate(anhang.getTranslationKey()))),
-            // Append "Kopie an" if needed (not null)
-            Stream.ofNullable(getKopieAnText(gesuch, translator))
-        );
-        signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1, anhangsText.toArray(String[]::new)));
         signatureTable.addCell(PdfUtils.createCell(pdfFont, FONT_SIZE_BIG, 1, 1));
         signatureTable.addCell(
             PdfUtils.createCell(
@@ -521,6 +541,25 @@ public class PdfUtils {
         );
 
         document.add(signatureTable);
+
+        final var anhangsTexts = Stream.of(
+            // Make List unique preserving order
+            new LinkedHashSet<>(anhangs).stream()
+                .map(anhang -> "- %s".formatted(translator.translate(anhang.getTranslationKey()))),
+            // Append "Kopie an" if needed (is not null)
+            Stream.ofNullable(getKopieAnText(gesuch, translator)),
+            // Append additional Anhangs if given
+            Arrays.stream(additionalAnhangs)
+        ).flatMap(Function.identity());
+
+        final var div = PdfUtils.createDiv(pdfFont, FONT_SIZE_BIG, anhangsTexts.toArray(String[]::new));
+        div.setFixedPosition(
+            document.getLeftMargin() + leftMargin,
+            document.getBottomMargin() + SPACING_MEDIUM,
+            // The anhangsText can overlap the signature table check all possible combinations
+            UnitValue.createPercentValue(100)
+        );
+        document.add(div);
     }
 
     public String getDelegierungKopieAnText(
