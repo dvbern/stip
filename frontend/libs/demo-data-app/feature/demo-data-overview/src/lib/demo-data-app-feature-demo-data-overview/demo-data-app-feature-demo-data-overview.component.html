@@ -36,7 +36,7 @@
               </button>
             }
             <button
-              class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+              class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2 tw:ml-5!"
               type="button"
               (click)="testDemoDataBerechnung()"
             >
@@ -70,19 +70,20 @@
                   <span class="tw:font-semibold" [innerHTML]="demoData.name"></span>
                 </div>
                 <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
-                <div class="tw:flex tw:gap-2 tw:items-center">
+                <div class="tw:flex tw:gap-6 tw:items-center">
                   <button
                     class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
                     type="button"
                     (click)="applyDemoData(demoData.id)"
                     [matTooltip]="t('demo-data-app.overview.apply-demo-data.apply')"
+                    [matTooltipShowDelay]="tooltipDelay"
                   >
                     <i class="material-symbols-rounded tw:text-sm">add</i>
                   </button>
                   <div class="tw:relative tw:flex tw:gap-1" role="status">
                     @if (demoData.testResult) {
                       @if (demoData.testResult.allValid) {
-                        <i class="material-symbols-rounded tw:cursor-default tw:text-sm tw:text-dv-green tw:peer"
+                        <i class="material-symbols-rounded tw:cursor-default tw:text-3xl! tw:text-dv-green tw:peer"
                           >check_circle</i
                         >
                       } @else if (!demoData.testResult.valid) {
@@ -90,16 +91,18 @@
                           type="button"
                           (click)="copyToClipboard(demoData.testResult?.message ?? 'error')"
                           [matTooltip]="t('demo-data-app.overview.test-berechnung.copy-to-clipboard')"
+                          [matTooltipShowDelay]="tooltipDelay"
                         >
-                          <i class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:text-base!">file_copy</i>
+                          <i class="material-symbols-rounded tw:text-gray-500 tw:text-base!">file_copy</i>
                         </button>
                         <i
-                          class="material-symbols-rounded tw:text-sm tw:text-dv-yellow tw:peer/error"
+                          class="material-symbols-rounded tw:text-3xl! tw:text-dv-yellow tw:peer/error"
                           [matTooltip]="t('demo-data-app.overview.test-berechnung.gesuch-invalid')"
+                          [matTooltipShowDelay]="tooltipDelay"
                           >warning</i
                         >
                       } @else {
-                        <i class="material-symbols-rounded tw:cursor-default tw:text-sm tw:text-dv-red tw:peer"
+                        <i class="material-symbols-rounded tw:cursor-default tw:text-3xl! tw:text-dv-red tw:peer"
                           >cancel</i
                         >
                       }

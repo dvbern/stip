@@ -10,6 +10,7 @@ export const DVBreakpoints = {
 export const PAGE_SIZES = [10, 20, 50];
 export const DEFAULT_PAGE_SIZE = 20;
 export const INPUT_DELAY = 600;
+export const TOOLTIP_DELAY = 200;
 
 export const BFSCODE_SCHWEIZ = '8100';
 

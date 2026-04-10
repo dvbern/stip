@@ -22,6 +22,7 @@ import { FallStore } from '@dv/shared/data-access/fall';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { DemoDataTestBerechnungResultat } from '@dv/shared/model/gesuch';
 import { type } from '@dv/shared/model/type-util';
+import { TOOLTIP_DELAY } from '@dv/shared/model/ui-constants';
 import { SharedPatternBasicLayoutComponent } from '@dv/shared/pattern/basic-layout';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
@@ -73,6 +74,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   fallStore = inject(FallStore);
   filterText = new FormControl<string | null>(null);
   selectedFileSig = signal<File | null>(null);
+  tooltipDelay = TOOLTIP_DELAY;
 
   validateBerechnungSig = input<boolean>(false, {
     // eslint-disable-next-line @angular-eslint/no-input-rename
