@@ -25,11 +25,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.Valid;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Embeddable
+@NoArgsConstructor
 public class Statisticsdata implements Serializable {
     @Nullable
     @NullOrNotBlank
@@ -39,9 +41,4 @@ public class Statisticsdata implements Serializable {
     @Nullable
     @Column(name = "com_fosnr")
     private @Valid Integer gemeindeBfsNr;
-
-    public Statisticsdata() {
-        this.gemeindeName = null;
-        this.gemeindeBfsNr = null;
-    }
 }

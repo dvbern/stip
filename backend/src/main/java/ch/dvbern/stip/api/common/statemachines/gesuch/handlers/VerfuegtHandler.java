@@ -21,10 +21,8 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
-@Slf4j
 @RequiredArgsConstructor
 public class VerfuegtHandler implements GesuchStatusChangeHandler {
     private final SwisstopoService swisstopoService;
@@ -33,6 +31,6 @@ public class VerfuegtHandler implements GesuchStatusChangeHandler {
     public void handle(Gesuch gesuch) {
         gesuch.setVerfuegt(true);
         gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.getGemeindeDataOfGesuch(gesuch);
+        swisstopoService.createFetchGemeindeDataOfGesuchScheduledTask(gesuch);
     }
 }
