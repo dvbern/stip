@@ -156,8 +156,7 @@ public class SwisstopoService {
     ) {
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         gesuch.getStatisticsdata()
-            .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr());
-        gesuch.getStatisticsdata()
+            .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr())
             .setGemeindeName(swisstopoApiFindAddrResponseElementAttribute.getCom_name());
     }
 
