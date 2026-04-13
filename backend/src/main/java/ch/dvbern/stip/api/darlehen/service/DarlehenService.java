@@ -78,6 +78,7 @@ import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
+import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
@@ -471,6 +472,11 @@ public class DarlehenService {
     @Transactional
     public FreiwilligDarlehenDto freiwilligDarlehenAblehnen(final UUID darlehenId) {
         final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
+
+        if (darlehen.getManuelleVerfuegung() == null) {
+            throw new BadRequestException("Manuelle negative verfuegung muss vorhanden sein");
+        }
+
         assertFreiwilligDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.ABGELEHNT);
         createFreiwilligDarlehenStatusprotokollEntry(
@@ -490,6 +496,17 @@ public class DarlehenService {
     @Transactional
     public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(final UUID darlehenId) {
         final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
+
+        if (darlehen.getManuelleVerfuegung() != null) {
+            darlehen.setManuelleVerfuegung(null);
+            dokumentRepository.delete(darlehen.getManuelleVerfuegung());
+            dokumentDeleteService.executeDeleteDokumentFromS3(
+                s3,
+                configService.bucketName,
+                darlehen.getManuelleVerfuegung().getObjectId()
+            );
+        }
+
         assertFreiwilligDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
         createFreiwilligDarlehenStatusprotokollEntry(
