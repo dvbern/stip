@@ -142,4 +142,10 @@ public interface DarlehenResource {
     @Path("/{darlehenId}/sb")
     @Produces({ "application/json", "text/plain" })
     FreiwilligDarlehenDto getFreiwilligDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
+
+    @POST
+    @Path("/{darlehenId}/verfuegung/upload")
+    @Consumes({ "multipart/form-data" })
+    @Produces({ "application/json", "text/plain" })
+    io.smallrye.mutiny.Uni<Response> uploadNegativeVerfuegung(@PathParam("darlehenId") UUID darlehenId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 }

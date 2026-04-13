@@ -238,27 +238,40 @@ public class DarlehenService {
     }
 
     @Transactional
-    public void createNegativeFreiwilligDarlehenVerfuegung(FreiwilligDarlehen darlehen) {
-        final ByteArrayOutputStream out =
-            darlehensVerfuegungPdfService.generateNegativeDarlehensVerfuegungPdf(darlehen);
+    public Uni<Response> uploadNegativeFreiwilligDarlehenVerfuegung(UUID darlehenId, FileUpload fileUpload) {
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
 
-        final String objectId = dokumentUploadService.executeUploadDocument(
-            out.toByteArray(),
-            NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
+        return dokumentUploadService.validateScanUploadDokument(
+            fileUpload,
             s3,
             configService,
-            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
+            antivirus,
+            DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
+            objectId -> uploadDokument(darlehen, fileUpload, objectId)
         );
+    }
 
-        var darlehensVerfuegung = new Dokument();
-        darlehensVerfuegung.setObjectId(objectId);
-        darlehensVerfuegung.setFilename(NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
-        darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
-        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+    @Transactional
+    protected void uploadDokument(
+        final FreiwilligDarlehen darlehen,
+        final FileUpload fileUpload,
+        final String objectId
+    ) {
+        final var dokument = new Dokument()
+            .setFilename(fileUpload.fileName())
+            .setFilesize(String.valueOf(fileUpload.size()))
+            .setFilepath(DARLEHEN_DOKUMENT_PATH)
+            .setObjectId(objectId);
 
+        darlehen.setManuelleVerfuegung(dokument);
+        dokumentRepository.persist(dokument);
+    }
+
+    @Transactional
+    public void createNegativeFreiwilligDarlehenVerfuegung(FreiwilligDarlehen darlehen) {
         final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
             darlehen.getFall(),
-            darlehensVerfuegung,
+            darlehen.getManuelleVerfuegung(),
             null,
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
         );

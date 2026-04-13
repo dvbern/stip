@@ -94,7 +94,8 @@ public class DarlehenApiSpec {
                 getDarlehenDownloadToken(),
                 getFreiwilligDarlehenDashboardSb(),
                 getFreiwilligDarlehenGs(),
-                getFreiwilligDarlehenSb()
+                getFreiwilligDarlehenSb(),
+                uploadNegativeVerfuegung()
         );
     }
 
@@ -180,6 +181,10 @@ public class DarlehenApiSpec {
 
     public GetFreiwilligDarlehenSbOper getFreiwilligDarlehenSb() {
         return new GetFreiwilligDarlehenSbOper(createReqSpec());
+    }
+
+    public UploadNegativeVerfuegungOper uploadNegativeVerfuegung() {
+        return new UploadNegativeVerfuegungOper(createReqSpec());
     }
 
     /**
@@ -367,7 +372,7 @@ public class DarlehenApiSpec {
      * Create a new Darlehen
      * 
      *
-     * @see #fallIdPath  (required)
+     * @see #fallIdPath Die ID vom Fall (required)
      * return FreiwilligDarlehenDtoSpec
      */
     public static class CreateFreiwilligDarlehenOper implements Oper {
@@ -408,7 +413,7 @@ public class DarlehenApiSpec {
         public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param fallId (UUID)  (required)
+         * @param fallId (UUID) Die ID vom Fall (required)
          * @return operation
          */
         public CreateFreiwilligDarlehenOper fallIdPath(Object fallId) {
@@ -1913,6 +1918,81 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetFreiwilligDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #darlehenIdPath Die ID vom Darlehen (required)
+     * @see #fileUploadMultiPart  (required)
+     */
+    public static class UploadNegativeVerfuegungOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/darlehen/{darlehenId}/verfuegung/upload";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public UploadNegativeVerfuegungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("multipart/form-data");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /darlehen/{darlehenId}/verfuegung/upload
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String DARLEHEN_ID_PATH = "darlehenId";
+
+        /**
+         * @param darlehenId (UUID) Die ID vom Darlehen (required)
+         * @return operation
+         */
+        public UploadNegativeVerfuegungOper darlehenIdPath(Object darlehenId) {
+            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
+            return this;
+        }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param fileUpload (File)  (required)
+         * @return operation
+         */
+         public UploadNegativeVerfuegungOper fileUploadMultiPart(File fileUpload) {
+            reqSpec.addMultiPart(fileUpload);
+            return this;
+         }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public UploadNegativeVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public UploadNegativeVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

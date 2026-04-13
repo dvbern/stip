@@ -56,11 +56,13 @@ import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIGABESTELLE_GESUCH_UPDATE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_DELETE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_FREIGABESTELLE;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_GS;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_SB;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -86,6 +88,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public FreiwilligDarlehenDto getFreiwilligDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getFreiwilligDarlehen(darlehenId);
+    }
+
+    @Blocking
+    @Override
+    @RolesAllowed({ SB_GESUCH_UPDATE, FREIGABESTELLE_GESUCH_UPDATE })
+    public Uni<Response> uploadNegativeVerfuegung(UUID darlehenId, FileUpload fileUpload) {
+        darlehenAuthorizer.canUploadManuelleVerfuegung();
+        return darlehenService.uploadNegativeFreiwilligDarlehenVerfuegung(darlehenId, fileUpload);
     }
 
     @Override

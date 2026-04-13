@@ -71,6 +71,14 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
         }
     }
 
+    public void canUploadManuelleVerfuegung() {
+        final var benutzer = benutzerService.getCurrentBenutzer();
+
+        if (!isSbOrFreigabestelleOrJurist(benutzer)) {
+            forbidden();
+        }
+    }
+
     @Transactional
     public void canCreateDarlehen(UUID fallId) {
         final var benutzer = benutzerService.getCurrentBenutzer();

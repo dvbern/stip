@@ -224,13 +224,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /darlehen/{darlehenId}/verfuegung/upload:
+    post:
+      tags:
+        - Darlehen
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UploadNegativeVerfuegung'
+      parameters:
+        - $ref: '#/components/parameters/darlehenId'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: uploadNegativeVerfuegung
+      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /darlehen/{fallId}:
     parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/fallId'
     post:
       tags:
         - Darlehen
@@ -6982,6 +7005,13 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
+    UploadNegativeVerfuegung:
+      type: object
+      required:
+        - fileUpload
+      properties:
+        fileUpload:
+          $ref: '#/components/schemas/FileUpload'
     SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7184,6 +7214,9 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
+    FileUpload:
+      format: binary
+      type: string
     DarlehenGrund:
       enum:
         - NICHT_BERECHTIGT
@@ -7258,9 +7291,6 @@ components:
       properties:
         token:
           type: string
-    FileUpload:
-      format: binary
-      type: string
     Kommentar:
       type: object
       required:
@@ -11874,6 +11904,20 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    darlehenId:
+      name: darlehenId
+      in: path
+      required: true
+      description: Die ID vom Darlehen
+      schema:
+        $ref: '#/components/schemas/UUID'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
+      schema:
+        $ref: '#/components/schemas/UUID'
     gesuchId:
       name: gesuchId
       in: path
@@ -11912,13 +11956,6 @@ components:
       in: path
       required: true
       description: Die ID der Delegierung
-      schema:
-        $ref: '#/components/schemas/UUID'
-    fallId:
-      name: fallId
-      in: path
-      required: true
-      description: Die ID vom Fall
       schema:
         $ref: '#/components/schemas/UUID'
     sozialdienstId:
