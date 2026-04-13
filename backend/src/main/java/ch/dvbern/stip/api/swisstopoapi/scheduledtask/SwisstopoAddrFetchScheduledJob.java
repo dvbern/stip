@@ -43,9 +43,9 @@ public class SwisstopoAddrFetchScheduledJob implements Job {
         final String ort = jobExecutionContext.getJobDetail().getJobDataMap().getString("ort");
         final String mandantIdentifier =
             jobExecutionContext.getJobDetail().getJobDataMap().getString("mandantIdentifier");
-        QuarkusTransactionUtil.runForTenantInNewTransaction(mandantIdentifier, () -> {
-            swisstopoService.getGemeindeDataOfGesuch(gesuchId, strasse, hausnummer, plz, ort);
-        }
+        QuarkusTransactionUtil.runForTenantInNewTransaction(
+            mandantIdentifier,
+            () -> swisstopoService.getGemeindeDataOfGesuch(gesuchId, strasse, hausnummer, plz, ort)
         );
     }
 }
