@@ -2,9 +2,6 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.DokumentDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -25,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BeschwerdeEntscheidDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid Boolean beschwerdeErfolgreich;
-  private @Valid List<DokumentDto> dokumente = new ArrayList<>();
+  private @Valid DokumentDto dokument;
 
   /**
    **/
@@ -67,39 +64,23 @@ public class BeschwerdeEntscheidDto  implements Serializable {
 
   /**
    **/
-  public BeschwerdeEntscheidDto dokumente(List<DokumentDto> dokumente) {
-    this.dokumente = dokumente;
+  public BeschwerdeEntscheidDto dokument(DokumentDto dokument) {
+    this.dokument = dokument;
     return this;
   }
 
   
-  @JsonProperty("dokumente")
+  @JsonProperty("dokument")
   @NotNull
-  public List<DokumentDto> getDokumente() {
-    return dokumente;
+  public DokumentDto getDokument() {
+    return dokument;
   }
 
-  @JsonProperty("dokumente")
-  public void setDokumente(List<DokumentDto> dokumente) {
-    this.dokumente = dokumente;
+  @JsonProperty("dokument")
+  public void setDokument(DokumentDto dokument) {
+    this.dokument = dokument;
   }
 
-  public BeschwerdeEntscheidDto addDokumenteItem(DokumentDto dokumenteItem) {
-    if (this.dokumente == null) {
-      this.dokumente = new ArrayList<>();
-    }
-
-    this.dokumente.add(dokumenteItem);
-    return this;
-  }
-
-  public BeschwerdeEntscheidDto removeDokumenteItem(DokumentDto dokumenteItem) {
-    if (dokumenteItem != null && this.dokumente != null) {
-      this.dokumente.remove(dokumenteItem);
-    }
-
-    return this;
-  }
 
   @Override
   public boolean equals(Object o) {
@@ -112,12 +93,12 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     BeschwerdeEntscheidDto beschwerdeEntscheid = (BeschwerdeEntscheidDto) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
         Objects.equals(this.beschwerdeErfolgreich, beschwerdeEntscheid.beschwerdeErfolgreich) &&
-        Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
+        Objects.equals(this.dokument, beschwerdeEntscheid.dokument);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, beschwerdeErfolgreich, dokumente);
+    return Objects.hash(kommentar, beschwerdeErfolgreich, dokument);
   }
 
   @Override
@@ -127,7 +108,7 @@ public class BeschwerdeEntscheidDto  implements Serializable {
     
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    beschwerdeErfolgreich: ").append(toIndentedString(beschwerdeErfolgreich)).append("\n");
-    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
+    sb.append("    dokument: ").append(toIndentedString(dokument)).append("\n");
     sb.append("}");
     return sb.toString();
   }
