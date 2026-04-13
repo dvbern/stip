@@ -52,7 +52,7 @@ public class SwisstopoService {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
     private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
     private static final String SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX = "SwisstopoAddrFetchScheduledJob-";
-    private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS = 1;
+    private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS = 5;
 
     private final GesuchService gesuchService;
     private final TenantService tenantService;
