@@ -17,9 +17,8 @@
 
 package ch.dvbern.stip.api.swisstopoapi.scheduledtask;
 
-import java.util.UUID;
-
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
 import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -36,16 +35,18 @@ public class SwisstopoAddrFetchScheduledJob implements Job {
     @Override
     @Transactional
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final UUID gesuchId = UUID.fromString(jobExecutionContext.getJobDetail().getJobDataMap().getString("gesuchId"));
-        final String strasse = jobExecutionContext.getJobDetail().getJobDataMap().getString("strasse");
-        final String hausnummer = jobExecutionContext.getJobDetail().getJobDataMap().getString("hausnummer");
-        final String plz = jobExecutionContext.getJobDetail().getJobDataMap().getString("plz");
-        final String ort = jobExecutionContext.getJobDetail().getJobDataMap().getString("ort");
-        final String mandantIdentifier =
-            jobExecutionContext.getJobDetail().getJobDataMap().getString("mandantIdentifier");
+        final var jobData = new SwisstopoAddrFetchJobData(
+            jobExecutionContext.getJobDetail().getJobDataMap()
+        );
         QuarkusTransactionUtil.runForTenantInNewTransaction(
-            mandantIdentifier,
-            () -> swisstopoService.getGemeindeDataOfGesuch(gesuchId, strasse, hausnummer, plz, ort)
+            jobData.getMandantIdentifier(),
+            () -> swisstopoService.getGemeindeDataOfGesuch(
+                jobData.getGesuchId(),
+                jobData.getStrasse(),
+                jobData.getHausnummer(),
+                jobData.getPlz(),
+                jobData.getOrt()
+            )
         );
     }
 }

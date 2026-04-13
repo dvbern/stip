@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
 import ch.dvbern.stip.api.swisstopoapi.scheduledtask.SwisstopoAddrFetchScheduledJob;
@@ -65,14 +66,16 @@ public class SwisstopoService {
     public void createFetchGemeindeDataOfGesuchScheduledTask(final Gesuch gesuch) {
         final GesuchTranche trancheToUse = gesuch.getLatestGesuchTranche();
         final Adresse adresse = trancheToUse.getGesuchFormular().getPersonInAusbildung().getAdresse();
+
+        final var jobData = new SwisstopoAddrFetchJobData(
+            gesuch.getId(),
+            adresse,
+            tenantService.getCurrentTenantIdentifier()
+        );
+
         final JobDetail jobDetail = JobBuilder.newJob(SwisstopoAddrFetchScheduledJob.class)
             .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + gesuch.getId().toString())
-            .usingJobData("gesuchId", gesuch.getId().toString())
-            .usingJobData("strasse", adresse.getStrasse())
-            .usingJobData("hausnummer", adresse.getHausnummer())
-            .usingJobData("plz", adresse.getPlz())
-            .usingJobData("ort", adresse.getOrt())
-            .usingJobData("mandantIdentifier", tenantService.getCurrentTenantIdentifier())
+            .usingJobData(jobData.toMap())
             .build();
         final Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + "trigger-" + gesuch.getId().toString())
