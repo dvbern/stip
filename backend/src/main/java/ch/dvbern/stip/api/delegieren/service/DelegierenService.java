@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.delegieren.service;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
@@ -67,7 +68,7 @@ public class DelegierenService {
         }
 
         final var fall = fallRepository.requireById(fallId);
-        if (fall.isDelegiert()) {
+        if (Objects.nonNull(fall.getCurrentDelegierung())) {
             throw new BadRequestException();
         }
 

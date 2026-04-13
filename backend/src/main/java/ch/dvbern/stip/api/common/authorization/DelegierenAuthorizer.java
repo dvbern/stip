@@ -70,7 +70,7 @@ public class DelegierenAuthorizer extends BaseAuthorizer {
 
         if (
             sozialdienstService
-                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getCurrentDelegierung().getSozialdienst().getId())
+                .isCurrentBenutzerMitarbeiterOfSozialdienst(fall.getActiveDelegierung().getSozialdienst().getId())
         ) {
             return;
         }
