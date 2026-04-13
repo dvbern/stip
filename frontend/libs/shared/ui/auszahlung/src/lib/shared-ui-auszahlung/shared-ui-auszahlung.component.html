@@ -141,7 +141,13 @@
       }
       @if (view.readonly) {
         @if (isGesuchFormStepSig()) {
-          <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="continueTriggered.emit()"
+            data-testid="button-next"
+            *dvIfGesuchsteller
+          >
             {{ 'shared.form.gonext' | transloco }}
           </button>
         }

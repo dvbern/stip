@@ -344,9 +344,7 @@
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Zurückgewiesen",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Freigegeben",
 
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingereicht",
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Akzeptiert",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
 
@@ -542,8 +540,8 @@
   "shared.form.person.zivilstand.label": "Zivilstand",
   "shared.form.person.zivilstand.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
   "shared.form.person.zivilstand.konkubinat.info": "Konkubinat bedeutet: Unverheiratete Paare, die zusammenleben, entweder seit mindestens 5 Jahren oder mit einem gemeinsamen Kind im selben Haushalt. Sie werden wie verheiratete Auszubildende behandelt.",
-  "shared.form.person.guardianship.label": "Es besteht eine umfassende Beistandschaft",
-  "shared.form.person.guardianship.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
+  "shared.form.person.vormundschaft.label": "Es besteht eine umfassende Beistandschaft",
+  "shared.form.person.vormundschaft.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
   "shared.form.person.vermoegenVorjahr.label": "Vermögen per 31.12. des Vorjahrs",
   "shared.form.person.sozialhilfebeitraege.label": "Werden Sozialhilfebeiträge ausbezahlt?",
   "shared.form.person.sozialhilfebeitraege.infoTitle": "Werden Sozialhilfebeiträge ausbezahlt?",
