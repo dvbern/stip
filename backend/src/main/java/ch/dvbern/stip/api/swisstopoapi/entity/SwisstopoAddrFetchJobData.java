@@ -48,11 +48,7 @@ public class SwisstopoAddrFetchJobData {
     @Getter
     private final String mandantIdentifier;
 
-    public SwisstopoAddrFetchJobData(
-    final UUID gesuchId,
-    final Adresse adresse,
-    final String mandantIdentifier
-    ) {
+    public SwisstopoAddrFetchJobData(final UUID gesuchId, final Adresse adresse, final String mandantIdentifier) {
         this.gesuchId = gesuchId;
         this.hausnummer = adresse.getHausnummer();
         this.strasse = adresse.getStrasse();
@@ -61,9 +57,7 @@ public class SwisstopoAddrFetchJobData {
         this.mandantIdentifier = mandantIdentifier;
     }
 
-    public SwisstopoAddrFetchJobData(
-    final JobDataMap map
-    ) {
+    public SwisstopoAddrFetchJobData(final JobDataMap map) {
         if (
             !(map.containsKey(GESUCH_ID_KEY)
             && map.containsKey(HAUSNUMMER_KEY)
