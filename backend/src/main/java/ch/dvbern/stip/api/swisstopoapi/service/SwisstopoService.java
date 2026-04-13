@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
 import ch.dvbern.stip.api.swisstopoapi.scheduledtask.SwisstopoAddrFetchScheduledJob;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import jakarta.inject.Inject;
@@ -51,7 +52,7 @@ public class SwisstopoService {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
     private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
     private static final String SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX = "SwisstopoAddrFetchScheduledJob-";
-    private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_MINUTES = 1;
+    private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS = 1;
 
     private final GesuchService gesuchService;
     private final TenantService tenantService;
@@ -77,7 +78,7 @@ public class SwisstopoService {
             .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + "trigger-" + gesuch.getId().toString())
             // This is necessary (delayed start) so we are sure this transaction is closed before the task starts.
             // Otherwise both transactions overlap
-            .startAt(DateBuilder.futureDate(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_MINUTES, IntervalUnit.MINUTE))
+            .startAt(DateBuilder.futureDate(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS, IntervalUnit.SECOND))
             .build();
         try {
             scheduler.scheduleJob(jobDetail, trigger);
@@ -92,7 +93,6 @@ public class SwisstopoService {
         }
     }
 
-    @Transactional(TxType.REQUIRES_NEW)
     public void getGemeindeDataOfGesuch(
         final UUID gesuchId,
         final String strasse,
@@ -102,7 +102,6 @@ public class SwisstopoService {
     ) {
         // Schnittstellen informationen:
         // https://www.swisstopo.admin.ch/dam/de/sd-web/fb0eJ1WiRYrq/Geb%C3%A4udeadressen%20Technical%20Documentation.pdf
-        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         final var buildingNoSearchPartJson = new JSONObject();
         buildingNoSearchPartJson.put(
             ADDR_NO_SEARCH_LAYER_DEF_KEY,
@@ -134,10 +133,7 @@ public class SwisstopoService {
                         )
                     )
                 );
-            gesuch.getStatisticsdata()
-                .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr());
-            gesuch.getStatisticsdata()
-                .setGemeindeName(swisstopoApiFindAddrResponseElementAttribute.getCom_name());
+            setGemeindeDataOfGesuch(gesuchId, swisstopoApiFindAddrResponseElementAttribute);
         } catch (Exception e) {
             LOG.error(
                 String.format(
@@ -149,4 +145,17 @@ public class SwisstopoService {
             );
         }
     }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void setGemeindeDataOfGesuch(
+        final UUID gesuchId,
+        final SwisstopoApiFindAddrResponseElementAttributes swisstopoApiFindAddrResponseElementAttribute
+    ) {
+        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
+        gesuch.getStatisticsdata()
+            .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr());
+        gesuch.getStatisticsdata()
+            .setGemeindeName(swisstopoApiFindAddrResponseElementAttribute.getCom_name());
+    }
+
 }
