@@ -81,10 +81,12 @@ import jakarta.validation.Validator;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.Response;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class DarlehenService {
@@ -116,7 +118,6 @@ public class DarlehenService {
     private final StatusprotokollService statusprotokollService;
 
     public static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
-    private static final String NEGATIVE_DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "Negative_DarlehenVerfuegung.pdf";
     private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
     private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
@@ -248,7 +249,8 @@ public class DarlehenService {
             configService,
             antivirus,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
-            objectId -> uploadDokument(darlehen, fileUpload, objectId)
+            objectId -> uploadDokument(darlehen, fileUpload, objectId),
+            throwable -> LOG.error(throwable.getMessage())
         );
     }
 
