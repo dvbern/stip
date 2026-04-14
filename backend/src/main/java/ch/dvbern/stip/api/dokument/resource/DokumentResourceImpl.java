@@ -37,7 +37,6 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.SachbearbeiterGesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentArt;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheOverrideDokumentService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
 import ch.dvbern.stip.generated.api.DokumentResource;
@@ -90,7 +89,6 @@ public class DokumentResourceImpl implements DokumentResource {
     private final UnterschriftenblattService unterschriftenblattService;
     private final CustomDokumentTypService customDokumentTypService;
     private final GesuchDokumentKommentarService gesuchDokumentKommentarService;
-    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
     private final BeschwerdeEntscheidService beschwerdeEntscheidService;
     private final DokumentDownloadService dokumentDownloadService;
     private final SachbearbeiterGesuchDokumentService sachbearbeiterGesuchDokumentService;
@@ -212,8 +210,6 @@ public class DokumentResourceImpl implements DokumentResource {
     ) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
-        gesuchTrancheOverrideDokumentService
-            .jahresfeldGesuchDokumentAblehnen(gesuchDokumentId, gesuchDokumentAblehnenRequestDto);
     }
 
     @Override
@@ -221,7 +217,6 @@ public class DokumentResourceImpl implements DokumentResource {
     public void gesuchDokumentAkzeptieren(UUID gesuchDokumentId) {
         gesuchDokumentAuthorizer.canUpdateGesuchDokument(gesuchDokumentId);
         gesuchDokumentService.gesuchDokumentAkzeptieren(gesuchDokumentId);
-        gesuchTrancheOverrideDokumentService.jahresfeldGesuchDokumentAkzeptieren(gesuchDokumentId);
     }
 
     @Override
