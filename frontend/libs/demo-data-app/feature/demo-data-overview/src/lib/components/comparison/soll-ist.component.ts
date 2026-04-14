@@ -26,7 +26,7 @@ export class SollIstComponent {
       valid?: DemoDataTestBerechnungValid;
     }
   >();
-  sollIst = ['soll', 'ist'] as const;
+  sollIstKeys = ['soll', 'ist'] as const;
 
   getText() {
     return this.elementRef.nativeElement.innerText;

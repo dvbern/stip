@@ -28,7 +28,7 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 type DemoDataState = {
   demoData: CachedRemoteData<DemoDataList>;
   lastDemoDataRun: RemoteData<ApplyDemoDataResponse>;
-  demoDataTestBerechnungResults: CachedRemoteData<
+  demoDataTestBerechnungResultats: CachedRemoteData<
     DemoDataTestBerechnungResultat[]
   >;
 };
@@ -36,7 +36,7 @@ type DemoDataState = {
 const initialState: DemoDataState = {
   demoData: initial(),
   lastDemoDataRun: initial(),
-  demoDataTestBerechnungResults: initial(),
+  demoDataTestBerechnungResultats: initial(),
 };
 
 type DemoDataError = SharedModelError & {
@@ -70,8 +70,8 @@ export class DemoDataStore extends signalStore(
     ),
   );
 
-  demoDataTestBerechnungResultsSig = computed(() => {
-    const testResults = this.demoDataTestBerechnungResults().data ?? [];
+  demoDataTestBerechnungResultatsSig = computed(() => {
+    const testResults = this.demoDataTestBerechnungResultats().data ?? [];
 
     return testResults.reduce(
       (acc, result) => ({ ...acc, [result.demoDataId]: result }),
@@ -191,7 +191,7 @@ export class DemoDataStore extends signalStore(
         patchState(this, (state) => ({
           demoData: cachedPending(state.demoData),
           lastDemoDataRun: initial(),
-          demoDataTestBerechnungResults: initial(),
+          demoDataTestBerechnungResultats: initial(),
         }));
       }),
       switchMap(
@@ -226,8 +226,8 @@ export class DemoDataStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          demoDataTestBerechnungResults: cachedPending(
-            state.demoDataTestBerechnungResults,
+          demoDataTestBerechnungResultats: cachedPending(
+            state.demoDataTestBerechnungResultats,
           ),
         }));
       }),
@@ -236,7 +236,7 @@ export class DemoDataStore extends signalStore(
           handleApiResponse(
             (testResult) =>
               patchState(this, () => ({
-                demoDataTestBerechnungResults: testResult,
+                demoDataTestBerechnungResultats: testResult,
               })),
             {
               onSuccess: () => {

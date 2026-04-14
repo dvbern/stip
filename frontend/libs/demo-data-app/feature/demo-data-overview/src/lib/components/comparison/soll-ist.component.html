@@ -2,17 +2,17 @@
 @if (values) {
   <div class="tw:w-full tw:grid tw:grid-cols-[auto_auto_auto] tw:gap-2" *dvTranslocoDemo="let t">
     <span></span>
-    @for (value of sollIst; track value) {
-      <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${value}`) }}</span>
+    @for (sollIstKey of sollIstKeys; track sollIstKey) {
+      <span class="tw:font-bold">{{ t(`demo-data-app.overview.apply-demo-data.info.${sollIstKey}`) }}</span>
     }
 
     <div class="tw:grid tw:grid-cols-subgrid tw:col-span-3" [class.tw:bg-red-100]="values.valid?.status === false">
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.status') }}:
       </span>
-      @for (value of sollIst; track value) {
+      @for (sollIstKey of sollIstKeys; track sollIstKey) {
         <span class="tw:break-normal">
-          @let status = values[value]?.status;
+          @let status = values[sollIstKey]?.status;
           {{ status ? t(`shared.verfuegung.status.${status}`) : '' }}
         </span>
       }
@@ -28,9 +28,9 @@
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
       </span>
-      @for (value of sollIst; track value) {
+      @for (sollIstKey of sollIstKeys; track sollIstKey) {
         <span>
-          {{ (values[value]?.ungekuerztStipendien | formatChfNullable) ?? 'N/A' }}
+          {{ (values[sollIstKey]?.ungekuerztStipendien | formatChfNullable) ?? 'N/A' }}
         </span>
       }
     </div>
@@ -42,9 +42,9 @@
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
       </span>
-      @for (value of sollIst; track value) {
+      @for (sollIstKey of sollIstKeys; track sollIstKey) {
         <span>
-          {{ (values[value]?.ungekuerztDarlehen | formatChfNullable) ?? 'N/A' }}
+          {{ (values[sollIstKey]?.ungekuerztDarlehen | formatChfNullable) ?? 'N/A' }}
         </span>
       }
     </div>
@@ -56,9 +56,9 @@
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.stipendien') }}:
       </span>
-      @for (value of sollIst; track value) {
+      @for (sollIstKey of sollIstKeys; track sollIstKey) {
         <span>
-          {{ (values[value]?.stipendien | formatChfNullable) ?? 'N/A' }}
+          {{ (values[sollIstKey]?.stipendien | formatChfNullable) ?? 'N/A' }}
         </span>
       }
     </div>
@@ -67,9 +67,9 @@
       <span class="tw:font-bold">
         {{ t('demo-data-app.overview.apply-demo-data.info.stipendienanspruch.darlehen') }}:
       </span>
-      @for (value of sollIst; track value) {
+      @for (sollIstKey of sollIstKeys; track sollIstKey) {
         <span>
-          {{ (values[value]?.darlehen | formatChfNullable) ?? 'N/A' }}
+          {{ (values[sollIstKey]?.darlehen | formatChfNullable) ?? 'N/A' }}
         </span>
       }
     </div>

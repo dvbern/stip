@@ -85,7 +85,7 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   demoDatasSig = computed(() => {
     const filterText = this.filterTextChangedSig()?.toLowerCase();
     const testResultsMap =
-      this.demoDataStore.demoDataTestBerechnungResultsSig();
+      this.demoDataStore.demoDataTestBerechnungResultatsSig();
     const list = this.demoDataStore
       .cachedDemoDataListViewSig()
       .data?.demoDatas.map((demoData) => {

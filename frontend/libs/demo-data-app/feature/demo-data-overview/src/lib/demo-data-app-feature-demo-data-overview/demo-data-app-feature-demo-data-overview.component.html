@@ -2,7 +2,7 @@
   <div class="tw:flex tw:flex-col tw:relative tw:min-h-0">
     @if (
       (demoDataStore.lastDemoDataRun() | rdIsPending: { ignoreInitial: true }) ||
-      (demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true })
+      (demoDataStore.demoDataTestBerechnungResultats() | rdIsPending: { ignoreInitial: true })
     ) {
       <dv-shared-ui-loading [overlay]="true" type="icon" class="tw:z-10"></dv-shared-ui-loading>
     }
@@ -15,12 +15,12 @@
         {{ t('demo-data-app.overview.title') }}
         <div class="tw:flex tw:gap-1">
           @if (demoDataList?.demoDatas?.length) {
-            @if (demoDataStore.demoDataTestBerechnungResults().data; as berechnungResults) {
+            @if (demoDataStore.demoDataTestBerechnungResultats().data; as berechnungResultats) {
               @if (previousBerechnungsResult.valueSig(); as previousValue) {
                 <button
                   class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
                   type="button"
-                  (click)="compareResults(previousValue, berechnungResults)"
+                  (click)="compareResults(previousValue, berechnungResultats)"
                   [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-compare')"
                 >
                   <i class="material-symbols-rounded tw:text-sm">alt_route</i>
@@ -29,7 +29,7 @@
               <button
                 class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
                 type="button"
-                (click)="saveResult(berechnungResults)"
+                (click)="saveResult(berechnungResultats)"
                 [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-save')"
               >
                 <i class="material-symbols-rounded tw:text-sm">add_to_photos</i>
@@ -57,7 +57,7 @@
     } @else {
       <div
         class="tw:grid tw:grid-cols-[2fr_1fr] tw:gap-6 tw:px-8 tw:items-start tw:dv-pass-height tw:min-h-0 tw:relative"
-        [class.busy]="demoDataStore.demoDataTestBerechnungResults() | rdIsPending: { ignoreInitial: true }"
+        [class.busy]="demoDataStore.demoDataTestBerechnungResultats() | rdIsPending: { ignoreInitial: true }"
       >
         <div class="tw:flex tw:flex-col">
           <ul class="tw:mb-4 tw:list-none tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6">
