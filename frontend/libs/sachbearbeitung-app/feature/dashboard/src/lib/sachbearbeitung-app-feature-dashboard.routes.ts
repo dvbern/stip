@@ -10,6 +10,11 @@ export const sachbearbeitungAppFeatureDashboardRoutes: Route[] = [
     providers: [],
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'antraege',
+      },
+      {
         path: 'fehlgeschlagene-zahlungen',
         title: 'sachbearbeitung-app.fehlgeschlagene-zahlungen.title',
         loadChildren: () =>
