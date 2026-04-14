@@ -1,5 +1,5 @@
 <ng-container *transloco="let t">
-  <div class="tw:flex tw:justify-between tw:mb-6">
+  <div class="tw:flex tw:justify-between tw:mb-3">
     <h1 class="tw:text-2xl!" data-testid="cockpit-title">
       @if (isDarlehenModeSig()) {
         {{ t('sachbearbeitung-app.darlehen.title') }}
@@ -31,14 +31,14 @@
     }
   </div>
 
-  <div class="tw:flex tw:gap-8" [formGroup]="togglesGroup">
-    @if (showScopeToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.scope">{{
+  <div class="tw:flex tw:gap-12" [formGroup]="togglesGroup">
+    @if (showZugewiesenToggleSig()) {
+      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.zugewiesen">{{
         t('sachbearbeitung-app.cockpit.toggle.meine')
       }}</mat-slide-toggle>
     }
-    @if (showWorkableToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" class="tw:ml-4" [formControl]="togglesGroup.controls.workable">{{
+    @if (showBearbeitbarToggleSig()) {
+      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.bearbeitbar">{{
         t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
       }}</mat-slide-toggle>
     }
@@ -46,16 +46,19 @@
 
   <!-- Gesuche Table -->
   @if (!isDarlehenModeSig()) {
-    <div class="tw:dv-table tw:shadow-none">
-      <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
-        <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading">
+    <div class="tw:dv-table tw:shadow-none tw:mt-0">
+      <form class="tw:relative tw:flex tw:flex-col tw:max-h-full" [formGroup]="filterForm">
+        <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading" class="tw:overflow-auto tw:shrink">
           <table
+            class="tw:dv-full-width-table"
             [dvSharedUiFocusableList]="items"
             [dataSource]="gesucheDataSourceSig()"
             data-testid="cockpit-table"
             mat-table
             matSort
             (matSortChange)="sortList($event)"
+            [matSortDirection]="sortDirection()"
+            [matSortActive]="sortColumn()!"
             tabindex="0"
           >
             <caption class="cdk-visually-hidden">
@@ -247,11 +250,10 @@
             <ng-container matColumnDef="STATUS">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
                 {{ t('sachbearbeitung-app.cockpit.table.status') }}
-                <mat-form-field class="tw:w-full">
+                <mat-form-field class="tw:w-full" (click)="$event.stopPropagation()">
                   <mat-select
                     [aria-label]="t('sachbearbeitung-app.cockpit.table.status')"
                     formControlName="status"
-                    (click)="$event.stopPropagation()"
                     class="tw:!font-normal"
                     [placeholder]="t('sachbearbeitung-app.cockpit.no-status-filter')"
                     panelClass="table-select"
@@ -399,16 +401,16 @@
               </td>
             </tr>
           </table>
-
-          <mat-paginator
-            showFirstLastButtons
-            [pageSizeOptions]="pageSizes"
-            [pageSize]="pageSize() ?? defaultPageSize"
-            [pageIndex]="page() ?? 0"
-            [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
-            (page)="paginateList($event)"
-          ></mat-paginator>
         </div>
+
+        <mat-paginator
+          showFirstLastButtons
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="pageSize() ?? defaultPageSize"
+          [pageIndex]="page() ?? 0"
+          [length]="gesuchStore.cockpitViewSig().gesuche?.totalEntries"
+          (page)="paginateList($event)"
+        ></mat-paginator>
         @if (gesuchStore.cockpitViewSig().loading) {
           <dv-shared-ui-loading
             class="position-absolute translate-middle start-50 top-50"

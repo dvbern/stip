@@ -19,7 +19,7 @@ export function provideMaterialDefaultOptions(
       provide: MAT_DIALOG_DEFAULT_OPTIONS,
       useValue: {
         maxWidth: '95vw',
-      } as MatDialogConfig,
+      } satisfies MatDialogConfig,
     },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -27,7 +27,7 @@ export function provideMaterialDefaultOptions(
         appearance: 'outline',
         floatLabel: 'always',
         ...options,
-      } as MatFormFieldDefaultOptions,
+      } satisfies MatFormFieldDefaultOptions,
     },
   ];
 }

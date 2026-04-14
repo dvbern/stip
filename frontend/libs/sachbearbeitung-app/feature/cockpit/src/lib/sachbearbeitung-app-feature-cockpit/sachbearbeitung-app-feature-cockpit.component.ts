@@ -77,6 +77,7 @@ import {
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import {
+  BearbeitbarParam,
   DashboardFormFields,
   DashboardFormSimpleFields,
   DashboardFormStartEndFields,
@@ -84,7 +85,6 @@ import {
   DashboardTableEntryFields,
   FilterTabParam,
   ScopeParam,
-  WorkableParam,
   gesucheStatusByTyp,
   getControlVisibility,
   getDefaultQueryForRole,
@@ -165,8 +165,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
   darlehenStore = inject(DarlehenStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   filterTab = input<FilterTabParam | undefined>(undefined);
-  scope = input<ScopeParam | undefined>(undefined);
-  workable = input<WorkableParam | undefined>(undefined);
+  zugewiesen = input<ScopeParam | undefined>(undefined);
+  bearbeitbar = input<BearbeitbarParam | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
   typ = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
@@ -180,6 +180,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
     SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn | undefined
   >(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
+  sortDirection = computed(() => {
+    const order = this.sortOrder();
+    switch (order) {
+      case 'ASCENDING':
+        return 'asc';
+      case 'DESCENDING':
+        return 'desc';
+      default:
+        return 'desc';
+    }
+  });
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
   });
@@ -211,8 +222,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
   } satisfies Record<DashboardFormStartEndFields, unknown>);
 
   togglesGroup = this.formBuilder.group({
-    scope: [<boolean | undefined>undefined],
-    workable: [<boolean | undefined>undefined],
+    zugewiesen: [<boolean | undefined>undefined],
+    bearbeitbar: [<boolean | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
@@ -243,40 +254,40 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   queryFromInputsSig = computed<{
     query: DashboardQuery;
-    scopeConfig: { show: boolean; value: boolean };
-    workableConfig: { show: boolean; value: boolean };
+    zugewiesenConfig: { show: boolean; value: boolean };
+    bearbeitbarConfig: { show: boolean; value: boolean };
   }>(() => {
-    const scope = this.scope() ?? this.defaultFilter.scope;
-    const workable = this.workable() ?? this.defaultFilter.workable;
+    const zugewiesen = this.zugewiesen() ?? this.defaultFilter.zugewiesen;
+    const bearbeitbar = this.bearbeitbar() ?? this.defaultFilter.bearbeitbar;
     const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
 
-    const query = getQueryFromParams(scope, workable, filterTab);
+    const query = getQueryFromParams(zugewiesen, bearbeitbar, filterTab);
 
-    const { scopeConfig, workableConfig } = getControlVisibility(
-      scope,
-      workable,
+    const { zugewiesenConfig, bearbeitbarConfig } = getControlVisibility(
+      zugewiesen,
+      bearbeitbar,
       filterTab,
     );
 
     return {
       query,
-      scopeConfig,
-      workableConfig,
+      zugewiesenConfig,
+      bearbeitbarConfig,
     };
   });
 
   isDarlehenModeSig = computed(() => this.filterTab() === 'DARLEHEN');
 
-  showScopeToggleSig = computed(() => {
-    const { scopeConfig } = this.queryFromInputsSig();
+  showZugewiesenToggleSig = computed(() => {
+    const { zugewiesenConfig } = this.queryFromInputsSig();
 
-    return scopeConfig.show;
+    return zugewiesenConfig.show;
   });
 
-  showWorkableToggleSig = computed(() => {
-    const { workableConfig } = this.queryFromInputsSig();
+  showBearbeitbarToggleSig = computed(() => {
+    const { bearbeitbarConfig } = this.queryFromInputsSig();
 
-    return workableConfig.show;
+    return bearbeitbarConfig.show;
   });
 
   sortList = sortList(this.router, this.route);
@@ -312,7 +323,9 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges);
+  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges, {
+    initialValue: 'TRANCHE',
+  });
   statusValuesSig = computed(() => {
     const typ = this.typChangedSig();
     if (!typ) {
@@ -415,21 +428,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   canCreateMassendruckSig: Signal<boolean> = computed(() => {
     const filterTab = this.filterTab();
-    const isFilterTabDruck = filterTab?.includes('DRUCKBAR');
     this.filterFormChangedSig();
 
-    if (!isFilterTabDruck) {
+    if (!canDrucken(filterTab)) {
       return false;
     }
 
     const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
-      .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([key, _]) => {
-          return key !== 'typ';
-        },
-      )
+      .filter(([key]) => key !== 'typ')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .some(([_, value]) => value);
 
@@ -452,37 +459,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
     });
   }
 
-  // todo: @scph hier muss noch nachgebessert werden!
-  // ngAfterViewInit() {
-  //   runInInjectionContext(this.injector, () => {
-  //     effect(() => {
-  //       this.filterTab();
-
-  //       const sortOrder = untracked(this.sortOrder);
-  //       const sortColumn = untracked(this.sortColumn);
-
-  //       const sorter = untracked(this.sortSig);
-  //       sorter.active = '';
-  //       sorter.direction = '';
-
-  //       sorter.sortChange.emit({ active: '', direction: '' });
-
-  //       // if (sortColumn && sortOrder) {
-  //       //   // sorter.sort({
-  //       //   //   id: sortColumn,
-  //       //   //   start: inverseSortMap[sortOrder],
-  //       //   //   disableClear: false,
-  //       //   // });
-  //       //   sorter.active = sortColumn;
-  //       //   sorter.direction = inverseSortMap[sortOrder];
-  //       // } else {
-  //       //   sorter.active = '';
-  //       //   sorter.direction = '';
-  //       // }
-  //     });
-  //   });
-  // }
-
   constructor() {
     limitPageToNumberOfEntriesEffect(
       this,
@@ -495,16 +471,16 @@ export class SachbearbeitungAppFeatureCockpitComponent
     effect(() => {
       this.filterTab();
 
-      const { scopeConfig, workableConfig } = untracked(
+      const { zugewiesenConfig, bearbeitbarConfig } = untracked(
         this.queryFromInputsSig,
       );
       const filter = untracked(this.filterInputsSig);
       const startEndFilter = untracked(this.startEndFilterInputsSig);
 
-      this.togglesGroup.controls.scope.setValue(scopeConfig.value, {
+      this.togglesGroup.controls.zugewiesen.setValue(zugewiesenConfig.value, {
         emitEvent: false,
       });
-      this.togglesGroup.controls.workable.setValue(workableConfig.value, {
+      this.togglesGroup.controls.bearbeitbar.setValue(bearbeitbarConfig.value, {
         emitEvent: false,
       });
 
@@ -571,46 +547,46 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
     });
 
-    const scopeChangedSig = toSignal(
-      this.togglesGroup.controls.scope.valueChanges,
+    const zugewiesenChangedSig = toSignal(
+      this.togglesGroup.controls.zugewiesen.valueChanges,
     );
-    const workableChangedSig = toSignal(
-      this.togglesGroup.controls.workable.valueChanges,
+    const bearbeitbarChangedSig = toSignal(
+      this.togglesGroup.controls.bearbeitbar.valueChanges,
     );
 
-    // scope changed
+    // zugewiesen changed
     effect(() => {
-      const scopeChanged = scopeChangedSig();
+      const zugewiesenChanged = zugewiesenChangedSig();
 
-      if (scopeChanged === undefined) {
+      if (!isDefined(zugewiesenChanged)) {
         return;
       }
 
-      const scope = scopeChanged === true ? 'MEINE' : 'ALLE';
+      const zugewiesen = zugewiesenChanged === true ? 'MEINE' : 'ALLE';
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
-          scope,
+          zugewiesen,
         },
         queryParamsHandling: 'merge',
       });
     });
 
-    // workable changed
+    // bearbeitbar changed
     effect(() => {
-      const workableChanged = workableChangedSig();
+      const bearbeitbarChanged = bearbeitbarChangedSig();
 
-      if (workableChanged === undefined) {
+      if (!isDefined(bearbeitbarChanged)) {
         return;
       }
 
-      const workable = workableChanged === true ? 'TRUE' : 'FALSE';
+      const bearbeitbar = bearbeitbarChanged === true ? 'TRUE' : 'FALSE';
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
-          workable,
+          bearbeitbar,
         },
         queryParamsHandling: 'merge',
       });
@@ -703,4 +679,14 @@ const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
   value: T,
 ) => {
   return value;
+};
+
+const canDrucken = (filterTab: FilterTabParam | undefined) => {
+  switch (filterTab) {
+    case 'DRUCKBAR_DATENSCHUTZBRIEFE':
+    case 'DRUCKBAR_VERFUEGUNGEN':
+      return true;
+    default:
+      return false;
+  }
 };

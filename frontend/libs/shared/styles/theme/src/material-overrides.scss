@@ -375,24 +375,46 @@ dv-sachbearbeitung-app-feature-gesuch-layout {
 }
 
 .mat-mdc-slide-toggle {
-  .mdc-switch__track {
-    height: 20px;
-    border-radius: 10px;
+  --mat-slide-toggle-track-height: 20px;
+  --mat-slide-toggle-track-shape: 10px;
+
+  .mdc-form-field {
+    padding: 4px 0;
   }
 
-  &.mat-accent {
-    --mat-slide-toggle-selected-icon-color: white;
-    --mat-slide-toggle-disabled-selected-icon-color: white;
-    --mat-slide-toggle-selected-focus-state-layer-color: var(--dv-red);
-    --mat-slide-toggle-selected-handle-color: var(--dv-red);
+  .mdc-switch {
+    margin: 0 15px 0 10px;
+    transform: scale(1.5);
+  }
+  .mdc-switch__handle {
+    border-color: transparent;
+    border-width: 3px;
+    border-style: solid;
+  }
+  .mdc-switch__ripple {
+    display: none;
+  }
+
+  .mdc-switch {
+    --mat-slide-toggle-disabled-selected-track-color: var(--dv-red);
+    --mat-slide-toggle-disabled-selected-handle-color: white;
+    --mat-slide-toggle-unselected-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-unselected-hover-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-unselected-focus-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-unselected-pressed-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-unselected-handle-color: white;
+    --mat-slide-toggle-unselected-hover-handle-color: white;
+    --mat-slide-toggle-unselected-focus-handle-color: white;
+    --mat-slide-toggle-unselected-pressed-handle-color: white;
     --mat-slide-toggle-selected-hover-state-layer-color: var(--dv-red);
     --mat-slide-toggle-selected-pressed-state-layer-color: var(--dv-red);
-    --mat-slide-toggle-selected-focus-handle-color: var(--dv-red);
-    --mat-slide-toggle-selected-hover-handle-color: var(--dv-red);
-    --mat-slide-toggle-selected-pressed-handle-color: var(--dv-red);
-    --mat-slide-toggle-selected-focus-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-selected-hover-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-selected-pressed-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-selected-track-color: var(--dv-gray-500);
+    --mat-slide-toggle-selected-track-color: var(--dv-red);
+    --mat-slide-toggle-selected-hover-track-color: var(--dv-red);
+    --mat-slide-toggle-selected-focus-track-color: var(--dv-red);
+    --mat-slide-toggle-selected-pressed-track-color: var(--dv-red);
+    --mat-slide-toggle-selected-handle-color: white;
+    --mat-slide-toggle-selected-hover-handle-color: white;
+    --mat-slide-toggle-selected-focus-handle-color: white;
+    --mat-slide-toggle-selected-pressed-handle-color: white;
   }
 }

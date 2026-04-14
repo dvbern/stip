@@ -8,18 +8,17 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 
 import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SortAndPageInputs } from '@dv/shared/model/table';
-import { DEFAULT_PAGE_SIZE } from '@dv/shared/model/ui-constants';
 import {
   DashboardFilterTabItem,
   DashboardTableEntryFields,
+  FilterTabParam,
   getDefaultQueryForRole,
 } from '@dv/shared/util/dashboard';
 
@@ -41,68 +40,58 @@ const resetTableFilterObj: Record<
   pageSize: undefined,
 };
 
-const baseFilterTabs: DashboardFilterTabItem[] = [
+const baseFilterTabs = [
   {
-    key: 'gesuche',
+    key: 'GESUCHE',
     route: ['gesuche'],
-    queryParams: { filterTab: 'GESUCHE' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
   {
-    key: 'pendent',
+    key: 'DRUCKBAR_VERFUEGUNGEN',
     route: ['gesuche'],
-    queryParams: { filterTab: 'PENDENTE_GESUCHE' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
   {
-    key: 'verfuegungen-druck',
+    key: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     route: ['gesuche'],
-    queryParams: { filterTab: 'DRUCKBAR_VERFUEGUNGEN' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
   {
-    key: 'datenschutz-briefe-druck',
+    key: 'JURISTISCHE_ABKLAERUNG',
     route: ['gesuche'],
-    queryParams: { filterTab: 'DRUCKBAR_DATENSCHUTZBRIEFE' },
-    queryParamsHandling: 'merge',
-    active: false,
-    roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-  },
-  {
-    key: 'juristische-abklaerung',
-    route: ['gesuche'],
-    queryParams: { filterTab: 'JURISTISCHE_ABKLAERUNG' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Jurist'],
   },
   {
-    key: 'abklaerung-durch-rechtsabteilung',
+    key: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
     route: ['gesuche'],
-    queryParams: { filterTab: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Jurist'],
   },
   {
-    key: 'darlehen',
+    key: 'DARLEHEN',
     route: ['gesuche'],
-    queryParams: { filterTab: 'DARLEHEN' },
-    queryParamsHandling: 'merge',
-    active: false,
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
-];
+  {
+    key: 'FEHLGESCHLAGENE_ZAHLUNGEN',
+    route: ['fehlgeschlagene-zahlungen'],
+    class: 'tw:border-3! tw:[&]:border-dv-red!',
+    roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+  },
+  {
+    key: 'PENDENTE_GESUCHE',
+    route: ['gesuche'],
+    roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
+  },
+] satisfies Partial<DashboardFilterTabItem & { key: FilterTabParam }>[];
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-dashboard',
-  imports: [CommonModule, TranslocoDirective, MatTabsModule, RouterModule],
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    RouterModule,
+    SachbearbeitungAppUiAdvTranslocoDirective,
+  ],
   templateUrl: './sachbearbeitung-app-feature-dashboard.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -119,67 +108,41 @@ export class SachbearbeitungAppFeatureDashboardComponent {
 
   tabsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
-    const filterTab = this.filterTab();
+    const filterTab =
+      this.filterTab() ?? getDefaultQueryForRole(rolesMap).filterTab;
     const hasfehlgeschlageneZahlungen =
       this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig();
 
-    const tabs = baseFilterTabs
-      .concat(
-        hasfehlgeschlageneZahlungen
-          ? [
-              {
-                key: 'fehlgeschlagene-zahlungen',
-                route: ['fehlgeschlagene-zahlungen'],
-                queryParamsHandling: 'merge',
-                class: 'tw:border-3! tw:border-red-500! tw-ml-auto!',
-                active: false,
-                roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-              },
-            ]
-          : [],
-      )
-      .filter((tab) => {
-        if (!tab.roles || tab.roles.length === 0) {
-          return true;
-        }
+    const tabs = baseFilterTabs.filter((tab) => {
+      if (
+        tab.key === 'FEHLGESCHLAGENE_ZAHLUNGEN' &&
+        !hasfehlgeschlageneZahlungen &&
+        // Do not hide the tab if user is already on given tab
+        filterTab !== tab.key
+      ) {
+        return false;
+      }
 
-        return tab.roles.some((role) => rolesMap[role]);
-      });
+      return tab.roles.some((role) => rolesMap[role]);
+    });
 
-    return tabs.map((tab) => ({
-      ...tab,
-      active: tab.queryParams?.['filterTab'] === filterTab,
-      // reset table filters when switching filter tabs
-      queryParams: { ...resetTableFilterObj, ...tab.queryParams },
-    }));
+    return tabs.map(
+      (tab) =>
+        ({
+          ...tab,
+          active: tab.key === filterTab,
+          // reset table filters when switching filter tabs
+          queryParams: { ...resetTableFilterObj, filterTab: tab.key },
+          queryParamsHandling: 'merge',
+        }) satisfies DashboardFilterTabItem,
+    );
   });
 
   constructor() {
+    // Load Fehlgeschlagene Zahlungen to check if there are any
     this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
       page: 1,
-      pageSize: DEFAULT_PAGE_SIZE,
+      pageSize: 1,
     });
-
-    const defaultFilter = getDefaultQueryForRole(
-      this.permissionStore.rolesMapSig(),
-    );
-
-    // ensure that a default query is present
-    this.route.queryParams
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((params) => {
-        if (!params['filterTab']) {
-          this.router.navigate(['antraege'], {
-            relativeTo: this.route,
-            queryParams: {
-              filterTab: defaultFilter.filterTab,
-              scope: defaultFilter.scope,
-              workable: defaultFilter.workable,
-            },
-            queryParamsHandling: 'merge',
-            replaceUrl: true,
-          });
-        }
-      });
   }
 }

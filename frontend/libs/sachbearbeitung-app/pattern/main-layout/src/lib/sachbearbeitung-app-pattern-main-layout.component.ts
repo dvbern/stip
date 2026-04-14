@@ -105,7 +105,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
         return item.rolesAllowed.some((role) => rolesMap[role]);
       })
       .map((item) => {
-        if (item.type === 'link' && item.route && item.route) {
+        if (item.type === 'link' && item.route) {
           const isActive = this.routeUrlSig()?.includes(item.route[0] ?? '');
           return { ...item, active: isActive };
         }
@@ -116,8 +116,8 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
             route: ['/dashboard', 'antraege'],
             queryParams: {
               filterTab: defaultFilter.filterTab,
-              scope: defaultFilter.scope,
-              workable: defaultFilter.workable,
+              scope: defaultFilter.zugewiesen,
+              bearbeitbar: defaultFilter.bearbeitbar,
             },
           };
         }

@@ -54,7 +54,7 @@ export type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
 
-export type WorkableParam = 'TRUE' | 'FALSE';
+export type BearbeitbarParam = 'TRUE' | 'FALSE';
 export type ScopeParam = 'ALLE' | 'MEINE';
 export type DashboardQuery =
   | keyof typeof GetGesucheSBQueryType
@@ -62,26 +62,26 @@ export type DashboardQuery =
 
 export type FilterConfig = {
   scope: ScopeParam;
-  workable: WorkableParam[];
+  bearbeitbar: BearbeitbarParam[];
   filterTab: FilterTabParam[];
 };
 
 // prettier-ignore
 export const dashboardFilterQueryWithParamsMap: Record<DashboardQuery, FilterConfig> = {
-  ALLE_DARLEHEN                         : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DARLEHEN'] },
-  MEINE_DARLEHEN                        : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DARLEHEN'] },
-  ALLE_BEARBEITBAR                      : { scope: 'ALLE',  workable: ['TRUE'],          filterTab: ['GESUCHE', 'DARLEHEN']},
-  MEINE_BEARBEITBAR                     : { scope: 'MEINE', workable: ['TRUE'],          filterTab: ['GESUCHE', 'DARLEHEN'] },
-  ALLE_GESUCHE                          : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['GESUCHE'] },
-  MEINE_GESUCHE                         : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['GESUCHE'] },
-  ALLE_PENDENTE_GESUCHE                 : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['PENDENTE_GESUCHE'] },
-  MEINE_PENDENTE_GESUCHE                : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['PENDENTE_GESUCHE'] },
-  ALLE_JURISTISCHE_ABKLAERUNG           : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['JURISTISCHE_ABKLAERUNG'] },
-  ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['ABKLAERUNG_DURCH_RECHSTABTEILUNG'] },
-  ALLE_DRUCKBAR_VERFUEGUNGEN            : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
-  MEINE_DRUCKBAR_VERFUEGUNGEN           : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
-  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE       : { scope: 'ALLE',  workable: ['FALSE'],         filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
-  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE      : { scope: 'MEINE', workable: ['FALSE'],         filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
+  ALLE_DARLEHEN                         : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DARLEHEN'] },
+  MEINE_DARLEHEN                        : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DARLEHEN'] },
+  ALLE_BEARBEITBAR                      : { scope: 'ALLE',  bearbeitbar: ['TRUE'],  filterTab: ['GESUCHE', 'DARLEHEN']},
+  MEINE_BEARBEITBAR                     : { scope: 'MEINE', bearbeitbar: ['TRUE'],  filterTab: ['GESUCHE', 'DARLEHEN'] },
+  ALLE_GESUCHE                          : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['GESUCHE'] },
+  MEINE_GESUCHE                         : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['GESUCHE'] },
+  ALLE_PENDENTE_GESUCHE                 : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['PENDENTE_GESUCHE'] },
+  MEINE_PENDENTE_GESUCHE                : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['PENDENTE_GESUCHE'] },
+  ALLE_JURISTISCHE_ABKLAERUNG           : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['JURISTISCHE_ABKLAERUNG'] },
+  ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['ABKLAERUNG_DURCH_RECHSTABTEILUNG'] },
+  ALLE_DRUCKBAR_VERFUEGUNGEN            : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
+  MEINE_DRUCKBAR_VERFUEGUNGEN           : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
+  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE       : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
+  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE      : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
 }
 
 export const dashboardQueries = Object.keys(
@@ -91,24 +91,26 @@ export const dashboardQueries = Object.keys(
 export type QueryTypeSuffix<T extends string> =
   T extends `${ScopeParam}_${infer Suffix}` ? Suffix : never;
 
-export type FilterTabParam = QueryTypeSuffix<DashboardQuery>;
+export type FilterTabParam =
+  | QueryTypeSuffix<DashboardQuery>
+  | 'FEHLGESCHLAGENE_ZAHLUNGEN';
 
 export type ToggleConfig = { show: boolean; value: boolean };
 
 export type DashFilterQueryParams = {
   filterTab: FilterTabParam;
-  scope: ScopeParam;
-  workable: WorkableParam;
+  zugewiesen: ScopeParam;
+  bearbeitbar: BearbeitbarParam;
 };
 
 export type NullableDashFilterQueryParams = {
   filterTab?: FilterTabParam | null;
   scope?: ScopeParam | null;
-  workable?: WorkableParam | null;
+  bearbeitbar?: BearbeitbarParam | null;
 };
 
 export interface DashboardFilterTabItem extends TabNavItem {
-  queryParams?: NullableDashFilterQueryParams;
+  queryParams: NullableDashFilterQueryParams;
   class?: string;
 }
 
@@ -118,7 +120,7 @@ export const isValidDashboardQuery = (
   return dashboardQueries.some((q) => q === query);
 };
 
-export const isWorkableEnabledTab = (filterTab: FilterTabParam): boolean => {
+export const isBearbeitbarEnabledTab = (filterTab: FilterTabParam): boolean => {
   return ['GESUCHE', 'DARLEHEN'].includes(filterTab);
 };
 
@@ -139,14 +141,14 @@ export const extractConfigFromQuery = (query: DashboardQuery): FilterConfig => {
 
 export const getQueryFromParams = (
   scope: ScopeParam,
-  workable: WorkableParam,
+  bearbeitbar: BearbeitbarParam,
   filterTab: FilterTabParam,
 ): DashboardQuery => {
-  let worableVal = workable;
+  let worableVal = bearbeitbar;
 
-  // force workable to FALSE if the filterTab is not workable-enabled to avoid invalid query combinations
+  // force bearbeitbar to FALSE if the filterTab is not bearbeitbar-enabled to avoid invalid query combinations
   // this does not reset the query param!
-  if (!isWorkableEnabledTab(filterTab)) {
+  if (!isBearbeitbarEnabledTab(filterTab)) {
     worableVal = 'FALSE';
   }
 
@@ -154,13 +156,13 @@ export const getQueryFromParams = (
     const config = dashboardFilterQueryWithParamsMap[q];
     return (
       config.filterTab.includes(filterTab) &&
-      config.workable.includes(worableVal) &&
+      config.bearbeitbar.includes(worableVal) &&
       config.scope === scope
     );
   });
 
   if (!query) {
-    const message = `No matching query found for scope=${scope}, filterTab=${filterTab}, workable=${workable}`;
+    const message = `No matching query found for scope=${scope}, filterTab=${filterTab}, bearbeitbar=${bearbeitbar}`;
     console.error(message);
     throw new Error(message);
   }
@@ -169,23 +171,23 @@ export const getQueryFromParams = (
 };
 
 export const getControlVisibility = (
-  scope: ScopeParam,
-  workable: WorkableParam,
+  zugewiesen: ScopeParam,
+  bearbeitbar: BearbeitbarParam,
   filterTab: FilterTabParam,
 ): {
-  scopeConfig: ToggleConfig;
-  workableConfig: ToggleConfig;
+  zugewiesenConfig: ToggleConfig;
+  bearbeitbarConfig: ToggleConfig;
 } => {
-  const isWorkableEnabled = isWorkableEnabledTab(filterTab);
+  const isBearbeitbarEnabled = isBearbeitbarEnabledTab(filterTab);
 
   return {
-    scopeConfig: {
+    zugewiesenConfig: {
       show: !isAlleOnlyTab(filterTab),
-      value: scope === 'MEINE',
+      value: zugewiesen === 'MEINE',
     },
-    workableConfig: {
-      show: isWorkableEnabled,
-      value: workable === 'TRUE',
+    bearbeitbarConfig: {
+      show: isBearbeitbarEnabled,
+      value: bearbeitbar === 'TRUE',
     },
   };
 };
@@ -202,16 +204,16 @@ export const isDarlehenQuery = (
   return query.includes('DARLEHEN') || query.includes('BEARBEITBAR');
 };
 
-export const SachbearbeiterDefaultQery: DashFilterQueryParams = {
+export const SachbearbeiterDefaultQuery: DashFilterQueryParams = {
   filterTab: 'GESUCHE',
-  scope: 'MEINE',
-  workable: 'TRUE',
+  zugewiesen: 'MEINE',
+  bearbeitbar: 'TRUE',
 };
 
 export const JuristDefautlQuery: DashFilterQueryParams = {
   filterTab: 'JURISTISCHE_ABKLAERUNG',
-  scope: 'ALLE',
-  workable: 'FALSE',
+  zugewiesen: 'ALLE',
+  bearbeitbar: 'FALSE',
 };
 
 export const getDefaultQueryForRole = (
@@ -225,8 +227,8 @@ export const getDefaultQueryForRole = (
   }
 
   if (isSachbearbeiter) {
-    return SachbearbeiterDefaultQery;
+    return SachbearbeiterDefaultQuery;
   }
 
-  return SachbearbeiterDefaultQery;
+  return SachbearbeiterDefaultQuery;
 };
