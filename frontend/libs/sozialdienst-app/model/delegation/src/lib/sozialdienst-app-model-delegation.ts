@@ -1,10 +1,11 @@
-import { InputSignal, InputSignalWithTransform } from '@angular/core';
+import { InputSignal } from '@angular/core';
 import {
   Adresse,
   DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams,
   DelegierenServiceGetDelegierungsOfSozialdienstMitarbeiterRequestParams,
   Delegierung,
-  FallWithDelegierung,
+  DelegierungEntry,
+  DelegierungStatus,
   GetDelegierungSozQueryTypeAdmin,
   GetDelegierungSozQueryTypeMitarbeiter,
   PersoenlicheAngaben,
@@ -25,31 +26,25 @@ export type PersoehnelicheAngabenKeys = keyof Omit<
   'adresse' | 'anrede'
 >;
 
-export type StatusKey = keyof Pick<Delegierung, 'delegierungAngenommen'>;
+export type StatusKey = keyof Pick<Delegierung, 'status'>;
 export type StatusFilter = {
-  [key in StatusKey]: InputSignalWithTransform<
-    boolean | undefined,
-    string | undefined
-  >;
+  [key in StatusKey]: InputSignal<DelegierungStatus | undefined>;
 };
 
-export type FallWithDelegierungKeys = keyof Pick<
-  FallWithDelegierung,
-  'fallNummer'
->;
+export type DelegierungEntryKeys = keyof Pick<DelegierungEntry, 'fallNummer'>;
 
 export type OrtKey = keyof Pick<Adresse, 'ort'>;
 
 export type WohnortKey = `wohn${OrtKey}`;
 
 export type SozCockpitFilterFormKeys =
-  | FallWithDelegierungKeys
+  | DelegierungEntryKeys
   | Exclude<PersoehnelicheAngabenKeys, 'email' | 'sprache'>
   | WohnortKey
   | StatusKey;
 
 export type SozCockpitFilterKeys =
-  | FallWithDelegierungKeys
+  | DelegierungEntryKeys
   | Exclude<PersoehnelicheAngabenKeys, 'email' | 'sprache'>
   | WohnortKey;
 

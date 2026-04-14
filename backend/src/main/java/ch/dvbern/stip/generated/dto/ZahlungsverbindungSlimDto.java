@@ -14,21 +14,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("ZahlungsverbindungUpdate")
+@JsonTypeName("ZahlungsverbindungSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class ZahlungsverbindungUpdateDto  implements Serializable {
+public class ZahlungsverbindungSlimDto  implements Serializable {
   private @Valid AdresseDto adresse;
-  private @Valid String iban;
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String institution;
 
   /**
    **/
-  public ZahlungsverbindungUpdateDto adresse(AdresseDto adresse) {
+  public ZahlungsverbindungSlimDto adresse(AdresseDto adresse) {
     this.adresse = adresse;
     return this;
   }
@@ -47,26 +46,7 @@ public class ZahlungsverbindungUpdateDto  implements Serializable {
 
   /**
    **/
-  public ZahlungsverbindungUpdateDto iban(String iban) {
-    this.iban = iban;
-    return this;
-  }
-
-  
-  @JsonProperty("iban")
-  @NotNull
-  public String getIban() {
-    return iban;
-  }
-
-  @JsonProperty("iban")
-  public void setIban(String iban) {
-    this.iban = iban;
-  }
-
-  /**
-   **/
-  public ZahlungsverbindungUpdateDto vorname(String vorname) {
+  public ZahlungsverbindungSlimDto vorname(String vorname) {
     this.vorname = vorname;
     return this;
   }
@@ -84,7 +64,7 @@ public class ZahlungsverbindungUpdateDto  implements Serializable {
 
   /**
    **/
-  public ZahlungsverbindungUpdateDto nachname(String nachname) {
+  public ZahlungsverbindungSlimDto nachname(String nachname) {
     this.nachname = nachname;
     return this;
   }
@@ -102,7 +82,7 @@ public class ZahlungsverbindungUpdateDto  implements Serializable {
 
   /**
    **/
-  public ZahlungsverbindungUpdateDto institution(String institution) {
+  public ZahlungsverbindungSlimDto institution(String institution) {
     this.institution = institution;
     return this;
   }
@@ -127,26 +107,24 @@ public class ZahlungsverbindungUpdateDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ZahlungsverbindungUpdateDto zahlungsverbindungUpdate = (ZahlungsverbindungUpdateDto) o;
-    return Objects.equals(this.adresse, zahlungsverbindungUpdate.adresse) &&
-        Objects.equals(this.iban, zahlungsverbindungUpdate.iban) &&
-        Objects.equals(this.vorname, zahlungsverbindungUpdate.vorname) &&
-        Objects.equals(this.nachname, zahlungsverbindungUpdate.nachname) &&
-        Objects.equals(this.institution, zahlungsverbindungUpdate.institution);
+    ZahlungsverbindungSlimDto zahlungsverbindungSlim = (ZahlungsverbindungSlimDto) o;
+    return Objects.equals(this.adresse, zahlungsverbindungSlim.adresse) &&
+        Objects.equals(this.vorname, zahlungsverbindungSlim.vorname) &&
+        Objects.equals(this.nachname, zahlungsverbindungSlim.nachname) &&
+        Objects.equals(this.institution, zahlungsverbindungSlim.institution);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(adresse, iban, vorname, nachname, institution);
+    return Objects.hash(adresse, vorname, nachname, institution);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ZahlungsverbindungUpdateDto {\n");
+    sb.append("class ZahlungsverbindungSlimDto {\n");
     
     sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
-    sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    institution: ").append(toIndentedString(institution)).append("\n");

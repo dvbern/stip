@@ -11,7 +11,7 @@
     @let dashboard = dashboardStore.dashboardViewSig();
     @if (dashboard) {
       @let fall = dashboard.fall;
-      @let delegierterSozialdienst = dashboard.delegierung?.sozialdienst;
+      @let delegierterSozialdienst = dashboard.currentDelegierung?.sozialdienst;
       <div
         class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]"
         [class.busy]="isUnterbruchOrAenderungPendingSig()"

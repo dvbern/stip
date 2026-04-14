@@ -208,7 +208,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         sozialdienst.setId(UUID.randomUUID());
         Delegierung delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
-        fall.setDelegierung(delegierung);
+        delegierung.akzeptieren();
+        fall.setCurrentDelegierung(delegierung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         ausbildung.setGesuchs(List.of(gesuch));
@@ -237,7 +238,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         Delegierung delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(new SozialdienstBenutzer());
-        fall.setDelegierung(delegierung);
+        delegierung.akzeptieren();
+        fall.setCurrentDelegierung(delegierung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         ausbildung.setGesuchs(List.of(gesuch));
