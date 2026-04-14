@@ -1,54 +1,54 @@
 openapi: 3.0.3
 info:
   title: STIP API
-  version: "1.0"
+  version: '1.0'
   license:
     name: GNU AGPLv3
-    url: "https://www.gnu.org/licenses/agpl.txt"
+    url: 'https://www.gnu.org/licenses/agpl.txt'
 servers:
-  - url: "http://localhost:{port}/api/v1"
+  - url: 'http://localhost:{port}/api/v1'
     variables:
       port:
-        default: "8080"
+        default: '8080'
 paths:
   /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}:
     parameters:
       - name: getFreiwilligDarlehenSbQueryType
         schema:
-          $ref: "#/components/schemas/GetFreiwilligDarlehenSbQueryType"
+          $ref: '#/components/schemas/GetFreiwilligDarlehenSbQueryType'
         in: path
         required: true
-      - $ref: "./components/parameters.yaml#/fallNummer"
-      - $ref: "./components/parameters.yaml#/piaNachname"
-      - $ref: "./components/parameters.yaml#/piaVorname"
-      - $ref: "./components/parameters.yaml#/piaGeburtsdatum"
-      - $ref: "./components/parameters.yaml#/status"
-      - $ref: "./components/parameters.yaml#/bearbeiter"
-      - $ref: "./components/parameters.yaml#/letzteAktivitaetFrom"
-      - $ref: "./components/parameters.yaml#/letzteAktivitaetTo"
-      - $ref: "./components/parameters.yaml#/page"
-      - $ref: "./components/parameters.yaml#/pageSize"
+      - $ref: './components/parameters.yaml#/fallNummer'
+      - $ref: './components/parameters.yaml#/piaNachname'
+      - $ref: './components/parameters.yaml#/piaVorname'
+      - $ref: './components/parameters.yaml#/piaGeburtsdatum'
+      - $ref: './components/parameters.yaml#/status'
+      - $ref: './components/parameters.yaml#/bearbeiter'
+      - $ref: './components/parameters.yaml#/letzteAktivitaetFrom'
+      - $ref: './components/parameters.yaml#/letzteAktivitaetTo'
+      - $ref: './components/parameters.yaml#/page'
+      - $ref: './components/parameters.yaml#/pageSize'
       - name: sortColumn
         schema:
-          $ref: "#/components/schemas/SbFreiwilligDarlehenDashboardColumn"
+          $ref: '#/components/schemas/SbFreiwilligDarlehenDashboardColumn'
         in: query
-      - $ref: "./components/parameters.yaml#/sortOrder"
+      - $ref: './components/parameters.yaml#/sortOrder'
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PaginatedSbFreiwilligDarlehenDashboard"
+                $ref: '#/components/schemas/PaginatedSbFreiwilligDarlehenDashboard'
           description: Returns gesuche filtered by status and sb
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getFreiwilligDarlehenDashboardSb
       summary: Returns darlehen filtered by status and sb
 
@@ -60,78 +60,78 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/UploadNegativeVerfuegung"
+              $ref: '#/components/schemas/UploadNegativeVerfuegung'
       parameters:
-        - $ref: "./components/parameters.yaml#/darlehenId"
+        - $ref: './components/parameters.yaml#/darlehenId'
       responses:
-        "200":
+        '200':
           description: OK
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: uploadNegativeVerfuegung
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
 
   /darlehen/{fallId}:
     parameters:
-      - $ref: "./components/parameters.yaml#/fallId"
+      - $ref: './components/parameters.yaml#/fallId'
     post:
       tags:
         - Darlehen
       responses:
-        "201":
+        '201':
           description: Created
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: createFreiwilligDarlehen
       summary: Create a new Darlehen
 
-  "/darlehen/dokument/{dokumentId}/token":
+  '/darlehen/dokument/{dokumentId}/token':
     parameters:
       - name: dokumentId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FileDownloadToken"
+                $ref: './components/common.yaml#/FileDownloadToken'
           description: Token returned
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "404":
-          $ref: "./components/responses.yaml#/NotFound"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getDarlehenDownloadToken
       summary: get Token to downlaod Darlehen Dokument
 
-  "/darlehen/dokument/download":
+  '/darlehen/dokument/download':
     parameters:
       - name: token
         schema:
@@ -142,7 +142,7 @@ paths:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           content:
             application/octet-stream:
               schema:
@@ -153,27 +153,27 @@ paths:
       summary: Download Darlehen Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
 
-  "/darlehen/dokument/{dokumentId}":
+  '/darlehen/dokument/{dokumentId}':
     parameters:
       - name: dokumentId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     delete:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Dokument deleted
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "404":
-          $ref: "./components/responses.yaml#/NotFound"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: deleteDarlehenDokument
       summary: deletes a Darlehen Dokument
 
@@ -181,30 +181,30 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
       - name: dokumentType
         schema:
-          $ref: "#/components/schemas/DarlehenDokumentType"
+          $ref: '#/components/schemas/DarlehenDokumentType'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Return Darlehen dokument
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/NullableDarlehenDokument"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: '#/components/schemas/NullableDarlehenDokument'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getDarlehenDokument
       summary: Returns Darlehen dokument
     post:
@@ -214,16 +214,16 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: "#/components/schemas/DarlehenDokumentCreate"
+              $ref: '#/components/schemas/DarlehenDokumentCreate'
       responses:
-        "200":
+        '200':
           description: OK
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: createDarlehenDokument
       x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
 
@@ -231,27 +231,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenEingeben
       summary: Change darlehen status to eingegeben
 
@@ -259,27 +259,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenFreigeben
       summary: Change darlehen status to freigegeben
 
@@ -287,7 +287,7 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
@@ -298,22 +298,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./components/common.yaml#/Kommentar"
+              $ref: './components/common.yaml#/Kommentar'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenZurueckweisen
       summary: Change darlehen status to in bearbeitung gs
 
@@ -321,27 +321,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenAkzeptieren
       summary: Change darlehen status to akzeptiert
 
@@ -349,27 +349,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     post:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenAblehen
       summary: Change darlehen status to abgelehnt
 
@@ -377,27 +377,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Return active darlehen if exists or else null
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getFreiwilligDarlehenGs
       summary: Return active darlehen darlehen if exists or else null
     patch:
@@ -408,38 +408,38 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FreiwilligDarlehenUpdateGs"
+              $ref: '#/components/schemas/FreiwilligDarlehenUpdateGs'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenUpdateGs
       summary: Update darlehen as gs
     delete:
       tags:
         - Darlehen
       responses:
-        "204":
+        '204':
           description: Darlehen was deleted
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: deleteFreiwilligDarlehenGs
       summary: Deletes a given darlehen by ID
 
@@ -447,27 +447,27 @@ paths:
     parameters:
       - name: fallId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Return all darlehen for a given fallId
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FreiwilligDarlehenGsResponse"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: '#/components/schemas/FreiwilligDarlehenGsResponse'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getAllFreiwilligDarlehenGs
       summary: Return all darlehen for a given fallId
 
@@ -475,29 +475,29 @@ paths:
     parameters:
       - name: gesuchId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Return all darlehen for a given fallId
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                  $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getAllFreiwilligDarlehenSb
       summary: Return all darlehen for a given fallId
 
@@ -505,27 +505,27 @@ paths:
     parameters:
       - name: darlehenId
         schema:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         in: path
         required: true
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Return darlehen
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getFreiwilligDarlehenSb
       summary: Return darlehen
     patch:
@@ -536,46 +536,46 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/FreiwilligDarlehenUpdateSb"
+              $ref: '#/components/schemas/FreiwilligDarlehenUpdateSb'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "./components/common.yaml#/FreiwilligDarlehen"
-        "400":
-          $ref: "./components/responses.yaml#/BadRequest"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: './components/common.yaml#/FreiwilligDarlehen'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: freiwilligDarlehenUpdateSb
       summary: Update darlehen as sb
 
   /darlehen/buchhaltung/{gesuchId}:
     parameters:
-      - $ref: "./components/parameters.yaml#/gesuchId"
+      - $ref: './components/parameters.yaml#/gesuchId'
     get:
       tags:
         - Darlehen
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DarlehenBuchhaltungOverview"
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "404":
-          $ref: "./components/responses.yaml#/NotFound"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getDarlehenBuchhaltungEntrys
       summary: Gets all darlehen buchhaltungsentrys
     post:
@@ -586,28 +586,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/DarlehenBuchhaltungSaldokorrektur"
+              $ref: '#/components/schemas/DarlehenBuchhaltungSaldokorrektur'
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/DarlehenBuchhaltungEntry"
+                $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
           description: Create a darlehen buchhaltungsentry from a saldokorrektur
-        "401":
-          $ref: "./components/responses.yaml#/Unauthorized"
-        "403":
-          $ref: "./components/responses.yaml#/Forbidden"
-        "404":
-          $ref: "./components/responses.yaml#/NotFound"
-        "500":
-          $ref: "./components/responses.yaml#/ServerError"
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: createDarlehenBuchhaltungSaldokorrektur
       summary: Create a darlehen buchhaltungsentry from a saldokorrektur
 
 components:
   securitySchemes:
-    $ref: "./components/security.yaml#/securitySchemes"
+    $ref: './components/security.yaml#/securitySchemes'
   schemas:
     UploadNegativeVerfuegung:
       type: object
@@ -636,12 +636,12 @@ components:
 
     PaginatedSbFreiwilligDarlehenDashboard:
       allOf:
-        - $ref: "./components/common.yaml#/PaginatedResult"
+        - $ref: './components/common.yaml#/PaginatedResult'
       properties:
         entries:
           type: array
           items:
-            $ref: "#/components/schemas/FreiwilligDarlehenDashboard"
+            $ref: '#/components/schemas/FreiwilligDarlehenDashboard'
 
     FreiwilligDarlehenDashboard:
       type: object
@@ -658,11 +658,11 @@ components:
         - letzteAktivitaet
       properties:
         id:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         fallId:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         relatedGesuchId:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
         piaVorname:
@@ -672,7 +672,7 @@ components:
         piaGeburtsdatum:
           type: string
         status:
-          $ref: "./components/common.yaml#/DarlehenStatus"
+          $ref: './components/common.yaml#/DarlehenStatus'
         bearbeiter:
           type: string
         letzteAktivitaet:
@@ -712,13 +712,13 @@ components:
         gruende:
           type: array
           items:
-            $ref: "./components/common.yaml#/DarlehenGrund"
+            $ref: './components/common.yaml#/DarlehenGrund'
 
     NullableDarlehenDokument:
       type: object
       properties:
         value:
-          $ref: "#/components/schemas/DarlehenDokument"
+          $ref: '#/components/schemas/DarlehenDokument'
 
     FreiwilligDarlehenGsResponse:
       type: object
@@ -729,7 +729,7 @@ components:
         darlehenList:
           type: array
           items:
-            $ref: "./components/common.yaml#/FreiwilligDarlehen"
+            $ref: './components/common.yaml#/FreiwilligDarlehen'
         canCreateDarlehen:
           type: boolean
 
@@ -741,13 +741,13 @@ components:
         - dokumente
       properties:
         id:
-          $ref: "./components/common.yaml#/UUID"
+          $ref: './components/common.yaml#/UUID'
         dokumentType:
-          $ref: "#/components/schemas/DarlehenDokumentType"
+          $ref: '#/components/schemas/DarlehenDokumentType'
         dokumente:
           type: array
           items:
-            $ref: "./components/common.yaml#/Dokument"
+            $ref: './components/common.yaml#/Dokument'
 
     DarlehenDokumentCreate:
       type: object
@@ -755,7 +755,7 @@ components:
         - fileUpload
       properties:
         fileUpload:
-          $ref: "./components/common.yaml#/FileUpload"
+          $ref: './components/common.yaml#/FileUpload'
 
     DarlehenBuchhaltungEntryKategorie:
       enum:
@@ -780,7 +780,7 @@ components:
         darlehenBuchhaltungEntrys:
           type: array
           items:
-            $ref: "#/components/schemas/DarlehenBuchhaltungEntry"
+            $ref: '#/components/schemas/DarlehenBuchhaltungEntry'
 
     DarlehenBuchhaltungEntry:
       type: object
@@ -793,9 +793,9 @@ components:
           type: string
           format: date-time
         kategorie:
-          $ref: "#/components/schemas/DarlehenBuchhaltungEntryKategorie"
+          $ref: '#/components/schemas/DarlehenBuchhaltungEntryKategorie'
         verfuegung:
-          $ref: "./components/common.yaml#/Dokument"
+          $ref: './components/common.yaml#/Dokument'
         betrag:
           type: integer
         userErstellt:
@@ -815,4 +815,4 @@ components:
           type: string
 
 security:
-  $ref: "./components/security.yaml#/security"
+  $ref: './components/security.yaml#/security'
