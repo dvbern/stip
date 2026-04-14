@@ -43,12 +43,12 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
+import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -58,6 +58,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -220,9 +221,9 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "in_bearbeitung_sb_reason")
     private InBearbeitungSbReason inBearbeitungSbReason;
 
-    @Getter(AccessLevel.NONE)
-    @Embedded
-    private @Valid Statisticsdata statisticsdata;
+    @Nullable
+    @OneToOne(mappedBy = "gesuch")
+    private Statisticsdata statisticsdata;
 
     // Needed as Embedded objects with all fields as null are themselves null
     public Statisticsdata getStatisticsdata() {

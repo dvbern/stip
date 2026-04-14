@@ -15,30 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuch.entity;
+package ch.dvbern.stip.api.swisstopoapi.service;
 
-import java.io.Serializable;
+import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
+import ch.dvbern.stip.api.swisstopoapi.repo.StatisticsdataRepository;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
-import ch.dvbern.stip.api.common.validation.NullOrNotBlank;
-import jakarta.annotation.Nullable;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.validation.Valid;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+@RequestScoped
+@RequiredArgsConstructor
+@Slf4j
+public class StatisticsdataService {
+    public final StatisticsdataRepository statisticsdataRepository;
 
-@Getter
-@Setter
-@Embeddable
-@NoArgsConstructor
-public class Statisticsdata implements Serializable {
-    @Nullable
-    @NullOrNotBlank
-    @Column(name = "com_name")
-    private @Valid String gemeindeName;
+    public void persist(final Statisticsdata statisticsdata) {
+        statisticsdataRepository.persist(statisticsdata);
+    }
 
-    @Nullable
-    @Column(name = "com_fosnr")
-    private @Valid Integer gemeindeBfsNr;
 }

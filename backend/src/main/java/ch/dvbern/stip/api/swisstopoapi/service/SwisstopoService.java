@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
@@ -37,8 +38,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jose4j.json.internal.json_simple.JSONObject;
-import org.quartz.DateBuilder;
-import org.quartz.DateBuilder.IntervalUnit;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -56,6 +55,7 @@ public class SwisstopoService {
     private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS = 5;
 
     private final GesuchService gesuchService;
+    private final StatisticsdataService statisticsdataService;
     private final TenantService tenantService;
     private final Scheduler scheduler;
 
@@ -81,7 +81,8 @@ public class SwisstopoService {
             .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + "trigger-" + gesuch.getId().toString())
             // This is necessary (delayed start) so we are sure this transaction is closed before the task starts.
             // Otherwise both transactions overlap
-            .startAt(DateBuilder.futureDate(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS, IntervalUnit.SECOND))
+            .startNow()
+            // .startAt(DateBuilder.futureDate(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS, IntervalUnit.SECOND))
             .build();
         try {
             scheduler.scheduleJob(jobDetail, trigger);
@@ -155,9 +156,13 @@ public class SwisstopoService {
         final SwisstopoApiFindAddrResponseElementAttributes swisstopoApiFindAddrResponseElementAttribute
     ) {
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
-        gesuch.getStatisticsdata()
+        Statisticsdata statisticsdata = gesuch.getStatisticsdata();
+        statisticsdata
+            .setGesuch(gesuch)
             .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr())
             .setGemeindeName(swisstopoApiFindAddrResponseElementAttribute.getCom_name());
+        gesuch.setStatisticsdata(statisticsdata);
+        statisticsdataService.persist(statisticsdata);
     }
 
 }
