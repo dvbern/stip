@@ -14,6 +14,6 @@ import { Dokument } from './dokument';
 export interface BeschwerdeEntscheid { 
     kommentar: string;
     beschwerdeErfolgreich: boolean;
-    dokumente: Array<Dokument>;
+    dokument: Dokument;
 }
 

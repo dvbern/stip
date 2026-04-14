@@ -9743,17 +9743,15 @@ components:
       required:
         - kommentar
         - beschwerdeErfolgreich
-        - dokumente
+        - dokument
       type: object
       properties:
         kommentar:
           type: string
         beschwerdeErfolgreich:
           type: boolean
-        dokumente:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dokument'
+        dokument:
+          $ref: '#/components/schemas/Dokument'
     BeschwerdeVerlaufEntryCreate:
       type: object
       required:
