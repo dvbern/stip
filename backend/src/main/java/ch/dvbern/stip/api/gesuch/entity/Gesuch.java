@@ -43,7 +43,6 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.GesuchNotiz;
-import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.annotation.Nullable;

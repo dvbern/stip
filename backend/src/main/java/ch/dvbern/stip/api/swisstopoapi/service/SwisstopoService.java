@@ -21,9 +21,10 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
+import ch.dvbern.stip.api.gesuch.service.StatisticsdataService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
@@ -52,7 +53,6 @@ public class SwisstopoService {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
     private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
     private static final String SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX = "SwisstopoAddrFetchScheduledJob-";
-    private static final int SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS = 5;
 
     private final GesuchService gesuchService;
     private final StatisticsdataService statisticsdataService;
@@ -79,10 +79,7 @@ public class SwisstopoService {
             .build();
         final Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + "trigger-" + gesuch.getId().toString())
-            // This is necessary (delayed start) so we are sure this transaction is closed before the task starts.
-            // Otherwise both transactions overlap
             .startNow()
-            // .startAt(DateBuilder.futureDate(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_DELAY_SECONDS, IntervalUnit.SECOND))
             .build();
         try {
             scheduler.scheduleJob(jobDetail, trigger);

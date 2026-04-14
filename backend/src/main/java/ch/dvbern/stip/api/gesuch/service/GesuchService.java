@@ -194,6 +194,7 @@ public class GesuchService {
     private final DatenschutzbriefService datenschutzbriefService;
     private final VerfuegungHistoryService verfuegungHistoryService;
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
+    private final StatisticsdataService statisticsdataService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -526,6 +527,7 @@ public class GesuchService {
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
+        statisticsdataService.deleteOfGesuch(gesuch);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();

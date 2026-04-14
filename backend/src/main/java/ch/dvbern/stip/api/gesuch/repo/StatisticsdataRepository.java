@@ -15,22 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.swisstopoapi.service;
+package ch.dvbern.stip.api.gesuch.repo;
 
-import ch.dvbern.stip.api.swisstopoapi.entity.Statisticsdata;
-import ch.dvbern.stip.api.swisstopoapi.repo.StatisticsdataRepository;
-import jakarta.enterprise.context.RequestScoped;
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
+import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@RequestScoped
+@ApplicationScoped
 @RequiredArgsConstructor
-@Slf4j
-public class StatisticsdataService {
-    public final StatisticsdataRepository statisticsdataRepository;
-
-    public void persist(final Statisticsdata statisticsdata) {
-        statisticsdataRepository.persist(statisticsdata);
-    }
-
+public class StatisticsdataRepository implements BaseRepository<Statisticsdata> {
 }
