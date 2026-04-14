@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDto;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.util.UUID;
@@ -22,13 +24,24 @@ import jakarta.validation.Valid;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")
 public interface DatenschutzbriefResource {
 
-    @GET
-    @Path("/{trancheId}/download")
-    @Produces({ "application/octet-stream" })
-    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDatenschutzbrief(@QueryParam("token") @NotNull   String token,@PathParam("trancheId") UUID trancheId);
+    @POST
+    @Path("/{gesuchId}/token")
+    @Consumes({ "application/json" })
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto createAndGetDatenschutzbriefDownloadToken(@PathParam("gesuchId") UUID gesuchId,@Valid DatenschutzbriefCreateDto datenschutzbriefCreateDto);
 
     @GET
-    @Path("/{elternId}/token")
+    @Path("/{gesuchId}/all")
     @Produces({ "application/json", "text/plain" })
-    FileDownloadTokenDto getDatenschutzbriefDownloadToken(@PathParam("elternId") UUID elternId);
+    List<DatenschutzbriefOverviewDto> getAllDatenschutzbriefs(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getDatenschutzbrief(@QueryParam("token") @NotNull   String token);
+
+    @GET
+    @Path("/{gesuchId}/token")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getDatenschutzbriefDownloadToken(@PathParam("gesuchId") UUID gesuchId,@QueryParam("datenschutzbriefId") @NotNull   UUID datenschutzbriefId);
 }

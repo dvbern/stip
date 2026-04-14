@@ -43,7 +43,7 @@ export class BeschwerdeStore extends signalStore(
 
     return beschwerde.map((entry) => ({
       ...entry,
-      document: entry.beschwerdeEntscheid?.dokumente[0],
+      document: entry.beschwerdeEntscheid?.dokument,
     }));
   });
 

@@ -31,8 +31,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
@@ -64,19 +63,18 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DatenschutzbriefPdfService {
-    private final GesuchTrancheService gesuchTrancheService;
+    private final GesuchRepository gesuchRepository;
 
     public ByteArrayOutputStream createDatenschutzbriefForElternteil(
         final Eltern elternteil,
-        final UUID gesuchtrancheId
+        final UUID gesuchId
     ) {
         final var out = new ByteArrayOutputStream();
 
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
 
-        final GesuchTranche gesuchTranche = gesuchTrancheService.getGesuchTranche(gesuchtrancheId);
-        final Gesuch gesuch = gesuchTranche.getGesuch();
+        final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
 
         final Locale locale = LocaleUtil.getLocale(gesuch);
 
@@ -87,10 +85,6 @@ public class DatenschutzbriefPdfService {
             final var pdfDocument = new PdfDocument(writer);
             final var document = new Document(pdfDocument, PAGE_SIZE);
         ) {
-            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
-
-            document.add(logo);
-
             final var leftMargin = document.getLeftMargin();
 
             final Link ausbildungsbeitraegeUri =
@@ -132,7 +126,7 @@ public class DatenschutzbriefPdfService {
                 )
             );
 
-            final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
+            final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
 
             document.add(
                 PdfUtils.createParagraph(
@@ -194,6 +188,7 @@ public class DatenschutzbriefPdfService {
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
+            final Image logo = PdfUtils.getLogo(pdfDocument, LOGO_PATH);
             document.add(logo);
 
             returnLetter(gesuch, document, leftMargin, translator, pdfFont, pdfFontBold, elternteil, pia);

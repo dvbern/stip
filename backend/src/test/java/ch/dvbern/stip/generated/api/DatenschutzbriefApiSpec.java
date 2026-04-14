@@ -13,6 +13,8 @@
 
 package ch.dvbern.stip.generated.api;
 
+import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDtoSpec;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
@@ -59,9 +61,19 @@ public class DatenschutzbriefApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
+                createAndGetDatenschutzbriefDownloadToken(),
+                getAllDatenschutzbriefs(),
                 getDatenschutzbrief(),
                 getDatenschutzbriefDownloadToken()
         );
+    }
+
+    public CreateAndGetDatenschutzbriefDownloadTokenOper createAndGetDatenschutzbriefDownloadToken() {
+        return new CreateAndGetDatenschutzbriefDownloadTokenOper(createReqSpec());
+    }
+
+    public GetAllDatenschutzbriefsOper getAllDatenschutzbriefs() {
+        return new GetAllDatenschutzbriefsOper(createReqSpec());
     }
 
     public GetDatenschutzbriefOper getDatenschutzbrief() {
@@ -83,17 +95,173 @@ public class DatenschutzbriefApiSpec {
     }
 
     /**
+     * get Token to downlaod Verfuegung
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * @see #body  (optional)
+     * return FileDownloadTokenDtoSpec
+     */
+    public static class CreateAndGetDatenschutzbriefDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/datenschutzbrief/{gesuchId}/token";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public CreateAndGetDatenschutzbriefDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setContentType("application/json");
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /datenschutzbrief/{gesuchId}/token
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /datenschutzbrief/{gesuchId}/token
+         * @param handler handler
+         * @return FileDownloadTokenDtoSpec
+         */
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+         /**
+         * @param datenschutzbriefCreateDtoSpec (DatenschutzbriefCreateDtoSpec)  (optional)
+         * @return operation
+         */
+        public CreateAndGetDatenschutzbriefDownloadTokenOper body(DatenschutzbriefCreateDtoSpec datenschutzbriefCreateDtoSpec) {
+            reqSpec.setBody(datenschutzbriefCreateDtoSpec);
+            return this;
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public CreateAndGetDatenschutzbriefDownloadTokenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public CreateAndGetDatenschutzbriefDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public CreateAndGetDatenschutzbriefDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Get all Datenschutzbriefs for given Gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return List&lt;DatenschutzbriefOverviewDtoSpec&gt;
+     */
+    public static class GetAllDatenschutzbriefsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/datenschutzbrief/{gesuchId}/all";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllDatenschutzbriefsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /datenschutzbrief/{gesuchId}/all
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /datenschutzbrief/{gesuchId}/all
+         * @param handler handler
+         * @return List&lt;DatenschutzbriefOverviewDtoSpec&gt;
+         */
+        public List<DatenschutzbriefOverviewDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DatenschutzbriefOverviewDtoSpec>> type = new TypeRef<List<DatenschutzbriefOverviewDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetAllDatenschutzbriefsOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllDatenschutzbriefsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllDatenschutzbriefsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * get Datenschutzbrief
      * 
      *
      * @see #tokenQuery  (required)
-     * @see #trancheIdPath  (optional)
      * return File
      */
     public static class GetDatenschutzbriefOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/datenschutzbrief/{trancheId}/download";
+        public static final String REQ_URI = "/datenschutzbrief/download";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -105,7 +273,7 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/{trancheId}/download
+         * GET /datenschutzbrief/download
          * @param handler handler
          * @param <T> type
          * @return type
@@ -116,24 +284,13 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/{trancheId}/download
+         * GET /datenschutzbrief/download
          * @param handler handler
          * @return File
          */
         public File executeAs(Function<Response, Response> handler) {
             TypeRef<File> type = new TypeRef<File>(){};
             return execute(handler).as(type);
-        }
-
-        public static final String TRANCHE_ID_PATH = "trancheId";
-
-        /**
-         * @param trancheId (UUID)  (optional)
-         * @return operation
-         */
-        public GetDatenschutzbriefOper trancheIdPath(Object trancheId) {
-            reqSpec.addPathParam(TRANCHE_ID_PATH, trancheId);
-            return this;
         }
 
         public static final String TOKEN_QUERY = "token";
@@ -171,13 +328,14 @@ public class DatenschutzbriefApiSpec {
      * get Token to downlaod Verfuegung
      * 
      *
-     * @see #elternIdPath  (required)
+     * @see #gesuchIdPath  (required)
+     * @see #datenschutzbriefIdQuery  (required)
      * return FileDownloadTokenDtoSpec
      */
     public static class GetDatenschutzbriefDownloadTokenOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/datenschutzbrief/{elternId}/token";
+        public static final String REQ_URI = "/datenschutzbrief/{gesuchId}/token";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -189,7 +347,7 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/{elternId}/token
+         * GET /datenschutzbrief/{gesuchId}/token
          * @param handler handler
          * @param <T> type
          * @return type
@@ -200,7 +358,7 @@ public class DatenschutzbriefApiSpec {
         }
 
         /**
-         * GET /datenschutzbrief/{elternId}/token
+         * GET /datenschutzbrief/{gesuchId}/token
          * @param handler handler
          * @return FileDownloadTokenDtoSpec
          */
@@ -209,14 +367,25 @@ public class DatenschutzbriefApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String ELTERN_ID_PATH = "elternId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param elternId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetDatenschutzbriefDownloadTokenOper elternIdPath(Object elternId) {
-            reqSpec.addPathParam(ELTERN_ID_PATH, elternId);
+        public GetDatenschutzbriefDownloadTokenOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        public static final String DATENSCHUTZBRIEF_ID_QUERY = "datenschutzbriefId";
+
+        /**
+         * @param datenschutzbriefId (UUID)  (required)
+         * @return operation
+         */
+        public GetDatenschutzbriefDownloadTokenOper datenschutzbriefIdQuery(Object... datenschutzbriefId) {
+            reqSpec.addQueryParam(DATENSCHUTZBRIEF_ID_QUERY, datenschutzbriefId);
             return this;
         }
 

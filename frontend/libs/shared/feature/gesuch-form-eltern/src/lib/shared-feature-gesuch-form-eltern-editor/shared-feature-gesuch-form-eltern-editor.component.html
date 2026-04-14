@@ -16,18 +16,15 @@
             >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
           >
         </div>
-        @if (
-          elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().trancheId;
-          as gesuchTrancheId
-        ) {
+        @if (elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().gesuchId; as gesuchId) {
           <button
             type="button"
             class="btn btn-link tw:p-0"
             [attr.aria-label]="'shared.dokumente.table.download' | transloco"
             [dvDownloadButton]="{
-              type: 'datenschutzbrief',
+              type: 'datenschutzbriefCreate',
               id: elternteil.id,
-              gesuchTrancheId,
+              gesuchId,
             }"
           >
             <div class="material-symbols-rounded tw:text-4xl!">download</div>

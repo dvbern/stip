@@ -19,6 +19,7 @@ export interface GesuchStateInfo {
     canChangeGesuchsperiode: boolean;
     canTriggerManuellPruefen: boolean;
     canBearbeitungAbschliessen: boolean;
+    canSBInitAenderung: boolean;
     inBearbeitungSbReason?: InBearbeitungSbReason;
 }
 

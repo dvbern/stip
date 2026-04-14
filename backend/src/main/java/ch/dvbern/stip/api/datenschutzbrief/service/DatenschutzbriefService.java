@@ -18,68 +18,124 @@
 package ch.dvbern.stip.api.datenschutzbrief.service;
 
 import java.io.ByteArrayOutputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
-import ch.dvbern.stip.api.common.i18n.translations.TL;
-import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
-import ch.dvbern.stip.api.common.util.LocaleUtil;
+import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
-import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefDownload;
-import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefDownloadLogRepository;
+import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefBuilder;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
+import ch.dvbern.stip.api.dokument.entity.DokumentBuilder;
+import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
-import ch.dvbern.stip.api.eltern.service.ElternService;
+import ch.dvbern.stip.api.eltern.repo.ElternRepository;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
+import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
+import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.text.CaseUtils;
+import org.jboss.resteasy.reactive.RestMulti;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class DatenschutzbriefService {
+
+    static final String DATENSCHUTZBRIEF_DOKUMENT_PATH = "datenschutzbrief/";
+    static final String FILENAME_DATENSCHUTZBRIEF = "Datenschutzbrief_%s_%s.pdf";
     private final DatenschutzbriefPdfService datenschutzbriefPdfService;
     private final DatenschutzbriefRepository datenschutzbriefRepository;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
-    private final ElternService elternService;
-    private final DatenschutzbriefDownloadLogRepository datenschutzbriefDownloadLogRepository;
-    private final GesuchTrancheRepository gesuchTrancheRepository;
+    private final DokumentRepository dokumentRepository;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final DokumentUploadService dokumentUploadService;
+    private final S3AsyncClient s3;
+    private final ConfigService configService;
+    private final ElternRepository elternRepository;
+    private final GesuchRepository gesuchRepository;
+    private final DatenschutzbriefMapper datenschutzbriefMapper;
 
-    public String getDatenschutzbriefFileName(final UUID trancheId, final Eltern elternTeil) {
-        final Locale locale = LocaleUtil.getLocale(gesuchTrancheRepository.requireById(trancheId));
-        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
-        final var filenameTitle = switch (elternTeil.getElternTyp()) {
-            case MUTTER -> translator.translate("stip.pdf.datenschutzbrief.MUTTER");
-            case VATER -> translator.translate("stip.pdf.datenschutzbrief.VATER");
-        };
-        return String.format("%s.pdf", filenameTitle);
-    }
-
-    public ByteArrayOutputStream getDateschutzbriefByteStream(final UUID trancheId, final Eltern elternTeil) {
-        logDatenschutzbriefDownload(trancheId, elternTeil.getId());
-        return datenschutzbriefPdfService.createDatenschutzbriefForElternteil(elternTeil, trancheId);
+    public RestMulti<Buffer> getDatenschutzbriefDokument(final UUID datenschutzbriefId) {
+        final var dokument = datenschutzbriefRepository.requireById(datenschutzbriefId).getDokument();
+        return dokumentDownloadService.getDokument(
+            s3,
+            configService.getBucketName(),
+            dokument.getObjectId(),
+            DATENSCHUTZBRIEF_DOKUMENT_PATH,
+            dokument.getFilename()
+        );
     }
 
     @Transactional
-    public void logDatenschutzbriefDownload(final UUID trancheId, final UUID elternId) {
-        final var eltern = elternService.getElternTeilById(elternId);
-        final var gesuchTranche = gesuchTrancheRepository.requireById(trancheId);
-        final var fallNummer = gesuchTranche.getGesuch().getAusbildung().getFall().getFallNummer();
-        final var gesuchNummer = gesuchTranche.getGesuch().getGesuchNummer();
-        final var sozialversicherungsnummer = eltern.getSozialversicherungsnummer();
-        final var datenschutzbriefDownloadLog =
-            new DatenschutzbriefDownload(fallNummer, gesuchNummer, sozialversicherungsnummer);
-        datenschutzbriefDownloadLogRepository.persistAndFlush(datenschutzbriefDownloadLog);
+    public UUID createDatenschutzbrief(final UUID gesuchId, final UUID elternteilId) {
+        final var elternteil = elternRepository.requireById(elternteilId);
+        return createDatenschutzbrief(gesuchId, elternteil, true).getId();
+    }
+
+    @Transactional
+    public Datenschutzbrief createDatenschutzbrief(
+        final UUID gesuchId,
+        final Eltern elternteil,
+        final boolean isVersendet
+    ) {
+        final var dokumentByteArray = datenschutzbriefPdfService.createDatenschutzbriefForElternteil(
+            elternteil,
+            gesuchId
+        );
+        final var dokument = storeDatenschutzbriefDokument(elternteil.getElternTyp(), dokumentByteArray);
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var datenschutzbrief = DatenschutzbriefBuilder.datenschutzbrief()
+            .isVersendet(isVersendet)
+            .datenschutzbriefEmpfaenger(elternteil.getElternTyp())
+            .sozialversicherungsnummer(elternteil.getSozialversicherungsnummer())
+            .nachname(elternteil.getNachname())
+            .vorname(elternteil.getVorname())
+            .gesuch(gesuch)
+            .dokument(dokument)
+            .build();
+        gesuch.getDatenschutzbriefs().add(datenschutzbrief);
+        dokumentRepository.persist(dokument);
+        datenschutzbriefRepository.persist(datenschutzbrief);
+        return datenschutzbrief;
+    }
+
+    private String generateFilename(ElternTyp elternTyp) {
+        final String formattedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return String.format(FILENAME_DATENSCHUTZBRIEF, CaseUtils.toCamelCase(elternTyp.name(), true), formattedDate);
+    }
+
+    private Dokument storeDatenschutzbriefDokument(final ElternTyp elternTyp, final ByteArrayOutputStream pdfContent) {
+        final String filename = generateFilename(elternTyp);
+        final String objectId = dokumentUploadService.executeUploadDocument(
+            pdfContent.toByteArray(),
+            filename,
+            s3,
+            configService,
+            DATENSCHUTZBRIEF_DOKUMENT_PATH
+        );
+
+        return DokumentBuilder.dokument()
+            .filename(filename)
+            .filepath(DATENSCHUTZBRIEF_DOKUMENT_PATH)
+            .filesize(String.valueOf(pdfContent.size()))
+            .objectId(objectId)
+            .build();
     }
 
     @Transactional
@@ -101,16 +157,9 @@ public class DatenschutzbriefService {
             final var empfaenger = trancheToUse.getGesuchFormular()
                 .getElternteilOfTyp(empfaengerToCreate)
                 .orElseThrow(IllegalStateException::new);
-            final var datenschutzbrief = new Datenschutzbrief()
-                .setVersendet(false)
-                .setDatenschutzbriefEmpfaenger(empfaengerToCreate)
-                .setVorname(empfaenger.getVorname())
-                .setNachname(empfaenger.getNachname())
-                .setGesuch(gesuch);
+            final var datenschutzbrief = createDatenschutzbrief(gesuch.getId(), empfaenger, false);
 
             gesuch.getDatenschutzbriefs().add(datenschutzbrief);
-
-            datenschutzbriefRepository.persist(datenschutzbrief);
         }
     }
 
@@ -124,6 +173,16 @@ public class DatenschutzbriefService {
                 case VATER -> Stream.of(ElternTyp.VATER);
                 case FAMILIE -> Stream.of(ElternTyp.MUTTER, ElternTyp.VATER);
             })
+            .toList();
+    }
+
+    public List<DatenschutzbriefOverviewDto> getDatenschutzbriefs(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+
+        return gesuch.getDatenschutzbriefs()
+            .stream()
+            .sorted(Comparator.comparing(Datenschutzbrief::getTimestampErstellt).reversed())
+            .map(datenschutzbriefMapper::toDto)
             .toList();
     }
 }

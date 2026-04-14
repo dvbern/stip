@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.resource;
 
+import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -26,16 +27,21 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
-import ch.dvbern.stip.api.eltern.service.ElternService;
 import ch.dvbern.stip.generated.api.DatenschutzbriefResource;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDto;
+import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
 import org.jboss.resteasy.reactive.RestMulti;
+
+import static ch.dvbern.stip.api.common.util.OidcPermissions.JURIST_GESUCH_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 
 @Validated
 @RequestScoped
@@ -46,33 +52,52 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final DatenschutzbriefAuthorizer authorizer;
-    private final ElternService elternService;
     private final DokumentDownloadService dokumentDownloadService;
+
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @Override
+    public List<DatenschutzbriefOverviewDto> getAllDatenschutzbriefs(UUID gesuchId) {
+        authorizer.canGetDatenschutzbriefs();
+        return datenschutzbriefService.getDatenschutzbriefs(gesuchId);
+    }
 
     @Blocking
     @PermitAll
     @Override
-    public RestMulti<Buffer> getDatenschutzbrief(final String token, final UUID trancheId) {
-        final var elternId = dokumentDownloadService.getClaimId(
+    public RestMulti<Buffer> getDatenschutzbrief(final String token) {
+        final var datenschutzbriefId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
             configService.getSecret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
-        final var elternTeil = elternService.getElternTeilById(elternId);
 
-        final var filename = datenschutzbriefService.getDatenschutzbriefFileName(trancheId, elternTeil);
-
-        final var buffer = datenschutzbriefService.getDateschutzbriefByteStream(trancheId, elternTeil);
-        return dokumentDownloadService.getWrapedDokument(filename, buffer);
+        return datenschutzbriefService.getDatenschutzbriefDokument(datenschutzbriefId);
     }
 
-    @PermitAll
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     @Override
-    public FileDownloadTokenDto getDatenschutzbriefDownloadToken(UUID elternId) {
+    public FileDownloadTokenDto getDatenschutzbriefDownloadToken(final UUID gesuchId, final UUID datenschutzbriefId) {
         authorizer.canGetDokumentDownloadToken();
         return dokumentDownloadService.getFileDownloadToken(
-            elternId,
+            datenschutzbriefId,
+            DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
+            benutzerService,
+            configService
+        );
+    }
+
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    @Override
+    public FileDownloadTokenDto createAndGetDatenschutzbriefDownloadToken(
+        UUID gesuchId,
+        DatenschutzbriefCreateDto datenschutzbriefCreateDto
+    ) {
+        authorizer.canGetDokumentDownloadToken();
+        final var datenschutzbriefId =
+            datenschutzbriefService.createDatenschutzbrief(gesuchId, datenschutzbriefCreateDto.getElternId());
+        return dokumentDownloadService.getFileDownloadToken(
+            datenschutzbriefId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,
             configService

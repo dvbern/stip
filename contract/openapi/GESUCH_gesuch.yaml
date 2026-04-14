@@ -1329,17 +1329,15 @@ components:
       required:
         - kommentar
         - beschwerdeErfolgreich
-        - dokumente
+        - dokument
       type: object
       properties:
         kommentar:
           type: string
         beschwerdeErfolgreich:
           type: boolean
-        dokumente:
-          type: array
-          items:
-            $ref: './components/common.yaml#/Dokument'
+        dokument:
+          $ref: './components/common.yaml#/Dokument'
     BeschwerdeVerlaufEntryCreate:
       type: object
       required:
@@ -1453,6 +1451,7 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - canAenderungEinreichen
       properties:
         offen:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
@@ -1464,6 +1463,8 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        canAenderungEinreichen:
+          type: boolean
     VerfuegtGesuch:
       type: object
       required:

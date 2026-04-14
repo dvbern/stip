@@ -15,5 +15,6 @@ export interface GesuchAenderungs {
     offen?: GesuchTrancheSlim;
     akzeptiert: Array<GesuchTrancheSlim>;
     abgelehnt: Array<GesuchTrancheSlim>;
+    canAenderungEinreichen: boolean;
 }
 

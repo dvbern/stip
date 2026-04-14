@@ -51,6 +51,27 @@ public class GesuchUtil {
         return Gesuchstatus.GESUCH_VERFUEGUNG_ABGESCHLOSSEN.contains(gesuch.getGesuchStatus());
     }
 
+    public boolean canGsAendererungEinreichen(final Gesuch gesuch) {
+        return gesuchAbgeschlossen(gesuch);
+    }
+
+    public boolean canSbInitAendererung(final Gesuch gesuch) {
+        return gesuchAbgeschlossen(gesuch) && !hasAenderungInPruefungOrFehlendeDok(gesuch);
+    }
+
+    public boolean hasAenderungInPruefungOrFehlendeDok(final Gesuch gesuch) {
+        final var tranchesInPruefungOrFehlendeDok = gesuch.getAenderungs()
+            .filter(
+                gesuchTranche -> Set.of(
+                    GesuchTrancheStatus.UEBERPRUEFEN,
+                    GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+                ).contains(gesuchTranche.getStatus())
+            )
+            .toList();
+
+        return !tranchesInPruefungOrFehlendeDok.isEmpty();
+    }
+
     public static boolean gesuchIsInStatus(final Gesuch gesuch, final Gesuchstatus gesuchStatus) {
         return gesuchIsInOneOfGesuchStatus(gesuch, Set.of(gesuchStatus));
     }

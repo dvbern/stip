@@ -318,6 +318,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
       inBearbeitungSbReason,
+      canSBInitAenderung,
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
@@ -332,9 +333,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
-    const list = StatusUebergaengeMap[gesuchStatus]
-      ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
-      ?.map((status) => ({
+
+    const statusAbhaengigUebergange = StatusUebergaengeMap[gesuchStatus] ?? [];
+
+    const flagAbhaengigUebergange: StatusUebergang[] = [];
+    if (canSBInitAenderung) {
+      flagAbhaengigUebergange.push('BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG');
+    }
+    if (canTriggerManuellPruefen) {
+      flagAbhaengigUebergange.push('STATUS_PRUEFUNG_AUSLOESEN');
+    }
+
+    const list = [...statusAbhaengigUebergange, ...flagAbhaengigUebergange]
+      .filter(isDefined)
+      .map((status) => ({
         ...StatusUebergaengeOptions[status]({
           permissions,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,

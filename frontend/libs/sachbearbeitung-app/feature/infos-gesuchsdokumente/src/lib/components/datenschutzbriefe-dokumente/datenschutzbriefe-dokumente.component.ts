@@ -10,12 +10,16 @@ import {
 } from '@angular/core';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
 @Component({
@@ -23,11 +27,15 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   standalone: true,
   imports: [
     DatePipe,
-    TranslocoPipe,
+    RouterLink,
+    MatTooltipModule,
     MatTableModule,
     MatPaginatorModule,
     TypeSafeMatCellDefDirective,
     SharedUiLoadingComponent,
+    SachbearbeitungAppUiAdvTranslocoDirective,
+    SharedUiTruncateTooltipDirective,
+    SharedUiDownloadButtonDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './datenschutzbriefe-dokumente.component.html',
@@ -37,7 +45,7 @@ export class DatenschutzbriefeDokumenteComponent {
   infosStore = inject(InfosGesuchsdokumenteStore);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchId = input.required<string>({ alias: 'id' });
+  gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
@@ -46,18 +54,20 @@ export class DatenschutzbriefeDokumenteComponent {
 
   displayedColumns = [
     'datum',
-    'kategorie',
-    'sachbearbeiter',
-    'person',
-    'massendruck',
+    'typ',
+    'userErstellt',
+    'sozialversicherungsnummer',
+    'vorname',
+    'nachname',
+    'dokument',
   ];
 
   paginatedDokumenteSig = computed(() => {
-    const briefe =
+    const datenschutzbriefe =
       this.infosStore.datenschutzbriefeDokumenteViewSig().datenschutzbriefe ??
       [];
 
-    const datasource = new MatTableDataSource(briefe);
+    const datasource = new MatTableDataSource(datenschutzbriefe);
     const paginator = this.paginatorSig();
 
     if (paginator) {
@@ -69,7 +79,7 @@ export class DatenschutzbriefeDokumenteComponent {
 
   constructor() {
     effect(() => {
-      const gesuchId = this.gesuchId();
+      const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
         this.infosStore.loadDatenschutzbriefeDokumente$({ gesuchId });
       }

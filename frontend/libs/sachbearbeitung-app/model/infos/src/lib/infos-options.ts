@@ -56,13 +56,6 @@ export const BUCHHALTUNG_ROUTE: InfosOptions = {
   iconSymbolName: 'library_books',
 };
 
-export const DARLEHEN_ROUTE: InfosOptions = {
-  route: 'darlehen',
-  translationKey: 'sachbearbeitung-app.infos.darlehen',
-  titleTranslationKey: 'sachbearbeitung-app.infos.darlehen',
-  iconSymbolName: 'real_estate_agent',
-};
-
 export const BESCHWERDEN_ROUTE: InfosOptions = {
   route: 'beschwerden',
   translationKey: 'sachbearbeitung-app.infos.beschwerden',
@@ -76,6 +69,5 @@ export const INFOS_OPTIONS = [
   INFO_ADMIN_DOKUMENTE_ROUTE,
   INFO_ADMIN_ROUTE,
   BUCHHALTUNG_ROUTE,
-  DARLEHEN_ROUTE,
   BESCHWERDEN_ROUTE,
 ];
