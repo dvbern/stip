@@ -36,6 +36,31 @@ paths:
         500:
           $ref: './components/responses.yaml#/ServerError'
       operationId: fallDelegieren
+  /delegierung/{gesuchId}/all:
+    parameters:
+      - $ref: './components/parameters.yaml#/gesuchId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delegierung'
+          description: All delegierungs for the given gesuch
+        401:
+          $ref: './components/responses.yaml#/Unauthorized'
+        403:
+          $ref: './components/responses.yaml#/Forbidden'
+        404:
+          $ref: './components/responses.yaml#/NotFound'
+        500:
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllDelegierungsForGesuch
+      summary: Returns all delegierungs for a given gesuch
   /delegierung/{delegierungId}/mitarbeiterDelegieren:
     parameters:
       - $ref: '#/components/parameters/delegierungId'
@@ -111,7 +136,7 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/delegierungAngenommen'
+        - $ref: './components/parameters.yaml#/status'
         - $ref: './components/parameters.yaml#/page'
         - $ref: './components/parameters.yaml#/pageSize'
         - name: sortColumn
@@ -193,11 +218,6 @@ components:
       schema:
         type: string
         format: date
-    delegierungAngenommen:
-      in: query
-      name: delegierungAngenommen
-      schema:
-        type: boolean
     nachname:
       in: query
       name: nachname
@@ -220,6 +240,9 @@ components:
       type: object
       required:
         - id
+        - sozialdienst
+        - persoenlicheAngaben
+        - status
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -227,26 +250,27 @@ components:
           $ref: './components/common.yaml#/SozialdienstSlim'
         delegierterMitarbeiter:
           $ref: './components/common.yaml#/SozialdienstBenutzer'
-        delegierungAngenommen:
-          type: boolean
         persoenlicheAngaben:
           $ref: './components/common.yaml#/PersoenlicheAngaben'
-    FallWithDelegierung:
+        status:
+          $ref: './components/common.yaml#/DelegierungStatus'
+        startDate:
+          $ref: './components/common.yaml#/LocalDate'
+        endDate:
+          $ref: './components/common.yaml#/LocalDate'
+    DelegierungEntry:
       required:
-        - id
-        - fallNummer
         - mandant
-        - delegierung
       type: object
+      allOf:
+        - $ref: '#/components/schemas/Delegierung'
       properties:
-        id:
+        fallId:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
         mandant:
           type: string
-        delegierung:
-          $ref: '#/components/schemas/Delegierung'
     PaginatedSozDashboard:
       allOf:
         - $ref: './components/common.yaml#/PaginatedResult'
@@ -254,7 +278,7 @@ components:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/FallWithDelegierung'
+            $ref: '#/components/schemas/DelegierungEntry'
     SozDashboardColumn:
       enum:
         - FALLNUMMER

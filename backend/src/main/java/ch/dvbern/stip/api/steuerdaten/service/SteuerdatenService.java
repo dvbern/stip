@@ -23,7 +23,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -73,7 +72,6 @@ public class SteuerdatenService {
 
         final var steuerdaten = steuerdatenMapper.map(steuerdatenDtos, formular.getSteuerdaten()).stream().toList();
         ValidatorUtil.validate(validator, formular, SteuerdatenPageValidation.class);
-        JahreswertUtil.synchroniseJahreswerte(formular.getTranche());
 
         steuerdaten.forEach(steuerdatenRepository::persistAndFlush);
         return steuerdaten.stream()

@@ -1046,6 +1046,19 @@
   "shared.form.darlehen.zurueckweisen.failure": "Une erreur s'est produite lors du refus du prêt. Veuillez réessayer.",
   "shared.form.darlehen.error.missingDocuments": "Veuillez télécharger tous les documents obligatoires avant de soumettre la demande de prêt.",
 
+  "shared.delegierungen.title": "Délégation",
+  "shared.form.delegierung.list.label": "Délégations précédentes",
+  "shared.form.delegierung.start.label": "Date de début de la délégation",
+  "shared.form.delegierung.end.label": "Date de fin de la délégation",
+  "shared.form.delegierung.range.ongoing": "depuis le {{startDate}}",
+  "shared.form.delegierung.range.startAndEnd": "du {{startDate}} au {{endDate}}",
+  "shared.form.delegierung.name.label": "Nom du service social",
+  "shared.form.delegierung.status.label": "Statut",
+  "shared.form.delegierung.telefonnummer.label": "Numéro de téléphone",
+  "shared.form.delegierung.email.label": "Adresse e-mail",
+  "shared.form.delegierung.vorname.label": "Prénom",
+  "shared.form.delegierung.nachname.label": "Nom",
+
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Désignation(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Désignation(FR)",
   "shared.form.gesuchsjahr.jahr.label": "Année",
@@ -1110,6 +1123,11 @@
   "shared.ausbildungskategorie.BRUECKENANGEBOT": "Offre de transition",
   "shared.ausbildungskategorie.HOEHERE_FACHPRUEFUNG": "Examen professionnel supérieur",
   "shared.ausbildungskategorie.BERUFSPRUEFUNG": "Examen professionnel",
+
+  "shared.delegierung.status.EINGEREICHT": "Soumis",
+  "shared.delegierung.status.AKZEPTIERT": "Accepté",
+  "shared.delegierung.status.ABGELEHNT": "Refusé",
+  "shared.delegierung.status.BEENDET": "Clôturé",
 
   "shared.kanton.AG": "Argovie",
   "shared.kanton.AI": "Appenzell Rh.-Ext.",

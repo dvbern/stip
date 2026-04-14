@@ -20,25 +20,26 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class DelegierungSlimDto  implements Serializable {
-  private @Valid Boolean delegierungAngenommen;
+  private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
   private @Valid SozialdienstSlimDto sozialdienst;
 
   /**
    **/
-  public DelegierungSlimDto delegierungAngenommen(Boolean delegierungAngenommen) {
-    this.delegierungAngenommen = delegierungAngenommen;
+  public DelegierungSlimDto status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+    this.status = status;
     return this;
   }
 
   
-  @JsonProperty("delegierungAngenommen")
-  public Boolean getDelegierungAngenommen() {
-    return delegierungAngenommen;
+  @JsonProperty("status")
+  @NotNull
+  public ch.dvbern.stip.api.delegieren.type.DelegierungStatus getStatus() {
+    return status;
   }
 
-  @JsonProperty("delegierungAngenommen")
-  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
-    this.delegierungAngenommen = delegierungAngenommen;
+  @JsonProperty("status")
+  public void setStatus(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+    this.status = status;
   }
 
   /**
@@ -50,6 +51,7 @@ public class DelegierungSlimDto  implements Serializable {
 
   
   @JsonProperty("sozialdienst")
+  @NotNull
   public SozialdienstSlimDto getSozialdienst() {
     return sozialdienst;
   }
@@ -69,13 +71,13 @@ public class DelegierungSlimDto  implements Serializable {
       return false;
     }
     DelegierungSlimDto delegierungSlim = (DelegierungSlimDto) o;
-    return Objects.equals(this.delegierungAngenommen, delegierungSlim.delegierungAngenommen) &&
+    return Objects.equals(this.status, delegierungSlim.status) &&
         Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(delegierungAngenommen, sozialdienst);
+    return Objects.hash(status, sozialdienst);
   }
 
   @Override
@@ -83,7 +85,7 @@ public class DelegierungSlimDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungSlimDto {\n");
     
-    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("}");
     return sb.toString();

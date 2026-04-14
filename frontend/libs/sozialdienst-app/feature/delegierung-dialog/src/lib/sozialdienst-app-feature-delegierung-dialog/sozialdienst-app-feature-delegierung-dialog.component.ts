@@ -28,7 +28,12 @@ import { subYears } from 'date-fns';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { selectLanguage } from '@dv/shared/data-access/language';
-import { Anrede, FallWithDelegierung, Sprache } from '@dv/shared/model/gesuch';
+import {
+  Anrede,
+  DelegierungEntry,
+  DelegierungStatus,
+  Sprache,
+} from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -50,7 +55,7 @@ import { SozialdienstAppTranslationKey } from '@dv/sozialdienst-app/assets/i18n'
 import { DelegationStore } from '@dv/sozialdienst-app/data-access/delegation';
 
 export interface DelegierungDialogData {
-  fall: FallWithDelegierung;
+  delegierung: DelegierungEntry;
 }
 
 @Component({
@@ -118,6 +123,12 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
     sozMitarbeiter: [<string | undefined>undefined, [Validators.required]],
   });
 
+  saveLabelKey: SozialdienstAppTranslationKey = `sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.${
+    this.dialogData.delegierung.delegierterMitarbeiter
+      ? 'changeZuweisung'
+      : 'accept'
+  }`;
+
   sozMitarbeiterChangedSig = toSignal(
     this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.valueChanges,
   );
@@ -127,16 +138,11 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   showUnsavedChangesErrorSig = computed(() => {
     this.matDiaogBackdropClickedSig();
 
-    if (
+    return (
       isDefined(
         this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value,
-      ) !==
-      isDefined(this.dialogData.fall.delegierung.delegierterMitarbeiter?.id)
-    ) {
-      return true;
-    } else {
-      return false;
-    }
+      ) !== isDefined(this.dialogData.delegierung.delegierterMitarbeiter?.id)
+    );
   });
 
   onGeburtsdatumBlur() {
@@ -153,7 +159,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
 
       if (
         sozMitarbeiterId !==
-        this.dialogData.fall.delegierung.delegierterMitarbeiter?.id
+        this.dialogData.delegierung.delegierterMitarbeiter?.id
       ) {
         this.dialogRef.disableClose = true;
       } else {
@@ -165,28 +171,37 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.delegationStore.loadSozialdienstBenutzerList$();
     this.form.patchValue({
-      fallNummer: this.dialogData.fall.fallNummer,
-      anrede: this.dialogData.fall.delegierung.persoenlicheAngaben?.anrede,
-      nachname: this.dialogData.fall.delegierung.persoenlicheAngaben?.nachname,
-      vorname: this.dialogData.fall.delegierung.persoenlicheAngaben?.vorname,
+      fallNummer: this.dialogData.delegierung.fallNummer,
+      anrede: this.dialogData.delegierung.persoenlicheAngaben?.anrede,
+      nachname: this.dialogData.delegierung.persoenlicheAngaben?.nachname,
+      vorname: this.dialogData.delegierung.persoenlicheAngaben?.vorname,
       geburtsdatum: parseBackendLocalDateAndPrint(
-        this.dialogData.fall.delegierung.persoenlicheAngaben?.geburtsdatum,
+        this.dialogData.delegierung.persoenlicheAngaben?.geburtsdatum,
         this.languageSig(),
       ),
-      email: this.dialogData.fall.delegierung.persoenlicheAngaben?.email,
-      sprache: this.dialogData.fall.delegierung.persoenlicheAngaben?.sprache,
+      email: this.dialogData.delegierung.persoenlicheAngaben?.email,
+      sprache: this.dialogData.delegierung.persoenlicheAngaben?.sprache,
     });
-    if (this.dialogData.fall.delegierung.persoenlicheAngaben?.adresse) {
+
+    if (
+      !(['AKZEPTIERT', 'EINGEREICHT'] as DelegierungStatus[]).includes(
+        this.dialogData.delegierung.status,
+      )
+    ) {
+      this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.disable();
+    }
+
+    if (this.dialogData.delegierung.persoenlicheAngaben?.adresse) {
       SharedUiFormAddressComponent.patchForm(
         this.form.controls.adresse,
-        this.dialogData.fall.delegierung.persoenlicheAngaben.adresse,
+        this.dialogData.delegierung.persoenlicheAngaben.adresse,
       );
     }
-    if (this.dialogData.fall.delegierung.delegierterMitarbeiter?.id) {
-      this.zuweisungSozMitarbeiterForm.patchValue({
-        sozMitarbeiter:
-          this.dialogData.fall.delegierung.delegierterMitarbeiter.id,
-      });
+
+    if (this.dialogData.delegierung.delegierterMitarbeiter?.id) {
+      this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.patchValue(
+        this.dialogData.delegierung.delegierterMitarbeiter.id,
+      );
     }
   }
 
@@ -198,7 +213,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
     const mitarbeiterId =
       this.zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.value;
 
-    const delegierungId = this.dialogData.fall.delegierung.id;
+    const delegierungId = this.dialogData.delegierung.id;
 
     if (mitarbeiterId && delegierungId) {
       this.delegationStore.delegierterMitarbeiterAendern$({
@@ -216,7 +231,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   }
 
   rejectDelegation() {
-    const delegierungId = this.dialogData.fall.delegierung.id;
+    const delegierungId = this.dialogData.delegierung.id;
     if (delegierungId) {
       SharedUiConfirmDialogComponent.open<
         SharedTranslationKey | SozialdienstAppTranslationKey
@@ -241,7 +256,7 @@ export class DelegierungDialogComponent implements OnInit, OnDestroy {
   }
 
   removeDelegation() {
-    const delegierungId = this.dialogData.fall.delegierung.id;
+    const delegierungId = this.dialogData.delegierung.id;
     if (delegierungId) {
       SharedUiConfirmDialogComponent.open<
         SharedTranslationKey | SozialdienstAppTranslationKey

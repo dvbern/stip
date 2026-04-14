@@ -161,7 +161,7 @@ public class NotificationService {
         final NotificationType notificationType,
         final Delegierung delegierung
     ) {
-        final var fall = delegierung.getDelegierterFall();
+        final var fall = delegierung.getFall();
         final var absender = delegierung.getSozialdienst().getSozialdienstAdmin().getFullName();
         final var persoenlicheAngaben = delegierung.getPersoenlicheAngaben();
 
@@ -186,7 +186,7 @@ public class NotificationService {
         notificationRepository.persistAndFlush(notification);
         mailService.sendStandardNotificationEmailForFall(
             delegierung.getPersoenlicheAngaben(),
-            delegierung.getDelegierterFall()
+            fall
         );
     }
 
@@ -333,19 +333,15 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         final var numberOfDays =
             String.valueOf(DateUtil.getDaysBetween(LocalDate.now(), gesuch.getNachfristDokumente()));
+        final var sachbearbeiter = gesuch.getAusbildung()
+            .getFall()
+            .getSachbearbeiterZuordnung()
+            .getSachbearbeiter();
         String msg = Templates.getGesuchFehlendeDokumenteText(
             sprache,
             numberOfDays,
-            gesuch.getAusbildung()
-                .getFall()
-                .getSachbearbeiterZuordnung()
-                .getSachbearbeiter()
-                .getVorname(),
-            gesuch.getAusbildung()
-                .getFall()
-                .getSachbearbeiterZuordnung()
-                .getSachbearbeiter()
-                .getNachname()
+            sachbearbeiter.getVorname(),
+            sachbearbeiter.getNachname()
         ).render();
         notification.setNotificationText(msg);
         notificationRepository.persistAndFlush(notification);
@@ -405,21 +401,15 @@ public class NotificationService {
         final var sprache = pia.getKorrespondenzSprache();
         final var anrede = NotificationTemplateUtils.getAnredeText(pia.getAnrede(), sprache);
         final var nachname = pia.getNachname();
-        final var sbVorname = gesuch.getAusbildung()
+        final var sachbearbeiter = gesuch.getAusbildung()
             .getFall()
             .getSachbearbeiterZuordnung()
-            .getSachbearbeiter()
-            .getVorname();
-        final var sbNachname = gesuch.getAusbildung()
-            .getFall()
-            .getSachbearbeiterZuordnung()
-            .getSachbearbeiter()
-            .getNachname();
+            .getSachbearbeiter();
         String msg = Templates.getFehlendeDokumenteNichtEingereichtText(
             anrede,
             nachname,
-            sbVorname,
-            sbNachname,
+            sachbearbeiter.getVorname(),
+            sachbearbeiter.getNachname(),
             sprache
         ).render();
 

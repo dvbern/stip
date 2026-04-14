@@ -19,6 +19,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { DelegierterMitarbeiterAendern } from '../model/delegierterMitarbeiterAendern';
+import { Delegierung } from '../model/delegierung';
 import { DelegierungCreate } from '../model/delegierungCreate';
 import { GetDelegierungSozQueryTypeAdmin } from '../model/getDelegierungSozQueryTypeAdmin';
 import { GetDelegierungSozQueryTypeMitarbeiter } from '../model/getDelegierungSozQueryTypeMitarbeiter';
@@ -53,6 +54,11 @@ export interface DelegierenServiceFallDelegierenRequestParams {
     delegierungCreate: DelegierungCreate;
 }
 
+export interface DelegierenServiceGetAllDelegierungsForGesuchRequestParams {
+    /** Die ID vom Gesuch */
+    gesuchId: string;
+}
+
 export interface DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams {
     getDelegierungSozQueryType: GetDelegierungSozQueryTypeAdmin;
     fallNummer?: string;
@@ -60,7 +66,7 @@ export interface DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParam
     vorname?: string;
     geburtsdatum?: string;
     wohnort?: string;
-    delegierungAngenommen?: boolean;
+    status?: string;
     page: number;
     pageSize: number;
     sortColumn?: SozDashboardColumn;
@@ -536,6 +542,95 @@ export class DelegierenService {
         );
     }
 
+    public getAllDelegierungsForGesuchPath = (requestParameters: DelegierenServiceGetAllDelegierungsForGesuchRequestParams) => {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllDelegierungsForGesuch$.');
+        }
+        let path = `/api/v1/delegierung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/all`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Returns all delegierungs for a given gesuch
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getAllDelegierungsForGesuch$(requestParameters: DelegierenServiceGetAllDelegierungsForGesuchRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Delegierung>>;
+     public getAllDelegierungsForGesuch$(requestParameters: DelegierenServiceGetAllDelegierungsForGesuchRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Delegierung>>>;
+     public getAllDelegierungsForGesuch$(requestParameters: DelegierenServiceGetAllDelegierungsForGesuchRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Delegierung>>>;
+     public getAllDelegierungsForGesuch$(requestParameters: DelegierenServiceGetAllDelegierungsForGesuchRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const gesuchId = requestParameters.gesuchId;
+        if (gesuchId === null || gesuchId === undefined) {
+            throw new Error('Required parameter gesuchId was null or undefined when calling getAllDelegierungsForGesuch$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/delegierung/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/all`;
+        return this.httpClient.request<Array<Delegierung>>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
     public getDelegierungsOfSozialdienstAdminPath = (requestParameters: DelegierenServiceGetDelegierungsOfSozialdienstAdminRequestParams) => {
         const getDelegierungSozQueryType = requestParameters.getDelegierungSozQueryType;
         if (getDelegierungSozQueryType === null || getDelegierungSozQueryType === undefined) {
@@ -546,7 +641,7 @@ export class DelegierenService {
         const vorname = requestParameters.vorname;
         const geburtsdatum = requestParameters.geburtsdatum;
         const wohnort = requestParameters.wohnort;
-        const delegierungAngenommen = requestParameters.delegierungAngenommen;
+        const status = requestParameters.status;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
             throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
@@ -582,8 +677,8 @@ export class DelegierenService {
           queryParams.append('wohnort', wohnort.toString());
         }
 
-        if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
-          queryParams.append('delegierungAngenommen', delegierungAngenommen.toString());
+        if (status !== undefined && status !== null) {
+          queryParams.append('status', status.toString());
         }
 
         if (page !== undefined && page !== null) {
@@ -627,7 +722,7 @@ export class DelegierenService {
         const vorname = requestParameters.vorname;
         const geburtsdatum = requestParameters.geburtsdatum;
         const wohnort = requestParameters.wohnort;
-        const delegierungAngenommen = requestParameters.delegierungAngenommen;
+        const status = requestParameters.status;
         const page = requestParameters.page;
         if (page === null || page === undefined) {
             throw new Error('Required parameter page was null or undefined when calling getDelegierungsOfSozialdienstAdmin$.');
@@ -660,9 +755,9 @@ export class DelegierenService {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>wohnort, 'wohnort');
         }
-        if (delegierungAngenommen !== undefined && delegierungAngenommen !== null) {
+        if (status !== undefined && status !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>delegierungAngenommen, 'delegierungAngenommen');
+            <any>status, 'status');
         }
         if (page !== undefined && page !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,

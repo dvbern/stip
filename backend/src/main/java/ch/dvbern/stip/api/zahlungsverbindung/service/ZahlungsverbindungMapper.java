@@ -24,7 +24,6 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.util.ZahlungsverbindungDiffUtil;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDto;
-import ch.dvbern.stip.generated.dto.ZahlungsverbindungUpdateDto;
 import jakarta.inject.Inject;
 import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
@@ -33,7 +32,7 @@ import org.mapstruct.MappingTarget;
 @Mapper(config = MappingConfig.class, uses = { AdresseMapper.class })
 
 public abstract class ZahlungsverbindungMapper
-extends EntityUpdateMapper<ZahlungsverbindungUpdateDto, Zahlungsverbindung> {
+extends EntityUpdateMapper<ZahlungsverbindungDto, Zahlungsverbindung> {
     @Inject
     AdresseRepository adresseRepository;
 

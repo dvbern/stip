@@ -13,9 +13,9 @@ import { Adresse } from './adresse';
 
 export interface Zahlungsverbindung { 
     vorname?: string;
-    adresse: Adresse;
-    iban: string;
     nachname?: string;
     institution?: string;
+    adresse: Adresse;
+    iban: string;
 }
 

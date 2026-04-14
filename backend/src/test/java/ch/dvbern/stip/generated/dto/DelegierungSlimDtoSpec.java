@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DelegierungStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,14 +29,14 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * DelegierungSlimDtoSpec
  */
 @JsonPropertyOrder({
-  DelegierungSlimDtoSpec.JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN,
+  DelegierungSlimDtoSpec.JSON_PROPERTY_STATUS,
   DelegierungSlimDtoSpec.JSON_PROPERTY_SOZIALDIENST
 })
 @JsonTypeName("DelegierungSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class DelegierungSlimDtoSpec {
-  public static final String JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN = "delegierungAngenommen";
-  private Boolean delegierungAngenommen;
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private DelegierungStatusDtoSpec status;
 
   public static final String JSON_PROPERTY_SOZIALDIENST = "sozialdienst";
   private SozialdienstSlimDtoSpec sozialdienst;
@@ -43,29 +44,29 @@ public class DelegierungSlimDtoSpec {
   public DelegierungSlimDtoSpec() {
   }
 
-  public DelegierungSlimDtoSpec delegierungAngenommen(Boolean delegierungAngenommen) {
+  public DelegierungSlimDtoSpec status(DelegierungStatusDtoSpec status) {
     
-    this.delegierungAngenommen = delegierungAngenommen;
+    this.status = status;
     return this;
   }
 
    /**
-   * Get delegierungAngenommen
-   * @return delegierungAngenommen
+   * Get status
+   * @return status
   **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getDelegierungAngenommen() {
-    return delegierungAngenommen;
+  public DelegierungStatusDtoSpec getStatus() {
+    return status;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
-    this.delegierungAngenommen = delegierungAngenommen;
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(DelegierungStatusDtoSpec status) {
+    this.status = status;
   }
 
 
@@ -79,9 +80,9 @@ public class DelegierungSlimDtoSpec {
    * Get sozialdienst
    * @return sozialdienst
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SozialdienstSlimDtoSpec getSozialdienst() {
     return sozialdienst;
@@ -89,7 +90,7 @@ public class DelegierungSlimDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
     this.sozialdienst = sozialdienst;
   }
@@ -103,20 +104,20 @@ public class DelegierungSlimDtoSpec {
       return false;
     }
     DelegierungSlimDtoSpec delegierungSlim = (DelegierungSlimDtoSpec) o;
-    return Objects.equals(this.delegierungAngenommen, delegierungSlim.delegierungAngenommen) &&
+    return Objects.equals(this.status, delegierungSlim.status) &&
         Objects.equals(this.sozialdienst, delegierungSlim.sozialdienst);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(delegierungAngenommen, sozialdienst);
+    return Objects.hash(status, sozialdienst);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class DelegierungSlimDtoSpec {\n");
-    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("}");
     return sb.toString();

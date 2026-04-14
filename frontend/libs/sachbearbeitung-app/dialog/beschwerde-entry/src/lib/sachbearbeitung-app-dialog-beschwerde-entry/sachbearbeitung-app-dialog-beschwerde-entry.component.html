@@ -31,7 +31,7 @@
         {{ 'sachbearbeitung-app.infos.beschwerde.title.' + dialogData.beschwerdeSetTo | transloco }}
       }
     </dd>
-    @let document = dialogData.beschwerdeEntscheid?.dokumente?.[0];
+    @let document = dialogData.beschwerdeEntscheid?.dokument;
     @if (document) {
       <dt class="tw:whitespace-normal tw:!font-semibold">
         {{ 'sachbearbeitung-app.infos.beschwerde.document' | transloco }}

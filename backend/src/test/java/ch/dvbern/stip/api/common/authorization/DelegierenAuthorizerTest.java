@@ -98,8 +98,9 @@ class DelegierenAuthorizerTest {
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(sozialdienstbenutzer);
+        delegierung.akzeptieren();
         when(delegierungRepository.requireById(any())).thenReturn(delegierung);
-        fall.setDelegierung(delegierung);
+        fall.setCurrentDelegierung(delegierung);
 
         when(fallRepository.requireById(any())).thenReturn(fall);
         when(sozialdienstService.getSozialdienstOfCurrentSozialdienstBenutzer()).thenReturn(sozialdienst);

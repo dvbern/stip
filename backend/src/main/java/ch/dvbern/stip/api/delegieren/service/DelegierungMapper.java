@@ -20,29 +20,22 @@ package ch.dvbern.stip.api.delegieren.service;
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.generated.dto.DelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungEntryDto;
 import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
-import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 @Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
 
 public abstract class DelegierungMapper {
     public abstract Delegierung toEntity(final DelegierungDto delegierungDto);
 
-    @Mapping(source = ".", target = "delegierungAngenommen", qualifiedByName = "delegierungAngenommen")
     public abstract DelegierungDto toDto(final Delegierung delegierung);
 
-    @Mapping(source = ".", target = "delegierungAngenommen", qualifiedByName = "delegierungAngenommen")
     public abstract DelegierungSlimDto toSlimDto(final Delegierung delegierung);
 
-    public abstract FallWithDelegierungDto toFallWithDto(Fall fall);
-
-    @Named("delegierungAngenommen")
-    boolean delegierungAngenommen(Delegierung delegierung) {
-        return delegierung.getDelegierterMitarbeiter() != null;
-    }
+    @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = "fall.fallNummer", target = "fallNummer")
+    public abstract DelegierungEntryDto toEntryDto(final Delegierung fall);
 }

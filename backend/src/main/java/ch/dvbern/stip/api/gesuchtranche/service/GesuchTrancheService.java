@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
-import ch.dvbern.stip.api.common.jahreswert.JahreswertUtil;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
@@ -107,7 +106,6 @@ public class GesuchTrancheService {
     private final GesuchMapperUtil gesuchMapperUtil;
     private final BenutzerService benutzerService;
     private final GesuchTrancheCopyService gesuchTrancheCopyService;
-    private final GesuchTrancheOverrideDokumentService gesuchTrancheOverrideDokumentService;
     private final AuszahlungValidatorService auszahlungValidatorService;
     private final CustomDokumentTypRepository customDokumentTypRepository;
 
@@ -421,8 +419,6 @@ public class GesuchTrancheService {
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(aenderung, newTranche);
 
         gesuchTrancheTruncateService.truncateExistingTranchen(gesuch, newTranche);
-        gesuchTrancheOverrideDokumentService.overrideJahreswertDokumente(gesuch, newTranche);
-        JahreswertUtil.synchroniseJahreswerte(newTranche);
     }
 
     @Transactional

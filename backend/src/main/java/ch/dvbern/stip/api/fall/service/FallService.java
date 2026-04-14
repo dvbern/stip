@@ -40,6 +40,10 @@ public class FallService {
     private final IdEncryptionService idEncryptionService;
     private final FallNummerSeqRepository fallNummerSeqRepository;
 
+    public Fall getById(final UUID fallId) {
+        return fallRepository.requireById(fallId);
+    }
+
     @Transactional
     public FallDto createFallForGs() {
         final var benutzer = benutzerService.getCurrentBenutzer();

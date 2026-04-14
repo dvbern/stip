@@ -37,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallDashboardItemDtoSpec.JSON_PROPERTY_FALL,
   FallDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS,
   FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS,
-  FallDashboardItemDtoSpec.JSON_PROPERTY_DELEGIERUNG
+  FallDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG
 })
 @JsonTypeName("FallDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -51,8 +51,8 @@ public class FallDashboardItemDtoSpec {
   public static final String JSON_PROPERTY_NOTIFICATIONS = "notifications";
   private List<NotificationDtoSpec> notifications;
 
-  public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
-  private DelegierungSlimDtoSpec delegierung;
+  public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
+  private DelegierungSlimDtoSpec currentDelegierung;
 
   public FallDashboardItemDtoSpec() {
   }
@@ -151,29 +151,29 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  public FallDashboardItemDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
+  public FallDashboardItemDtoSpec currentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
     
-    this.delegierung = delegierung;
+    this.currentDelegierung = currentDelegierung;
     return this;
   }
 
    /**
-   * Get delegierung
-   * @return delegierung
+   * Get currentDelegierung
+   * @return currentDelegierung
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DelegierungSlimDtoSpec getDelegierung() {
-    return delegierung;
+  public DelegierungSlimDtoSpec getCurrentDelegierung() {
+    return currentDelegierung;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG)
+  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierung(DelegierungSlimDtoSpec delegierung) {
-    this.delegierung = delegierung;
+  public void setCurrentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
   }
 
   @Override
@@ -188,12 +188,12 @@ public class FallDashboardItemDtoSpec {
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications) &&
-        Objects.equals(this.delegierung, fallDashboardItem.delegierung);
+        Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, delegierung);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung);
   }
 
   @Override
@@ -203,7 +203,7 @@ public class FallDashboardItemDtoSpec {
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
-    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
+    sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

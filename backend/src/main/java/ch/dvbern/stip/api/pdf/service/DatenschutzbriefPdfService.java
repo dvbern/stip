@@ -184,7 +184,7 @@ public class DatenschutzbriefPdfService {
             );
 
             final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
-            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
+            PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs);
 
             document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
