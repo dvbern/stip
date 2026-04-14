@@ -59,6 +59,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -217,8 +218,9 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .as(BeschwerdeVerlaufEntryDtoSpec[].class);
         assertThat(beschwerdeVerlaufEntries.length, is(1));
         final var entry = beschwerdeVerlaufEntries[0];
+        assertNotNull(entry.getBeschwerdeEntscheid());
         assertThat(entry.getBeschwerdeEntscheid().getBeschwerdeErfolgreich(), is(false));
-        assertThat(entry.getBeschwerdeEntscheid().getDokumente().size(), is(1));
+        assertNotNull(entry.getBeschwerdeEntscheid().getDokument());
     }
 
     @Test
@@ -270,7 +272,10 @@ class GesuchResourceBeschwerdeEntscheidTest {
             .body()
             .as(BeschwerdeVerlaufEntryDtoSpec[].class);
         assertThat(beschwerdeVerlaufEntries.length, is(2));
-        dokumentId = beschwerdeVerlaufEntries[0].getBeschwerdeEntscheid().getDokumente().get(0).getId();
+        final var entry = beschwerdeVerlaufEntries[0];
+        assertNotNull(entry.getBeschwerdeEntscheid());
+        assertNotNull(entry.getBeschwerdeEntscheid().getDokument());
+        dokumentId = entry.getBeschwerdeEntscheid().getDokument().getId();
     }
 
     @Test

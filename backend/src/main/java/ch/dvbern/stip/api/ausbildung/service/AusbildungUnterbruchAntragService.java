@@ -78,7 +78,6 @@ public class AusbildungUnterbruchAntragService {
     private final StatusprotokollService statusprotokollService;
 
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH = "ausbildung_unterbruch_antrag/";
-    public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED = "DELETED";
 
     public AusbildungUnterbruchAntrag requireById(final UUID ausbildungUnterbruchAntragId) {
         return ausbildungUnterbruchAntragRepository.requireById(ausbildungUnterbruchAntragId);
@@ -169,12 +168,7 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         final List<String> objectIds =
             antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
-        createStatusprotokollEntry(
-            antrag,
-            AUSBILDUNG_UNTERBRUCH_ANTRAG_STATUS_DELETED,
-            antrag.getStatus().toString(),
-            antrag.getKommentarGS()
-        );
+
         ausbildungUnterbruchAntragRepository.delete(antrag);
         dokumentDeleteService.executeDeleteDokumentsFromS3(s3, configService.getBucketName(), objectIds);
     }

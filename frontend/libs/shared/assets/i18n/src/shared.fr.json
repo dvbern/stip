@@ -344,9 +344,7 @@
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Rejeté",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Libéré",
 
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Créé",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Soumis",
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Supprimé",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Accepté",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Refusé",
 
@@ -542,8 +540,8 @@
   "shared.form.person.zivilstand.label": "État civil",
   "shared.form.person.zivilstand.ledig.info": "Si vous êtes en couple depuis 5 ans ou plus, veuillez sélectionner \"Concubinage\".",
   "shared.form.person.zivilstand.konkubinat.info": "Définition de «concubinage» : couple non marié qui forme une union de fait depuis au moins cinq ans ou qui a un enfant commun qui vit sous le même toit. Les personnes vivant en concubinage sont considérées comme des personnes en formation mariées.",
-  "shared.form.person.guardianship.label": "Il y a une curatelle de portée générale",
-  "shared.form.person.guardianship.info": "Si vous être représenté·e par une curatrice ou un curateur, veuillez cocher cette case.\n\nExplication: La curatelle de portée générale couvre tous les domaines de l’assistance personnelle, de la gestion du patrimoine et des rapports juridiques avec des tiers. La curatrice ou le curateur prend des décisions au nom de la personne concernée et la représente dans tous ces domaines. La personne concernée ne peut pas exercer ses droits civils.",
+  "shared.form.person.vormundschaft.label": "Il y a une curatelle de portée générale",
+  "shared.form.person.vormundschaft.info": "Si vous être représenté·e par une curatrice ou un curateur, veuillez cocher cette case.\n\nExplication: La curatelle de portée générale couvre tous les domaines de l’assistance personnelle, de la gestion du patrimoine et des rapports juridiques avec des tiers. La curatrice ou le curateur prend des décisions au nom de la personne concernée et la représente dans tous ces domaines. La personne concernée ne peut pas exercer ses droits civils.",
   "shared.form.person.vermoegenVorjahr.label": "Fortune au 31.12. de l'année précédente",
   "shared.form.person.sozialhilfebeitraege.label": "Des contributions d'aide sociale sont-elles versées?",
   "shared.form.person.sozialhilfebeitraege.infoTitle": "Des contributions d'aide sociale sont-elles versées?",

@@ -90,14 +90,10 @@ public class BeschwerdeEntscheidService {
             configService,
             antivirus,
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
-            objectId -> beschwerdeEntscheid.setDokumente(
-                List.of(
-                    uploadDokument(
-                        beschwerdeEntscheid,
-                        fileUpload,
-                        objectId
-                    )
-                )
+            objectId -> uploadDokument(
+                beschwerdeEntscheid,
+                fileUpload,
+                objectId
             ),
             throwable -> LOG.error(throwable.getMessage())
         );
@@ -112,7 +108,7 @@ public class BeschwerdeEntscheidService {
     }
 
     @Transactional
-    protected Dokument uploadDokument(
+    protected void uploadDokument(
         final BeschwerdeEntscheid beschwerdeEntscheid,
         final FileUpload fileUpload,
         final String objectId
@@ -123,9 +119,8 @@ public class BeschwerdeEntscheidService {
             .setFilepath(BESCHWERDEENTSCHEID_DOKUMENT_PATH)
             .setObjectId(objectId);
 
-        beschwerdeEntscheid.getDokumente().add(dokument);
+        beschwerdeEntscheid.setDokument(dokument);
         dokumentRepository.persist(dokument);
-        return dokument;
     }
 
     public RestMulti<Buffer> getDokument(final UUID dokumentId) {

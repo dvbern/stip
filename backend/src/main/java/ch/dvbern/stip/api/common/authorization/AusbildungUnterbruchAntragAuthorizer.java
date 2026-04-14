@@ -27,8 +27,10 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
+import ch.dvbern.stip.generated.dto.UpdateAusbildungUnterbruchAntragSBDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
@@ -113,8 +115,15 @@ public class AusbildungUnterbruchAntragAuthorizer extends BaseAuthorizer {
         permitAll();
     }
 
-    public void sbCanWrite(final UUID ausbildungUnterbruchAntragId) {
+    public void sbCanWrite(
+        final UUID ausbildungUnterbruchAntragId,
+        final UpdateAusbildungUnterbruchAntragSBDto updateAusbildungUnterbruchAntragSBDto
+    ) {
+        if (updateAusbildungUnterbruchAntragSBDto.getStatus() == AusbildungUnterbruchAntragStatus.IN_BEARBEITUNG_GS) {
+            throw new BadRequestException("Cannot update Unterbruchantrag to Status IN_BEARBEITUNG_GS");
+        }
         final var antrag = ausbildungUnterbruchAntragService.requireById(ausbildungUnterbruchAntragId);
+
         assertAusbildungUnterbruchAntragIsInState(antrag, AusbildungUnterbruchAntragStatus.EINGEGEBEN);
     }
 
