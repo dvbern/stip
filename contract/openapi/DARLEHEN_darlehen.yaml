@@ -559,9 +559,8 @@ paths:
       tags:
         - Darlehen
       requestBody:
-        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/FreiwilligDarlehenUpdateSb'
       responses:
