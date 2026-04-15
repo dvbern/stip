@@ -26,6 +26,7 @@ import {
   handleApiResponse,
   initial,
   isPending,
+  mapCachedData,
   pending,
 } from '@dv/shared/util/remote-data';
 
@@ -435,4 +436,13 @@ export class DarlehenStore extends signalStore(
       ),
     ),
   );
+
+  softDeleteNegativVerfuegung() {
+    patchState(this, (state) => ({
+      cachedDarlehen: mapCachedData(state.cachedDarlehen, (d) => ({
+        ...d,
+        negativeVerfuegung: undefined,
+      })),
+    }));
+  }
 }

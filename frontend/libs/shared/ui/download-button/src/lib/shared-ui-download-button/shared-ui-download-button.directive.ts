@@ -36,6 +36,10 @@ export type DownloadOptions =
       id: string;
     }
   | {
+      type: 'darlehenNegativVerfuegung';
+      id: string;
+    }
+  | {
       type: 'berechnungsblatt';
       id: string;
     }
@@ -148,6 +152,17 @@ const getDownloadObservable$ = (
         .pipe(
           map(({ token }) =>
             darlehenService.downloadDarlehenDokumentPath({ token }),
+          ),
+        );
+    }
+    case 'darlehenNegativVerfuegung': {
+      return darlehenService
+        .getDarlehenNegativVerfuegungDownloadToken$({
+          dokumentId: id,
+        })
+        .pipe(
+          map(({ token }) =>
+            darlehenService.downloadDarlehenNegativVerfuegungPath({ token }),
           ),
         );
     }

@@ -26,6 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
@@ -40,14 +41,17 @@ import {
   DarlehenDokumentType,
   DarlehenGrund,
   FreiwilligDarlehenUpdateGs,
-  FreiwilligDarlehenUpdateSb,
 } from '@dv/shared/model/gesuch';
 import { getDarlehenPermissions } from '@dv/shared/model/permission-state';
 import {
   SharedPatternDocumentUploadComponent,
   createDarlehenUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
+import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
+import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -60,6 +64,7 @@ import {
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
@@ -79,16 +84,22 @@ import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
     MatInputModule,
     MatCheckboxModule,
     MatRadioModule,
+    MatTooltipModule,
     MaskitoDirective,
     RouterLink,
+    FilesizePipe,
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
     SharedPatternDocumentUploadComponent,
     SharedUiFormMessageErrorDirective,
     SharedUiIfSachbearbeiterDirective,
     SharedUiIfGesuchstellerDirective,
+    SharedUiFileUploadComponent,
     SharedUiMaxLengthDirective,
     SharedUiFormReadonlyDirective,
+    SharedUiAdvTranslocoDirective,
+    SharedUiDownloadButtonDirective,
+    SharedUiTruncateTooltipDirective,
   ],
   templateUrl: './shared-pattern-darlehen-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -109,6 +120,9 @@ export class SharedPatternDarlehenFormComponent {
     SharedPatternDocumentUploadComponent,
   );
 
+  deploymentConfigSig = this.store.selectSignal(
+    selectSharedDataAccessConfigsView,
+  );
   darlehenStore = inject(DarlehenStore);
   darlehenSig = this.darlehenStore.cachedDarlehen.data;
 
@@ -147,7 +161,8 @@ export class SharedPatternDarlehenFormComponent {
 
   formSb = this.formBuilder.group({
     gewaehren: [<boolean | null>null, [Validators.required]],
-    betrag: [<string | undefined>undefined],
+    negativeVerfuegung: [<File | undefined>undefined],
+    betrag: [<string | undefined>undefined, [Validators.required]],
     kommentar: [<string | null>null, [Validators.required]],
   });
 
@@ -168,11 +183,6 @@ export class SharedPatternDarlehenFormComponent {
   });
 
   gewaehrenChangedSig = toSignal(this.formSb.controls.gewaehren.valueChanges);
-  showBetragFieldSig = computed(() => {
-    const gewaehren = this.gewaehrenChangedSig();
-
-    return !!gewaehren;
-  });
 
   anzahlBetreibungenChangedSig = toSignal(
     this.formGs.controls.anzahlBetreibungen.valueChanges,
@@ -226,6 +236,7 @@ export class SharedPatternDarlehenFormComponent {
   );
   darlehenUpdatedSig = output<void>();
   darlehenDeletedSig = output<void>();
+  gotReenabledSig = signal({});
 
   constructor() {
     // patch form value
@@ -251,19 +262,28 @@ export class SharedPatternDarlehenFormComponent {
           ]),
         ),
       });
+
+      if (darlehen.status === 'IN_FREIGABE') {
+        this.formSb.controls.negativeVerfuegung.addValidators(
+          Validators.required,
+        );
+      }
     });
 
     effect(() => {
-      const gewaehren = this.showBetragFieldSig();
-      const betragControl = this.formSb.controls.betrag;
+      const gewaehren = this.gewaehrenChangedSig();
+      this.gotReenabledSig();
 
-      this.formService.setDisabledState(betragControl, !gewaehren);
-      if (gewaehren) {
-        betragControl.setValidators([Validators.required]);
-      } else {
-        betragControl.clearValidators();
-      }
-      betragControl.updateValueAndValidity();
+      this.formService.setDisabledState(
+        this.formSb.controls.betrag,
+        !gewaehren,
+        true,
+      );
+      this.formService.setDisabledState(
+        this.formSb.controls.negativeVerfuegung,
+        !!gewaehren,
+        true,
+      );
     });
   }
 
@@ -355,13 +375,14 @@ export class SharedPatternDarlehenFormComponent {
 
   // Sachbearbeiter Actions
 
-  private buildUpdatedSbFrom(): FreiwilligDarlehenUpdateSb {
+  private buildUpdatedSbFrom() {
     const realValues = convertTempFormToRealValues(this.formSb, [
       'kommentar',
       'gewaehren',
     ]);
     return {
       betrag: fromFormatedNumber(realValues.betrag),
+      negativeVerfuegung: realValues.negativeVerfuegung,
       kommentar: realValues.kommentar,
       gewaehren: realValues.gewaehren,
     };
@@ -389,8 +410,8 @@ export class SharedPatternDarlehenFormComponent {
         if (result) {
           this.darlehenStore.darlehenUpdateAndFreigebenSb$({
             data: {
+              ...updatedDarlehen,
               darlehenId: darlehen.id,
-              freiwilligDarlehenUpdateSb: updatedDarlehen,
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
@@ -450,7 +471,7 @@ export class SharedPatternDarlehenFormComponent {
           this.darlehenStore.darlehenUpdateAndAbschliessenSb$({
             data: {
               darlehenId: darlehen.id,
-              freiwilligDarlehenUpdateSb: updatedDarlehen,
+              ...updatedDarlehen,
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
@@ -460,5 +481,9 @@ export class SharedPatternDarlehenFormComponent {
           });
         }
       });
+  }
+
+  deleteNegativVerfuegung() {
+    this.darlehenStore.softDeleteNegativVerfuegung();
   }
 }
