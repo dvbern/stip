@@ -8,7 +8,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
@@ -65,6 +64,11 @@ public interface DarlehenResource {
     @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenDokument(@QueryParam("token") @NotNull   String token);
 
+    @GET
+    @Path("/negativ-verfuegung/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenNegativVerfuegung(@QueryParam("token") @NotNull   String token);
+
     @POST
     @Path("/{darlehenId}/ablehnen")
     @Produces({ "application/json", "text/plain" })
@@ -93,9 +97,9 @@ public interface DarlehenResource {
 
     @PATCH
     @Path("/{darlehenId}/sb")
-    @Consumes({ "application/json" })
+    @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull FreiwilligDarlehenUpdateSbDto freiwilligDarlehenUpdateSbDto);
+    FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@FormParam(value = "gewaehren")  Boolean gewaehren,@FormParam(value = "negativeVerfuegung")  org.jboss.resteasy.reactive.multipart.FileUpload negativeVerfuegung,@FormParam(value = "betrag")  Integer betrag,@FormParam(value = "kommentar")  String kommentar);
 
     @POST
     @Path("/{darlehenId}/zurueckweisen")
@@ -129,6 +133,11 @@ public interface DarlehenResource {
     FileDownloadTokenDto getDarlehenDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
+    @Path("/negativ-verfuegung/{dokumentId}/token")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getDarlehenNegativVerfuegungDownloadToken(@PathParam("dokumentId") UUID dokumentId);
+
+    @GET
     @Path("/dashboard/{getFreiwilligDarlehenSbQueryType}")
     @Produces({ "application/json", "text/plain" })
     PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(@PathParam("getFreiwilligDarlehenSbQueryType") ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
@@ -142,10 +151,4 @@ public interface DarlehenResource {
     @Path("/{darlehenId}/sb")
     @Produces({ "application/json", "text/plain" })
     FreiwilligDarlehenDto getFreiwilligDarlehenSb(@PathParam("darlehenId") UUID darlehenId);
-
-    @POST
-    @Path("/{darlehenId}/verfuegung/upload")
-    @Consumes({ "multipart/form-data" })
-    @Produces({ "application/json", "text/plain" })
-    io.smallrye.mutiny.Uni<Response> uploadNegativeVerfuegung(@PathParam("darlehenId") UUID darlehenId,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 }

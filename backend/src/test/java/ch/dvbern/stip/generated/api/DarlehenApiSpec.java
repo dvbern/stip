@@ -22,7 +22,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GetFreiwilligDarlehenSbQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
@@ -80,6 +79,7 @@ public class DarlehenApiSpec {
                 deleteDarlehenDokument(),
                 deleteFreiwilligDarlehenGs(),
                 downloadDarlehenDokument(),
+                downloadDarlehenNegativVerfuegung(),
                 freiwilligDarlehenAblehen(),
                 freiwilligDarlehenAkzeptieren(),
                 freiwilligDarlehenEingeben(),
@@ -92,10 +92,10 @@ public class DarlehenApiSpec {
                 getDarlehenBuchhaltungEntrys(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
+                getDarlehenNegativVerfuegungDownloadToken(),
                 getFreiwilligDarlehenDashboardSb(),
                 getFreiwilligDarlehenGs(),
-                getFreiwilligDarlehenSb(),
-                uploadNegativeVerfuegung()
+                getFreiwilligDarlehenSb()
         );
     }
 
@@ -121,6 +121,10 @@ public class DarlehenApiSpec {
 
     public DownloadDarlehenDokumentOper downloadDarlehenDokument() {
         return new DownloadDarlehenDokumentOper(createReqSpec());
+    }
+
+    public DownloadDarlehenNegativVerfuegungOper downloadDarlehenNegativVerfuegung() {
+        return new DownloadDarlehenNegativVerfuegungOper(createReqSpec());
     }
 
     public FreiwilligDarlehenAblehenOper freiwilligDarlehenAblehen() {
@@ -171,6 +175,10 @@ public class DarlehenApiSpec {
         return new GetDarlehenDownloadTokenOper(createReqSpec());
     }
 
+    public GetDarlehenNegativVerfuegungDownloadTokenOper getDarlehenNegativVerfuegungDownloadToken() {
+        return new GetDarlehenNegativVerfuegungDownloadTokenOper(createReqSpec());
+    }
+
     public GetFreiwilligDarlehenDashboardSbOper getFreiwilligDarlehenDashboardSb() {
         return new GetFreiwilligDarlehenDashboardSbOper(createReqSpec());
     }
@@ -181,10 +189,6 @@ public class DarlehenApiSpec {
 
     public GetFreiwilligDarlehenSbOper getFreiwilligDarlehenSb() {
         return new GetFreiwilligDarlehenSbOper(createReqSpec());
-    }
-
-    public UploadNegativeVerfuegungOper uploadNegativeVerfuegung() {
-        return new UploadNegativeVerfuegungOper(createReqSpec());
     }
 
     /**
@@ -639,6 +643,79 @@ public class DarlehenApiSpec {
         }
     }
     /**
+     * Download Darlehen negativeVerfuegung Dokument
+     * 
+     *
+     * @see #tokenQuery  (required)
+     * return File
+     */
+    public static class DownloadDarlehenNegativVerfuegungOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/negativ-verfuegung/download";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public DownloadDarlehenNegativVerfuegungOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/octet-stream");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/negativ-verfuegung/download
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/negativ-verfuegung/download
+         * @param handler handler
+         * @return File
+         */
+        public File executeAs(Function<Response, Response> handler) {
+            TypeRef<File> type = new TypeRef<File>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String TOKEN_QUERY = "token";
+
+        /**
+         * @param token (String)  (required)
+         * @return operation
+         */
+        public DownloadDarlehenNegativVerfuegungOper tokenQuery(Object... token) {
+            reqSpec.addQueryParam(TOKEN_QUERY, token);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public DownloadDarlehenNegativVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public DownloadDarlehenNegativVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
      * Change darlehen status to abgelehnt
      * 
      *
@@ -1019,7 +1096,10 @@ public class DarlehenApiSpec {
      * 
      *
      * @see #darlehenIdPath  (required)
-     * @see #body  (required)
+     * @see #gewaehrenForm  (optional)
+     * @see #negativeVerfuegungMultiPart  (optional)
+     * @see #betragForm  (optional)
+     * @see #kommentarForm  (optional)
      * return FreiwilligDarlehenDtoSpec
      */
     public static class FreiwilligDarlehenUpdateSbOper implements Oper {
@@ -1032,7 +1112,7 @@ public class DarlehenApiSpec {
 
         public FreiwilligDarlehenUpdateSbOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setContentType("application/json");
+            reqSpec.setContentType("multipart/form-data");
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
@@ -1058,15 +1138,6 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-         /**
-         * @param freiwilligDarlehenUpdateSbDtoSpec (FreiwilligDarlehenUpdateSbDtoSpec)  (required)
-         * @return operation
-         */
-        public FreiwilligDarlehenUpdateSbOper body(FreiwilligDarlehenUpdateSbDtoSpec freiwilligDarlehenUpdateSbDtoSpec) {
-            reqSpec.setBody(freiwilligDarlehenUpdateSbDtoSpec);
-            return this;
-        }
-
         public static final String DARLEHEN_ID_PATH = "darlehenId";
 
         /**
@@ -1077,6 +1148,50 @@ public class DarlehenApiSpec {
             reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
             return this;
         }
+
+         public static final String GEWAEHREN_FORM = "gewaehren";
+
+         /**
+         * @param gewaehren (Boolean)  (optional)
+         * @return operation
+         */
+         public FreiwilligDarlehenUpdateSbOper gewaehrenForm(Object... gewaehren) {
+            reqSpec.addFormParam(GEWAEHREN_FORM, gewaehren);
+            return this;
+         }
+
+         public static final String BETRAG_FORM = "betrag";
+
+         /**
+         * @param betrag (Integer)  (optional)
+         * @return operation
+         */
+         public FreiwilligDarlehenUpdateSbOper betragForm(Object... betrag) {
+            reqSpec.addFormParam(BETRAG_FORM, betrag);
+            return this;
+         }
+
+         public static final String KOMMENTAR_FORM = "kommentar";
+
+         /**
+         * @param kommentar (String)  (optional)
+         * @return operation
+         */
+         public FreiwilligDarlehenUpdateSbOper kommentarForm(Object... kommentar) {
+            reqSpec.addFormParam(KOMMENTAR_FORM, kommentar);
+            return this;
+         }
+
+         /**
+         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
+         * @see #reqSpec for customise
+         * @param negativeVerfuegung (File)  (optional)
+         * @return operation
+         */
+         public FreiwilligDarlehenUpdateSbOper negativeVerfuegungMultiPart(File negativeVerfuegung) {
+            reqSpec.addMultiPart(negativeVerfuegung);
+            return this;
+         }
 
         /**
          * Customize request specification
@@ -1487,7 +1602,7 @@ public class DarlehenApiSpec {
         }
     }
     /**
-     * get Token to downlaod Darlehen Dokument
+     * get Token to download Darlehen Dokument
      * 
      *
      * @see #dokumentIdPath  (required)
@@ -1555,6 +1670,79 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetDarlehenDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * get Token to download Darlehen negativeVerfuegung
+     * 
+     *
+     * @see #dokumentIdPath  (required)
+     * return FileDownloadTokenDtoSpec
+     */
+    public static class GetDarlehenNegativVerfuegungDownloadTokenOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/negativ-verfuegung/{dokumentId}/token";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenNegativVerfuegungDownloadTokenOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/negativ-verfuegung/{dokumentId}/token
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/negativ-verfuegung/{dokumentId}/token
+         * @param handler handler
+         * @return FileDownloadTokenDtoSpec
+         */
+        public FileDownloadTokenDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<FileDownloadTokenDtoSpec> type = new TypeRef<FileDownloadTokenDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String DOKUMENT_ID_PATH = "dokumentId";
+
+        /**
+         * @param dokumentId (UUID)  (required)
+         * @return operation
+         */
+        public GetDarlehenNegativVerfuegungDownloadTokenOper dokumentIdPath(Object dokumentId) {
+            reqSpec.addPathParam(DOKUMENT_ID_PATH, dokumentId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenNegativVerfuegungDownloadTokenOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenNegativVerfuegungDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -1918,81 +2106,6 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetFreiwilligDarlehenSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #darlehenIdPath Die ID vom Darlehen (required)
-     * @see #fileUploadMultiPart  (required)
-     */
-    public static class UploadNegativeVerfuegungOper implements Oper {
-
-        public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/darlehen/{darlehenId}/verfuegung/upload";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public UploadNegativeVerfuegungOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setContentType("multipart/form-data");
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * POST /darlehen/{darlehenId}/verfuegung/upload
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        public static final String DARLEHEN_ID_PATH = "darlehenId";
-
-        /**
-         * @param darlehenId (UUID) Die ID vom Darlehen (required)
-         * @return operation
-         */
-        public UploadNegativeVerfuegungOper darlehenIdPath(Object darlehenId) {
-            reqSpec.addPathParam(DARLEHEN_ID_PATH, darlehenId);
-            return this;
-        }
-
-         /**
-         * It will assume that the control name is file and the &lt;content-type&gt; is &lt;application/octet-stream&gt;
-         * @see #reqSpec for customise
-         * @param fileUpload (File)  (required)
-         * @return operation
-         */
-         public UploadNegativeVerfuegungOper fileUploadMultiPart(File fileUpload) {
-            reqSpec.addMultiPart(fileUpload);
-            return this;
-         }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public UploadNegativeVerfuegungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public UploadNegativeVerfuegungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

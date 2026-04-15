@@ -42,7 +42,6 @@ import ch.dvbern.stip.generated.dto.DarlehenDokumentTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.DarlehenGrundDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -219,13 +218,12 @@ public class DarlehenResourceImplTest {
     @TestAsSachbearbeiter
     @Order(9)
     void darlehenUpdateSb() {
-        final var updateDto = new FreiwilligDarlehenUpdateSbDtoSpec();
-        updateDto.setBetrag(0);
-        updateDto.setGewaehren(false);
-        updateDto.setKommentar("asd");
         darlehenApiSpec.freiwilligDarlehenUpdateSb()
             .darlehenIdPath(darlehen.getId())
-            .body(updateDto)
+            .betragForm(0)
+            .gewaehrenForm(false)
+            .kommentarForm("asd")
+            .reqSpec(req -> req.addMultiPart("fileUpload", TestUtil.getTestPng(), "image/png"))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -263,13 +261,12 @@ public class DarlehenResourceImplTest {
     @TestAsSachbearbeiter
     @Order(12)
     void darlehenUpdateSbAkzeptieren() {
-        final var updateDto = new FreiwilligDarlehenUpdateSbDtoSpec();
-        updateDto.setBetrag(2500);
-        updateDto.setGewaehren(true);
-        updateDto.setKommentar("asd");
         darlehenApiSpec.freiwilligDarlehenUpdateSb()
             .darlehenIdPath(darlehen.getId())
-            .body(updateDto)
+            .betragForm(2500)
+            .gewaehrenForm(true)
+            .kommentarForm("asd")
+            .reqSpec(req -> req.addMultiPart("fileUpload", TestUtil.getTestPng(), "image/png"))
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
