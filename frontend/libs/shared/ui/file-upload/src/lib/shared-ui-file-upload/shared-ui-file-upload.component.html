@@ -1,8 +1,6 @@
 <ng-container *dvTranslocoShared="let t">
-  <dv-shared-ui-drop-file
-    class="tw:flex tw:flex-col tw:items-center tw:rounded-lg tw:border-2 tw:bg-white tw:p-4 tw:shadow-sm tw:grow"
-  >
-    <label class="tw:flex tw:flex-col tw:items-center">
+  <dv-shared-ui-drop-file class="tw:rounded-lg tw:border-2 tw:bg-white tw:shadow-sm tw:grow">
+    <label class="tw:flex tw:flex-col tw:items-center tw:p-4 tw:w-full tw:text-center tw:cursor-pointer">
       <div
         class="text-muted text-italic d-md-block d-none my-4 text-center"
         [innerHTML]="t('shared.file.dropZone')"
@@ -35,13 +33,14 @@
         <span class="material-symbols-rounded text-muted tw:!text-xl/none align-middle">delete</span>
       </button>
     </div>
-  } @else {
-    <div class="group-errors tw:mb-[3px] tw:text-sm">
+  }
+  <div class="group-errors tw:mb-[3px] tw:text-sm">
+    @if (ngControl?.control?.invalid) {
       <mat-error>
-        @if (fileControl.touched && fileInput.files?.length === 0) {
+        @if (ngControl?.control?.touched && fileInput.files?.length === 0) {
           {{ t('shared.form.error.required') }}
         }
       </mat-error>
-    </div>
-  }
+    }
+  </div>
 </ng-container>

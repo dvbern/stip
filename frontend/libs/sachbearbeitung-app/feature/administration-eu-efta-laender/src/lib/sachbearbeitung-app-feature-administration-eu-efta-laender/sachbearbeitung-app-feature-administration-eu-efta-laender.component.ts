@@ -28,6 +28,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, map } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
 import { LandStore } from '@dv/shared/data-access/land';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -169,20 +170,24 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
             land,
             landId: land.id,
             onSuccess: () => {
-              this.notificationStore.createSuccessNotification({
-                messageKey:
-                  'sachbearbeitung-app.admin.euEftaLaender.edit.success',
-              });
+              this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                {
+                  messageKey:
+                    'sachbearbeitung-app.admin.euEftaLaender.edit.success',
+                },
+              );
             },
           });
         } else {
           this.laenderStore.createLand$({
             land,
             onSuccess: () => {
-              this.notificationStore.createSuccessNotification({
-                messageKey:
-                  'sachbearbeitung-app.admin.euEftaLaender.create.success',
-              });
+              this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                {
+                  messageKey:
+                    'sachbearbeitung-app.admin.euEftaLaender.create.success',
+                },
+              );
             },
           });
         }
