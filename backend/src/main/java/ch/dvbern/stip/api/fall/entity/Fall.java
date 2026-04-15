@@ -50,7 +50,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -111,9 +110,17 @@ public class Fall extends AbstractMandantEntity {
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private List<FreiwilligDarlehen> freiwilligDarlehens = new ArrayList<>();
 
-    @NullableUnlessGenerated
-    @OneToOne(mappedBy = "delegierterFall")
-    private Delegierung delegierung;
+    @Nullable
+    @OneToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "current_delegierung_id",
+        foreignKey = @ForeignKey(name = "FK_fall_delegierung_id"),
+        nullable = true
+    )
+    private Delegierung currentDelegierung;
+
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    private Set<Delegierung> historicalDelegierungs = new HashSet<>();
 
     @NullableUnlessGenerated
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, optional = true)
@@ -130,15 +137,19 @@ public class Fall extends AbstractMandantEntity {
         if (Objects.isNull(auszahlung)) {
             return null;
         }
-        if (auszahlung.isAuszahlungAnSozialdienst()) {
-            return delegierung.getSozialdienst().getZahlungsverbindung();
+        if (auszahlung.isAuszahlungAnSozialdienst() && Objects.nonNull(getActiveDelegierung())) {
+            return getActiveDelegierung().getSozialdienst().getZahlungsverbindung();
         }
         return auszahlung.getZahlungsverbindung();
     }
 
-    @Transient
     public boolean isDelegiert() {
-        return Optional.ofNullable(getDelegierung()).map(Delegierung::getDelegierterMitarbeiter).isPresent();
+        return Objects.nonNull(getActiveDelegierung());
+    }
+
+    public Delegierung getActiveDelegierung() {
+        final var delegierung = getCurrentDelegierung();
+        return Optional.ofNullable(delegierung).filter(Delegierung::isActive).orElse(null);
     }
 
     public Gesuch getLatestGesuch() {

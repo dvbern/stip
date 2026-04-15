@@ -30,6 +30,7 @@ export interface Gesuch {
     bearbeiter?: string;
     gesuchTrancheToWorkWith: GesuchTranche;
     einreichedatum?: string;
+    hadDelegierungs?: boolean;
     delegierung?: DelegierungSlim;
     nachfristDokumente?: string;
     verfuegt: boolean;

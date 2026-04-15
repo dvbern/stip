@@ -9,12 +9,23 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Delegierung } from './delegierung';
+import { SozialdienstSlim } from './sozialdienstSlim';
+import { PersoenlicheAngaben } from './persoenlicheAngaben';
+import { SozialdienstBenutzer } from './sozialdienstBenutzer';
+import { DelegierungStatus } from './delegierungStatus';
 
 export interface FallWithDelegierung { 
     id: string;
-    fallNummer: string;
+    sozialdienst: SozialdienstSlim;
+    delegierterMitarbeiter?: SozialdienstBenutzer;
+    persoenlicheAngaben: PersoenlicheAngaben;
+    status: DelegierungStatus;
+    startDate?: string;
+    endDate?: string;
+    fallId?: string;
+    fallNummer?: string;
     mandant: string;
-    delegierung: Delegierung;
 }
+
+
 

@@ -1,6 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.generated.dto.FallWithDelegierungDto;
+import ch.dvbern.stip.generated.dto.DelegierungEntryDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,7 +26,7 @@ public class PaginatedSozDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
-  private @Valid List<FallWithDelegierungDto> entries;
+  private @Valid List<DelegierungEntryDto> entries;
 
   /**
    **/
@@ -84,23 +84,23 @@ public class PaginatedSozDashboardDto  implements Serializable {
 
   /**
    **/
-  public PaginatedSozDashboardDto entries(List<FallWithDelegierungDto> entries) {
+  public PaginatedSozDashboardDto entries(List<DelegierungEntryDto> entries) {
     this.entries = entries;
     return this;
   }
 
   
   @JsonProperty("entries")
-  public List<FallWithDelegierungDto> getEntries() {
+  public List<DelegierungEntryDto> getEntries() {
     return entries;
   }
 
   @JsonProperty("entries")
-  public void setEntries(List<FallWithDelegierungDto> entries) {
+  public void setEntries(List<DelegierungEntryDto> entries) {
     this.entries = entries;
   }
 
-  public PaginatedSozDashboardDto addEntriesItem(FallWithDelegierungDto entriesItem) {
+  public PaginatedSozDashboardDto addEntriesItem(DelegierungEntryDto entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -109,7 +109,7 @@ public class PaginatedSozDashboardDto  implements Serializable {
     return this;
   }
 
-  public PaginatedSozDashboardDto removeEntriesItem(FallWithDelegierungDto entriesItem) {
+  public PaginatedSozDashboardDto removeEntriesItem(DelegierungEntryDto entriesItem) {
     if (entriesItem != null && this.entries != null) {
       this.entries.remove(entriesItem);
     }

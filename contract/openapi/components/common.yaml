@@ -317,28 +317,28 @@ Gesuchsjahr:
 UUID:
   format: uuid
   type: string
-Zahlungsverbindung:
-  title: Root Type for Zahlungsverbindung
-  type: object
-  allOf:
-    - type: object
-    - $ref: '#/ZahlungsverbindungUpdate'
-ZahlungsverbindungUpdate:
+ZahlungsverbindungSlim:
   title: Root Type for Zahlungsverbindung
   required:
     - adresse
-    - iban
   type: object
   properties:
     vorname:
       type: string
-    adresse:
-      $ref: '#/Adresse'
-    iban:
-      type: string
     nachname:
       type: string
     institution:
+      type: string
+    adresse:
+      $ref: '#/Adresse'
+Zahlungsverbindung:
+  allOf:
+    - $ref: '#/ZahlungsverbindungSlim'
+  required:
+    - iban
+  type: object
+  properties:
+    iban:
       type: string
 Gesuch:
   required:
@@ -382,6 +382,8 @@ Gesuch:
     einreichedatum:
       format: date
       type: string
+    hadDelegierungs:
+      type: boolean
     delegierung:
       $ref: '#/DelegierungSlim'
     nachfristDokumente:
@@ -447,11 +449,20 @@ PersoenlicheAngaben:
       $ref: '#/Sprache'
     adresse:
       $ref: '#/Adresse'
+DelegierungStatus:
+  enum:
+    - EINGEREICHT
+    - AKZEPTIERT
+    - ABGELEHNT
+    - BEENDET
 DelegierungSlim:
+  required:
+    - status
+    - sozialdienst
   type: object
   properties:
-    delegierungAngenommen:
-      type: boolean
+    status:
+      $ref: '#/DelegierungStatus'
     sozialdienst:
       $ref: '#/SozialdienstSlim'
 GesuchWithChanges:
@@ -898,6 +909,7 @@ SozialdienstSlim:
     - id
     - name
     - aktiv
+    - zahlungsverbindung
   properties:
     id:
       $ref: '#/UUID'
@@ -905,6 +917,8 @@ SozialdienstSlim:
       type: string
     aktiv:
       type: boolean
+    zahlungsverbindung:
+      $ref: '#/ZahlungsverbindungSlim'
 GesuchTrancheTyp:
   enum:
     - AENDERUNG

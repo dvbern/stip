@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DelegierungStatusDtoSpec;
 import ch.dvbern.stip.generated.dto.PersoenlicheAngabenDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDtoSpec;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDtoSpec;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -34,8 +36,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DelegierungDtoSpec.JSON_PROPERTY_ID,
   DelegierungDtoSpec.JSON_PROPERTY_SOZIALDIENST,
   DelegierungDtoSpec.JSON_PROPERTY_DELEGIERTER_MITARBEITER,
-  DelegierungDtoSpec.JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN,
-  DelegierungDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN
+  DelegierungDtoSpec.JSON_PROPERTY_PERSOENLICHE_ANGABEN,
+  DelegierungDtoSpec.JSON_PROPERTY_STATUS,
+  DelegierungDtoSpec.JSON_PROPERTY_START_DATE,
+  DelegierungDtoSpec.JSON_PROPERTY_END_DATE
 })
 @JsonTypeName("Delegierung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,11 +53,17 @@ public class DelegierungDtoSpec {
   public static final String JSON_PROPERTY_DELEGIERTER_MITARBEITER = "delegierterMitarbeiter";
   private SozialdienstBenutzerDtoSpec delegierterMitarbeiter;
 
-  public static final String JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN = "delegierungAngenommen";
-  private Boolean delegierungAngenommen;
-
   public static final String JSON_PROPERTY_PERSOENLICHE_ANGABEN = "persoenlicheAngaben";
   private PersoenlicheAngabenDtoSpec persoenlicheAngaben;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  private DelegierungStatusDtoSpec status;
+
+  public static final String JSON_PROPERTY_START_DATE = "startDate";
+  private LocalDate startDate;
+
+  public static final String JSON_PROPERTY_END_DATE = "endDate";
+  private LocalDate endDate;
 
   public DelegierungDtoSpec() {
   }
@@ -94,9 +104,9 @@ public class DelegierungDtoSpec {
    * Get sozialdienst
    * @return sozialdienst
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public SozialdienstSlimDtoSpec getSozialdienst() {
     return sozialdienst;
@@ -104,7 +114,7 @@ public class DelegierungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_SOZIALDIENST)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setSozialdienst(SozialdienstSlimDtoSpec sozialdienst) {
     this.sozialdienst = sozialdienst;
   }
@@ -136,32 +146,6 @@ public class DelegierungDtoSpec {
   }
 
 
-  public DelegierungDtoSpec delegierungAngenommen(Boolean delegierungAngenommen) {
-    
-    this.delegierungAngenommen = delegierungAngenommen;
-    return this;
-  }
-
-   /**
-   * Get delegierungAngenommen
-   * @return delegierungAngenommen
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getDelegierungAngenommen() {
-    return delegierungAngenommen;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_DELEGIERUNG_ANGENOMMEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDelegierungAngenommen(Boolean delegierungAngenommen) {
-    this.delegierungAngenommen = delegierungAngenommen;
-  }
-
-
   public DelegierungDtoSpec persoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
     
     this.persoenlicheAngaben = persoenlicheAngaben;
@@ -172,9 +156,9 @@ public class DelegierungDtoSpec {
    * Get persoenlicheAngaben
    * @return persoenlicheAngaben
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public PersoenlicheAngabenDtoSpec getPersoenlicheAngaben() {
     return persoenlicheAngaben;
@@ -182,9 +166,87 @@ public class DelegierungDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PERSOENLICHE_ANGABEN)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setPersoenlicheAngaben(PersoenlicheAngabenDtoSpec persoenlicheAngaben) {
     this.persoenlicheAngaben = persoenlicheAngaben;
+  }
+
+
+  public DelegierungDtoSpec status(DelegierungStatusDtoSpec status) {
+    
+    this.status = status;
+    return this;
+  }
+
+   /**
+   * Get status
+   * @return status
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public DelegierungStatusDtoSpec getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_STATUS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setStatus(DelegierungStatusDtoSpec status) {
+    this.status = status;
+  }
+
+
+  public DelegierungDtoSpec startDate(LocalDate startDate) {
+    
+    this.startDate = startDate;
+    return this;
+  }
+
+   /**
+   * Get startDate
+   * @return startDate
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getStartDate() {
+    return startDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_START_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStartDate(LocalDate startDate) {
+    this.startDate = startDate;
+  }
+
+
+  public DelegierungDtoSpec endDate(LocalDate endDate) {
+    
+    this.endDate = endDate;
+    return this;
+  }
+
+   /**
+   * Get endDate
+   * @return endDate
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEndDate() {
+    return endDate;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_END_DATE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEndDate(LocalDate endDate) {
+    this.endDate = endDate;
   }
 
   @Override
@@ -199,13 +261,15 @@ public class DelegierungDtoSpec {
     return Objects.equals(this.id, delegierung.id) &&
         Objects.equals(this.sozialdienst, delegierung.sozialdienst) &&
         Objects.equals(this.delegierterMitarbeiter, delegierung.delegierterMitarbeiter) &&
-        Objects.equals(this.delegierungAngenommen, delegierung.delegierungAngenommen) &&
-        Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben);
+        Objects.equals(this.persoenlicheAngaben, delegierung.persoenlicheAngaben) &&
+        Objects.equals(this.status, delegierung.status) &&
+        Objects.equals(this.startDate, delegierung.startDate) &&
+        Objects.equals(this.endDate, delegierung.endDate);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sozialdienst, delegierterMitarbeiter, delegierungAngenommen, persoenlicheAngaben);
+    return Objects.hash(id, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
   }
 
   @Override
@@ -215,8 +279,10 @@ public class DelegierungDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
-    sb.append("    delegierungAngenommen: ").append(toIndentedString(delegierungAngenommen)).append("\n");
     sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
+    sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("}");
     return sb.toString();
   }

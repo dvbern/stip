@@ -26,7 +26,6 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { debounceTime } from 'rxjs';
 
@@ -34,7 +33,8 @@ import { selectVersion } from '@dv/shared/data-access/config';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SozialdienstBenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  FallWithDelegierung,
+  DelegierungEntry,
+  DelegierungStatus,
   SortOrder,
   SozDashboardColumn,
 } from '@dv/shared/model/gesuch';
@@ -76,6 +76,7 @@ import {
   SozCockitComponentInputs,
   SozCockpitFilterFormKeys,
 } from '@dv/sozialdienst-app/model/delegation';
+import { SozialdienstAppUiAdvTranslocoDirective } from '@dv/sozialdienst-app/ui/adv-transloco-directive';
 
 type DisplayColumns =
   | SozDashboardColumn
@@ -106,9 +107,9 @@ type DisplayColumns =
     SharedUiMaxLengthDirective,
     SharedUiClearButtonComponent,
     SharedUiTruncateTooltipDirective,
+    SozialdienstAppUiAdvTranslocoDirective,
     TypeSafeMatCellDefDirective,
     TypeSafeMatRowDefDirective,
-    TranslocoDirective,
   ],
   templateUrl: './sozialdienst-app-feature-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -148,12 +149,7 @@ export class SozialdienstAppFeatureCockpitComponent
       max: PAGE_SIZES[PAGE_SIZES.length - 1],
     }),
   });
-  delegierungAngenommen = input<boolean | undefined, string | undefined>(
-    undefined,
-    {
-      transform: booleanOrUndefined,
-    },
-  );
+  status = input<DelegierungStatus | undefined>(undefined);
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
@@ -179,7 +175,7 @@ export class SozialdienstAppFeatureCockpitComponent
     vorname: [<string | undefined>undefined],
     geburtsdatum: [<Date | undefined>undefined],
     wohnort: [<string | undefined>undefined],
-    delegierungAngenommen: [<boolean | undefined>undefined],
+    status: [<DelegierungStatus | undefined>undefined],
   } satisfies Record<SozCockpitFilterFormKeys, unknown>);
 
   quickFilterForm = this.formBuilder.group({
@@ -233,17 +229,7 @@ export class SozialdienstAppFeatureCockpitComponent
     );
   });
 
-  // for delegierungAngenommen
-  statusValues = [
-    {
-      key: 'DELEGIERUNG',
-      value: true,
-    },
-    {
-      key: 'DELEGIERUNG_ANFRAGE',
-      value: false,
-    },
-  ];
+  statusValues = Object.values(DelegierungStatus);
 
   filterFormChangedSig = toSignal(
     this.filterForm.valueChanges.pipe(debounceTime(INPUT_DELAY)),
@@ -253,7 +239,7 @@ export class SozialdienstAppFeatureCockpitComponent
     const faelle =
       this.delegationStore.cockpitViewSig().paginatedSozDashboard?.entries;
 
-    const dataSource = new MatTableDataSource<FallWithDelegierung>(faelle);
+    const dataSource = new MatTableDataSource<DelegierungEntry>(faelle);
     return dataSource;
   });
   totalEntriesSig = computed(() => {
@@ -328,8 +314,8 @@ export class SozialdienstAppFeatureCockpitComponent
     });
   }
 
-  openDialog(fall: FallWithDelegierung) {
-    DelegierungDialogComponent.open(this.dialog, { fall })
+  openDialog(delegierung: DelegierungEntry) {
+    DelegierungDialogComponent.open(this.dialog, { delegierung })
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
@@ -357,7 +343,7 @@ export class SozialdienstAppFeatureCockpitComponent
       vorname: this.vorname(),
       geburtsdatum: this.geburtsdatum(),
       wohnort: this.wohnort(),
-      delegierungAngenommen: this.delegierungAngenommen(),
+      status: this.status(),
     };
 
     const page = this.page();
@@ -381,7 +367,6 @@ export class SozialdienstAppFeatureCockpitComponent
     this.quickFilterForm.reset({ query });
     this.filterForm.reset({
       ...filter,
-      delegierungAngenommen: filter.delegierungAngenommen,
       geburtsdatum: parseDate(filter.geburtsdatum ?? ''),
     });
 
@@ -396,13 +381,6 @@ export class SozialdienstAppFeatureCockpitComponent
     this.filterForm.markAllAsTouched();
   }
 }
-
-const booleanOrUndefined = (value: string | undefined): boolean | undefined => {
-  if (value === undefined) {
-    return undefined;
-  }
-  return value === 'true';
-};
 
 const createQuery = <T extends Partial<LoadPaginatedDashboardByRoles>>(
   value: T,

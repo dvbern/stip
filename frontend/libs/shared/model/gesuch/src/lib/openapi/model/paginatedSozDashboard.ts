@@ -9,12 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { FallWithDelegierung } from './fallWithDelegierung';
+import { DelegierungEntry } from './delegierungEntry';
 
 export interface PaginatedSozDashboard { 
     page?: number;
     pageSize?: number;
     totalEntries?: number;
-    entries?: Array<FallWithDelegierung>;
+    entries?: Array<DelegierungEntry>;
 }
 

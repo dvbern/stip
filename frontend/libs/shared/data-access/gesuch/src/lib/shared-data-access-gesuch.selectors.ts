@@ -11,6 +11,7 @@ import {
 } from '@dv/shared/model/gesuch';
 import {
   BaseFormSteps,
+  DELEGIERUNGEN,
   EINNAHMEN_KOSTEN,
   EINNAHMEN_KOSTEN_PARTNER,
   ELTERN,
@@ -18,6 +19,7 @@ import {
   LEBENSLAUF,
   PARTNER,
   RETURN_TO_HOME,
+  TRANCHE,
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import {
@@ -165,6 +167,14 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
               steps: state.gesuchFormular.steuerdatenTabs.map(
                 (typ) => ELTERN_STEUERERKLAERUNG_STEPS[typ],
               ),
+            },
+          ]
+        : []),
+      ...(state.gesuch?.hadDelegierungs
+        ? [
+            {
+              after: TRANCHE,
+              steps: [DELEGIERUNGEN],
             },
           ]
         : []),

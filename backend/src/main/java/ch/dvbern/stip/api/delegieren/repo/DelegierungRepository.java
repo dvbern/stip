@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -45,7 +46,8 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
     public JPAQuery<Delegierung> getFindAllOffen(
         final UUID sozialdienstId
     ) {
-        return getFindAlleOfSozialdienstQuery(sozialdienstId).where(qDelegierung.delegierterMitarbeiter.isNull());
+        return getFindAlleOfSozialdienstQuery(sozialdienstId)
+            .where(qDelegierung.status.eq(DelegierungStatus.EINGEREICHT));
     }
 
     public JPAQuery<Delegierung> getFindAlleOfSozialdienstQuery(UUID sozialdienstId) {

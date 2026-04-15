@@ -16,7 +16,7 @@ export interface Sozialdienst {
     id: string;
     name: string;
     aktiv: boolean;
-    sozialdienstAdmin: SozialdienstBenutzer;
     zahlungsverbindung: Zahlungsverbindung;
+    sozialdienstAdmin: SozialdienstBenutzer;
 }
 

@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungSlimDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -30,7 +31,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   SozialdienstSlimDtoSpec.JSON_PROPERTY_ID,
   SozialdienstSlimDtoSpec.JSON_PROPERTY_NAME,
-  SozialdienstSlimDtoSpec.JSON_PROPERTY_AKTIV
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_AKTIV,
+  SozialdienstSlimDtoSpec.JSON_PROPERTY_ZAHLUNGSVERBINDUNG
 })
 @JsonTypeName("SozialdienstSlim")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -43,6 +45,9 @@ public class SozialdienstSlimDtoSpec {
 
   public static final String JSON_PROPERTY_AKTIV = "aktiv";
   private Boolean aktiv;
+
+  public static final String JSON_PROPERTY_ZAHLUNGSVERBINDUNG = "zahlungsverbindung";
+  private ZahlungsverbindungSlimDtoSpec zahlungsverbindung;
 
   public SozialdienstSlimDtoSpec() {
   }
@@ -124,6 +129,32 @@ public class SozialdienstSlimDtoSpec {
     this.aktiv = aktiv;
   }
 
+
+  public SozialdienstSlimDtoSpec zahlungsverbindung(ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
+    
+    this.zahlungsverbindung = zahlungsverbindung;
+    return this;
+  }
+
+   /**
+   * Get zahlungsverbindung
+   * @return zahlungsverbindung
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public ZahlungsverbindungSlimDtoSpec getZahlungsverbindung() {
+    return zahlungsverbindung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ZAHLUNGSVERBINDUNG)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setZahlungsverbindung(ZahlungsverbindungSlimDtoSpec zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -135,12 +166,13 @@ public class SozialdienstSlimDtoSpec {
     SozialdienstSlimDtoSpec sozialdienstSlim = (SozialdienstSlimDtoSpec) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
         Objects.equals(this.name, sozialdienstSlim.name) &&
-        Objects.equals(this.aktiv, sozialdienstSlim.aktiv);
+        Objects.equals(this.aktiv, sozialdienstSlim.aktiv) &&
+        Objects.equals(this.zahlungsverbindung, sozialdienstSlim.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, aktiv);
+    return Objects.hash(id, name, aktiv, zahlungsverbindung);
   }
 
   @Override
@@ -150,6 +182,7 @@ public class SozialdienstSlimDtoSpec {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }
