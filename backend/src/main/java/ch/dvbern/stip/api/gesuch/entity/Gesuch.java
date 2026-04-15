@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -223,14 +222,6 @@ public class Gesuch extends AbstractMandantEntity {
     @Nullable
     @OneToOne(mappedBy = "gesuch")
     private Statisticsdata statisticsdata;
-
-    // Needed as Embedded objects with all fields as null are themselves null
-    public Statisticsdata getStatisticsdata() {
-        if (Objects.isNull(this.statisticsdata)) {
-            this.statisticsdata = new Statisticsdata();
-        }
-        return this.statisticsdata;
-    }
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();

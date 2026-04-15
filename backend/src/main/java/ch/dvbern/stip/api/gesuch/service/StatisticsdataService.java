@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.service;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
@@ -31,13 +32,30 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class StatisticsdataService {
     public final StatisticsdataRepository statisticsdataRepository;
+    public final GesuchService gesuchService;
 
-    public void persist(final Statisticsdata statisticsdata) {
+    public void setOrCreateGemeindeStatisticsDataOfGesuch(
+        final UUID gesuchId,
+        final Integer com_fosnr,
+        final String com_name
+    ) {
+        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
+        Statisticsdata statisticsdata = gesuch.getStatisticsdata();
+        if (Objects.isNull(statisticsdata)) {
+            statisticsdata = new Statisticsdata();
+            statisticsdata
+                .setGesuch(gesuch);
+        }
+        statisticsdata
+            .setGemeindeBfsNr(com_fosnr)
+            .setGemeindeName(com_name);
+        gesuch.setStatisticsdata(statisticsdata);
         statisticsdataRepository.persist(statisticsdata);
     }
 
-    public void deleteOfGesuch(final Gesuch gesuch) {
-        if (Objects.isNull(gesuch.getStatisticsdata().getGesuch())) {
+    public void deleteForGesuch(final UUID gesuchId) {
+        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
+        if (Objects.isNull(gesuch.getStatisticsdata())) {
             return;
         }
         statisticsdataRepository.delete(gesuch.getStatisticsdata());

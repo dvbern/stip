@@ -21,7 +21,6 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.StatisticsdataService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -152,14 +151,10 @@ public class SwisstopoService {
         final UUID gesuchId,
         final SwisstopoApiFindAddrResponseElementAttributes swisstopoApiFindAddrResponseElementAttribute
     ) {
-        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
-        Statisticsdata statisticsdata = gesuch.getStatisticsdata();
-        statisticsdata
-            .setGesuch(gesuch)
-            .setGemeindeBfsNr(swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr())
-            .setGemeindeName(swisstopoApiFindAddrResponseElementAttribute.getCom_name());
-        gesuch.setStatisticsdata(statisticsdata);
-        statisticsdataService.persist(statisticsdata);
+        statisticsdataService.setOrCreateGemeindeStatisticsDataOfGesuch(
+            gesuchId,
+            swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr(),
+            swisstopoApiFindAddrResponseElementAttribute.getCom_name()
+        );
     }
-
 }

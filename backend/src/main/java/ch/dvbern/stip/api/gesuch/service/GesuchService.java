@@ -527,7 +527,7 @@ public class GesuchService {
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
-        statisticsdataService.deleteOfGesuch(gesuch);
+        statisticsdataService.deleteForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();
