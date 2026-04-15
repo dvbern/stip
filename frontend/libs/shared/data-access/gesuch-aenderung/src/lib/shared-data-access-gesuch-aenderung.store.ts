@@ -4,6 +4,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { isSharedModelError } from '@dv/shared/model/error';
 import {
@@ -32,7 +33,7 @@ const initialState: GesuchAenderungState = {
   cachedGesuchAenderung: initial(),
 };
 
-const EXPECTED_ERRORS: Record<string, string> = {
+const EXPECTED_ERRORS: Record<string, SharedTranslationKey> = {
   '{jakarta.validation.constraints.gesuchTranche.daterangeTooShort.message}':
     'shared.form.error.tranche.daterangeTooShort',
 };

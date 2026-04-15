@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   BuchhaltungEntry,
@@ -125,10 +126,12 @@ export class BuchhaltungStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess',
-                  });
+                  this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.infos.buchhaltung.notification.buchhaltungSaldokorrekturSuccess',
+                    },
+                  );
                 },
               },
             ),

@@ -533,9 +533,7 @@ export class SozialdienstStore extends signalStore(
                 onSuccess: () => {
                   this.loadAllSozialdienste$();
                   this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'shared.admin.sozialdienst.sozialdienstStatusChanged.' +
-                      aktiv,
+                    messageKey: `shared.admin.sozialdienst.sozialdienstStatusChanged.${aktiv}`,
                   });
                 },
                 onFailure: () => {

@@ -11,6 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 
@@ -56,13 +57,16 @@ export class AusbildungAbbrechenComponent {
   });
 
   gesuchAbbrechen() {
-    SharedUiKommentarDialogComponent.open(this.dialog, {
-      titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
-      messageKey:
-        'sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message',
-      placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
-      confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
-    })
+    SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+      this.dialog,
+      {
+        titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
+        messageKey:
+          'sachbearbeitung-app.infos.admin.ausbildung-abbrechen.message',
+        placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
+        confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-abbrechen',
+      },
+    )
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {

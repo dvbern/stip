@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   GesuchNotiz,
@@ -96,10 +97,12 @@ export class NotizStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.notificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.notiz.bearbeiten.success',
-                  });
+                  this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                    },
+                  );
                   this.loadNotizen$({ gesuchId });
                 },
               },
@@ -133,10 +136,12 @@ export class NotizStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.notificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.notiz.bearbeiten.success',
-                  });
+                  this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                    },
+                  );
                   this.loadNotizen$({ gesuchId });
                 },
               },
@@ -168,10 +173,12 @@ export class NotizStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.notificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.notiz.erstellen.success',
-                  });
+                  this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.infos.notiz.erstellen.success',
+                    },
+                  );
                   this.loadNotizen$({ gesuchId: gesuchNotizCreate.gesuchId });
                   onSuccess();
                 },
@@ -204,10 +211,12 @@ export class NotizStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.notificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.notiz.delete.success',
-                  });
+                  this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.infos.notiz.delete.success',
+                    },
+                  );
                   this.loadNotizen$({ gesuchId });
                 },
               },

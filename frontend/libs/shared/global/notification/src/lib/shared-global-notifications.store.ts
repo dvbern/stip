@@ -1,6 +1,7 @@
 import { Injectable, computed } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
   CreateNotification,
@@ -38,7 +39,9 @@ export class GlobalNotificationStore extends signalStore(
   /**
    * Add a new notification to the list of notifications.
    */
-  createNotification(notification: CreateNotification) {
+  createNotification<T extends string = SharedTranslationKey>(
+    notification: CreateNotification<NoInfer<T> | SharedTranslationKey>,
+  ) {
     return patchState(this, (state) => ({
       nextNotificationId: state.nextNotificationId + 1,
       notifications: [
@@ -53,10 +56,10 @@ export class GlobalNotificationStore extends signalStore(
   /**
    * Helper function to create a new success notification.
    */
-  createSuccessNotification<T extends string = string>(
-    notification: MessageOrKey<T>,
+  createSuccessNotification<T extends string = SharedTranslationKey>(
+    notification: MessageOrKey<NoInfer<T> | SharedTranslationKey>,
   ) {
-    return this.createNotification({
+    return this.createNotification<T>({
       type: 'SUCCESS',
       ...notification,
     });

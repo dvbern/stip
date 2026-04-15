@@ -324,7 +324,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
             titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
             messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
             labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',
-            placeholderKey: '',
+            placeholderKey: 'shared.nothing',
             confirmKey: 'shared.form.send',
           }).afterClosed(),
         )

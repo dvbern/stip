@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { DemoDataAppTranslationKey } from '@dv/demo-data-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
@@ -156,9 +157,12 @@ export class DemoDataStore extends signalStore(
             (demoData) => patchState(this, { lastDemoDataRun: demoData }),
             {
               onSuccess: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'demo-data-app.overview.apply-demo-data.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey:
+                      'demo-data-app.overview.apply-demo-data.success',
+                  },
+                );
               },
             },
           ),
@@ -196,9 +200,12 @@ export class DemoDataStore extends signalStore(
                 {
                   onSuccess: () => {
                     onSuccess();
-                    this.globalNotificationStore.createSuccessNotification({
-                      messageKey: 'demo-data-app.overview.file-upload.success',
-                    });
+                    this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                      {
+                        messageKey:
+                          'demo-data-app.overview.file-upload.success',
+                      },
+                    );
                   },
                 },
               ),
@@ -225,9 +232,11 @@ export class DemoDataStore extends signalStore(
               })),
             {
               onSuccess: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'demo-data-app.overview.file-upload.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey: 'demo-data-app.overview.file-upload.success',
+                  },
+                );
               },
             },
           ),
