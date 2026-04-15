@@ -1046,6 +1046,8 @@ FreiwilligDarlehen:
       $ref: '#/DarlehenStatus'
     gewaehren:
       type: boolean
+    negativeVerfuegung:
+      $ref: '#/Dokument'
     betrag:
       type: integer
       minimum: 0

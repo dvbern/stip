@@ -224,33 +224,6 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/{darlehenId}/verfuegung/upload:
-    post:
-      tags:
-        - Darlehen
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UploadNegativeVerfuegung'
-      parameters:
-        - $ref: '#/components/parameters/darlehenId'
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: uploadNegativeVerfuegung
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
   /darlehen/{fallId}:
     parameters:
       - $ref: '#/components/parameters/fallId'
@@ -305,7 +278,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDarlehenDownloadToken
-      summary: get Token to downlaod Darlehen Dokument
+      summary: get Token to download Darlehen Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -329,6 +302,63 @@ paths:
           description: File returned
       operationId: downloadDarlehenDokument
       summary: Download Darlehen Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenNegativVerfuegungDownloadToken
+      summary: get Token to download Darlehen negativeVerfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenNegativVerfuegung
+      summary: Download Darlehen negativeVerfuegung Dokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
@@ -7033,13 +7063,6 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
-    UploadNegativeVerfuegung:
-      type: object
-      required:
-        - fileUpload
-      properties:
-        fileUpload:
-          $ref: '#/components/schemas/FileUpload'
     SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7109,6 +7132,8 @@ components:
       properties:
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/FileUpload'
         betrag:
           type: integer
           minimum: 0
@@ -7242,16 +7267,6 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
-    FileUpload:
-      format: binary
-      type: string
-    DarlehenGrund:
-      enum:
-        - NICHT_BERECHTIGT
-        - AUSBILDUNG_ZWOELF_JAHRE
-        - HOHE_GEBUEHREN
-        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
-        - ZWEITAUSBILDUNG
     Dokument:
       required:
         - id
@@ -7273,6 +7288,13 @@ components:
           type: string
         objectId:
           type: string
+    DarlehenGrund:
+      enum:
+        - NICHT_BERECHTIGT
+        - AUSBILDUNG_ZWOELF_JAHRE
+        - HOHE_GEBUEHREN
+        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+        - ZWEITAUSBILDUNG
     FreiwilligDarlehen:
       type: object
       required:
@@ -7288,6 +7310,8 @@ components:
           $ref: '#/components/schemas/DarlehenStatus'
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
           minimum: 0
@@ -7319,6 +7343,9 @@ components:
       properties:
         token:
           type: string
+    FileUpload:
+      format: binary
+      type: string
     Kommentar:
       type: object
       required:
@@ -11942,13 +11969,6 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
-    darlehenId:
-      name: darlehenId
-      in: path
-      required: true
-      description: Die ID vom Darlehen
-      schema:
-        $ref: '#/components/schemas/UUID'
     fallId:
       name: fallId
       in: path

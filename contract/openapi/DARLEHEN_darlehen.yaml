@@ -52,31 +52,6 @@ paths:
       operationId: getFreiwilligDarlehenDashboardSb
       summary: Returns darlehen filtered by status and sb
 
-  /darlehen/{darlehenId}/verfuegung/upload:
-    post:
-      tags:
-        - Darlehen
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UploadNegativeVerfuegung'
-      parameters:
-        - $ref: './components/parameters.yaml#/darlehenId'
-      responses:
-        '200':
-          description: OK
-        '400':
-          $ref: './components/responses.yaml#/BadRequest'
-        '401':
-          $ref: './components/responses.yaml#/Unauthorized'
-        '403':
-          $ref: './components/responses.yaml#/Forbidden'
-        '500':
-          $ref: './components/responses.yaml#/ServerError'
-      operationId: uploadNegativeVerfuegung
-      x-quarkus-response-type: io.smallrye.mutiny.Uni<Response>
-
   /darlehen/{fallId}:
     parameters:
       - $ref: './components/parameters.yaml#/fallId'
@@ -129,7 +104,7 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: getDarlehenDownloadToken
-      summary: get Token to downlaod Darlehen Dokument
+      summary: get Token to download Darlehen Dokument
 
   '/darlehen/dokument/download':
     parameters:
@@ -151,6 +126,58 @@ paths:
           description: File returned
       operationId: downloadDarlehenDokument
       summary: Download Darlehen Dokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+
+  '/darlehen/negativ-verfuegung/{dokumentId}/token':
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenNegativVerfuegungDownloadToken
+      summary: get Token to download Darlehen negativeVerfuegung
+
+  '/darlehen/negativ-verfuegung/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenNegativVerfuegung
+      summary: Download Darlehen negativeVerfuegung Dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
 
   '/darlehen/dokument/{dokumentId}':
@@ -609,14 +636,6 @@ components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
   schemas:
-    UploadNegativeVerfuegung:
-      type: object
-      required:
-        - fileUpload
-      properties:
-        fileUpload:
-          $ref: './components/common.yaml#/FileUpload'
-
     SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
@@ -691,6 +710,8 @@ components:
       properties:
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: './components/common.yaml#/FileUpload'
         betrag:
           type: integer
           minimum: 0
