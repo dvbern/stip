@@ -479,6 +479,7 @@ public class DarlehenService {
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
         createNegativeFreiwilligDarlehenVerfuegung(darlehen);
+        darlehen.setManuelleVerfuegung(null);
         notificationService.createDarlehenAbgelehntNotificationAndSendStdMail(darlehen);
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
@@ -659,7 +660,7 @@ public class DarlehenService {
             configService,
             antivirus,
             DARLEHEN_DOKUMENT_PATH,
-            objectId -> uploadNegativVerfuegungDokument(
+            objectId -> uploadDarlehenDokument(
                 darlehenId,
                 dokumentTyp,
                 fileUpload,
@@ -701,7 +702,7 @@ public class DarlehenService {
         freiwilligDarlehenRepository.persistAndFlush(freiwilligDarlehen);
     }
 
-    private void uploadNegativVerfuegungDokument(
+    private void uploadDarlehenDokument(
         final UUID darlehenId,
         final DarlehenDokumentType type,
         final FileUpload fileUpload,
@@ -749,7 +750,7 @@ public class DarlehenService {
             s3,
             configService.getBucketName(),
             dokument.getObjectId(),
-            DARLEHEN_DOKUMENT_PATH,
+            dokument.getFilepath(),
             dokument.getFilename()
         );
     }
