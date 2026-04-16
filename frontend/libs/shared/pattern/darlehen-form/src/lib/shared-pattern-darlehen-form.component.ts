@@ -381,8 +381,8 @@ export class SharedPatternDarlehenFormComponent {
       'gewaehren',
     ]);
     return {
-      betrag: fromFormatedNumber(realValues.betrag),
-      negativeVerfuegung: realValues.negativeVerfuegung,
+      betrag: fromFormatedNumber(realValues.betrag) ?? undefined,
+      negativeVerfuegung: realValues.negativeVerfuegung ?? undefined,
       kommentar: realValues.kommentar,
       gewaehren: realValues.gewaehren,
     };
@@ -415,7 +415,7 @@ export class SharedPatternDarlehenFormComponent {
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
-              this.formSb.markAsPristine();
+              this.formSb.markAsUntouched();
             },
           });
         }

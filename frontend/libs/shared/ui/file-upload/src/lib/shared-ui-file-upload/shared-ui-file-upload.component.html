@@ -35,11 +35,9 @@
     </div>
   }
   <div class="group-errors tw:mb-[3px] tw:text-sm">
-    @if (ngControl?.control?.invalid) {
+    @if (ngControl?.control?.invalid && ngControl?.control?.touched && fileInput.files?.length === 0) {
       <mat-error>
-        @if (ngControl?.control?.touched && fileInput.files?.length === 0) {
-          {{ t('shared.form.error.required') }}
-        }
+        {{ t('shared.form.error.required') }}
       </mat-error>
     }
   </div>
