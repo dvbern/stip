@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
@@ -46,15 +47,20 @@ public class DokumentDeleteService {
         final String bucketName,
         final List<String> objectIds
     ) {
-        Uni.createFrom()
-            .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
-            .onFailure()
-            .invoke(
-                throwable -> LOG
-                    .error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), throwable)
-            )
-            .await()
-            .indefinitely();
+        try {
+            Uni.createFrom()
+                .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
+                .onFailure()
+                .invoke(
+                    throwable -> LOG
+                        .error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), throwable)
+                )
+                .await()
+                .indefinitely()
+                .get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), e);
+        }
     }
 
     private CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(

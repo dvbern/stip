@@ -90,6 +90,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @RequiredArgsConstructor
 public class DarlehenService {
     public static final String DARLEHEN_DOKUMENT_PATH = "darlehen/";
+    public static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen_verfuegung/";
+    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
     private final FallRepository fallRepository;
     private final FreiwilligDarlehenRepository freiwilligDarlehenRepository;
@@ -115,9 +117,6 @@ public class DarlehenService {
     private final GesetzlichDarlehenRepository gesetzlichDarlehenRepository;
     private final MailService mailService;
     private final StatusprotokollService statusprotokollService;
-
-    public static final String DARLEHEN_VERFUEGUNG_DOKUMENT_PATH = "darlehen/";
-    private static final String DARLEHEN_VERFUEGUNG_DOKUMENT_NAME = "DarlehenVerfuegung.pdf";
 
     private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
         final Fall fall,
@@ -493,8 +492,9 @@ public class DarlehenService {
             dokumentRepository.delete(dokument);
             dokumentDeleteService.executeDeleteDokumentFromS3(
                 s3,
-                configService.bucketName,
+                configService.getBucketName(),
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
+
             );
         }
 
