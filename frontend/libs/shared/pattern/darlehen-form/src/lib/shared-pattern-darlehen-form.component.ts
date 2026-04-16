@@ -415,7 +415,7 @@ export class SharedPatternDarlehenFormComponent {
             },
             onSuccess: () => {
               this.sbFormSavedSig.set(true);
-              this.formSb.markAsPristine();
+              this.formSb.markAsUntouched();
             },
           });
         }

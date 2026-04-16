@@ -40,7 +40,6 @@ import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
 export class SharedUiFileUploadComponent
   implements ControlValueAccessor, OnInit
 {
-  private touched = false;
   private injector = inject(Injector);
   ngControl = inject(NgControl, { optional: true });
   allowedFileTypesSig = input<string[]>();
@@ -63,18 +62,12 @@ export class SharedUiFileUploadComponent
       effect(() => {
         const touched = this.ngControl?.control?.['touchedReactive']();
         if (touched) {
-          this.markAsTouched();
+          this.fileControl.markAsTouched();
+        } else {
+          this.fileControl.markAsUntouched();
         }
       });
     });
-  }
-
-  markAsTouched() {
-    if (!this.touched) {
-      this.onTouched();
-      this.touched = true;
-      this.fileControl.markAsTouched();
-    }
   }
 
   // ControlValueAccessor implementation
@@ -112,6 +105,7 @@ export class SharedUiFileUploadComponent
 
     const value = files && files.length > 0 ? files[0] : null;
     this.onChange(value);
+    this.onTouched();
     this.selectedFileSig.emit(value);
     this.latestValueSig.set(value);
   }
