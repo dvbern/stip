@@ -494,7 +494,7 @@ public class DarlehenService {
             dokumentDeleteService.executeDeleteDokumentFromS3(
                 s3,
                 configService.bucketName,
-                dokument.getObjectId()
+                DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
             );
         }
 

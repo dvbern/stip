@@ -223,7 +223,10 @@ public class DarlehenResourceImplTest {
             .betragForm(0)
             .gewaehrenForm(false)
             .kommentarForm("asd")
-            .reqSpec(req -> req.addMultiPart("fileUpload", TestUtil.getTestPng(), "image/png"))
+            .reqSpec(
+                req -> req
+                    .addMultiPart("fileUpload", TestUtil.getTestPng(), "image/png")
+            )
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

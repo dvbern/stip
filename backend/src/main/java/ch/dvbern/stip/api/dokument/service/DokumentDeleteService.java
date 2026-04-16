@@ -23,12 +23,14 @@ import java.util.concurrent.CompletableFuture;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
 @ApplicationScoped
+@Slf4j
 @UnlessBuildProfile("test")
 public class DokumentDeleteService {
     public void executeDeleteDokumentFromS3(
@@ -46,6 +48,11 @@ public class DokumentDeleteService {
     ) {
         Uni.createFrom()
             .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
+            .onFailure()
+            .invoke(
+                throwable -> LOG
+                    .error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), throwable)
+            )
             .await()
             .indefinitely();
     }
