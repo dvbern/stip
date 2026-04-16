@@ -66,6 +66,15 @@ export const getLebenslaufItems = (
                     [`start.${item.type}`, item.von],
                     [`end.${item.type}`, item.bis],
                     ['wohnsitz', _t(t, `shared.kanton.${item.wohnsitz}`)],
+                    item.ausbildungAbgeschlossen
+                      ? [
+                          'ausbildungAbgeschlossen',
+                          _t(
+                            t,
+                            `shared.ui.${item.ausbildungAbgeschlossen ? 'yes' : 'no'}`,
+                          ),
+                        ]
+                      : null,
                   ],
                   (key) => `shared.form.lebenslauf.item.${key}`,
                 ),

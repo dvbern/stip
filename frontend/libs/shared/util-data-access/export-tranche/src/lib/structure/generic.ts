@@ -5,6 +5,7 @@ import type {
   ContentTable,
   DynamicContent,
   TableCell,
+  TableCellProperties,
 } from 'pdfmake/interfaces';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
@@ -87,13 +88,18 @@ export const getPageFooter =
 
 export const getValueList = <Key extends string>(
   t: TranslocoService,
-  valueList: (readonly [Key, string | number | undefined] | null)[],
+  valueList: (
+    | readonly [Key, string | number | undefined]
+    | readonly [Key, string | number | undefined, TableCellProperties]
+    | null
+  )[],
   translation: (key: Key) => SharedTranslationKey,
 ) =>
   valueList.filter(isDefined).map(
-    ([key, value]) =>
+    ([key, value, properties]) =>
       [
         {
+          ...properties,
           text: _t(t, translation(key)),
           bold: true,
         },
@@ -101,7 +107,7 @@ export const getValueList = <Key extends string>(
           text:
             typeof value === 'number' ? toFormatedNumber(value) : (value ?? ''),
         },
-      ] satisfies Content,
+      ] satisfies TableCell[],
   );
 
 export const getSeparator = (): Content => ({
