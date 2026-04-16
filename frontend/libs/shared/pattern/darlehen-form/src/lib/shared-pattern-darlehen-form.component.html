@@ -42,7 +42,10 @@
             </div>
           </mat-radio-group>
 
-          @if (formSb.controls.gewaehren.value === false) {
+          @if (
+            formSb.controls.gewaehren.value === false &&
+            (darlehenPermissionsSig()?.canWriteSb || darlehenSig()?.negativeVerfuegung)
+          ) {
             <div class="tw:flex tw:flex-col tw:gap-2" *dvIfSachbearbeiter>
               <label>{{ t('shared.form.darlehen.negativDarlehenVerfuegung.label') }}</label>
 
