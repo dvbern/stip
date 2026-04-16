@@ -494,7 +494,6 @@ public class DarlehenService {
                 s3,
                 configService.getBucketName(),
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
-
             );
         }
 
