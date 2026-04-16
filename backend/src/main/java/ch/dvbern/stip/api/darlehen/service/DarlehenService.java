@@ -486,18 +486,25 @@ public class DarlehenService {
     }
 
     @Transactional
-    public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(final UUID darlehenId) {
-        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
-
-        if (darlehen.getManuelleVerfuegung() != null) {
-            darlehen.setManuelleVerfuegung(null);
-            dokumentRepository.delete(darlehen.getManuelleVerfuegung());
+    public void deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(final FreiwilligDarlehen freiwilligDarlehen) {
+        if (freiwilligDarlehen.getManuelleVerfuegung() != null) {
+            final var dokument = freiwilligDarlehen.getManuelleVerfuegung();
+            freiwilligDarlehen.setManuelleVerfuegung(null);
+            dokumentRepository.delete(dokument);
             dokumentDeleteService.executeDeleteDokumentFromS3(
                 s3,
                 configService.bucketName,
-                darlehen.getManuelleVerfuegung().getObjectId()
+                dokument.getObjectId()
             );
         }
+
+    }
+
+    @Transactional
+    public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(final UUID darlehenId) {
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
+
+        deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
 
         assertFreiwilligDarlehenStatus(darlehen, DarlehenStatus.IN_FREIGABE);
         darlehen.setStatus(DarlehenStatus.AKZEPTIERT);
@@ -563,6 +570,7 @@ public class DarlehenService {
             DarlehenStatus.EINGEGEBEN,
             kommentar.getText()
         );
+        deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
 
@@ -614,6 +622,8 @@ public class DarlehenService {
                 .await()
                 .indefinitely()
                 .close();;
+        } else {
+            deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
         }
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
@@ -773,6 +783,7 @@ public class DarlehenService {
     public void deleteFreiwilligDarlehen(UUID darlehenId) {
         final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
         assertFreiwilligDarlehenStatus(darlehen, DarlehenStatus.IN_BEARBEITUNG_GS);
+        deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
         freiwilligDarlehenRepository.delete(darlehen);
     }
 
