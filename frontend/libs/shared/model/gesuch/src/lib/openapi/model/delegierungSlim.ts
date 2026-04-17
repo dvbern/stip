@@ -10,9 +10,12 @@
  * Do not edit the class manually.
  */
 import { SozialdienstSlim } from './sozialdienstSlim';
+import { DelegierungStatus } from './delegierungStatus';
 
 export interface DelegierungSlim { 
-    delegierungAngenommen?: boolean;
-    sozialdienst?: SozialdienstSlim;
+    status: DelegierungStatus;
+    sozialdienst: SozialdienstSlim;
 }
+
+
 

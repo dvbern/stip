@@ -32,8 +32,8 @@ public class AuthorizerUtil {
         final Fall fall,
         final SozialdienstService sozialdienstService
     ) {
-        final var delegierung = fall.getDelegierung();
-        if (delegierung == null || !fall.isDelegiert()) {
+        final var delegierung = fall.getActiveDelegierung();
+        if (delegierung == null) {
             return false;
         }
 

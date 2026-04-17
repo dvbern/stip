@@ -82,7 +82,7 @@ export class DashboardStore extends signalStore(
         const canCurrentlyEditAusbildung = isNotReadonly(
           this.appType,
           rolesMap,
-          fallDashboardItem.delegierung,
+          fallDashboardItem.currentDelegierung,
         );
         const alternativeBezeichnung = `${ausbildung.alternativeAusbildungsstaette} - ${ausbildung.alternativeAusbildungsgang}`;
         const getBezeichnung = (
@@ -116,11 +116,11 @@ export class DashboardStore extends signalStore(
 
     return {
       fall: fallDashboardItem.fall,
-      delegierung: fallDashboardItem.delegierung,
+      currentDelegierung: fallDashboardItem.currentDelegierung,
       canCreateAusbildung: isNotReadonly(
         this.appType,
         rolesMap,
-        fallDashboardItem.delegierung,
+        fallDashboardItem.currentDelegierung,
       ),
       notifications: fallDashboardItem.notifications.map((notification) => ({
         ...notification,
@@ -214,7 +214,7 @@ const toGesuchDashboardItemView =
     const canCurrentlyEditGesuch = isNotReadonly(
       appType,
       rolesMap,
-      fallItem.delegierung,
+      fallItem.currentDelegierung,
     );
     const gesuchPermission = getGesuchPermissions(gesuch, appType, rolesMap);
     const aenderungPermission = gesuch.offeneAenderung

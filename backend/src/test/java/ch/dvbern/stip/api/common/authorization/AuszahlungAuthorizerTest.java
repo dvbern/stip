@@ -116,8 +116,9 @@ class AuszahlungAuthorizerTest {
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(sozialdienstbenutzer);
+        delegierung.akzeptieren();
         when(delegierungRepository.requireById(any())).thenReturn(delegierung);
-        fall.setDelegierung(delegierung);
+        fall.setCurrentDelegierung(delegierung);
 
         var ausbildung = new Ausbildung();
         var gesuch = new Gesuch();

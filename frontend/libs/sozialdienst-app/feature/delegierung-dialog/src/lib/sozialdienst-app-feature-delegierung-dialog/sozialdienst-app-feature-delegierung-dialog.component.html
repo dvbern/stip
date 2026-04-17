@@ -10,7 +10,7 @@
 
   <!-- dialog  title  -->
   <h1 class="title h2 tw:!mb-8">
-    @if (dialogData.fall.delegierung.delegierungAngenommen) {
+    @if (dialogData.delegierung.status === 'AKZEPTIERT') {
       {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | transloco }}
     } @else {
       {{ 'sozialdienst-app.cockpit.table.delegierung.title.anfrage' | transloco }}
@@ -165,7 +165,7 @@
     <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | transloco }}</mat-label>
       <mat-select
-        formControlName="sozMitarbeiter"
+        [formControl]="zuweisungSozMitarbeiterForm.controls.sozMitarbeiter"
         data-testid="form-sozMitarbeiter-select"
         [placeholder]="'shared.form.select.empty' | transloco"
       >
@@ -191,37 +191,72 @@
           </div>
         }
       </div>
-      <div class="justify-content-between tw:flex tw:w-full">
-        <button type="button" data-testid="dialog-sozMitarbeiter-cancel" class="btn btn-secondary" (click)="cancel()">
-          {{ 'shared.cancel' | transloco }}
-        </button>
+      <div class="tw:justify-between tw:flex tw:w-full tw:gap-3">
+        @switch (dialogData.delegierung.status) {
+          @case ('EINGEREICHT') {
+            <button
+              type="button"
+              data-testid="dialog-sozMitarbeiter-cancel"
+              class="btn btn-secondary"
+              (click)="cancel()"
+            >
+              {{ 'shared.cancel' | transloco }}
+            </button>
 
-        @if (!dialogData.fall.delegierung.delegierungAngenommen) {
-          <button
-            *dvHasRoles="['V0_Sozialdienst-Admin']"
-            type="button"
-            data-testid="dialog-sozAdmin-delegierung-reject"
-            class="btn btn-danger"
-            (click)="rejectDelegation()"
-          >
-            {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
-          </button>
-        } @else {
-          <button
-            type="button"
-            data-testid="dialog-sozAdmin-delegierung-remove"
-            class="btn btn-danger"
-            (click)="removeDelegation()"
-          >
-            {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove' | transloco }}
-          </button>
+            <button
+              *dvHasRoles="['V0_Sozialdienst-Admin']"
+              type="button"
+              data-testid="dialog-sozAdmin-delegierung-reject"
+              class="btn btn-danger"
+              (click)="rejectDelegation()"
+            >
+              {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
+            </button>
+
+            <dv-shared-ui-form-save
+              [labelKey]="saveLabelKey"
+              [disabled]="zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.pristine"
+              [loading]="pending"
+              [prefixIcon]="true"
+            ></dv-shared-ui-form-save>
+          }
+          @case ('AKZEPTIERT') {
+            <button
+              type="button"
+              data-testid="dialog-sozMitarbeiter-cancel"
+              class="btn btn-secondary"
+              (click)="cancel()"
+            >
+              {{ 'shared.cancel' | transloco }}
+            </button>
+
+            <button
+              type="button"
+              data-testid="dialog-sozAdmin-delegierung-remove"
+              class="btn btn-danger"
+              (click)="removeDelegation()"
+            >
+              {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove' | transloco }}
+            </button>
+
+            <dv-shared-ui-form-save
+              [labelKey]="'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.changeZuweisung'"
+              [disabled]="zuweisungSozMitarbeiterForm.controls.sozMitarbeiter.pristine"
+              [loading]="pending"
+              [prefixIcon]="true"
+            ></dv-shared-ui-form-save>
+          }
+          @default {
+            <button
+              type="button"
+              data-testid="dialog-sozMitarbeiter-cancel"
+              class="btn btn-secondary"
+              (click)="cancel()"
+            >
+              {{ 'shared.close' | transloco }}
+            </button>
+          }
         }
-
-        <dv-shared-ui-form-save
-          [disabled]="zuweisungSozMitarbeiterForm.pristine"
-          [loading]="pending"
-          [prefixIcon]="true"
-        ></dv-shared-ui-form-save>
       </div>
     </div>
   </form>

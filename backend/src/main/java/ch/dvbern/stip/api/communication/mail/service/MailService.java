@@ -75,8 +75,8 @@ public class MailService {
     private List<String> gatherRecipients(final String primaryEmail, final Fall fall) {
         final var result = new ArrayList<String>();
 
-        final var delegierung = fall.getDelegierung();
-        if (delegierung != null && delegierung.getDelegierterMitarbeiter() != null) {
+        final var delegierung = fall.getActiveDelegierung();
+        if (delegierung != null) {
             result.add(delegierung.getDelegierterMitarbeiter().getEmail());
         }
 

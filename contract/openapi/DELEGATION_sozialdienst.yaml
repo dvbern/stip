@@ -400,19 +400,13 @@ components:
     Sozialdienst:
       allOf:
         - $ref: './components/common.yaml#/SozialdienstSlim'
-        - type: object
-          required:
-            - id
-            - name
-            - sozialdienstAdmin
-            - zahlungsverbindung
-            - aktiv
-          properties:
-            sozialdienstAdmin:
-              $ref: './components/common.yaml#/SozialdienstBenutzer'
-            zahlungsverbindung:
-              $ref: './components/common.yaml#/Zahlungsverbindung'
-            aktiv:
-              type: boolean
+      required:
+        - sozialdienstAdmin
+        - zahlungsverbindung
+      properties:
+        sozialdienstAdmin:
+          $ref: './components/common.yaml#/SozialdienstBenutzer'
+        zahlungsverbindung:
+          $ref: './components/common.yaml#/Zahlungsverbindung'
 security:
   $ref: './components/security.yaml#/security'

@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.entity.QDelegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
@@ -55,7 +56,7 @@ public class SozialdienstDashboardQueryBuilder {
     }
 
     public void fallNummer(final JPAQuery<Delegierung> query, final String fallNummer) {
-        query.where(qDelegierung.delegierterFall.fallNummer.containsIgnoreCase(fallNummer));
+        query.where(qDelegierung.fall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
     public void vorname(final JPAQuery<Delegierung> query, final String vorname) {
@@ -74,13 +75,8 @@ public class SozialdienstDashboardQueryBuilder {
         query.where(qDelegierung.persoenlicheAngaben.geburtsdatum.eq(geburtsdatum));
     }
 
-    public void delegierungAngenommen(final JPAQuery<Delegierung> query, final Boolean delegierungAngenommen) {
-        if (delegierungAngenommen) {
-            query.where(qDelegierung.delegierterMitarbeiter.isNotNull());
-        } else {
-            query.where(qDelegierung.delegierterMitarbeiter.isNull());
-        }
-
+    public void delegierungStatus(final JPAQuery<Delegierung> query, final String delegierungStatus) {
+        query.where(qDelegierung.status.eq(DelegierungStatus.valueOf(delegierungStatus)));
     }
 
     public void orderBy(
@@ -89,7 +85,7 @@ public class SozialdienstDashboardQueryBuilder {
         final SortOrder sortOrder
     ) {
         final var fieldSpecified = switch (column) {
-            case FALLNUMMER -> qDelegierung.delegierterFall.fallNummer;
+            case FALLNUMMER -> qDelegierung.fall.fallNummer;
             case VORNAME -> qDelegierung.persoenlicheAngaben.vorname;
             case NACHNAME -> qDelegierung.persoenlicheAngaben.nachname;
             case WOHNORT -> qDelegierung.persoenlicheAngaben.adresse.ort;

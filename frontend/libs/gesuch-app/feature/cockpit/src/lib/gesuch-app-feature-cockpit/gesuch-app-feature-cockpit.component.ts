@@ -100,7 +100,7 @@ export class GesuchAppFeatureCockpitComponent {
   availableSozialdiensteSig = computed(() => {
     const sozialdienste = this.sozialdienstStore.availableSozialdienste()?.data;
     const delegierterSozialdienst =
-      this.dashboardStore.dashboardViewSig()?.delegierung?.sozialdienst;
+      this.dashboardStore.dashboardViewSig()?.currentDelegierung?.sozialdienst;
 
     return sozialdienste?.filter(
       (sozialdienst) =>

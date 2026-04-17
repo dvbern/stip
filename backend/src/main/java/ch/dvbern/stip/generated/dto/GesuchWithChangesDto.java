@@ -40,6 +40,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid Boolean verfuegt;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
+  private @Valid Boolean hadDelegierungs;
   private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
@@ -293,6 +294,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
+  public GesuchWithChangesDto hadDelegierungs(Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+    return this;
+  }
+
+  
+  @JsonProperty("hadDelegierungs")
+  public Boolean getHadDelegierungs() {
+    return hadDelegierungs;
+  }
+
+  @JsonProperty("hadDelegierungs")
+  public void setHadDelegierungs(Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+  }
+
+  /**
+   **/
   public GesuchWithChangesDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
@@ -402,6 +421,7 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt) &&
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
+        Objects.equals(this.hadDelegierungs, gesuchWithChanges.hadDelegierungs) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
         Objects.equals(this.changes, gesuchWithChanges.changes) &&
@@ -410,7 +430,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente, changes, isInitial);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente, changes, isInitial);
   }
 
   @Override
@@ -431,6 +451,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
+    sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");

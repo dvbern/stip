@@ -23,8 +23,11 @@ import java.util.Objects;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.service.FallMapper;
+import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
@@ -35,6 +38,7 @@ import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -50,12 +54,16 @@ import org.mapstruct.Named;
     }
 )
 public abstract class GesuchMapper {
+    @Inject
+    FallService fallService;
+
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(source = ".", target = "hadDelegierungs", qualifiedByName = "getHadDelegierungs")
+    @Mapping(source = ".", target = "delegierung", qualifiedByName = "getCurrentDelegierung")
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
-    @Mapping(source = "ausbildung.fall.delegierung", target = "delegierung")
     @Mapping(
         target = "hasPendingAusbildungUnterbruchAntrag",
         source = ".",
@@ -88,10 +96,11 @@ public abstract class GesuchMapper {
 
     @Mapping(source = "timestampMutiert", target = "aenderungsdatum")
     @Mapping(source = ".", target = "bearbeiter", qualifiedByName = "getFullNameOfSachbearbeiter")
+    @Mapping(source = ".", target = "hadDelegierungs", qualifiedByName = "getHadDelegierungs")
+    @Mapping(source = ".", target = "delegierung", qualifiedByName = "getCurrentDelegierung")
     @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
     @Mapping(source = "ausbildung.id", target = "ausbildungId")
-    @Mapping(source = "ausbildung.fall.delegierung", target = "delegierung")
     @Mapping(
         source = ".", target = "hasPendingAusbildungUnterbruchAntrag",
         qualifiedByName = "hasPendingAusbildungUnterbruchAntrag"
@@ -117,6 +126,20 @@ public abstract class GesuchMapper {
         }
 
         return zuordnung.getSachbearbeiter().getFullName();
+    }
+
+    private Fall getFall(Gesuch gesuch) {
+        return fallService.getById(gesuch.getAusbildung().getFall().getId());
+    }
+
+    @Named("getCurrentDelegierung")
+    Delegierung getCurrentDelegierung(Gesuch gesuch) {
+        return getFall(gesuch).getCurrentDelegierung();
+    }
+
+    @Named("getHadDelegierungs")
+    Boolean getHadDelegierungs(Gesuch gesuch) {
+        return !getFall(gesuch).getHistoricalDelegierungs().isEmpty();
     }
 
     @Named("getStartDate")

@@ -736,7 +736,8 @@
                     DarlehenBuchhaltungEntryKategorie=ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie,
                     VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus,
                     AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
-                    InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason
+                    InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
+                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

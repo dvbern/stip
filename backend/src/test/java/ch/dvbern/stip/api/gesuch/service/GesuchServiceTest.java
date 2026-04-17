@@ -1475,6 +1475,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setAusbildungsgang(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
@@ -1512,6 +1513,7 @@ class GesuchServiceTest {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.getAusbildung().setFall(fall);
 
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
@@ -1548,6 +1550,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
@@ -1583,6 +1586,7 @@ class GesuchServiceTest {
         gesuch.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
@@ -1623,6 +1627,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
         gesuch.setEinreichedatum(LocalDate.now());
 
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
@@ -1702,6 +1707,7 @@ class GesuchServiceTest {
         gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
@@ -1793,6 +1799,7 @@ class GesuchServiceTest {
             .getLatestGesuchTranche();
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),

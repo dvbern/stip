@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.delegieren.resource;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
 import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapper;
 import ch.dvbern.stip.api.delegieren.service.PersoenlicheAngabenMapperImpl;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.notification.service.NotificationService;
@@ -57,6 +59,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -174,12 +177,13 @@ class DelegierenResourceImplTest {
 
         Mockito.doAnswer(invocationOnMock -> {
             var delegierung = invocationOnMock.getArgument(0, Delegierung.class);
-            assertEquals(delegierung.getSozialdienst().getId(), sozialdienst.getId());
-            assertEquals(delegierung.getDelegierterFall().getId(), fall.getId());
-            assertEquals(delegierung.getPersoenlicheAngaben().getAnrede(), delegierungCreate.getAnrede());
-            assertEquals(delegierung.getPersoenlicheAngaben().getNachname(), delegierungCreate.getNachname());
-            assertEquals(delegierung.getPersoenlicheAngaben().getVorname(), delegierungCreate.getVorname());
-            assertEquals(delegierung.getPersoenlicheAngaben().getGeburtsdatum(), delegierungCreate.getGeburtsdatum());
+            assertEquals(sozialdienst.getId(), delegierung.getSozialdienst().getId());
+            assertEquals(fall.getId(), delegierung.getFall().getId());
+            assertEquals(DelegierungStatus.EINGEREICHT, delegierung.getStatus());
+            assertEquals(delegierungCreate.getAnrede(), delegierung.getPersoenlicheAngaben().getAnrede());
+            assertEquals(delegierungCreate.getNachname(), delegierung.getPersoenlicheAngaben().getNachname());
+            assertEquals(delegierungCreate.getVorname(), delegierung.getPersoenlicheAngaben().getVorname());
+            assertEquals(delegierungCreate.getGeburtsdatum(), delegierung.getPersoenlicheAngaben().getGeburtsdatum());
             return null;
         }).when(delegierungRepository).persist(any(Delegierung.class));
 
@@ -242,7 +246,7 @@ class DelegierenResourceImplTest {
         delegierung.setId(UUID.randomUUID());
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setPersoenlicheAngaben(persoenlicheAngaben);
-        delegierung.setDelegierterFall(fall);
+        delegierung.setFall(fall);
 
         var delegierterMitarbeiterAendern = new DelegierterMitarbeiterAendernDto();
         delegierterMitarbeiterAendern.mitarbeiterId(UUID.randomUUID());
@@ -254,5 +258,7 @@ class DelegierenResourceImplTest {
         when(sozialdienstBenutzerService.getCurrentSozialdienstBenutzer()).thenReturn(Optional.of(currentBenutzer));
 
         delegierenApi.delegierterMitarbeiterAendern(delegierung.getId(), delegierterMitarbeiterAendern);
+        assertEquals(DelegierungStatus.AKZEPTIERT, delegierung.getStatus());
+        assertTrue(Objects.nonNull(delegierung.getStartDate()));
     }
 }

@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.entity.QFall;
+import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -58,6 +59,19 @@ public class FallRepository implements BaseRepository<Fall> {
 
     public Optional<Fall> findFallForGsOptional(final UUID gesuchstellerId) {
         return find("gesuchsteller.id", gesuchstellerId).firstResultOptional();
+    }
+
+    public Fall findFallForGesuch(final UUID gesuchId) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+
+        final var gesuch = QGesuch.gesuch;
+
+        return queryFactory
+            .selectFrom(Q_FALL)
+            .join(gesuch)
+            .on(gesuch.ausbildung.fall.id.eq(Q_FALL.id))
+            .where(gesuch.id.eq(gesuchId))
+            .fetchFirst();
     }
 
     public Stream<Fall> findAllFallsWithFailedAuszahlungBuchhaltung(final Integer page, final Integer pageSize) {

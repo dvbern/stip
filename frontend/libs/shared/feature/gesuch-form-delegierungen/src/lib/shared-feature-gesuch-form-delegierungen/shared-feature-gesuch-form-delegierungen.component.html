@@ -1,0 +1,104 @@
+<form [formGroup]="form" class="tw:dv-form-grid tw:pt-6" [dvSharedUiFormReadonly]="true" *dvTranslocoShared="let t">
+  <aside class="tw:md:col-span-2 tw:lg:col-start-3 tw:lg:row-span-12">
+    <h2 class="tw:text-xl!">{{ t('shared.form.delegierung.list.label') }}</h2>
+    <mat-selection-list [multiple]="false" [formControl]="selectedDelegierung">
+      @for (delegation of delegationStore.delegationenViewSig(); track delegation) {
+        <mat-list-option [value]="delegation" class="tw:py-3! tw:pl-0! tw:h-auto! tw:max-w-fit tw:lg:max-w-full">
+          <div class="tw:flex! tw:gap-4 tw:lg:max-xl:flex-col tw:lg:max-xl:gap-0 tw:md:max-xl:items-start">
+            <span
+              class="tw:shrink tw:text-ellipsis tw:overflow-hidden"
+              [dvTruncateTooltip]="delegation.sozialdienst.name"
+              >{{ delegation.sozialdienst.name }}</span
+            >
+            <mat-chip
+              class="tw:shrink-0 tw:text-sm tw:h-6! tw:ml-auto tw:lg:max-xl:ml-0"
+              highlighted
+              [color]="delegation.color"
+              >{{ t(`shared.delegierung.status.${delegation.status}`) }}</mat-chip
+            >
+          </div>
+          @if (delegation.startDate) {
+            <div class="tw:text-xs tw:text-gray-600 tw:mt-1">
+              {{
+                t(
+                  delegation.endDate
+                    ? 'shared.form.delegierung.range.startAndEnd'
+                    : 'shared.form.delegierung.range.ongoing',
+                  {
+                    startDate: delegation.startDate | date: 'dd.MM.yyyy',
+                    endDate: delegation.endDate | date: 'dd.MM.yyyy',
+                  }
+                )
+              }}
+            </div>
+          }
+        </mat-list-option>
+      }
+    </mat-selection-list>
+  </aside>
+
+  <!-- Startdatum der Delegation -->
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:lg:mt-6">
+    <mat-label>{{ t('shared.form.delegierung.start.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.start" data-testid="form-delegierung-start" />
+  </mat-form-field>
+
+  <!-- Enddatum der Delegation -->
+  <mat-form-field dvSharedUiFormField class="tw:lg:mt-6">
+    <mat-label>{{ t('shared.form.delegierung.end.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.end" data-testid="form-delegierung-end" />
+  </mat-form-field>
+
+  <!-- Name des Sozialdienstes -->
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+    <mat-label>{{ t('shared.form.delegierung.name.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.name" data-testid="form-delegierung-name" />
+  </mat-form-field>
+
+  <!-- Status -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ t('shared.form.delegierung.status.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.status" data-testid="form-delegierung-status" />
+  </mat-form-field>
+
+  <!-- Adresse -->
+  <div class="tw:col-start-1! tw:md:col-span-2">
+    <dv-shared-ui-form-address [group]="form.controls.adresse" [languageSig]="languageSig()" />
+  </div>
+
+  <!-- Telefonnummer -->
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+    <mat-label>{{ t('shared.form.delegierung.telefonnummer.label') }}</mat-label>
+    <input
+      readonly
+      type="text"
+      matInput
+      [formControl]="form.controls.telefonnummer"
+      data-testid="form-delegierung-telefonnummer"
+    />
+  </mat-form-field>
+
+  <!-- Mail-Adresse -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ t('shared.form.delegierung.email.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.email" data-testid="form-delegierung-email" />
+  </mat-form-field>
+
+  <!-- Sozialdienstmitarbeiter-Vorname -->
+  <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+    <mat-label>{{ t('shared.form.delegierung.vorname.label') }}</mat-label>
+    <input readonly type="text" matInput [formControl]="form.controls.vorname" data-testid="form-delegierung-vorname" />
+  </mat-form-field>
+
+  <!-- Sozialdienstmitarbeiter-Nachname -->
+  <mat-form-field dvSharedUiFormField>
+    <mat-label>{{ t('shared.form.delegierung.nachname.label') }}</mat-label>
+    <input
+      readonly
+      type="text"
+      matInput
+      [formControl]="form.controls.nachname"
+      data-testid="form-delegierung-nachname"
+    />
+  </mat-form-field>
+</form>

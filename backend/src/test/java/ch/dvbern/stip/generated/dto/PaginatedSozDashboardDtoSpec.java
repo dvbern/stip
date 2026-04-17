@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ch.dvbern.stip.generated.dto.FallWithDelegierungDtoSpec;
+import ch.dvbern.stip.generated.dto.DelegierungEntryDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -40,7 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class PaginatedSozDashboardDtoSpec {
   public static final String JSON_PROPERTY_ENTRIES = "entries";
-  private List<FallWithDelegierungDtoSpec> entries;
+  private List<DelegierungEntryDtoSpec> entries;
 
   public static final String JSON_PROPERTY_PAGE = "page";
   private Integer page;
@@ -54,13 +54,13 @@ public class PaginatedSozDashboardDtoSpec {
   public PaginatedSozDashboardDtoSpec() {
   }
 
-  public PaginatedSozDashboardDtoSpec entries(List<FallWithDelegierungDtoSpec> entries) {
+  public PaginatedSozDashboardDtoSpec entries(List<DelegierungEntryDtoSpec> entries) {
     
     this.entries = entries;
     return this;
   }
 
-  public PaginatedSozDashboardDtoSpec addEntriesItem(FallWithDelegierungDtoSpec entriesItem) {
+  public PaginatedSozDashboardDtoSpec addEntriesItem(DelegierungEntryDtoSpec entriesItem) {
     if (this.entries == null) {
       this.entries = new ArrayList<>();
     }
@@ -76,14 +76,14 @@ public class PaginatedSozDashboardDtoSpec {
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public List<FallWithDelegierungDtoSpec> getEntries() {
+  public List<DelegierungEntryDtoSpec> getEntries() {
     return entries;
   }
 
 
   @JsonProperty(JSON_PROPERTY_ENTRIES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEntries(List<FallWithDelegierungDtoSpec> entries) {
+  public void setEntries(List<DelegierungEntryDtoSpec> entries) {
     this.entries = entries;
   }
 

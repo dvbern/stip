@@ -79,7 +79,7 @@ class RequiredDokumentServiceTest {
         gesuch.setAusbildung(ausbildung);
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(new Sozialdienst());
-        gesuch.getAusbildung().getFall().setDelegierung(delegierung);
+        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung);
 
         // act & assert
         assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, gsBenutzer), is(false));
@@ -110,7 +110,7 @@ class RequiredDokumentServiceTest {
         gesuch.setAusbildung(ausbildung);
         var delegierung = new Delegierung();
         delegierung.setSozialdienst(new Sozialdienst());
-        gesuch.getAusbildung().getFall().setDelegierung(delegierung);
+        gesuch.getAusbildung().getFall().setCurrentDelegierung(delegierung);
 
         // act & assert
         assertThat(service.getGSCanFehlendeDokumenteEinreichen(gesuch, sozMaBenutzer), is(true));

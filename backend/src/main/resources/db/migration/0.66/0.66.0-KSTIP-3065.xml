@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-548">
+      <dropForeignKeyConstraint baseTableName="delegierung" constraintName="FK_delegierung_fall_id"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-539">
+      <addColumn tableName="fall">
+         <column name="current_delegierung_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-540">
+      <addColumn tableName="fall_aud">
+         <column name="current_delegierung_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-541">
+      <addColumn tableName="delegierung">
+         <column name="fall_id" type="UUID">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-542">
+      <addColumn tableName="delegierung_aud">
+         <column name="fall_id" type="UUID"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-543">
+      <addColumn tableName="delegierung">
+         <column name="status" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-544">
+      <addColumn tableName="delegierung_aud">
+         <column name="status" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775728293231-541">
+      <addColumn tableName="delegierung">
+         <column name="end_date" type="date"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775728293231-542">
+      <addColumn tableName="delegierung_aud">
+         <column name="end_date" type="date"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775728293231-543">
+      <addColumn tableName="delegierung">
+         <column name="start_date" type="date"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775728293231-544">
+      <addColumn tableName="delegierung_aud">
+         <column name="start_date" type="date"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-545">
+      <addUniqueConstraint columnNames="current_delegierung_id"
+                           constraintName="UC_FALLCURRENT_DELEGIERUNG_ID_COL"
+                           tableName="fall"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-546">
+      <addForeignKeyConstraint baseColumnNames="fall_id"
+                               baseTableName="delegierung"
+                               constraintName="FK_delegierung_fall_id"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="fall"
+                               validate="true"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-547">
+      <addForeignKeyConstraint baseColumnNames="current_delegierung_id"
+                               baseTableName="fall"
+                               constraintName="FK_fall_delegierung_id"
+                               deferrable="false"
+                               initiallyDeferred="false"
+                               referencedColumnNames="id"
+                               referencedTableName="delegierung"
+                               validate="true"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-549">
+      <dropUniqueConstraint constraintName="uc_delegierungdelegierter_fall_id_col"
+                            tableName="delegierung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-550">
+      <dropColumn columnName="delegierter_fall_id" tableName="delegierung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1775726135018-551">
+      <dropColumn columnName="delegierter_fall_id" tableName="delegierung_aud"/>
+   </changeSet>
+</databaseChangeLog>

@@ -830,6 +830,34 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /delegierung/{gesuchId}/all:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delegierung'
+          description: All delegierungs for the given gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDelegierungsForGesuch
+      summary: Returns all delegierungs for a given gesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /delegierung/{delegierungId}/mitarbeiterDelegieren:
     parameters:
       - $ref: '#/components/parameters/delegierungId'
@@ -914,7 +942,7 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/delegierungAngenommen'
+        - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -7272,6 +7300,9 @@ components:
       type: object
       required:
         - id
+        - sozialdienst
+        - persoenlicheAngaben
+        - status
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -7279,26 +7310,27 @@ components:
           $ref: '#/components/schemas/SozialdienstSlim'
         delegierterMitarbeiter:
           $ref: '#/components/schemas/SozialdienstBenutzer'
-        delegierungAngenommen:
-          type: boolean
         persoenlicheAngaben:
           $ref: '#/components/schemas/PersoenlicheAngaben'
-    FallWithDelegierung:
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
+        startDate:
+          $ref: '#/components/schemas/LocalDate'
+        endDate:
+          $ref: '#/components/schemas/LocalDate'
+    DelegierungEntry:
       required:
-        - id
-        - fallNummer
         - mandant
-        - delegierung
       type: object
+      allOf:
+        - $ref: '#/components/schemas/Delegierung'
       properties:
-        id:
+        fallId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
         mandant:
           type: string
-        delegierung:
-          $ref: '#/components/schemas/Delegierung'
     PaginatedSozDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7306,7 +7338,7 @@ components:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/FallWithDelegierung'
+            $ref: '#/components/schemas/DelegierungEntry'
     SozDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7392,11 +7424,26 @@ components:
           type: string
         ort:
           type: string
+    ZahlungsverbindungSlim:
+      title: Root Type for Zahlungsverbindung
+      required:
+        - adresse
+      type: object
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        institution:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     SozialdienstSlim:
       required:
         - id
         - name
         - aktiv
+        - zahlungsverbindung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -7404,6 +7451,8 @@ components:
           type: string
         aktiv:
           type: boolean
+        zahlungsverbindung:
+          $ref: '#/components/schemas/ZahlungsverbindungSlim'
     SozialdienstBenutzerBase:
       required:
         - vorname
@@ -7452,6 +7501,12 @@ components:
           $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
+    DelegierungStatus:
+      enum:
+        - EINGEREICHT
+        - AKZEPTIERT
+        - ABGELEHNT
+        - BEENDET
     SozialdienstBenutzerCreate:
       required:
         - redirectUri
@@ -7511,43 +7566,23 @@ components:
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'
-        - type: object
-          required:
-            - id
-            - name
-            - sozialdienstAdmin
-            - zahlungsverbindung
-            - aktiv
-          properties:
-            sozialdienstAdmin:
-              $ref: '#/components/schemas/SozialdienstBenutzer'
-            zahlungsverbindung:
-              $ref: '#/components/schemas/Zahlungsverbindung'
-            aktiv:
-              type: boolean
-    ZahlungsverbindungUpdate:
-      title: Root Type for Zahlungsverbindung
       required:
-        - adresse
+        - sozialdienstAdmin
+        - zahlungsverbindung
+      properties:
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstBenutzer'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
+    Zahlungsverbindung:
+      allOf:
+        - $ref: '#/components/schemas/ZahlungsverbindungSlim'
+      required:
         - iban
       type: object
       properties:
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
         iban:
           type: string
-        nachname:
-          type: string
-        institution:
-          type: string
-    Zahlungsverbindung:
-      title: Root Type for Zahlungsverbindung
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
     DemoDataList:
       required:
         - importiertVon
@@ -9609,7 +9644,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
-        delegierung:
+        currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
     AusbildungDashboardItem:
       type: object
@@ -11039,10 +11074,13 @@ components:
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
     DelegierungSlim:
+      required:
+        - status
+        - sozialdienst
       type: object
       properties:
-        delegierungAngenommen:
-          type: boolean
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
     Gesuch:
@@ -11087,6 +11125,8 @@ components:
         einreichedatum:
           format: date
           type: string
+        hadDelegierungs:
+          type: boolean
         delegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         nachfristDokumente:
@@ -11896,11 +11936,6 @@ components:
       schema:
         type: string
         format: date
-    delegierungAngenommen:
-      in: query
-      name: delegierungAngenommen
-      schema:
-        type: boolean
     nachname:
       in: query
       name: nachname
