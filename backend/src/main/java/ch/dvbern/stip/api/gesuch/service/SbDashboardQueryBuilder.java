@@ -55,8 +55,8 @@ public class SbDashboardQueryBuilder {
         final var meId = benutzerService.getCurrentBenutzer().getId();
 
         final var query = switch (queryType) {
-            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery();
-            case MEINE_BEARBEITBAR -> gesuchRepository.getFindMeineBearbeitbarQuery(meId);
+            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery(trancheType);
+            case MEINE_BEARBEITBAR -> gesuchRepository.getFindMeineBearbeitbarQuery(meId, trancheType);
             case ALLE_PENDENTE_GESUCHE -> gesuchRepository.getFindAllePendenteQuery();
             case MEINE_PENDENTE_GESUCHE -> gesuchRepository.getFindAlleMeinePendenteQuery(meId);
             case ALLE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleJurBearbeitungQuery();
