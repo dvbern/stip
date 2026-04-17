@@ -8,7 +8,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
@@ -65,6 +64,11 @@ public interface DarlehenResource {
     @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenDokument(@QueryParam("token") @NotNull   String token);
 
+    @GET
+    @Path("/negativ-verfuegung/download")
+    @Produces({ "application/octet-stream" })
+    org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> downloadDarlehenNegativVerfuegung(@QueryParam("token") @NotNull   String token);
+
     @POST
     @Path("/{darlehenId}/ablehnen")
     @Produces({ "application/json", "text/plain" })
@@ -93,9 +97,9 @@ public interface DarlehenResource {
 
     @PATCH
     @Path("/{darlehenId}/sb")
-    @Consumes({ "application/json" })
+    @Consumes({ "multipart/form-data" })
     @Produces({ "application/json", "text/plain" })
-    FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@Valid @NotNull FreiwilligDarlehenUpdateSbDto freiwilligDarlehenUpdateSbDto);
+    FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(@PathParam("darlehenId") UUID darlehenId,@FormParam(value = "gewaehren")  Boolean gewaehren,@FormParam(value = "negativeVerfuegung")  org.jboss.resteasy.reactive.multipart.FileUpload negativeVerfuegung,@FormParam(value = "betrag")  Integer betrag,@FormParam(value = "kommentar")  String kommentar);
 
     @POST
     @Path("/{darlehenId}/zurueckweisen")
@@ -127,6 +131,11 @@ public interface DarlehenResource {
     @Path("/dokument/{dokumentId}/token")
     @Produces({ "application/json", "text/plain" })
     FileDownloadTokenDto getDarlehenDownloadToken(@PathParam("dokumentId") UUID dokumentId);
+
+    @GET
+    @Path("/negativ-verfuegung/{dokumentId}/token")
+    @Produces({ "application/json", "text/plain" })
+    FileDownloadTokenDto getDarlehenNegativVerfuegungDownloadToken(@PathParam("dokumentId") UUID dokumentId);
 
     @GET
     @Path("/dashboard/{getFreiwilligDarlehenSbQueryType}")

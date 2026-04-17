@@ -2,17 +2,21 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  Injector,
+  OnInit,
+  effect,
+  inject,
   input,
   output,
+  runInInjectionContext,
   signal,
   viewChild,
 } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
-  NG_VALUE_ACCESSOR,
+  NgControl,
   ReactiveFormsModule,
-  Validators,
 } from '@angular/forms';
 import { MatError } from '@angular/material/form-field';
 
@@ -27,37 +31,43 @@ import { SharedUiDropFileComponent } from '@dv/shared/ui/drop-file';
     SharedUiAdvTranslocoDirective,
     SharedUiDropFileComponent,
   ],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: SharedUiFileUploadComponent,
-    },
-  ],
   host: {
     class: 'tw:flex tw:flex-col tw:gap-2',
   },
   templateUrl: './shared-ui-file-upload.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedUiFileUploadComponent implements ControlValueAccessor {
-  private touched = false;
+export class SharedUiFileUploadComponent
+  implements ControlValueAccessor, OnInit
+{
+  private injector = inject(Injector);
+  ngControl = inject(NgControl, { optional: true });
   allowedFileTypesSig = input<string[]>();
   selectedFileSig = output<File | null>();
 
   fileInputSig = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   latestValueSig = signal<File | null>(null);
-  fileControl = new FormControl<File | undefined>(
-    undefined,
-    Validators.required,
-  );
+  fileControl = new FormControl<File | undefined>(undefined);
 
-  markAsTouched() {
-    if (!this.touched) {
-      this.onTouched();
-      this.touched = true;
-      this.fileControl.markAsTouched();
+  constructor() {
+    // this is a workaround to get access to the NgControl instance and not run into circular dependency issues
+    // https://stackoverflow.com/questions/45755958/how-to-get-formcontrol-instance-from-controlvalueaccessor
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
     }
+  }
+
+  ngOnInit() {
+    runInInjectionContext(this.injector, () => {
+      effect(() => {
+        const touched = this.ngControl?.control?.['touchedReactive']();
+        if (touched) {
+          this.fileControl.markAsTouched();
+        } else {
+          this.fileControl.markAsUntouched();
+        }
+      });
+    });
   }
 
   // ControlValueAccessor implementation
@@ -95,6 +105,7 @@ export class SharedUiFileUploadComponent implements ControlValueAccessor {
 
     const value = files && files.length > 0 ? files[0] : null;
     this.onChange(value);
+    this.onTouched();
     this.selectedFileSig.emit(value);
     this.latestValueSig.set(value);
   }

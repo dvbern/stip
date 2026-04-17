@@ -19,6 +19,7 @@ export interface FreiwilligDarlehen {
     relatedGesuchId?: string;
     status?: DarlehenStatus;
     gewaehren?: boolean;
+    negativeVerfuegung?: Dokument;
     betrag?: number;
     kommentar?: string;
     betragGewuenscht?: number;

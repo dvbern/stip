@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDashboardDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -37,7 +36,14 @@ public abstract class FreiwilligDarlehenMapper {
     @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
     @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
     @Mapping(source = "darlehenBuchhaltungEntry.verfuegung", target = "verfuegung")
-    public abstract FreiwilligDarlehenDto toDto(FreiwilligDarlehen freiwilligDarlehen);
+    public abstract FreiwilligDarlehenDto toDtoGs(FreiwilligDarlehen freiwilligDarlehen);
+
+    @Mapping(source = "fall.id", target = "fallId")
+    @Mapping(source = "relatedGesuch.id", target = "relatedGesuchId")
+    @Mapping(source = ".", target = "isDelegiert", qualifiedByName = "getIsDelegiert")
+    @Mapping(source = "darlehenBuchhaltungEntry.verfuegung", target = "verfuegung")
+    @Mapping(source = "manuelleVerfuegung", target = "negativeVerfuegung")
+    public abstract FreiwilligDarlehenDto toDtoSb(FreiwilligDarlehen freiwilligDarlehen);
 
     @Mapping(source = "fall.fallNummer", target = "fallNummer")
     @Mapping(source = "fall.id", target = "fallId")
@@ -53,11 +59,6 @@ public abstract class FreiwilligDarlehenMapper {
 
     public abstract FreiwilligDarlehen partialUpdate(
         FreiwilligDarlehenUpdateGsDto darlehenDto,
-        @MappingTarget FreiwilligDarlehen freiwilligDarlehen
-    );
-
-    public abstract FreiwilligDarlehen partialUpdate(
-        FreiwilligDarlehenUpdateSbDto darlehenDto,
         @MappingTarget FreiwilligDarlehen freiwilligDarlehen
     );
 

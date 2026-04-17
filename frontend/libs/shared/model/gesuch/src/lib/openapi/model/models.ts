@@ -128,7 +128,6 @@ export * from './freiwilligDarlehen';
 export * from './freiwilligDarlehenDashboard';
 export * from './freiwilligDarlehenGsResponse';
 export * from './freiwilligDarlehenUpdateGs';
-export * from './freiwilligDarlehenUpdateSb';
 export * from './geschwister';
 export * from './geschwisterUpdate';
 export * from './gesuch';

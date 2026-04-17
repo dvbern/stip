@@ -173,10 +173,12 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
 
   saveResult(results: DemoDataTestBerechnungResultat[]) {
     this.previousBerechnungsResult.set(results);
-    this.globalNotificationStore.createSuccessNotification({
-      messageKey:
-        'demo-data-app.overview.apply-demo-data.berechnung-save.success',
-    });
+    this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+      {
+        messageKey:
+          'demo-data-app.overview.apply-demo-data.berechnung-save.success',
+      },
+    );
   }
 
   compareResults<T extends DemoDataTestBerechnungResultat>(

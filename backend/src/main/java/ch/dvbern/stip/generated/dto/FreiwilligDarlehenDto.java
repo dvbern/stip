@@ -29,6 +29,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid UUID relatedGesuchId;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
   private @Valid Boolean gewaehren;
+  private @Valid DokumentDto negativeVerfuegung;
   private @Valid Integer betrag;
   private @Valid String kommentar;
   private @Valid Integer betragGewuenscht;
@@ -128,6 +129,24 @@ public class FreiwilligDarlehenDto  implements Serializable {
   @JsonProperty("gewaehren")
   public void setGewaehren(Boolean gewaehren) {
     this.gewaehren = gewaehren;
+  }
+
+  /**
+   **/
+  public FreiwilligDarlehenDto negativeVerfuegung(DokumentDto negativeVerfuegung) {
+    this.negativeVerfuegung = negativeVerfuegung;
+    return this;
+  }
+
+  
+  @JsonProperty("negativeVerfuegung")
+  public DokumentDto getNegativeVerfuegung() {
+    return negativeVerfuegung;
+  }
+
+  @JsonProperty("negativeVerfuegung")
+  public void setNegativeVerfuegung(DokumentDto negativeVerfuegung) {
+    this.negativeVerfuegung = negativeVerfuegung;
   }
 
   /**
@@ -327,6 +346,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
         Objects.equals(this.relatedGesuchId, freiwilligDarlehen.relatedGesuchId) &&
         Objects.equals(this.status, freiwilligDarlehen.status) &&
         Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
+        Objects.equals(this.negativeVerfuegung, freiwilligDarlehen.negativeVerfuegung) &&
         Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
         Objects.equals(this.kommentar, freiwilligDarlehen.kommentar) &&
         Objects.equals(this.betragGewuenscht, freiwilligDarlehen.betragGewuenscht) &&
@@ -340,7 +360,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, negativeVerfuegung, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
   }
 
   @Override
@@ -353,6 +373,7 @@ public class FreiwilligDarlehenDto  implements Serializable {
     sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    negativeVerfuegung: ").append(toIndentedString(negativeVerfuegung)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");

@@ -88,7 +88,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDarlehenAblehenenAkzeptieren(UUID darlehenId) {
+    public void canDarlehenAblehnenAkzeptieren(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (!isFreigabestelle(benutzer)) {

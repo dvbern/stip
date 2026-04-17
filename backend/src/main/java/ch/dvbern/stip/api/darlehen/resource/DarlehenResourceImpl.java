@@ -40,7 +40,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDto;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDto;
-import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateSbDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbFreiwilligDarlehenDashboardDto;
@@ -133,14 +132,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAblehen(UUID darlehenId) {
-        darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
+        darlehenAuthorizer.canDarlehenAblehnenAkzeptieren(darlehenId);
         return darlehenService.freiwilligDarlehenAblehnen(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_FREIGABESTELLE)
     public FreiwilligDarlehenDto freiwilligDarlehenAkzeptieren(UUID darlehenId) {
-        darlehenAuthorizer.canDarlehenAblehenenAkzeptieren(darlehenId);
+        darlehenAuthorizer.canDarlehenAblehnenAkzeptieren(darlehenId);
         return darlehenService.freiwilligDarlehenAkzeptieren(darlehenId);
     }
 
@@ -176,20 +175,24 @@ public class DarlehenResourceImpl implements DarlehenResource {
     }
 
     @Override
+    @Blocking
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
+    public FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(
+        UUID darlehenId,
+        Boolean gewaehren,
+        FileUpload negativeVerfuegung,
+        Integer betrag,
+        String kommentar
+    ) {
+        darlehenAuthorizer.canDarlehenUpdateSb(darlehenId);
+        return darlehenService.darlehenUpdateSb(darlehenId, gewaehren, negativeVerfuegung, betrag, kommentar);
+    }
+
+    @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_DELETE)
     public void deleteFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canDarlehenUpdateGs(darlehenId);
         darlehenService.deleteFreiwilligDarlehen(darlehenId);
-    }
-
-    @Override
-    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
-    public FreiwilligDarlehenDto freiwilligDarlehenUpdateSb(
-        UUID darlehenId,
-        FreiwilligDarlehenUpdateSbDto darlehenUpdateSbDto
-    ) {
-        darlehenAuthorizer.canDarlehenUpdateSb(darlehenId);
-        return darlehenService.darlehenUpdateSb(darlehenId, darlehenUpdateSbDto);
     }
 
     @Override
@@ -263,6 +266,31 @@ public class DarlehenResourceImpl implements DarlehenResource {
         return dokumentDownloadService.getFileDownloadToken(
             dokumentId,
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM,
+            benutzerService,
+            configService
+        );
+    }
+
+    @Blocking
+    @Override
+    @PermitAll
+    public RestMulti<Buffer> downloadDarlehenNegativVerfuegung(String token) {
+        final var dokumentId = dokumentDownloadService.getClaimId(
+            jwtPar,
+            token,
+            configService.getSecret(),
+            DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM
+        );
+        return darlehenService.getDarlehenNegativVerfuegung(dokumentId);
+    }
+
+    @Override
+    @RolesAllowed(FREIWILLIG_DARLEHEN_UPDATE_SB)
+    public FileDownloadTokenDto getDarlehenNegativVerfuegungDownloadToken(UUID dokumentId) {
+        darlehenAuthorizer.canGetDarlehenSb();
+        return dokumentDownloadService.getFileDownloadToken(
+            dokumentId,
+            DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM,
             benutzerService,
             configService
         );

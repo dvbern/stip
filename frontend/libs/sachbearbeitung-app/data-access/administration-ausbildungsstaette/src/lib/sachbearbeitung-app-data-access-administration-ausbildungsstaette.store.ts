@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Observable, map, pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Abschluss,
@@ -181,10 +182,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
             },
             {
               onSuccess: (value) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.createDialog.success',
+                  },
+                );
                 onSuccess?.(value);
               },
             },
@@ -212,10 +215,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
             },
             {
               onSuccess: (value) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.createDialog.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.createDialog.success',
+                  },
+                );
                 onSuccess?.(value);
               },
             },
@@ -243,10 +248,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
             },
             {
               onSuccess: (value) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.editDialog.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.editDialog.success',
+                  },
+                );
                 onSuccess?.(value);
               },
             },
@@ -276,10 +283,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
               },
               {
                 onSuccess: (value) => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.success',
-                  });
+                  this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.createDialog.success',
+                    },
+                  );
                   onSuccess?.(value);
                 },
               },
@@ -307,10 +316,12 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
             },
             {
               onSuccess: (value) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.editDialog.success',
+                  },
+                );
                 onSuccess?.(value);
               },
             },
@@ -354,9 +365,11 @@ export class AdministrationAusbildungsstaetteStore extends signalStore(
         return servicesCalls$[type]().pipe(
           handleApiResponse(() => undefined, {
             onSuccess: () => {
-              this.globalNotificationStore.createSuccessNotification({
-                messageKey: `sachbearbeitung-app.feature.administration.ausbildungsstaette.${type}.archiveDialog.success`,
-              });
+              this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                {
+                  messageKey: `sachbearbeitung-app.feature.administration.ausbildungsstaette.${type}.archiveDialog.success`,
+                },
+              );
               onSuccess();
             },
           }),
