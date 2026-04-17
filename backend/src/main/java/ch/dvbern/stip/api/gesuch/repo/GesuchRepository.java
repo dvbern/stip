@@ -283,43 +283,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .findFirst();
     }
 
-    public Gesuch requireGesuchForDokument(final UUID dokumentId) {
-        final var gesuchTranche = QGesuchTranche.gesuchTranche;
-        final var gesuchDokument = QGesuchDokument.gesuchDokument;
-        final var dokument = QDokument.dokument;
-
-        final var subQuery = JPAExpressions
-            .select(dokument)
-            .from(dokument)
-            .where(dokument.id.eq(dokumentId));
-
-        // It is referentially possible that one Dokument could be attached to multiple Gesuche
-        // but our business logic forbids that
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(Q_GESUCH)
-            .join(gesuchTranche)
-            .on(gesuchTranche.gesuch.id.eq(Q_GESUCH.id))
-            .join(gesuchDokument)
-            .on(gesuchDokument.gesuchTranche.id.eq(gesuchTranche.id))
-            .where(gesuchDokument.dokumente.any().in(subQuery))
-            .stream()
-            .findFirst()
-            .orElseThrow(NotFoundException::new);
-    }
-
-    public Gesuch findGesuchByAuszahlungId(final UUID auszahlungId) {
-        final var fall = QFall.fall;
-        // join is necessary as querydsl defaults to max 4 levels of depth
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(Q_GESUCH)
-            .join(fall)
-            .on(fall.id.eq(Q_GESUCH.ausbildung.fall.id))
-            .where(fall.auszahlung.id.eq(auszahlungId))
-            .stream()
-            .findFirst()
-            .orElseThrow(NotFoundException::new);
-    }
-
     public Stream<Gesuch> findGesuchWithPendingSapAction() {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_GESUCH)
