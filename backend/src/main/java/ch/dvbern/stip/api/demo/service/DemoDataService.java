@@ -39,9 +39,8 @@ import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
-import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
-import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -114,23 +113,18 @@ public class DemoDataService {
     }
 
     @Transactional
-    public List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung() {
+    public List<DemoDataTestBerechnungResultatDto> testAllDemoDataBerechnung() {
         final var demoDataList =
             demoDataRepository.findAll().stream().sorted(Comparator.comparing(DemoData::getTestFall));
         return demoDataList.map(demoData -> {
-            final var ret = new DemoDataTestBerechnungResultDto();
-            ret.demoDataId(demoData.getId());
             try {
                 final var gesuch = generateDemoDataService.createEinreichableGesuch(demoData, new Fall());
-                final var stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
-                ret.testFall(demoData.getTestFall());
-                ret.valid(stipendienanspruchDto.getSuccess());
-                ret.ist(stipendienanspruchDto.getBetragStipendienIst());
-                ret.soll(stipendienanspruchDto.getBetragStipendienSoll());
-                return ret;
+                return generateDemoDataService.getBerechnungResultatDto(gesuch, demoData);
             } catch (Exception e) {
-                ret.message(e.getMessage());
-                return ret;
+                return new DemoDataTestBerechnungResultatDto()
+                    .message(e.getMessage())
+                    .testFall(demoData.getTestFall())
+                    .demoDataId(demoData.getId());
             }
         }
         ).toList();
@@ -201,12 +195,14 @@ public class DemoDataService {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
         }
 
-        ApplyDemoDataResponseStipendienanspruchDto stipendienanspruchDto;
+        DemoDataTestBerechnungResultatDto stipendienanspruchDto;
         try {
-            stipendienanspruchDto = generateDemoDataService.getStipendienanspruchDto(gesuch, demoData);
+            stipendienanspruchDto = generateDemoDataService.getBerechnungResultatDto(gesuch, demoData);
         } catch (Exception e) {
-            stipendienanspruchDto = new ApplyDemoDataResponseStipendienanspruchDto()
-                .success(false);
+            stipendienanspruchDto = new DemoDataTestBerechnungResultatDto()
+                .demoDataId(demoData.getId())
+                .testFall(demoData.getTestFall())
+                .message(e.getMessage());
             LOG.error("Unable to calculate berechnung for{}\n{}", demoData.getTestFall(), e.getMessage());
         }
 

@@ -33,6 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_STIPENDIEN,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH,
@@ -49,6 +51,12 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG = "berechnungVorKuerzungUndTeilung";
   private Integer berechnungVorKuerzungUndTeilung;
+
+  public static final String JSON_PROPERTY_UNGEKUERZT_STIPENDIEN = "ungekuerztStipendien";
+  private Integer ungekuerztStipendien;
+
+  public static final String JSON_PROPERTY_UNGEKUERZT_DARLEHEN = "ungekuerztDarlehen";
+  private Integer ungekuerztDarlehen;
 
   public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
   private Integer totalNachKuerzungNachEinreichefrist;
@@ -123,6 +131,58 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
+  }
+
+
+  public BerechnungsresultatDtoSpec ungekuerztStipendien(Integer ungekuerztStipendien) {
+    
+    this.ungekuerztStipendien = ungekuerztStipendien;
+    return this;
+  }
+
+   /**
+   * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
+   * @return ungekuerztStipendien
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUngekuerztStipendien() {
+    return ungekuerztStipendien;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUngekuerztStipendien(Integer ungekuerztStipendien) {
+    this.ungekuerztStipendien = ungekuerztStipendien;
+  }
+
+
+  public BerechnungsresultatDtoSpec ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+    
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
+    return this;
+  }
+
+   /**
+   * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
+   * @return ungekuerztDarlehen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUngekuerztDarlehen() {
+    return ungekuerztDarlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUngekuerztDarlehen(Integer ungekuerztDarlehen) {
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
   }
 
 
@@ -326,6 +386,8 @@ public class BerechnungsresultatDtoSpec {
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
+        Objects.equals(this.ungekuerztStipendien, berechnungsresultat.ungekuerztStipendien) &&
+        Objects.equals(this.ungekuerztDarlehen, berechnungsresultat.ungekuerztDarlehen) &&
         Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
         Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
         Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
@@ -337,7 +399,7 @@ public class BerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate);
   }
 
   @Override
@@ -346,6 +408,8 @@ public class BerechnungsresultatDtoSpec {
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
+    sb.append("    ungekuerztStipendien: ").append(toIndentedString(ungekuerztStipendien)).append("\n");
+    sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
     sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
     sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");

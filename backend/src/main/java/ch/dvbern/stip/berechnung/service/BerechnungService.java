@@ -136,6 +136,9 @@ public class BerechnungService {
         if (berechnungVorKuerzungUndTeilung < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungVorKuerzungUndTeilung = 0;
         }
+        final Integer ungekuerztDarlehen = getDarlehen(gesuch, berechnungVorKuerzungUndTeilung);
+        final int ungekuerztStipendien =
+            BerechnungUtil.substractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, ungekuerztDarlehen);
 
         final var monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
@@ -172,18 +175,15 @@ public class BerechnungService {
 
         final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
         final var berechnungStipendium =
-            berechnungDarlehen != null
-                ? BigDecimal.valueOf(totalVorTeilungDarlehen)
-                    .multiply(BigDecimal.valueOf(2))
-                    .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
-                    .intValue()
-                : totalVorTeilungDarlehen;
+            BerechnungUtil.substractGesezlichesDarlehen(totalVorTeilungDarlehen, berechnungDarlehen);
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungVorKuerzungUndTeilung,
             berechnungStipendium,
             berechnungsresultate,
+            ungekuerztStipendien,
+            ungekuerztDarlehen,
             totalNachKuerzungNachEinreichefrist,
             12 - monateUebrigNachEinreichefrist,
             totalNachKuerzungUnterbruch,
@@ -222,10 +222,7 @@ public class BerechnungService {
         if (monateTertiaerstufe > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
             // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
             // stipendium
-            darlehen = BigDecimal.valueOf(stipendium)
-                .divide(BigDecimal.valueOf(300), 0, RoundingMode.UP)
-                .multiply(BigDecimal.valueOf(100))
-                .intValue();
+            darlehen = BerechnungUtil.calculateGesetzlichesDarlehen(stipendium);
         }
         return darlehen;
     }

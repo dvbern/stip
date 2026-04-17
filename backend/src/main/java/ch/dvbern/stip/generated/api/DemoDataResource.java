@@ -2,7 +2,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
-import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import java.util.UUID;
@@ -51,5 +51,5 @@ public interface DemoDataResource {
     @GET
     @Path("/test-all-berechnung")
     @Produces({ "application/json", "text/plain" })
-    List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung();
+    List<DemoDataTestBerechnungResultatDto> testAllDemoDataBerechnung();
 }

@@ -9,8 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ApplyDemoDataResponseStipendienanspruch } from './applyDemoDataResponseStipendienanspruch';
 import { Gesuchstatus } from './gesuchstatus';
+import { DemoDataTestBerechnungResultat } from './demoDataTestBerechnungResultat';
 
 export interface ApplyDemoDataResponse { 
     gesuchId: string;
@@ -18,7 +18,7 @@ export interface ApplyDemoDataResponse {
     gueltigAb: string;
     gueltigBis: string;
     gesuchStatus: Gesuchstatus;
-    stipendienanspruch: ApplyDemoDataResponseStipendienanspruch;
+    berechnungResultat: DemoDataTestBerechnungResultat;
 }
 
 

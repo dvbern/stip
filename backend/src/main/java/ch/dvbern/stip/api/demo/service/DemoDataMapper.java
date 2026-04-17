@@ -28,8 +28,8 @@ import ch.dvbern.stip.api.demo.entity.DemoDataImport;
 import ch.dvbern.stip.api.dokument.service.DokumentMapper;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
-import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseStipendienanspruchDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -49,10 +49,10 @@ public abstract class DemoDataMapper {
     @Mapping(source = "gesuch", target = "gesuchTrancheId", qualifiedByName = "getCurrentGesuchTrancheId")
     @Mapping(source = "gesuch", target = "gueltigAb", qualifiedByName = "getStartDate")
     @Mapping(source = "gesuch", target = "gueltigBis", qualifiedByName = "getEndDate")
-    @Mapping(source = "stipendienanspruchDto", target = "stipendienanspruch")
+    @Mapping(source = "berechnungResultatDto", target = "berechnungResultat")
     public abstract ApplyDemoDataResponseDto toDto(
         final Gesuch gesuch,
-        final ApplyDemoDataResponseStipendienanspruchDto stipendienanspruchDto
+        final DemoDataTestBerechnungResultatDto berechnungResultatDto
     );
 
     @Named("getCurrentGesuchTrancheId")

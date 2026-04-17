@@ -1606,6 +1606,17 @@ components:
         berechnungVorKuerzungUndTeilung:
           description: 'Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen und Teilung des Gesetzlichen Darlehens'
           type: integer
+        ungekuerztStipendien:
+          description: >-
+            Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
+            Kürzungen abzüglich des Darlehens
+            (wird nur für Vergleiche und debugging verwendet)
+          type: integer
+        ungekuerztDarlehen:
+          description: >-
+            Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen
+            (wird nur für Vergleiche und debugging verwendet)
+          type: integer
         totalNachKuerzungNachEinreichefrist:
           description: 'Die Summe nach der Kürzung der verspäteten Eingabe'
           type: integer
