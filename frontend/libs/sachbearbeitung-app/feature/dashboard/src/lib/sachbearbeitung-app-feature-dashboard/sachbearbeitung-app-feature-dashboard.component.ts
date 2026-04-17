@@ -27,7 +27,6 @@ const resetTableFilterObj: Record<
   undefined
 > = {
   fallNummer: undefined,
-  typ: undefined,
   piaNachname: undefined,
   piaVorname: undefined,
   piaGeburtsdatum: undefined,
@@ -43,6 +42,11 @@ const resetTableFilterObj: Record<
 const baseFilterTabs = [
   {
     key: 'GESUCHE',
+    route: ['gesuche'],
+    roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
+  },
+  {
+    key: 'AENDERUNGEN',
     route: ['gesuche'],
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },

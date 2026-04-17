@@ -97,7 +97,7 @@
               >
                 <a
                   [routerLink]="
-                    gesuch.typ === 'AENDERUNG'
+                    typSig() === 'AENDERUNG'
                       ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
                       : ['/gesuch/info', gesuch.id, 'tranche', gesuch.trancheId]
                   "
@@ -105,32 +105,6 @@
                 >
                   {{ gesuch.fallNummer }}
                 </a>
-              </td>
-            </ng-container>
-
-            <!-- typ -->
-            <ng-container matColumnDef="TYP">
-              <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
-                {{ t('sachbearbeitung-app.cockpit.table.typ') }}
-                <mat-form-field class="d-flex">
-                  <mat-select
-                    [aria-label]="t('sachbearbeitung-app.cockpit.table.typ')"
-                    formControlName="typ"
-                    (click)="$event.stopPropagation()"
-                    class="fw-normal"
-                    panelClass="table-select"
-                    (selectionChange)="resetStatus()"
-                  >
-                    @for (typ of availableTypes; track typ) {
-                      <mat-option [value]="typ">
-                        {{ t('shared.gesuch.tranche.typ.' + typ) }}
-                      </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-              </th>
-              <td mat-cell *dvMatCellDef="let gesuch; dataSource: gesucheDataSourceSig()" class="tw:whitespace-nowrap">
-                {{ t('shared.gesuch.tranche.typ.' + gesuch.typ) }}
               </td>
             </ng-container>
 
@@ -389,7 +363,7 @@
               tabindex="-1"
               *dvMatRowDef="let gesuch; dataSource: gesucheDataSourceSig(); columns: displayedGesucheColumns"
               [routerLink]="
-                gesuch.typ === 'AENDERUNG'
+                typSig() === 'AENDERUNG'
                   ? ['/gesuch', 'info', gesuch.id, 'aenderung', gesuch.trancheId]
                   : ['/gesuch', 'info', gesuch.id, 'tranche', gesuch.trancheId]
               "

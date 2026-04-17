@@ -4,7 +4,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  Injector,
   InputSignal,
   QueryList,
   Signal,
@@ -94,6 +93,7 @@ import {
 } from '@dv/shared/util/dashboard';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import { isPending } from '@dv/shared/util/remote-data';
 import {
   getSortAndPageInputs,
   limitPageToNumberOfEntriesEffect,
@@ -159,7 +159,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
-  private injector = inject(Injector);
   massendruckStore = inject(MassendruckStore);
   gesuchStore = inject(GesuchStore);
   darlehenStore = inject(DarlehenStore);
@@ -168,7 +167,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   zugewiesen = input<ScopeParam | undefined>(undefined);
   bearbeitbar = input<BearbeitbarParam | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
-  typ = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
   piaVorname = input<string | undefined>(undefined);
   piaGeburtsdatum = input<string | undefined>(undefined);
@@ -203,12 +201,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedGesucheColumns = Object.keys(SbGesucheDashboardColumn);
+  displayedGesucheColumns = (
+    Object.keys(SbGesucheDashboardColumn) as SbGesucheDashboardColumn[]
+  ).filter((key) => key !== 'TYP');
   displayedDarlehenColumns = Object.keys(SbFreiwilligDarlehenDashboardColumn);
 
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
-    typ: [<GesuchTrancheTyp | undefined>undefined],
     piaNachname: [<string | undefined>undefined],
     piaVorname: [<string | undefined>undefined],
     piaGeburtsdatum: [<Date | undefined>undefined],
@@ -236,7 +235,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   filterInputsSig = computed(() => {
     return {
       fallNummer: this.fallNummer(),
-      typ: parseTyp(this.typ()) ?? 'TRANCHE',
       piaNachname: this.piaNachname(),
       piaVorname: this.piaVorname(),
       piaGeburtsdatum: this.piaGeburtsdatum(),
@@ -277,6 +275,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
   });
 
   isDarlehenModeSig = computed(() => this.filterTab() === 'DARLEHEN');
+  typSig = computed((): GesuchTrancheTyp => {
+    const filterTab = this.filterTab();
+    return filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE';
+  });
 
   showZugewiesenToggleSig = computed(() => {
     const { zugewiesenConfig } = this.queryFromInputsSig();
@@ -323,11 +325,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges, {
-    initialValue: 'TRANCHE',
-  });
   statusValuesSig = computed(() => {
-    const typ = this.typChangedSig();
+    const typ = this.typSig();
     if (!typ) {
       return null;
     }
@@ -342,7 +341,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
-    'typ',
   ]);
   filterStartEndFormChangedSig = toSignal(
     this.filterStartEndForm.valueChanges.pipe(
@@ -368,7 +366,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
           id: entry.id,
           trancheId: entry.gesuchTrancheId,
           fallNummer: entry.fallNummer,
-          typ: entry.typ,
           piaNachname: entry.piaNachname,
           piaVorname: entry.piaVorname,
           piaGeburtsdatum: entry.piaGeburtsdatum,
@@ -428,13 +425,14 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   canCreateMassendruckSig: Signal<boolean> = computed(() => {
     const filterTab = this.filterTab();
+    const isLoading = isPending(this.gesuchStore.gesuche());
     this.filterFormChangedSig();
 
     if (!canDrucken(filterTab)) {
       return false;
     }
 
-    const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
+    const hasEntries = !isLoading && (this.gesucheTotalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
       .filter(([key]) => key !== 'typ')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -596,6 +594,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     effect(() => {
       const query = this.queryFromInputsSig().query;
       const filter = this.filterInputsSig();
+      const filterTab = this.filterTab();
       const startEndFilter = this.startEndFilterInputsSig();
 
       if (untracked(this.isDarlehenModeSig) || !isGesuchQuery(query)) {
@@ -604,6 +603,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
       this.gesuchStore.loadGesuche$({
         getGesucheSBQueryType: query,
+        typ: filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE',
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -621,7 +621,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       }
 
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { typ: _typ, status: _status, ...darlehenFilter } = filter;
+      const { status: _status, ...darlehenFilter } = filter;
 
       const { sortColumn, ...restSortAndPage } = getSortAndPageInputs(this);
 
@@ -644,14 +644,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
     this.filterForm.controls.status.reset();
   }
 }
-
-const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
-  if (typ && Object.keys(GesuchTrancheTyp).includes(typ)) {
-    return typ as GesuchTrancheTyp;
-  }
-
-  return undefined;
-};
 
 const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
   if (!status || !Object.keys(Gesuchstatus).includes(status)) {
