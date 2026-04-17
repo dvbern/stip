@@ -15,22 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.common.validation;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
+// https://stackoverflow.com/questions/31132477/java-annotation-for-null-but-neither-empty-nor-blank
+public class NullOrNotBlankValidator implements ConstraintValidator<NullOrNotBlank, String> {
 
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.createFetchGemeindeDataOfGesuchScheduledTask(gesuch);
+    public void initialize(NullOrNotBlank parameters) {
+        // Nothing to do here
+    }
+
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
+        return value == null || value.trim().length() > 0;
     }
 }

@@ -15,22 +15,26 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.common.validation;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.createFetchGemeindeDataOfGesuchScheduledTask(gesuch);
-    }
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Target({ ElementType.FIELD })
+@Retention(RUNTIME)
+@Documented
+@Constraint(validatedBy = NullOrNotBlankValidator.class)
+public @interface NullOrNotBlank {
+    String message() default "{javax.validation.constraints.NullOrNotBlank.message}";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

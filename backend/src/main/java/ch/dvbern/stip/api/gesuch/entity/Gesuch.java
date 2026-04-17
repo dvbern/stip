@@ -56,6 +56,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -217,6 +218,10 @@ public class Gesuch extends AbstractMandantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "in_bearbeitung_sb_reason")
     private InBearbeitungSbReason inBearbeitungSbReason;
+
+    @Nullable
+    @OneToOne(mappedBy = "gesuch")
+    private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();

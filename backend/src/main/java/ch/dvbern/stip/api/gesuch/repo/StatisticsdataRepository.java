@@ -15,22 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.gesuch.repo;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
+import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
-
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.createFetchGemeindeDataOfGesuchScheduledTask(gesuch);
-    }
+public class StatisticsdataRepository implements BaseRepository<Statisticsdata> {
 }
