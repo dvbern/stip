@@ -244,7 +244,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return addStatusFilter(getFindAlleQuery(), Gesuchstatus.FEHLENDE_DOKUMENTE).stream().toList();
     }
 
-    public Optional<GesuchFormular> getLatestGesuchFormularWithPiaForBenutzer(final UUID benutzerId) {
+    public Optional<GesuchFormular> getLatestGesuchFormularWithPiaForFall(final UUID fallId) {
         final var gesuch = QGesuch.gesuch;
         final var tranche = QGesuchTranche.gesuchTranche;
         final var formular = QGesuchFormular.gesuchFormular;
@@ -263,8 +263,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .join(ausbildung)
             .on(gesuch.ausbildung.id.eq(ausbildung.id))
             .join(fall)
-            .on(ausbildung.fall.id.eq(fall.id))
-            .where(fall.gesuchsteller.id.eq(benutzerId))
+            .on(ausbildung.fall.id.eq(fallId))
             .orderBy(pia.timestampMutiert.desc())
             .stream()
             .findFirst();

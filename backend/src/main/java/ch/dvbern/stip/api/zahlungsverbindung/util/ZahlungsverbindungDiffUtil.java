@@ -24,17 +24,17 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ZahlungsverbindungDiffUtil {
-    public boolean hasAdresseChanged(ZahlungsverbindungDto zahlungsverbindungUpdateDto, Zahlungsverbindung toUpdate) {
+    public boolean hasAdresseChanged(ZahlungsverbindungDto zahlungsverbindungDto, Zahlungsverbindung toUpdate) {
         if (
             NullDiffUtil.hasNullChanged(
-                zahlungsverbindungUpdateDto.getAdresse(),
+                zahlungsverbindungDto.getAdresse(),
                 toUpdate.getAdresse()
             )
         ) {
             return true;
         }
 
-        return zahlungsverbindungUpdateDto.getAdresse().getId() != toUpdate
+        return zahlungsverbindungDto.getAdresse().getId() != toUpdate
             .getAdresse()
             .getId();
     }

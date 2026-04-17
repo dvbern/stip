@@ -18,6 +18,6 @@ export interface FallDashboardItem {
     fall: Fall;
     ausbildungDashboardItems: Array<AusbildungDashboardItem>;
     notifications: Array<Notification>;
-    delegierung?: DelegierungSlim;
+    currentDelegierung?: DelegierungSlim;
 }
 

@@ -17,9 +17,6 @@
 
 package ch.dvbern.stip.api.beschwerdeentscheid.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -29,9 +26,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -72,26 +68,7 @@ public class BeschwerdeEntscheid extends AbstractMandantEntity {
     @Column(name = "beschwerde_erfolgreich", nullable = false)
     private boolean beschwerdeErfolgreich;
 
-    @OneToMany
-    @JoinTable(
-        name = "beschwerde_entscheid_dokument",
-        joinColumns = @JoinColumn(
-            name = "beschwerde_entscheid_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_beschwerde_entscheid_dokumente")
-        ),
-        inverseJoinColumns = @JoinColumn(
-            name = "dokument_id",
-            referencedColumnName = "id",
-            foreignKey = @ForeignKey(name = "FK_dokument_beschwerde_entscheid")
-        ),
-        indexes = {
-            @Index(
-                name = "beschwerde_entscheid_dokument_beschwerde_entscheid_id", columnList = "beschwerde_entscheid_id"
-            ),
-            @Index(name = "beschwerde_entscheid_dokument_dokument_id", columnList = "dokument_id")
-        }
-    )
-    private List<Dokument> dokumente = new ArrayList<>();
-
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "dokument_id")
+    private Dokument dokument;
 }

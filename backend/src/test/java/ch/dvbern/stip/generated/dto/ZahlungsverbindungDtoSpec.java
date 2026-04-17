@@ -28,23 +28,20 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * ZahlungsverbindungDtoSpec
  */
 @JsonPropertyOrder({
-  ZahlungsverbindungDtoSpec.JSON_PROPERTY_VORNAME,
-  ZahlungsverbindungDtoSpec.JSON_PROPERTY_ADRESSE,
   ZahlungsverbindungDtoSpec.JSON_PROPERTY_IBAN,
+  ZahlungsverbindungDtoSpec.JSON_PROPERTY_VORNAME,
   ZahlungsverbindungDtoSpec.JSON_PROPERTY_NACHNAME,
-  ZahlungsverbindungDtoSpec.JSON_PROPERTY_INSTITUTION
+  ZahlungsverbindungDtoSpec.JSON_PROPERTY_INSTITUTION,
+  ZahlungsverbindungDtoSpec.JSON_PROPERTY_ADRESSE
 })
 @JsonTypeName("Zahlungsverbindung")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class ZahlungsverbindungDtoSpec {
-  public static final String JSON_PROPERTY_VORNAME = "vorname";
-  private String vorname;
-
-  public static final String JSON_PROPERTY_ADRESSE = "adresse";
-  private AdresseDtoSpec adresse;
-
   public static final String JSON_PROPERTY_IBAN = "iban";
   private String iban;
+
+  public static final String JSON_PROPERTY_VORNAME = "vorname";
+  private String vorname;
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
@@ -52,60 +49,11 @@ public class ZahlungsverbindungDtoSpec {
   public static final String JSON_PROPERTY_INSTITUTION = "institution";
   private String institution;
 
+  public static final String JSON_PROPERTY_ADRESSE = "adresse";
+  private AdresseDtoSpec adresse;
+
   public ZahlungsverbindungDtoSpec() {
   }
-
-  public ZahlungsverbindungDtoSpec vorname(String vorname) {
-    
-    this.vorname = vorname;
-    return this;
-  }
-
-   /**
-   * Get vorname
-   * @return vorname
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public String getVorname() {
-    return vorname;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VORNAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVorname(String vorname) {
-    this.vorname = vorname;
-  }
-
-
-  public ZahlungsverbindungDtoSpec adresse(AdresseDtoSpec adresse) {
-    
-    this.adresse = adresse;
-    return this;
-  }
-
-   /**
-   * Get adresse
-   * @return adresse
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public AdresseDtoSpec getAdresse() {
-    return adresse;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_ADRESSE)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setAdresse(AdresseDtoSpec adresse) {
-    this.adresse = adresse;
-  }
-
 
   public ZahlungsverbindungDtoSpec iban(String iban) {
     
@@ -130,6 +78,32 @@ public class ZahlungsverbindungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setIban(String iban) {
     this.iban = iban;
+  }
+
+
+  public ZahlungsverbindungDtoSpec vorname(String vorname) {
+    
+    this.vorname = vorname;
+    return this;
+  }
+
+   /**
+   * Get vorname
+   * @return vorname
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getVorname() {
+    return vorname;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VORNAME)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setVorname(String vorname) {
+    this.vorname = vorname;
   }
 
 
@@ -184,6 +158,32 @@ public class ZahlungsverbindungDtoSpec {
     this.institution = institution;
   }
 
+
+  public ZahlungsverbindungDtoSpec adresse(AdresseDtoSpec adresse) {
+    
+    this.adresse = adresse;
+    return this;
+  }
+
+   /**
+   * Get adresse
+   * @return adresse
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public AdresseDtoSpec getAdresse() {
+    return adresse;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ADRESSE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setAdresse(AdresseDtoSpec adresse) {
+    this.adresse = adresse;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -193,27 +193,27 @@ public class ZahlungsverbindungDtoSpec {
       return false;
     }
     ZahlungsverbindungDtoSpec zahlungsverbindung = (ZahlungsverbindungDtoSpec) o;
-    return Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
-        Objects.equals(this.adresse, zahlungsverbindung.adresse) &&
-        Objects.equals(this.iban, zahlungsverbindung.iban) &&
+    return Objects.equals(this.iban, zahlungsverbindung.iban) &&
+        Objects.equals(this.vorname, zahlungsverbindung.vorname) &&
         Objects.equals(this.nachname, zahlungsverbindung.nachname) &&
-        Objects.equals(this.institution, zahlungsverbindung.institution);
+        Objects.equals(this.institution, zahlungsverbindung.institution) &&
+        Objects.equals(this.adresse, zahlungsverbindung.adresse);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, iban, nachname, institution);
+    return Objects.hash(iban, vorname, nachname, institution, adresse);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ZahlungsverbindungDtoSpec {\n");
-    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
-    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("    iban: ").append(toIndentedString(iban)).append("\n");
+    sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    institution: ").append(toIndentedString(institution)).append("\n");
+    sb.append("    adresse: ").append(toIndentedString(adresse)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -236,7 +236,7 @@ export const getTranchePermissions = (
 export const isNotReadonly = (
   appType: AppType,
   rolesMap: RolesMap,
-  delegierung: DelegierungSlim | boolean | undefined,
+  delegierung: Pick<DelegierungSlim, 'status'> | boolean | undefined,
 ) => {
   ensureIsBusinessAppType(appType);
   switch (appType) {
@@ -248,7 +248,7 @@ export const isNotReadonly = (
       const isDelegiert =
         typeof delegierung === 'boolean'
           ? delegierung
-          : (delegierung?.delegierungAngenommen ?? false);
+          : delegierung?.status === 'AKZEPTIERT';
       if (!isDelegiert) {
         return true;
       }

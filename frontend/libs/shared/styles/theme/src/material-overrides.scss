@@ -290,6 +290,9 @@ $dv-all-colors: (
 
 .mat-mdc-list-item {
   --mat-list-list-item-focus-state-layer-color: transparent;
+  &.mdc-list-item--with-trailing-radio .mdc-list-item__end {
+    margin-left: 4px;
+  }
 }
 
 .info-dialog-columnar {

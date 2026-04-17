@@ -135,7 +135,7 @@ public class VerfuegungPdfService {
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
-            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            if (gesuch.getAusbildung().getFall().isDelegiert()) {
                 addVerfuegung(
                     verfuegung,
                     document,
@@ -199,7 +199,7 @@ public class VerfuegungPdfService {
         // Add the main content and footer sections.
         section.render(verfuegung, document, leftMargin, translator, pdfFont, pdfFontBold, ausbildungsbeitraegeUri);
         anhangs.addFirst(Anhangs.RECHTSMITTELBELEHRUNG);
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, true);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
     }

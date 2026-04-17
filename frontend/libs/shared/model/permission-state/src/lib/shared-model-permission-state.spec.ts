@@ -113,26 +113,30 @@ describe('isNotReadonly', () => {
 
     it('should return true if delegated but not angenommen', () => {
       const rolesMap = {};
-      const delegierung = { delegierungAngenommen: false };
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+      expect(
+        isNotReadonly('gesuch-app', rolesMap, { status: 'EINGEREICHT' }),
+      ).toBe(true);
     });
 
     it('should return true if delegated and user has V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
-      const delegierung = { delegierungAngenommen: true };
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+      expect(
+        isNotReadonly('gesuch-app', rolesMap, { status: 'AKZEPTIERT' }),
+      ).toBe(true);
     });
 
     it('should return true if delegated but not angenommen and user has V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
-      const delegierung = { delegierungAngenommen: false };
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+      expect(
+        isNotReadonly('gesuch-app', rolesMap, { status: 'ABGELEHNT' }),
+      ).toBe(true);
     });
 
     it('should return false if delegated and user does not have V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { V0_Gesuchsteller: true } as const;
-      const delegierung = { delegierungAngenommen: true };
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(false);
+      expect(
+        isNotReadonly('gesuch-app', rolesMap, { status: 'AKZEPTIERT' }),
+      ).toBe(false);
     });
   });
 });

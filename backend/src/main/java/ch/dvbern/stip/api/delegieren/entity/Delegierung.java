@@ -17,20 +17,26 @@
 
 package ch.dvbern.stip.api.delegieren.entity;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.AssociationOverride;
 import jakarta.persistence.AssociationOverrides;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -60,13 +66,26 @@ public class Delegierung extends AbstractMandantEntity {
     private @Valid Sozialdienst sozialdienst;
 
     @NotNull
-    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private DelegierungStatus status = DelegierungStatus.EINGEREICHT;
+
+    @NotNull
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(
-        name = "delegierter_fall_id",
+        name = "fall_id",
         foreignKey = @ForeignKey(name = "FK_delegierung_fall_id"),
         nullable = false
     )
-    private @Valid Fall delegierterFall;
+    private Fall fall;
+
+    @Nullable
+    @Column(nullable = true, name = "start_date")
+    private LocalDate startDate;
+
+    @Nullable
+    @Column(nullable = true, name = "end_date")
+    private LocalDate endDate;
 
     @Embedded
     @AssociationOverrides(
@@ -85,4 +104,24 @@ public class Delegierung extends AbstractMandantEntity {
         foreignKey = @ForeignKey(name = "FK_delegierung_sozialdienst_benutzer_id")
     )
     private @Valid SozialdienstBenutzer delegierterMitarbeiter;
+
+    public boolean isActive() {
+        return status == DelegierungStatus.AKZEPTIERT;
+    }
+
+    public void akzeptieren() {
+        setStatus(DelegierungStatus.AKZEPTIERT);
+        setStartDate(LocalDate.now());
+    }
+
+    public void ablehnen() {
+        setStatus(DelegierungStatus.ABGELEHNT);
+        fall.setCurrentDelegierung(null);
+    }
+
+    public void aufloesen() {
+        setStatus(DelegierungStatus.BEENDET);
+        fall.setCurrentDelegierung(null);
+        setEndDate(LocalDate.now());
+    }
 }

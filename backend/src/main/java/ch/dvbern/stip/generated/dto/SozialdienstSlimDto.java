@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.ZahlungsverbindungSlimDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class SozialdienstSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
   private @Valid Boolean aktiv;
+  private @Valid ZahlungsverbindungSlimDto zahlungsverbindung;
 
   /**
    **/
@@ -81,6 +83,25 @@ public class SozialdienstSlimDto  implements Serializable {
     this.aktiv = aktiv;
   }
 
+  /**
+   **/
+  public SozialdienstSlimDto zahlungsverbindung(ZahlungsverbindungSlimDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+    return this;
+  }
+
+  
+  @JsonProperty("zahlungsverbindung")
+  @NotNull
+  public ZahlungsverbindungSlimDto getZahlungsverbindung() {
+    return zahlungsverbindung;
+  }
+
+  @JsonProperty("zahlungsverbindung")
+  public void setZahlungsverbindung(ZahlungsverbindungSlimDto zahlungsverbindung) {
+    this.zahlungsverbindung = zahlungsverbindung;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -93,12 +114,13 @@ public class SozialdienstSlimDto  implements Serializable {
     SozialdienstSlimDto sozialdienstSlim = (SozialdienstSlimDto) o;
     return Objects.equals(this.id, sozialdienstSlim.id) &&
         Objects.equals(this.name, sozialdienstSlim.name) &&
-        Objects.equals(this.aktiv, sozialdienstSlim.aktiv);
+        Objects.equals(this.aktiv, sozialdienstSlim.aktiv) &&
+        Objects.equals(this.zahlungsverbindung, sozialdienstSlim.zahlungsverbindung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, aktiv);
+    return Objects.hash(id, name, aktiv, zahlungsverbindung);
   }
 
   @Override
@@ -109,6 +131,7 @@ public class SozialdienstSlimDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    aktiv: ").append(toIndentedString(aktiv)).append("\n");
+    sb.append("    zahlungsverbindung: ").append(toIndentedString(zahlungsverbindung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -29,7 +29,7 @@ public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
   private @Valid List<NotificationDto> notifications = new ArrayList<>();
-  private @Valid DelegierungSlimDto delegierung;
+  private @Valid DelegierungSlimDto currentDelegierung;
 
   /**
    **/
@@ -122,20 +122,20 @@ public class FallDashboardItemDto  implements Serializable {
   }
   /**
    **/
-  public FallDashboardItemDto delegierung(DelegierungSlimDto delegierung) {
-    this.delegierung = delegierung;
+  public FallDashboardItemDto currentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
     return this;
   }
 
   
-  @JsonProperty("delegierung")
-  public DelegierungSlimDto getDelegierung() {
-    return delegierung;
+  @JsonProperty("currentDelegierung")
+  public DelegierungSlimDto getCurrentDelegierung() {
+    return currentDelegierung;
   }
 
-  @JsonProperty("delegierung")
-  public void setDelegierung(DelegierungSlimDto delegierung) {
-    this.delegierung = delegierung;
+  @JsonProperty("currentDelegierung")
+  public void setCurrentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
   }
 
 
@@ -151,12 +151,12 @@ public class FallDashboardItemDto  implements Serializable {
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications) &&
-        Objects.equals(this.delegierung, fallDashboardItem.delegierung);
+        Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, delegierung);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung);
   }
 
   @Override
@@ -167,7 +167,7 @@ public class FallDashboardItemDto  implements Serializable {
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
-    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
+    sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

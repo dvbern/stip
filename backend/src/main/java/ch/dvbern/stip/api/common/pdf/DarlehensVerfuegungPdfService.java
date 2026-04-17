@@ -128,7 +128,7 @@ public class DarlehensVerfuegungPdfService {
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
-            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            if (gesuch.getAusbildung().getFall().isDelegiert()) {
                 addPositiveDarlehensVerfuegung(
                     gesuch,
                     darlehenNr,
@@ -181,7 +181,7 @@ public class DarlehensVerfuegungPdfService {
         final Gesuch gesuch,
         final TL translator
     ) {
-        if (Objects.isNull(gesuch.getAusbildung().getFall().getDelegierung())) {
+        if (gesuch.getAusbildung().getFall().isDelegiert()) {
             return "";
         }
 
@@ -191,7 +191,7 @@ public class DarlehensVerfuegungPdfService {
                     " %s",
                     translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile2")
                 ),
-                PdfUtils.getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getDelegierung())
+                PdfUtils.getDelegierungKopieAnText(gesuch.getAusbildung().getFall().getCurrentDelegierung())
             );
 
         return kopieAnSozialdienst;
@@ -284,28 +284,19 @@ public class DarlehensVerfuegungPdfService {
 
         final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
 
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
-
         String kopieAnSozialdienst = getKopieAnSozialdienstString(gesuch, translator);
-
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
+        PdfUtils.footer(
+            gesuch,
+            document,
+            leftMargin,
+            translator,
+            pdfFont,
+            anhangs,
+            "- %s %s".formatted(
                 translator.translate("stip.darlehen.verfuegung.positiv.textBlock.kopieAn.zeile1"),
                 kopieAnSozialdienst
-            )
-        );
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFontItalic,
-                FONT_SIZE_BIG,
-                leftMargin,
-                "- ",
-                translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis")
-            )
+            ),
+            "- %s".formatted(translator.translate("stip.darlehen.verfuegung.positiv.wichtigerHinweis"))
         );
 
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
@@ -467,7 +458,7 @@ public class DarlehensVerfuegungPdfService {
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
-            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            if (gesuch.getAusbildung().getFall().isDelegiert()) {
                 addNegativeDarlehensVerfuegung(
                     darlehen,
                     gesuch,
@@ -600,7 +591,7 @@ public class DarlehensVerfuegungPdfService {
 
         final List<Anhangs> anhangs = List.of(Anhangs.RECHTSMITTELBELEHRUNG);
 
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, false);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs);
 
         String kopieAnSozialdienst = getKopieAnSozialdienstString(gesuch, translator);
 
