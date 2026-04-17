@@ -21,6 +21,14 @@ export interface Berechnungsresultat {
      */
     berechnungVorKuerzungUndTeilung: number;
     /**
+     * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
+     */
+    ungekuerztStipendien?: number;
+    /**
+     * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
+     */
+    ungekuerztDarlehen?: number;
+    /**
      * Die Summe nach der Kürzung der verspäteten Eingabe
      */
     totalNachKuerzungNachEinreichefrist?: number;

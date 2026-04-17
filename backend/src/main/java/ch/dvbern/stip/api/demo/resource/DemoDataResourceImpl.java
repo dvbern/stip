@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
 import ch.dvbern.stip.generated.dto.DemoDataListDto;
-import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -110,7 +110,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
 
     @Override
     @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
-    public List<DemoDataTestBerechnungResultDto> testAllDemoDataBerechnung() {
+    public List<DemoDataTestBerechnungResultatDto> testAllDemoDataBerechnung() {
         demoDataAuthorizer.canRead();
         return demoDataService.testAllDemoDataBerechnung();
     }

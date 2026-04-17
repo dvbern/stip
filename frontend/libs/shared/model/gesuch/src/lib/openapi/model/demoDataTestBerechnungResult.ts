@@ -9,13 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DemoDataTestBerechnungValid } from './demoDataTestBerechnungValid';
+import { DemoDataTestBerechnungValues } from './demoDataTestBerechnungValues';
 
 export interface DemoDataTestBerechnungResult { 
     demoDataId: string;
     testFall: string;
-    valid: boolean;
-    soll?: number;
-    ist?: number;
+    valid: DemoDataTestBerechnungValid;
     message?: string;
+    soll: DemoDataTestBerechnungValues;
+    ist: DemoDataTestBerechnungValues;
 }
 

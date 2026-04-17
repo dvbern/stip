@@ -25,10 +25,10 @@
             <tr [class.tw:bg-gray-100]="rowIndex % 2 !== 0">
               <td class="tw:px-4 tw:font-bold tw:align-top">
                 @if ($first) {
-                  {{ change.berechnung?.testFall }}
+                  {{ change.key }}
                 }
               </td>
-              <td class="tw:px-4 tw:select-none">
+              <td class="tw:px-4 tw:select-none tw:align-top">
                 <i class="material-symbols-rounded tw:text-sm tw:text-gray-500" [matTooltip]="propChange.type">
                   @switch (propChange.type) {
                     @case ('REMOVE') {
@@ -43,12 +43,28 @@
                   }
                 </i>
               </td>
-              <td class="tw:px-4 tw:font-semibold">{{ propChange.key }}</td>
-              <td class="tw:px-4 tw:whitespace-nowrap">
-                <dv-comparison-value [valueSig]="propChange.oldValue"></dv-comparison-value>
+              <td class="tw:px-4 tw:font-semibold tw:align-top">
+                {{ t($any(`demo-data-app.overview.apply-demo-data.changes.table.property.${propChange.key}`)) }}
               </td>
               <td class="tw:px-4 tw:whitespace-nowrap">
-                <dv-comparison-value [valueSig]="propChange.value"></dv-comparison-value>
+                @for (subChange of propChange.changes; track $index) {
+                  <div class="tw:flex tw:justify-between tw:gap-3">
+                    <span class="tw:text-gray-500"
+                      >{{ t($any(`demo-data-app.overview.apply-demo-data.changes.table.${subChange.key}`)) }}:</span
+                    >
+                    <dv-comparison-value [valueSig]="subChange.oldValue"></dv-comparison-value>
+                  </div>
+                }
+              </td>
+              <td class="tw:px-4 tw:whitespace-nowrap">
+                @for (subChange of propChange.changes; track $index) {
+                  <div class="tw:flex tw:justify-between tw:gap-3">
+                    <span class="tw:text-gray-500"
+                      >{{ t($any(`demo-data-app.overview.apply-demo-data.changes.table.${subChange.key}`)) }}:</span
+                    >
+                    <dv-comparison-value [valueSig]="subChange.value"></dv-comparison-value>
+                  </div>
+                }
               </td>
             </tr>
           }

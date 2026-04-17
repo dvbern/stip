@@ -140,7 +140,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DemoDataTestBerechnungResult'
+                  $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
           description: The results of comparing all Berechnung tests
         '401':
           $ref: './components/responses.yaml#/Unauthorized'
@@ -864,26 +864,39 @@ components:
           $ref: '#/components/schemas/DemoAuszahlung'
         darlehen:
           $ref: '#/components/schemas/DemoDarlehen'
-        stipendienanspruch:
-          required:
-            - status
-          type: object
-          properties:
-            status:
-              $ref: './components/common.yaml#/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
-    DemoDataTestBerechnungResult:
+        berechnungValues:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+
+    DemoDataTestBerechnungValid:
+      type: object
+      properties:
+        status:
+          type: boolean
+        ungekuerztStipendien:
+          type: boolean
+        ungekuerztDarlehen:
+          type: boolean
+        stipendien:
+          type: boolean
+        darlehen:
+          type: boolean
+    DemoDataTestBerechnungValues:
+      type: object
+      properties:
+        status:
+          $ref: './components/common.yaml#/VerfuegungStatus'
+        ungekuerztStipendien:
+          type: integer
+        ungekuerztDarlehen:
+          type: integer
+        stipendien:
+          type: integer
+        darlehen:
+          type: integer
+    DemoDataTestBerechnungResultat:
       required:
         - demoDataId
         - testFall
-        - valid
       type: object
       properties:
         demoDataId:
@@ -891,13 +904,13 @@ components:
         testFall:
           type: string
         valid:
-          type: boolean
-        soll:
-          type: integer
-        ist:
-          type: integer
+          $ref: '#/components/schemas/DemoDataTestBerechnungValid'
         message:
           type: string
+        soll:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+        ist:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
     ApplyDemoDataResponse:
       required:
         - gesuchId
@@ -905,7 +918,7 @@ components:
         - gueltigAb
         - gueltigBis
         - gesuchStatus
-        - stipendienanspruch
+        - berechnungResultat
       type: object
       properties:
         gesuchId:
@@ -920,24 +933,7 @@ components:
           format: date
         gesuchStatus:
           $ref: './components/common.yaml#/Gesuchstatus'
-        stipendienanspruch:
-          required:
-            - success
-          type: object
-          properties:
-            success:
-              type: boolean
-            statusSoll:
-              $ref: './components/common.yaml#/VerfuegungStatus'
-            statusIst:
-              $ref: './components/common.yaml#/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
+        berechnungResultat:
+          $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
 security:
   $ref: './components/security.yaml#/security'

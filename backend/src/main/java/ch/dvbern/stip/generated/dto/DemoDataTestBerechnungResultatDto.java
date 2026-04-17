@@ -1,5 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDto;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -14,22 +16,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("DemoDataTestBerechnungResult")
+@JsonTypeName("DemoDataTestBerechnungResultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class DemoDataTestBerechnungResultDto  implements Serializable {
+public class DemoDataTestBerechnungResultatDto  implements Serializable {
   private @Valid UUID demoDataId;
   private @Valid String testFall;
-  private @Valid Boolean valid;
-  private @Valid Integer soll;
-  private @Valid Integer ist;
+  private @Valid DemoDataTestBerechnungValidDto valid;
   private @Valid String message;
+  private @Valid DemoDataTestBerechnungValuesDto soll;
+  private @Valid DemoDataTestBerechnungValuesDto ist;
 
   /**
    **/
-  public DemoDataTestBerechnungResultDto demoDataId(UUID demoDataId) {
+  public DemoDataTestBerechnungResultatDto demoDataId(UUID demoDataId) {
     this.demoDataId = demoDataId;
     return this;
   }
@@ -48,7 +50,7 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
 
   /**
    **/
-  public DemoDataTestBerechnungResultDto testFall(String testFall) {
+  public DemoDataTestBerechnungResultatDto testFall(String testFall) {
     this.testFall = testFall;
     return this;
   }
@@ -67,62 +69,25 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
 
   /**
    **/
-  public DemoDataTestBerechnungResultDto valid(Boolean valid) {
+  public DemoDataTestBerechnungResultatDto valid(DemoDataTestBerechnungValidDto valid) {
     this.valid = valid;
     return this;
   }
 
   
   @JsonProperty("valid")
-  @NotNull
-  public Boolean getValid() {
+  public DemoDataTestBerechnungValidDto getValid() {
     return valid;
   }
 
   @JsonProperty("valid")
-  public void setValid(Boolean valid) {
+  public void setValid(DemoDataTestBerechnungValidDto valid) {
     this.valid = valid;
   }
 
   /**
    **/
-  public DemoDataTestBerechnungResultDto soll(Integer soll) {
-    this.soll = soll;
-    return this;
-  }
-
-  
-  @JsonProperty("soll")
-  public Integer getSoll() {
-    return soll;
-  }
-
-  @JsonProperty("soll")
-  public void setSoll(Integer soll) {
-    this.soll = soll;
-  }
-
-  /**
-   **/
-  public DemoDataTestBerechnungResultDto ist(Integer ist) {
-    this.ist = ist;
-    return this;
-  }
-
-  
-  @JsonProperty("ist")
-  public Integer getIst() {
-    return ist;
-  }
-
-  @JsonProperty("ist")
-  public void setIst(Integer ist) {
-    this.ist = ist;
-  }
-
-  /**
-   **/
-  public DemoDataTestBerechnungResultDto message(String message) {
+  public DemoDataTestBerechnungResultatDto message(String message) {
     this.message = message;
     return this;
   }
@@ -138,6 +103,42 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     this.message = message;
   }
 
+  /**
+   **/
+  public DemoDataTestBerechnungResultatDto soll(DemoDataTestBerechnungValuesDto soll) {
+    this.soll = soll;
+    return this;
+  }
+
+  
+  @JsonProperty("soll")
+  public DemoDataTestBerechnungValuesDto getSoll() {
+    return soll;
+  }
+
+  @JsonProperty("soll")
+  public void setSoll(DemoDataTestBerechnungValuesDto soll) {
+    this.soll = soll;
+  }
+
+  /**
+   **/
+  public DemoDataTestBerechnungResultatDto ist(DemoDataTestBerechnungValuesDto ist) {
+    this.ist = ist;
+    return this;
+  }
+
+  
+  @JsonProperty("ist")
+  public DemoDataTestBerechnungValuesDto getIst() {
+    return ist;
+  }
+
+  @JsonProperty("ist")
+  public void setIst(DemoDataTestBerechnungValuesDto ist) {
+    this.ist = ist;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -147,31 +148,31 @@ public class DemoDataTestBerechnungResultDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    DemoDataTestBerechnungResultDto demoDataTestBerechnungResult = (DemoDataTestBerechnungResultDto) o;
-    return Objects.equals(this.demoDataId, demoDataTestBerechnungResult.demoDataId) &&
-        Objects.equals(this.testFall, demoDataTestBerechnungResult.testFall) &&
-        Objects.equals(this.valid, demoDataTestBerechnungResult.valid) &&
-        Objects.equals(this.soll, demoDataTestBerechnungResult.soll) &&
-        Objects.equals(this.ist, demoDataTestBerechnungResult.ist) &&
-        Objects.equals(this.message, demoDataTestBerechnungResult.message);
+    DemoDataTestBerechnungResultatDto demoDataTestBerechnungResultat = (DemoDataTestBerechnungResultatDto) o;
+    return Objects.equals(this.demoDataId, demoDataTestBerechnungResultat.demoDataId) &&
+        Objects.equals(this.testFall, demoDataTestBerechnungResultat.testFall) &&
+        Objects.equals(this.valid, demoDataTestBerechnungResultat.valid) &&
+        Objects.equals(this.message, demoDataTestBerechnungResultat.message) &&
+        Objects.equals(this.soll, demoDataTestBerechnungResultat.soll) &&
+        Objects.equals(this.ist, demoDataTestBerechnungResultat.ist);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(demoDataId, testFall, valid, soll, ist, message);
+    return Objects.hash(demoDataId, testFall, valid, message, soll, ist);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class DemoDataTestBerechnungResultDto {\n");
+    sb.append("class DemoDataTestBerechnungResultatDto {\n");
     
     sb.append("    demoDataId: ").append(toIndentedString(demoDataId)).append("\n");
     sb.append("    testFall: ").append(toIndentedString(testFall)).append("\n");
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
+    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    soll: ").append(toIndentedString(soll)).append("\n");
     sb.append("    ist: ").append(toIndentedString(ist)).append("\n");
-    sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("}");
     return sb.toString();
   }

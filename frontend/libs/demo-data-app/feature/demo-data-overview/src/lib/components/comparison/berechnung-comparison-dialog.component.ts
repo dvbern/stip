@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -8,12 +8,12 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { IChange } from 'json-diff-ts';
 
 import { DemoDataAppUiAdvTranslocoDirective } from '@dv/demo-data-app/ui/adv-transloco-directive';
-import { DemoDataTestBerechnungResult } from '@dv/shared/model/gesuch';
+import { DemoDataTestBerechnungResultat } from '@dv/shared/model/gesuch';
 
 import { ComparisonValueComponent } from './comparison-value.component';
 
 export type BerechnungComparison = (IChange & {
-  berechnung: DemoDataTestBerechnungResult | null;
+  berechnung: DemoDataTestBerechnungResultat | null;
 })[];
 
 @Component({
@@ -23,6 +23,7 @@ export type BerechnungComparison = (IChange & {
     DemoDataAppUiAdvTranslocoDirective,
     MatTooltipModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BerechnungComparisonDialogComponent {
   private dialogRef = inject(MatDialogRef);

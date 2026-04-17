@@ -62,6 +62,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpe
 import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.StatisticsdataRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
@@ -225,6 +226,9 @@ class GesuchServiceTest {
 
     @InjectMock
     StatusprotokollService statusprotokollService;
+
+    @InjectMock
+    StatisticsdataRepository statisticsdataRepository;
 
     static final String TENANT_ID = "bern";
 

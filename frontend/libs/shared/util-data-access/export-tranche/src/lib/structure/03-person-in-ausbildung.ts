@@ -112,7 +112,10 @@ export const getPersonInAusbildung = (
             getBoolean(t, fluechtlingsstatus),
           ],
           ['person.zustaendigerKanton.label', zustaendigerKanton],
-          ['person.einreisedatum.label', personInAusbildung.einreisedatum],
+          [
+            'person.einreisedatum.label',
+            formatDate(personInAusbildung.einreisedatum),
+          ],
           [
             'person.zustaendigeKESB.label',
             personInAusbildung.zustaendigeKESB
