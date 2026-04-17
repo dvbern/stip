@@ -34,21 +34,22 @@ export const getAusbildung = (
       getValueList(
         t,
         [
-          ['ausbildungsstaette.label', ausbildungsstaette],
-          ['ausbildungsgang.label', ausbildungsgang],
+          ['ausbildung.ausbildungsstaette.label', ausbildungsstaette],
+          ['ausbildung.ausbildungsgang.label', ausbildungsgang],
           zusatzfrage
             ? [
-                `fachrichtung.label.${zusatzfrage}`,
+                `ausbildung.fachrichtung.label.${zusatzfrage}`,
                 ausbildung.fachrichtungBerufsbezeichnung,
               ]
             : null,
-          ['ausbildungsort.label', ausbildung.ausbildungsort],
+          ['ausbildung.ausbildungsort.label', ausbildung.ausbildungsort],
+          ['shared.address.zipcode.label', ausbildung.ausbildungsortPLZ],
           [
-            'isAusbildungAusland.label',
+            'ausbildung.isAusbildungAusland.label',
             getBoolean(t, ausbildung.isAusbildungAusland),
           ],
         ],
-        (key) => `shared.form.ausbildung.${key}`,
+        (key) => `shared.form.${key}`,
       ),
     ),
     {

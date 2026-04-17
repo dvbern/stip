@@ -24,6 +24,7 @@ import java.util.Set;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenGrund;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.FreiwilligDarlehenEinreichenValidationGroup;
@@ -138,6 +139,10 @@ public class FreiwilligDarlehen extends AbstractMandantEntity {
     @Nullable
     @Column(name = "eingabedatum")
     private LocalDate eingabedatum;
+
+    @OneToOne(orphanRemoval = true)
+    @JoinColumn(name = "manuelle_verfuegung_id")
+    private Dokument manuelleVerfuegung;
 
     @Transient
     public String getDarlehenNr() {

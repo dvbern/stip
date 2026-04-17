@@ -9,10 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DemoDataOhneKuerzungenResult } from './demoDataOhneKuerzungenResult';
 
-export interface FreiwilligDarlehenUpdateSb { 
-    gewaehren?: boolean;
-    betrag?: number;
-    kommentar?: string;
+export interface DemoDataTestBerechnungResultSollAllOf { 
+    ohneKuerzungen: DemoDataOhneKuerzungenResult;
 }
 

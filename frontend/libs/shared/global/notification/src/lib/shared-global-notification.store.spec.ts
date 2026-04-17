@@ -30,14 +30,14 @@ describe('GlobalNotificationStore', () => {
 
   it('should add a new notification with messageKey', () => {
     store.createSuccessNotification({
-      messageKey: 'messageKey',
+      messageKey: 'shared.accept',
     });
 
     expect(store.notifications()).toEqual([
       {
         id: 1,
         type: 'SUCCESS',
-        messageKey: 'messageKey',
+        messageKey: 'shared.accept',
       },
     ]);
   });

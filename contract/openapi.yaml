@@ -226,11 +226,7 @@ paths:
         - auth-dev-bern: []
   /darlehen/{fallId}:
     parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/fallId'
     post:
       tags:
         - Darlehen
@@ -282,7 +278,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDarlehenDownloadToken
-      summary: get Token to downlaod Darlehen Dokument
+      summary: get Token to download Darlehen Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -306,6 +302,63 @@ paths:
           description: File returned
       operationId: downloadDarlehenDokument
       summary: Download Darlehen Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenNegativVerfuegungDownloadToken
+      summary: get Token to download Darlehen negativeVerfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenNegativVerfuegung
+      summary: Download Darlehen negativeVerfuegung Dokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
@@ -722,9 +775,8 @@ paths:
       tags:
         - Darlehen
       requestBody:
-        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/FreiwilligDarlehenUpdateSb'
       responses:
@@ -1529,7 +1581,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DemoDataTestBerechnungResult'
+                  $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
           description: The results of comparing all Berechnung tests
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -7079,6 +7131,8 @@ components:
       properties:
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/FileUpload'
         betrag:
           type: integer
           minimum: 0
@@ -7212,13 +7266,6 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
-    DarlehenGrund:
-      enum:
-        - NICHT_BERECHTIGT
-        - AUSBILDUNG_ZWOELF_JAHRE
-        - HOHE_GEBUEHREN
-        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
-        - ZWEITAUSBILDUNG
     Dokument:
       required:
         - id
@@ -7240,6 +7287,13 @@ components:
           type: string
         objectId:
           type: string
+    DarlehenGrund:
+      enum:
+        - NICHT_BERECHTIGT
+        - AUSBILDUNG_ZWOELF_JAHRE
+        - HOHE_GEBUEHREN
+        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+        - ZWEITAUSBILDUNG
     FreiwilligDarlehen:
       type: object
       required:
@@ -7255,6 +7309,8 @@ components:
           $ref: '#/components/schemas/DarlehenStatus'
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
           minimum: 0
@@ -8290,26 +8346,38 @@ components:
           $ref: '#/components/schemas/DemoAuszahlung'
         darlehen:
           $ref: '#/components/schemas/DemoDarlehen'
-        stipendienanspruch:
-          required:
-            - status
-          type: object
-          properties:
-            status:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
-    DemoDataTestBerechnungResult:
+        berechnungValues:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+    DemoDataTestBerechnungValid:
+      type: object
+      properties:
+        status:
+          type: boolean
+        ungekuerztStipendien:
+          type: boolean
+        ungekuerztDarlehen:
+          type: boolean
+        stipendien:
+          type: boolean
+        darlehen:
+          type: boolean
+    DemoDataTestBerechnungValues:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/VerfuegungStatus'
+        ungekuerztStipendien:
+          type: integer
+        ungekuerztDarlehen:
+          type: integer
+        stipendien:
+          type: integer
+        darlehen:
+          type: integer
+    DemoDataTestBerechnungResultat:
       required:
         - demoDataId
         - testFall
-        - valid
       type: object
       properties:
         demoDataId:
@@ -8317,13 +8385,13 @@ components:
         testFall:
           type: string
         valid:
-          type: boolean
-        soll:
-          type: integer
-        ist:
-          type: integer
+          $ref: '#/components/schemas/DemoDataTestBerechnungValid'
         message:
           type: string
+        soll:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+        ist:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
     ApplyDemoDataResponse:
       required:
         - gesuchId
@@ -8331,7 +8399,7 @@ components:
         - gueltigAb
         - gueltigBis
         - gesuchStatus
-        - stipendienanspruch
+        - berechnungResultat
       type: object
       properties:
         gesuchId:
@@ -8346,25 +8414,8 @@ components:
           format: date
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
-        stipendienanspruch:
-          required:
-            - success
-          type: object
-          properties:
-            success:
-              type: boolean
-            statusSoll:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            statusIst:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
+        berechnungResultat:
+          $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
     GesuchTrancheTyp:
       enum:
         - AENDERUNG
@@ -10019,6 +10070,17 @@ components:
           description: >-
             Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
             Kürzungen und Teilung des Gesetzlichen Darlehens
+          type: integer
+        ungekuerztStipendien:
+          description: >-
+            Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
+            Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und
+            debugging verwendet)
+          type: integer
+        ungekuerztDarlehen:
+          description: >-
+            Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen
+            (wird nur für Vergleiche und debugging verwendet)
           type: integer
         totalNachKuerzungNachEinreichefrist:
           description: Die Summe nach der Kürzung der verspäteten Eingabe
@@ -11912,6 +11974,13 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
+      schema:
+        $ref: '#/components/schemas/UUID'
     gesuchId:
       name: gesuchId
       in: path
@@ -11945,13 +12014,6 @@ components:
       in: path
       required: true
       description: Die ID der Delegierung
-      schema:
-        $ref: '#/components/schemas/UUID'
-    fallId:
-      name: fallId
-      in: path
-      required: true
-      description: Die ID vom Fall
       schema:
         $ref: '#/components/schemas/UUID'
     sozialdienstId:

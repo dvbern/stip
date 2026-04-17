@@ -1,295 +1,345 @@
-@if (darlehenStore.darlehenViewSig().loading) {
-  <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
-} @else {
-  <!-- sachbearbeiter form -->
-  @if (darlehenPermissionsSig()?.canReadSbForm) {
-    <form
-      [formGroup]="formSb"
-      [dvSharedUiFormReadonlyToggle]="!darlehenPermissionsSig()?.canWriteSb"
-      novalidate
-      data-testid="form-darlehen-sb-form"
-    >
-      <div class="tw:dv-form-half">
-        <!-- todo: KSTIP-2857 info betragBezogenKanton -->
-        <div>
-          <span class="tw:font-bold"> {{ 'shared.form.darlehen.betragBezogenKanton.info' | transloco }} </span>:
-          <span>0</span>
+<ng-container *dvTranslocoShared="let t">
+  @if (darlehenStore.darlehenViewSig().loading) {
+    <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
+  } @else {
+    <!-- sachbearbeiter form -->
+    @if (darlehenPermissionsSig()?.canReadSbForm) {
+      <form
+        [formGroup]="formSb"
+        [dvSharedUiFormReadonlyToggle]="!darlehenPermissionsSig()?.canWriteSb"
+        (gotReenabledSig)="gotReenabledSig.set({})"
+        novalidate
+        data-testid="form-darlehen-sb-form"
+      >
+        <div class="tw:dv-form-half">
+          <!-- todo: KSTIP-2857 info betragBezogenKanton -->
+          <div>
+            <span class="tw:font-bold"> {{ t('shared.form.darlehen.betragBezogenKanton.info') }} </span>:
+            <span>0</span>
+          </div>
+
+          <!-- darlehenGewaehren -->
+          <mat-radio-group
+            [formControl]="formSb.controls.gewaehren"
+            class="tw:w-full"
+            data-testid="form-darlehen-darlehenGewaehren"
+            dvSharedUiFormField
+          >
+            <div class="tw:flex tw:w-full">
+              <mat-label>{{ t('shared.form.darlehen.darlehenGewaehren.label') }}</mat-label>
+            </div>
+            <div class="tw:flex tw:justify-between tw:flex-col tw:w-full tw:gap-2">
+              @for (value of [true, false]; track $index) {
+                <mat-radio-button [value]="value">{{
+                  t(`shared.form.darlehen.darlehenGewaehren.${value}`)
+                }}</mat-radio-button>
+              }
+            </div>
+            <div class="group-errors">
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </div>
+          </mat-radio-group>
+
+          @if (
+            formSb.controls.gewaehren.value === false &&
+            (darlehenPermissionsSig()?.canWriteSb || darlehenSig()?.negativeVerfuegung)
+          ) {
+            <div class="tw:flex tw:flex-col tw:gap-2" *dvIfSachbearbeiter>
+              <label>{{ t('shared.form.darlehen.negativDarlehenVerfuegung.label') }}</label>
+
+              @if (darlehenSig()?.negativeVerfuegung; as dokument) {
+                <div class="tw:flex tw:gap-5">
+                  <button
+                    type="button"
+                    class="btn btn-link tw:flex! tw:p-0! tw:items-center tw:mb-6!"
+                    [attr.aria-label]="t('shared.dokumente.table.download')"
+                    [dvDownloadButton]="{
+                      type: 'darlehenNegativVerfuegung',
+                      id: dokument.id,
+                    }"
+                  >
+                    <span class="tw:grow-0 tw:whitespace-nowrap tw:truncate" [dvTruncateTooltip]="dokument.filename">
+                      {{ dokument.filename }} {{ dokument.filesize | filesize }}
+                    </span>
+                    <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-xl/1!">download</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-link tw:flex! tw:p-0! tw:items-center tw:mb-6! tw:no-underline!"
+                    [matTooltip]="t('shared.form.delete')"
+                    [attr.aria-label]="t('shared.form.delete')"
+                    (click)="deleteNegativVerfuegung()"
+                  >
+                    <span class="material-symbols-rounded text-muted tw:align-middle tw:text-xl!">delete</span>
+                  </button>
+                </div>
+              } @else {
+                <dv-shared-ui-file-upload
+                  [formControl]="formSb.controls.negativeVerfuegung"
+                  [allowedFileTypesSig]="deploymentConfigSig().deploymentConfig?.allowedMimeTypes"
+                ></dv-shared-ui-file-upload>
+              }
+            </div>
+          }
+
+          @if (formSb.controls.gewaehren.value) {
+            <mat-form-field dvSharedUiFormField class="tw:w-full">
+              <mat-label>{{ t('shared.form.darlehen.betragDarlehen.label') }}</mat-label>
+              <input
+                [formControl]="formSb.controls.betrag"
+                data-testid="form-darlehen-betragDarlehen"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+              />
+
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </mat-form-field>
+          }
+
+          <!-- kommentar  -->
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
+            <mat-label>{{ t('shared.form.darlehen.kommentar.label') }}</mat-label>
+            <textarea
+              [formControl]="formSb.controls.kommentar"
+              data-testid="form-darlehen-kommentar"
+              dvMaxLength="large"
+              matInput
+              rows="4"
+            ></textarea>
+
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ t('shared.form.error.required') }}
+            </mat-error>
+          </mat-form-field>
         </div>
 
-        <!-- darlehenGewaehren -->
-        <mat-radio-group
-          [formControl]="formSb.controls.gewaehren"
-          class="tw:w-full"
-          data-testid="form-darlehen-darlehenGewaehren"
-          dvSharedUiFormField
-        >
-          <div class="tw:flex tw:w-full">
-            <mat-label>{{ 'shared.form.darlehen.darlehenGewaehren.label' | transloco }}</mat-label>
-          </div>
-          <div class="tw:flex tw:justify-between tw:flex-col tw:w-full tw:gap-2">
-            @for (value of [true, false]; track $index) {
-              <mat-radio-button [value]="value">{{
-                'shared.form.darlehen.darlehenGewaehren.' + value | transloco
-              }}</mat-radio-button>
-            }
-          </div>
-          <div class="group-errors">
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </div>
-        </mat-radio-group>
+        <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
+          @if (darlehenPermissionsSig()?.canWriteSb) {
+            <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
+              <span>{{ t('shared.cancel') }}</span>
+            </a>
+          }
 
-        @if (showBetragFieldSig()) {
+          @if (darlehenPermissionsSig()?.canFreigeben) {
+            <!-- darlehen Freigeben -->
+            <button
+              type="button"
+              data-testid="button-darlehen-freigeben"
+              (click)="darlehenUpdateAndFreigeben()"
+              class="btn btn-primary"
+            >
+              {{ t('shared.form.darlehen.freigeben') }}
+            </button>
+            <!-- dalehen zurückweisen -->
+            <button
+              type="button"
+              data-testid="button-darlehen-zurueckweisen"
+              (click)="darlehenUpdateAndZurueckweisen()"
+              class="btn btn-danger"
+            >
+              {{ t('shared.form.darlehen.zurueckweisen') }}
+            </button>
+          }
+
+          @if (darlehenPermissionsSig()?.canApproveDarlehen) {
+            <!-- darlehen abschliessen -->
+            <button
+              type="button"
+              data-testid="button-darlehen-abschliessen"
+              (click)="darlehenUpdateAndAbschliessen()"
+              class="btn btn-primary"
+            >
+              {{ t('shared.form.darlehen.abschliessen') }}
+            </button>
+          }
+        </div>
+      </form>
+      <hr class="tw:mt-10! tw:border-t tw:border-gray-400" />
+    }
+
+    <!-- gesuchsteller form -->
+    <form
+      [formGroup]="formGs"
+      [dvSharedUiFormReadonlyToggle]="!darlehenPermissionsSig()?.canWriteGs"
+      novalidate
+      data-testid="form-darlehen-gs-form"
+    >
+      <div class="tw:mt-10 tw:dv-form-half">
+        <!-- Darlehensbetrag -->
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
+          <mat-label>{{ 'shared.form.darlehen.betragGewuenscht.label' | transloco }}</mat-label>
+          <input
+            [formControl]="formGs.controls.betragGewuenscht"
+            data-testid="form-darlehen-betragGewuenscht"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- schulden -->
+        <mat-form-field dvSharedUiFormField class="tw:w-full">
+          <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
+          <input
+            [formControl]="formGs.controls.schulden"
+            data-testid="form-darlehen-schulden"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- anzahlBetreibungen -->
+        <div class="tw:flex tw:w-full tw:gap-2">
           <mat-form-field dvSharedUiFormField class="tw:w-full">
-            <mat-label>{{ 'shared.form.darlehen.betragDarlehen.label' | transloco }}</mat-label>
+            <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
             <input
-              [formControl]="formSb.controls.betrag"
-              data-testid="form-darlehen-betragDarlehen"
+              [formControl]="formGs.controls.anzahlBetreibungen"
+              data-testid="form-darlehen-anzahlBetreibungen"
               matInput
-              type="text"
-              [maskito]="maskitoNumber"
+              type="number"
+              min="0"
             />
 
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
+              {{ t('shared.form.error.required') }}
             </mat-error>
           </mat-form-field>
-        }
+          @if (anzahlBetreibungenDocSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          }
+        </div>
 
-        <!-- kommentar  -->
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.kommentar.label' | transloco }}</mat-label>
-          <textarea
-            [formControl]="formSb.controls.kommentar"
-            data-testid="form-darlehen-kommentar"
-            dvMaxLength="large"
-            matInput
-            rows="4"
-          ></textarea>
+        <fieldset
+          class="tw:col-span-2 tw:grid tw:grid-cols-[1fr_56px] tw:gap-x-6 tw:gap-y-4 tw:rounded-sm"
+          formGroupName="gruende"
+        >
+          <legend class="tw:col-span-2">
+            <h3 class="tw:!mb-0">
+              {{ t('shared.form.darlehen.gruende.label') }}
+            </h3>
+          </legend>
+          <!-- grundNichtBerechtigt -->
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
+            <mat-checkbox
+              class="tw:w-full"
+              [formControl]="formGs.controls.gruende.controls.NICHT_BERECHTIGT"
+              data-testid="form-darlehen-grundNichtBerechtigt"
+            >
+              {{ t('shared.form.darlehen.grundNichtBerechtigt.label') }}
+            </mat-checkbox>
+          </div>
+          @if (grundNichtBerechtigtDocSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          }
 
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
+          <!-- grundAusbildungZwoelfJahre -->
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
+            <mat-checkbox
+              class="tw:w-full"
+              [formControl]="formGs.controls.gruende.controls.AUSBILDUNG_ZWOELF_JAHRE"
+              data-testid="form-darlehen-grundAusbildungZwoelfJahre"
+            >
+              {{ t('shared.form.darlehen.grundAusbildungZwoelfJahre.label') }}
+            </mat-checkbox>
+          </div>
+
+          <!-- grundHoheGebuehren -->
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
+            <mat-checkbox
+              class="tw:w-full"
+              [formControl]="formGs.controls.gruende.controls.HOHE_GEBUEHREN"
+              data-testid="form-darlehen-grundHoheGebuehren"
+            >
+              {{ t('shared.form.darlehen.grundHoheGebuehren.label') }}
+            </mat-checkbox>
+          </div>
+          @if (grundHoheGebuehrenDocSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          }
+
+          <!-- grundAnschaffungenFuerAusbildung -->
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
+            <mat-checkbox
+              class="tw:w-full"
+              [formControl]="formGs.controls.gruende.controls.ANSCHAFFUNGEN_FUER_AUSBILDUNG"
+              data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
+            >
+              {{ t('shared.form.darlehen.grundAnschaffungenFuerAusbildung.label') }}
+            </mat-checkbox>
+          </div>
+          @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
+            <dv-shared-pattern-document-upload
+              class="flex-shrink-1"
+              [optionsSig]="options"
+            ></dv-shared-pattern-document-upload>
+          }
+
+          <!-- grundZweitausbildung -->
+          <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
+            <mat-checkbox
+              class="tw:w-full"
+              [formControl]="formGs.controls.gruende.controls.ZWEITAUSBILDUNG"
+              data-testid="form-darlehen-grundZweitausbildung"
+            >
+              {{ t('shared.form.darlehen.grundZweitausbildung.label') }}
+            </mat-checkbox>
+          </div>
+        </fieldset>
       </div>
 
-      <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
-        @if (darlehenPermissionsSig()?.canWriteSb) {
-          <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
-            <span>{{ 'shared.cancel' | transloco }}</span>
-          </a>
-        }
+      <!-- Missing Document Error -->
+      @if (!isAllDocumentsUploadedSig() && formGs.touched && gsShowMissingDocsErrorSig()) {
+        <mat-error class="tw:block!">
+          {{ t('shared.form.darlehen.error.missingDocuments') }}
+        </mat-error>
+      }
 
-        @if (darlehenPermissionsSig()?.canFreigeben) {
-          <!-- darlehen Freigeben -->
+      <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center" *dvIfGesuchsteller>
+        @if (darlehenPermissionsSig()?.canWriteGs) {
           <button
             type="button"
-            data-testid="button-darlehen-freigeben"
-            (click)="darlehenUpdateAndFreigeben()"
-            class="btn btn-primary"
-          >
-            {{ 'shared.form.darlehen.freigeben' | transloco }}
-          </button>
-          <!-- dalehen zurückweisen -->
-          <button
-            type="button"
-            data-testid="button-darlehen-zurueckweisen"
-            (click)="darlehenUpdateAndZurueckweisen()"
+            (click)="darlehenDeleteGs()"
             class="btn btn-danger"
+            data-testid="button-delete-darlehen"
           >
-            {{ 'shared.form.darlehen.zurueckweisen' | transloco }}
+            {{ t('shared.cancel') }}
           </button>
         }
 
-        @if (darlehenPermissionsSig()?.canApproveDarlehen) {
-          <!-- darlehen abschliessen -->
+        @if (darlehenPermissionsSig()?.canEingeben) {
           <button
             type="button"
-            data-testid="button-darlehen-abschliessen"
-            (click)="darlehenUpdateAndAbschliessen()"
+            (click)="darlehenUpdateAndEingebenGs()"
             class="btn btn-primary"
+            data-testid="button-eingeben-darlehen"
           >
-            {{ 'shared.form.darlehen.abschliessen' | transloco }}
+            {{ t('shared.form.darlehen.eingeben') }}
           </button>
         }
       </div>
     </form>
-    <hr class="tw:mt-10! tw:border-t tw:border-gray-400" />
   }
-
-  <!-- gesuchsteller form -->
-  <form
-    [formGroup]="formGs"
-    [dvSharedUiFormReadonlyToggle]="!darlehenPermissionsSig()?.canWriteGs"
-    novalidate
-    data-testid="form-darlehen-gs-form"
-  >
-    <div class="tw:mt-10 tw:dv-form-half">
-      <!-- Darlehensbetrag -->
-      <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ 'shared.form.darlehen.betragGewuenscht.label' | transloco }}</mat-label>
-        <input
-          [formControl]="formGs.controls.betragGewuenscht"
-          data-testid="form-darlehen-betragGewuenscht"
-          matInput
-          type="text"
-          [maskito]="maskitoNumber"
-        />
-
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- schulden -->
-      <mat-form-field dvSharedUiFormField class="tw:w-full">
-        <mat-label>{{ 'shared.form.darlehen.schulden.label' | transloco }}</mat-label>
-        <input
-          [formControl]="formGs.controls.schulden"
-          data-testid="form-darlehen-schulden"
-          matInput
-          type="text"
-          [maskito]="maskitoNumber"
-        />
-
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      <!-- anzahlBetreibungen -->
-      <div class="tw:flex tw:w-full tw:gap-2">
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.darlehen.anzahlBetreibungen.label' | transloco }}</mat-label>
-          <input
-            [formControl]="formGs.controls.anzahlBetreibungen"
-            data-testid="form-darlehen-anzahlBetreibungen"
-            matInput
-            type="number"
-            min="0"
-          />
-
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-        @if (anzahlBetreibungenDocSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-
-      <fieldset
-        class="tw:col-span-2 tw:grid tw:grid-cols-[1fr_56px] tw:gap-x-6 tw:gap-y-4 tw:rounded-sm"
-        formGroupName="gruende"
-      >
-        <legend class="tw:col-span-2">
-          <h3 class="tw:!mb-0">
-            {{ 'shared.form.darlehen.gruende.label' | transloco }}
-          </h3>
-        </legend>
-        <!-- grundNichtBerechtigt -->
-        <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-          <mat-checkbox
-            class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.NICHT_BERECHTIGT"
-            data-testid="form-darlehen-grundNichtBerechtigt"
-          >
-            {{ 'shared.form.darlehen.grundNichtBerechtigt.label' | transloco }}
-          </mat-checkbox>
-        </div>
-        @if (grundNichtBerechtigtDocSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-
-        <!-- grundAusbildungZwoelfJahre -->
-        <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-          <mat-checkbox
-            class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.AUSBILDUNG_ZWOELF_JAHRE"
-            data-testid="form-darlehen-grundAusbildungZwoelfJahre"
-          >
-            {{ 'shared.form.darlehen.grundAusbildungZwoelfJahre.label' | transloco }}
-          </mat-checkbox>
-        </div>
-
-        <!-- grundHoheGebuehren -->
-        <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-          <mat-checkbox
-            class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.HOHE_GEBUEHREN"
-            data-testid="form-darlehen-grundHoheGebuehren"
-          >
-            {{ 'shared.form.darlehen.grundHoheGebuehren.label' | transloco }}
-          </mat-checkbox>
-        </div>
-        @if (grundHoheGebuehrenDocSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-
-        <!-- grundAnschaffungenFuerAusbildung -->
-        <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-          <mat-checkbox
-            class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.ANSCHAFFUNGEN_FUER_AUSBILDUNG"
-            data-testid="form-darlehen-grundAnschaffungenFuerAusbildung"
-          >
-            {{ 'shared.form.darlehen.grundAnschaffungenFuerAusbildung.label' | transloco }}
-          </mat-checkbox>
-        </div>
-        @if (grundAnschaffungenFuerAusbildungDocSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-
-        <!-- grundZweitausbildung -->
-        <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">
-          <mat-checkbox
-            class="tw:w-full"
-            [formControl]="formGs.controls.gruende.controls.ZWEITAUSBILDUNG"
-            data-testid="form-darlehen-grundZweitausbildung"
-          >
-            {{ 'shared.form.darlehen.grundZweitausbildung.label' | transloco }}
-          </mat-checkbox>
-        </div>
-      </fieldset>
-    </div>
-
-    <!-- Missing Document Error -->
-    @if (!isAllDocumentsUploadedSig() && formGs.touched && gsShowMissingDocsErrorSig()) {
-      <mat-error class="tw:block!">
-        {{ 'shared.form.darlehen.error.missingDocuments' | transloco }}
-      </mat-error>
-    }
-
-    <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center" *dvIfGesuchsteller>
-      @if (darlehenPermissionsSig()?.canWriteGs) {
-        <button type="button" (click)="darlehenDeleteGs()" class="btn btn-danger" data-testid="button-delete-darlehen">
-          {{ 'shared.cancel' | transloco }}
-        </button>
-      }
-
-      @if (darlehenPermissionsSig()?.canEingeben) {
-        <button
-          type="button"
-          (click)="darlehenUpdateAndEingebenGs()"
-          class="btn btn-primary"
-          data-testid="button-eingeben-darlehen"
-        >
-          {{ 'shared.form.darlehen.eingeben' | transloco }}
-        </button>
-      }
-    </div>
-  </form>
-}
+</ng-container>

@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, catchError, map, pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   SharedModelSachbearbeiter,
@@ -106,10 +107,12 @@ export class BenutzerverwaltungStore extends signalStore(
             map(mapToSachbearbeiterWithKnownRoles),
             handleApiResponse((benutzer) => patchState(this, { benutzer }), {
               onSuccess: (benutzer) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeitet',
+                  },
+                );
                 patchState(this, { benutzer: success(benutzer) });
               },
               onFailure: () => {
@@ -142,10 +145,12 @@ export class BenutzerverwaltungStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
-                  });
+                  this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey:
+                        'sachbearbeitung-app.admin.benutzerverwaltung.benutzerGeloescht',
+                    },
+                  );
                   this.loadAllSbAppBenutzers$();
                 },
                 onFailure: () => {
@@ -177,20 +182,24 @@ export class BenutzerverwaltungStore extends signalStore(
             map(mapToSachbearbeiterWithKnownRoles),
             handleApiResponse((benutzer) => patchState(this, { benutzer }), {
               onSuccess: (newUser) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellt',
+                  },
+                );
                 onAfterSave?.(newUser.id);
               },
               onFailure: (error) => {
                 const parsedError = SharedModelError.parse(error);
                 if (parsedError.status === 409) {
-                  this.globalNotificationStore.createNotification({
-                    type: 'ERROR',
-                    messageKey:
-                      'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists',
-                  });
+                  this.globalNotificationStore.createNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      type: 'ERROR',
+                      messageKey:
+                        'sachbearbeitung-app.admin.benutzerverwaltung.benutzerErstellenFehler.emailExists',
+                    },
+                  );
                 }
               },
             }),

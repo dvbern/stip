@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
 import { SachbearbeitungAppDialogBeschwaerdeEntscheidComponent } from '@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
@@ -125,15 +126,14 @@ export class VerwaltungComponent {
       return;
     }
 
-    SharedUiKommentarDialogComponent.open(this.matDialog, {
-      titleKey:
-        'sachbearbeitung-app.infos.beschwerde.create.title.' +
-        beschwerdeHaengig,
-      confirmKey: 'sachbearbeitung-app.infos.beschwerde.create.confirm',
-      placeholderKey:
-        'sachbearbeitung-app.infos.beschwerde.create.placeholder.' +
-        beschwerdeHaengig,
-    })
+    SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+      this.matDialog,
+      {
+        titleKey: `sachbearbeitung-app.infos.beschwerde.create.title.${beschwerdeHaengig}`,
+        confirmKey: 'sachbearbeitung-app.infos.beschwerde.create.confirm',
+        placeholderKey: `sachbearbeitung-app.infos.beschwerde.create.placeholder.${beschwerdeHaengig}`,
+      },
+    )
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {

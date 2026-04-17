@@ -17,10 +17,40 @@
 
 package ch.dvbern.stip.berechnung.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Objects;
+
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class BerechnungUtil {
     public int monthLimitAusbildungTertiaerstufe = 36;
     public int darlehenLimit = 50000;
+
+    public int calculateGesetzlichesDarlehen(int total) {
+        return BigDecimal.valueOf(total)
+            .divide(BigDecimal.valueOf(300), 0, RoundingMode.UP)
+            .multiply(BigDecimal.valueOf(100))
+            .intValue();
+    }
+
+    public int substractGesezlichesDarlehen(int total, Integer darlehen) {
+        if (Objects.isNull(darlehen)) {
+            return total;
+        }
+
+        return BigDecimal.valueOf(total)
+            .multiply(BigDecimal.valueOf(2))
+            .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
+            .intValue();
+    }
+
+    public boolean nullableCompare(Integer value1, Integer value2, int defaultValue) {
+        if ((Objects.isNull(value1) || value1 == defaultValue) && (Objects.isNull(value2) || value2 == defaultValue)) {
+            return true;
+        }
+
+        return Objects.equals(value1, value2);
+    }
 }

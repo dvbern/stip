@@ -123,13 +123,16 @@ export class AusbildungUnterbrechenComponent {
   }
 
   gesuchUnterbrechen() {
-    SharedUiKommentarDialogComponent.open(this.dialog, {
-      titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
-      messageKey:
-        'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.message',
-      placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
-      confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
-    })
+    SharedUiKommentarDialogComponent.open<SachbearbeitungAppTranslationKey>(
+      this.dialog,
+      {
+        titleKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
+        messageKey:
+          'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.message',
+        placeholderKey: 'sachbearbeitung-app.infos.admin.kommentar.placeholder',
+        confirmKey: 'sachbearbeitung-app.infos.admin.ausbildung-unterbrechen',
+      },
+    )
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {

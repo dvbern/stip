@@ -18,7 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoAuszahlungDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDarlehenDtoSpec;
-import ch.dvbern.stip.generated.dto.DemoDataStipendienanspruchDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoEinnahmenKostenDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoElternteilDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDtoSpec;
@@ -58,7 +58,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoDataDtoSpec.JSON_PROPERTY_GESCHWISTER,
   DemoDataDtoSpec.JSON_PROPERTY_AUSZAHLUNG,
   DemoDataDtoSpec.JSON_PROPERTY_DARLEHEN,
-  DemoDataDtoSpec.JSON_PROPERTY_STIPENDIENANSPRUCH
+  DemoDataDtoSpec.JSON_PROPERTY_BERECHNUNG_VALUES
 })
 @JsonTypeName("DemoData")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -105,8 +105,8 @@ public class DemoDataDtoSpec {
   public static final String JSON_PROPERTY_DARLEHEN = "darlehen";
   private DemoDarlehenDtoSpec darlehen;
 
-  public static final String JSON_PROPERTY_STIPENDIENANSPRUCH = "stipendienanspruch";
-  private DemoDataStipendienanspruchDtoSpec stipendienanspruch;
+  public static final String JSON_PROPERTY_BERECHNUNG_VALUES = "berechnungValues";
+  private DemoDataTestBerechnungValuesDtoSpec berechnungValues;
 
   public DemoDataDtoSpec() {
   }
@@ -515,29 +515,29 @@ public class DemoDataDtoSpec {
   }
 
 
-  public DemoDataDtoSpec stipendienanspruch(DemoDataStipendienanspruchDtoSpec stipendienanspruch) {
+  public DemoDataDtoSpec berechnungValues(DemoDataTestBerechnungValuesDtoSpec berechnungValues) {
     
-    this.stipendienanspruch = stipendienanspruch;
+    this.berechnungValues = berechnungValues;
     return this;
   }
 
    /**
-   * Get stipendienanspruch
-   * @return stipendienanspruch
+   * Get berechnungValues
+   * @return berechnungValues
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VALUES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public DemoDataStipendienanspruchDtoSpec getStipendienanspruch() {
-    return stipendienanspruch;
+  public DemoDataTestBerechnungValuesDtoSpec getBerechnungValues() {
+    return berechnungValues;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_STIPENDIENANSPRUCH)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VALUES)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setStipendienanspruch(DemoDataStipendienanspruchDtoSpec stipendienanspruch) {
-    this.stipendienanspruch = stipendienanspruch;
+  public void setBerechnungValues(DemoDataTestBerechnungValuesDtoSpec berechnungValues) {
+    this.berechnungValues = berechnungValues;
   }
 
   @Override
@@ -563,12 +563,12 @@ public class DemoDataDtoSpec {
         Objects.equals(this.geschwister, demoData.geschwister) &&
         Objects.equals(this.auszahlung, demoData.auszahlung) &&
         Objects.equals(this.darlehen, demoData.darlehen) &&
-        Objects.equals(this.stipendienanspruch, demoData.stipendienanspruch);
+        Objects.equals(this.berechnungValues, demoData.berechnungValues);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, einnahmenKostenPartner, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, stipendienanspruch);
+    return Objects.hash(ausbildung, personInAusbildung, lebenslauf, partner, kinder, einnahmenKosten, einnahmenKostenPartner, familiensituation, elterns, steuererklaerung, steuerdaten, geschwister, auszahlung, darlehen, berechnungValues);
   }
 
   @Override
@@ -589,7 +589,7 @@ public class DemoDataDtoSpec {
     sb.append("    geschwister: ").append(toIndentedString(geschwister)).append("\n");
     sb.append("    auszahlung: ").append(toIndentedString(auszahlung)).append("\n");
     sb.append("    darlehen: ").append(toIndentedString(darlehen)).append("\n");
-    sb.append("    stipendienanspruch: ").append(toIndentedString(stipendienanspruch)).append("\n");
+    sb.append("    berechnungValues: ").append(toIndentedString(berechnungValues)).append("\n");
     sb.append("}");
     return sb.toString();
   }

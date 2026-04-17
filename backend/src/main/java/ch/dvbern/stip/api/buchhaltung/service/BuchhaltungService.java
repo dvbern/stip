@@ -159,7 +159,8 @@ public class BuchhaltungService {
         return TLProducer.defaultBundle().forAppLanguage(language);
     }
 
-    private Buchhaltung createBuchhaltungForBusinessPartnerAction(
+    @Transactional
+    public Buchhaltung createBuchhaltungForBusinessPartnerAction(
         final UUID gesuchId,
         final BuchhaltungType buchhaltungBusinessPartnerType
     ) {
@@ -198,20 +199,6 @@ public class BuchhaltungService {
         fall.getAuszahlung().setBuchhaltung(buchhaltungEntry);
         fall.getBuchhaltungs().add(buchhaltungEntry);
         return buchhaltungEntry;
-    }
-
-    @Transactional
-    public Buchhaltung createBuchhaltungForBusinessPartnerCreate(
-        final UUID gesuchId
-    ) {
-        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CREATE);
-    }
-
-    @Transactional
-    public Buchhaltung createBuchhaltungForBusinessPartnerChange(
-        final UUID gesuchId
-    ) {
-        return createBuchhaltungForBusinessPartnerAction(gesuchId, BuchhaltungType.BUSINESSPARTNER_CHANGE);
     }
 
     @Transactional

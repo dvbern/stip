@@ -15,7 +15,7 @@ package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.DemoDataListDtoSpec;
-import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultDtoSpec;
+import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDtoSpec;
 import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
@@ -486,7 +486,7 @@ public class DemoDataApiSpec {
      * Tests the Berechnung of all testcases to their excepted Stipendienanspruch values
      * 
      *
-     * return List&lt;DemoDataTestBerechnungResultDtoSpec&gt;
+     * return List&lt;DemoDataTestBerechnungResultatDtoSpec&gt;
      */
     public static class TestAllDemoDataBerechnungOper implements Oper {
 
@@ -516,10 +516,10 @@ public class DemoDataApiSpec {
         /**
          * GET /demo-data/test-all-berechnung
          * @param handler handler
-         * @return List&lt;DemoDataTestBerechnungResultDtoSpec&gt;
+         * @return List&lt;DemoDataTestBerechnungResultatDtoSpec&gt;
          */
-        public List<DemoDataTestBerechnungResultDtoSpec> executeAs(Function<Response, Response> handler) {
-            TypeRef<List<DemoDataTestBerechnungResultDtoSpec>> type = new TypeRef<List<DemoDataTestBerechnungResultDtoSpec>>(){};
+        public List<DemoDataTestBerechnungResultatDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<DemoDataTestBerechnungResultatDtoSpec>> type = new TypeRef<List<DemoDataTestBerechnungResultatDtoSpec>>(){};
             return execute(handler).as(type);
         }
 

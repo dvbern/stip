@@ -14,13 +14,12 @@ export const getEinnahmenKosten = (
   if (!einnahmenKosten) {
     return [];
   }
+  const isPartner = einkommenTyp === 'partner';
 
   return [
-    getTitle(
-      t,
-      `shared.einnahmenkosten${einkommenTyp === 'partner' ? '-partner' : ''}.title`,
-      { pageBreak: 'before' },
-    ),
+    getTitle(t, `shared.einnahmenkosten${isPartner ? '-partner' : ''}.title`, {
+      pageBreak: 'before',
+    }),
     getSection(t, 'shared.form.einnahmenkosten.einnahmen.title'),
     getTable([
       ...getValueList(
@@ -46,27 +45,39 @@ export const getEinnahmenKosten = (
       ...getValueList(
         t,
         [
-          [
-            'ausbildungskosten.label.undefined',
-            einnahmenKosten.ausbildungskosten,
-          ],
+          !isPartner
+            ? [
+                'ausbildungskosten.label.undefined',
+                einnahmenKosten.ausbildungskosten,
+              ]
+            : null,
           [
             'betreuungskostenKinder.label',
             einnahmenKosten.betreuungskostenKinder,
           ],
           ['fahrkosten.label', einnahmenKosten.fahrkosten],
-          ['wohnkosten.label', einnahmenKosten.wohnkosten],
-          ['verpflegungskosten.label', einnahmenKosten.verpflegungskosten],
-          [
-            'auswaertigeMittagessenProWoche.label',
-            einnahmenKosten.auswaertigeMittagessenProWoche,
-          ],
-          ['wgWohnend.label', getBoolean(t, einnahmenKosten.wgWohnend)],
-          ['wgAnzahlPersonen.label', einnahmenKosten.wgAnzahlPersonen],
-          [
-            'alternativeWohnformWohnend.label',
-            getBoolean(t, einnahmenKosten.alternativeWohnformWohnend),
-          ],
+          !isPartner ? ['wohnkosten.label', einnahmenKosten.wohnkosten] : null,
+          isPartner
+            ? ['verpflegungskosten.label', einnahmenKosten.verpflegungskosten]
+            : null,
+          !isPartner
+            ? [
+                'auswaertigeMittagessenProWoche.label',
+                einnahmenKosten.auswaertigeMittagessenProWoche,
+              ]
+            : null,
+          !isPartner
+            ? ['wgWohnend.label', getBoolean(t, einnahmenKosten.wgWohnend)]
+            : null,
+          !isPartner
+            ? ['wgAnzahlPersonen.label', einnahmenKosten.wgAnzahlPersonen]
+            : null,
+          !isPartner
+            ? [
+                'alternativeWohnformWohnend.label',
+                getBoolean(t, einnahmenKosten.alternativeWohnformWohnend),
+              ]
+            : null,
         ],
         (key) => `shared.form.einnahmenkosten.${key}`,
       ),

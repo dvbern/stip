@@ -9,7 +9,7 @@
     (gotReenabledSig)="gotReenabled$.next({})"
     data-testid="form-family-form"
     novalidate
-    class="mt-4 family-form"
+    class="family-form"
     (ngSubmit)="handleSave()"
   >
     @if (hasHiddenVersteckteElternSig()) {
@@ -316,12 +316,8 @@
               </mat-radio-group>
               <div
                 dvSharedUiInfoDialog
-                [dialogTitleKey]="
-                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.infoTitle'
-                "
-                [dialogMessageKey]="
-                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.info'
-                "
+                [dialogTitleKey]="'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.infoTitle'"
+                [dialogMessageKey]="'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-mutterschaftsanerkennung.info'"
                 #fehlendeMutterschaftsAnerkennungDialog="dvSharedUiInfoDialog"
                 class="col-12 col-xl-6"
               ></div>
@@ -433,12 +429,8 @@
               </mat-radio-group>
               <div
                 dvSharedUiInfoDialog
-                [dialogTitleKey]="
-                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle'
-                "
-                [dialogMessageKey]="
-                  'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'
-                "
+                [dialogTitleKey]="'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.infoTitle'"
+                [dialogMessageKey]="'shared.form.familiensituation.elternteil-unbekannt-reason.fehlende-vaterschaftsanerkennung.info'"
                 #fehlendeVaterschaftsAnerkennungDialog="dvSharedUiInfoDialog"
                 class="col-12 col-xl-6"
               ></div>
