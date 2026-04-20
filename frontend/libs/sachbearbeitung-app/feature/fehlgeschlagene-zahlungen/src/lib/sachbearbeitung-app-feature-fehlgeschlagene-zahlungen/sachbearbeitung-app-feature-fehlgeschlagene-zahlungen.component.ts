@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   QueryList,
   computed,
   effect,
@@ -68,6 +69,7 @@ import { restrictNumberParam } from '@dv/shared/util/table';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SachbearbeitungAppFeatureFehlgeschlageneZahlungenComponent {
+  @HostBinding('class') klass = 'tw:p-6 tw:bg-white tw:dv-pass-height';
   fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
 
   page = input(<number | undefined>undefined, {

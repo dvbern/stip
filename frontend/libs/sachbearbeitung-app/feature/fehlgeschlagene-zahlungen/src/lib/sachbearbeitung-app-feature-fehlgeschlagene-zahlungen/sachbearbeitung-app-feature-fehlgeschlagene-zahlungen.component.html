@@ -1,125 +1,126 @@
-<div class="container" *transloco="let t">
-  <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
+<div class="tw:max-h-full tw:dv-pass-height-shrink" *transloco="let t">
+  <h1 class="tw:m-0! tw:!text-2xl" data-testid="fehlgeschlagene-zahlungen-title">
     {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.title') }}
   </h1>
-  <div class="tw:my-6">
-    <div class="tw:dv-table tw:relative">
-      <div [class.opacity-50]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading">
-        <table
-          mat-table
-          [dvSharedUiFocusableList]="items"
-          [dataSource]="fehlgeschlageneZahlungenDataSourceSig()"
-          data-testid="sachbearbeitung-app.fehlgeschlagene-zahlungen.table"
-          tabindex="0"
-        >
-          <caption class="cdk-visually-hidden">
-            {{
-              t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.description')
-            }}
-          </caption>
+  <div
+    [class.opacity-50]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading"
+    class="tw:dv-table tw:shadow-none tw:relative tw:my-6 tw:dv-pass-height"
+  >
+    <div clasS="tw:flex tw:overflow-auto tw:shrink">
+      <table
+        class="tw:dv-full-width-table"
+        mat-table
+        [dvSharedUiFocusableList]="items"
+        [dataSource]="fehlgeschlageneZahlungenDataSourceSig()"
+        data-testid="sachbearbeitung-app.fehlgeschlagene-zahlungen.table"
+        tabindex="0"
+      >
+        <caption class="cdk-visually-hidden">
+          {{
+            t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.description')
+          }}
+        </caption>
 
-          <ng-container matColumnDef="fallNummer">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-              {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer') }}
-            </th>
-            <td
-              mat-cell
-              *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-              class="tw:w-32 tw:whitespace-nowrap"
-            >
-              <a [routerLink]="['/infos/buchhaltung', fz.gesuchId]">
-                {{ fz.fallNummer }}
-              </a>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="fallNummer">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+            {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.fallNummer') }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+            class="tw:w-32 tw:whitespace-nowrap"
+          >
+            <a [routerLink]="['/infos/buchhaltung', fz.gesuchId]">
+              {{ fz.fallNummer }}
+            </a>
+          </td>
+        </ng-container>
 
-          <!-- Gesuch -->
-          <ng-container matColumnDef="gesuchNummer">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-              {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.gesuchNummer') }}
-            </th>
-            <td
-              mat-cell
-              *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-              class="tw:w-32 tw:whitespace-nowrap"
-            >
-              {{ fz.gesuchNummer }}
-            </td>
-          </ng-container>
+        <!-- Gesuch -->
+        <ng-container matColumnDef="gesuchNummer">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+            {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.gesuchNummer') }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+            class="tw:w-32 tw:whitespace-nowrap"
+          >
+            {{ fz.gesuchNummer }}
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="nachname">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
-              {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.nachname') }}
-            </th>
-            <td
-              mat-cell
-              *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-              class="tw:whitespace-nowrap"
-              [dvTruncateTooltip]="fz.name"
-            >
-              {{ fz.name }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="nachname">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
+            {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.nachname') }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+            class="tw:whitespace-nowrap"
+            [dvTruncateTooltip]="fz.name"
+          >
+            {{ fz.name }}
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="vorname">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
-              {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname') }}
-            </th>
-            <td
-              mat-cell
-              *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-              class="tw:max-w-32 tw:whitespace-nowrap"
-              [dvTruncateTooltip]="fz.vorname"
-            >
-              {{ fz.vorname }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="vorname">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
+            {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.vorname') }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+            class="tw:max-w-32 tw:whitespace-nowrap"
+            [dvTruncateTooltip]="fz.vorname"
+          >
+            {{ fz.vorname }}
+          </td>
+        </ng-container>
 
-          <!-- letzter Zahlungsversuch / timestamp -->
-          <ng-container matColumnDef="lastTryDate">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-              {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate') }}
-            </th>
-            <td
-              mat-cell
-              *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
-              class="tw:w-32 tw:whitespace-nowrap"
-            >
-              {{ fz.lastTryDate | date: 'dd.MM.yyyy HH:mm' }}
-            </td>
-          </ng-container>
+        <!-- letzter Zahlungsversuch / timestamp -->
+        <ng-container matColumnDef="lastTryDate">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+            {{ t('sachbearbeitung-app.fehlgeschlagene-zahlungen.table.lastTryDate') }}
+          </th>
+          <td
+            mat-cell
+            *dvMatCellDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig()"
+            class="tw:w-32 tw:whitespace-nowrap"
+          >
+            {{ fz.lastTryDate | date: 'dd.MM.yyyy HH:mm' }}
+          </td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            dvSharedUiFocusableListItem
-            mat-row
-            tabindex="-1"
-            *dvMatRowDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig(); columns: displayedColumns"
-            class="highlightable"
-            [routerLink]="['/infos/buchhaltung', fz.gesuchId]"
-          ></tr>
-          <tr class="mat-mdc-row" *matNoDataRow>
-            <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-              {{ t('shared.table.noData') }}
-            </td>
-          </tr>
-        </table>
-
-        <mat-paginator
-          showFirstLastButtons
-          [pageSizeOptions]="pageSizes"
-          [pageSize]="pageSize() ?? defaultPageSize"
-          [pageIndex]="page() ?? 0"
-          [length]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().data?.totalEntries"
-          (page)="paginate($event)"
-        ></mat-paginator>
-      </div>
-      @if (fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading) {
-        <dv-shared-ui-loading
-          class="position-absolute translate-middle start-50 top-50"
-          [type]="'compact'"
-        ></dv-shared-ui-loading>
-      }
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          dvSharedUiFocusableListItem
+          mat-row
+          tabindex="-1"
+          *dvMatRowDef="let fz; dataSource: fehlgeschlageneZahlungenDataSourceSig(); columns: displayedColumns"
+          class="highlightable"
+          [routerLink]="['/infos/buchhaltung', fz.gesuchId]"
+        ></tr>
+        <tr class="mat-mdc-row" *matNoDataRow>
+          <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+            {{ t('shared.table.noData') }}
+          </td>
+        </tr>
+      </table>
     </div>
+    <mat-paginator
+      showFirstLastButtons
+      [pageSizeOptions]="pageSizes"
+      [pageSize]="pageSize() ?? defaultPageSize"
+      [pageIndex]="page() ?? 0"
+      [length]="fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().data?.totalEntries"
+      (page)="paginate($event)"
+    ></mat-paginator>
+    @if (fehlgeschlageneZahlungenStore.fehlgeschlageneZahlungenView().loading) {
+      <dv-shared-ui-loading
+        class="position-absolute translate-middle start-50 top-50"
+        [type]="'compact'"
+      ></dv-shared-ui-loading>
+    }
   </div>
 </div>

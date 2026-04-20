@@ -50,8 +50,23 @@
   @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
 }
 
+@utility dv-pass-height-shrink {
+  @apply tw:flex tw:flex-col tw:overflow-y-auto;
+}
+
+@utility dv-full-width-table {
+  th:first-child,
+  td:first-child {
+    @apply tw:pl-0!;
+  }
+  th:last-child,
+  td:last-child {
+    @apply tw:pr-0!;
+  }
+}
+
 @utility dv-pass-height {
-  @apply tw:flex tw:flex-col tw:overflow-y-auto tw:flex-1;
+  @apply tw:dv-pass-height-shrink tw:flex-1;
 }
 
 @utility dv-historized {

@@ -236,8 +236,10 @@ export class DarlehenStore extends signalStore(
     rxMethod<DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams>(
       pipe(
         tap(() => {
-          patchState(this, () => ({
-            paginatedSbDarlehenDashboard: pending(),
+          patchState(this, (state) => ({
+            paginatedSbDarlehenDashboard: cachedPending(
+              state.paginatedSbDarlehenDashboard,
+            ),
           }));
         }),
         switchMap((req) =>

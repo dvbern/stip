@@ -3,7 +3,7 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
-import { UrlTree } from '@angular/router';
+import { QueryParamsHandling, UrlTree } from '@angular/router';
 
 import {
   BenutzerRole,
@@ -32,7 +32,7 @@ interface NavItemBase {
 
 export interface NavItemLink extends NavItemBase {
   type: 'link';
-  route: UrlTree | (string | undefined)[];
+  route: (string | undefined)[];
   queryParams?: Record<string, string>;
 }
 
@@ -59,9 +59,11 @@ export type NavItem =
   | NavItemSeparator;
 
 export interface TabNavItem {
+  key: string;
   active: boolean | undefined;
   route: UrlTree | (string | undefined)[];
-  queryParams?: Record<string, string | undefined>;
-  name: string;
+  roles?: BenutzerRole[] | SozialdienstBenutzerRole[];
+  queryParams?: Record<string, string | null | undefined>;
+  queryParamsHandling?: QueryParamsHandling;
   testId?: string;
 }
