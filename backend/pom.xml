@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
@@ -246,6 +245,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jaxb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -368,13 +371,13 @@
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>svg</artifactId>
-      <version>${itext.version}</version>
+      <version>${itext.version}</version> <!-- Jilt is not needed at runtime -->
     </dependency>
     <dependency>
       <groupId>cc.jilt</groupId>
       <artifactId>jilt</artifactId>
       <version>1.9.1</version>
-      <scope>provided</scope> <!-- Jilt is not needed at runtime -->
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
@@ -737,8 +740,7 @@
                     VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus,
                     AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
                     InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
-                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus
-                  </schemaMappings>
+                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus</schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
                   <configOptions>
@@ -763,9 +765,7 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
-                  <additionalProperties>
-                    removeEnumValuePrefix=false
-                  </additionalProperties>
+                  <additionalProperties>removeEnumValuePrefix=false</additionalProperties>
                 </configuration>
               </execution>
               <execution>
@@ -801,9 +801,7 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
-                  <additionalProperties>
-                    removeEnumValuePrefix=false
-                  </additionalProperties>
+                  <additionalProperties>removeEnumValuePrefix=false</additionalProperties>
                 </configuration>
               </execution>
             </executions>
