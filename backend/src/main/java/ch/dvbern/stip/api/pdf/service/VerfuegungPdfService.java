@@ -508,11 +508,7 @@ public class VerfuegungPdfService {
         var totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total");
 
         if (isRueckforderung || total < 0) {
-            totalLabel = String.format(
-                "%s %s",
-                totalLabel,
-                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.rueckforderung")
-            );
+            totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.rueckforderung");
         } else {
             totalLabel = String.format(
                 "%s %s",
