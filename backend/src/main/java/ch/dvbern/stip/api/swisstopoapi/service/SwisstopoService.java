@@ -142,13 +142,10 @@ public class SwisstopoService {
             if (gemeindeDataByPlz != null) {
                 setGemeindeDataOfGesuch(gesuchId, gemeindeDataByPlz);
             } else {
-                LOG.error(
-                    String.format(
-                        "Could not perform Building lookup in Swisstopo data with properties, Street: %s, No: %s",
-                        strasse,
-                        hausnummer
-                    ),
-                    e
+                LOG.warn(
+                    "Could not perform Building lookup in Swisstopo data with properties, Street: {}, No: {}",
+                    strasse,
+                    hausnummer
                 );
             }
         }

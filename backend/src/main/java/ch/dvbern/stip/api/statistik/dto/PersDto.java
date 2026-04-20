@@ -45,6 +45,12 @@ public class PersDto {
     @XmlElement(name = "place")
     private Integer place;
 
+    @XmlElement(name = "placeHist")
+    private Integer placeHist;
+
+    @XmlElement(name = "country")
+    private Integer country;
+
     @XmlElement(name = "com")
     private String com;
 

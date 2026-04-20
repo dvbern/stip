@@ -15,14 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.darlehen.type;
+package ch.dvbern.stip.api.statistik.type;
 
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public enum DarlehenBuchhaltungEntryKategorie {
-    FREIWILLIG,
-    GESETZLICH,
-    MANUELLE_KORREKTUR;
+@Getter
+@AllArgsConstructor
+public enum StatistikBuchhaltungType {
+    STIPENDIUM(1),
+    DARLEHEN(2);
 
-    public static final Set<DarlehenBuchhaltungEntryKategorie> DARLEHEN = Set.of(FREIWILLIG, GESETZLICH);
+    private final int bfsCode;
 }

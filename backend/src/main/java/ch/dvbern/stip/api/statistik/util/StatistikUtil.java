@@ -17,11 +17,156 @@
 
 package ch.dvbern.stip.api.statistik.util;
 
-import lombok.experimental.UtilityClass;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
+import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
+import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungType;
+import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
+import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
+import ch.dvbern.stip.stipdecision.type.Kanton;
+import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @UtilityClass
 public class StatistikUtil {
-    public static int booleanToBfsCode(boolean value) {
+    public static int booleanToBfsCode(final boolean value) {
         return value ? 2 : 1;
+    }
+
+    public Kanton getKantonFromTenantIdentifier(final String tenantIdentifier) {
+        return Arrays.stream(Kanton.values())
+            .filter(kanton -> kanton.getTenant().equals(tenantIdentifier))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("No Kanton found for tenant: " + tenantIdentifier));
+    }
+
+    public int getBfsCodeFromTenantIdentifier(final String tenantIdentifier) {
+        return getKantonFromTenantIdentifier(tenantIdentifier).getBfsCode();
+    }
+
+    public static GesuchTranche getLatestGesuchTrancheFromFallByYear(final Fall fall, final int year) {
+        final var trancheStream = fall.getAusbildungs()
+            .stream()
+            .flatMap(ausbildung -> ausbildung.getGesuchs().stream())
+            .flatMap(gesuch -> gesuch.getGesuchTranchen().stream());
+
+        return getLatestGesuchTrancheByYear(trancheStream, year);
+    }
+
+    public static GesuchTranche getLatestGesuchTrancheByYear(
+        final Stream<GesuchTranche> gesuchTrancheStream,
+        final int year
+    ) {
+        return gesuchTrancheStream
+            .filter(tranche -> {
+                final var gueltigkeit = tranche.getGueltigkeit();
+                final var gueltigAb = gueltigkeit.getGueltigAb();
+                final var gueltigBis = gueltigkeit.getGueltigBis();
+                return (gueltigAb != null && gueltigAb.getYear() == year)
+                || (gueltigBis != null && gueltigBis.getYear() == year);
+            })
+            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
+            .orElse(null);
+    }
+
+    public static Integer getBfsGemeindeNrFromGesuch(
+        final GesuchTranche gesuchTranche,
+        final SwisstopoService swisstopoService
+    ) {
+        final var gesuch = gesuchTranche.getGesuch();
+        final var statisticsdata = Optional.ofNullable(gesuch.getStatisticsdata());
+
+        if (statisticsdata.isEmpty()) {
+            final var address = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse();
+            swisstopoService.getGemeindeDataOfGesuch(
+                gesuch.getId(),
+                address.getStrasse(),
+                address.getHausnummer(),
+                address.getPlz(),
+                address.getOrt()
+            );
+        }
+
+        return statisticsdata
+            .map(Statisticsdata::getGemeindeBfsNr)
+            .orElse(null);
+    }
+
+    public static boolean isFirstAusbildung(final GesuchTranche gesuchTranche) {
+        final var lebenslaufItems = gesuchTranche.getGesuchFormular().getLebenslaufItems();
+
+        return lebenslaufItems.stream()
+            .filter(LebenslaufItem::isAusbildung)
+            .anyMatch(LebenslaufItem::isAusbildungAbgeschlossen);
+    }
+
+    public static List<StatistikBuchhaltungUnion> combineBuchhaltungs(
+        final List<Buchhaltung> buchhaltungs,
+        final List<DarlehenBuchhaltungEntry> darlehenBuchhaltungs,
+        int year
+    ) {
+        final var stipendiumStream = buchhaltungs.stream()
+            .map(
+                buchhaltung -> StatistikBuchhaltungUnion.builder()
+                    .gesuch(buchhaltung.getGesuch())
+                    .type(StatistikBuchhaltungType.STIPENDIUM)
+                    .betrag(buchhaltung.getBetrag())
+                    .anzahlSemester(getSemesterCount(buchhaltung.getGesuch(), year))
+                    .build()
+            );
+
+        final var darlehenStream = darlehenBuchhaltungs.stream()
+            .map(
+                darlehenBuchhaltung -> StatistikBuchhaltungUnion.builder()
+                    .gesuch(darlehenBuchhaltung.getGesuch())
+                    .type(StatistikBuchhaltungType.DARLEHEN)
+                    .betrag(darlehenBuchhaltung.getBetrag())
+                    .anzahlSemester(getSemesterCount(darlehenBuchhaltung.getGesuch(), year))
+                    .build()
+            );
+
+        return Stream.concat(stipendiumStream, darlehenStream)
+            .toList();
+    }
+
+    public static Integer getSemesterCount(final Gesuch gesuch, int year) {
+        final var ausbildung = gesuch.getAusbildung();
+        final LocalDate begin = ausbildung.getAusbildungBegin();
+        final LocalDate end = ausbildung.getAusbildungEnd();
+
+        if (begin.getYear() == year) {
+            if (DateUtil.isFruehling(begin)) {
+                return 2;
+            }
+            if (DateUtil.isHerbst(begin)) {
+                return 1;
+            }
+            return null;
+        }
+
+        if (end.getYear() == year) {
+            if (DateUtil.isFruehling(end)) {
+                return 1;
+            }
+            if (DateUtil.isHerbst(end)) {
+                return 2;
+            }
+            return null;
+        }
+
+        return 2;
     }
 }
