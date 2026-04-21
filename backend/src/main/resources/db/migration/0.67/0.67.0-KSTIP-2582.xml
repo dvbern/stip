@@ -3,14 +3,46 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-   <changeSet author="luca.fondo (generated)" id="1776689525410-547">
-      <addColumn tableName="abschluss">
-         <column name="bfs_studien_stufe" type="INTEGER"/>
-      </addColumn>
-   </changeSet>
-   <changeSet author="luca.fondo (generated)" id="1776689525410-548">
-      <addColumn tableName="abschluss_aud">
-         <column name="bfs_studien_stufe" type="INTEGER"/>
-      </addColumn>
-   </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776689525410-547">
+    <addColumn tableName="abschluss">
+      <column name="bfs_studien_stufe" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776689525410-548">
+    <addColumn tableName="abschluss_aud">
+      <column name="bfs_studien_stufe" type="INTEGER"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-550">
+    <dropForeignKeyConstraint baseTableName="darlehen_buchhaltung_entry"
+                              constraintName="FKnp356nv4dh5tyhegwre6q3ei8"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-547">
+    <addColumn tableName="darlehen_buchhaltung_entry">
+      <column name="gesuch_id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-548">
+    <addColumn tableName="darlehen_buchhaltung_entry_aud">
+      <column name="gesuch_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-549">
+    <addForeignKeyConstraint baseColumnNames="gesuch_id"
+                             baseTableName="darlehen_buchhaltung_entry"
+                             constraintName="FKetvr2dmpegsi9ou1ydbm0abrc"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="id"
+                             referencedTableName="gesuch"
+                             validate="true"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-551">
+    <dropColumn columnName="fall_id" tableName="darlehen_buchhaltung_entry"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1776780830365-552">
+    <dropColumn columnName="fall_id" tableName="darlehen_buchhaltung_entry_aud"/>
+  </changeSet>
 </databaseChangeLog>
