@@ -35,7 +35,7 @@
       }
     </div>
 
-    <h3 class="tw:mb-4!">Total</h3>
+    <h3 class="tw:mb-4!">{{ t('total') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
@@ -54,10 +54,34 @@
             {{ zusammenfassung.berechnungStipendium | formatChf }}
           </div>
         </div>
+        <!-- todo: nach merge von KSTIP-3223 , neues verhalten: wenn darlehen und stipendium vorhanden sind, berechnungVorTeilungDarlehen Darstellen!-->
         @if (hasDarlehen) {
+          <div class="tw:border-t tw:border-gray-300 tw:my-6"></div>
           <div class="tw:flex tw:justify-between tw:text-xl tw:font-semibold tw:mb-6">
-            <div>
-              {{ t('totalDarlehen') }}
+            <div class="tw:flex tw:items-center tw:gap-1">
+              <div>
+                {{ t('totalDarlehen') }}
+              </div>
+              <!-- todo translation missing for aria label -->
+              <button
+                type="button"
+                (click)="eigenverdienstInfoDialog.toggle()"
+                class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
+                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+              >
+                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+              </button>
+              <div
+                dvSharedUiInfoDialog
+                [forceDialogPosition]="true"
+                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
+                [dialogMessageParams]="{
+                  einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
+                }"
+                #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
+                class="d-none"
+              ></div>
             </div>
             <div>
               {{ zusammenfassung.berechnungDarlehen | formatChf }}
@@ -142,7 +166,8 @@
               </div>
             </div>
           }
-          @if (hasDarlehen) {
+          <!-- todo: update info texts total representation after merge of KSTIP-3223 -->
+          <!-- @if (hasDarlehen) {
             <div class="tw:flex tw:items-center tw:text-lg tw:mb-2 tw:mt-8">
               <div>
                 {{ t('persoenlich.informationStudierende') }}
@@ -159,8 +184,8 @@
               <div
                 dvSharedUiInfoDialog
                 [forceDialogPosition]="true"
-                [dialogTitleKey]="'hinweis.eigenverdienst.title'"
-                [dialogMessageKey]="'hinweis.eigenverdienst.info'"
+                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
                 [dialogMessageParams]="{
                   einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
                 }"
@@ -168,24 +193,14 @@
                 class="d-none"
               ></div>
             </div>
-          }
+          }-->
         </div>
       </mat-card-content>
     </mat-card>
 
-    <h3 class="tw:mb-4!">Berechnungen</h3>
+    <h3 class="tw:mb-4!">{{ t('berechnungen') }}</h3>
 
     <mat-card class="tw:mb-10">
-      <!-- <mat-card-header>
-        <mat-card-title>
-          <h3 class="fs-3 mb-0">
-            {{ t('title') }}
-          </h3>
-        </mat-card-title>
-      </mat-card-header> -->
-
-      <!-- <div class="border-bottom mt-4 mb-4 border-1"></div> -->
-
       <mat-card-content>
         @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
           @for (teilBerechnung of berechnungen; track $index) {
