@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.darlehen.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;

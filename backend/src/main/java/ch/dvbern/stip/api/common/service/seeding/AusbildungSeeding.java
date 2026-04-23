@@ -119,7 +119,7 @@ public class AusbildungSeeding extends Seeder {
                         .setBfsKategorie(Integer.valueOf(rowMap.get("bfsKategorie")))
                         .setBfsStudienStufe(
                             rowMap.get("bfsStudienStufe").isEmpty() ? null
-                            :Integer.valueOf(rowMap.get("bfsStudienStufe"))
+                                : Integer.valueOf(rowMap.get("bfsStudienStufe"))
                         )
                         .setBerufsbefaehigenderAbschluss(
                             Boolean.parseBoolean(rowMap.get("berufsbefaehigenderAbschluss"))

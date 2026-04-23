@@ -17,11 +17,11 @@
 
 package ch.dvbern.stip.api.personinausbildung.type;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import java.util.EnumSet;
 import java.util.Set;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
