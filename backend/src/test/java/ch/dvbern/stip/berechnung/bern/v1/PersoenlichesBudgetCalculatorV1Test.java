@@ -84,7 +84,7 @@ public class PersoenlichesBudgetCalculatorV1Test {
         gesuch.getLatestGesuchTranche().getGesuchFormular().setElterns(Set.of());
         gesuch.getLatestGesuchTranche().getGesuchFormular().setSteuerdaten(Set.of());
         BerechnungRequestV1 berechnungRequestV1 = BerechnungRequestV1
-            .createRequest(gesuch, gesuch.getLatestGesuchTranche(), ElternTyp.VATER, personenImHaushaltService);
+            .createRequest(gesuch, gesuch.getLatestGesuchTranche(), ElternTyp.VATER, true, personenImHaushaltService);
         var result = PersoenlichesBudgetCalculatorV1.calculatePersoenlichesBudget(
             berechnungRequestV1.getInputPersoenlichesBudget(),
             Optional.empty(),
