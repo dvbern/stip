@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,6 +7,7 @@ import {
   input,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -21,7 +23,9 @@ import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
+  selector: 'dv-shared-feature-verfuegung-zusammenfassung',
   imports: [
+    CommonModule,
     MatCardModule,
     TranslocoDirective,
     RouterLink,
@@ -31,6 +35,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
     SharedUiInfoDialogDirective,
+    MatTooltipModule,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',

@@ -359,10 +359,13 @@ form:not(.readonly) .mat-mdc-form-field-required-marker {
 
 dv-sachbearbeitung-app-feature-verfuegung {
   .mat-mdc-card {
-    border-width: 1px !important;
-    border-color: var(--dv-gray-300) !important;
-    border-style: solid !important;
-    box-shadow: none !important;
+    background-color: var(--dv-gray-100);
+    border-width: 1px;
+    border-color: var(--dv-gray-100);
+    border-style: solid;
+    border-radius: var(--dv-border-radius);
+    box-shadow: none;
+    padding-block: 1rem;
   }
 }
 

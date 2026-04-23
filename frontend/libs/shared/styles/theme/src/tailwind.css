@@ -20,6 +20,8 @@
   --color-dv-warning-subtle: color-mix(in srgb, var(--dv-warning) 20%, white);
   --color-dv-green: var(--dv-green);
   --color-dv-yellow: var(--dv-yellow);
+  --color-dv-blue: var(--dv-blue);
+  --color-dv-muted: var(--dv-gray-600);
 }
 
 /*
