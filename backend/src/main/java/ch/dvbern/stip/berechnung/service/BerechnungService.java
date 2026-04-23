@@ -181,6 +181,7 @@ public class BerechnungService {
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungVorKuerzungUndTeilung,
+            totalVorTeilungDarlehen,
             berechnungStipendium,
             berechnungsresultate,
             monateMitDarlehen,

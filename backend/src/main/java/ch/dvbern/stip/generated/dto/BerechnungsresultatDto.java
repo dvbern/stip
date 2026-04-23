@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer year;
   private @Valid Integer berechnungVorKuerzungUndTeilung;
+  private @Valid Integer berechnungVorTeilungDarlehen;
   private @Valid Integer berechnungStipendium;
   private @Valid List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
   private @Valid Integer monateMitDarlehen;
@@ -75,6 +76,26 @@ public class BerechnungsresultatDto  implements Serializable {
   @JsonProperty("berechnungVorKuerzungUndTeilung")
   public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
+  }
+
+  /**
+   * berechneter stipendienbetrag vor der Teilung in darlehen und stipendium
+   **/
+  public BerechnungsresultatDto berechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+    this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
+    return this;
+  }
+
+  
+  @JsonProperty("berechnungVorTeilungDarlehen")
+  @NotNull
+  public Integer getBerechnungVorTeilungDarlehen() {
+    return berechnungVorTeilungDarlehen;
+  }
+
+  @JsonProperty("berechnungVorTeilungDarlehen")
+  public void setBerechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+    this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
   }
 
   /**
@@ -298,6 +319,7 @@ public class BerechnungsresultatDto  implements Serializable {
     BerechnungsresultatDto berechnungsresultat = (BerechnungsresultatDto) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
+        Objects.equals(this.berechnungVorTeilungDarlehen, berechnungsresultat.berechnungVorTeilungDarlehen) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
         Objects.equals(this.monateMitDarlehen, berechnungsresultat.monateMitDarlehen) &&
@@ -312,7 +334,7 @@ public class BerechnungsresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungStipendium, tranchenBerechnungsresultate, monateMitDarlehen, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, berechnungVorTeilungDarlehen, berechnungStipendium, tranchenBerechnungsresultate, monateMitDarlehen, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungDarlehen);
   }
 
   @Override
@@ -322,6 +344,7 @@ public class BerechnungsresultatDto  implements Serializable {
     
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
+    sb.append("    berechnungVorTeilungDarlehen: ").append(toIndentedString(berechnungVorTeilungDarlehen)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
     sb.append("    monateMitDarlehen: ").append(toIndentedString(monateMitDarlehen)).append("\n");

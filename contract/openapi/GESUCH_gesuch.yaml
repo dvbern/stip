@@ -1596,6 +1596,7 @@ components:
       required:
         - year
         - berechnungVorKuerzungUndTeilung
+        - berechnungVorTeilungDarlehen
         - berechnungStipendium
         - tranchenBerechnungsresultate
         - stipendienanspruch
@@ -1629,6 +1630,9 @@ components:
           type: integer
         anzahlMonateUnterbruch:
           description: 'Die Anzahl Monate von dem Unterbruch der Ausbildung'
+          type: integer
+        berechnungVorTeilungDarlehen:
+          description: 'berechneter stipendienbetrag vor der Teilung in darlehen und stipendium'
           type: integer
         berechnungStipendium:
           description: 'Berechneter Stpendiumsanspruch für das Gesuch'
