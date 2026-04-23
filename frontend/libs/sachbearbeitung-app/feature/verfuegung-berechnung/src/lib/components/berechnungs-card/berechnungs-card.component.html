@@ -1,164 +1,185 @@
-@if (berechnungSig(); as berechnung) {
-  <mat-card class="rounded-4" *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.berechnung'">
-    <mat-card-header>
-      <mat-card-title>
-        <h1 class="tw:text-lg! tw:mb-1">
-          {{ t(titleKeySig()) }}
-        </h1>
-        <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
-          <span>{{ berechnung.name }}</span>
-          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
-            <span>
-              {{ t('persoenlich.sv-nummer') }}
-              {{ berechnung.sozialversicherungsnummer }},
-              {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
-            </span>
+<ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.berechnung'">
+  @if (berechnungSig(); as berechnung) {
+    <h2 class="tw:mb-6!">
+      {{ t(titleKeySig()) }}
+    </h2>
+    <div class="tw:text-lg tw:flex tw:flex-col tw:gap-2 tw:pb-3">
+      <div class="tw:flex tw:gap-2">
+        <!-- name -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1 tw:font-semibold">{{ berechnung.name }}</div>
 
-            <span>
-              {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
-
-              {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
-
-              {{ t('months') }}: {{ berechnung.anzahlMonate }}
-            </span>
+        <!-- sv-numer -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold">
+            {{ t('persoenlich.sv-nummer') }}
           </span>
-
-          @switch (berechnung.typ) {
-            @case ('persoenlich') {
-              <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
-            }
-            @case ('familien') {
-              <span
-                class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500"
-              >
-                <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
-                <span class="tw:text-gray-500 tw:text-sm">
-                  {{ t('veranlagungscode') }}:
-                  {{ berechnung.veranlagungscode }}
-                </span>
-              </span>
-            }
-          }
+          <span>
+            {{ berechnung.sozialversicherungsnummer }}
+          </span>
         </div>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-accordion class="full-width large" multi>
-        <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
-          <ng-content select="dv-persoenliche-einnahmen,dv-familien-einnahmen"></ng-content>
-        </dv-berechnungs-expansion-panel>
-        <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'kosten'">
-          <ng-content select="dv-persoenliche-kosten,dv-familien-kosten"></ng-content>
-        </dv-berechnungs-expansion-panel>
-      </mat-accordion>
-    </mat-card-content>
 
-    <mat-card-footer class="px-3 py-4">
+        <!-- geburtsdatum -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold">
+            {{ t('persoenlich.geburtsdatum') }}
+          </span>
+          <span>
+            {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
+          </span>
+        </div>
+      </div>
+
+      <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
+        <span>
+          {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
+        </span>
+
+        <span>
+          {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }}, {{ t('to') }}:
+          {{ berechnung.gueltigBis | date: 'MM.yyyy' }}, {{ t('months') }}: {{ berechnung.anzahlMonate }}
+        </span>
+      </span>
+
       @switch (berechnung.typ) {
         @case ('persoenlich') {
-          <div class="tw:mt-3">
-            <!-- fehlbetrag -->
-            <dv-position
-              type="title"
-              [titleSig]="t('persoenlich.fehlbetrag')"
-              [infoSig]="t('persoenlich.fehlbetrag.info')"
-              [amountSig]="berechnung.fehlbetrag | formatChf"
-            ></dv-position>
-
-            <!-- proKopfTeilung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('persoenlich.proKopfTeilung')"
-              [amountSig]="berechnung.proKopfTeilung | formatChf"
-            ></dv-position>
-
-            <!-- budgetTranche -->
-            <dv-position
-              type="title"
-              class="tw:mt-2"
-              [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
-              [amountSig]="berechnung.budgetTranche | formatChf"
-            ></dv-position>
-
-            <!-- Hinweis 1. schwarzarbeitBGSA -->
-            <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
-              {{ t('hinweis.schwarzarbeitBGSA') }}
-            </div>
-
-            <!-- Hinweis 2. hoechstwerte -->
-            <div class="tw:text-gray-500 tw:text-sm">
-              {{ t('hinweis.hoechstwerte') }}
-            </div>
-          </div>
+          <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
         }
         @case ('familien') {
-          <div class="tw:mt-3">
-            <!--  einnahmeUeberschuss -->
-            <dv-position
-              type="title"
-              [titleSig]="t('familien.einnahmeueberschuss')"
-              [infoSig]="t('familien.einnahmeueberschuss.info')"
-              [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
-            ></dv-position>
-
-            <!-- proKopfTeilungKinderInAusbildung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.anzahlKinderInAusbildung')"
-              [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
-            ></dv-position>
-
-            <!-- anrechenbareElterlicheLeistung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.elterlicheLeistung')"
-              [infoSig]="t('familien.elterlicheLeistung.info')"
-              [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
-            ></dv-position>
-
-            <!-- halbierungsReduktion -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.reduktionArt15Abs2ABG')"
-              [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
-              [amountSig]="berechnung.halbierungsReduktion | formatChf"
-            ></dv-position>
-
-            <!-- Fehlbetrag -->
-            <dv-position
-              type="title"
-              class="tw:mt-10"
-              [titleSig]="t('familien.fehlbetrag')"
-              [infoSig]="t('familien.fehlbetrag.info')"
-              [amountSig]="berechnung.fehlbetrag | formatChf"
-            ></dv-position>
-
-            <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.proKopfTeilung')"
-              [amountSig]="berechnung.proKopfTeilung | formatChf"
-            ></dv-position>
-
-            <!-- Ungedeckter Anteil Lebenshaltungskosten -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
-              [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
-              [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
-            ></dv-position>
-
-            <!-- Hinweis 1. schwarzarbeit BGSA -->
-            <div class="tw:mt-10 tw:text-gray-500 tw:text-sm">
-              {{ t('hinweis.schwarzarbeitBGSA') }}
-            </div>
-            <!-- Hinweis 2. -->
-            <div class="tw:text-gray-500 tw:text-sm">
-              {{ t('hinweis.hoechstwerte') }}
-            </div>
-          </div>
+          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
+            <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
+            <span class="tw:text-gray-500 tw:text-sm">
+              {{ t('veranlagungscode') }}:
+              {{ berechnung.veranlagungscode }}
+            </span>
+          </span>
         }
       }
-    </mat-card-footer>
-  </mat-card>
-}
+    </div>
+
+    <mat-accordion class="dv-full-width dv-large" multi>
+      <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
+        <ng-content select="dv-persoenliche-einnahmen,dv-familien-einnahmen"></ng-content>
+      </dv-berechnungs-expansion-panel>
+      <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'kosten'">
+        <ng-content select="dv-persoenliche-kosten,dv-familien-kosten"></ng-content>
+      </dv-berechnungs-expansion-panel>
+    </mat-accordion>
+
+    <mat-card>
+      <!-- <mat-card-header>
+        <mat-card-title></mat-card-title>
+      </mat-card-header> -->
+      <mat-card-content>
+        @switch (berechnung.typ) {
+          @case ('persoenlich') {
+            <div class="tw:mt-3">
+              <!-- fehlbetrag -->
+              <dv-position
+                type="title"
+                [titleSig]="t('persoenlich.fehlbetrag')"
+                [infoSig]="t('persoenlich.fehlbetrag.info')"
+                [amountSig]="berechnung.fehlbetrag | formatChf"
+              ></dv-position>
+
+              <!-- proKopfTeilung -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('persoenlich.proKopfTeilung')"
+                [amountSig]="berechnung.proKopfTeilung | formatChf"
+              ></dv-position>
+
+              <!-- budgetTranche -->
+              <dv-position
+                type="title"
+                class="tw:mt-2"
+                [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
+                [amountSig]="berechnung.budgetTranche | formatChf"
+              ></dv-position>
+
+              <!-- Hinweis 1. schwarzarbeitBGSA -->
+              <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
+                {{ t('hinweis.schwarzarbeitBGSA') }}
+              </div>
+
+              <!-- Hinweis 2. hoechstwerte -->
+              <div class="tw:text-gray-500 tw:text-sm">
+                {{ t('hinweis.hoechstwerte') }}
+              </div>
+            </div>
+          }
+          @case ('familien') {
+            <div class="tw:mt-3">
+              <!--  einnahmeUeberschuss -->
+              <dv-position
+                type="title"
+                [titleSig]="t('familien.einnahmeueberschuss')"
+                [infoSig]="t('familien.einnahmeueberschuss.info')"
+                [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
+              ></dv-position>
+
+              <!-- proKopfTeilungKinderInAusbildung -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('familien.anzahlKinderInAusbildung')"
+                [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
+              ></dv-position>
+
+              <!-- anrechenbareElterlicheLeistung -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('familien.elterlicheLeistung')"
+                [infoSig]="t('familien.elterlicheLeistung.info')"
+                [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
+              ></dv-position>
+
+              <!-- halbierungsReduktion -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('familien.reduktionArt15Abs2ABG')"
+                [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
+                [amountSig]="berechnung.halbierungsReduktion | formatChf"
+              ></dv-position>
+
+              <!-- Fehlbetrag -->
+              <dv-position
+                type="title"
+                class="tw:mt-10"
+                [titleSig]="t('familien.fehlbetrag')"
+                [infoSig]="t('familien.fehlbetrag.info')"
+                [amountSig]="berechnung.fehlbetrag | formatChf"
+              ></dv-position>
+
+              <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('familien.proKopfTeilung')"
+                [amountSig]="berechnung.proKopfTeilung | formatChf"
+              ></dv-position>
+
+              <!-- Ungedeckter Anteil Lebenshaltungskosten -->
+              <dv-position
+                class="tw:mt-2"
+                [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
+                [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
+                [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
+              ></dv-position>
+
+              <!-- Hinweis 1. schwarzarbeit BGSA -->
+              <div class="tw:mt-10 tw:text-gray-500 tw:text-sm">
+                {{ t('hinweis.schwarzarbeitBGSA') }}
+              </div>
+              <!-- Hinweis 2. -->
+              <div class="tw:text-gray-500 tw:text-sm">
+                {{ t('hinweis.hoechstwerte') }}
+              </div>
+            </div>
+          }
+        }
+      </mat-card-content>
+
+      <!-- todo: paddings not finished yet -->
+      <!-- <mat-card-footer class="tw:px-2 tw:py-3">
+      </mat-card-footer> -->
+    </mat-card>
+  }
+</ng-container>

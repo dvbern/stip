@@ -8,7 +8,8 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
@@ -28,7 +29,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
   selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
   imports: [
     MatCardModule,
-    TranslocoPipe,
+    MatSlideToggleModule,
     MatExpansionModule,
     BerechnungsCardComponent,
     PersoenlicheEinnahmenComponent,
@@ -36,6 +37,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
     FamilienEinnahmenComponent,
     FamilienKostenComponent,
     SharedUiLoadingComponent,
+    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',

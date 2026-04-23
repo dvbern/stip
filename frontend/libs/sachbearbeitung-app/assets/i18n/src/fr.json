@@ -476,6 +476,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "de",
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",
+  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Masquer les valeurs nulles",
   "sachbearbeitung-app.darlehen.title": "Prêts",
   "sachbearbeitung-app.darlehen-dashboard.title": "Dashboard prêts",
   "sachbearbeitung-app.darlehen-dashboard.quick-filter.ALLE_DARLEHEN": "Tous les prêts",

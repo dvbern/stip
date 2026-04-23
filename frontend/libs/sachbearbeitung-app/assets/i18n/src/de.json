@@ -476,6 +476,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "Von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "Bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
+  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Nullwerte ausblenden",
   "sachbearbeitung-app.darlehen.title": "Darlehen",
   "sachbearbeitung-app.darlehen-dashboard.title": "Darlehen Dashboard",
   "sachbearbeitung-app.darlehen-dashboard.quick-filter.ALLE_DARLEHEN": "Alle Darlehen",

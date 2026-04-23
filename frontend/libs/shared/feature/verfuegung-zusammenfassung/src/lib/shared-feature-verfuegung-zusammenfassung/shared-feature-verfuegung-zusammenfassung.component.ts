@@ -17,7 +17,6 @@ import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -29,7 +28,6 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     MatCardModule,
     TranslocoDirective,
     RouterLink,
-    SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiDownloadButtonDirective,

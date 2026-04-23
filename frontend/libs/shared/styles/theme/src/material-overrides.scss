@@ -275,12 +275,12 @@ $dv-all-colors: (
   }
 }
 
-.mat-mdc-card-content .mat-accordion.full-width {
+.mat-mdc-card-content .mat-accordion.dv-full-width {
   display: block;
   margin: 0 -16px;
 }
-.mat-accordion.large .mat-expansion-panel-header,
-.mat-expansion-panel.large .mat-expansion-panel-header {
+.mat-accordion.dv-large .mat-expansion-panel-header,
+.mat-expansion-panel.dv-large .mat-expansion-panel-header {
   height: auto;
 }
 
