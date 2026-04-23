@@ -1,0 +1,134 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  /statistik:
+    post:
+      tags:
+        - Statistik
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: Job creation accepted
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: createStatistikJob
+      summary: Creates background statistik job
+
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statistik'
+          description: Token returned
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllStatistiks
+      summary: Get All statistiks
+
+  '/statistik/{statistikId}/token':
+    parameters:
+      - name: statistikId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: Token returned
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/FileDownloadToken'
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getStatistikDownloadToken
+      summary: get Token to download Statistik
+
+  '/statistik/download':
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: File returned
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+      operationId: getStatistikDownload
+      summary: Download statistik dokument
+      x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+
+  schemas:
+    Statistik:
+      type: object
+      properties:
+        id:
+          $ref: './components/common.yaml#/UUID'
+        year:
+          type: integer
+          format: int32
+        filename:
+          type: string
+        filesize:
+          type: string
+
+security:
+  $ref: './components/security.yaml#/security'

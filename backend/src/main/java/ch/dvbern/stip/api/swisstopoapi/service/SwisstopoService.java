@@ -85,13 +85,7 @@ public class SwisstopoService {
         try {
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            LOG.error(
-                String.format(
-                    "Could not schedule %s",
-                    SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX
-                ),
-                e
-            );
+            LOG.error("Could not schedule {}", SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX, e);
         }
     }
 
