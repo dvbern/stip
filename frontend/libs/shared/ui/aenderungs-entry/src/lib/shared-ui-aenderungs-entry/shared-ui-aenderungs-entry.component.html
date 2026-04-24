@@ -1,8 +1,8 @@
 <!-- Änderung Titel -->
 <div class="tw:flex tw:grow tw:flex-col">
   <div class="tw:flex tw:items-baseline">
-    <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
-      <i class="material-symbols-rounded fs-5">edit</i>
+    <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="tw:mr-2">
+      <i class="material-symbols-rounded tw:text-lg">edit</i>
     </dv-shared-ui-icon-chip>
     @if (tranche.status === 'IN_BEARBEITUNG_GS') {
       <h3 data-testid="cockpit-periode-title">
@@ -15,7 +15,7 @@
           <span>{{ 'shared.dashboard.aenderung.title' | transloco }}</span>
           <span>&nbsp;</span>
         </h3>
-        <h6 class="card-subtitle fw-medium small mt-2 mb-2">
+        <h6 class="card-subtitle fw-medium small tw:mt-2 tw:mb-2">
           <span>{{ tranche.gueltigAb | date: 'dd.MM.yyyy' }}</span>
           <span> - </span>
           <span>{{ tranche.gueltigBis | date: 'dd.MM.yyyy' }}</span>
@@ -27,17 +27,17 @@
   <!-- Status des Antrags -->
   <div class="tw:flex tw:grow tw:flex-col tw:align-top">
     @if (tranche.comment) {
-      <span class="fw-normal small mt-4">{{ tranche.comment }}</span>
+      <span class="fw-normal small tw:mt-6">{{ tranche.comment }}</span>
     }
-    <span class="fw-normal small mt-4">{{ 'shared.dashboard.aenderung.status.title' | transloco }}</span>
+    <span class="fw-normal small tw:mt-6">{{ 'shared.dashboard.aenderung.status.title' | transloco }}</span>
     <span class="fw-medium">
       {{ 'shared.gesuch.status.tranche.' + tranche.status | transloco }}
     </span>
-    <div class="tw:grow mb-3"></div>
+    <div class="tw:grow tw:mb-4"></div>
     @if (gesuch.canDeleteAenderung) {
       <button
         type="button"
-        class="btn btn-outline-primary mb-2 w-100"
+        class="tw:dv-button-outline tw:mb-2 tw:w-full"
         data-testid="shared.dashboard.aenderung.delete"
         (click)="deleteAenderung.emit(tranche.id)"
       >
@@ -45,7 +45,7 @@
       </button>
     }
     <a
-      class="btn btn-primary w-100"
+      class="tw:dv-button-main-primary tw:w-full"
       [class.btn-outline-primary]="tranche.status !== 'IN_BEARBEITUNG_GS'"
       data-testid="cockpit-gesuch-edit"
       [routerLink]="['/gesuch', gesuch.id, 'aenderung', tranche.id]"

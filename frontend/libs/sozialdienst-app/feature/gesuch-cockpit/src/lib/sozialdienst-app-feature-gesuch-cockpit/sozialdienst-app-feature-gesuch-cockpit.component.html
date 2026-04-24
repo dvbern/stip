@@ -3,7 +3,7 @@
     <div class="gray-bg"></div>
   </div>
 
-  <div class="tw:relative tw:my-12 tw:justify-between container">
+  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
     <h1 class="tw:!mb-8 tw:!text-white">
       {{ t('welcome.title', { name: benutzerNameSig() }) }}
     </h1>
@@ -30,7 +30,7 @@
               data-testid="cockpit-create-ausbildung"
               type="button"
               (click)="createAusbildung(fall.id)"
-              class="btn btn-danger d-flex align-items-center tw:w-max"
+              class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
             >
               <dv-shared-ui-icon-chip>
                 <i class="material-symbols-rounded">add</i>
@@ -61,7 +61,7 @@
               Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
               sind und weitere nützliche Grundlagen.
             </p>
-            <a class="btn btn-outline-primary tw:mt-3 tw:w-full"> Stipendien und Darlehen </a>
+            <a class="tw:dv-button-outline tw:mt-3 tw:w-full"> Stipendien und Darlehen </a>
           </div>
         </div>
       </div>

@@ -11,14 +11,14 @@
       <dv-shared-ui-icon-chip class="tw:mr-3">
         <i class="material-symbols-rounded title-icon">science</i>
       </dv-shared-ui-icon-chip>
-      <h1 class="tw:mb-4! tw:flex tw:justify-between tw:w-3/5">
+      <h1 class="tw:mb-4 tw:flex tw:justify-between tw:w-3/5 tw:text-4xl tw:font-semibold">
         {{ t('demo-data-app.overview.title') }}
-        <div class="tw:flex tw:gap-1">
+        <div class="tw:flex tw:gap-1 tw:text-base">
           @if (demoDataList?.demoDatas?.length) {
             @if (demoDataStore.demoDataTestBerechnungResultats().data; as berechnungResultats) {
               @if (previousBerechnungsResult.valueSig(); as previousValue) {
                 <button
-                  class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                  class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
                   type="button"
                   (click)="compareResults(previousValue, berechnungResultats)"
                   [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-compare')"
@@ -27,7 +27,7 @@
                 </button>
               }
               <button
-                class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
                 type="button"
                 (click)="saveResult(berechnungResultats)"
                 [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-save')"
@@ -36,7 +36,7 @@
               </button>
             }
             <button
-              class="btn btn-outline-dark tw:font-normal! tw:inline-flex! tw:items-center tw:p-2 tw:ml-5!"
+              class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center tw:ml-5"
               type="button"
               (click)="testDemoDataBerechnung()"
             >
@@ -72,7 +72,7 @@
                 <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
                 <div class="tw:flex tw:gap-6 tw:items-center">
                   <button
-                    class="btn btn-outline-dark btn-sm tw:inline-flex! tw:items-center tw:p-2"
+                    class="tw:dv-button-icon-outline btn-sm tw:inline-flex! tw:items-center tw:p-2"
                     type="button"
                     (click)="applyDemoData(demoData.id)"
                     [matTooltip]="t('demo-data-app.overview.apply-demo-data.apply')"
@@ -123,8 +123,8 @@
             } @empty {
               <li>
                 <dv-shared-ui-info-container [type]="'info'">
-                  <span class="text-info material-symbols-rounded me-3">info</span>
-                  <div class="ms-3">{{ t('demo-data-app.overview.no-data') }}</div>
+                  <span class="tw:text-dv-blue material-symbols-rounded tw:mr-4">info</span>
+                  <div class="tw:ml-4">{{ t('demo-data-app.overview.no-data') }}</div>
                 </dv-shared-ui-info-container>
               </li>
             }
@@ -132,7 +132,9 @@
         </div>
         <aside class="tw:sticky tw:top-0">
           @if (demoDataList) {
-            <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.import-details.title') }}</h2>
+            <h2 class="tw:font-semibold tw:mb-4 tw:text-xl">
+              {{ t('demo-data-app.overview.import-details.title') }}
+            </h2>
             <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
               <dt class="tw:whitespace-nowrap tw:!font-semibold">
                 {{ t('demo-data-app.overview.import-details.imported-by') }}:
@@ -175,7 +177,7 @@
               </dd>
             </dl>
           }
-          <h2 class="tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.file-upload.title') }}</h2>
+          <h2 class="tw:font-semibold tw:mb-4! tw:text-xl!">{{ t('demo-data-app.overview.file-upload.title') }}</h2>
           <dv-shared-ui-file-upload
             class="tw:mb-6"
             [allowedFileTypesSig]="['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']"
@@ -185,7 +187,7 @@
           @if (selectedFileSig()?.size) {
             <button
               type="button"
-              class="btn btn-primary"
+              class="tw:dv-button-main-primary"
               data-testid="button-save"
               (click)="createDemoDataImport()"
               [disabled]="selectedFileSig()?.size === 0"

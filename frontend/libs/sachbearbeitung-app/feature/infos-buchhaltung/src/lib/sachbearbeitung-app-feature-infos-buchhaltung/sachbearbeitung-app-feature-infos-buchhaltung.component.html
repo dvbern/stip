@@ -7,7 +7,7 @@
       @if (buchhaltungStore.buchhaltung().data?.canRetryAuszahlung) {
         <button
           type="button"
-          class="btn btn-outline-primary tw:flex tw:items-center tw:gap-2"
+          class="tw:dv-button-outline tw:flex tw:items-center tw:gap-2"
           [disabled]="buchhaltungStore.retriedAuszahlung() | rdIsPending: { ignoreInitial: true }"
           (click)="retryAuszahlung()"
           data-testid="sachbearbeitung-app.buchhaltung-info.retry"
@@ -17,7 +17,7 @@
         </button>
       }
 
-      <button type="button" (click)="createBuchhaltungsKorrektur()" class="btn btn-outline-primary">
+      <button type="button" (click)="createBuchhaltungsKorrektur()" class="tw:dv-button-outline">
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
       </button>
     </div>
@@ -135,11 +135,11 @@
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.info' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw:whitespace-nowrap">
-            <div class="tw:flex gap-1">
+            <div class="tw:flex tw:gap-1">
               <button
                 type="button"
                 (click)="showDetails(buchhaltung.entry)"
-                class="dv-icon-button dv-icon-button-md text-info"
+                class="tw:dv-button-icon tw:text-dv-blue"
                 [matTooltip]="'sachbearbeitung-app.infos.buchhaltung.table.moreInfo' | transloco"
               >
                 <span class="material-symbols-rounded">info</span>
@@ -147,7 +147,7 @@
               @if (buchhaltung.entry.verfuegungId) {
                 <button
                   type="button"
-                  class="btn btn-outline-primary fs-7 tw:p-4 tw:text-sm"
+                  class="tw:dv-button-outline fs-7 tw:p-4 tw:text-sm"
                   [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
                   [matTooltip]="'shared.dokumente.table.download' | transloco"
                 >
@@ -167,15 +167,15 @@
           mat-row
           *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
           [ngClass]="{
-            'tw:!bg-(--dv-blue-bg-subtle)': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
-            'tw:!bg-(--dv-green-bg-subtle)': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
-            'tw:!bg-(--dv-yellow-bg-subtle)': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
+            'tw:!bg-(--dv-blue-subtle)': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
+            'tw:!bg-(--dv-green-subtle)': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
+            'tw:!bg-(--dv-yellow-subtle)': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
           }"
         ></tr>
         <tr
           mat-row
           *matRowDef="let separator; columns: ['separator']; when: isStartOfNewGesuch"
-          class="tw:!h-4 tw:!bg-(--dv-red-bg-subtle)"
+          class="tw:!h-4 tw:!bg-(--dv-red-subtle)"
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
@@ -192,7 +192,7 @@
       </mat-paginator>
       @if (buchhaltungStore.buchhaltung() | rdIsPending) {
         <dv-shared-ui-loading
-          class="position-absolute translate-middle start-50 top-50"
+          class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
           [type]="'compact'"
         ></dv-shared-ui-loading>
       }

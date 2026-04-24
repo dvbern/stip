@@ -19,5 +19,5 @@ export class SharedUiVersionTextComponent {
   };
 
   @HostBinding('class') defaultClasses =
-    'position-absolute me-2 bottom-0 end-0 text-end';
+    'tw:absolute tw:mr-2 tw:bottom-0 tw:right-0 tw:text-end';
 }

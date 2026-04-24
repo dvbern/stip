@@ -1,5 +1,47 @@
 @import 'tailwindcss' prefix(tw);
 @import './components/table.css';
+@import './components/button.css';
+
+@source inline("tw:bg-dv-blue-subtle");
+
+@theme inline {
+  --color-dv-yellow: #ffc107;
+  --color-dv-yellow-subtle: #fff3cd;
+  --color-dv-yellow-dark: #503d04;
+  --color-dv-blue: #298bef;
+  --color-dv-blue-subtle: #d4e8fc;
+  --color-dv-blue-dark: #004784;
+  --color-dv-green: #2eb85c;
+  --color-dv-green-subtle: #eff7e0;
+  --color-dv-green-dark: #005322;
+  --color-dv-green-hover: #1e783c;
+  --color-dv-gray: #677589;
+  --color-dv-gray-subtle: #eeeeee;
+  --color-dv-gray-light: #7f7f8b;
+  --color-dv-gray-dark: #4e4e4e;
+  --color-dv-gray-darker: color-mix(
+    in srgb,
+    var(--tw-color-dv-gray-dark) 20%,
+    black
+  );
+  --color-dv-red: #fe5454;
+  --color-dv-red-subtle: #ffdddd;
+  --color-dv-red-dark: #930016;
+  --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
+  --color-dv-warning: var(--tw-color-dv-yellow);
+  --color-dv-warning-subtle: color-mix(
+    in srgb,
+    var(--tw-color-dv-yellow) 20%,
+    white
+  );
+  --color-dv-border: #dee2e6;
+
+  --color-dv-main-info: var(--tw-color-dv-blue);
+  --color-dv-main-danger: var(--tw-color-dv-red);
+  --color-dv-main-success: var(--tw-color-dv-green);
+  --color-dv-main-warn: var(--tw-color-dv-yellow);
+  --color-dv-main-primary: var(--tw-color-dv-gray-dark);
+}
 
 @layer base {
   * {
@@ -11,15 +53,39 @@
   .btn {
     @apply tw:transition-opacity!;
   }
-}
+  :root {
+    --dv-base-font-size: 16px;
+    --content-max-width: 1440px;
+    --header-size: 76px;
 
-@theme {
-  --color-dv-red: var(--dv-red);
-  --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
-  --color-dv-warning: var(--dv-warning);
-  --color-dv-warning-subtle: color-mix(in srgb, var(--dv-warning) 20%, white);
-  --color-dv-green: var(--dv-green);
-  --color-dv-yellow: var(--dv-yellow);
+    --dv-body-bg: #fafbfd;
+    --dv-border-color: var(--tw-color-dv-border);
+
+    --dv-overridden-body-bg: #f3f3f3;
+    --dv-blue: var(--tw-color-dv-blue);
+    --dv-blue-subtle: var(--tw-color-dv-blue-subtle);
+    --dv-red: var(--tw-color-dv-red);
+    --dv-red-subtle: var(--tw-color-dv-red-subtle);
+    --dv-green: var(--tw-color-dv-green);
+    --dv-green-subtle: var(--tw-color-dv-green-subtle);
+    --dv-yellow: var(--tw-color-dv-yellow);
+    --dv-yellow-subtle: var(--tw-color-dv-yellow-subtle);
+    --dv-gray: var(--tw-color-dv-gray);
+    --dv-gray-subtle: var(--tw-color-dv-gray-dark);
+
+    --dv-secondary-color: var(--dv-gray);
+    --dv-light-bg-subtle: #fff;
+    --dv-light-border-subtle: var(--dv-gray-subtle);
+    --dv-border-radius: 8px;
+
+    --mat-dialog-container-min-width: min(500px, 100%);
+    --mat-tooltip-supporting-text-line-height: 1.5;
+    --mat-tooltip-supporting-text-size: 14px;
+
+    @media (min-width: theme('screens.lg')) {
+      --header-size: 110px;
+    }
+  }
 }
 
 /*
@@ -34,8 +100,33 @@
   This is a workaround to prevent this error by adding a normal classname as first classname.
 */
 
-@utility max-w-half {
+@utility dv-page-body {
+  @apply tw:relative tw:lg:mt-(--header-size) tw:mt-(--header-size);
+  position: relative;
+  height: calc(100vh - var(--header-size));
+}
+
+@utility dv-container {
+  @apply tw:max-w-xl tw:sm:max-w-3xl tw:md:max-w-240 tw:lg:max-w-285 tw:xl:max-w-330 tw:w-full tw:px-3 tw:mx-auto;
+}
+
+@utility dv-max-w-half {
   max-width: min(45vw, 547px);
+}
+
+@utility dv-simple-table {
+  @apply tw:w-full tw:mb-4 tw:align-top tw:bg-white tw:-m-2 tw:p-2 tw:rounded-sm tw:mt-6;
+  th {
+    @apply tw:text-left;
+  }
+  th,
+  td {
+    @apply tw:p-2;
+  }
+  th,
+  tr:not(:last-child) td {
+    @apply tw:border-b tw:border-dv-border;
+  }
 }
 
 @utility dv-table {

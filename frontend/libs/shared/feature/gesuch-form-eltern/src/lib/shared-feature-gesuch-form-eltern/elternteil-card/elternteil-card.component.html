@@ -1,23 +1,25 @@
 <button
   type="button"
   [attr.data-testid]="'button-add-' + elternTyp.toLocaleLowerCase()"
-  class="card shadow-sm border-1 w-100"
+  class="tw:flex tw:flex-col tw:bg-white tw:border tw:border-dv-border tw:rounded-lg tw:shadow tw:w-full tw:cursor-pointer"
   (click)="handleClick()"
   [disabled]="hidden"
   *transloco="let t"
 >
-  <div class="card-body text-start w-100">
+  <div class="tw:p-6 tw:text-start tw:w-full">
     @if (elternteil; as parent) {
       <!-- display Elternteil -->
       <div>
-        <div class="d-flex justify-content-between align-items-center w-100 mb-4">
-          <h4 class="d-flex align-items-center m-0">{{ parent.nachname }} {{ parent.vorname }}</h4>
-          <span class="flex-grow-1"></span>
-          <dv-shared-ui-icon-chip class="flex-shrink-0 chip">
-            <i class="material-symbols-rounded fs-2 text-white">check</i>
+        <div class="tw:flex tw:justify-between tw:items-center tw:w-full tw:mb-6">
+          <h1 class="tw:text-xl tw:font-semibold tw:flex tw:items-center m-0">
+            {{ parent.nachname }} {{ parent.vorname }}
+          </h1>
+          <span class="tw:grow"></span>
+          <dv-shared-ui-icon-chip class="tw:shrink-0 chip">
+            <i class="material-symbols-rounded tw:text-3xl! tw:text-white">check</i>
           </dv-shared-ui-icon-chip>
         </div>
-        <div class="d-flex justify-content-between align-items-end w-100">
+        <div class="tw:flex tw:justify-between align-items-end tw:w-full">
           @if (parent.adresse; as adresse) {
             <small>
               @if (adresse.coAdresse) {
@@ -29,18 +31,18 @@
             </small>
           }
           @if (!readonly) {
-            <i class="material-symbols-rounded me-2 fs-2">edit</i>
+            <i class="material-symbols-rounded tw:mr-2 tw:text-3xl!">edit</i>
           } @else {
-            <i class="material-symbols-rounded me-2 fs-2">visibility</i>
+            <i class="material-symbols-rounded tw:mr-2 tw:text-3xl!">visibility</i>
           }
         </div>
       </div>
     } @else {
       <!-- placeholder -->
       <div>
-        <div class="d-flex justify-content-between align-items-center w-100">
+        <div class="tw:flex tw:justify-between tw:items-center tw:w-full">
           <h4 class="tw:flex tw:items-center tw:m-0">
-            <i class="material-symbols-rounded me-3 fs-1">{{ elternTyp === 'MUTTER' ? 'woman' : 'man' }}</i>
+            <i class="material-symbols-rounded tw:mr-4 tw:text-4xl!">{{ elternTyp === 'MUTTER' ? 'woman' : 'man' }}</i>
             <span class="tw:flex tw:flex-col">
               {{ t('shared.form.eltern.' + elternTyp + '.title') }}
               @if (hidden) {
@@ -49,7 +51,7 @@
             </span>
           </h4>
           @if (!hidden) {
-            <i class="material-symbols-rounded fs-2">add</i>
+            <i class="material-symbols-rounded tw:text-3xl!">add</i>
           }
         </div>
       </div>

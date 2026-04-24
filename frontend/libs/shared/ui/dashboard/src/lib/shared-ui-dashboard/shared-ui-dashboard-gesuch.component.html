@@ -98,7 +98,7 @@
           @if (gesuch.isActive) {
             @if (gesuch.canEdit) {
               <a
-                class="btn btn-primary"
+                class="tw:dv-button-main-primary"
                 data-testid="cockpit-gesuch-edit"
                 [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
               >
@@ -108,7 +108,7 @@
               @if (gesuch.canDelete) {
                 <button
                   type="button"
-                  class="btn btn-outline-primary"
+                  class="tw:dv-button-outline"
                   data-testid="shared.dashboard.gesuch.delete"
                   (click)="deleteGesuch.emit(gesuch.id)"
                 >
@@ -117,7 +117,7 @@
               }
             } @else if (gesuch.gesuchStatus === 'IN_BEARBEITUNG_GS') {
               <a
-                class="btn btn-primary"
+                class="tw:dv-button-main-primary"
                 data-testid="cockpit-gesuch-edit"
                 [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
               >
@@ -125,7 +125,7 @@
               </a>
             } @else if (missingDocTrancheId) {
               <a
-                class="btn btn-primary"
+                class="tw:dv-button-main-primary"
                 data-testid="cockpit-gesuch-upload-missing-documents"
                 [routerLink]="['/gesuch', 'dokumente', gesuch.id, 'tranche', missingDocTrancheId]"
               >
@@ -135,7 +135,7 @@
           }
           @if (!gesuch.isActive || gesuch.gesuchStatus !== 'IN_BEARBEITUNG_GS') {
             <a
-              class="btn btn-outline-primary"
+              class="tw:dv-button-outline"
               data-testid="cockpit-gesuch-edit"
               [routerLink]="['/gesuch', gesuch.id, 'tranche', gesuch.currentTrancheId]"
             >
@@ -145,7 +145,7 @@
             @if (gesuch.canCreateAenderung) {
               <button
                 type="button"
-                class="btn btn-outline-primary"
+                class="tw:dv-button-outline"
                 data-testid="cockpit-gesuch-aenderung-create"
                 (click)="aenderungMelden.emit()"
               >
@@ -161,7 +161,7 @@
       <div class="tw:h-full tw:min-h-[3px] tw:w-full tw:min-w-[3px] tw:bg-(--dv-light-border-subtle)"></div>
       <div class="tw:flex tw:flex-col">
         @if (gesuch.offeneAenderung; as aenderung) {
-          <div class="divider me-4"></div>
+          <div class="divider tw:mr-6"></div>
           <dv-shared-ui-aenderungs-entry
             class="tw:flex tw:flex-1 tw:flex-col"
             [gesuch]="gesuch"

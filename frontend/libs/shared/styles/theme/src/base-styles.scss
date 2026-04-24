@@ -1,3 +1,7 @@
+:root {
+  font-family: 'Open sans';
+}
+
 /*
 Source - https://stackoverflow.com/a/65777114
 Posted by Amaarockz, modified by community. See post 'Timeline' for change history
@@ -12,18 +16,26 @@ Retrieved 2026-03-06, License - CC BY-SA 4.0
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--dv-gray-100);
+  background: var(--tw-color-gray-100);
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--dv-gray-300);
+  background: var(--tw-color-gray-300);
   border-radius: 5px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--dv-gray-500);
+  background: var(--tw-color-gray-400);
+}
+
+body {
+  background-color: var(--dv-overridden-body-bg);
+
+  .app-container {
+    background-color: var(--dv-body-bg);
+  }
 }
 
 .app-container {
@@ -32,11 +44,7 @@ Retrieved 2026-03-06, License - CC BY-SA 4.0
   max-width: var(--content-max-width);
 }
 
-main.page-body {
-  position: relative;
-  margin-top: var(--header-size);
-  height: calc(100vh - var(--header-size));
-
+main.tw\:dv-page-body {
   .sidenav {
     width: 296px;
   }
@@ -106,13 +114,13 @@ main.page-body {
   }
 }
 
-@include media-breakpoint-down(md) {
-  .cdk-overlay-pane.full-height {
-    height: 100%;
-  }
-}
-@include media-breakpoint-down(lg) {
-  .app-container {
-    min-height: 100vh;
-  }
-}
+// @include media-breakpoint-down(md) {
+//   .cdk-overlay-pane.full-height {
+//     height: 100%;
+//   }
+// }
+// @include media-breakpoint-down(lg) {
+//   .app-container {
+//     min-height: 100vh;
+//   }
+// }

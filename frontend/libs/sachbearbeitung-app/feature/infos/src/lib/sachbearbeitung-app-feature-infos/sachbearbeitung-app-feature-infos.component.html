@@ -1,16 +1,16 @@
 <ng-container *transloco="let t">
-  <div class="d-flex h-100">
+  <div class="tw:flex tw:h-full">
     <ng-template #navigation cdkPortal>
-      <div class="sidenav p-4">
+      <div class="sidenav tw:p-6">
         @for (option of infosOptions; track $index) {
           <a
             type="button"
-            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100 shadow-none"
+            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
             [routerLink]="['/gesuch', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
           >
-            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
+            <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
             <span class="text-start">
               {{ t(option.translationKey, option.translationOptions) }}
             </span>
@@ -19,19 +19,21 @@
       </div>
     </ng-template>
     <!-- left step nav (Desktop) -->
-    <div class="d-none d-lg-block border-end bg-white">
+    <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
     </div>
     <div class="tw:p-6 tw:bg-white tw:dv-pass-height">
       <!-- step header (mobile) -->
-      <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
+      <div
+        class="tw:flex tw:items-center tw:justify-between border-bottom tw:lg:hidden tw:mt-4 tw:mb-6 border-1 tw:pb-4"
+      >
         <ng-container *ngTemplateOutlet="navigation"></ng-container>
       </div>
 
       <!-- title (desktop) -->
       @if (option) {
-        <div class="d-none d-lg-flex justify-content-start align-items-center">
-          <dv-shared-ui-icon-chip class="step-icon me-3">
+        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center">
+          <dv-shared-ui-icon-chip class="step-icon tw:mr-4">
             <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
           </dv-shared-ui-icon-chip>
 
@@ -41,7 +43,7 @@
         </div>
       }
 
-      <div class="mt-4">
+      <div class="tw:mt-6">
         <dv-shared-ui-router-outlet-wrapper
           attribute="option"
           (data)="option = $event"

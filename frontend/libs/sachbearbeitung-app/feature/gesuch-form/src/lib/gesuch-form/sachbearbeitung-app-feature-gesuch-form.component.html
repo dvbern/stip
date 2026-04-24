@@ -1,11 +1,11 @@
-<div class="d-flex h-100" *transloco="let t">
+<div class="tw:flex tw:h-full" *transloco="let t">
   <!-- left step nav (Desktop) -->
   @let trancheId = gesuchTrancheIdSig();
   @let currentTranche = currentTrancheSig();
   @let initialRoute = isInitialRouteSig();
 
   <!-- side menu -->
-  <div class="d-none d-lg-block border-end tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
+  <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white tw:overflow-y-auto tw:max-w-[320px]">
     <!-- Gesuch -->
     @if (tranchenSig()?.length || isAenderungRouteSig()) {
       <div class="tw:w-full tw:p-6 tw:bg-gray-100">
@@ -28,16 +28,16 @@
                 {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
               }
             </span>
-            <i class="material-symbols-rounded ms-2">expand_more</i>
+            <i class="material-symbols-rounded tw:ml-2">expand_more</i>
           </button>
-          <mat-menu #gesuchMenu="matMenu" class="header-menu-panel mt-2 rounded">
-            <div class="d-flex flex-column gap-2">
+          <mat-menu #gesuchMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+            <div class="tw:flex tw:flex-col tw:gap-2">
               @for (tranche of tranchenSig(); track $index) {
                 <a
                   [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
                   [queryParams]="{ revision: tranche.revision }"
                   [queryParamsHandling]="'merge'"
-                  class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                  class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
                   data-testid="tranche-nav-menu-item"
                   [class.active]="trancheId === tranche.id"
                   mat-menu-item
@@ -75,14 +75,16 @@
   <div class="tw:p-6 tw:dv-pass-height tw:bg-white">
     @if (currentStepSig(); as step) {
       <!-- step header (mobile) -->
-      <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+      <div
+        class="tw:flex tw:items-center tw:justify-between tw:border-b tw:border-dv-border tw:pb-4 tw:mt-4 tw:mb-6 tw:lg:hidden"
+      >
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
-        <div class="text-end">
+        <div class="tw:text-end">
           <h5 class="step-title">
             {{ t(step.translationKey) }}
           </h5>
           @if (step.nextStep?.translationKey; as nextStepKey) {
-            <p class="fst-italic mb-0">
+            <p class="fst-italic tw:mb-0">
               {{ t('shared.form.next') }}:
               {{ t(nextStepKey) }}
             </p>
@@ -91,8 +93,8 @@
       </div>
 
       <!-- title (desktop) -->
-      <div class="d-none d-lg-flex justify-content-start">
-        <dv-shared-ui-icon-chip class="step-icon me-3">
+      <div class="tw:hidden tw:lg:flex tw:justify-start">
+        <dv-shared-ui-icon-chip class="step-icon tw:mr-4">
           <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
@@ -103,7 +105,7 @@
       </div>
     }
 
-    <div class="mt-4 tw:pb-10">
+    <div class="tw:mt-6 tw:pb-10">
       <dv-shared-ui-router-outlet-wrapper
         attribute="step"
         (data)="stepSig.set($event)"

@@ -5,20 +5,20 @@
         @if (item.children.length) {
           <button
             type="button"
-            class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
             [attr.data-testid]="item.testId"
             [matMenuTriggerFor]="itemMenu"
             [class.isActive]="item.active"
           >
             @if (item.icon) {
-              <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
+              <i class="material-symbols-rounded tw:mr-2 text-white">{{ item.icon }}</i>
             }
             @if (item.label) {
               <span>{{ t(item.label.key, item.label.context) }}</span>
             }
-            <i class="material-symbols-rounded ms-2">expand_more</i>
+            <i class="material-symbols-rounded tw:ml-2">expand_more</i>
           </button>
-          <mat-menu #itemMenu="matMenu" class="header-menu-panel mt-2 rounded tw:gap-4">
+          <mat-menu #itemMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg tw:gap-4">
             <dv-shared-ui-nav-items
               class="tw:flex tw:flex-col tw:gap-2"
               [navItemsSig]="item.children"
@@ -30,13 +30,13 @@
         <a
           [routerLink]="item.route"
           [queryParams]="item.queryParams"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           [attr.data-testid]="item.testId"
           [class.isActive]="item.active"
           routerLinkActive="active"
         >
           @if (item.icon) {
-            <i class="material-symbols-rounded me-2 text-white">{{ item.icon }}</i>
+            <i class="material-symbols-rounded tw:mr-2 text-white">{{ item.icon }}</i>
           }
           @if (item.label) {
             <span>{{ t(item.label.key, item.label.context) }}</span>
@@ -66,15 +66,15 @@
           <div class="tw:w-px tw:bg-gray-300 tw:self-stretch"></div>
         } @else {
           @if (item.label) {
-            <div class="d-flex align-items-center text-muted small gap-2 tw:w-full">
-              <div class="flex-grow-1 tw:border tw:border-gray-300"></div>
+            <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2 tw:w-full">
+              <div class="tw:grow tw:border tw:border-gray-300"></div>
               <div class="tw:whitespace-nowrap">
                 {{ t(item.label.key, item.label.context) }}
               </div>
-              <div class="flex-grow-1 tw:border tw:border-gray-300"></div>
+              <div class="tw:grow tw:border tw:border-gray-300"></div>
             </div>
           } @else {
-            <div class="flex-grow-1 tw:border tw:border-gray-300 tw:w-full"></div>
+            <div class="tw:grow tw:border tw:border-gray-300 tw:w-full"></div>
           }
         }
       }

@@ -5,10 +5,10 @@
   <dv-shared-ui-loading data-testid="form-eltern-steuerdaten-loading"></dv-shared-ui-loading>
 } @else {
   @if (gesuchTrancheId && tenantConfigService.tenantInfoSig()?.features?.nesko) {
-    <div class="row g-4 my-2" *dvHasRoles="['V0_Sachbearbeiter']">
-      <div class="col-12 col-md-6 col-xl-4">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6" *dvHasRoles="['V0_Sachbearbeiter']">
+      <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <button
-          class="btn btn-primary"
+          class="tw:dv-button-main-primary"
           type="button"
           (click)="updateSteuerdatenFromNesko(gesuchTrancheId)"
           [disabled]="!canCheckNeskoSig()"
@@ -23,18 +23,18 @@
   <form
     [formGroup]="form"
     novalidate
-    class="mt-4"
+    class="tw:mt-6"
     data-testid="form-eltern-steuerdaten-form"
     [dvSharedUiFormReadonly]="view.readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
   >
-    <h3 class="pt-5">
+    <h3 class="tw:pt-12">
       {{ 'shared.form.shared.section.einnahmen' | transloco }}
     </h3>
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Total Einkünfte-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.totalEinkuenfte.label' | transloco }}</mat-label>
         <input
           formControlName="totalEinkuenfte"
@@ -49,7 +49,7 @@
       </mat-form-field>
 
       <!-- Eigenmietwert-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.eigenmietwert.label' | transloco }}</mat-label>
         <input
           formControlName="eigenmietwert"
@@ -64,17 +64,17 @@
       </mat-form-field>
     </div>
 
-    <div class="row mt-1">
+    <div class="tw:grid tw:grid-cols-12 tw:mt-1">
       <!-- Arbeitsverhaeltnis-->
       <mat-radio-group
-        class="col-12"
+        class="tw:col-span-12"
         formControlName="arbeitsverhaeltnis"
         data-testid="form-eltern-steuerdaten-arbeitsverhaeltnis"
         dvSharedUiFormField
       >
         <mat-label>{{ 'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.label' | transloco }}</mat-label>
-        <div class="d-flex gap-2 col-12 col-md-6 col-xl-4 pe-md-3">
-          <div class="d-flex flex-column">
+        <div class="tw:flex tw:gap-2 tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 pe-md-3">
+          <div class="tw:flex tw:flex-col">
             <mat-radio-button data-testid="selbstaendig" [value]="true">{{
               'shared.form.eltern-steuerdaten.arbeitsverhaeltnis.true' | transloco
             }}</mat-radio-button>
@@ -94,10 +94,10 @@
     @if (
       !hiddenFieldSet.valuesSig().has(form.controls.saeule3a) || !hiddenFieldSet.valuesSig().has(form.controls.saeule2)
     ) {
-      <div class="row g-4 my-2">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Saeule 3a-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule3a)) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule3a.label' | transloco }}</mat-label>
             <input
               formControlName="saeule3a"
@@ -113,7 +113,7 @@
         }
         <!-- Saeule 2-->
         @if (!hiddenFieldSet.valuesSig().has(form.controls.saeule2)) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
             <mat-label>{{ 'shared.form.eltern-steuerdaten.saeule2.label' | transloco }}</mat-label>
             <input
               formControlName="saeule2"
@@ -130,9 +130,9 @@
       </div>
     }
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Vermögen-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.vermoegen.label' | transloco }}</mat-label>
         <input
           formControlName="vermoegen"
@@ -147,13 +147,13 @@
       </mat-form-field>
     </div>
 
-    <h3 class="pt-5">
+    <h3 class="tw:pt-12">
       {{ 'shared.form.shared.section.ausgaben' | transloco }}
     </h3>
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Steuern Kanton-Gemeinde-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernKantonGemeinde.label' | transloco }}</mat-label>
         <input
           formControlName="steuernKantonGemeinde"
@@ -168,7 +168,7 @@
       </mat-form-field>
 
       <!-- Steuern Bund-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.steuernBund.label' | transloco }}</mat-label>
         <input
           formControlName="steuernBund"
@@ -183,9 +183,9 @@
       </mat-form-field>
     </div>
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Fahrkosten-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkosten.label' | transloco }}</mat-label>
         <input
           formControlName="fahrkosten"
@@ -200,7 +200,7 @@
       </mat-form-field>
 
       <!-- Fahrkosten Partner:in-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.fahrkostenPartner.label' | transloco }}</mat-label>
         <input
           formControlName="fahrkostenPartner"
@@ -212,9 +212,9 @@
       </mat-form-field>
     </div>
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Verpflegung-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegung.label' | transloco }}</mat-label>
         <input
           formControlName="verpflegung"
@@ -229,7 +229,7 @@
       </mat-form-field>
 
       <!-- Verpflegung Partner:in-->
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'shared.form.eltern-steuerdaten.verpflegungPartner.label' | transloco }}</mat-label>
         <input
           formControlName="verpflegungPartner"
@@ -241,10 +241,10 @@
       </mat-form-field>
     </div>
 
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <!-- Steuerjahr-->
       @if (!hiddenFieldSet.valuesSig().has(form.controls.steuerjahr)) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.steuerjahr.label' | transloco }}</mat-label>
           <input
             formControlName="steuerjahr"
@@ -264,7 +264,7 @@
       }
       <!-- veranlagungsStatus-->
       @if (!hiddenFieldSet.valuesSig().has(form.controls.veranlagungsStatus)) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.eltern-steuerdaten.veranlagungsStatus.label' | transloco }}</mat-label>
           <input
             formControlName="veranlagungsStatus"
@@ -282,11 +282,16 @@
 
     <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
-        <button type="submit" (click)="handleSave()" class="btn btn-primary" data-testid="button-save-continue">
+        <button
+          type="submit"
+          (click)="handleSave()"
+          class="tw:dv-button-main-primary"
+          data-testid="button-save-continue"
+        >
           {{ 'shared.form.save-and-continue' | transloco }}
         </button>
       } @else {
-        <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+        <button type="button" data-testid="button-next" class="tw:dv-button-main-primary" (click)="handleContinue()">
           {{ 'shared.form.gonext' | transloco }}
         </button>
       }

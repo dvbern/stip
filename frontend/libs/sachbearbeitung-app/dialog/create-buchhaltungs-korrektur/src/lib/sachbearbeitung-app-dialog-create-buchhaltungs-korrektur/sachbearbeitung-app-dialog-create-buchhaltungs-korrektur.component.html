@@ -1,6 +1,6 @@
 <button
   type="button"
-  class="dv-icon-button dv-icon-button-lg position-absolute end-0 top-0 m-2"
+  class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-2"
   [attr.aria-label]="'shared.dialog.unsavedChanges.cancel' | transloco"
   (click)="cancel()"
 >
@@ -25,10 +25,10 @@
     </mat-error>
   </mat-form-field>
   <div class="tw:mt-6 tw:flex tw:w-full tw:justify-end tw:gap-3">
-    <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+    <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
       {{ 'shared.ui.confirmDialog.cancel' | transloco }}
     </button>
-    <button type="submit" class="btn btn-primary" data-testid="dialog-confirm">
+    <button type="submit" class="tw:dv-button-main-primary" data-testid="dialog-confirm">
       {{ 'shared.form.save' | transloco }}
     </button>
   </div>

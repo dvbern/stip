@@ -1,22 +1,22 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="tw:flex tw:flex-col tw:relative tw:p-6 tw:rounded-lg">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:top-0 tw:right-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 mb-4 d-flex">
+  <h1 class="tw:mb-6 tw:flex tw:font-semibold tw:text-lg">
     {{ dialogData.titleKey | transloco }}
   </h1>
   @if (dialogData.messageKey) {
-    <p class="content mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
+    <p class="content tw:mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
   }
 
-  <form [formGroup]="form" class="mt-4" data-testid="form-kommentar-dialog-form" novalidate>
-    <mat-form-field dvSharedUiFormField class="col-12">
+  <form [formGroup]="form" class="tw:flex tw:flex-col tw:mt-6" data-testid="form-kommentar-dialog-form" novalidate>
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       @if (dialogData.labelKey; as commentLabel) {
         <mat-label>{{ commentLabel | transloco }}</mat-label>
       }
@@ -33,15 +33,15 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="d-flex mt-4 justify-content-between">
-      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+    <div class="tw:flex tw:mt-6 tw:justify-between">
+      <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
       <button
         type="submit"
         [disabled]="form.invalid"
         data-testid="dialog-confirm"
-        class="btn btn-primary ms-2"
+        class="tw:dv-button-main-primary tw:ml-2"
         (click)="confirm()"
       >
         {{ dialogData.confirmKey | transloco }}

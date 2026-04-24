@@ -1,16 +1,16 @@
-<div class="d-flex gap-1 align-items-center text-nowrap">
+<div class="tw:flex tw:gap-1 tw:items-center text-nowrap">
   @switch (type) {
     @case ('success') {
-      <i class="material-symbols-rounded fs-4">check_circle</i>
+      <i class="material-symbols-rounded tw:text-xl">check_circle</i>
     }
     @case ('warning') {
-      <i class="material-symbols-rounded fs-4">error</i>
+      <i class="material-symbols-rounded tw:text-xl">error</i>
     }
     @case ('danger') {
-      <i class="material-symbols-rounded fs-4">warning</i>
+      <i class="material-symbols-rounded tw:text-xl">warning</i>
     }
     @case ('info') {
-      <i class="material-symbols-rounded fs-4">schedule</i>
+      <i class="material-symbols-rounded tw:text-xl">schedule</i>
     }
   }
   <ng-content></ng-content>

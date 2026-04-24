@@ -1,4 +1,4 @@
-<div class="container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck'">
+<div class="tw:dv-container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck'">
   <div
     class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
     [formGroup]="quickFilterForm"
@@ -12,10 +12,10 @@
         [class.btn-danger]="radio.checked"
         [class.btn-light]="!radio.checked"
       >
-        <dv-shared-ui-icon-chip class="chip me-3">
-          <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
+        <dv-shared-ui-icon-chip class="chip tw:mr-4">
+          <i class="icon material-symbols-rounded tw:text-xl">{{ quickFilter.icon }}</i>
         </dv-shared-ui-icon-chip>
-        <div class="tw:text-start tw:leading-4 flex-grow-1">
+        <div class="tw:text-start tw:leading-4 tw:grow">
           <span class="tw:font-semibold tw:mb-0">
             {{ t('quick-filter.' + quickFilter.typ) }}
           </span>
@@ -66,7 +66,7 @@
                 class="filtered tw:w-32 tw:whitespace-nowrap"
                 example="01.01.2000"
               >
-                <label class="pe-none" for="timestampErstellt">{{ t('table.timestampErstellt') }}</label>
+                <label class="tw:pointer-events-none" for="timestampErstellt">{{ t('table.timestampErstellt') }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -82,12 +82,12 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="btn btn-link tw:text-dv-gray tw:!p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="timestampErstelltDatepicker.open(); $event.stopPropagation()"
                     >
                       <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                        <i class="icon material-symbols-rounded tw:text-lg">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #timestampErstelltDatepicker></mat-datepicker>
@@ -222,7 +222,7 @@
       </div>
       @if (massendruckStore.paginatedMassendruckListViewSig().loading) {
         <dv-shared-ui-loading
-          class="position-absolute translate-middle start-50 top-50"
+          class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
           [type]="'compact'"
         ></dv-shared-ui-loading>
       }

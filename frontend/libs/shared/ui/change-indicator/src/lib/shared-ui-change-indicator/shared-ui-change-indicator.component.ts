@@ -7,7 +7,6 @@ import {
 
 @Component({
   selector: 'dv-shared-ui-change-indicator',
-  imports: [],
   template: '',
   styleUrl: './shared-ui-change-indicator.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -5,10 +5,11 @@
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: radial-gradient(closest-side, white 87%, transparent 88%),
+  background:
+    radial-gradient(closest-side, white 87%, transparent 88%),
     conic-gradient(
-      var(--dv-primary) calc(var(--progress) * 1%),
-      var(--dv-gray-300) 0
+      var(--tw-color-dv-gray-dark) calc(var(--progress) * 1%),
+      var(--tw-color-dv-border) 0
     );
   font-size: 14px;
   font-weight: 600;

@@ -1,8 +1,8 @@
 .expand-indicator {
   border-radius: 50%;
   color: white;
-  border: 1px solid var(--dv-blue-bg);
-  background-color: var(--dv-blue-bg);
+  border: 1px solid var(--dv-blue);
+  background-color: var(--dv-blue);
 }
 
 .tw\:dv-table .mat-mdc-table {
@@ -30,7 +30,7 @@
       padding-right: var(--dv-table-header-spacing-horizontal, 16px);
 
       &.filtered {
-        @apply tw:pb-3;
+        @apply tw:pb-4;
 
         .mat-sort-header-container {
           align-items: start;
@@ -144,7 +144,7 @@
       min-height: unset;
     }
 
-    .mat-mdc-form-field-flex {
+    .mat-mdc-form-fieltw:flex {
       align-items: center;
       height: 100%;
     }

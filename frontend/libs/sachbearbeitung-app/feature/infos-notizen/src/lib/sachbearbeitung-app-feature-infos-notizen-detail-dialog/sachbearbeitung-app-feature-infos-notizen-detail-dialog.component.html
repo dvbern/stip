@@ -94,12 +94,12 @@
   }
   @if (!dialogData.readonly) {
     <div class="tw:mt-10 tw:flex tw:justify-end tw:gap-6">
-      <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
         {{ 'shared.cancel' | transloco }}
       </button>
       <button
         type="button"
-        class="btn btn-primary"
+        class="tw:dv-button-main-primary"
         (click)="handleSave()"
         data-testid="dialog-confirm"
         [disabled]="

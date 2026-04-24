@@ -13,10 +13,10 @@
 
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered">
-              <label class="pe-none" for="nameFilter">
+              <label class="tw:pointer-events-none" for="nameFilter">
                 {{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}
               </label>
-              <div class="d-flex position-relative align-items-center justify-content-end">
+              <div class="tw:flex tw:relative tw:items-center tw:justify-end">
                 <mat-form-field class="filter-form-field">
                   <input
                     matInput
@@ -29,7 +29,7 @@
                   />
                 </mat-form-field>
                 <dv-shared-ui-clear-button
-                  class="clear d-flex align-items-center position-absolute"
+                  class="clear tw:flex tw:items-center tw:absolute"
                   (clear)="filterForm.controls.name.reset()"
                   [valueSig]="filterForm.controls.name.value"
                 ></dv-shared-ui-clear-button>
@@ -38,7 +38,7 @@
             <td
               mat-cell
               *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource"
-              class="tw:whitespace-nowrap tw:max-w-half"
+              class="tw:whitespace-nowrap tw:dv-max-w-half"
               [dvTruncateTooltip]="sozialdienst.name"
             >
               {{ sozialdienst.name }}
@@ -51,7 +51,7 @@
               <label for="ortFilter">
                 {{ 'sachbearbeitung-app.admin.sozialdienst.ort.label' | transloco }}
               </label>
-              <div class="d-flex position-relative align-items-center justify-content-end">
+              <div class="tw:flex tw:relative tw:items-center tw:justify-end">
                 <mat-form-field class="filter-form-field">
                   <input
                     matInput
@@ -64,7 +64,7 @@
                   />
                 </mat-form-field>
                 <dv-shared-ui-clear-button
-                  class="clear d-flex align-items-center position-absolute"
+                  class="clear tw:flex tw:items-center tw:absolute"
                   (clear)="filterForm.controls.ort.reset()"
                   [valueSig]="filterForm.controls.ort.value"
                 ></dv-shared-ui-clear-button>
@@ -80,7 +80,7 @@
               <label for="statusFilter">
                 {{ 'sachbearbeitung-app.admin.sozialdienst.status' | transloco }}
               </label>
-              <div class="d-flex position-relative align-items-center justify-content-end">
+              <div class="tw:flex tw:relative tw:items-center tw:justify-end">
                 <mat-form-field class="filter-form-field">
                   <mat-select
                     formControlName="status"
@@ -108,22 +108,22 @@
                 <a
                   [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | transloco"
                   [routerLink]="['.', 'create']"
-                  class="btn btn-outline-primary btn-sm"
+                  class="tw:dv-button-outline btn-sm"
                   data-testid="sozialdienst-create"
                 >
-                  <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
+                  <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
                 </a>
               </div>
             </th>
             <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
-              <div class="d-flex justify-content-end gap-2">
+              <div class="tw:flex tw:justify-end tw:gap-2">
                 <a
                   [routerLink]="['.', 'edit', sozialdienst.id]"
                   class="btn btn-link"
                   [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | transloco"
                   data-testid="sozialdienst-edit"
                 >
-                  <i class="material-symbols-rounded fs-5">edit</i>
+                  <i class="material-symbols-rounded tw:text-lg">edit</i>
                 </a>
                 <button
                   type="button"
@@ -135,9 +135,9 @@
                   "
                 >
                   @if (sozialdienst.aktiv) {
-                    <i class="material-symbols-rounded fs-5">cancel</i>
+                    <i class="material-symbols-rounded tw:text-lg">cancel</i>
                   } @else {
-                    <i class="material-symbols-rounded fs-5">check_circle</i>
+                    <i class="material-symbols-rounded tw:text-lg">check_circle</i>
                   }
                 </button>
                 <button
@@ -147,7 +147,7 @@
                   [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | transloco"
                   data-testid="sozialdienst-delete"
                 >
-                  <i class="material-symbols-rounded fs-5">delete</i>
+                  <i class="material-symbols-rounded tw:text-lg">delete</i>
                 </button>
               </div>
             </td>
@@ -170,7 +170,7 @@
         </mat-paginator>
         @if (store.sozialdienste() | rdIsPending) {
           <dv-shared-ui-loading
-            class="position-absolute translate-middle start-50 top-50"
+            class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

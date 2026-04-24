@@ -1,6 +1,12 @@
 <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tw:mt-6 nav-style-tabs">
   @for (tab of tabsSig(); track tab.name) {
-    <a mat-tab-link [routerLink]="[tab.name]" [active]="tab.active" class="btn btn-nav" [class.active]="tab.active">
+    <a
+      mat-tab-link
+      [routerLink]="[tab.name]"
+      [active]="tab.active"
+      class="tw:dv-nav-button"
+      [class.active]="tab.active"
+    >
       {{ `sachbearbeitung-app.infos.admin.${tab.name}` | transloco }}
     </a>
   }

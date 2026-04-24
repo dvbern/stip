@@ -1,13 +1,13 @@
-<h3 class="card-title d-flex align-items-center" data-testid="nachrichten-title">
-  <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="me-2">
-    <i class="material-symbols-rounded fs-5">mail</i>
+<h3 class="tw:flex tw:items-center tw:text-2xl tw:font-semibold" data-testid="nachrichten-title">
+  <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="tw:mr-2">
+    <i class="material-symbols-rounded tw:text-lg">mail</i>
   </dv-shared-ui-icon-chip>
   <span>{{ 'shared.nachrichten.title' | transloco }}</span>
 </h3>
 
 @let notifications = notificationsSig();
 @if (notifications.length > 0) {
-  <div class="notifications gap-2 mt-4">
+  <div class="notifications tw:gap-2 tw:mt-6">
     <h4 class="subgrid subgrid-3 m-0">
       <span>{{ 'shared.nachrichten.subject' | transloco }}</span>
       <span>{{ 'shared.nachrichten.sender' | transloco }}</span>

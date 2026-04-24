@@ -1,4 +1,4 @@
-<div class="p-3 d-flex justify-content-between">
+<div class="tw:p-4 tw:flex tw:justify-between">
   <div>
     <dv-shared-ui-language-selector [language]="languageSig()" (languageChange)="handleLanguageChangeHeader($event)" />
   </div>
@@ -10,11 +10,11 @@
   ></button>
 </div>
 
-<div class="p-3 d-flex flex-column">
-  <div class="d-flex flex-column align-items-start">
-    <ul class="nav flex-column w-100">
+<div class="tw:p-4 tw:flex tw:flex-col">
+  <div class="tw:flex tw:flex-col align-items-start">
+    <ul class="nav tw:flex-col tw:w-full">
       <li class="nav-item">
-        <span class="nav-link mb-4">{{ benutzerNameSig() }}</span>
+        <span class="nav-link tw:mb-6">{{ benutzerNameSig() }}</span>
       </li>
 
       <li class="nav-item">
@@ -26,7 +26,7 @@
     </ul>
   </div>
   <!-- eslint-disable-next-line @angular-eslint/template/interactive-supports-focus -->
-  <div class="mt-2" (keypress.enter)="closeSidenav.emit()" (click)="closeSidenav.emit()">
+  <div class="tw:mt-2" (keypress.enter)="closeSidenav.emit()" (click)="closeSidenav.emit()">
     <ng-content></ng-content>
     <ng-template [cdkPortalOutlet]="navigationStore.portalSig()"></ng-template>
   </div>

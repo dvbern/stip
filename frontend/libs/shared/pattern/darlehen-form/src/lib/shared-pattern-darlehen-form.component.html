@@ -72,7 +72,7 @@
                     [attr.aria-label]="t('shared.form.delete')"
                     (click)="deleteNegativVerfuegung()"
                   >
-                    <span class="material-symbols-rounded text-muted tw:align-middle tw:text-xl!">delete</span>
+                    <span class="material-symbols-rounded tw:text-dv-gray tw:align-middle tw:text-xl!">delete</span>
                   </button>
                 </div>
               } @else {
@@ -120,7 +120,7 @@
 
         <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
           @if (darlehenPermissionsSig()?.canWriteSb) {
-            <a [routerLink]="['/darlehen-dashboard']" class="btn btn-secondary" data-testid="darlehen-cancel">
+            <a [routerLink]="['/darlehen-dashboard']" class="tw:dv-button-outline" data-testid="darlehen-cancel">
               <span>{{ t('shared.cancel') }}</span>
             </a>
           }
@@ -131,7 +131,7 @@
               type="button"
               data-testid="button-darlehen-freigeben"
               (click)="darlehenUpdateAndFreigeben()"
-              class="btn btn-primary"
+              class="tw:dv-button-main-primary"
             >
               {{ t('shared.form.darlehen.freigeben') }}
             </button>
@@ -140,7 +140,7 @@
               type="button"
               data-testid="button-darlehen-zurueckweisen"
               (click)="darlehenUpdateAndZurueckweisen()"
-              class="btn btn-danger"
+              class="tw:dv-button-main-danger"
             >
               {{ t('shared.form.darlehen.zurueckweisen') }}
             </button>
@@ -152,7 +152,7 @@
               type="button"
               data-testid="button-darlehen-abschliessen"
               (click)="darlehenUpdateAndAbschliessen()"
-              class="btn btn-primary"
+              class="tw:dv-button-main-primary"
             >
               {{ t('shared.form.darlehen.abschliessen') }}
             </button>
@@ -322,7 +322,7 @@
           <button
             type="button"
             (click)="darlehenDeleteGs()"
-            class="btn btn-danger"
+            class="tw:dv-button-main-danger"
             data-testid="button-delete-darlehen"
           >
             {{ t('shared.cancel') }}
@@ -333,7 +333,7 @@
           <button
             type="button"
             (click)="darlehenUpdateAndEingebenGs()"
-            class="btn btn-primary"
+            class="tw:dv-button-main-primary"
             data-testid="button-eingeben-darlehen"
           >
             {{ t('shared.form.darlehen.eingeben') }}

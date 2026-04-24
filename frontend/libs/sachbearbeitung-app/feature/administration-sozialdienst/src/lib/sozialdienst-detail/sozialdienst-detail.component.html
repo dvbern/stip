@@ -1,11 +1,11 @@
-<form [formGroup]="form" data-testid="form-sozialdienst-form" novalidate class="mt-4" (ngSubmit)="handleSubmit()">
+<form [formGroup]="form" data-testid="form-sozialdienst-form" novalidate class="tw:mt-6" (ngSubmit)="handleSubmit()">
   @if (store.sozialdienst() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <!-- Name -->
-    <div class="row g-4">
-      <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6">
+      <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
           <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}</mat-label>
           <input
             [formControl]="form.controls.name"
@@ -23,8 +23,8 @@
 
     @let zahlungsverbindungControls = form.controls.zahlungsverbindung.controls;
     <!-- IBAN -->
-    <div class="row g-4 my-2">
-      <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | transloco }}</mat-label>
         <span matTextPrefix>CH</span>
         <input
@@ -47,17 +47,17 @@
     </div>
 
     <!-- Adresse -->
-    <div class="row g-4 mt-1">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
       <dv-shared-ui-form-address
-        class="col-12 col-xl-8"
+        class="tw:col-span-12 tw:xl:col-span-8"
         [group]="form.controls.zahlungsverbindung.controls.adresse"
         [languageSig]="languageSig()"
       />
     </div>
 
     <fieldset formGroupName="sozialdienstAdmin">
-      <legend class="row d-flex mt-4">
-        <div class="d-flex gap-5 align-content-center col-12 col-md-6 col-xl-4">
+      <legend class="tw:grid tw:grid-cols-12 tw:flex tw:mt-6">
+        <div class="tw:flex tw:gap-8 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <div>
             {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | transloco }}
           </div>
@@ -66,19 +66,19 @@
             <button
               [title]="'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco"
               type="button"
-              class="btn btn-outline-primary btn-sm d-flex align-items-center"
+              class="tw:dv-button-outline btn-sm tw:flex tw:items-center"
               (click)="replaceSozialdienstAdmin()"
             >
-              <i class="material-symbols-rounded fs-4">cycle</i>
+              <i class="material-symbols-rounded tw:text-xl">cycle</i>
             </button>
           }
         </div>
       </legend>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <!-- nachname -->
-        <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
             <input
               [formControl]="zahlungsverbindungControls.nachname"
@@ -94,8 +94,8 @@
         </div>
 
         <!-- vorname -->
-        <div class="d-flex gap 2 align-content-center col-12 col-md-6 col-xl-4">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:flex gap 2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
             <input
               [formControl]="zahlungsverbindungControls.vorname"
@@ -113,12 +113,12 @@
 
       @let sozialdienstControls = form.controls.sozialdienstAdmin.controls;
       <!-- E-Mail Adresse -->
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <div
-          class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4"
+          class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
           [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
         >
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
             <input
               data-testid="form-sozialdienst-email"
@@ -141,7 +141,7 @@
 
     @if (!form.disabled) {
       <dv-shared-ui-form-save
-        class="mt-4"
+        class="tw:mt-6"
         [disabled]="form.invalid || form.pristine"
         [loading]="store.sozialdienst() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>

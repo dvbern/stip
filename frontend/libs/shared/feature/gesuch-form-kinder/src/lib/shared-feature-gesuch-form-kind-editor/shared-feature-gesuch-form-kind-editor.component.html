@@ -5,11 +5,11 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-kind-form"
   novalidate
-  class="mt-4"
+  class="tw:mt-6"
   (ngSubmit)="handleSave()"
 >
-  <div class="row g-4 my-2">
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:pt-6">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
       <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
@@ -17,7 +17,7 @@
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
       <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
@@ -27,9 +27,9 @@
     </mat-form-field>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- GEBURTSDATUM -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
@@ -57,7 +57,7 @@
     </mat-form-field>
 
     <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | transloco }}</mat-label>
       <input
         type="text"
@@ -79,12 +79,12 @@
     </mat-form-field>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Ausbildungssituation -->
-    <div class="col-12 col-md-6 col-xl-4">
+    <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
       <mat-radio-group
-        class="d-flex flex-column"
+        class="tw:flex tw:flex-col"
         [formControl]="form.controls.ausbildungssituation"
         data-testid="form-kind-ausbildungssituation"
         dvSharedUiFormField
@@ -110,10 +110,10 @@
     </div>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Unterhaltsbeitraege -->
-    <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ 'shared.form.kinder.unterhaltsbeitraege.label' | transloco }}</mat-label>
         <input
           matInput
@@ -136,8 +136,8 @@
     </div>
 
     <!-- Kinder- und Ausbildungszulagen -->
-    <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ 'shared.form.kinder.kinderUndAusbildungszulagen.label' | transloco }}</mat-label>
         <input
           matInput
@@ -157,10 +157,10 @@
     </div>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Renten -->
-    <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ 'shared.form.kinder.renten.label' | transloco }}</mat-label>
         <input
           matInput
@@ -180,8 +180,8 @@
     </div>
 
     <!-- Ergänzungsleistungen -->
-    <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ 'shared.form.kinder.ergaenzungsleistungen.label' | transloco }}</mat-label>
         <input
           matInput
@@ -201,10 +201,10 @@
     </div>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Andere Einnahmen -->
-    <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-4">
-      <mat-form-field dvSharedUiFormField class="flex-grow-1">
+    <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ 'shared.form.kinder.andereEinnahmen.label' | transloco }}</mat-label>
         <input
           matInput
@@ -227,11 +227,11 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
+    <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save">
+      <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | transloco }}
       </button>
     }

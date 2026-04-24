@@ -9,17 +9,17 @@
       [dvSharedUiFormReadonly]="view.readonly"
       (gotReenabledSig)="gotReenabled$.next({})"
       novalidate
-      class="mt-4"
+      class="tw:mt-6"
       data-testid="form-partner-form"
       (ngSubmit)="handleSaveAndContinue()"
     >
-      <h3 class="pt-5">
+      <h3 class="tw:pt-12">
         {{ 'shared.form.shared.section.personal-details' | transloco }}
       </h3>
       <!-- AHV -->
-      <div class="row g-4 my-2">
-        <div class="d-flex align-content-center col-12 col-md-6 col-xl-4">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+        <div class="tw:flex align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
             <input
               matInput
@@ -43,23 +43,23 @@
           <button
             type="button"
             (click)="ahvPartnerInfoDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
           >
-            <span class="material-symbols-rounded"> info </span>
+            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
           </button>
         </div>
-        <div class="d-none d-xl-block col-xl-4"></div>
+        <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.partner.sozialversicherungsnummer.infoTitle'"
           [dialogMessageKey]="'shared.form.partner.sozialversicherungsnummer.info'"
           #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
-      <div class="row g-4 my-2">
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
           <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
           <mat-hint *dvZuvorHint="view.formChanges.nachname"></mat-hint>
@@ -67,7 +67,7 @@
             {{ 'shared.form.error.required' | transloco }}
           </mat-error>
         </mat-form-field>
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
           <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
           <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
@@ -78,18 +78,18 @@
       </div>
 
       <!-- Adresse -->
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <dv-shared-ui-form-address
-          class="col-12 col-xl-8"
+          class="tw:col-span-12 tw:xl:col-span-8"
           [group]="form.controls.adresse"
           [changes]="view.formChanges.adresse"
           [languageSig]="languageSig()"
         />
       </div>
 
-      <div class="row g-4 my-2">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
         <!-- GEBURTSDATUM -->
-        <mat-form-field dvSharedUiFormField class="col-12 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
           <input
@@ -117,9 +117,9 @@
         </mat-form-field>
       </div>
 
-      <div class="row g-4 my-2">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div class="col-12 col-xl-4 col-md-6 d-flex align-items-center flex-grow-1 gap-2">
+        <div class="tw:col-span-12 tw:xl:col-span-4 tw:md:col-span-6 tw:flex tw:items-center tw:grow tw:gap-2">
           <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
             'shared.form.partner.inAusbildung.label' | transloco
           }}</mat-checkbox>
@@ -129,10 +129,10 @@
         </div>
       </div>
 
-      <div class="row g-4 my-2">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
         <!-- PENSUM -->
         @if (showAusbildungspensumSig()) {
-          <mat-form-field dvSharedUiFormField class="col-12 col-xl-4">
+          <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
             <mat-label>{{ 'shared.form.ausbildung.pensum.label' | transloco }}</mat-label>
             <mat-select
               formControlName="ausbildungspensum"
@@ -162,11 +162,11 @@
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
         @if (!view.readonly) {
-          <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+          <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
             {{ 'shared.form.save-and-continue' | transloco }}
           </button>
         } @else {
-          <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
+          <button type="button" class="tw:dv-button-main-primary" (click)="handleContinue()" data-testid="button-next">
             {{ 'shared.form.gonext' | transloco }}
           </button>
         }

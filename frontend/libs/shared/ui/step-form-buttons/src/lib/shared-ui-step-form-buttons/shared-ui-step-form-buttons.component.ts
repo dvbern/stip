@@ -4,10 +4,9 @@ import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core';
   selector: 'dv-shared-ui-step-form-buttons',
   standalone: true,
   templateUrl: './shared-ui-step-form-buttons.component.html',
-  styleUrls: ['./shared-ui-step-form-buttons.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiStepFormButtonsComponent {
   @HostBinding('class') klass =
-    'col-12 col-xl-8 mt-5 d-flex flex-column gap-3 flex-md-row align-items-center justify-content-center';
+    'tw:col-span-12 tw:xl:col-span-8 tw:mt-12 tw:flex tw:flex-col tw:gap-3 tw:md:flex-row tw:items-start tw:justify-start';
 }

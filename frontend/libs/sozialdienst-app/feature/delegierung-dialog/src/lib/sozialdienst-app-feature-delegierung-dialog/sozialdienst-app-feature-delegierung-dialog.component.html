@@ -1,8 +1,8 @@
-<section class="tw:relative tw:flex tw:w-full tw:max-w-[700px] tw:flex-col rounded p-4">
+<section class="tw:relative tw:flex tw:w-full tw:max-w-[700px] tw:flex-col tw:rounded-lg tw:p-6">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
@@ -18,7 +18,7 @@
   </h1>
 
   <!-- readonly angaben form -->
-  <h3 class="title h3">
+  <h3 class="tw:text-2xl tw:font-semibold">
     {{ 'shared.form.shared.section.personal-details' | transloco }}
   </h3>
   <form
@@ -41,7 +41,7 @@
       <!-- Sprache -->
       <label>{{ 'shared.form.delegation.sprache.label' | transloco }}</label>
       <mat-radio-group
-        class="d-flex flex-column"
+        class="tw:flex tw:flex-col"
         [formControl]="form.controls.sprache"
         data-testid="form-delegieren-sprache"
         dvSharedUiFormField
@@ -151,7 +151,7 @@
   <hr class="tw:my-8 tw:border-t-2 tw:border-t-gray-500" />
 
   <!-- change zuweisung form -->
-  <h3 class="title h3">
+  <h3 class="tw:text-2xl tw:font-semibold">
     {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | transloco }}
   </h3>
   <form
@@ -197,7 +197,7 @@
             <button
               type="button"
               data-testid="dialog-sozMitarbeiter-cancel"
-              class="btn btn-secondary"
+              class="tw:dv-button-outline"
               (click)="cancel()"
             >
               {{ 'shared.cancel' | transloco }}
@@ -207,7 +207,7 @@
               *dvHasRoles="['V0_Sozialdienst-Admin']"
               type="button"
               data-testid="dialog-sozAdmin-delegierung-reject"
-              class="btn btn-danger"
+              class="tw:dv-button-main-danger"
               (click)="rejectDelegation()"
             >
               {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.reject' | transloco }}
@@ -224,7 +224,7 @@
             <button
               type="button"
               data-testid="dialog-sozMitarbeiter-cancel"
-              class="btn btn-secondary"
+              class="tw:dv-button-outline"
               (click)="cancel()"
             >
               {{ 'shared.cancel' | transloco }}
@@ -233,7 +233,7 @@
             <button
               type="button"
               data-testid="dialog-sozAdmin-delegierung-remove"
-              class="btn btn-danger"
+              class="tw:dv-button-main-danger"
               (click)="removeDelegation()"
             >
               {{ 'sozialdienst-app.delegierung-dialog.sozAdmin.delegierung.remove' | transloco }}
@@ -250,7 +250,7 @@
             <button
               type="button"
               data-testid="dialog-sozMitarbeiter-cancel"
-              class="btn btn-secondary"
+              class="tw:dv-button-outline"
               (click)="cancel()"
             >
               {{ 'shared.close' | transloco }}

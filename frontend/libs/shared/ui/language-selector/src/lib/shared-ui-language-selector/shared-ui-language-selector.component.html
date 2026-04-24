@@ -1,9 +1,9 @@
-<ul class="nav flex-nowrap">
+<ul class="nav tw:list-none tw:flex tw:flex-nowrap">
   @for (lang of languages; track trackByIndex($index)) {
     <li class="nav-item">
       <button
         type="button"
-        class="nav-link"
+        class="nav-link tw:py-2"
         [attr.data-testid]="'lang-' + lang"
         (click)="handleLanguageChange(lang)"
         [class.active]="language === lang"

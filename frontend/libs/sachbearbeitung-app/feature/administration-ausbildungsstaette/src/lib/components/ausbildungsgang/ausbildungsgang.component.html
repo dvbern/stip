@@ -19,7 +19,7 @@
 
       <ng-container matColumnDef="AUSBILDUNGSSTAETTE">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="ausbildungsstaette">{{
+          <label class="tw:pointer-events-none" for="ausbildungsstaette">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.ausbildungsstaette'
               | transloco
           }}</label>
@@ -36,7 +36,7 @@
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5"
               (clear)="filterForm.controls.ausbildungsstaette.reset()"
               [valueSig]="filterForm.controls.ausbildungsstaette.value"
             ></dv-shared-ui-clear-button>
@@ -54,7 +54,7 @@
 
       <ng-container matColumnDef="ABSCHLUSS_AUSBILDUNGSKATEGORIE">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="ausbildungskategorie">{{
+          <label class="tw:pointer-events-none" for="ausbildungskategorie">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.ausbildungskategorie'
               | transloco
           }}</label>
@@ -113,7 +113,7 @@
 
       <ng-container matColumnDef="ABSCHLUSS">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="abschluss">{{
+          <label class="tw:pointer-events-none" for="abschluss">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsgang.table.abschluss' | transloco
           }}</label>
           <div class="tw:relative tw:flex">
@@ -198,12 +198,12 @@
             }
             <button
               type="button"
-              class="btn btn-outline-primary btn-sm"
+              class="tw:dv-button-outline btn-sm"
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               (click)="createAusbildungsgang()"
               [disabled]="addAusbildungsgangIsLoadingSig()"
             >
-              <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
             </button>
           </div>
         </th>
@@ -212,7 +212,7 @@
             @if (abschluss.aktiv) {
               <button
                 type="button"
-                class="dv-icon-button dv-icon-button-md tw:text-gray-500"
+                class="tw:dv-button-icon tw:text-gray-500"
                 (click)="archive(abschluss); $event.stopPropagation()"
               >
                 <span class="material-symbols-rounded tw:!text-2xl/none">cancel</span>
@@ -220,7 +220,7 @@
             }
             <button
               type="button"
-              class="dv-icon-button dv-icon-button-md text-info"
+              class="tw:dv-button-icon tw:text-dv-blue"
               (click)="showInfo(abschluss); $event.stopPropagation()"
             >
               <span class="material-symbols-rounded tw:!text-2xl/none"> info </span>

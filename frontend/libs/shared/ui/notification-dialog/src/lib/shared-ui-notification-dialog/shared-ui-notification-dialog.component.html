@@ -1,24 +1,25 @@
-<div class="p-md-4 p-3">
-  <h4 class="d-flex align-items-center align-self-start title">
-    <span class="text-info upload-icon material-symbols-rounded rounded-circle align-self-start me-2 mt-1 p-1"
+<div class="p-md-4 tw:p-4">
+  <h4 class="tw:flex tw:items-center align-self-start title">
+    <span
+      class="tw:text-dv-blue upload-icon material-symbols-rounded tw:rounded-full align-self-start tw:mr-2 tw:mt-1 p-1"
       >mail</span
     >
     {{ 'shared.nachricht.title' | transloco }}
-    <span class="flex-grow-1"></span>
-    <button type="button" class="dv-icon-button align-self-start close ms-2" (click)="close()">
+    <span class="tw:grow"></span>
+    <button type="button" class="tw:dv-button-icon align-self-start close tw:ml-2" (click)="close()">
       <span class="material-symbols-rounded align-middle">close</span>
     </button>
   </h4>
 
   @let notification = data.notification;
-  <dl class="d-flex flex-column tw:mb-0 mt-4">
-    <div class="d-flex gap-4">
-      <div class="d-flex flex-column">
+  <dl class="tw:flex tw:flex-col tw:mb-0 tw:mt-6">
+    <div class="tw:flex tw:gap-6">
+      <div class="tw:flex tw:flex-col">
         <dt>{{ 'shared.nachrichten.sender' | transloco }}:</dt>
         <dd>{{ notification.absender }}</dd>
       </div>
 
-      <div class="d-flex flex-column">
+      <div class="tw:flex tw:flex-col">
         <dt>{{ 'shared.nachrichten.date' | transloco }}:</dt>
         <dd>
           <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
@@ -34,7 +35,7 @@
         @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
           <button
             type="button"
-            class="btn btn-outline-primary tw:mt-6!"
+            class="tw:dv-button-outline tw:mt-6!"
             [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
             [dvDownloadButton]="{
               type: 'verfuegung',

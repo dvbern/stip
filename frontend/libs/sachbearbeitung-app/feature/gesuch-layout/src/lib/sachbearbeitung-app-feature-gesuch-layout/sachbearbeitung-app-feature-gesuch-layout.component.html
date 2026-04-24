@@ -6,11 +6,11 @@
     <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
       <a
-        class="btn btn-nav fw-normal d-flex align-items-center align-self-center shadow-none"
+        class="tw:dv-nav-button fw-normal tw:flex tw:items-center align-self-center"
         [routerLink]="['/']"
         data-testid="header-nav-backlink"
       >
-        <i class="material-symbols-rounded fs-3 me-2 text-white">arrow_left_alt</i>
+        <i class="material-symbols-rounded tw:text-2xl tw:mr-2 text-white">arrow_left_alt</i>
         <span>{{ t('shared.header.backToDashboard') }}</span>
       </a>
       @if (gesuchInfoDataSig(); as infoData) {
@@ -43,7 +43,7 @@
       @if (firstAenderungIdSig(); as firstAenderungId) {
         <a
           [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderungIdSig()]"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="isAenderungRouteSig()"
         >
@@ -52,7 +52,7 @@
       } @else {
         <button
           type="button"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           disabled
         >
@@ -64,7 +64,7 @@
       @if (firstDarlehenIdSig(); as firstDarlehenId) {
         <a
           [routerLink]="['/gesuch', 'darlehen', firstDarlehenId, 'gesuch', gesuchId]"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           [class.active]="isDarlehenRouteSig()"
         >
@@ -73,7 +73,7 @@
       } @else {
         <button
           type="button"
-          class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           disabled
         >
@@ -84,7 +84,7 @@
       <!-- infos -->
       <a
         [routerLink]="['/gesuch', 'infos', gesuchId]"
-        class="btn btn-nav fw-normal d-flex align-items-center px-2 shadow-none"
+        class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
         data-testid="sb-gesuch-header-infos-nav-link"
         [class.active]="isInfosRouteSig()"
       >
@@ -107,7 +107,7 @@
     <div
       class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
     >
-      <i class="material-symbols-rounded me-1 tw:text-dv-warning">info</i>
+      <i class="material-symbols-rounded tw:mr-1 tw:text-dv-warning">info</i>
       <span class="tw:text-md tw:text-neutral-500">
         {{ t('sachbearbeitung-app.header.info.isHistorized') }}
       </span>
@@ -121,7 +121,7 @@
           mat-tab-link
           [routerLink]="tab.route"
           [queryParams]="tab.queryParams"
-          class="btn btn-nav tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
+          class="tw:dv-nav-button tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
           [active]="tab.active"
           [class.active]="tab.active"
         >
@@ -137,7 +137,7 @@
       <div>
         <button
           type="button"
-          class="btn btn-outline-primary fw-normal d-flex align-items-center px-3 shadow-none tw:border-gray-300!"
+          class="tw:dv-button-outline fw-normal tw:flex tw:items-center px-3 tw:border-gray-300!"
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
           [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
@@ -145,22 +145,22 @@
           [matMenuTriggerFor]="aktionMenu"
         >
           <span>{{ t('sachbearbeitung-app.header.aktion') }}</span>
-          <i class="material-symbols-rounded ms-2">expand_more</i>
+          <i class="material-symbols-rounded tw:ml-2">expand_more</i>
         </button>
         <!-- Aktion Menu -->
-        <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
-          <div class="d-flex flex-column gap-2">
+        <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+          <div class="tw:flex tw:flex-col tw:gap-2">
             @switch (availableTrancheInteraction) {
               @case ('CREATE_TRANCHE') {
                 <!-- Tranche erstellen -->
                 <button
                   type="button"
-                  class="btn fw-normal px-2 shadow-none"
+                  class="btn fw-normal tw:px-2"
                   data-testid="aktion-tranche-erstellen"
                   mat-menu-item
                   (click)="createTranche()"
                 >
-                  <div class="d-flex align-items-center gap-2">
+                  <div class="tw:flex tw:items-center tw:gap-2">
                     <i class="material-symbols-rounded">add_circle</i>
                     <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
                   </div>
@@ -169,14 +169,14 @@
             }
 
             @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
-              <hr class="my-1" />
+              <hr class="tw:my-1" />
             }
 
             @for (uebergang of statusUebergaenge.list; track $index) {
               @if (uebergang.name) {
                 <button
                   type="button"
-                  class="btn fw-normal pe-auto px-2 shadow-none"
+                  class="btn fw-normal pe-auto tw:px-2"
                   [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
                   [disabled]="uebergang.disabledReason || !trancheId"
                   [matTooltip]="
@@ -187,7 +187,7 @@
                   mat-menu-item
                   (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
                 >
-                  <div class="d-flex align-items-center gap-2">
+                  <div class="tw:flex tw:items-center tw:gap-2">
                     <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
                     <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
                   </div>

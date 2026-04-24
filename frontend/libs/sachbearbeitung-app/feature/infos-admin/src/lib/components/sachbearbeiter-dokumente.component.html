@@ -44,11 +44,11 @@
           <button
             [matTooltip]="t('shared.dokumente.createCustomDokumentTyp')"
             type="button"
-            class="btn btn-outline-primary btn-sm"
+            class="tw:dv-button-outline btn-sm"
             data-testid="dokumente-button-createCustomDokumentTyp"
             (click)="createSachbearbeiterDokument()"
           >
-            <i class="material-symbols-rounded fs-4">add</i>
+            <i class="material-symbols-rounded tw:text-xl">add</i>
           </button>
         </th>
         <td mat-cell class="tw:w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">
@@ -57,7 +57,7 @@
             @if (dokument.canDelete) {
               <button
                 type="button"
-                class="dv-icon-button delete-icon tw:shrink-0"
+                class="tw:dv-button-icon delete-icon tw:shrink-0"
                 [attr.aria-label]="t('shared.form.delete')"
                 [matTooltip]="t('shared.dokumente.deleteCustomDokumentTyp.title')"
                 (click)="deleteSachbearbeiterDokument(dokument.id)"

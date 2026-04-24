@@ -4,11 +4,11 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-geschwister-form"
   novalidate
-  class="mt-4"
+  class="tw:mt-6"
   (ngSubmit)="handleSave()"
 >
-  <div class="row g-4 my-2">
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
       <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
@@ -16,7 +16,7 @@
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
       <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
@@ -26,9 +26,9 @@
     </mat-form-field>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- GEBURTSDATUM -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
@@ -56,7 +56,7 @@
     </mat-form-field>
 
     <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.shared.wohnsitz.label' | transloco }}</mat-label>
       <mat-select
         formControlName="wohnsitz"
@@ -80,8 +80,8 @@
 
   <!-- WOHNSITZ AUFTEILUNG -->
   @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
-    <div class="row g-4 my-2">
-      <div class="col-12 col-md-6 col-xl-4">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+      <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <dv-shared-ui-wohnsitz-splitter
           [updateValidity]="updateValidity$ | async"
           [controls]="form.controls"
@@ -94,17 +94,17 @@
     </div>
   }
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Ausbildungssituation -->
     <mat-radio-group
       formControlName="ausbildungssituation"
       data-testid="form-geschwister-ausbildungssituation"
       dvSharedUiFormField
-      class="col-12 col-xl-8"
+      class="tw:col-span-12 tw:xl:col-span-8"
     >
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
-      <div class="d-flex gap-2 flex-wrap col-12 justify-content-between">
-        <div class="d-flex flex-column">
+      <div class="tw:flex tw:gap-2 flex-wrap tw:col-span-12 tw:justify-between">
+        <div class="tw:flex tw:flex-col">
           @for (a of ausbildungssituationValues; track $index) {
             <mat-radio-button [attr.data-testid]="a" [value]="a">{{
               'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
@@ -121,7 +121,7 @@
 
         @if (ausbildungssituationDocumentSig(); as options) {
           <dv-shared-pattern-document-upload
-            class="flex-shrink-1 mt-2"
+            class="flex-shrink-1 tw:mt-2"
             [optionsSig]="options"
           ></dv-shared-pattern-document-upload>
         }
@@ -136,11 +136,11 @@
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons>
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
+    <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save">
+      <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | transloco }}
       </button>
     }

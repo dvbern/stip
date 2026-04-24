@@ -1,0 +1,380 @@
+<ng-container *transloco="let t">
+  <div class="tw:dv-container">
+    <div class="tw:mt-10 tw:grid tw:grid-cols-4 tw:gap-4" [formGroup]="quickFilterForm">
+      @for (quickFilterGroup of availableQuickFiltersSig(); track quickFilterGroup) {
+        <dv-shared-ui-filter-menu-button
+          [activeFilter]="show()"
+          [defaultFilter]="quickFilterGroup.filters[0].typ"
+          (filterChange)="handleQuickFilterClick($event)"
+          [filters]="quickFilterGroup.filters"
+          baseTranslationKey="sachbearbeitung-app.darlehen-dashboard.quick-filter."
+        ></dv-shared-ui-filter-menu-button>
+      }
+    </div>
+
+    <div class="tw:flex tw:justify-between tw:mt-8">
+      <h1 class="tw:text-2xl" data-testid="darlehen-title">
+        {{ t('sachbearbeitung-app.darlehen.title') }}
+      </h1>
+    </div>
+
+    <div class="tw:my-6">
+      <div class="tw:dv-table">
+        <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
+          <div [class.opacity-50]="darlehenStore.dashboardViewSig().loading">
+            <table
+              [dvSharedUiFocusableList]="items"
+              [dataSource]="darlehenDataSourceSig()"
+              data-testid="darlehen-table"
+              mat-table
+              matSort
+              (matSortChange)="sortList($event)"
+              tabindex="0"
+            >
+              <caption class="cdk-visually-hidden">
+                {{
+                  t('sachbearbeitung-app.darlehen-dashboard.table.description')
+                }}
+              </caption>
+
+              <ng-container matColumnDef="FALLNUMMER">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+                  <label class="tw:pointer-events-none" for="fallNummer">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.fallNummer')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="fallNummer"
+                        matInput
+                        [dvMaxLength]="'small'"
+                        class="tw:w-full"
+                        [formControl]="filterForm.controls.fallNummer"
+                        data-testid="darlehen-filter-fall"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="filterForm.controls.fallNummer.reset()"
+                      [valueSig]="filterForm.controls.fallNummer.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:w-32 tw:whitespace-nowrap"
+                >
+                  <a
+                    [routerLink]="['/darlehen', darlehen.id, 'gesuch', darlehen.relatedGesuchId]"
+                    (click)="$event.stopPropagation()"
+                  >
+                    {{ darlehen.fallNummer }}
+                  </a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_NACHNAME">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="tw:pointer-events-none" for="piaNachname">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.nachname')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaNachname"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        [formControl]="filterForm.controls.piaNachname"
+                        data-testid="darlehen-filter-nachname"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaNachname.reset()"
+                      [valueSig]="filterForm.controls.piaNachname.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="darlehen.piaNachname"
+                >
+                  {{ darlehen.piaNachname }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_VORNAME">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="tw:pointer-events-none" for="piaVorname">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.vorname')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaVorname"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        [formControl]="filterForm.controls.piaVorname"
+                        data-testid="darlehen-filter-vorname"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaVorname.reset()"
+                      [valueSig]="filterForm.controls.piaVorname.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:max-w-32 tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="darlehen.piaVorname"
+                >
+                  {{ darlehen.piaVorname }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="PIA_GEBURTSDATUM">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [start]="'desc'"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
+                  example="01.01.2000"
+                >
+                  <label class="tw:pointer-events-none" for="piaGeburtsdatum">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.geburtsdatum')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="piaGeburtsdatum"
+                        class="tw:w-full"
+                        matInput
+                        [dvMaxLength]="'small'"
+                        [formControl]="filterForm.controls.piaGeburtsdatum"
+                        data-testid="darlehen-filter-geburtsdatum"
+                        [matDatepicker]="geburtsdatumDatepicker"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                      <button
+                        matIconSuffix
+                        type="button"
+                        class="tw:dv-button tw:text-dv-gray tw:p-1"
+                        [attr.aria-label]="'shared.ui.open-date-picker'"
+                        (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
+                      >
+                        <dv-shared-ui-icon-chip class="fs-8">
+                          <i class="icon material-symbols-rounded tw:text-lg">event</i>
+                        </dv-shared-ui-icon-chip>
+                      </button>
+                      <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="filterForm.controls.piaGeburtsdatum.reset()"
+                      [valueSig]="filterForm.controls.piaGeburtsdatum.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                >
+                  {{ darlehen.piaGeburtsdatum | date: 'dd.MM.yyyy' }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="STATUS">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
+                  {{ t('sachbearbeitung-app.darlehen-dashboard.table.status') }}
+                  <mat-form-field class="tw:w-full">
+                    <mat-select
+                      [aria-label]="t('sachbearbeitung-app.darlehen-dashboard.table.status')"
+                      [formControl]="filterForm.controls.status"
+                      (click)="$event.stopPropagation()"
+                      class="tw:font-normal"
+                      [placeholder]="t('sachbearbeitung-app.darlehen-dashboard.no-status-filter')"
+                      panelClass="table-select"
+                    >
+                      <mat-option [value]="null">
+                        {{ t('sachbearbeitung-app.darlehen-dashboard.no-status-filter') }}
+                      </mat-option>
+                      @for (status of statusValues; track status) {
+                        <mat-option [value]="status">
+                          {{ t('sachbearbeitung-app.darlehen.status.' + status) }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:w-48 tw:whitespace-nowrap"
+                >
+                  <span [dvTruncateTooltip]="t(darlehen.translationKey)">
+                    {{ t(darlehen.translationKey) }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="BEARBEITER">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
+                  <label class="tw:pointer-events-none" for="bearbeiter">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.bearbeiter')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="bearbeiter"
+                        class="tw:w-full"
+                        matInput
+                        dvMaxLength
+                        [formControl]="filterForm.controls.bearbeiter"
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="filterForm.controls.bearbeiter.reset()"
+                      [valueSig]="filterForm.controls.bearbeiter.value"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                  [dvTruncateTooltip]="darlehen.bearbeiter"
+                >
+                  {{ darlehen.bearbeiter }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="LETZTE_AKTIVITAET">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  mat-sort-header
+                  [start]="'desc'"
+                  class="filtered tw:w-40 tw:whitespace-nowrap"
+                >
+                  <label class="tw:pointer-events-none" for="letzteAktivitaet">{{
+                    t('sachbearbeitung-app.darlehen-dashboard.table.letzteAktivitaet')
+                  }}</label>
+                  <div class="tw:relative tw:flex">
+                    <mat-form-field>
+                      <input
+                        id="letzteAktivitaet"
+                        class="range"
+                        matInput
+                        dvMaxLength
+                        [value]="letzteAktivitaetRangeSig()"
+                        disabled
+                        (click)="$event.stopPropagation()"
+                        (keydown)="$event.stopPropagation()"
+                      />
+                      <button
+                        matIconSuffix
+                        type="button"
+                        class="tw:dv-button tw:text-dv-gray tw:p-1"
+                        [attr.aria-label]="'shared.ui.open-date-picker'"
+                        (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
+                      >
+                        <dv-shared-ui-icon-chip class="fs-8">
+                          <i class="icon material-symbols-rounded tw:text-lg">event</i>
+                        </dv-shared-ui-icon-chip>
+                      </button>
+                      <mat-date-range-input
+                        class="tw:hidden tw:w-full"
+                        [rangePicker]="letzteAktivitaetRangePicker"
+                        (click)="$event.stopPropagation()"
+                      >
+                        <input
+                          [formControl]="filterStartEndForm.controls.letzteAktivitaetFrom"
+                          matStartDate
+                          [placeholder]="t('shared.label.von')"
+                        />
+                        <input
+                          [formControl]="filterStartEndForm.controls.letzteAktivitaetTo"
+                          matEndDate
+                          [placeholder]="t('shared.label.bis')"
+                        />
+                      </mat-date-range-input>
+                      <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
+                    </mat-form-field>
+                    <dv-shared-ui-clear-button
+                      class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                      (clear)="
+                        filterStartEndForm.controls.letzteAktivitaetFrom.reset();
+                        filterStartEndForm.controls.letzteAktivitaetTo.reset()
+                      "
+                      [valueSig]="[
+                        filterStartEndForm.controls.letzteAktivitaetFrom.value,
+                        filterStartEndForm.controls.letzteAktivitaetTo.value,
+                      ]"
+                    ></dv-shared-ui-clear-button>
+                  </div>
+                </th>
+                <td
+                  mat-cell
+                  *dvMatCellDef="let darlehen; dataSource: darlehenDataSourceSig()"
+                  class="tw:whitespace-nowrap"
+                >
+                  {{ darlehen.letzteAktivitaet | date: 'dd.MM.yyyy' }}
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr
+                dvSharedUiFocusableListItem
+                mat-row
+                tabindex="-1"
+                *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
+                [routerLink]="['/darlehen', darlehen.id, 'gesuch', darlehen.relatedGesuchId]"
+                class="highlightable"
+              ></tr>
+              <tr class="mat-mdc-row" *matNoDataRow>
+                <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+                  {{ t('shared.table.noData') }}
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator
+              showFirstLastButtons
+              [pageSizeOptions]="pageSizes"
+              [pageSize]="pageSize() ?? defaultPageSize"
+              [pageIndex]="page() ?? 0"
+              [length]="darlehenStore.dashboardViewSig().darlehen?.totalEntries"
+              (page)="paginateList($event)"
+            ></mat-paginator>
+          </div>
+          @if (darlehenStore.dashboardViewSig().loading) {
+            <dv-shared-ui-loading
+              class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+              [type]="'compact'"
+            ></dv-shared-ui-loading>
+          }
+        </form>
+      </div>
+    </div>
+  </div>
+</ng-container>

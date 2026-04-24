@@ -13,10 +13,10 @@
 
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-56 tw:whitespace-nowrap">
-              <label class="pe-none" for="benutzers">
+              <label class="tw:pointer-events-none" for="benutzers">
                 {{ t('sachbearbeitung-app.admin.benutzerverwaltung.name.label') }}
               </label>
-              <div class="d-flex position-relative align-items-center justify-content-end">
+              <div class="tw:flex tw:relative tw:items-center tw:justify-end">
                 <mat-form-field class="filter-form-field">
                   <input
                     matInput
@@ -30,7 +30,7 @@
                 </mat-form-field>
 
                 <dv-shared-ui-clear-button
-                  class="clear d-flex align-items-center position-absolute"
+                  class="clear tw:flex tw:items-center tw:absolute"
                   (clear)="filterForm.controls.name.reset()"
                   [valueSig]="filterForm.controls.name.value"
                 ></dv-shared-ui-clear-button>
@@ -52,7 +52,7 @@
                 <label>
                   {{ t('sachbearbeitung-app.admin.benutzerverwaltung.email.label') }}
                 </label>
-                <div class="d-flex position-relative align-items-center justify-content-end"></div>
+                <div class="tw:flex tw:relative tw:items-center tw:justify-end"></div>
               </div>
             </th>
             <td
@@ -67,10 +67,10 @@
 
           <ng-container matColumnDef="roles">
             <th mat-header-cell *matHeaderCellDef class="filtered tw:w-64 tw:whitespace-nowrap">
-              <label class="pe-none" for="benutzers">
+              <label class="tw:pointer-events-none" for="benutzers">
                 {{ t('sachbearbeitung-app.admin.benutzerverwaltung.overview.roles') }}
               </label>
-              <div class="d-flex position-relative align-items-center justify-content-end">
+              <div class="tw:flex tw:relative tw:items-center tw:justify-end">
                 <mat-form-field class="filter-form-field">
                   <input
                     matInput
@@ -83,14 +83,14 @@
                   />
                 </mat-form-field>
                 <dv-shared-ui-clear-button
-                  class="clear d-flex align-items-center position-absolute"
+                  class="clear tw:flex tw:items-center tw:absolute"
                   (clear)="filterForm.controls.roles.reset()"
                   [valueSig]="filterForm.controls.roles.value"
                 ></dv-shared-ui-clear-button>
               </div>
             </th>
             <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource" class="py-2">
-              <div class="d-flex align-items-center flex-wrap gap-2">
+              <div class="tw:flex tw:items-center flex-wrap tw:gap-2">
                 @if (!benutzer.roles.extraAmount || showFullListForBenutzer[benutzer.id]) {
                   @for (role of benutzer.roles.full; track role) {
                     <dv-shared-ui-badge [type]="role.color">
@@ -121,19 +121,19 @@
               <a
                 [matTooltip]="t('sachbearbeitung-app.admin.gesuchsperiode.table.erstellen')"
                 [routerLink]="['.', 'create']"
-                class="btn btn-outline-primary btn-sm"
+                class="tw:dv-button-outline btn-sm"
               >
-                <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
+                <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
               </a>
             </th>
             <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
-              <div class="d-flex justify-content-end gap-2">
+              <div class="tw:flex tw:justify-end tw:gap-2">
                 <a
                   [routerLink]="['.', 'edit', benutzer.id]"
                   class="btn btn-link"
                   [attr.aria-label]="t('sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten')"
                 >
-                  <i class="material-symbols-rounded fs-5">edit</i>
+                  <i class="material-symbols-rounded tw:text-lg">edit</i>
                 </a>
                 <button
                   type="button"
@@ -141,7 +141,7 @@
                   [attr.aria-label]="t('sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen')"
                   (click)="deleteBenutzer(benutzer)"
                 >
-                  <i class="material-symbols-rounded fs-5">delete</i>
+                  <i class="material-symbols-rounded tw:text-lg">delete</i>
                 </button>
               </div>
             </td>
@@ -164,7 +164,7 @@
         </mat-paginator>
         @if (store.benutzers() | rdIsPending) {
           <dv-shared-ui-loading
-            class="position-absolute translate-middle start-50 top-50"
+            class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

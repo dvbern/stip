@@ -5,12 +5,16 @@
     <dv-shared-ui-loading style="height: 39px" type="icon"></dv-shared-ui-loading>
   } @else {
     @if (dokumentRd.data?.id && dokumentRd.data?.dokumente?.length) {
-      <div class="d-flex justify-content-between">
+      <div class="tw:flex tw:justify-between">
         @switch (dokumentRd.data?.status) {
           @case ('AUSSTEHEND') {
             @if (gesuchDokumentViewSig()?.permissions?.canApprove) {
-              <button (click)="dokumentAblehnen()" type="button" class="btn btn-danger d-flex align-items-center gap-1">
-                <i class="material-symbols-rounded fs-4">close</i>
+              <button
+                (click)="dokumentAblehnen()"
+                type="button"
+                class="tw:dv-button-main-danger tw:flex tw:items-center tw:gap-1"
+              >
+                <i class="material-symbols-rounded tw:text-xl">close</i>
                 <span>
                   {{ 'shared.dokumente.dokumentStatus.action.reject' | transloco }}
                 </span>
@@ -18,9 +22,9 @@
               <button
                 (click)="dokumentAkzeptieren()"
                 type="button"
-                class="btn btn-success text-white d-flex align-items-center gap-1"
+                class="btn btn-success text-white tw:flex tw:items-center tw:gap-1"
               >
-                <i class="material-symbols-rounded fs-4">check</i>
+                <i class="material-symbols-rounded tw:text-xl">check</i>
                 <span>
                   {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
                 </span>
@@ -44,7 +48,7 @@
         }
       </div>
     } @else {
-      <div class="d-flex">
+      <div class="tw:flex">
         <dv-shared-ui-icon-badge type="warning" class="status ms-auto">
           {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
         </dv-shared-ui-icon-badge>

@@ -2,7 +2,7 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
+    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
@@ -108,15 +108,15 @@
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | transloco }}</mat-label>
     </mat-checkbox>
 
-    <div class="d-flex justify-content-between tw:col-span-full mt-4">
-      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="close()">
+    <div class="tw:flex tw:justify-between tw:col-span-full tw:mt-6">
+      <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="close()">
         {{ 'shared.cancel' | transloco }}
       </button>
       <button
         type="submit"
         data-testid="dialog-submit"
         [disabled]="form.invalid || form.pristine"
-        class="btn btn-primary ms-2"
+        class="tw:dv-button-main-primary tw:ml-2"
         (click)="confirm()"
       >
         {{ 'sachbearbeitung-app.admin.euEftaLaender-dialog.submit' | transloco }}

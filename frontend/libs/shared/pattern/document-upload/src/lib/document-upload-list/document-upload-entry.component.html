@@ -2,7 +2,7 @@
 @let document = documentViewSig();
 @if (document && upload) {
   <dv-shared-ui-icon-chip
-    class="fs-5 reverse me-2 mt-1"
+    class="tw:text-lg reverse tw:mr-2 tw:mt-1"
     [class.spin]="loadingSig()"
     [ngClass]="'bg-' + document.theme.type"
   >
@@ -10,15 +10,15 @@
       {{ document.theme.icon }}
     </i>
   </dv-shared-ui-icon-chip>
-  <div class="d-flex flex-column w-min-content tw:ml-1 flex-grow-1" *dvTranslocoShared="let t">
-    <div class="d-flex flex-row">
+  <div class="tw:flex tw:flex-col w-min-content tw:ml-1 tw:grow" *dvTranslocoShared="let t">
+    <div class="tw:flex flex-row">
       <span class="text-truncate filename fs-7" [title]="document.file.filename">{{ document.file.filename }}</span>
-      <div class="flex-grow-1"></div>
+      <div class="tw:grow"></div>
       @switch (document.state) {
         @case ('uploading') {
           <button
             type="button"
-            class="dv-icon-button cancel-icon ms-2 flex-shrink-0"
+            class="tw:dv-button-icon cancel-icon tw:ml-2 tw:shrink-0"
             [attr.aria-label]="t('shared.cancel')"
             (click)="cancelUpload.emit({ dokumentId: document.file.id })"
           >
@@ -33,16 +33,16 @@
             data-testid="download-button"
             [dvDownloadButton]="downloadOptionsSig()"
           >
-            <span class="material-symbols-rounded text-muted align-middle">download</span>
+            <span class="material-symbols-rounded tw:text-dv-gray align-middle">download</span>
           </button>
           <button
             type="button"
-            class="dv-icon-button delete-icon ms-2 flex-shrink-0"
+            class="tw:dv-button-icon delete-icon tw:ml-2 tw:shrink-0"
             [attr.aria-label]="t('shared.form.delete')"
             [disabled]="!isDeletableSig() || loadingSig()"
             (click)="checkForRemove$.emit()"
           >
-            <span class="material-symbols-rounded text-muted align-middle">delete</span>
+            <span class="material-symbols-rounded tw:text-dv-gray align-middle">delete</span>
           </button>
         }
       }
@@ -59,10 +59,10 @@
         }}</span>
       }
       @case ('uploading') {
-        <span class="fs-8 fst-italic text-info">{{ t('shared.file.uploading') }}</span>
+        <span class="fs-8 fst-italic tw:text-dv-blue">{{ t('shared.file.uploading') }}</span>
       }
       @case ('deleting') {
-        <span class="fs-8 fst-italic text-info">{{ t('shared.file.deleting') }}</span>
+        <span class="fs-8 fst-italic tw:text-dv-blue">{{ t('shared.file.deleting') }}</span>
       }
     }
     @if (document.error; as error) {

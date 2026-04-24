@@ -19,9 +19,11 @@ import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   DokumentOptions,
+  DokumentView,
   SharedModelGesuchDokument,
 } from '@dv/shared/model/dokument';
 import { Dokument } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
@@ -64,14 +66,19 @@ export class SharedPatternDocumentUploadComponent {
   mainDocumentSig = computed(() => {
     const { dokuments } = this.uploadStore.dokumentListView();
     if (!dokuments.length) return;
-    return (
+    const dokument =
       // If there are any documents in error state, show the first one
       dokuments.find((document) => document.state === 'error') ??
       // else show the first document that is still uploading
       dokuments.find((document) => document.state === 'uploading') ??
       // else show the first document that is done
-      dokuments.find((document) => document.state === 'done')
-    );
+      dokuments.find((document) => document.state === 'done');
+    return dokument
+      ? {
+          ...dokument,
+          twColor: getStateColor(dokument.theme.type),
+        }
+      : undefined;
   });
 
   initialOptionsSig = computed(
@@ -179,3 +186,20 @@ export class SharedPatternDocumentUploadComponent {
     }
   }
 }
+
+const getStateColor = (type: DokumentView['theme']['type']) => {
+  switch (type) {
+    case 'danger': {
+      return { bg: 'tw:bg-dv-red-subtle', color: 'tw:text-dv-red' };
+    }
+    case 'info': {
+      return { bg: 'tw:bg-dv-blue-subtle', color: 'tw:text-dv-blue' };
+    }
+    case 'success': {
+      return { bg: 'tw:bg-dv-green-subtle', color: 'tw:text-dv-green' };
+    }
+    default: {
+      assertUnreachable(type);
+    }
+  }
+};

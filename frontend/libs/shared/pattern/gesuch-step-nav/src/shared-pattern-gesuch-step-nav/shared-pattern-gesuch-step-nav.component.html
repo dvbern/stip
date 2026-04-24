@@ -1,12 +1,10 @@
 @for (step of stepsViewSig(); track $index; let index = $index) {
   @if (step.prependLine) {
-    <hr class="mt-4 mb-4 pb-2" />
+    <hr class="tw:mt-6 tw:mb-6 tw:border-t tw:border-dv-border tw:pb-2" />
   }
 
   <a
-    class="btn btn-nav btn-warning d-flex justify-content-start align-items-center fw-normal position-relative mb-3 w-100 overflow-visible"
-    [class.btn-light]="!step.active()"
-    [class.shadow-none]="!step.active()"
+    class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center tw:relative tw:mb-4 tw:w-full"
     [class.active]="step.active()"
     [class.disabled]="step.disabled"
     [class.tw:dv-historized]="isHistorizedSig()"
@@ -19,14 +17,14 @@
     @if (step.hasChanges) {
       <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
     }
-    <div class="position-relative d-flex me-3 align-middle">
+    <div class="tw:relative tw:flex tw:mr-4 align-middle">
       <i class="material-symbols-rounded">{{ step.iconSymbolName }}</i>
       @if (step.status) {
         <i
-          class="validator-indicator material-symbols-rounded position-absolute"
-          [class.text-warning]="step.status === 'WARNING'"
-          [class.text-success]="step.status === 'VALID'"
-          [class.text-danger]="step.status === 'INVALID'"
+          class="validator-indicator material-symbols-rounded tw:absolute"
+          [class.tw:text-dv-yellow]="step.status === 'WARNING'"
+          [class.tw:text-dv-green]="step.status === 'VALID'"
+          [class.tw:text-dv-red]="step.status === 'INVALID'"
         >
           {{ statusIconMap[step.status] }}
         </i>

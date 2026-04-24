@@ -2,7 +2,7 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
+    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="t('shared.close')"
   >
     <span class="material-symbols-rounded">close</span>
@@ -151,17 +151,27 @@
       </mat-form-field>
 
       <div class="tw:mt-10 tw:flex tw:col-span-2 tw:gap-6">
-        <button type="button" class="btn btn-danger" (click)="update('ABGELEHNT')" data-testid="dialog-reject">
+        <button
+          type="button"
+          class="tw:dv-button-main-danger"
+          (click)="update('ABGELEHNT')"
+          data-testid="dialog-reject"
+        >
           {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.ABGELEHNT') }}
         </button>
-        <button type="button" class="btn btn-primary" (click)="update('AKZEPTIERT')" data-testid="dialog-accept">
+        <button
+          type="button"
+          class="tw:dv-button-main-primary"
+          (click)="update('AKZEPTIERT')"
+          data-testid="dialog-accept"
+        >
           {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.AKZEPTIERT') }}
         </button>
       </div>
     </form>
   } @else {
     <div class="tw:flex tw:justify-center">
-      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-close">
+      <button type="button" class="tw:dv-button-outline" (click)="close()" data-testid="dialog-close">
         {{ t('shared.close') }}
       </button>
     </div>

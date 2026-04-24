@@ -61,14 +61,14 @@ const baseNavItems: (NavItem & {
       <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
       </dv-shared-pattern-mobile-sidenav>
     </mat-sidenav>
-    <mat-sidenav-content class="d-flex flex-column">
+    <mat-sidenav-content class="tw:flex tw:flex-col">
       <dv-shared-pattern-global-header
         [staticNavItemsSig]="navItemsSig()"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
-      <main class="page-body tw:flex tw:flex-col">
+      <main class="tw:dv-page-body tw:flex tw:flex-col">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>

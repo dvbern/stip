@@ -13,7 +13,7 @@
         <!-- button sendMissingDocuments -->
         <button
           type="button"
-          class="btn btn-primary ml-auto"
+          class="tw:dv-button-main-primary ml-auto"
           (click)="setToAdditionalDokumenteErhalten()"
           data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
           [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
@@ -56,7 +56,7 @@
     <!-- button sendMissingDocuments -->
     <button
       type="button"
-      class="btn btn-primary ml-auto"
+      class="tw:dv-button-main-primary ml-auto"
       (click)="fehlendeDokumenteUebermitteln()"
       data-testid="dokumente-button-sendMissingDocuments"
       [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig() || (dokumentsStore.dokuments() | rdIsPending)"
@@ -70,7 +70,7 @@
 <dv-shared-ui-step-form-buttons *dvIfSachbearbeiter>
   <button
     type="button"
-    class="btn btn-primary"
+    class="tw:dv-button-main-primary"
     (click)="handleContinue()"
     data-testid="button-continue"
     [disabled]="dokumente | rdIsPending"
@@ -83,7 +83,7 @@
   @if (!gesuch.isFehlendeDokumente) {
     <button
       type="button"
-      class="btn btn-primary"
+      class="tw:dv-button-main-primary"
       (click)="handleContinue()"
       data-testid="button-continue"
       [disabled]="dokumente | rdIsPending"
@@ -93,7 +93,7 @@
   } @else {
     <button
       type="button"
-      class="btn btn-primary"
+      class="tw:dv-button-main-primary"
       (click)="fehlendeDokumenteEinreichen()"
       data-testid="button-save"
       [disabled]="

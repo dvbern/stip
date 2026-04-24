@@ -15,5 +15,5 @@ import {
 export class SharedUiTableHeaderFilterComponent {
   @Input({ required: true }) text!: string;
   @HostBinding('class') klass =
-    'd-flex flex-column align-items-start position-relative pb-4';
+    'tw:flex tw:flex-col align-items-start tw:relative pb-4';
 }

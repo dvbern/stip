@@ -1,21 +1,23 @@
 <ng-container *transloco="let t">
-  <div class="d-flex h-100">
+  <div class="tw:flex tw:h-full">
     <!-- left step nav (Desktop) -->
-    <div class="d-none d-lg-block border-end bg-white">
-      <dv-shared-pattern-gesuch-step-nav class="sidenav p-4" [stepsSig]="stepsSig()" />
+    <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
+      <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
     </div>
 
     <div class="tw:dv-pass-height tw:p-6">
       @if (currentStepSig(); as step) {
         <!-- step header (mobile) -->
-        <div class="d-flex align-items-center justify-content-between border-bottom border-1 pb-3 mt-3 mb-4 d-lg-none">
+        <div
+          class="tw:flex tw:items-center tw:justify-between tw:border-b tw:border-dv-border tw:pb-4 tw:mt-4 tw:mb-6 tw:lg:hidden"
+        >
           <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
-          <div class="text-end">
-            <h5 class="step-title">
+          <div class="tw:text-end">
+            <h5 class="step-title tw:font-semibold tw:text-lg/tight">
               {{ t(step.translationKey) }}
             </h5>
             @if (step.nextStep?.translationKey; as nextStepKey) {
-              <p class="fst-italic mb-0">
+              <p class="fst-italic tw:mb-0">
                 {{ t('shared.form.next') }}:
                 {{ t(nextStepKey) }}
               </p>
@@ -24,12 +26,12 @@
         </div>
 
         <!-- title (desktop) -->
-        <div class="d-none d-lg-flex justify-content-start">
-          <dv-shared-ui-icon-chip class="step-icon me-3">
+        <div class="tw:hidden tw:lg:flex tw:justify-start">
+          <dv-shared-ui-icon-chip class="step-icon tw:mr-4">
             <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
           </dv-shared-ui-icon-chip>
 
-          <h2 class="fw-bold" data-testid="step-title">
+          <h2 class="tw:font-bold tw:text-3xl" data-testid="step-title">
             {{ t(step.titleTranslationKey) }}
           </h2>
           <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>

@@ -2,16 +2,16 @@
   <dv-shared-ui-drop-file class="tw:rounded-lg tw:border-2 tw:bg-white tw:shadow-sm tw:grow">
     <label class="tw:flex tw:flex-col tw:items-center tw:p-4 tw:w-full tw:text-center tw:cursor-pointer">
       <div
-        class="text-muted text-italic d-md-block d-none my-4 text-center"
+        class="tw:text-dv-gray text-italic tw:md:block tw:hidden tw:my-6 text-center"
         [innerHTML]="t('shared.file.dropZone')"
       ></div>
-      <button (click)="fileInput.click()" type="button" class="btn btn-outline-primary">
+      <button (click)="fileInput.click()" type="button" class="tw:dv-button-outline btn-outline-primary">
         {{ t('shared.file.upload') }}
       </button>
       <input
         #fileInput
         [formControl]="fileControl"
-        class="cdk-visually-hidden mb-2"
+        class="cdk-visually-hidden tw:mb-2"
         type="file"
         tabindex="-1"
         data-testid="file-input"
@@ -26,11 +26,11 @@
       <span class="tw:truncate" [title]="file.name">{{ file.name }}</span>
       <button
         type="button"
-        class="dv-icon-button tw:ml-2 tw:h-auto tw:w-auto tw:self-end flex-shrink-0"
+        class="tw:dv-button-icon tw:ml-2 tw:h-auto tw:w-auto tw:self-end tw:shrink-0"
         [attr.aria-label]="t('shared.form.delete')"
         (click)="resetSelectedFile()"
       >
-        <span class="material-symbols-rounded text-muted tw:!text-xl/none align-middle">delete</span>
+        <span class="material-symbols-rounded tw:text-dv-gray tw:!text-xl/none align-middle">delete</span>
       </button>
     </div>
   }

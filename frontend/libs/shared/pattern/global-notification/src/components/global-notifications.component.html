@@ -2,21 +2,25 @@
   <div class="py-3" matSnackBarLabel>
     @if (store.mostImportantNotificationSig(); as globalNotification) {
       @for (notification of globalNotification?.list; track notification.id) {
-        <div class="d-flex align-items-center">
+        <div class="tw:flex tw:items-center">
           @if (notification.messageKey) {
-            <div class="flex-grow-1" [innerHTML]="notification.messageKey | transloco"></div>
+            <div class="tw:grow" [innerHTML]="notification.messageKey | transloco"></div>
           } @else if (notification.message) {
-            <div class="flex-grow-1">
+            <div class="tw:grow">
               {{ notification.message }}
             </div>
           } @else {
-            <div class="flex-grow-1">
+            <div class="tw:grow">
               {{ 'shared.genericError.general' | transloco }}
             </div>
           }
           @if (!globalNotification.autohide) {
-            <button type="button" class="dv-icon-button text-white ms-2" (click)="removeNotification(notification.id)">
-              <span class="material-symbols-rounded align-middle fs-4">close</span>
+            <button
+              type="button"
+              class="tw:dv-button-icon text-white tw:ml-2"
+              (click)="removeNotification(notification.id)"
+            >
+              <span class="material-symbols-rounded align-middle tw:text-xl">close</span>
             </button>
           }
         </div>

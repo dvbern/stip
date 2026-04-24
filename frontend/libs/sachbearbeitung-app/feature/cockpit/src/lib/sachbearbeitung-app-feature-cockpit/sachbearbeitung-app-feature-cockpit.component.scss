@@ -8,12 +8,12 @@
     height: 24px;
 
     &.in_bearbeitung_gs {
-      background-color: var(--dv-blue-bg-subtle);
-      color: var(--dv-blue-bg);
+      background-color: var(--dv-blue-subtle);
+      color: var(--dv-blue);
     }
     &.komplett_eingereicht {
-      background-color: var(--dv-green-bg-subtle);
-      color: var(--dv-green-bg);
+      background-color: var(--dv-green-subtle);
+      color: var(--dv-green);
     }
   }
 

@@ -1,4 +1,4 @@
-<div class="container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck-detail'">
+<div class="tw:dv-container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck-detail'">
   @let massendruck = massendruckStore.massendruckViewSig().massendruckJob;
   <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
     {{ t('title') }}
@@ -51,11 +51,11 @@
           }
           @case ('FAILED') {
             <div class="tw:flex tw:gap-4">
-              <button type="button" class="btn btn-danger" (click)="cancelMassendruckJob(massendruck)">
+              <button type="button" class="tw:dv-button-main-danger" (click)="cancelMassendruckJob(massendruck)">
                 <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">cancel</div>
                 {{ t('cancel') }}
               </button>
-              <button type="button" class="btn btn-outline-primary" (click)="retryMassendruckJob(massendruck)">
+              <button type="button" class="tw:dv-button-outline" (click)="retryMassendruckJob(massendruck)">
                 <div class="material-symbols-rounded tw:text-xl! tw:mr-1 tw:align-middle">restart_alt</div>
                 {{ t('retry') }}
               </button>
@@ -66,7 +66,7 @@
     }
     @if (massendruckStore.massendruckViewSig().loading) {
       <dv-shared-ui-loading
-        class="position-absolute translate-middle start-50 top-50"
+        class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
         [type]="'compact'"
       ></dv-shared-ui-loading>
     }
@@ -231,7 +231,7 @@
       </div>
       @if (massendruckStore.massendruckViewSig().loading) {
         <dv-shared-ui-loading
-          class="position-absolute translate-middle start-50 top-50"
+          class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
           [type]="'compact'"
         ></dv-shared-ui-loading>
       }

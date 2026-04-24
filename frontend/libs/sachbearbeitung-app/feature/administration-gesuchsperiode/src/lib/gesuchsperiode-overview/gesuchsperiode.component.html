@@ -67,23 +67,23 @@
             <a
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               [routerLink]="['.', 'create']"
-              class="btn btn-outline-primary btn-sm"
+              class="tw:dv-button-outline btn-sm"
             >
-              <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
             </a>
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsperiode; dataSource: gesuchsperiodeSource">
-            <div class="d-flex">
+            <div class="tw:flex">
               @if (gesuchsperiode.isEditable) {
                 <button
                   type="button"
-                  class="btn btn-link me-2"
+                  class="btn btn-link tw:mr-2"
                   [attr.aria-label]="
                     'sachbearbeitung-app.admin.gesuchsperiode.table.loeschen' | transloco: gesuchsperiode
                   "
                   (click)="deleteGesuchsperiode(gesuchsperiode); $event.stopPropagation()"
                 >
-                  <i class="material-symbols-rounded fs-5">delete</i>
+                  <i class="material-symbols-rounded tw:text-lg">delete</i>
                 </button>
               }
             </div>

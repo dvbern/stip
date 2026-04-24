@@ -1,14 +1,14 @@
 <ng-container *dvTranslocoDemo="let t">
   <button
     type="button"
-    class="dv-icon-button dv-icon-button-lg m-2 position-absolute top-0 end-0"
+    class="tw:dv-button-icon tw:m-2 tw:absolute tw:top-0 tw:right-0"
     [attr.aria-label]="t('shared.close')"
     (click)="close()"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
   <div class="tw:max-h-[90vh] tw:p-4 tw:flex tw:flex-col">
-    <h3 class="tw:mb-4 tw:mr-4">
+    <h3 class="tw:font-semibold tw:text-lg tw:mb-4 tw:mr-4">
       {{ t(`demo-data-app.overview.apply-demo-data.changes.${data.length ? 'found' : 'none'}`) }}
     </h3>
     <div class="tw:overflow-auto tw:shrink tw:min-h-0">
@@ -71,8 +71,8 @@
         }
       </table>
     </div>
-    <div class="d-flex mt-4 justify-content-end">
-      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-cancel">
+    <div class="tw:flex tw:mt-6 tw:justify-end">
+      <button type="button" class="tw:dv-button-outline" (click)="close()" data-testid="dialog-cancel">
         {{ t('shared.close') }}
       </button>
     </div>

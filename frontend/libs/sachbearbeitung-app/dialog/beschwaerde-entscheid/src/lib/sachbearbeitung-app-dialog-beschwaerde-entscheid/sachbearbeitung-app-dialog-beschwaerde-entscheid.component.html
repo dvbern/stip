@@ -33,8 +33,8 @@
       class="tw:w-full"
     >
       <mat-label>{{ 'sachbearbeitung-app.infos.beschwerde.erfolgreich' | transloco }}</mat-label>
-      <div class="d-flex justify-content-between col-12 flex-wrap gap-2">
-        <div class="d-flex flex-column">
+      <div class="tw:flex tw:justify-between tw:col-span-12 flex-wrap tw:gap-2">
+        <div class="tw:flex tw:flex-col">
           <mat-radio-button data-testid="yes" [value]="true">{{
             'sachbearbeitung-app.infos.beschwerde.infoDialog.true' | transloco
           }}</mat-radio-button>
@@ -50,11 +50,11 @@
       </div>
     </mat-radio-group>
 
-    <div class="d-flex justify-content-between mt-4">
-      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-ok">
+    <div class="tw:flex tw:justify-between tw:mt-6">
+      <button type="button" class="tw:dv-button-outline" (click)="close()" data-testid="dialog-ok">
         {{ 'shared.close' | transloco }}
       </button>
-      <button type="submit" class="btn btn-primary ms-2" data-testid="dialog-confirm">
+      <button type="submit" class="tw:dv-button-main-primary tw:ml-2" data-testid="dialog-confirm">
         {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.confirm' | transloco }}
       </button>
     </div>
@@ -63,7 +63,7 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
+    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:!m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>

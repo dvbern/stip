@@ -22,10 +22,10 @@
       </mat-error>
     </mat-form-field>
     <div class="tw:mt-5 tw:flex tw:justify-between">
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw:ml-2">
+      <button type="submit" [disabled]="form.invalid" class="tw:dv-button-main-primary tw:ml-2">
         {{ 'sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.confirm' | transloco }}
       </button>
     </div>
