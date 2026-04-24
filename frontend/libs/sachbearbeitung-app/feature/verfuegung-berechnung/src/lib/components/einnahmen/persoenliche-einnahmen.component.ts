@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -8,15 +9,18 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
+import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
   selector: 'dv-persoenliche-einnahmen',
   imports: [
+    CommonModule,
     TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
+    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -26,6 +30,10 @@ import { PositionComponent } from '../position/position.component';
       "
     >
       @let einnahmen = budgetSig().einnahmen;
+      @let hideZero = hideZeroSig();
+
+      <!-- <pre>{{ einnahmen | json }}</pre> -->
+
       <!-- Nettoerwerbseinkommen -->
       <dv-position
         [titleSig]="t('nettoerwerbseinkommen')"
@@ -41,11 +49,6 @@ import { PositionComponent } from '../position/position.component';
       </dv-position>
 
       <!-- BGSA -->
-      <!-- <dv-position
-        [titleSig]="t('einnahmenBGSA')"
-        [personValueItemsSig]="einnahmen.einnahmenBGSA"
-        [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
-      > -->
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
@@ -79,6 +82,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('eoLeistungen.info')"
         [personValueItemsSig]="einnahmen.eoLeistungen"
         [amountSig]="einnahmen.eoLeistungenTotal | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.eoLeistungenTotal"
       >
       </dv-position>
 
@@ -88,6 +92,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('taggelderAHVIV.info')"
         [personValueItemsSig]="einnahmen.taggelderAHVIV"
         [amountSig]="einnahmen.taggelderAHVIVTotal | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.taggelderAHVIVTotal"
       >
       </dv-position>
 
@@ -97,6 +102,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('renten.info')"
         [personValueItemsSig]="einnahmen.renten"
         [amountSig]="einnahmen.rentenTotal | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.rentenTotal"
       >
       </dv-position>
 
@@ -159,6 +165,7 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
+  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<PersoenlichesBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }

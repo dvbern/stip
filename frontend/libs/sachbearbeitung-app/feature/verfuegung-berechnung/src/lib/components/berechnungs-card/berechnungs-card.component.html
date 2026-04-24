@@ -3,6 +3,8 @@
     <h2 class="tw:mb-6!">
       {{ t(titleKeySig()) }}
     </h2>
+
+    <!-- badges -->
     <div class="tw:text-lg tw:flex tw:flex-col tw:gap-2 tw:pb-3">
       <div class="tw:flex tw:gap-2">
         <!-- name -->
@@ -10,9 +12,7 @@
 
         <!-- sv-numer -->
         <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
-          <span class="tw:font-semibold">
-            {{ t('persoenlich.sv-nummer') }}
-          </span>
+          <span class="tw:font-semibold"> {{ t('sv-nummer') }}: </span>
           <span>
             {{ berechnung.sozialversicherungsnummer }}
           </span>
@@ -20,52 +20,76 @@
 
         <!-- geburtsdatum -->
         <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
-          <span class="tw:font-semibold">
-            {{ t('persoenlich.geburtsdatum') }}
-          </span>
+          <span class="tw:font-semibold"> {{ t('geburtsdatum') }}: </span>
           <span>
             {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
           </span>
         </div>
       </div>
 
-      <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
-        <span>
-          {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
-        </span>
+      <div class="tw:flex tw:gap-2">
+        @switch (berechnung.typ) {
+          @case ('persoenlich') {
+            <!-- ausbildungsjahr -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('ausbildungsjahr') }}: </span>
+              <span> {{ berechnung.yearRange }} </span>
+            </div>
+          }
+          @case ('familien') {
+            <!-- steuerjahr  -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('steuerjahr') }}: </span>
+              <span>
+                {{ berechnung.steuerjahr }}
+              </span>
+            </div>
 
-        <span>
-          {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }}, {{ t('to') }}:
-          {{ berechnung.gueltigBis | date: 'MM.yyyy' }}, {{ t('months') }}: {{ berechnung.anzahlMonate }}
-        </span>
-      </span>
-
-      @switch (berechnung.typ) {
-        @case ('persoenlich') {
-          <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
+            <!-- veranlagungscode -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('veranlagungscode') }}: </span>
+              <span>
+                {{ berechnung.veranlagungscode }}
+              </span>
+            </div>
+          }
         }
-        @case ('familien') {
-          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
-            <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
-            <span class="tw:text-gray-500 tw:text-sm">
-              {{ t('veranlagungscode') }}:
-              {{ berechnung.veranlagungscode }}
-            </span>
+        <!-- von -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('from') }}: </span>
+          <span>
+            {{ berechnung.gueltigAb | date: 'MM.yyyy' }}
           </span>
-        }
-      }
+        </div>
+
+        <!-- bis -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('to') }}: </span>
+          <span>
+            {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
+          </span>
+        </div>
+
+        <!-- anzahl monate -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('months') }}: </span>
+          <span>
+            {{ berechnung.anzahlMonate }}
+          </span>
+        </div>
+      </div>
     </div>
 
-    <mat-accordion class="dv-full-width dv-large" multi>
-      <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
+    <mat-accordion multi>
+      <dv-berechnungs-expansion-panel class="tw:block tw:mb-4" [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
         <ng-content select="dv-persoenliche-einnahmen,dv-familien-einnahmen"></ng-content>
       </dv-berechnungs-expansion-panel>
-      <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'kosten'">
+      <dv-berechnungs-expansion-panel class="tw:block tw:mb-4" [berechnungSig]="berechnung" [variantSig]="'kosten'">
         <ng-content select="dv-persoenliche-kosten,dv-familien-kosten"></ng-content>
       </dv-berechnungs-expansion-panel>
     </mat-accordion>
 
-    <mat-card>
+    <mat-card class="tw:mt-4">
       <!-- <mat-card-header>
         <mat-card-title></mat-card-title>
       </mat-card-header> -->

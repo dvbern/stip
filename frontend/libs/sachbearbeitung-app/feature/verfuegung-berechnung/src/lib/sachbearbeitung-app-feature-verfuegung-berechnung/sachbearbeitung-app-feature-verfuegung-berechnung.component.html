@@ -1,7 +1,7 @@
 <ng-container *transloco="let t">
   <h1 class="tw:mb-6!">{{ t('sachbearbeitung-app.verfuegung.berechnung.details') }}</h1>
 
-  <mat-slide-toggle class="tw:mb-6" [hideIcon]="true">{{
+  <mat-slide-toggle #hideZeroToggle class="tw:mb-6" [hideIcon]="true">{{
     t('sachbearbeitung-app.verfuegung.berechnung.hideZeroValues')
   }}</mat-slide-toggle>
 
@@ -11,6 +11,7 @@
     @if (berechnungenRawSig(); as berechnung) {
       <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich" [stammdatenSig]="berechnung.berechnungsStammdaten">
         <dv-persoenliche-einnahmen
+          [hideZeroSig]="hideZeroToggle.checked"
           [budgetSig]="berechnung.persoenlich"
           [stammdatenSig]="berechnung.berechnungsStammdaten"
         ></dv-persoenliche-einnahmen>

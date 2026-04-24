@@ -12,8 +12,4 @@
     {{ dialogData.titleKey | transloco: dialogData.titleParams }}
   </h1>
   <p class="content" [innerHTML]="dialogData.messageKey | transloco: dialogData.messageParams"></p>
-  <!-- todo: mit levin besprechen -->
-  <button (click)="close()" type="button" class="btn btn-outline-primary tw:mt-auto tw:self-center">
-    {{ 'shared.close' | transloco }}
-  </button>
 </section>

@@ -275,15 +275,6 @@ $dv-all-colors: (
   }
 }
 
-.mat-mdc-card-content .mat-accordion.dv-full-width {
-  display: block;
-  margin: 0 -16px;
-}
-.mat-accordion.dv-large .mat-expansion-panel-header,
-.mat-expansion-panel.dv-large .mat-expansion-panel-header {
-  height: auto;
-}
-
 .mat-mdc-form-field-hint.mat-caution {
   color: mat.m2-get-color-from-palette($gesuch-app-caution, 500);
 }
@@ -355,6 +346,21 @@ $dv-all-colors: (
 
 form:not(.readonly) .mat-mdc-form-field-required-marker {
   color: var(--dv-red);
+}
+
+.mat-accordion.dv-large .mat-expansion-panel-header,
+.mat-expansion-panel.dv-large .mat-expansion-panel-header {
+  height: auto;
+}
+
+.mat-expansion-panel.dv-large {
+  .mat-content-hide-toggle {
+    margin: 0;
+  }
+  .mat-expansion-panel-header,
+  .mat-expansion-panel-body {
+    padding: 1rem;
+  }
 }
 
 dv-sachbearbeitung-app-feature-verfuegung {
