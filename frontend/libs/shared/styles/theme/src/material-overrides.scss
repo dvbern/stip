@@ -357,9 +357,11 @@ form:not(.readonly) .mat-mdc-form-field-required-marker {
   .mat-content-hide-toggle {
     margin: 0;
   }
-  .mat-expansion-panel-header,
-  .mat-expansion-panel-body {
+  .mat-expansion-panel-header {
     padding: 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem 1rem 1rem;
   }
 }
 

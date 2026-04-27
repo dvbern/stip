@@ -12,7 +12,7 @@
 
     <div
       [ngClass]="{ accept: accepted, reject: !accepted }"
-      class="tw:flex tw:gap-2 tw:justify-between tw:p-2 tw:items-center tw:rounded-2xl tw:mb-10 tw:bg-gray-100"
+      class="tw:min-h-20 tw:flex tw:gap-2 tw:justify-between tw:p-2 tw:items-center tw:rounded-2xl tw:mb-10 tw:bg-gray-100"
     >
       <div
         class="tw:font-semibold tw:text-xl tw:flex tw:items-center tw:gap-2 tw:ml-3"
@@ -23,17 +23,6 @@
           {{ accepted ? t('resultat.angenommen') : t('resultat.abgelehnt') }}
         </span>
       </div>
-      <!-- todo: download geht nicht mehr -->
-      @if (gesuchIdSig(); as id) {
-        <button
-          type="button"
-          class="btn btn-outline-primary tw:p-4!"
-          [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
-          [matTooltip]="t('download.berechnungsblatt')"
-        >
-          <span class="material-symbols-rounded tw:align-middle">download</span>
-        </button>
-      }
     </div>
 
     <h3 class="tw:mb-4!">{{ t('total') }}</h3>
@@ -63,12 +52,11 @@
               <div>
                 {{ t('totalDarlehen') }}
               </div>
-              <!-- todo translation missing for aria label -->
               <button
                 type="button"
                 (click)="eigenverdienstInfoDialog.toggle()"
                 class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
-                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+                [attr.aria-label]="t('toggle-info-messages')"
               >
                 <span class="material-symbols-rounded tw:text-2xl!"> info </span>
               </button>
@@ -150,8 +138,8 @@
                 <div
                   dvSharedUiInfoDialog
                   [forceDialogPosition]="true"
-                  [dialogTitleKey]="'hinweis.unterbruch.title'"
-                  [dialogMessageKey]="'hinweis.unterbruch.info'"
+                  [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
+                  [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
                   [dialogMessageParams]="{
                     anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
                     betrag:
@@ -167,34 +155,6 @@
               </div>
             </div>
           }
-          <!-- todo: update info texts total representation after merge of KSTIP-3223 -->
-          <!-- @if (hasDarlehen) {
-            <div class="tw:flex tw:items-center tw:text-lg tw:mb-2 tw:mt-8">
-              <div>
-                {{ t('persoenlich.informationStudierende') }}
-              </div>
-
-              <button
-                type="button"
-                (click)="eigenverdienstInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
-                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
-              >
-                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
-              </button>
-              <div
-                dvSharedUiInfoDialog
-                [forceDialogPosition]="true"
-                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
-                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
-                [dialogMessageParams]="{
-                  einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
-                }"
-                #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
-              ></div>
-            </div>
-          }-->
         </div>
       </mat-card-content>
     </mat-card>

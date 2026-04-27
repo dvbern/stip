@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +16,12 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 
 @Component({
   selector: 'dv-berechnungs-expansion-panel',
-  imports: [MatExpansionModule, SharedUiFormatChfPipe, TranslocoDirective],
+  imports: [
+    MatExpansionModule,
+    SharedUiFormatChfPipe,
+    TranslocoDirective,
+    CommonModule,
+  ],
   template: `
     @if (viewSig(); as view) {
       <mat-expansion-panel
@@ -24,7 +30,12 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
         [hideToggle]="true"
         *transloco="let t"
       >
-        <mat-expansion-panel-header class="">
+        <mat-expansion-panel-header
+          [ngClass]="{
+            'tw:border-b tw:border-b-gray-300 tw:rounded-b-none!':
+              panel.expanded,
+          }"
+        >
           <mat-panel-title class="tw:block! tw:m-0!">
             <div
               class="tw:flex tw:text-lg tw:font-semibold tw:flex-1 tw:justify-between"

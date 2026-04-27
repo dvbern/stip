@@ -81,3 +81,7 @@
     @apply tw:bg-dv-red tw:text-white;
   }
 }
+
+@utility dv-verfuegung-position-list {
+  @apply tw:flex tw:flex-col;
+}

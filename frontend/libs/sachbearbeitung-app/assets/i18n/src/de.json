@@ -682,7 +682,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "Von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "Bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
-  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Nullwerte ausblenden",
+  "sachbearbeitung-app.verfuegung.berechnung.showZeroValues": "Nullwerte anzeigen",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Familienbudget",
   "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Vaterbudget",
@@ -748,7 +748,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info": "Das Gesuch wurde {anzahlMonate, plural, one {1 Monat} other {# Monate}} zu spät eingereicht.<br>Dies ergibt eine Reduktion von CHF {{ betrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title": "Kürzungen Unterbruch",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info": "Das Gesuch wurde {anzahlMonate, plural, one {1 Monat} other {# Monate}} Unterbrochen.<br>Dies ergibt eine Reduktion von CHF {{ betrag }}.",
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Eigenverdienst auf dem Erwerbseinkommen",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title": "Aufteilung ab dem 4. Studienjahr für Studierende der Tertiärstufe",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info": "Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen mit Bezug des Darlehens entspricht dem Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}. Der maximal zulässige Eigenverdienst auf dem Erwerbseinkommen ohne Bezug des Darlehens entspricht dem Darlehen + Einkommensfreibetrag von CHF {{ einkommensfreibetrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.no-data": "Keine Berechnungsdaten vorhanden",
 
@@ -819,7 +819,6 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen": "Total Betrag Darlehen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.download.berechnungsblatt": "Berechnungsblatt herunterladen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.toggle-info-messages": "Informationsmeldungen anzeigen",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.persoenlich.informationStudierende": "Aufteilung ab dem 4. Studienjahr für Studierende der Tertiärstufe",
   "sachbearbeitung-app.verfuegung.negativ.dialog.comment": "Kommentar",
   "sachbearbeitung-app.verfuegung.negativ.dialog.manuell": "Manuelle Verfügung hochladen",
 

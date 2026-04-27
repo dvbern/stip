@@ -12,26 +12,26 @@ import {
 // und wir die direktive dann "dvShowZero" nennen. @mada fragen.
 
 @Directive({
-  selector: '[dvHideZero]',
+  selector: '[dvShowZero]',
   standalone: true,
 })
-export class HideZeroDirective {
+export class ShowZeroDirective {
   private hasView = false;
 
   templateRef = inject(TemplateRef);
   viewContainer = inject(ViewContainerRef);
 
-  hideSig = input<boolean>(false, { alias: 'dvHideZero' });
+  showSig = input<boolean>(false, { alias: 'dvShowZero' });
   valueSig = input.required<number | undefined | null>({
-    alias: 'dvHideZeroValue',
+    alias: 'dvShowZeroValue',
   });
 
   constructor() {
     effect(() => {
-      const hide = this.hideSig();
+      const show = this.showSig();
       const value = this.valueSig();
 
-      if (hide && value === 0) {
+      if (!show && value === 0) {
         if (this.hasView) {
           this.viewContainer.clear();
           this.hasView = false;
