@@ -159,7 +159,7 @@
                 <!-- Tranche erstellen -->
                 <button
                   type="button"
-                  class="btn fw-normal tw:px-2"
+                  class="fw-normal tw:px-2"
                   data-testid="aktion-tranche-erstellen"
                   mat-menu-item
                   (click)="createTranche()"
@@ -180,7 +180,7 @@
               @if (uebergang.name) {
                 <button
                   type="button"
-                  class="btn fw-normal pe-auto tw:px-2"
+                  class="tw:pr-auto tw:px-2"
                   [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
                   [disabled]="uebergang.disabledReason || !trancheId"
                   [matTooltip]="

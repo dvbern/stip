@@ -10,6 +10,16 @@
           @case ('AUSSTEHEND') {
             @if (gesuchDokumentViewSig()?.permissions?.canApprove) {
               <button
+                (click)="dokumentAkzeptieren()"
+                type="button"
+                class="tw:dv-button-main-success tw:flex tw:items-center tw:gap-1"
+              >
+                <i class="material-symbols-rounded tw:text-xl!">check</i>
+                <span>
+                  {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
+                </span>
+              </button>
+              <button
                 (click)="dokumentAblehnen()"
                 type="button"
                 class="tw:dv-button-main-danger tw:flex tw:items-center tw:gap-1"
@@ -19,29 +29,19 @@
                   {{ 'shared.dokumente.dokumentStatus.action.reject' | transloco }}
                 </span>
               </button>
-              <button
-                (click)="dokumentAkzeptieren()"
-                type="button"
-                class="btn btn-success text-white tw:flex tw:items-center tw:gap-1"
-              >
-                <i class="material-symbols-rounded tw:text-xl!">check</i>
-                <span>
-                  {{ 'shared.dokumente.dokumentStatus.action.accept' | transloco }}
-                </span>
-              </button>
             } @else {
-              <dv-shared-ui-icon-badge typeSig="warning" class="status ms-auto">
+              <dv-shared-ui-icon-badge typeSig="warning">
                 {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | transloco }}
               </dv-shared-ui-icon-badge>
             }
           }
           @case ('AKZEPTIERT') {
-            <dv-shared-ui-icon-badge typeSig="success" class="status ms-auto">
+            <dv-shared-ui-icon-badge typeSig="success">
               {{ 'shared.dokumente.dokumentStatus.AKZEPTIERT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
           @case ('ABGELEHNT') {
-            <dv-shared-ui-icon-badge typeSig="danger" class="status ms-auto">
+            <dv-shared-ui-icon-badge typeSig="danger">
               {{ 'shared.dokumente.dokumentStatus.ABGELEHNT' | transloco }}
             </dv-shared-ui-icon-badge>
           }
@@ -49,7 +49,7 @@
       </div>
     } @else {
       <div class="tw:flex">
-        <dv-shared-ui-icon-badge typeSig="warning" class="status ms-auto">
+        <dv-shared-ui-icon-badge typeSig="warning">
           {{ 'shared.dokumente.dokumentStatus.NO_DOCUMENT' | transloco }}
         </dv-shared-ui-icon-badge>
       </div>

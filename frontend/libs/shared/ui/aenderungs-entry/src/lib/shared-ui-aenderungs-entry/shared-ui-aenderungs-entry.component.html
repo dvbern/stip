@@ -5,7 +5,7 @@
       <i class="material-symbols-rounded tw:text-lg!">edit</i>
     </dv-shared-ui-icon-chip>
     @if (tranche.status === 'IN_BEARBEITUNG_GS') {
-      <h3 data-testid="cockpit-periode-title">
+      <h3 data-testid="cockpit-aenderung-title">
         <span>{{ 'shared.dashboard.aenderung.title' | transloco }}</span>
         <span>&nbsp;</span>
       </h3>
@@ -45,8 +45,11 @@
       </button>
     }
     <a
-      class="tw:dv-button-main-primary tw:w-full"
-      [class.btn-outline-primary]="tranche.status !== 'IN_BEARBEITUNG_GS'"
+      class="tw:w-full"
+      [ngClass]="{
+        'tw:dv-button-main-primary': tranche.status !== 'IN_BEARBEITUNG_GS',
+        'tw:bg-white tw:dv-button-outline-primary': tranche.status === 'IN_BEARBEITUNG_GS',
+      }"
       data-testid="cockpit-gesuch-edit"
       [routerLink]="['/gesuch', gesuch.id, 'aenderung', tranche.id]"
     >

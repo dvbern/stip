@@ -103,7 +103,7 @@
       class="tw:col-span-12 tw:xl:col-span-8"
     >
       <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
-      <div class="tw:flex tw:gap-2 flex-wrap tw:col-span-12 tw:justify-between">
+      <div class="tw:flex tw:gap-2 tw:flex-wrap tw:col-span-12 tw:justify-between">
         <div class="tw:flex tw:flex-col">
           @for (a of ausbildungssituationValues; track $index) {
             <mat-radio-button [attr.data-testid]="a" [value]="a">{{

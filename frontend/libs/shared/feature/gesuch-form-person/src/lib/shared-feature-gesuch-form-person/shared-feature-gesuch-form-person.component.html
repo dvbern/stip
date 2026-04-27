@@ -776,10 +776,7 @@
             </div>
 
             @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="align-self-center ms-auto flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
           <div class="group-errors">

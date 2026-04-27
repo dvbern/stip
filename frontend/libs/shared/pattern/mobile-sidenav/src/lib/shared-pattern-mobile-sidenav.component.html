@@ -4,7 +4,7 @@
   </div>
   <button
     type="button"
-    class="btn-close"
+    class="tw:dv-button"
     [attr.aria-label]="'shared.close' | transloco"
     (click)="closeSidenav.emit()"
   ></button>
@@ -12,16 +12,16 @@
 
 <div class="tw:p-4 tw:flex tw:flex-col">
   <div class="tw:flex tw:flex-col align-items-start">
-    <ul class="nav tw:flex-col tw:w-full">
-      <li class="nav-item">
-        <span class="nav-link tw:mb-6">{{ benutzerNameSig() }}</span>
+    <ul class="nav tw:flex-col tw:w-full tw:list-none">
+      <li class="tw:mb-6">
+        <span class="tw:py-2 tw:px-4">{{ benutzerNameSig() }}</span>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link">Profil</a>
+      <li>
+        <a class="tw:py-2 tw:px-4">Profil</a>
       </li>
-      <li class="nav-item">
-        <button type="button" class="nav-link" (click)="logout()">Logout</button>
+      <li>
+        <button type="button" class="tw:dv-button tw:py-2 tw:px-4" (click)="logout()">Logout</button>
       </li>
     </ul>
   </div>

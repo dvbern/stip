@@ -9,14 +9,14 @@
 <form
   [formGroup]="form"
   data-testid="form-aenderung-melden-dialog-form"
-  class="tw:block tw:max-w-[580px] tw:p-6"
+  class="tw:block tw:max-w-145 tw:p-6"
   (ngSubmit)="confirm()"
 >
-  <h3 class="tw:mb-6">
+  <h1 class="tw:text-2xl tw:font-semibold tw:mb-6">
     {{ titleKeys.title | transloco }}
-  </h3>
+  </h1>
   <div class="tw:mb-6" [innerHTML]="titleKeys.text | transloco"></div>
-  <div class="tw:grid tw:grid-cols-12">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-3">
     <div class="tw:col-span-6">
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | transloco }}</mat-label>

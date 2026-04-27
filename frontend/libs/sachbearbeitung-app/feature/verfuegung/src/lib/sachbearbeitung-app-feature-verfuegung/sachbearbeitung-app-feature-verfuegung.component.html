@@ -24,8 +24,6 @@
           type="button"
           class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
           [attr.data-testid]="'option-nav-' + option.route"
-          [class.btn-light]="!option.active"
-          [class.shadow-none]="!option.active"
           [routerLink]="option.fullRoute"
           routerLinkActive="active"
           queryParamsHandling="merge"

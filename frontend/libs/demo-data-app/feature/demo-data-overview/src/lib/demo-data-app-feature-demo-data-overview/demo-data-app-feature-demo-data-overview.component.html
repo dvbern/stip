@@ -60,10 +60,10 @@
         [class.busy]="demoDataStore.demoDataTestBerechnungResultats() | rdIsPending: { ignoreInitial: true }"
       >
         <div class="tw:flex tw:flex-col">
-          <ul class="tw:mb-4 tw:list-none tw:px-0! tw:grid tw:grid-cols-[minmax(210px,_1fr)_auto_auto] tw:gap-6">
+          <ul class="tw:mb-4 tw:list-none tw:px-0! tw:grid tw:grid-cols-[minmax(210px,1fr)_auto_auto] tw:gap-6">
             @for (demoData of demoDatasSig(); track $index) {
               <li
-                class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-center tw:items-start"
+                class="tw:mb-2 tw:odd:bg-white tw:p-5 tw:hover:bg-gray-100 tw:col-span-4 tw:grid tw:grid-cols-subgrid tw:items-start"
               >
                 <div class="tw:flex tw:flex-col">
                   <span class="tw:font-bold">{{ demoData.testFall }}</span>
@@ -78,7 +78,7 @@
                     [matTooltip]="t('demo-data-app.overview.apply-demo-data.apply')"
                     [matTooltipShowDelay]="tooltipDelay"
                   >
-                    <i class="material-symbols-rounded tw:text-sm!">add</i>
+                    <i class="material-symbols-rounded tw:text-xl!">add</i>
                   </button>
                   <div class="tw:relative tw:flex tw:gap-1" role="status">
                     @if (demoData.testResult) {
@@ -107,7 +107,7 @@
                         >
                       }
                       <dv-soll-ist
-                        class="tw:w-[500px] tw:shadow-md tw:transition-[clip-path] tw:peer-hover:[clip-path:inset(-20px)] tw:[clip-path:inset(0_0_100%_0)] tw:hover:[clip-path:inset(-20px)] tw:absolute tw:p-5 tw:rounded-md tw:bg-white tw:z-30"
+                        class="tw:w-125 tw:shadow-md tw:transition-[clip-path] tw:peer-hover:[clip-path:inset(-20px)] tw:[clip-path:inset(0_0_100%_0)] tw:hover:[clip-path:inset(-20px)] tw:absolute tw:p-5 tw:rounded-md tw:bg-white tw:z-30"
                         [valuesSig]="demoData.testResult"
                         #sollIst
                       ></dv-soll-ist>

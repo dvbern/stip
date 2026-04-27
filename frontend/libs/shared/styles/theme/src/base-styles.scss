@@ -93,34 +93,3 @@ main.tw\:dv-page-body {
 .form-control[role='combobox']::placeholder {
   color: #000;
 }
-
-.dv-typeahead-clear-btn.btn {
-  position: absolute;
-  top: var(--dv-border-width);
-  right: 34px;
-  height: calc(100% - var(--dv-border-width) - var(--dv-border-width));
-  border-color: transparent;
-  background: #fff;
-  border-radius: 0;
-  color: #666;
-  padding: 0 0.5rem 1px;
-  box-shadow: none;
-
-  &:hover,
-  &:active {
-    color: #000;
-    border-color: transparent;
-    background: #fff;
-  }
-}
-
-// @include media-breakpoint-down(md) {
-//   .cdk-overlay-pane.full-height {
-//     height: 100%;
-//   }
-// }
-// @include media-breakpoint-down(lg) {
-//   .app-container {
-//     min-height: 100vh;
-//   }
-// }
