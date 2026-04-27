@@ -103,9 +103,16 @@
 
             <!-- proKopfTeilung -->
             <dv-position
-              class="tw:mt-2"
+              class="tw:mt-2 tw:text-dv-muted"
               [titleSig]="t('persoenlich.proKopfTeilung')"
               [amountSig]="berechnung.proKopfTeilung | formatChf"
+            ></dv-position>
+
+            <!-- proKopfTeilungBetrag12Monate -->
+            <dv-position
+              class="tw:mt-2 tw:text-dv-muted"
+              [titleSig]="'Todo: Budget für 12 Monate'"
+              [amountSig]="0 | formatChf"
             ></dv-position>
 
             <!-- budgetTranche -->
@@ -137,7 +144,7 @@
 
             <!-- proKopfTeilungKinderInAusbildung -->
             <dv-position
-              class="tw:mt-2"
+              class="tw:mt-2 tw:text-dv-muted"
               [titleSig]="t('familien.anzahlKinderInAusbildung')"
               [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
             ></dv-position>
@@ -153,6 +160,7 @@
             <!-- halbierungsReduktion -->
             <dv-position
               class="tw:mt-2"
+              type="title"
               [titleSig]="t('familien.reduktionArt15Abs2ABG')"
               [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
               [amountSig]="berechnung.halbierungsReduktion | formatChf"
