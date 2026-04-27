@@ -121,7 +121,7 @@
           mat-tab-link
           [routerLink]="tab.route"
           [queryParams]="tab.queryParams"
-          class="tw:dv-nav-button tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0! form-tabs"
+          class="tw:dv-nav-button tw:bg-white! tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0!"
           [active]="tab.active"
           [class.active]="tab.active"
         >
@@ -137,7 +137,7 @@
       <div>
         <button
           type="button"
-          class="tw:dv-button-outline fw-normal tw:flex tw:items-center px-3 tw:border-gray-300!"
+          class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
           [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
@@ -148,7 +148,11 @@
           <i class="material-symbols-rounded tw:ml-2">expand_more</i>
         </button>
         <!-- Aktion Menu -->
-        <mat-menu #aktionMenu="matMenu" xPosition="before" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+        <mat-menu
+          #aktionMenu="matMenu"
+          xPosition="before"
+          class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
+        >
           <div class="tw:flex tw:flex-col tw:gap-2">
             @switch (availableTrancheInteraction) {
               @case ('CREATE_TRANCHE') {
@@ -169,7 +173,7 @@
             }
 
             @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
-              <hr class="tw:my-1" />
+              <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
             }
 
             @for (uebergang of statusUebergaenge.list; track $index) {

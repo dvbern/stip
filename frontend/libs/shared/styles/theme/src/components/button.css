@@ -1,5 +1,9 @@
 @utility dv-button {
-  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer tw:[&.disabled]:opacity-65 tw:[&.disabled]:pointer-events-none tw:transition-[color_background-color_border-color_--tw-brightness];
+  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer  tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
+  &.disabled,
+  &[disabled] {
+    @apply tw:opacity-65 tw:pointer-events-none;
+  }
 }
 
 @utility dv-button-main-* {
@@ -30,5 +34,18 @@
 }
 
 @utility dv-nav-button {
-  @apply tw:dv-button tw:text-dv-gray tw:[&.active]:bg-dv-red tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red tw:hover:text-white tw:[&.active]:text-white tw:[&.isActive]:text-white tw:border-0;
+  @apply tw:dv-button tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
+
+  --mat-tab-active-label-text-color: white;
+  --mat-tab-active-focus-label-text-color: white;
+  --mat-tab-active-hover-label-text-color: white;
+  --mat-tab-active-indicator-color: transparent;
+  --mat-tab-active-focus-indicator-color: transparent;
+  --mat-tab-active-hover-indicator-color: transparent;
+  --mat-tab-inactive-focus-label-text-color: white;
+  --mat-tab-inactive-hover-label-text-color: white;
+
+  &:hover {
+    --mat-menu-item-label-text-color: white;
+  }
 }

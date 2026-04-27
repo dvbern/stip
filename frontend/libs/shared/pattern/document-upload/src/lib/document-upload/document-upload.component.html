@@ -10,11 +10,15 @@
 @if (mainDocumentSig(); as dokument) {
   <div class="tw:text-xl tw:absolute indicator tw:rounded-full tw:bg-white tw:pointer-events-none shadow">
     <dv-shared-ui-icon-chip
-      class="tw:text-2xl!"
+      class="tw:text-lg!"
       [class.spin]="dokument.state === 'uploading'"
-      [ngClass]="dokument.twColor.bg"
+      [ngClass]="dokument.theme.backgroundColor"
     >
-      <i class="material-symbols-rounded fs-6 tw:text-base!" [ngClass]="dokument.twColor.color">
+      <i
+        class="material-symbols-rounded tw:text-base!"
+        [class.bg-success]="dokument.state === 'done'"
+        [ngClass]="dokument.theme.textColor"
+      >
         {{ dokument.theme.icon }}
       </i>
     </dv-shared-ui-icon-chip>

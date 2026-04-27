@@ -4,7 +4,7 @@
       mat-tab-link
       [routerLink]="[tab.name]"
       [active]="tab.active"
-      class="tw:dv-nav-button"
+      class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border!"
       [class.active]="tab.active"
     >
       {{ `sachbearbeitung-app.infos.admin.${tab.name}` | transloco }}

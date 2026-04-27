@@ -73,7 +73,7 @@ export class SachbearbeitungAppFeatureInfosNotizenDetailDialogComponent {
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
 
-  @HostBinding('class') defaultClasses = 'tw:flex tw:flex-col tw:gap-2 p-8';
+  @HostBinding('class') defaultClasses = 'tw:flex! tw:flex-col tw:gap-2 tw:p-8';
 
   public permissionStore = inject(PermissionStore);
   public dialogData = inject<NotizDialogData>(MAT_DIALOG_DATA);

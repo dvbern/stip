@@ -15,7 +15,7 @@
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
       @if (exportValuesSig(); as exportValues) {
-        <div class="tw:relative">
+        <div class="tw:relative tw:text-base">
           @if (isExportingSig()) {
             <dv-shared-ui-loading [type]="'icon'" [overlay]="true"></dv-shared-ui-loading>
           }
@@ -262,7 +262,7 @@
             {{ t('shared.form.aenderung.action.accept') }}
           </button>
           <button
-            class="btn btn-link"
+            class="tw:dv-button"
             data-testid="aenderung-manually-change"
             type="button"
             [disabled]="hasValidationErrors"

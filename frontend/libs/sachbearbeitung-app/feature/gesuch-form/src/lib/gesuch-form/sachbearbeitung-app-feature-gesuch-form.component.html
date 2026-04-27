@@ -37,7 +37,7 @@
                   [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
                   [queryParams]="{ revision: tranche.revision }"
                   [queryParamsHandling]="'merge'"
-                  class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+                  class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
                   data-testid="tranche-nav-menu-item"
                   [class.active]="trancheId === tranche.id"
                   mat-menu-item
@@ -66,7 +66,7 @@
         }
       </div>
 
-      <hr class="m-0 p-0" />
+      <hr class="tw:m-0 tw:p-0 tw:border-t tw:border-dv-border" />
     }
 
     <dv-shared-pattern-gesuch-step-nav class="tw:p-6" [stepsSig]="stepsSig()" />
@@ -80,9 +80,9 @@
       >
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
-          <h5 class="step-title">
+          <h1 class="step-title tw:text-2xl tw:font-semibold">
             {{ t(step.translationKey) }}
-          </h5>
+          </h1>
           @if (step.nextStep?.translationKey; as nextStepKey) {
             <p class="fst-italic tw:mb-0">
               {{ t('shared.form.next') }}:
@@ -98,7 +98,7 @@
           <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
-        <h2 class="fw-bold" data-testid="step-title">
+        <h2 class="tw:text-3xl tw:font-bold" data-testid="step-title">
           {{ t(step.titleTranslationKey) }}
         </h2>
         <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>

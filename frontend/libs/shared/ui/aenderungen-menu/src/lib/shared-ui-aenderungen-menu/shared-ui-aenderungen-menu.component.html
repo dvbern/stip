@@ -32,7 +32,7 @@
           [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
           [queryParamsHandling]="'merge'"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
           data-testid="aenderungen-nav-menu-item"
           mat-menu-item
           [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
@@ -50,16 +50,16 @@
       }
       @if (anederungen?.akzeptiert?.length) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.completed') }}
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (aenderung of anederungen?.akzeptiert; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
@@ -79,16 +79,16 @@
       }
       @if (anederungen?.abgelehnt?.length) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.rejected') }}
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (aenderung of anederungen?.abgelehnt; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"

@@ -132,7 +132,11 @@
         dvSharedUiFormField
       >
         {{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.prefix' | transloco
-        }}<button class="btn btn-link tw:p-0! tw:align-baseline!" type="button" (click)="showNutzungsbedingungen()">
+        }}<button
+          class="tw:dv-button tw:p-0! tw:align-baseline! tw:inline tw:underline"
+          type="button"
+          (click)="showNutzungsbedingungen()"
+        >
           {{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.link' | transloco }}</button
         >{{ 'shared.form.delegation.nutzungsbedingungenAkzeptiert.label.suffix' | transloco }}
         <div class="group-errors">

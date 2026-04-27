@@ -1,9 +1,9 @@
-<div class="tw:mt-6 tw:grid tw:grid-cols-12 tw:flex tw:gap-6" *dvTranslocoSb="let t">
+<div class="tw:mt-6 tw:grid tw:grid-cols-12 tw:gap-6" *dvTranslocoSb="let t">
   <ng-template dvHeaderSuffix>
     @if (store.currentGesuchsperiodeViewSig(); as view) {
       <mat-chip
         class="tw:ml-2 fw-normal tw:text-xl"
-        [class.opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
+        [class.tw:opacity-50]="view.gueltigkeitStatus === 'PUBLIZIERT_INAKTIV'"
         [color]="view?.statusColor"
         highlighted
         >{{ t(`shared.gesuch.periode.status.${view.gueltigkeitStatus}`) }}</mat-chip
@@ -13,7 +13,7 @@
 
   @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
     @if (idSig(); as id) {
-      <div class="tw:col-span-12 tw:xl:col-span-5 order-xl-1">
+      <aside class="tw:col-span-12 tw:xl:col-span-5 tw:xl:order-1">
         <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
           class="tw:col-span-12 tw:md:col-span-3 tw:xl:col-span-3"
           typeSig="gesuchsperiode"
@@ -21,7 +21,7 @@
           [unsavedChangesSig]="unsavedChangesSig()"
           (publish)="publish(id)"
         ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
-      </div>
+      </aside>
     }
   }
   <form
@@ -29,14 +29,14 @@
     [dvSharedUiFormReadonly]="store.currentGesuchsperiodeViewSig()?.isReadonly"
     data-testid="form-gesuchsperiode-form"
     (ngSubmit)="handleSave()"
-    class="tw:col-span-12 tw:xl:col-span-7"
+    class="tw:grid tw:col-span-12 tw:xl:col-span-7 tw:gap-y-6 tw:mt-3 tw:px-3"
   >
     @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
-      <h1 class="h2 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title') }}
-      </h1>
+      </h2>
 
       <div class="tw:grid tw:grid-cols-12 tw:gap-6">
         <!-- BezeichnungDe -->
@@ -292,9 +292,9 @@
       </div>
 
       <!-- Stammdaten -->
-      <h1 class="h2 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.stammdaten.title') }}
-      </h1>
+      </h2>
 
       <div class="tw:grid tw:grid-cols-12 tw:gap-6">
         <!-- Freibetrag Vermögen -->
@@ -395,7 +395,7 @@
         </mat-form-field>
       </div>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1 tw:mb-6">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <!-- Limite_EkFreibetrag_Integrationszulag -->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
           <mat-label
@@ -538,7 +538,7 @@
       </div>
 
       <!-- Ausbildungskosten (pers. Budget) -->
-      <h2 class="h3 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.ausbildungskosten.title') }}
       </h2>
 
@@ -575,7 +575,7 @@
       </div>
 
       <!-- Grundbedarf -->
-      <h2 class="h3 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.grundbedarf.title') }}
       </h2>
 
@@ -726,7 +726,7 @@
       </div>
 
       <!-- Medizinische Grundversorgung -->
-      <h2 class="h3 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.medizinische_grundversorgung.title') }}
       </h2>
 
@@ -783,7 +783,7 @@
       </div>
 
       <!-- Wohnkosten (Familienbudget) -->
-      <h2 class="h3 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-familienbudget.title') }}
       </h2>
 
@@ -874,7 +874,7 @@
       </div>
 
       <!-- Wohnkosten (Persönliches Budget) -->
-      <h2 class="h3 tw:pt-12 tw:mb-6">
+      <h2 class="tw:text-2xl tw:font-semibold tw:pt-12">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.wohnkosten-persoenlich.title') }}
       </h2>
 

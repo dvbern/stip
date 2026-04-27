@@ -8,15 +8,15 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 tw:mb-6 tw:flex">
+  <h1 class="tw:mb-6 tw:flex tw:text-xl tw:font-semibold">
     {{ t('shared.dokumente.createCustomDokumentTyp.dialog.title') }}
   </h1>
   @if (!data?.hideDescription) {
     <p class="content tw:mb-0" [innerHTML]="t('shared.dokumente.createCustomDokumentTyp.dialog.message')"></p>
   }
 
-  <form [formGroup]="form" class="tw:mt-6" novalidate>
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12">
+  <form [formGroup]="form" class="tw:mt-6 tw:grid tw:grid-cols-1" novalidate>
+    <mat-form-field dvSharedUiFormField>
       <mat-label>{{ t('shared.dokumente.createCustomDokumentTyp.dialog.name.label') }}</mat-label>
       <input
         type="text"
@@ -33,7 +33,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:mt-6">
+    <mat-form-field dvSharedUiFormField class="tw:mt-6">
       <mat-label>{{ t('shared.dokumente.createCustomDokumentTyp.dialog.kommentar.label') }}</mat-label>
       <textarea
         rows="4"

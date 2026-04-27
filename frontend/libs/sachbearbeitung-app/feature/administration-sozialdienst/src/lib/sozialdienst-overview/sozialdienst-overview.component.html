@@ -3,7 +3,7 @@
 } @else {
   @if (sozialDiensteListDataSourceSig(); as sozialdienstListSource) {
     <form [formGroup]="filterForm">
-      <div class="tw:dv-table" [class.opacity-50]="store.sozialdienste() | rdIsPending">
+      <div class="tw:dv-table" [class.tw:opacity-50]="store.sozialdienste() | rdIsPending">
         <table mat-table [dataSource]="sozialdienstListSource" matSort>
           <caption class="cdk-visually-hidden">
             {{
@@ -103,31 +103,29 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>
-              <div class="action-cell-content">
-                <a
-                  [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | transloco"
-                  [routerLink]="['.', 'create']"
-                  class="tw:dv-button-outline btn-sm"
-                  data-testid="sozialdienst-create"
-                >
-                  <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
-                </a>
-              </div>
+            <th mat-header-cell *matHeaderCellDef class="tw:justify-items-end">
+              <a
+                [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.erstellen' | transloco"
+                [routerLink]="['.', 'create']"
+                class="tw:dv-button-icon-outline"
+                data-testid="sozialdienst-create"
+              >
+                <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
+              </a>
             </th>
             <td mat-cell *dvMatCellDef="let sozialdienst; dataSource: sozialdienstListSource">
               <div class="tw:flex tw:justify-end tw:gap-2">
                 <a
                   [routerLink]="['.', 'edit', sozialdienst.id]"
-                  class="btn btn-link"
+                  class="tw:dv-button-icon"
                   [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.bearbeiten' | transloco"
                   data-testid="sozialdienst-edit"
                 >
-                  <i class="material-symbols-rounded tw:text-lg">edit</i>
+                  <i class="material-symbols-rounded tw:text-lg!">edit</i>
                 </a>
                 <button
                   type="button"
-                  class="btn btn-link"
+                  class="tw:dv-button-icon"
                   (click)="toggleStatus(sozialdienst); $event.stopPropagation()"
                   [matTooltip]="
                     'sachbearbeitung-app.admin.sozialdienst.status.action.' + booleanToStatus(sozialdienst.aktiv)
@@ -135,28 +133,28 @@
                   "
                 >
                   @if (sozialdienst.aktiv) {
-                    <i class="material-symbols-rounded tw:text-lg">cancel</i>
+                    <i class="material-symbols-rounded tw:text-lg!">cancel</i>
                   } @else {
-                    <i class="material-symbols-rounded tw:text-lg">check_circle</i>
+                    <i class="material-symbols-rounded tw:text-lg!">check_circle</i>
                   }
                 </button>
                 <button
                   type="button"
-                  class="btn btn-link"
+                  class="tw:dv-button-icon"
                   (click)="deleteSozialdienst(sozialdienst)"
                   [matTooltip]="'sachbearbeitung-app.admin.sozialdienst.loeschen' | transloco"
                   data-testid="sozialdienst-delete"
                 >
-                  <i class="material-symbols-rounded tw:text-lg">delete</i>
+                  <i class="material-symbols-rounded tw:text-lg!">delete</i>
                 </button>
               </div>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
           <tr mat-row *matRowDef="let sozialdienst; columns: displayedColumns"></tr>
           <tr class="mat-mdc-row" *matNoDataRow>
-            <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
               {{ 'shared.table.noData' | transloco }}
             </td>
           </tr>
@@ -170,7 +168,7 @@
         </mat-paginator>
         @if (store.sozialdienste() | rdIsPending) {
           <dv-shared-ui-loading
-            class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

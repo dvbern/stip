@@ -133,9 +133,9 @@
     }
 
     <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons class="tw:md:col-span-2 tw:lg:col-span-3">
+    <dv-shared-ui-step-form-buttons>
       @if (!isGesuchFormStepSig()) {
-        <button type="button" class="btn btn-outline" (click)="backTriggered.emit()" data-testid="button-next">
+        <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-next">
           {{ 'shared.form.back' | transloco }}
         </button>
       }

@@ -13,7 +13,7 @@
           (click)="navClicked$.emit()"
         >
           <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
-          <span class="text-start">
+          <span class="tw:text-start">
             {{ t(option.translationKey, option.translationOptions) }}
           </span>
         </a>
@@ -32,7 +32,7 @@
           (click)="navClicked$.emit()"
         >
           <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
-          <span class="text-start">
+          <span class="tw:text-start">
             {{ t(option.translationKey, option.translationOptions) }}
           </span>
         </a>
@@ -58,7 +58,7 @@
           <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
-        <h2 class="fw-bold m-0" data-testid="step-title">
+        <h2 class="tw:font-semibold tw:m-0" data-testid="step-title">
           {{ t(option.titleTranslationKey) }}
         </h2>
       </div>

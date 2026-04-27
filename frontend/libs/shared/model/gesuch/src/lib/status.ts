@@ -3,8 +3,8 @@ export type StatusColor =
   | 'warn'
   | 'accent'
   | 'success'
-  | 'caution'
-  | 'info';
+  | 'info'
+  | 'danger';
 
 export const trancheRoutes = ['tranche', 'aenderung', 'initial'] as const;
 export type TrancheRoute = (typeof trancheRoutes)[number];

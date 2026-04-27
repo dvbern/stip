@@ -1,6 +1,6 @@
 <div class="tw:dv-container" *transloco="let t; prefix: 'sachbearbeitung-app.massendruck-detail'">
   @let massendruck = massendruckStore.massendruckViewSig().massendruckJob;
-  <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="massendruck-detail-title">
+  <h1 class="tw:mb-6 tw:mt-8 tw:text-2xl tw:font-semibold" data-testid="massendruck-detail-title">
     {{ t('title') }}
     @if (massendruck) {
       - {{ t('massendruckJobTyp.' + massendruck?.massendruckJobTyp) }}
@@ -9,17 +9,17 @@
 
   <div class="tw:flex tw:items-center tw:min-h-24 tw:justify-between tw:relative">
     @if (massendruck) {
-      <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
+      <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:gap-y-2 tw:pl-0">
         <!-- userErstellt -->
-        <dt class="tw:font-medium">{{ t('userErstellt') }}</dt>
+        <dt class="tw:font-semibold">{{ t('userErstellt') }}</dt>
         <dd>{{ massendruck?.userErstellt }}</dd>
 
         <!-- Datum -->
-        <dt class="tw:font-medium">{{ t('timestampErstellt') }}</dt>
+        <dt class="tw:font-semibold">{{ t('timestampErstellt') }}</dt>
         <dd>{{ massendruck?.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}</dd>
 
         <!-- status -->
-        <dt class="tw:font-medium">{{ t('status') }}</dt>
+        <dt class="tw:font-semibold">{{ t('status') }}</dt>
         <dd>
           {{ t('table.status.filter.' + massendruck?.massendruckJobStatus) }}
         </dd>
@@ -28,7 +28,7 @@
         <ng-template #downloadDocument>
           <button
             type="button"
-            class="btn btn-link tw:p-0"
+            class="tw:dv-button tw:p-0 tw:flex tw:flex-col"
             [attr.aria-label]="t('dokument-download')"
             [dvDownloadButton]="{
               type: 'massendruck',
@@ -36,7 +36,7 @@
             }"
           >
             <div class="material-symbols-rounded tw:text-4xl!">download</div>
-            <div>
+            <div class="tw:underline">
               {{ t('dokument-download') }}
             </div>
           </button>
@@ -66,7 +66,7 @@
     }
     @if (massendruckStore.massendruckViewSig().loading) {
       <dv-shared-ui-loading
-        class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+        class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
         [type]="'compact'"
       ></dv-shared-ui-loading>
     }
@@ -74,7 +74,7 @@
 
   <div class="tw:my-6">
     <div class="tw:dv-table tw:relative">
-      <div [class.opacity-50]="massendruckStore.massendruckViewSig().loading">
+      <div [class.tw:opacity-50]="massendruckStore.massendruckViewSig().loading">
         <!-- filter form (header filters) -->
         <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
           <table
@@ -231,7 +231,7 @@
       </div>
       @if (massendruckStore.massendruckViewSig().loading) {
         <dv-shared-ui-loading
-          class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+          class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
           [type]="'compact'"
         ></dv-shared-ui-loading>
       }

@@ -1,12 +1,11 @@
-@if (dokumentStore.sachbearbeiterDokuments() | rdIsPending: { ignoreInitial: true }) {
-  <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
-}
 <ng-container *dvTranslocoSb="let t">
-  <h3>
+  <h2 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
     {{ t('shared.dokumente.table.title.sachbearbeitungGesuchDokuments') }}
-  </h3>
-
-  <div class="tw:dv-table">
+  </h2>
+  <div class="tw:dv-table tw:relative">
+    @if (dokumentStore.sachbearbeiterDokuments() | rdIsPending: { ignoreInitial: true }) {
+      <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
+    }
     <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn">
       <caption class="cdk-visually-hidden">
         {{
@@ -44,11 +43,11 @@
           <button
             [matTooltip]="t('shared.dokumente.createCustomDokumentTyp')"
             type="button"
-            class="tw:dv-button-outline btn-sm"
+            class="tw:dv-button-icon-outline tw:inline-flex! tw:items-center tw:p-2"
             data-testid="dokumente-button-createCustomDokumentTyp"
             (click)="createSachbearbeiterDokument()"
           >
-            <i class="material-symbols-rounded tw:text-xl">add</i>
+            <i class="material-symbols-rounded tw:text-xl!">add</i>
           </button>
         </th>
         <td mat-cell class="tw:w-32" *dvMatCellDef="let dokument; dataSource: dokumenteDataSourceSig()">

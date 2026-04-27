@@ -22,7 +22,7 @@
         @if (elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().gesuchId; as gesuchId) {
           <button
             type="button"
-            class="btn btn-link tw:p-0"
+            class="tw:dv-button tw:p-0"
             [attr.aria-label]="'shared.dokumente.table.download' | transloco"
             [dvDownloadButton]="{
               type: 'datenschutzbriefCreate',

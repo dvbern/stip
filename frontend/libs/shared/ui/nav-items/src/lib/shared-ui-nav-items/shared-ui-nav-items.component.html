@@ -5,7 +5,7 @@
         @if (item.children.length) {
           <button
             type="button"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
             [attr.data-testid]="item.testId"
             [matMenuTriggerFor]="itemMenu"
             [class.isActive]="item.active"
@@ -30,7 +30,7 @@
         <a
           [routerLink]="item.route"
           [queryParams]="item.queryParams"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
           [attr.data-testid]="item.testId"
           [class.isActive]="item.active"
           routerLinkActive="active"
@@ -46,7 +46,7 @@
       @case ('action') {
         <button
           type="button"
-          class="btn tw:font-normal tw:shadow-none!"
+          class="tw:dv-button tw:shadow-none!"
           [attr.data-testid]="item.testId"
           (click)="item.action()"
           [disabled]="item.disabled"
@@ -66,7 +66,7 @@
           <div class="tw:w-px tw:bg-gray-300 tw:self-stretch"></div>
         } @else {
           @if (item.label) {
-            <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2 tw:w-full">
+            <div class="tw:flex tw:items-center tw:text-dv-gray tw:text-sm tw:gap-2 tw:w-full">
               <div class="tw:grow tw:border tw:border-gray-300"></div>
               <div class="tw:whitespace-nowrap">
                 {{ t(item.label.key, item.label.context) }}

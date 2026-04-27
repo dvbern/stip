@@ -28,18 +28,18 @@
     @if (view.gesuchFormular?.geschwisters; as geschwisters) {
       <div class="tw:col-span-12 tw:xl:col-span-8">
         @if (geschwisters.length) {
-          <table class="table" aria-describedby="List von Geschwister">
+          <table class="tw:dv-simple-table" aria-describedby="List von Geschwister">
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">
+                <th></th>
+                <th>
                   {{ 'shared.form.geschwister.name' | transloco }}
                 </th>
-                <th scope="col">
+                <th>
                   {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
                 </th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -63,7 +63,7 @@
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.edit' | transloco"
                         >
@@ -75,7 +75,7 @@
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleDeleteGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.delete' | transloco"
                         >
@@ -84,7 +84,7 @@
                       } @else {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.view' | transloco"
                         >

@@ -9,16 +9,16 @@
       [dvSharedUiFormReadonly]="view.readonly"
       (gotReenabledSig)="gotReenabled$.next({})"
       novalidate
-      class="tw:mt-6"
+      class="testing-library-fix tw:mt-6"
       data-testid="form-partner-form"
       (ngSubmit)="handleSaveAndContinue()"
     >
-      <h3 class="tw:pt-12">
+      <h3 class="tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
         {{ 'shared.form.shared.section.personal-details' | transloco }}
       </h3>
       <!-- AHV -->
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
-        <div class="tw:flex align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+        <div class="testing-library-fix tw:flex tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
             <input
@@ -58,7 +58,7 @@
           class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
           <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
@@ -78,16 +78,16 @@
       </div>
 
       <!-- Adresse -->
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <dv-shared-ui-form-address
-          class="tw:col-span-12 tw:xl:col-span-8"
+          class="testing-library-fix tw:col-span-12 tw:xl:col-span-8"
           [group]="form.controls.adresse"
           [changes]="view.formChanges.adresse"
           [languageSig]="languageSig()"
         />
       </div>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- GEBURTSDATUM -->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
           <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
@@ -117,9 +117,11 @@
         </mat-form-field>
       </div>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-        <div class="tw:col-span-12 tw:xl:col-span-4 tw:md:col-span-6 tw:flex tw:items-center tw:grow tw:gap-2">
+        <div
+          class="testing-library-fix tw:col-span-12 tw:xl:col-span-4 tw:md:col-span-6 tw:flex tw:items-center tw:grow tw:gap-2"
+        >
           <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
             'shared.form.partner.inAusbildung.label' | transloco
           }}</mat-checkbox>
@@ -129,7 +131,7 @@
         </div>
       </div>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- PENSUM -->
         @if (showAusbildungspensumSig()) {
           <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:xl:col-span-4">
@@ -162,11 +164,20 @@
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
         @if (!view.readonly) {
-          <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
+          <button
+            type="submit"
+            class="testing-library-fix tw:dv-button-main-primary"
+            data-testid="button-save-continue"
+          >
             {{ 'shared.form.save-and-continue' | transloco }}
           </button>
         } @else {
-          <button type="button" class="tw:dv-button-main-primary" (click)="handleContinue()" data-testid="button-next">
+          <button
+            type="button"
+            class="testing-library-fix tw:dv-button-main-primary"
+            (click)="handleContinue()"
+            data-testid="button-next"
+          >
             {{ 'shared.form.gonext' | transloco }}
           </button>
         }

@@ -9,21 +9,20 @@
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
+          class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
           [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
-          [class.btn-danger]="radio.checked"
-          [class.btn-light]="!radio.checked"
+          [class.active]="radio.checked"
         >
-          <dv-shared-ui-icon-chip class="chip tw:mr-4">
-            <i class="icon material-symbols-rounded tw:text-xl">{{ quickFilter.icon }}</i>
+          <dv-shared-ui-icon-chip class="tw:mr-4">
+            <i class="icon material-symbols-rounded tw:text-xl!">{{ quickFilter.icon }}</i>
           </dv-shared-ui-icon-chip>
           <div class="tw:text-start tw:leading-4 tw:grow">
-            <span class="fw-bold fs-7 tw:mb-0">
+            <span class="tw:text-sm! tw:mb-0">
               {{ t(`sozialdienst-app.cockpit.quick-filter.${quickFilter.typ}`) }}
             </span>
             <input
               #radio
-              class="fs-7 cdk-visually-hidden"
+              class="tw:text-sm! cdk-visually-hidden"
               type="radio"
               name="query"
               labelPosition="before"
@@ -37,7 +36,7 @@
     </div>
 
     <!-- table -->
-    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
+    <h1 class="tw:mb-6 tw:mt-8 tw:text-2xl tw:font-semibold" data-testid="cockpit-title">
       {{ t('sozialdienst-app.cockpit.delegierungen') }}
     </h1>
 
@@ -78,7 +77,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.fallNummer.reset()"
                     [valueSig]="filterForm.controls.fallNummer.value"
                   ></dv-shared-ui-clear-button>
@@ -90,7 +89,11 @@
                 class="tw:w-32 tw:whitespace-nowrap"
               >
                 @if (delegierung.status === 'AKZEPTIERT') {
-                  <a [routerLink]="['/fall', delegierung.id]" (click)="$event.stopPropagation()">
+                  <a
+                    class="tw:underline"
+                    [routerLink]="['/fall', delegierung.fallId]"
+                    (click)="$event.stopPropagation()"
+                  >
                     {{ delegierung.fallNummer }}
                   </a>
                 } @else {
@@ -117,7 +120,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.nachname.reset()"
                     [valueSig]="filterForm.controls.nachname.value"
                   ></dv-shared-ui-clear-button>
@@ -151,7 +154,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.vorname.reset()"
                     [valueSig]="filterForm.controls.vorname.value"
                   ></dv-shared-ui-clear-button>
@@ -194,18 +197,18 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link tw:text-dv-gray tw:!p-1"
+                      class="tw:dv-button tw:text-dv-gray tw:!p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded tw:text-lg">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-xs">
+                        <i class="icon material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.geburtsdatum.reset()"
                     [valueSig]="filterForm.controls.geburtsdatum.value"
                   ></dv-shared-ui-clear-button>
@@ -239,7 +242,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.wohnort.reset()"
                     [valueSig]="filterForm.controls.wohnort.value"
                   ></dv-shared-ui-clear-button>
@@ -264,7 +267,6 @@
                     <mat-select
                       [formControl]="filterForm.controls.status"
                       (click)="$event.stopPropagation()"
-                      class="tw:!font-normal"
                       [placeholder]="t('sozialdienst-app.cockpit.no-status-filter')"
                       panelClass="table-select"
                     >
@@ -326,7 +328,7 @@
         </div>
         @if (delegationStore.cockpitViewSig().loading) {
           <dv-shared-ui-loading
-            class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

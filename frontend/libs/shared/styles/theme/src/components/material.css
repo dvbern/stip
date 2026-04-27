@@ -1,0 +1,54 @@
+@layer theme {
+  html body {
+    /* Backgrounds, Borders & Outlines */
+    --mat-sys-surface: white;
+    --mat-sys-on-surface-variant: black;
+    --mat-sys-surface-container: #fefefe;
+    --mat-dialog-container-color: white;
+    --mat-sys-surface-container-high: white;
+    --mat-chip-selected-label-text-color: white;
+    --mat-sys-outline: var(--dv-border-color);
+
+    /* Typography */
+    --mat-sys-body-medium-tracking: normal;
+    --mat-sys-body-large-tracking: normal;
+    --mat-sys-title-small-tracking: normal;
+    --mat-sys-title-small-weight: var(--tw-font-weight-semibold);
+    --mat-sys-body-medium-line-height: var(--tw-text-2xl);
+    --mat-sys-body-small-size: var(--tw-text-sm);
+
+    /* Inputs */
+    --mat-sys-label-large-size: var(--dv-base-font-size);
+    --mat-form-field-outlined-disabled-input-text-color: var(--dv-gray-subtle);
+    --mat-select-placeholder-text-color: var(--tw-color-dv-gray);
+    --mat-option-focus-state-layer-color: #eee;
+    --mat-form-field-outlined-input-text-placeholder-color: var(
+      --tw-color-dv-gray
+    );
+
+    /* Radio & Checkboxes */
+    --mat-checkbox-label-text-size: var(--tw-text-base);
+    --mat-radio-label-text-size: var(--tw-text-base);
+    --mat-checkbox-selected-icon-color: var(--tw-color-dv-main-info);
+    --mat-checkbox-selected-focus-icon-color: var(--tw-color-dv-main-info);
+    --mat-checkbox-selected-hover-icon-color: var(--tw-color-dv-main-info);
+    --mat-radio-selected-icon-color: var(--tw-color-dv-main-info);
+    --mat-radio-selected-focus-icon-color: var(--tw-color-dv-main-info);
+    --mat-radio-selected-hover-icon-color: var(--tw-color-dv-main-info);
+
+    /* List item */
+    --mat-list-list-item-disabled-state-layer-color: transparent;
+
+    /* Datepicker */
+    --mat-datepicker-toggle-icon-color: var(--tw-color-dv-gray);
+    --mat-datepicker-calendar-container-elevation-shadow:
+      0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)),
+      0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+
+    /* Tabs */
+    --mat-tab-divider-height: 0;
+    --mat-tab-label-text-size: var(--tw-text-base);
+    --mat-tab-label-text-weight: var(--tw-font-weight-medium);
+    --mat-tab-inactive-label-text-color: var(--tw-color-dv-gray);
+  }
+}

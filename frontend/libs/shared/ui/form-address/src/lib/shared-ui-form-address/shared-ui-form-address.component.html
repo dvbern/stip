@@ -1,4 +1,4 @@
-<div class="tw:grid tw:grid-cols-12 tw:gap-6" [formGroup]="group" [class.touched]="touchedSig()">
+<div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6" [formGroup]="group" [class.touched]="touchedSig()">
   <!-- touchedSig muessen wir irgendwo lesen, damit die change detection funktioniert, deshalb hier im html -->
 
   @let changes = adresseChangesSig();
@@ -69,7 +69,7 @@
   </ng-container>
 
   <!-- c/o -->
-  <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
+  <mat-form-field dvSharedUiFormField class="testing-library-fix tw:col-span-12 tw:md:col-span-6">
     <mat-label
       >{{ 'shared.form.shared.address.co.label' | transloco }} ({{
         'shared.form.optional.label' | transloco
@@ -80,7 +80,7 @@
   </mat-form-field>
 
   <!-- Land -->
-  <div class="tw:col-span-12 tw:md:col-span-6">
+  <div class="testing-library-fix tw:col-span-12 tw:md:col-span-6">
     <dv-shared-ui-select-search
       formControlName="landId"
       [testIdSig]="'form-address-land'"

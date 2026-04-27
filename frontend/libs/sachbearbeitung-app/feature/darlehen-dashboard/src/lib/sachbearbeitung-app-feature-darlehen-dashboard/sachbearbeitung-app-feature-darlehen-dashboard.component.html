@@ -178,8 +178,8 @@
                         [attr.aria-label]="'shared.ui.open-date-picker'"
                         (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                       >
-                        <dv-shared-ui-icon-chip class="fs-8">
-                          <i class="icon material-symbols-rounded tw:text-lg">event</i>
+                        <dv-shared-ui-icon-chip class="tw:text-xs!">
+                          <i class="icon material-symbols-rounded tw:text-lg!">event</i>
                         </dv-shared-ui-icon-chip>
                       </button>
                       <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
@@ -298,8 +298,8 @@
                         [attr.aria-label]="'shared.ui.open-date-picker'"
                         (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
                       >
-                        <dv-shared-ui-icon-chip class="fs-8">
-                          <i class="icon material-symbols-rounded tw:text-lg">event</i>
+                        <dv-shared-ui-icon-chip class="tw:text-xs">
+                          <i class="icon material-symbols-rounded tw:text-lg!">event</i>
                         </dv-shared-ui-icon-chip>
                       </button>
                       <mat-date-range-input
@@ -369,7 +369,7 @@
           </div>
           @if (darlehenStore.dashboardViewSig().loading) {
             <dv-shared-ui-loading
-              class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+              class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
               [type]="'compact'"
             ></dv-shared-ui-loading>
           }

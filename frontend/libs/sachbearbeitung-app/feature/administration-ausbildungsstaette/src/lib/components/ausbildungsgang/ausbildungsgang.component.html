@@ -9,7 +9,7 @@
       data-testid="cockpit-table"
       mat-table
       matSort
-      class="tw:w-full tw:!table-fixed"
+      class="tw:w-full tw:table-fixed!"
     >
       <caption class="cdk-visually-hidden">
         {{
@@ -46,7 +46,7 @@
           mat-cell
           *dvMatCellDef="let ausbildungsgang; dataSource: ausbildungsgaengeDataSourceSig()"
           [dvTruncateTooltip]="ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang()"
-          class="tw:w-32 tw:whitespace-nowrap"
+          class="tw:w-32 tw:whitespace-nowrap tw:truncate"
         >
           {{ ausbildungsgang.ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang() }}
         </td>
@@ -66,7 +66,6 @@
               "
               [formControl]="filterForm.controls.ausbildungskategorie"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
                   | transloco
@@ -129,7 +128,7 @@
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
               (clear)="filterForm.controls.abschluss.reset()"
               [valueSig]="filterForm.controls.abschluss.value"
             ></dv-shared-ui-clear-button>
@@ -155,7 +154,7 @@
               "
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
+              class="tw:font-normal!"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco
               "
@@ -191,19 +190,19 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-20 tw:whitespace-nowrap tw:!text-right">
-          <div class="tw:relative tw:inline-block">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-20 tw:whitespace-nowrap tw:justify-items-end">
+          <div class="tw:relative">
             @if (addAusbildungsgangIsLoadingSig()) {
               <dv-shared-ui-loading [overlay]="true" [type]="'icon'"></dv-shared-ui-loading>
             }
             <button
               type="button"
-              class="tw:dv-button-outline btn-sm"
+              class="tw:dv-button-icon-outline"
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               (click)="createAusbildungsgang()"
               [disabled]="addAusbildungsgangIsLoadingSig()"
             >
-              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
             </button>
           </div>
         </th>
@@ -215,7 +214,7 @@
                 class="tw:dv-button-icon tw:text-gray-500"
                 (click)="archive(abschluss); $event.stopPropagation()"
               >
-                <span class="material-symbols-rounded tw:!text-2xl/none">cancel</span>
+                <span class="material-symbols-rounded tw:text-2xl/none!">cancel</span>
               </button>
             }
             <button
@@ -223,7 +222,7 @@
               class="tw:dv-button-icon tw:text-dv-blue"
               (click)="showInfo(abschluss); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:!text-2xl/none"> info </span>
+              <span class="material-symbols-rounded tw:text-2xl/none!"> info </span>
             </button>
           </div>
         </td>

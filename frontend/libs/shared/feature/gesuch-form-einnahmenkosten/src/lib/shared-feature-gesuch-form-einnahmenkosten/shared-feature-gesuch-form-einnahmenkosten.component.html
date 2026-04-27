@@ -13,18 +13,16 @@
         (gotReenabledSig)="gotReenabled$.next({})"
         data-testid="form-einnahmen-kosten-form"
         novalidate
-        class="tw:mt-6"
+        class="testing-library-fix tw:mt-6"
         (ngSubmit)="handleSave()"
       >
-        <h3 class="tw:mb-6">
+        <h2 class="tw:text-2xl tw:font-semibold tw:mb-6">
           {{ t('shared.form.einnahmenkosten.einnahmen.title') }}
-        </h3>
+        </h2>
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6">
           <!-- NETTOERWERBSEINKOMMEN -->
-          <div
-            class="tw:flex tw:gap-2 align-content-center tw:flex-wrap tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6"
-          >
+          <div class="tw:flex tw:gap-2 tw:content-center tw:flex-wrap tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <div class="tw:flex tw:gap-2 tw:grow">
               <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
@@ -73,7 +71,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- UNTERHALTSBEITRÄGE -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.unterhaltsbeitraege.label') }}</mat-label>
               <input
@@ -100,7 +98,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ZULAGEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.zulagen.label') }}</mat-label>
               <input
@@ -126,7 +124,7 @@
         </div>
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- RENTEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.renten.label') }}</mat-label>
               <input
@@ -153,7 +151,7 @@
         </div>
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- EO_LEISTUNGEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.eoLeistungen.label') }}</mat-label>
               <input
@@ -180,7 +178,7 @@
         </div>
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ERGAENZUNGSLEISTUNGEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.ergaenzungsleistungen.label') }}</mat-label>
               <input
@@ -207,7 +205,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- BEITRAEGE -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.beitraege.label') }}</mat-label>
               <input
@@ -235,7 +233,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- EINNAHMEN BGSA -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.einnahmenBGSA.label') }}</mat-label>
               <input
@@ -263,7 +261,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- TAGGELDER AHV IV -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.taggelderAHVIV.label') }}</mat-label>
               <input
@@ -290,7 +288,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ANDERE EINNAHMEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.andereEinnahmen.label') }}</mat-label>
               <input
@@ -317,9 +315,9 @@
         </div>
 
         <!-- KOSTEN -->
-        <h3 class="tw:pt-12 tw:mb-6">
+        <h2 class="tw:text-2xl tw:font-semibold tw:pt-12 tw:mb-6">
           {{ t('shared.form.einnahmenkosten.kosten.title') }}
-        </h3>
+        </h2>
 
         @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
 
@@ -336,7 +334,7 @@
               />
               <mat-hint *dvZuvorHint="formChanges.ausbildungskosten"></mat-hint>
               @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
-                <mat-hint class="mat-caution">
+                <mat-hint class="tw:text-yellow-700">
                   {{
                     t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, {
                       max: formStateSig().ausbildungsKostenLimit,
@@ -362,7 +360,7 @@
         @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
           <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- BETREUUNGKOSTEN_KINDER -->
-            <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.betreuungskostenKinder.label') }}</mat-label>
                 <input
@@ -390,7 +388,7 @@
 
         <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- FAHRKOSTEN -->
-          <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.fahrkosten.label') }}</mat-label>
               <input
@@ -418,7 +416,7 @@
         @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
           <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- WOHNKOSTEN -->
-            <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.wohnkosten.label') }}</mat-label>
                 <input
@@ -446,7 +444,7 @@
         @if (!hiddenFieldsSetSig().has(form.controls.verpflegungskosten)) {
           <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- VERPFLEGUNGSKOSTEN -->
-            <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.verpflegungskosten.label') }}</mat-label>
                 <input
@@ -557,13 +555,13 @@
         }
 
         <!-- STEUERRELEVANTE DATEN -->
-        <h3 class="tw:pt-12 tw:mb-6">
+        <h2 class="tw:text-2xl tw:font-semibold tw:mt-6">
           {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
-        </h3>
+        </h2>
         @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
           <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- VERMOEGEN -->
-            <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
                 <input
@@ -645,7 +643,11 @@
         <!-- Buttons -->
         <dv-shared-ui-step-form-buttons>
           @if (!view.readonly) {
-            <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
+            <button
+              type="submit"
+              class="testing-library-fix tw:dv-button-main-primary"
+              data-testid="button-save-continue"
+            >
               {{ t('shared.form.save-and-continue') }}
             </button>
           } @else {

@@ -19,15 +19,15 @@
       @for (state of darlehenCompletedStates; track $index) {
         @if (darlehens[state] && darlehens[state].length) {
           <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-            <hr class="tw:grow" />
+            <hr class="tw:grow tw:border-t tw:border-dv-border" />
             {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-            <hr class="tw:grow" />
+            <hr class="tw:grow tw:border-t tw:border-dv-border" />
           </div>
           @for (darlehen of darlehens[state]; track $index) {
             @if (idType.id) {
               <a
                 [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
-                class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+                class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
                 data-testid="header-nav-darlehen-menu-item"
                 [class.active]="darlehenRouteIdSig() === darlehen.id"
                 mat-menu-item
@@ -48,7 +48,7 @@
       }
 
       @if (idType.type === 'fall' && idType.id && canCreateDarlehenSig()) {
-        <hr class="tw:grow tw:hidden tw:not-first:block" />
+        <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
         <button
           type="button"
           class="btn tw:font-normal tw:shadow-none!"
@@ -69,15 +69,15 @@
     @for (state of darlehenCompletedStates; track $index) {
       @if (darlehens[state] && darlehens[state].length) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-          <hr class="tw:grow" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (darlehen of darlehens[state]; track $index) {
           @if (idType.id) {
             <a
               [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
-              class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+              class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
               data-testid="header-nav-darlehen-menu-item"
               [class.active]="darlehenRouteIdSig() === darlehen.id"
               mat-menu-item
@@ -98,7 +98,7 @@
     }
 
     @if (idType.type === 'fall' && idType.id && canCreateDarlehenSig()) {
-      <hr class="tw:grow tw:hidden tw:not-first:block" />
+      <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
       <button
         type="button"
         class="btn tw:font-normal tw:shadow-none!"

@@ -5,7 +5,7 @@
     @let permissions = gesuchViewSig().permissions;
     @let einreichenView = einreichenStore.einreichenViewSig();
     @if (gesuchViewSig().loading || einreichenView.loading) {
-      <dv-shared-ui-loading data-testid="abschluss-loading"></dv-shared-ui-loading>
+      <dv-shared-ui-loading class="tw:col-span-12" data-testid="abschluss-loading"></dv-shared-ui-loading>
     } @else if (isEditingAenderung && !canAenderungEinreichenSig()) {
       <div class="tw:col-span-12 tw:xl:col-span-8 tw:mt-6 tw:flex tw:flex-col align-items-start">
         <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">
@@ -33,17 +33,19 @@
             }
             @case ('NOT_READY') {
               @if (einreichenView.specialValidationErrors.length === 0) {
-                <dv-shared-ui-info-container class="tw:block" [type]="'warning'" data-testid="alert-warning">
+                <dv-shared-ui-info-container class="tw:flex-col" [type]="'warning'" data-testid="alert-warning">
                   <div class="tw:flex tw:gap-2">
                     <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
                     <span [innerHTML]="'shared.form.abschluss.notReady' | transloco"></span>
                   </div>
 
-                  <ul class="tw:mt-6">
+                  <ul class="tw:mt-6 tw:pl-8">
                     @for (step of einreichenView.invalidFormularSteps; track step.route) {
                       @if (step.routeParts; as link) {
                         <li>
-                          <a [routerLink]="link">{{ step.titleTranslationKey | transloco }}</a>
+                          <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="link">{{
+                            step.titleTranslationKey | transloco
+                          }}</a>
                         </li>
                       }
                     }
@@ -52,10 +54,13 @@
               } @else {
                 @for (error of einreichenView.specialValidationErrors; track error) {
                   <dv-shared-ui-info-container [type]="'danger'" data-testid="alert-danger">
-                    <span class="text-danger material-symbols-rounded">error</span>
+                    <span class="tw:text-dv-red material-symbols-rounded">error</span>
                     <div class="tw:ml-4">
                       <span [innerHTML]="error.validationErrorKey | transloco"></span>
-                      &nbsp;<a [routerLink]="error.stepRoute">{{ error.linkKey | transloco }}</a>
+                      <br />
+                      <a class="tw:text-dv-gray-dark tw:underline" [routerLink]="error.stepRoute">{{
+                        error.linkKey | transloco
+                      }}</a>
                     </div>
                   </dv-shared-ui-info-container>
                 }
@@ -70,7 +75,7 @@
               @if (einreichenView.isFehlendeDokumente) {
                 <button
                   type="submit"
-                  class="tw:dv-button-main-primary tw:mt-6"
+                  class="tw:dv-button-main-primary tw:self-start tw:mt-6"
                   (click)="fehlendeDokumenteEinreichen()"
                   data-testid="button-fehlende-dokumente-einreichen"
                   [disabled]="
@@ -84,7 +89,7 @@
               } @else {
                 <button
                   type="submit"
-                  class="tw:dv-button-main-primary tw:mt-6"
+                  class="tw:dv-button-main-primary tw:self-start tw:mt-6"
                   (click)="abschliessen()"
                   data-testid="button-abschluss"
                   [disabled]="!permissions.canFreigeben || einreichenStore.einreicheOperationIsInProgressSig()"
@@ -95,7 +100,7 @@
             }
             @case ('SUBMITTED') {
               <dv-shared-ui-info-container [type]="'success'" data-testid="alert-success">
-                <span class="text-success material-symbols-rounded tw:mr-4">check_circle</span>
+                <span class="tw:text-dv-main-success material-symbols-rounded tw:mr-4">check_circle</span>
                 <span [innerHTML]="'shared.form.abschluss.submitted' | transloco"></span>
               </dv-shared-ui-info-container>
             }

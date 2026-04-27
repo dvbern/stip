@@ -53,7 +53,7 @@
                 <div class="tw:flex tw:gap-5">
                   <button
                     type="button"
-                    class="btn btn-link tw:flex! tw:p-0! tw:items-center tw:mb-6!"
+                    class="tw:dv-button tw:flex! tw:p-0! tw:items-center tw:mb-6!"
                     [attr.aria-label]="t('shared.dokumente.table.download')"
                     [dvDownloadButton]="{
                       type: 'darlehenNegativVerfuegung',
@@ -67,7 +67,7 @@
                   </button>
                   <button
                     type="button"
-                    class="btn btn-link tw:flex! tw:p-0! tw:items-center tw:mb-6! tw:no-underline!"
+                    class="tw:dv-button tw:flex! tw:p-0! tw:items-center tw:mb-6! tw:no-underline!"
                     [matTooltip]="t('shared.form.delete')"
                     [attr.aria-label]="t('shared.form.delete')"
                     (click)="deleteNegativVerfuegung()"
@@ -118,48 +118,54 @@
           </mat-form-field>
         </div>
 
-        <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
-          @if (darlehenPermissionsSig()?.canWriteSb) {
-            <a [routerLink]="['/darlehen-dashboard']" class="tw:dv-button-outline" data-testid="darlehen-cancel">
-              <span>{{ t('shared.cancel') }}</span>
-            </a>
-          }
+        @if (
+          darlehenPermissionsSig()?.canWriteSb ||
+          darlehenPermissionsSig()?.canFreigeben ||
+          darlehenPermissionsSig()?.canApproveDarlehen
+        ) {
+          <div *dvIfSachbearbeiter class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
+            @if (darlehenPermissionsSig()?.canWriteSb) {
+              <a [routerLink]="['/darlehen-dashboard']" class="tw:dv-button-outline" data-testid="darlehen-cancel">
+                <span>{{ t('shared.cancel') }}</span>
+              </a>
+            }
 
-          @if (darlehenPermissionsSig()?.canFreigeben) {
-            <!-- darlehen Freigeben -->
-            <button
-              type="button"
-              data-testid="button-darlehen-freigeben"
-              (click)="darlehenUpdateAndFreigeben()"
-              class="tw:dv-button-main-primary"
-            >
-              {{ t('shared.form.darlehen.freigeben') }}
-            </button>
-            <!-- dalehen zurückweisen -->
-            <button
-              type="button"
-              data-testid="button-darlehen-zurueckweisen"
-              (click)="darlehenUpdateAndZurueckweisen()"
-              class="tw:dv-button-main-danger"
-            >
-              {{ t('shared.form.darlehen.zurueckweisen') }}
-            </button>
-          }
+            @if (darlehenPermissionsSig()?.canFreigeben) {
+              <!-- darlehen Freigeben -->
+              <button
+                type="button"
+                data-testid="button-darlehen-freigeben"
+                (click)="darlehenUpdateAndFreigeben()"
+                class="tw:dv-button-main-primary"
+              >
+                {{ t('shared.form.darlehen.freigeben') }}
+              </button>
+              <!-- dalehen zurückweisen -->
+              <button
+                type="button"
+                data-testid="button-darlehen-zurueckweisen"
+                (click)="darlehenUpdateAndZurueckweisen()"
+                class="tw:dv-button-main-danger"
+              >
+                {{ t('shared.form.darlehen.zurueckweisen') }}
+              </button>
+            }
 
-          @if (darlehenPermissionsSig()?.canApproveDarlehen) {
-            <!-- darlehen abschliessen -->
-            <button
-              type="button"
-              data-testid="button-darlehen-abschliessen"
-              (click)="darlehenUpdateAndAbschliessen()"
-              class="tw:dv-button-main-primary"
-            >
-              {{ t('shared.form.darlehen.abschliessen') }}
-            </button>
-          }
-        </div>
+            @if (darlehenPermissionsSig()?.canApproveDarlehen) {
+              <!-- darlehen abschliessen -->
+              <button
+                type="button"
+                data-testid="button-darlehen-abschliessen"
+                (click)="darlehenUpdateAndAbschliessen()"
+                class="tw:dv-button-main-primary"
+              >
+                {{ t('shared.form.darlehen.abschliessen') }}
+              </button>
+            }
+          </div>
+        }
       </form>
-      <hr class="tw:mt-10! tw:border-t tw:border-gray-400" />
+      <hr class="tw:mt-10 tw:border-t tw:border-dv-border tw:xl:w-1/2" />
     }
 
     <!-- gesuchsteller form -->
@@ -231,9 +237,9 @@
           formGroupName="gruende"
         >
           <legend class="tw:col-span-2">
-            <h3 class="tw:!mb-0">
+            <h2 class="tw:text-2xl tw:font-semibold tw:mb-4">
               {{ t('shared.form.darlehen.gruende.label') }}
-            </h3>
+            </h2>
           </legend>
           <!-- grundNichtBerechtigt -->
           <div class="tw:col-span-1 tw:col-start-1 tw:min-h-14">

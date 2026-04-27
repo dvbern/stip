@@ -1,5 +1,5 @@
 @if (storeSig().hasEntriesSig()) {
-  <ul class="tw:flex tw:flex-col list-unstyled tw:gap-2 tw:mb-0">
+  <ul class="tw:flex tw:flex-col tw:gap-2 tw:mb-0 tw:list-none">
     @for (document of storeSig().dokumentListView().dokuments; track document.file.id) {
       <li>
         <dv-shared-pattern-document-upload-entry

@@ -1,10 +1,16 @@
-<form [formGroup]="form" data-testid="form-sozialdienst-form" novalidate class="tw:mt-6" (ngSubmit)="handleSubmit()">
+<form
+  [formGroup]="form"
+  data-testid="form-sozialdienst-form"
+  novalidate
+  class="tw:mt-8 tw:px-2 tw:flex tw:flex-col tw:gap-6"
+  (ngSubmit)="handleSubmit()"
+>
   @if (store.sozialdienst() | rdIsPending: { ignoreInitial: true }) {
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <!-- Name -->
     <div class="tw:grid tw:grid-cols-12 tw:gap-6">
-      <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+      <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <mat-form-field dvSharedUiFormField class="tw:grow">
           <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}</mat-label>
           <input
@@ -55,29 +61,27 @@
       />
     </div>
 
-    <fieldset formGroupName="sozialdienstAdmin">
-      <legend class="tw:grid tw:grid-cols-12 tw:flex tw:mt-6">
-        <div class="tw:flex tw:gap-8 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <div>
-            {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | transloco }}
-          </div>
-          <!-- button sozialdienstAdmin ersetzen -->
-          @if (idSig()) {
-            <button
-              [title]="'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco"
-              type="button"
-              class="tw:dv-button-outline btn-sm tw:flex tw:items-center"
-              (click)="replaceSozialdienstAdmin()"
-            >
-              <i class="material-symbols-rounded tw:text-xl">cycle</i>
-            </button>
-          }
+    <fieldset formGroupName="sozialdienstAdmin" class="tw:flex tw:flex-col tw:gap-6 tw:mt-6">
+      <legend class="tw:flex tw:gap-8 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+        <div class="tw:text-2xl tw:font-semibold">
+          {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | transloco }}
         </div>
+        <!-- button sozialdienstAdmin ersetzen -->
+        @if (idSig()) {
+          <button
+            [title]="'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco"
+            type="button"
+            class="tw:dv-button-icon-outline tw:flex tw:items-center"
+            (click)="replaceSozialdienstAdmin()"
+          >
+            <i class="material-symbols-rounded tw:text-xl!">cycle</i>
+          </button>
+        }
       </legend>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- nachname -->
-        <div class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+        <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
             <input
@@ -94,7 +98,7 @@
         </div>
 
         <!-- vorname -->
-        <div class="tw:flex gap 2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+        <div class="tw:flex gap 2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
             <input
@@ -115,7 +119,7 @@
       <!-- E-Mail Adresse -->
       <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <div
-          class="tw:flex tw:gap-2 align-content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
+          class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
           [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
         >
           <mat-form-field dvSharedUiFormField class="tw:grow">

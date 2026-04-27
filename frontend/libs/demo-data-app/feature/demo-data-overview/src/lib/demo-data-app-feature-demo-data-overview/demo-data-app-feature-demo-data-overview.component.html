@@ -23,7 +23,7 @@
                   (click)="compareResults(previousValue, berechnungResultats)"
                   [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-compare')"
                 >
-                  <i class="material-symbols-rounded tw:text-sm">alt_route</i>
+                  <i class="material-symbols-rounded tw:text-sm!">alt_route</i>
                 </button>
               }
               <button
@@ -32,7 +32,7 @@
                 (click)="saveResult(berechnungResultats)"
                 [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-save')"
               >
-                <i class="material-symbols-rounded tw:text-sm">add_to_photos</i>
+                <i class="material-symbols-rounded tw:text-sm!">add_to_photos</i>
               </button>
             }
             <button
@@ -72,13 +72,13 @@
                 <div class="tw:whitespace-pre-wrap" [innerHTML]="demoData.description"></div>
                 <div class="tw:flex tw:gap-6 tw:items-center">
                   <button
-                    class="tw:dv-button-icon-outline btn-sm tw:inline-flex! tw:items-center tw:p-2"
+                    class="tw:dv-button-icon-outline tw:inline-flex! tw:items-center tw:p-2"
                     type="button"
                     (click)="applyDemoData(demoData.id)"
                     [matTooltip]="t('demo-data-app.overview.apply-demo-data.apply')"
                     [matTooltipShowDelay]="tooltipDelay"
                   >
-                    <i class="material-symbols-rounded tw:text-sm">add</i>
+                    <i class="material-symbols-rounded tw:text-sm!">add</i>
                   </button>
                   <div class="tw:relative tw:flex tw:gap-1" role="status">
                     @if (demoData.testResult) {
@@ -136,29 +136,29 @@
               {{ t('demo-data-app.overview.import-details.title') }}
             </h2>
             <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
-              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              <dt class="tw:whitespace-nowrap tw:font-semibold">
                 {{ t('demo-data-app.overview.import-details.imported-by') }}:
               </dt>
               <dd class="tw:mb-0!">{{ demoDataList.importiertVon }}</dd>
-              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              <dt class="tw:whitespace-nowrap tw:font-semibold">
                 {{ t('demo-data-app.overview.import-details.last-updated') }}:
               </dt>
               <dd class="tw:mb-0!">{{ demoDataList.letzteAktivitaet | date: 'dd.MM.yyyy' }}</dd>
-              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              <dt class="tw:whitespace-nowrap tw:font-semibold">
                 {{ t('demo-data-app.overview.import-details.total') }}:
               </dt>
               <dd class="tw:mb-0!">{{ demoDataList.demoDatas.length }}</dd>
-              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              <dt class="tw:whitespace-nowrap tw:font-semibold">
                 {{ t('demo-data-app.overview.import-details.comment') }}:
               </dt>
               <dd class="tw:mb-0!">{{ demoDataList.kommentar }}</dd>
-              <dt class="tw:whitespace-nowrap tw:!font-semibold">
+              <dt class="tw:whitespace-nowrap tw:font-semibold">
                 {{ t('demo-data-app.overview.import-details.file') }}:
               </dt>
               <dd class="tw:mb-0 tw:min-w-0">
                 <button
                   type="button"
-                  class="btn btn-link tw:flex! tw:max-w-full tw:p-0! tw:items-center"
+                  class="tw:dv-button tw:flex! tw:max-w-full tw:p-0! tw:items-center"
                   [attr.aria-label]="t('demo-data-app.overview.import-details.download')"
                   [dvDownloadButton]="{
                     type: 'demoData',
@@ -202,7 +202,7 @@
               class="tw:mt-4 tw:flex-col"
             >
               <dl class="tw:grid tw:grid-cols-[auto_1fr] tw:gap-3 tw:mb-6!">
-                <dt class="tw:whitespace-nowrap tw:!font-semibold">
+                <dt class="tw:whitespace-nowrap tw:font-semibold">
                   {{ t('shared.form.tranche.status.label.GESUCH') }}:
                 </dt>
                 <dd class="tw:mb-0!">

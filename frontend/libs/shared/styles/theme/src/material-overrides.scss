@@ -25,16 +25,8 @@ html {
       density: 0,
     )
   );
+  @include mat.system-classes();
 
-  --mat-sys-surface-container: #fefefe;
-  --mat-dialog-container-color: white;
-  --mat-sys-on-surface-variant: black;
-  --mat-form-field-outlined-disabled-input-text-color: var(--dv-gray-subtle);
-  --mat-sys-body-medium-size: 1rem;
-  --mat-sys-body-medium-line-height: 1.5rem;
-  --mat-sys-label-large-size: var(--dv-base-font-size);
-  --mat-sys-body-small-size: 0.875rem;
-  --mat-option-focus-state-layer-color: #eee;
   .mat-mdc-form-field {
     .mat-mdc-text-field-wrapper {
       background-color: white;
@@ -52,19 +44,43 @@ html {
     }
   }
 
-  .mat-mdc-checkbox,
-  .mat-mdc-radio-button {
-    --mat-sys-primary: var(--mat-sys-secondary);
-  }
-
-  .mat-mdc-form-field-required-marker {
-    color: #fe5454;
-  }
-
   .mat-mdc-form-field-hint-wrapper,
   .mat-mdc-form-field-error-wrapper {
     padding: 0;
   }
+}
+
+// Snackbar overlay settings for container size
+// modify the parent container of the snackbar to center it
+.cdk-overlay-pane:not(.mat-mdc-snack-bar-handset):has(
+    > .mat-mdc-snack-bar-container
+  ) {
+  position: relative !important;
+  margin: 120px auto 0 auto !important;
+  flex-basis: var(--content-max-width);
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-self: flex-start;
+
+  .mat-mdc-snack-bar-container {
+    position: absolute;
+    top: 0;
+    flex: 0 0 auto;
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+}
+
+// Limit select drowdown content size
+.cdk-overlay-connected-position-bounding-box
+  .cdk-overlay-pane
+  .mat-mdc-select-panel {
+  max-width: 724px;
+  min-width: 254px;
+}
+
+.mat-mdc-paginator-page-size-label {
+  align-self: center;
 }
 
 .clearable-select .mat-mdc-select:not(.mat-mdc-select-empty) {
@@ -72,12 +88,69 @@ html {
     display: none;
   }
 }
+.mat-mdc-form-field-error:not(:first-child) {
+  display: none;
+}
 
 .dense-control {
   @include mat.form-field-density(-2);
 }
+
 .group-errors .mat-mdc-form-field-error {
   font-size: var(--mat-sys-body-small-size);
+}
+
+.mat-mdc-form-field.mat-mdc-form-field-label-always-float {
+  align-self: flex-start;
+  --mat-mdc-form-field-floating-label-scale: 1;
+  --mat-form-field-outlined-outline-color: rgba(0, 0, 0, 0.09);
+}
+
+// Table highlight on hover and show pointer if clickable
+.cdk-row.active,
+table tr.mat-mdc-row {
+  &.active,
+  &.highlightable:hover {
+    background-color: var(--mat-option-hover-state-layer-color);
+  }
+  &.highlightable {
+    cursor: pointer;
+  }
+}
+
+.mat-mdc-progress-bar {
+  --mat-progress-bar-active-indicator-height: 0.125rem;
+  --mat-progress-bar-track-height: 0.125rem;
+}
+
+.mat-mdc-snack-bar-container {
+  --mat-mdc-snack-bar-button-color: #fff;
+  --mat-snackbar-supporting-text-color: #fff;
+}
+
+$dv-all-colors: info, danger, success, warn, primary;
+
+@each $name in $dv-all-colors {
+  .mat-#{$name} {
+    --mat-chip-elevated-selected-container-color: var(
+      --tw-color-dv-main-#{$name}
+    );
+    --mat-chip-elevated-container-color: var(--tw-color-dv-main-#{$name});
+    --mat-snack-bar-container-color: var(--tw-color-dv-main-#{$name});
+    --mat-progress-bar-active-indicator-color: var(--tw-color-dv-main-#{$name});
+    --mat-progress-bar-track-color: var(--tw-color-dv-main-#{$name}-subtle);
+  }
+}
+.cdk-overlay-container .header-menu-panel {
+  padding: 5px 12px;
+  max-width: 450px;
+}
+
+.mat-mdc-list-item {
+  --mat-list-list-item-focus-state-layer-color: transparent;
+  &.mdc-list-item--with-trailing-radio .mdc-list-item__end {
+    margin-left: 4px;
+  }
 }
 
 .info-dialog-columnar {
@@ -85,53 +158,50 @@ html {
     min-width: unset;
   }
 }
-.mat-mdc-form-field.mat-mdc-form-field-label-always-float {
-  align-self: flex-start;
-  --mat-mdc-form-field-floating-label-scale: 1;
-  --mat-form-field-outlined-outline-color: rgba(0, 0, 0, 0.09);
+
+.dv-dialog-formular {
+  --mat-dialog-container-min-width: 900px;
+}
+
+.mat-mdc-tab-nav-bar.nav-style-tabs {
+  .mat-mdc-tab-links {
+    gap: 0 24px;
+  }
+}
+
+.mat-mdc-form-field-required-marker {
+  color: var(--tw-color-dv-main-danger);
+}
+
+dv-sachbearbeitung-app-feature-gesuch-layout {
+  .tw\:dv-table {
+    box-shadow: none;
+    border: 1px solid var(--tw-color-gray-300);
+  }
+  .mat-mdc-tab-link.btn-nav {
+    box-shadow: none;
+    border: 1px solid var(--tw-color-gray-300);
+  }
 }
 
 .mat-mdc-slide-toggle {
-  --mat-slide-toggle-track-height: 20px;
-  --mat-slide-toggle-track-shape: 10px;
-
-  .mdc-form-field {
-    padding: 4px 0;
-  }
-
-  .mdc-switch {
-    margin: 0 15px 0 10px;
-    transform: scale(1.5);
-  }
-  .mdc-switch__handle {
-    border-color: transparent;
-    border-width: 3px;
-    border-style: solid;
-  }
-  .mdc-switch__ripple {
-    display: none;
-  }
+  --mat-slide-toggle-selected-track-color: var(--tw-color-dv-red);
+  --mat-slide-toggle-selected-focus-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-selected-pressed-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-selected-hover-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-unselected-track-color: var(--tw-color-dv-gray-light);
+  --mat-slide-toggle-unselected-focus-track-color: var(
+    --tw-color-dv-gray-light
+  );
+  --mat-slide-toggle-unselected-pressed-track-color: var(--tw-color-dv-gray);
+  --mat-slide-toggle-unselected-hover-track-color: var(--tw-color-dv-gray);
+  --mat-slide-toggle-unselected-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-focus-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-pressed-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-hover-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-label-text-size: 1rem;
 
   .mdc-switch {
-    --mat-slide-toggle-disabled-selected-track-color: var(--dv-red);
-    --mat-slide-toggle-disabled-selected-handle-color: white;
-    --mat-slide-toggle-unselected-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-unselected-hover-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-unselected-focus-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-unselected-pressed-track-color: var(--dv-gray-500);
-    --mat-slide-toggle-unselected-handle-color: white;
-    --mat-slide-toggle-unselected-hover-handle-color: white;
-    --mat-slide-toggle-unselected-focus-handle-color: white;
-    --mat-slide-toggle-unselected-pressed-handle-color: white;
-    --mat-slide-toggle-selected-hover-state-layer-color: var(--dv-red);
-    --mat-slide-toggle-selected-pressed-state-layer-color: var(--dv-red);
-    --mat-slide-toggle-selected-track-color: var(--dv-red);
-    --mat-slide-toggle-selected-hover-track-color: var(--dv-red);
-    --mat-slide-toggle-selected-focus-track-color: var(--dv-red);
-    --mat-slide-toggle-selected-pressed-track-color: var(--dv-red);
-    --mat-slide-toggle-selected-handle-color: white;
-    --mat-slide-toggle-selected-hover-handle-color: white;
-    --mat-slide-toggle-selected-focus-handle-color: white;
-    --mat-slide-toggle-selected-pressed-handle-color: white;
+    margin: 0 0.5rem 0 0;
   }
 }

@@ -21,7 +21,7 @@
         {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
       </button>
     </div>
-    <div class="tw:dv-table" [class.opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
+    <div class="tw:dv-table" [class.tw:opacity-50]="buchhaltungStore.buchhaltung() | rdIsPending">
       <table mat-table [dataSource]="buchhaltungDataSource" matSort class="tw:w-full tw:table-fixed">
         <caption class="cdk-visually-hidden">
           {{
@@ -147,7 +147,7 @@
               @if (buchhaltung.entry.verfuegungId) {
                 <button
                   type="button"
-                  class="tw:dv-button-outline fs-7 tw:p-4 tw:text-sm"
+                  class="tw:dv-button-outline tw:text-sm! tw:p-4 tw:text-sm"
                   [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
                   [matTooltip]="'shared.dokumente.table.download' | transloco"
                 >
@@ -162,7 +162,7 @@
           <td mat-cell *matCellDef [colSpan]="displayedColumns.length"></td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
         <tr
           mat-row
           *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
@@ -178,7 +178,7 @@
           class="tw:!h-4 tw:!bg-(--dv-red-subtle)"
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
-          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+          <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
             {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>
@@ -192,7 +192,7 @@
       </mat-paginator>
       @if (buchhaltungStore.buchhaltung() | rdIsPending) {
         <dv-shared-ui-loading
-          class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+          class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
           [type]="'compact'"
         ></dv-shared-ui-loading>
       }

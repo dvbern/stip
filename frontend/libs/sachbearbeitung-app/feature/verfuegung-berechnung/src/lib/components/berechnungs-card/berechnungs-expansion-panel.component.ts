@@ -38,7 +38,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
               }
             </div>
             @if (!panel.expanded) {
-              <span class="tw:text-end tw:grow align-self-start text-nowrap">
+              <span class="tw:text-end tw:grow tw:self-start text-nowrap">
                 {{ view.total | formatChf }}
               </span>
             }

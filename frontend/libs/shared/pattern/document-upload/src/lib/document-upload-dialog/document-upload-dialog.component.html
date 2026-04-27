@@ -1,19 +1,17 @@
-<div class="p-md-4 tw:p-4" *dvTranslocoShared="let t">
+<div class="tw:md:p-6 tw:p-4" *dvTranslocoShared="let t">
   @let info = data.options.info;
-  <h4 class="tw:flex align-content-center align-self-start title tw:mr-2">
-    <span class="tw:text-dv-blue upload-icon material-symbols-rounded tw:rounded-full align-self-start tw:mr-2 p-1"
-      >upload</span
-    >
-    <div [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"></div>
+  <h1 class="tw:flex tw:items-center tw:self-start tw:mr-2 tw:pr-2">
+    <span class="material-symbols-rounded tw:text-dv-blue upload-icon tw:rounded-full tw:mr-2 tw:p-1">upload</span>
+    <div class="tw:text-xl tw:font-semibold" [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"></div>
     <span class="tw:grow"></span>
     <button
       type="button"
-      class="tw:dv-button-icon tw:absolute align-self-start tw:right-0 tw:top-0"
+      class="tw:dv-button-icon tw:absolute tw:self-start tw:right-0 tw:top-0"
       (click)="closeDialog()"
     >
-      <span class="material-symbols-rounded align-middle">close</span>
+      <span class="material-symbols-rounded">close</span>
     </button>
-  </h4>
+  </h1>
 
   @if (info.description) {
     <div
@@ -24,14 +22,14 @@
 
   @if (showUplaodSig()) {
     <dv-shared-ui-drop-file
-      class="tw:flex tw:items-center tw:flex-col tw:rounded-lg tw:top-3 tw:mt-6 border border-2 tw:bg-white tw:p-4 shadow"
+      class="tw:flex tw:items-center tw:flex-col tw:rounded-lg tw:top-3 tw:mt-6 border tw:border-2 tw:bg-white tw:p-4 shadow"
       [disabled]="data.store.isLoading()"
       [class.rounded-bottom-3]="!data.store.hasEntriesSig()"
       (filesDropped)="handleMultipleDocumentsAdded($event)"
     >
       <label class="upload" [class.disabled]="data.store.isLoading()">
         <div
-          class="tw:text-dv-gray text-italic tw:md:block tw:hidden my-4 text-center"
+          class="tw:text-dv-gray tw:md:block tw:hidden tw:my-6 tw:text-center"
           [innerHTML]="t('shared.file.dropZone')"
         ></div>
         <button (click)="fileInput.click()" type="button" class="tw:dv-button-outline">
@@ -62,9 +60,9 @@
     (removeUpload)="data.store.removeDocument($event.dokumentId, data.options)"
   ></dv-shared-pattern-document-upload-list>
 </div>
-<div class="border-top border-2"></div>
 @if (uploadViewSig().isSachbearbeitungApp && uploadViewSig().dokumentModel.art === 'GESUCH_DOKUMENT') {
-  <div class="p-md-4 tw:p-4">
+  <div class="tw:border-t-2 tw:border-dv-border"></div>
+  <div class="tw:md:p-6 tw:p-4">
     <dv-shared-pattern-document-upload-approval
       [uploadViewSig]="uploadViewSig()"
     ></dv-shared-pattern-document-upload-approval>

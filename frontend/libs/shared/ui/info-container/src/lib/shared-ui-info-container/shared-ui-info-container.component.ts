@@ -17,7 +17,6 @@ type AvailableTypes = 'info' | 'warning' | 'danger' | 'success' | 'light';
   standalone: true,
   selector: 'dv-shared-ui-info-container',
   templateUrl: './shared-ui-info-container.component.html',
-  styleUrl: './shared-ui-info-container.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiInfoContainerComponent {
@@ -26,7 +25,7 @@ export class SharedUiInfoContainerComponent {
     alias: 'type',
   });
   @HostBinding('class') defaultClasses =
-    'tw:rounded-lg tw:p-4 tw:mb-4 tw:border-1';
+    'tw:flex tw:rounded-lg tw:p-4 tw:mb-4 tw:border-1';
 
   private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);

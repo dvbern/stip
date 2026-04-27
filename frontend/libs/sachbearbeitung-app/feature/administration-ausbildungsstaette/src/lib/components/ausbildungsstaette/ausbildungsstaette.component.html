@@ -9,7 +9,7 @@
       data-testid="cockpit-table"
       mat-table
       matSort
-      class="tw:w-full tw:!table-fixed"
+      class="tw:w-full tw:table-fixed"
     >
       <caption class="cdk-visually-hidden">
         {{
@@ -37,7 +37,7 @@
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
               (clear)="filterForm.controls.ausbildungsstaette.reset()"
               [valueSig]="filterForm.controls.ausbildungsstaette.value"
             ></dv-shared-ui-clear-button>
@@ -66,7 +66,6 @@
                 aria-labelledby="nummerTypLabel"
                 [formControl]="filterForm.controls.nummerTyp"
                 (click)="$event.stopPropagation()"
-                class="tw:!font-normal"
                 [placeholder]="
                   'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.nummerTyp.filter.alle'
                     | transloco
@@ -91,7 +90,7 @@
               </mat-select>
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
               (clear)="filterForm.controls.nummerTyp.reset()"
               [valueSig]="filterForm.controls.nummerTyp.value"
             ></dv-shared-ui-clear-button>
@@ -128,7 +127,7 @@
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
               (clear)="filterForm.controls.nummer.reset()"
               [valueSig]="filterForm.controls.nummer.value"
             ></dv-shared-ui-clear-button>
@@ -153,7 +152,6 @@
               aria-labelledby="statusLabel"
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco
               "
@@ -189,19 +187,19 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-20 tw:whitespace-nowrap tw:!text-right">
-          <div class="tw:relative tw:inline-block">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-20 tw:whitespace-nowrap tw:justify-items-end">
+          <div class="tw:relative">
             @if (addAusbildungsstaetteIsLoadingSig()) {
               <dv-shared-ui-loading [overlay]="true" [type]="'icon'"></dv-shared-ui-loading>
             }
             <button
               type="button"
-              class="tw:dv-button-outline btn-sm"
+              class="tw:dv-button-icon-outline"
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               (click)="createAusbildungsstaette()"
               [disabled]="addAusbildungsstaetteIsLoadingSig()"
             >
-              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
             </button>
           </div>
         </th>
@@ -212,7 +210,7 @@
               class="tw:dv-button-icon tw:text-gray-500"
               (click)="editAusbildungsstaette(abschluss); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:!text-xl/none">edit</span>
+              <span class="material-symbols-rounded tw:text-xl/none!">edit</span>
             </button>
             @if (abschluss.canArchive) {
               <button

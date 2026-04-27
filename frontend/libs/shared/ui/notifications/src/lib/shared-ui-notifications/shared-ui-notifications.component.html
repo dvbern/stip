@@ -1,21 +1,21 @@
 <h3 class="tw:flex tw:items-center tw:text-2xl tw:font-semibold" data-testid="nachrichten-title">
   <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="tw:mr-2">
-    <i class="material-symbols-rounded tw:text-lg">mail</i>
+    <i class="material-symbols-rounded tw:text-lg!">mail</i>
   </dv-shared-ui-icon-chip>
   <span>{{ 'shared.nachrichten.title' | transloco }}</span>
 </h3>
 
 @let notifications = notificationsSig();
 @if (notifications.length > 0) {
-  <div class="notifications tw:gap-2 tw:mt-6">
-    <h4 class="subgrid subgrid-3 m-0">
+  <div class="tw:grid tw:grid-cols-[auto_auto_auto] tw:mt-6 tw:gap-x-2">
+    <h4 class="tw:text-lg tw:font-semibold tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:m-0 tw:mb-3">
       <span>{{ 'shared.nachrichten.subject' | transloco }}</span>
       <span>{{ 'shared.nachrichten.sender' | transloco }}</span>
       <span>{{ 'shared.nachrichten.date' | transloco }}</span>
     </h4>
     @for (notification of notificationsViewSig(); track notification) {
       <button
-        class="btn btn-link text-decoration-none subgrid subgrid-3 px-0 py-2 text-start border-top border-1"
+        class="tw:dv-button tw:items-center tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:px-0 tw:py-3 tw:text-start tw:border-0 tw:border-t tw:rounded-none tw:border-dv-border"
         (click)="openNotification(notification)"
       >
         <span>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</span>

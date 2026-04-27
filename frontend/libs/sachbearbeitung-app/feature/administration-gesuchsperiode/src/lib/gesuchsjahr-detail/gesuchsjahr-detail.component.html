@@ -1,10 +1,10 @@
-<div class="tw:mt-6 tw:grid tw:grid-cols-12 tw:flex tw:gap-6">
+<div class="tw:mt-6 tw:grid tw:grid-cols-12 tw:gap-6">
   @if (store.currentGesuchsjahrViewSig()?.isEditable) {
     @if (idSig(); as id) {
-      <div class="tw:col-span-12 tw:xl:col-span-5 order-xl-1">
+      <div class="tw:col-span-12 tw:xl:col-span-5 tw:xl:order-1">
         <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
           class="tw:col-span-12 tw:md:col-span-3 tw:xl:col-span-3"
-          typeSig="gesuchsperiode"
+          typeSig="gesuchsjahr"
           [unsavedChangesSig]="unsavedChangesSig()"
           (publish)="publish(id)"
         ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
@@ -16,11 +16,11 @@
     [dvSharedUiFormReadonly]="store.currentGesuchsjahrViewSig()?.isReadonly"
     data-testid="form-gesuchsjahr-form"
     (ngSubmit)="handleSave()"
-    class="tw:col-span-12 tw:xl:col-span-7"
+    class="tw:grid tw:col-span-12 tw:xl:col-span-7 tw:gap-y-6 tw:mt-3 tw:px-3"
   >
-    <h3 class="tw:mb-6">
+    <h2 class="tw:mb-6 tw:text-2xl tw:font-semibold">
       {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
-    </h3>
+    </h2>
 
     @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>

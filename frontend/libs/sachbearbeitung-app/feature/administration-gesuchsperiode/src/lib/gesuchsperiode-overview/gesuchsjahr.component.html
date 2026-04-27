@@ -2,7 +2,7 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (gesuchsJahrDatasourceSig(); as gesuchsjahrSource) {
-    <h2 class="tw:!my-6 tw:!text-2xl">
+    <h2 class="tw:my-6 tw:text-2xl tw:font-semibold">
       {{ 'sachbearbeitung-app.admin.gesuchsjahr.title' | transloco }}
     </h2>
     <div class="tw:dv-table">
@@ -25,7 +25,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             {{ 'sachbearbeitung-app.admin.gesuchsjahr.table.bezeichnung' | transloco }}
           </th>
-          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource" class="fw-bold">
+          <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource" class="tw:font-semibold">
             {{ gesuchsjahr | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
           </td>
         </ng-container>
@@ -60,28 +60,28 @@
         </ng-container>
 
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="tw:text-right">
+          <th mat-header-cell *matHeaderCellDef class="tw:w-6 tw:justify-items-end">
             <a
               [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
               [routerLink]="['.', 'create']"
-              class="tw:dv-button-outline btn-sm"
+              class="tw:dv-button-icon-outline"
             >
-              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
             </a>
           </th>
           <td mat-cell *dvMatCellDef="let gesuchsjahr; dataSource: gesuchsjahrSource">
             <div class="tw:flex">
               @if (gesuchsjahr.isEditable) {
                 @if (store.gesuchsjahre() | rdIsPending) {
-                  <dv-shared-ui-loading class="ps-3" type="icon"></dv-shared-ui-loading>
+                  <dv-shared-ui-loading class="tw:pl-4" type="icon"></dv-shared-ui-loading>
                 } @else {
                   <button
                     type="button"
-                    class="btn btn-link tw:mr-2"
+                    class="tw:dv-button-icon tw:mr-2"
                     [attr.aria-label]="'sachbearbeitung-app.admin.gesuchsjahr.table.loeschen' | transloco: gesuchsjahr"
                     (click)="deleteGesuchsjahr(gesuchsjahr); $event.stopPropagation()"
                   >
-                    <i class="material-symbols-rounded tw:text-lg">delete</i>
+                    <i class="material-symbols-rounded tw:text-lg!">delete</i>
                   </button>
                 }
               }
@@ -89,7 +89,7 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
         <tr
           mat-row
           dvSharedUiFocusableListItem
@@ -99,7 +99,7 @@
           [routerLink]="['.', gesuchsjahr.id]"
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
-          <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+          <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
             {{ 'shared.table.noData' | transloco }}
           </td>
         </tr>

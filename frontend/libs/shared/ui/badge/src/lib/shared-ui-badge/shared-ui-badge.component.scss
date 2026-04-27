@@ -4,18 +4,18 @@
   padding: 0.25rem 1rem;
 
   &.success {
-    background-color: var(--dv-success-subtle);
+    background-color: var(--tw-color-dv-main-success-subtle);
   }
 
   &.warning {
-    background-color: var(--dv-warning-bg-subtle);
+    background-color: var(--tw-color-dv-main-warn-subtle);
   }
 
   &.danger {
-    background-color: var(--dv-danger-bg-subtle);
+    background-color: var(--tw-color-dv-main-danger-subtle);
   }
 
   &.info {
-    background-color: var(--dv-info-bg-subtle);
+    background-color: var(--tw-color-dv-main-info-subtle);
   }
 }

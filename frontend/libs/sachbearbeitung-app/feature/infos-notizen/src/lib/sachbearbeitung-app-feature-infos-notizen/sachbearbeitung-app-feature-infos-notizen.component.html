@@ -3,9 +3,8 @@
 } @else {
   <div class="tw:dv-table">
     <table
-      class="tw:w-full tw:!table-fixed"
+      class="tw:w-full tw:table-fixed!"
       mat-table
-      matSort
       [dataSource]="notizSig()"
       [dvSharedUiFocusableList]="items"
       tabindex="0"
@@ -18,28 +17,28 @@
 
       <!-- notizTyp  -->
       <ng-container matColumnDef="notizTyp">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-14">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-16">
           {{ 'sachbearbeitung-app.infos.notizen.table.notizTyp' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
-          <div class="tw:flex tw:h-[53px] tw:items-center">
+          <div class="tw:flex tw:h-13.25 tw:items-center">
             @if (notiz.notizTyp === 'GESUCH_NOTIZ') {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.GESUCH_NOTIZ' | transloco"
-                class="material-symbols-rounded tw:text-xl"
+                class="material-symbols-rounded tw:text-xl!"
                 >notes</i
               >
             } @else if (notiz.notizTyp === 'PENDENZ_NOTIZ') {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.PENDENZ_NOTIZ' | transloco"
-                class="material-symbols-rounded tw:text-xl"
+                class="material-symbols-rounded tw:text-xl!"
                 [class.tw:text-dv-red]="!notiz.pendenzAbgeschlossen"
                 >pending_actions</i
               >
             } @else {
               <i
                 [matTooltip]="'sachbearbeitung-app.infos.notizen.notizTyp.JURISTISCHE_NOTIZ' | transloco"
-                class="material-symbols-rounded tw:text-xl"
+                class="material-symbols-rounded tw:text-xl!"
                 >gavel</i
               >
             }
@@ -49,11 +48,11 @@
 
       <!-- Datum -->
       <ng-container matColumnDef="datum">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-28">
           {{ 'sachbearbeitung-app.infos.notizen.table.datum' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
-          <div class="tw:flex tw:h-[53px] tw:items-center tw:truncate">
+          <div class="tw:flex tw:h-13.25 tw:items-center tw:truncate">
             {{ notiz.timestampErstellt | date: 'dd.MM.yyyy' }}
           </div>
         </td>
@@ -65,7 +64,7 @@
           {{ 'sachbearbeitung-app.infos.notizen.table.user' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:whitespace-nowrap tw:align-top">
-          <div class="tw:flex tw:h-[53px] tw:items-center">
+          <div class="tw:flex tw:h-13.25 tw:items-center">
             <span class="tw:truncate" [dvTruncateTooltip]="notiz.userErstellt">
               {{ notiz.userErstellt }}
             </span>
@@ -75,11 +74,11 @@
 
       <!-- Betreff -->
       <ng-container matColumnDef="betreff">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-auto">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-auto">
           {{ 'sachbearbeitung-app.infos.notizen.table.betreff' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:whitespace-nowrap tw:align-top">
-          <div class="tw:flex tw:h-[53px] tw:items-center">
+          <div class="tw:flex tw:h-13.25 tw:items-center">
             <span class="tw:truncate" [dvTruncateTooltip]="notiz.betreff">
               {{ notiz.betreff | transloco }}
             </span>
@@ -89,18 +88,18 @@
 
       <!-- Actions -->
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-32">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:justify-items-end">
           @if (permissionStore.rolesMapSig().V0_Sachbearbeiter) {
             <button
               type="button"
-              class="tw:dv-button-icon-outline btn-sm d-inline-flex lh-1 tw:items-center tw:p-2"
+              class="tw:dv-button-icon-outline d-inline-flex lh-1 tw:items-center tw:p-2"
               [matTooltip]="'sachbearbeitung-app.infos.notiz.erstellen' | transloco"
               [class.active]="aktionTrigger.menuOpen"
               #aktionTrigger="matMenuTrigger"
               [matMenuTriggerFor]="notizMenu"
               [matMenuTriggerRestoreFocus]="false"
             >
-              <i class="material-symbols-rounded tw:text-xl">add</i>
+              <i class="material-symbols-rounded tw:text-xl!">add</i>
             </button>
           }
 
@@ -110,12 +109,12 @@
                 *dvHasRoles="['V0_Sachbearbeiter']"
                 mat-menu-item
                 type="button"
-                class="btn fw-normal tw:px-2"
+                class="tw:px-2"
                 data-testid="pendenz-notiz-create"
                 (click)="createNotiz('PENDENZ_NOTIZ')"
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
-                  <i class="material-symbols-rounded tw:text-xl">pending_actions</i>
+                  <i class="material-symbols-rounded tw:text-xl!">pending_actions</i>
                   <span>{{ 'sachbearbeitung-app.infos.penenzNotiz.erstellen' | transloco }}</span>
                 </div>
               </button>
@@ -124,12 +123,12 @@
                 *dvHasRoles="['V0_Sachbearbeiter']"
                 mat-menu-item
                 type="button"
-                class="btn fw-normal tw:px-2"
+                class="tw:px-2"
                 data-testid="notiz-create"
                 (click)="createNotiz('GESUCH_NOTIZ')"
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
-                  <i class="material-symbols-rounded tw:text-xl">notes</i>
+                  <i class="material-symbols-rounded tw:text-xl!">notes</i>
                   <span>{{ 'sachbearbeitung-app.infos.notiz.erstellen' | transloco }}</span>
                 </div>
               </button>
@@ -138,12 +137,12 @@
                 mat-menu-item
                 type="button"
                 [disabled]="!canCreateJurNotizSig()"
-                class="btn fw-normal tw:px-2"
+                class="tw:px-2"
                 data-testid="jur-notiz-create"
                 (click)="createNotiz('JURISTISCHE_NOTIZ')"
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
-                  <i class="material-symbols-rounded tw:text-xl">gavel</i>
+                  <i class="material-symbols-rounded tw:text-xl!">gavel</i>
                   <span>{{ 'sachbearbeitung-app.infos.juristischeNotiz.erstellen' | transloco }}</span>
                 </div>
               </button>
@@ -151,24 +150,24 @@
           </mat-menu>
         </th>
         <td mat-cell *dvMatCellDef="let notiz; dataSource: notizSig()" class="tw:align-top">
-          <div class="tw:flex tw:h-[53px] tw:items-center tw:justify-end tw:gap-1">
+          <div class="tw:flex tw:h-13.25 tw:items-center tw:justify-end tw:gap-1">
             @if (notiz.notizTyp === 'JURISTISCHE_NOTIZ' && permissionStore.rolesMapSig().V0_Jurist && !notiz.antwort) {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
-                class="btn btn-link btn-sm"
+                class="tw:dv-button-icon"
                 [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.bearbeiten' | transloco"
               >
-                <i class="material-symbols-rounded tw:text-xl">edit</i>
+                <i class="material-symbols-rounded tw:text-xl!">edit</i>
               </button>
             } @else if (notiz.notizTyp === 'JURISTISCHE_NOTIZ') {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
-                class="btn btn-link btn-sm"
+                class="tw:dv-button-icon"
                 [matTooltip]="'sachbearbeitung-app.infos.juristischeNotiz.anzeigen' | transloco"
               >
-                <i class="material-symbols-rounded tw:text-xl">visibility</i>
+                <i class="material-symbols-rounded tw:text-xl!">visibility</i>
               </button>
             }
 
@@ -179,27 +178,27 @@
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
-                class="btn btn-link btn-sm"
+                class="tw:dv-button-icon"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.bearbeiten' | transloco"
               >
-                <i class="material-symbols-rounded tw:text-xl">edit</i>
+                <i class="material-symbols-rounded tw:text-xl!">edit</i>
               </button>
               <button
                 type="button"
                 (click)="deleteNotiz(notiz.id); $event.stopPropagation()"
-                class="btn btn-link btn-sm"
+                class="tw:dv-button-icon"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.delete' | transloco"
               >
-                <i class="material-symbols-rounded tw:text-xl">delete</i>
+                <i class="material-symbols-rounded tw:text-xl!">delete</i>
               </button>
             } @else if (notiz.notizTyp === 'GESUCH_NOTIZ') {
               <button
                 type="button"
                 (click)="editNotiz(notiz); $event.stopPropagation()"
-                class="btn btn-link btn-sm"
+                class="tw:dv-button-icon"
                 [matTooltip]="'sachbearbeitung-app.infos.notiz.anzeigen' | transloco"
               >
-                <i class="material-symbols-rounded tw:text-xl">visibility</i>
+                <i class="material-symbols-rounded tw:text-xl!">visibility</i>
               </button>
             }
           </div>
@@ -216,7 +215,7 @@
         (interacted)="openNotiz(notiz)"
       ></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
-        <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+        <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
           {{ 'sachbearbeitung-app.infos.notizen.noData' | transloco }}
         </td>
       </tr>

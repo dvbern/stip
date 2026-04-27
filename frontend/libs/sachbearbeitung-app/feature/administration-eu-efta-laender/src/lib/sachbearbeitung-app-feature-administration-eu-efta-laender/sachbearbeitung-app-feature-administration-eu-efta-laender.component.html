@@ -29,7 +29,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                 (clear)="filterForm.controls.iso3code.reset()"
                 [valueSig]="filterForm.controls.iso3code.value"
               ></dv-shared-ui-clear-button>
@@ -57,7 +57,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                 (clear)="filterForm.controls.deKurzform.reset()"
                 [valueSig]="filterForm.controls.deKurzform.value"
               ></dv-shared-ui-clear-button>
@@ -85,7 +85,7 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                 (clear)="filterForm.controls.frKurzform.reset()"
                 [valueSig]="filterForm.controls.frKurzform.value"
               ></dv-shared-ui-clear-button>
@@ -103,7 +103,6 @@
                 [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.label' | transloco"
                 formControlName="eintragGueltig"
                 (click)="$event.stopPropagation()"
-                class="tw:!font-normal"
                 [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.eintragGueltig.filter.OFF' | transloco"
                 panelClass="table-select"
               >
@@ -133,7 +132,6 @@
                 [aria-label]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.label' | transloco"
                 formControlName="isEuEfta"
                 (click)="$event.stopPropagation()"
-                class="tw:!font-normal"
                 [placeholder]="'sachbearbeitung-app.admin.euEftaLaender.isEuEfta.filter.OFF' | transloco"
                 panelClass="table-select"
               >
@@ -156,25 +154,25 @@
 
         <!-- actions -->
         <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell *matHeaderCellDef class="tw:justify-items-end">
             <button
               type="button"
-              class="tw:dv-button-outline btn-sm"
+              class="tw:dv-button-icon-outline"
               [attr.aria-label]="'sachbearbeitung-app.admin.euEftaLaender.create' | transloco"
               (click)="openDialog()"
             >
-              <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
+              <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
             </button>
           </th>
           <td mat-cell *dvMatCellDef="let country; dataSource: countryDataSourceSig()">
             <div class="tw:flex tw:justify-end tw:gap-2">
               <button
                 type="button"
-                class="btn btn-link"
+                class="tw:dv-button"
                 [attr.aria-label]="'sachbearbeitung-app.admin.euEftaLaender.edit' | transloco"
                 (click)="openDialog(country)"
               >
-                <i class="material-symbols-rounded tw:text-lg">edit</i>
+                <i class="material-symbols-rounded tw:text-lg!">edit</i>
               </button>
             </div>
           </td>

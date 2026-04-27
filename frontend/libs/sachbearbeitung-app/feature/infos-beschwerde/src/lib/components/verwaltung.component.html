@@ -1,11 +1,11 @@
 @let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.state?.beschwerdeHaengig ?? null;
 @if (beschwerdeHaengig !== null) {
   <!-- Beschwerde Hängig -->
-  <h3 class="tw:!mb-6">
+  <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
     {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | transloco }}
   </h3>
 
-  <p>
+  <p class="tw:my-3">
     {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text.' + beschwerdeHaengig | transloco }}
   </p>
 
@@ -19,10 +19,10 @@
   </button>
 
   <!-- Beschwerde Entscheid hochladen -->
-  <h3 class="tw:!mb-6 tw:!mt-10">
+  <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
     {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | transloco }}
   </h3>
-  <p>
+  <p class="tw:my-3">
     {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | transloco }}
   </p>
   <button

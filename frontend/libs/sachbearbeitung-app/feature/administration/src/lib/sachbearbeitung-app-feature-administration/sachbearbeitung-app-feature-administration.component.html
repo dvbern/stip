@@ -15,7 +15,7 @@
             [attr.data-testid]="'option-nav-' + option.route"
           >
             <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
-            <span class="text-start">
+            <span class="tw:text-start">
               {{ t(option.translationKey) }}
             </span>
           </a>
@@ -36,7 +36,7 @@
 
       <!-- title (desktop) -->
       @if (option) {
-        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center">
+        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center tw:mt-6">
           @if (option.type === 'PARENT') {
             <dv-shared-ui-icon-chip class="step-icon tw:mr-4">
               <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
@@ -44,14 +44,14 @@
           } @else {
             <a
               [routerLink]="option.parentRoute"
-              class="btn btn-link text-decoration-none fw-normal tw:flex tw:items-center tw:mr-2 tw:border-none tw:p-2"
+              class="tw:dv-button fw-normal tw:flex tw:items-center tw:mr-2 tw:border-none tw:p-2"
               data-testid="gesuch-step-nav-overview"
             >
               <i class="material-symbols-rounded tw:mr-2 text-black">arrow_back</i>
             </a>
           }
 
-          <h2 class="fw-bold tw:flex m-0" data-testid="step-title">
+          <h2 class="tw:text-3xl tw:font-bold tw:flex" data-testid="step-title">
             {{ t(option.titleTranslationKey) }}
             <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
           </h2>

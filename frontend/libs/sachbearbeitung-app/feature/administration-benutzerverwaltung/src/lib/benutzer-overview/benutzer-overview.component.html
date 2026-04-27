@@ -2,7 +2,7 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @if (benutzerListDataSourceSig(); as benutzerListSource) {
-    <div class="tw:dv-table" [class.opacity-50]="store.benutzers() | rdIsPending" *dvTranslocoSb="let t">
+    <div class="tw:dv-table" [class.tw:opacity-50]="store.benutzers() | rdIsPending" *dvTranslocoSb="let t">
       <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
         <table mat-table [dataSource]="benutzerListSource" matSort>
           <caption class="cdk-visually-hidden">
@@ -105,7 +105,7 @@
                   }
                   <button
                     type="button"
-                    class="btn btn-badge fw-normal fs-7"
+                    class="tw:dv-button-main-primary tw:bg-dv-gray-subtle tw:text-black tw:font-normal tw:rounded-full tw:px-3 tw:py-1 tw:text-sm!"
                     [attr.aria-label]="t('shared.table.showMore')"
                     (click)="expandRolesForBenutzer(benutzer.id)"
                   >
@@ -117,40 +117,40 @@
           </ng-container>
 
           <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef class="tw:w-20">
+            <th mat-header-cell *matHeaderCellDef class="tw:w-20 tw:justify-items-end">
               <a
                 [matTooltip]="t('sachbearbeitung-app.admin.gesuchsperiode.table.erstellen')"
                 [routerLink]="['.', 'create']"
-                class="tw:dv-button-outline btn-sm"
+                class="tw:dv-button-icon-outline"
               >
-                <i class="material-symbols-rounded tw:text-xl tw:align-middle">add</i>
+                <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
               </a>
             </th>
             <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
               <div class="tw:flex tw:justify-end tw:gap-2">
                 <a
                   [routerLink]="['.', 'edit', benutzer.id]"
-                  class="btn btn-link"
+                  class="tw:dv-button-icon"
                   [attr.aria-label]="t('sachbearbeitung-app.admin.benutzerverwaltung.benutzerBearbeiten')"
                 >
-                  <i class="material-symbols-rounded tw:text-lg">edit</i>
+                  <i class="material-symbols-rounded tw:text-lg!">edit</i>
                 </a>
                 <button
                   type="button"
-                  class="btn btn-link"
+                  class="tw:dv-button-icon"
                   [attr.aria-label]="t('sachbearbeitung-app.admin.benutzerverwaltung.benutzerLoeschen')"
                   (click)="deleteBenutzer(benutzer)"
                 >
-                  <i class="material-symbols-rounded tw:text-lg">delete</i>
+                  <i class="material-symbols-rounded tw:text-lg!">delete</i>
                 </button>
               </div>
             </td>
           </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="fw-bold"></tr>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" class="tw:font-semibold"></tr>
           <tr mat-row *matRowDef="let benutzer; columns: displayedColumns"></tr>
           <tr class="mat-mdc-row" *matNoDataRow>
-            <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+            <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
               {{ t('shared.table.noData') }}
             </td>
           </tr>
@@ -164,7 +164,7 @@
         </mat-paginator>
         @if (store.benutzers() | rdIsPending) {
           <dv-shared-ui-loading
-            class="tw:absolute tw:translate-1/2 tw:left-50 tw:top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }

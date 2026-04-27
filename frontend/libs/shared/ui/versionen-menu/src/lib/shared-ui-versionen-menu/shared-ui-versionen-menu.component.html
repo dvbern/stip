@@ -8,7 +8,7 @@
   @if (versionen.length || initial?.tranchen?.length) {
     <button
       type="button"
-      class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+      class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-menu"
       [matMenuTriggerFor]="versionenMenu"
       [class.active]="isGesuchRouteSig()"
@@ -32,7 +32,7 @@
     <mat-menu #versionenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
       <div class="tw:flex tw:flex-col tw:gap-2">
         <a
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-versionen-default"
           [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
           mat-menu-item
@@ -42,12 +42,12 @@
         >
           <span>{{ t('shared.header.versionen') }}</span>
         </a>
-        <hr class="tw:my-2" />
+        <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
         @for (version of versionen; track version.berechnungId) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
             [queryParams]="{ berechnungId: version.berechnungId, revision: version.tranchen[0].revision }"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-item"
             mat-menu-item
             [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
@@ -62,7 +62,7 @@
           </a>
         }
         @if (versionen.length) {
-          <hr class="tw:my-2" />
+          <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
         }
         @if (initial) {
           <a
@@ -71,7 +71,7 @@
               berechnungId: initial.berechnungId,
               revision: initial.tranchen?.[0]?.revision,
             }"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center px-3"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-initial-item"
             mat-menu-item
             [class.active]="isInitialRouteSig()"
@@ -85,7 +85,7 @@
     <!-- fallback button that -->
     <a
       type="button"
-      class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+      class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-default"
       [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
       [class.active]="isGesuchRouteSig()"

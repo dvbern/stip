@@ -4,9 +4,9 @@
 >
   <div class="tw:grid tw:grid-cols-12">
     <div class="tw:col-span-12">
-      <h3 class="tw:text-xl fw-semibold tw:flex tw:mb-6">
+      <h3 class="tw:text-xl tw:font-semibold tw:flex tw:mb-6">
         <dv-shared-ui-icon-chip class="step-icon tw:mr-1 tw:text-2xl!">
-          <i class="material-symbols-rounded title-icon tw:text-dv-blue fs-7">info</i>
+          <i class="material-symbols-rounded title-icon tw:text-dv-blue tw:text-sm!">info</i>
         </dv-shared-ui-icon-chip>
         {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | transloco }}
       </h3>
@@ -32,7 +32,7 @@
           <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
         }
         @if (blockedReasonRd?.data; as blockedReason) {
-          <span class="text-danger">{{ blockedReason | transloco }}</span>
+          <span class="tw:text-dv-main-danger">{{ blockedReason | transloco }}</span>
         }
       </div>
     </div>

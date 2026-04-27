@@ -1,13 +1,13 @@
 @import 'tailwindcss' prefix(tw);
-@import './components/table.css';
 @import './components/button.css';
+@import './components/table.css';
+@import './components/material.css';
 
-@source inline("tw:bg-dv-blue-subtle");
-
-@theme inline {
+@theme inline static {
   --color-dv-yellow: #ffc107;
   --color-dv-yellow-subtle: #fff3cd;
   --color-dv-yellow-dark: #503d04;
+  --color-dv-yellow-light: #fffbf0;
   --color-dv-blue: #298bef;
   --color-dv-blue-subtle: #d4e8fc;
   --color-dv-blue-dark: #004784;
@@ -37,10 +37,15 @@
   --color-dv-border: #dee2e6;
 
   --color-dv-main-info: var(--tw-color-dv-blue);
+  --color-dv-main-info-subtle: var(--tw-color-dv-blue-subtle);
   --color-dv-main-danger: var(--tw-color-dv-red);
+  --color-dv-main-danger-subtle: var(--tw-color-dv-red-subtle);
   --color-dv-main-success: var(--tw-color-dv-green);
+  --color-dv-main-success-subtle: var(--tw-color-dv-green-subtle);
   --color-dv-main-warn: var(--tw-color-dv-yellow);
+  --color-dv-main-warn-subtle: var(--tw-color-dv-yellow-subtle);
   --color-dv-main-primary: var(--tw-color-dv-gray-dark);
+  --color-dv-main-primary-subtle: var(--tw-color-dv-gray-dark-subtle);
 }
 
 @layer base {

@@ -8,7 +8,7 @@
   <div class="spinner" [class.tw:mb-4]="type === 'spinner'" [class.tw:mb-1]="type === 'compact'"></div>
   @if (type !== 'icon') {
     @if (loadingTextKey; as textKey) {
-      <div class="spinner-text" [class.fs-7]="type === 'compact'">{{ t(textKey) }}</div>
+      <div class="spinner-text" [class.tw:text-sm!]="type === 'compact'">{{ t(textKey) }}</div>
     }
   }
 </div>
