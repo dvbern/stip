@@ -45,4 +45,88 @@
   <changeSet author="luca.fondo (generated)" id="1776780830365-552">
     <dropColumn columnName="fall_id" tableName="darlehen_buchhaltung_entry_aud"/>
   </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-547">
+    <createTable tableName="statistik">
+      <column name="id" type="UUID">
+        <constraints nullable="false" primaryKey="true" primaryKeyName="statistikPK"/>
+      </column>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_erstellt" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="user_mutiert" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="version" type="BIGINT"/>
+      <column name="mandant" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="filename" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="filepath" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="filesize" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="object_id" type="VARCHAR(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="year" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-548">
+    <createTable tableName="statistik_aud">
+      <column name="id" type="UUID">
+        <constraints nullable="false"/>
+      </column>
+      <column name="rev" type="INTEGER">
+        <constraints nullable="false"/>
+      </column>
+      <column name="revtype" type="SMALLINT"/>
+      <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
+      <column name="user_erstellt" type="VARCHAR(255)"/>
+      <column name="user_mutiert" type="VARCHAR(255)"/>
+      <column name="mandant" type="VARCHAR(255)"/>
+      <column name="filename" type="VARCHAR(255)"/>
+      <column name="filepath" type="VARCHAR(255)"/>
+      <column name="filesize" type="INTEGER"/>
+      <column name="object_id" type="VARCHAR(255)"/>
+      <column name="year" type="INTEGER"/>
+    </createTable>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-549">
+    <addPrimaryKey columnNames="rev, id"
+                   constraintName="statistik_audPK"
+                   tableName="statistik_aud"/>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-550">
+    <createIndex indexName="IX_statistik_mandant" tableName="statistik">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-551">
+    <createIndex indexName="IX_statistik_year" tableName="statistik">
+      <column name="year"/>
+    </createIndex>
+  </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1777279266991-552">
+    <addForeignKeyConstraint baseColumnNames="rev"
+                             baseTableName="statistik_aud"
+                             constraintName="FK1gkrwvxjv63c9rcc6oyqdlqjh"
+                             deferrable="false"
+                             initiallyDeferred="false"
+                             referencedColumnNames="rev"
+                             referencedTableName="revinfo"
+                             validate="true"/>
+  </changeSet>
 </databaseChangeLog>
