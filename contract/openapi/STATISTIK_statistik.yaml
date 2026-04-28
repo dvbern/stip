@@ -131,7 +131,7 @@ components:
           $ref: './components/common.yaml#/UUID'
         timestampErstellt:
           $ref: './components/common.yaml#/LocalDateTime'
-        userErstellt:
+        userTriggeredCreation:
           type: string
         year:
           type: integer

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   StatistikDtoSpec.JSON_PROPERTY_ID,
   StatistikDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
-  StatistikDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
+  StatistikDtoSpec.JSON_PROPERTY_USER_TRIGGERED_CREATION,
   StatistikDtoSpec.JSON_PROPERTY_YEAR,
   StatistikDtoSpec.JSON_PROPERTY_FILENAME,
   StatistikDtoSpec.JSON_PROPERTY_FILESIZE
@@ -44,8 +44,8 @@ public class StatistikDtoSpec {
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private java.time.LocalDateTime timestampErstellt;
 
-  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
-  private String userErstellt;
+  public static final String JSON_PROPERTY_USER_TRIGGERED_CREATION = "userTriggeredCreation";
+  private String userTriggeredCreation;
 
   public static final String JSON_PROPERTY_YEAR = "year";
   private Integer year;
@@ -111,29 +111,29 @@ public class StatistikDtoSpec {
   }
 
 
-  public StatistikDtoSpec userErstellt(String userErstellt) {
+  public StatistikDtoSpec userTriggeredCreation(String userTriggeredCreation) {
     
-    this.userErstellt = userErstellt;
+    this.userTriggeredCreation = userTriggeredCreation;
     return this;
   }
 
    /**
-   * Get userErstellt
-   * @return userErstellt
+   * Get userTriggeredCreation
+   * @return userTriggeredCreation
   **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public String getUserErstellt() {
-    return userErstellt;
+  public String getUserTriggeredCreation() {
+    return userTriggeredCreation;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
+  @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUserTriggeredCreation(String userTriggeredCreation) {
+    this.userTriggeredCreation = userTriggeredCreation;
   }
 
 
@@ -225,7 +225,7 @@ public class StatistikDtoSpec {
     StatistikDtoSpec statistik = (StatistikDtoSpec) o;
     return Objects.equals(this.id, statistik.id) &&
         Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
-        Objects.equals(this.userErstellt, statistik.userErstellt) &&
+        Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
         Objects.equals(this.filesize, statistik.filesize);
@@ -233,7 +233,7 @@ public class StatistikDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userErstellt, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, userTriggeredCreation, year, filename, filesize);
   }
 
   @Override
@@ -242,7 +242,7 @@ public class StatistikDtoSpec {
     sb.append("class StatistikDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
+    sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");

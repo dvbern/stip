@@ -22,10 +22,10 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class StatistikDto  implements Serializable {
   private @Valid UUID id;
   private @Valid java.time.LocalDateTime timestampErstellt;
-  private @Valid String userErstellt;
   private @Valid Integer year;
   private @Valid String filename;
   private @Valid String filesize;
+  private @Valid String userTriggeredCreation;
 
   /**
    **/
@@ -63,25 +63,6 @@ public class StatistikDto  implements Serializable {
   @JsonProperty("timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
-  }
-
-  /**
-   **/
-  public StatistikDto userErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
-    return this;
-  }
-
-  
-  @JsonProperty("userErstellt")
-  @NotNull
-  public String getUserErstellt() {
-    return userErstellt;
-  }
-
-  @JsonProperty("userErstellt")
-  public void setUserErstellt(String userErstellt) {
-    this.userErstellt = userErstellt;
   }
 
   /**
@@ -141,6 +122,24 @@ public class StatistikDto  implements Serializable {
     this.filesize = filesize;
   }
 
+  /**
+   **/
+  public StatistikDto userTriggeredCreation(String userTriggeredCreation) {
+    this.userTriggeredCreation = userTriggeredCreation;
+    return this;
+  }
+
+  
+  @JsonProperty("userTriggeredCreation")
+  public String getUserTriggeredCreation() {
+    return userTriggeredCreation;
+  }
+
+  @JsonProperty("userTriggeredCreation")
+  public void setUserTriggeredCreation(String userTriggeredCreation) {
+    this.userTriggeredCreation = userTriggeredCreation;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -153,15 +152,15 @@ public class StatistikDto  implements Serializable {
     StatistikDto statistik = (StatistikDto) o;
     return Objects.equals(this.id, statistik.id) &&
         Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
-        Objects.equals(this.userErstellt, statistik.userErstellt) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
-        Objects.equals(this.filesize, statistik.filesize);
+        Objects.equals(this.filesize, statistik.filesize) &&
+        Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userErstellt, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, year, filename, filesize, userTriggeredCreation);
   }
 
   @Override
@@ -171,10 +170,10 @@ public class StatistikDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
-    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
+    sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

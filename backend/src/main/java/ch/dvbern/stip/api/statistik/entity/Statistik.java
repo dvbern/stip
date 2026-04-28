@@ -49,6 +49,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @AllArgsConstructor
 public class Statistik extends AbstractMandantEntity {
     @NotNull
+    @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
+    @Column(name = "user_triggered_creation", nullable = false)
+    private String userTriggeredCreation;
+
+    @NotNull
     @Column(name = "year", nullable = false)
     private int year;
 

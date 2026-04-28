@@ -147,6 +147,7 @@ public class StatistikXMLService {
         );
 
         final var statistik = Statistik.builder()
+            .userTriggeredCreation(triggeredBy)
             .objectId(objectId)
             .year(year)
             .filename(fileName)
@@ -154,12 +155,7 @@ public class StatistikXMLService {
             .filesize(outputStream.size())
             .build();
 
-        statistikRepository.persist(statistik);
-
-        statistik.setUserErstellt(triggeredBy);
-        statistik.setUserMutiert(triggeredBy);
-
-        statistikRepository.flush();
+        statistikRepository.persistAndFlush(statistik);
     }
 
     public static void validate(ByteArrayOutputStream xmlOut) throws SAXException {
