@@ -24,6 +24,7 @@ public class StatistikConstants {
     public static final String STATISTIK_JOB_PREFIX = "statistik-xml-job-";
     public static final String STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY = "year";
     public static final String STATISTIK_JOB_CONTEXT_MAP_USER_KEY = "user";
+    public static final String STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY = "user";
 
     public static final String STATISTIK_XML_ENCODING = "UTF-8";
     public static final String STATISTIK_XML_PERSON_ID_CATEGORY = "CH.AHV";

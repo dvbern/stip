@@ -28,7 +28,6 @@ import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -162,7 +161,12 @@ public class StatistikXMLService {
         statistikRepository.persistAndFlush(statistik);
 
         final var endTimestamp = LocalDateTime.now();
-        LOG.info("Finished creating and saving statistik for year {} triggered by {} in {} ms", year, triggeredBy, Duration.between(startTimestamp, endTimestamp).toMillis());
+        LOG.info(
+            "Finished creating and saving statistik for year {} triggered by {} in {} ms",
+            year,
+            triggeredBy,
+            Duration.between(startTimestamp, endTimestamp).toMillis()
+        );
     }
 
     public static void validate(ByteArrayOutputStream xmlOut) throws SAXException {

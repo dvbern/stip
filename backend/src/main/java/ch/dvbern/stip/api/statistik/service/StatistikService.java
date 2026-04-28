@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.StatistikDto;
 import io.smallrye.jwt.auth.principal.JWTParser;
@@ -53,6 +54,7 @@ public class StatistikService {
     private final ConfigService configService;
     private final JWTParser jwtParser;
     private final S3AsyncClient s3AsyncClient;
+    private final TenantService tenantService;
 
     public void createStatistikJob(final int year) {
         final var currentUserName = benutzerService.getCurrentBenutzer().getFullName();
@@ -61,6 +63,10 @@ public class StatistikService {
             .withIdentity(
                 StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
                 "statistik"
+            )
+            .usingJobData(
+                StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY,
+                tenantService.getCurrentTenantIdentifier()
             )
             .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, year)
             .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY, currentUserName)

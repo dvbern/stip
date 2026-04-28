@@ -858,4 +858,13 @@ public class DarlehenService {
         );
         return darlehenBuchhaltungOverviewDto;
     }
+
+    @Transactional
+    public void deleteForGesuch(final UUID gesuchId) {
+        final var darlehenBuchhaltungEntries = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuchId);
+        for (var entry : darlehenBuchhaltungEntries) {
+            darlehenBuchhaltungEntryRepository.delete(entry);
+        }
+    }
+
 }
