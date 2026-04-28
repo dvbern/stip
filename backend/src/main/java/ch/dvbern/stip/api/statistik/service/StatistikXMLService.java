@@ -25,6 +25,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -122,6 +123,9 @@ public class StatistikXMLService {
 
     @Transactional
     public void createAndSave(final int year, final String triggeredBy) {
+        final var startTimestamp = LocalDateTime.now();
+        LOG.info("Creating and saving statistik for year {} triggered by {}", year, triggeredBy);
+
         final var outputStream = generateStatistikXml(year);
 
         try {
@@ -156,6 +160,9 @@ public class StatistikXMLService {
             .build();
 
         statistikRepository.persistAndFlush(statistik);
+
+        final var endTimestamp = LocalDateTime.now();
+        LOG.info("Finished creating and saving statistik for year {} triggered by {} in {} ms", year, triggeredBy, Duration.between(startTimestamp, endTimestamp).toMillis());
     }
 
     public static void validate(ByteArrayOutputStream xmlOut) throws SAXException {
