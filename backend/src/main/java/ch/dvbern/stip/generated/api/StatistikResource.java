@@ -33,7 +33,7 @@ public interface StatistikResource {
 
     @GET
     @Path("/download")
-    @Produces({ "application/octet-stream", "application/json", "text/plain" })
+    @Produces({ "application/octet-stream" })
     org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer> getStatistikDownload(@QueryParam("token") @NotNull   String token);
 
     @GET

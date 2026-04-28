@@ -134,7 +134,6 @@ public class StatistikXMLService {
         final var fileName = String.format(
             "%s%s%s",
             StatistikConstants.STATISTIK_FILE_PREFIX,
-//            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")),
             year,
             StatistikConstants.STATISTIK_FILE_EXTENSION
         );
