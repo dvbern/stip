@@ -81,14 +81,6 @@ main.tw\:dv-page-body {
   }
 }
 
-// Typeahead popup (ng-bootstrap with custom popup class)
-.dv-typeahead-popup {
-  width: 100%;
-  overflow: hidden;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
 // Typeahead "Bitte wählen" soll gleich aussehen wie bei Dropdowns
 .form-control[role='combobox']::placeholder {
   color: #000;
