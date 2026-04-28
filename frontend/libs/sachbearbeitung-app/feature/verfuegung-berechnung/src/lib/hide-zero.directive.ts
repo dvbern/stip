@@ -8,30 +8,27 @@ import {
   input,
 } from '@angular/core';
 
-// todo: es macht mehr sinn, als default keine null anzuzeigen, weshalb es heissen sollte "null werte anzeigen"
-// und wir die direktive dann "dvShowZero" nennen. @mada fragen.
-
 @Directive({
-  selector: '[dvShowZero]',
+  selector: '[dvHideZero]',
   standalone: true,
 })
-export class ShowZeroDirective {
+export class HideZeroDirective {
   private hasView = false;
 
   templateRef = inject(TemplateRef);
   viewContainer = inject(ViewContainerRef);
 
-  showSig = input<boolean>(false, { alias: 'dvShowZero' });
+  hideSig = input<boolean>(false, { alias: 'dvHideZero' });
   valueSig = input.required<number | undefined | null>({
-    alias: 'dvShowZeroValue',
+    alias: 'dvHideZeroValue',
   });
 
   constructor() {
     effect(() => {
-      const show = this.showSig();
+      const hide = this.hideSig();
       const value = this.valueSig();
 
-      if (!show && value === 0) {
+      if (hide && value === 0) {
         if (this.hasView) {
           this.viewContainer.clear();
           this.hasView = false;

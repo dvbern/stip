@@ -12,7 +12,7 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { ShowZeroDirective } from '../../show-zero.directive';
+import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
@@ -22,7 +22,7 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
-    ShowZeroDirective,
+    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -33,7 +33,7 @@ import { PositionComponent } from '../position/position.component';
     >
       @let budget = budgetSig();
       @let kosten = budget.kosten;
-      @let showZero = showZeroSig();
+      @let hideZero = hideZeroSig();
 
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
@@ -45,7 +45,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.ausbildungskostenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.ausbildungskostenTotal"
+        *dvHideZero="hideZero; value: kosten.ausbildungskostenTotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -62,7 +62,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.fahrkostenTotal"
+        *dvHideZero="hideZero; value: kosten.fahrkostenTotal"
       >
       </dv-position>
 
@@ -71,7 +71,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('mehrkostenVerpflegung')"
         [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kosten.verpflegungskosten | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.verpflegungskosten"
+        *dvHideZero="hideZero; value: kosten.verpflegungskosten"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -87,7 +87,7 @@ import { PositionComponent } from '../position/position.component';
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.grundbedarf | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.grundbedarf"
+        *dvHideZero="hideZero; value: kosten.grundbedarf"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -103,7 +103,7 @@ import { PositionComponent } from '../position/position.component';
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.wohnkosten | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.wohnkosten"
+        *dvHideZero="hideZero; value: kosten.wohnkosten"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -122,7 +122,7 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           kosten.medizinischeGrundversorgungTotal | formatChfPositive
         "
-        *dvShowZero="showZero; value: kosten.medizinischeGrundversorgungTotal"
+        *dvHideZero="hideZero; value: kosten.medizinischeGrundversorgungTotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -139,7 +139,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.fahrkostenPartner | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.fahrkostenPartner"
+        *dvHideZero="hideZero; value: kosten.fahrkostenPartner"
       >
       </dv-position>
 
@@ -153,7 +153,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.verpflegungPartner | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.verpflegungPartner"
+        *dvHideZero="hideZero; value: kosten.verpflegungPartner"
       >
       </dv-position>
 
@@ -161,7 +161,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('betreuungskostenKinder')"
         [amountSig]="kosten.betreuungskostenKinder | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.betreuungskostenKinder"
+        *dvHideZero="hideZero; value: kosten.betreuungskostenKinder"
       >
       </dv-position>
 
@@ -170,7 +170,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.kantonsGemeindesteuern"
+        *dvHideZero="hideZero; value: kosten.kantonsGemeindesteuern"
       >
       </dv-position>
 
@@ -179,7 +179,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.bundessteuern | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.bundessteuern"
+        *dvHideZero="hideZero; value: kosten.bundessteuern"
       >
       </dv-position>
 
@@ -188,7 +188,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('anteilLebenshaltungskosten')"
         [infoSig]="t('anteilLebenshaltungskosten.info')"
         [amountSig]="kosten.anteilLebenshaltungskosten | formatChfPositive"
-        *dvShowZero="showZero; value: kosten.anteilLebenshaltungskosten"
+        *dvHideZero="hideZero; value: kosten.anteilLebenshaltungskosten"
       >
       </dv-position>
 
@@ -205,6 +205,6 @@ import { PositionComponent } from '../position/position.component';
 })
 export class PersoenlicheKostenComponent {
   @HostBinding('class') classes = 'tw:dv-verfuegung-position-list';
-  showZeroSig = input<boolean>(false);
+  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<PersoenlichesBudgetresultatView>();
 }

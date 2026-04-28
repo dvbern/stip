@@ -682,7 +682,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "de",
   "sachbearbeitung-app.verfuegung.berechnung.to": "à",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Détails du calcul",
-  "sachbearbeitung-app.verfuegung.berechnung.showZeroValues": "Afficher les valeurs nulles",
+  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Masquer les valeurs nulles",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Budget personnel",
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Budget familial",
   "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Budget du père",

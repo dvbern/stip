@@ -1,8 +1,8 @@
 <ng-container *transloco="let t">
   <h1 class="tw:mb-6!">{{ t('sachbearbeitung-app.verfuegung.berechnung.details') }}</h1>
 
-  <mat-slide-toggle #showZeroToggle class="tw:mb-6" [hideIcon]="true">{{
-    t('sachbearbeitung-app.verfuegung.berechnung.showZeroValues')
+  <mat-slide-toggle #hideZeroToggle [checked]="true" class="tw:mb-6" [hideIcon]="true">{{
+    t('sachbearbeitung-app.verfuegung.berechnung.hideZeroValues')
   }}</mat-slide-toggle>
 
   @if (berechnungStore.berechnungsViewSig().loading) {
@@ -11,12 +11,12 @@
     @if (berechnungenRawSig(); as berechnung) {
       <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich" [stammdatenSig]="berechnung.berechnungsStammdaten">
         <dv-persoenliche-einnahmen
-          [showZeroSig]="showZeroToggle.checked"
+          [hideZeroSig]="hideZeroToggle.checked"
           [budgetSig]="berechnung.persoenlich"
           [stammdatenSig]="berechnung.berechnungsStammdaten"
         ></dv-persoenliche-einnahmen>
         <dv-persoenliche-kosten
-          [showZeroSig]="showZeroToggle.checked"
+          [hideZeroSig]="hideZeroToggle.checked"
           [budgetSig]="berechnung.persoenlich"
         ></dv-persoenliche-kosten>
       </dv-berechnungs-card>
@@ -25,12 +25,12 @@
         @for (familienbudget of berechnung.familien; track $index) {
           <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">
             <dv-familien-einnahmen
-              [showZeroSig]="showZeroToggle.checked"
+              [hideZeroSig]="hideZeroToggle.checked"
               [budgetSig]="familienbudget"
               [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-einnahmen>
             <dv-familien-kosten
-              [showZeroSig]="showZeroToggle.checked"
+              [hideZeroSig]="hideZeroToggle.checked"
               [budgetSig]="familienbudget"
               [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-kosten>

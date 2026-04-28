@@ -32,7 +32,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
       >
         <mat-expansion-panel-header
           [ngClass]="{
-            'tw:border-b tw:border-b-gray-300 tw:rounded-b-none!':
+            'tw:border-b tw:border-b-gray-500 tw:rounded-b-none!':
               panel.expanded,
           }"
         >

@@ -9,7 +9,7 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { ShowZeroDirective } from '../../show-zero.directive';
+import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
@@ -20,7 +20,7 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
-    ShowZeroDirective,
+    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -30,7 +30,7 @@ import { PositionComponent } from '../position/position.component';
       "
     >
       @let einnahmen = budgetSig().einnahmen;
-      @let showZero = showZeroSig();
+      @let hideZero = hideZeroSig();
 
       <!-- Nettoerwerbseinkommen -->
       <dv-position
@@ -43,7 +43,7 @@ import { PositionComponent } from '../position/position.component';
         "
         [personValueItemsSig]="einnahmen.nettoerwerbseinkommen"
         [amountSig]="einnahmen.nettoerwerbseinkommenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.nettoerwerbseinkommenTotal"
+        *dvHideZero="hideZero; value: einnahmen.nettoerwerbseinkommenTotal"
       >
       </dv-position>
 
@@ -51,7 +51,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.einnahmenBGSATotal"
+        *dvHideZero="hideZero; value: einnahmen.einnahmenBGSATotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           1)
@@ -65,7 +65,7 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           einnahmen.kinderAusbildungszulagenTotal | formatChfPositive
         "
-        *dvShowZero="showZero; value: einnahmen.kinderAusbildungszulagenTotal"
+        *dvHideZero="hideZero; value: einnahmen.kinderAusbildungszulagenTotal"
       >
       </dv-position>
 
@@ -74,7 +74,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('unterhaltsbeitraege')"
         [personValueItemsSig]="einnahmen.unterhaltsbeitraege"
         [amountSig]="einnahmen.unterhaltsbeitraegeTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.unterhaltsbeitraegeTotal"
+        *dvHideZero="hideZero; value: einnahmen.unterhaltsbeitraegeTotal"
       >
       </dv-position>
 
@@ -84,7 +84,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('eoLeistungen.info')"
         [personValueItemsSig]="einnahmen.eoLeistungen"
         [amountSig]="einnahmen.eoLeistungenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.eoLeistungenTotal"
+        *dvHideZero="hideZero; value: einnahmen.eoLeistungenTotal"
       >
       </dv-position>
 
@@ -94,7 +94,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('taggelderAHVIV.info')"
         [personValueItemsSig]="einnahmen.taggelderAHVIV"
         [amountSig]="einnahmen.taggelderAHVIVTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.taggelderAHVIVTotal"
+        *dvHideZero="hideZero; value: einnahmen.taggelderAHVIVTotal"
       >
       </dv-position>
 
@@ -104,7 +104,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('renten.info')"
         [personValueItemsSig]="einnahmen.renten"
         [amountSig]="einnahmen.rentenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.rentenTotal"
+        *dvHideZero="hideZero; value: einnahmen.rentenTotal"
       >
       </dv-position>
 
@@ -113,7 +113,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('ergaenzungsleistungen')"
         [personValueItemsSig]="einnahmen.ergaenzungsleistungen"
         [amountSig]="einnahmen.ergaenzungsleistungenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.ergaenzungsleistungenTotal"
+        *dvHideZero="hideZero; value: einnahmen.ergaenzungsleistungenTotal"
       >
       </dv-position>
 
@@ -123,7 +123,7 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           einnahmen.beitraegeGemeindeInstitutionen | formatChfPositive
         "
-        *dvShowZero="showZero; value: einnahmen.beitraegeGemeindeInstitutionen"
+        *dvHideZero="hideZero; value: einnahmen.beitraegeGemeindeInstitutionen"
       >
       </dv-position>
 
@@ -133,7 +133,7 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('andereEinnahmen.info')"
         [personValueItemsSig]="einnahmen.andereEinnahmen"
         [amountSig]="einnahmen.andereEinnahmenTotal | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.andereEinnahmenTotal"
+        *dvHideZero="hideZero; value: einnahmen.andereEinnahmenTotal"
       >
       </dv-position>
 
@@ -148,7 +148,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.anrechenbaresVermoegen"
+        *dvHideZero="hideZero; value: einnahmen.anrechenbaresVermoegen"
       >
       </dv-position>
 
@@ -156,7 +156,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('elterlicheLeistung')"
         [amountSig]="einnahmen.elterlicheLeistung | formatChfPositive"
-        *dvShowZero="showZero; value: einnahmen.elterlicheLeistung"
+        *dvHideZero="hideZero; value: einnahmen.elterlicheLeistung"
       >
       </dv-position>
 
@@ -172,7 +172,7 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
-  showZeroSig = input<boolean>(false);
+  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<PersoenlichesBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }
