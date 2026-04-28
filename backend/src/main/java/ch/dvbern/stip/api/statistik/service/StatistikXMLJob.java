@@ -29,14 +29,16 @@ import org.quartz.JobExecutionException;
 
 @Singleton
 @RequiredArgsConstructor
-public class StatistikCSVJob implements Job {
-    private final StatistikCSVService statistikCSVService;
+public class StatistikXMLJob implements Job {
+    private final StatistikXMLService statistikXMLService;
 
     @Override
     @Transactional
     @RunForTenant(MandantIdentifier.BERN)
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        final int year = context.getMergedJobDataMap().getInt(StatistikConstants.STATISTIK_JOB_YEAR_KEY);
-        statistikCSVService.createAndSave(year);
+        final int year = context.getMergedJobDataMap().getInt(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY);
+        final String triggeredBy =
+            context.getMergedJobDataMap().getString(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY);
+        statistikXMLService.createAndSave(year, triggeredBy);
     }
 }

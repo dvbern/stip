@@ -55,12 +55,15 @@ public class StatistikService {
     private final S3AsyncClient s3AsyncClient;
 
     public void createStatistikJob(final int year) {
-        final JobDetail jobDetail = JobBuilder.newJob(StatistikCSVJob.class)
+        final var currentUserName = benutzerService.getCurrentBenutzer().getFullName();
+
+        final JobDetail jobDetail = JobBuilder.newJob(StatistikXMLJob.class)
             .withIdentity(
                 StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
                 "statistik"
             )
-            .usingJobData(StatistikConstants.STATISTIK_JOB_YEAR_KEY, year)
+            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, year)
+            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY, currentUserName)
             .build();
 
         final Trigger trigger = TriggerBuilder.newTrigger()

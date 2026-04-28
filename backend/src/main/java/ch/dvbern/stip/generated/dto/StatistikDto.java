@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class StatistikDto  implements Serializable {
   private @Valid UUID id;
+  private @Valid java.time.LocalDateTime timestampErstellt;
+  private @Valid String userErstellt;
   private @Valid Integer year;
   private @Valid String filename;
   private @Valid String filesize;
@@ -34,6 +36,7 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("id")
+  @NotNull
   public UUID getId() {
     return id;
   }
@@ -45,6 +48,44 @@ public class StatistikDto  implements Serializable {
 
   /**
    **/
+  public StatistikDto timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("timestampErstellt")
+  @NotNull
+  public java.time.LocalDateTime getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+  @JsonProperty("timestampErstellt")
+  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+  /**
+   **/
+  public StatistikDto userErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+  
+  @JsonProperty("userErstellt")
+  @NotNull
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+  @JsonProperty("userErstellt")
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
+  }
+
+  /**
+   **/
   public StatistikDto year(Integer year) {
     this.year = year;
     return this;
@@ -52,6 +93,7 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("year")
+  @NotNull
   public Integer getYear() {
     return year;
   }
@@ -70,6 +112,7 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("filename")
+  @NotNull
   public String getFilename() {
     return filename;
   }
@@ -88,6 +131,7 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("filesize")
+  @NotNull
   public String getFilesize() {
     return filesize;
   }
@@ -108,6 +152,8 @@ public class StatistikDto  implements Serializable {
     }
     StatistikDto statistik = (StatistikDto) o;
     return Objects.equals(this.id, statistik.id) &&
+        Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
+        Objects.equals(this.userErstellt, statistik.userErstellt) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
         Objects.equals(this.filesize, statistik.filesize);
@@ -115,7 +161,7 @@ public class StatistikDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, userErstellt, year, filename, filesize);
   }
 
   @Override
@@ -124,6 +170,8 @@ public class StatistikDto  implements Serializable {
     sb.append("class StatistikDto {\n");
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");

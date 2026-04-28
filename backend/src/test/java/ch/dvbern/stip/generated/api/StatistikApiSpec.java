@@ -233,7 +233,7 @@ public class StatistikApiSpec {
 
         public GetStatistikDownloadOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/octet-stream");
+            reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 

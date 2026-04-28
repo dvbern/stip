@@ -11,9 +11,11 @@
  */
 
 export interface Statistik { 
-    id?: string;
-    year?: number;
-    filename?: string;
-    filesize?: string;
+    id: string;
+    timestampErstellt: string;
+    userErstellt: string;
+    year: number;
+    filename: string;
+    filesize: string;
 }
 

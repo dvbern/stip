@@ -29,6 +29,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   StatistikDtoSpec.JSON_PROPERTY_ID,
+  StatistikDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  StatistikDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   StatistikDtoSpec.JSON_PROPERTY_YEAR,
   StatistikDtoSpec.JSON_PROPERTY_FILENAME,
   StatistikDtoSpec.JSON_PROPERTY_FILESIZE
@@ -38,6 +40,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class StatistikDtoSpec {
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
+
+  public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
+  private java.time.LocalDateTime timestampErstellt;
+
+  public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
+  private String userErstellt;
 
   public static final String JSON_PROPERTY_YEAR = "year";
   private Integer year;
@@ -61,9 +69,9 @@ public class StatistikDtoSpec {
    * Get id
    * @return id
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public UUID getId() {
     return id;
@@ -71,9 +79,61 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_ID)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setId(UUID id) {
     this.id = id;
+  }
+
+
+  public StatistikDtoSpec timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+    
+    this.timestampErstellt = timestampErstellt;
+    return this;
+  }
+
+   /**
+   * Get timestampErstellt
+   * @return timestampErstellt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public java.time.LocalDateTime getTimestampErstellt() {
+    return timestampErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TIMESTAMP_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
+    this.timestampErstellt = timestampErstellt;
+  }
+
+
+  public StatistikDtoSpec userErstellt(String userErstellt) {
+    
+    this.userErstellt = userErstellt;
+    return this;
+  }
+
+   /**
+   * Get userErstellt
+   * @return userErstellt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public String getUserErstellt() {
+    return userErstellt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_USER_ERSTELLT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUserErstellt(String userErstellt) {
+    this.userErstellt = userErstellt;
   }
 
 
@@ -87,9 +147,9 @@ public class StatistikDtoSpec {
    * Get year
    * @return year
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_YEAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public Integer getYear() {
     return year;
@@ -97,7 +157,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_YEAR)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setYear(Integer year) {
     this.year = year;
   }
@@ -113,9 +173,9 @@ public class StatistikDtoSpec {
    * Get filename
    * @return filename
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilename() {
     return filename;
@@ -123,7 +183,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FILENAME)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFilename(String filename) {
     this.filename = filename;
   }
@@ -139,9 +199,9 @@ public class StatistikDtoSpec {
    * Get filesize
    * @return filesize
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_FILESIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getFilesize() {
     return filesize;
@@ -149,7 +209,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_FILESIZE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setFilesize(String filesize) {
     this.filesize = filesize;
   }
@@ -164,6 +224,8 @@ public class StatistikDtoSpec {
     }
     StatistikDtoSpec statistik = (StatistikDtoSpec) o;
     return Objects.equals(this.id, statistik.id) &&
+        Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
+        Objects.equals(this.userErstellt, statistik.userErstellt) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
         Objects.equals(this.filesize, statistik.filesize);
@@ -171,7 +233,7 @@ public class StatistikDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, userErstellt, year, filename, filesize);
   }
 
   @Override
@@ -179,6 +241,8 @@ public class StatistikDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class StatistikDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");

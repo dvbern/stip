@@ -26,6 +26,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,7 +78,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor
-public class StatistikCSVService {
+public class StatistikXMLService {
 
     private final StatistikRepository statistikRepository;
     private final BuchhaltungRepository buchhaltungRepository;
@@ -119,7 +121,7 @@ public class StatistikCSVService {
     }
 
     @Transactional
-    public void createAndSave(final int year) {
+    public void createAndSave(final int year, final String triggeredBy) {
         final var outputStream = generateStatistikXml(year);
 
         try {
@@ -132,9 +134,11 @@ public class StatistikCSVService {
         final var fileName = String.format(
             "%s%s%s",
             StatistikConstants.STATISTIK_FILE_PREFIX,
+//            LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")),
             year,
             StatistikConstants.STATISTIK_FILE_EXTENSION
         );
+
         final var objectId = dokumentUploadService.executeUploadDocument(
             outputStream.toByteArray(),
             fileName,
@@ -151,14 +155,19 @@ public class StatistikCSVService {
             .filesize(outputStream.size())
             .build();
 
-        statistikRepository.persistAndFlush(statistik);
+        statistikRepository.persist(statistik);
+
+        statistik.setUserErstellt(triggeredBy);
+        statistik.setUserMutiert(triggeredBy);
+
+        statistikRepository.flush();
     }
 
     public static void validate(ByteArrayOutputStream xmlOut) throws SAXException {
         SchemaFactory factory =
             SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 
-        URL xsdUrl = StatistikCSVService.class.getResource(StatistikConstants.STATISTIK_XML_SCHEMA_PATH);
+        URL xsdUrl = StatistikXMLService.class.getResource(StatistikConstants.STATISTIK_XML_SCHEMA_PATH);
         if (xsdUrl == null) {
             throw new IllegalStateException("XSD not found: " + StatistikConstants.STATISTIK_XML_SCHEMA_PATH);
         }
@@ -216,7 +225,7 @@ public class StatistikCSVService {
                 HeadDto.builder()
                     .version(year)
                     .canton(bfsCode)
-                    .dataDelivery("TBD") // TODO
+                    .dataDelivery("BE_KT")
                     .deliveryDate(LocalDate.now().toString())
                     .build()
             )

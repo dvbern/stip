@@ -108,6 +108,16 @@ paths:
               schema:
                 format: binary
                 type: string
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
       operationId: getStatistikDownload
       summary: Download statistik dokument
       x-quarkus-response-type: org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
@@ -119,9 +129,20 @@ components:
   schemas:
     Statistik:
       type: object
+      required:
+        - id
+        - timestampErstellt
+        - userErstellt
+        - year
+        - filename
+        - filesize
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
+        timestampErstellt:
+          $ref: './components/common.yaml#/LocalDateTime'
+        userErstellt:
+          type: string
         year:
           type: integer
           format: int32
