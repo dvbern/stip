@@ -131,7 +131,7 @@
             } @else {
               <div class="tw:grid tw:grid-cols-[33px_1fr_1fr_3fr] tw:gap-4 tw:py-2">
                 @for (kommentar of dokument.kommentare; track $index) {
-                  <i class="material-symbols-rounded text-gray">person</i>
+                  <i class="material-symbols-rounded tw:text-dv-gray">person</i>
                   <span>{{ kommentar.user_erstellt }}</span>
                   <div class="tw:text-dv-gray">
                     {{ kommentar.timestampErstellt | date: 'dd. MMMM yyyy' }}

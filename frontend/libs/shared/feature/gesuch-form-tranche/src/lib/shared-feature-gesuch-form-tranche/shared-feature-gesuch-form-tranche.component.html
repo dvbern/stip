@@ -214,21 +214,21 @@
       @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
         @if (abschlussPhase === 'NOT_READY' && specialValidationErrors.length === 0) {
           <div
-            class="alert alert-warning tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+            class="tw:bg-dv-main-warn-subtle tw:text-dv-main-warn tw:border-dv-main-warn tw:border tw:rounded-2xl tw:p-6 tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
             role="alert"
             data-testid="alert-warning"
           >
-            <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
+            <span class="material-symbols-rounded">warning</span>
             <span [innerHTML]="t('shared.form.tranche-abschluss.notReady')"></span>
           </div>
         } @else if (abschlussPhase === 'NOT_READY') {
           @for (error of specialValidationErrors; track error) {
             <div
-              class="alert alert-danger tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+              class="tw:bg-dv-main-danger-subtle tw:text-dv-main-danger tw:border-dv-main-danger tw:border tw:rounded-2xl tw:p-6 tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
               role="alert"
               data-testid="alert-danger"
             >
-              <span class="text-danger material-symbols-rounded">error</span>
+              <span class="material-symbols-rounded">error</span>
               <div>
                 <span [innerHTML]="t($any(error.validationErrorKey))"></span>
                 &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuchId]">{{ t($any(error.linkKey)) }}</a>

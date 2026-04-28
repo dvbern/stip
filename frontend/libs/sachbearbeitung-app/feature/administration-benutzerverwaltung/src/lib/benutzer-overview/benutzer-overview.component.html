@@ -89,7 +89,7 @@
                 ></dv-shared-ui-clear-button>
               </div>
             </th>
-            <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource" class="py-2">
+            <td mat-cell *dvMatCellDef="let benutzer; dataSource: benutzerListSource">
               <div class="tw:flex tw:items-center tw:flex-wrap tw:gap-2">
                 @if (!benutzer.roles.extraAmount || showFullListForBenutzer[benutzer.id]) {
                   @for (role of benutzer.roles.full; track role) {

@@ -6,7 +6,11 @@
     @if (isVerstecktSig()) {
       <div class="tw:grid tw:grid-cols-12 tw:mt-8">
         <div class="tw:col-span-8 tw:md:col-span-4">
-          <div class="alert alert-info" role="alert">
+          <div
+            class="tw:bg-dv-main-info-subtle tw:text-dv-main-info tw:border-dv-main-info tw:border tw:rounded-2xl tw:p-6 tw:mt-8 tw:flex tw:gap-2"
+            role="alert"
+          >
+            <span class="tw:text-dv-blue material-symbols-rounded tw:mr-4">info</span>
             {{ 'shared.form.eltern-steuererklaerung.nichtSichtbar' | transloco }}
           </div>
         </div>

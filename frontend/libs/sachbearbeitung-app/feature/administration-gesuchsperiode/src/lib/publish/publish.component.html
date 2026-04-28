@@ -5,7 +5,7 @@
   <div class="tw:grid tw:grid-cols-12">
     <div class="tw:col-span-12">
       <h3 class="tw:text-xl tw:font-semibold tw:flex tw:mb-6">
-        <dv-shared-ui-icon-chip class="step-icon tw:mr-1 tw:text-2xl!">
+        <dv-shared-ui-icon-chip class="tw:mr-1 tw:text-2xl!">
           <i class="material-symbols-rounded title-icon tw:text-dv-blue tw:text-sm!">info</i>
         </dv-shared-ui-icon-chip>
         {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | transloco }}
@@ -17,7 +17,7 @@
     <div class="tw:flex tw:col-span-12 tw:justify-center">
       <button
         type="button"
-        class="tw:dv-button-main-primary align-self-center tw:col-span-12 col-md-auto"
+        class="tw:dv-button-main-primary align-self-center tw:col-span-12"
         [disabled]="blockedReasonSig()?.data"
         (click)="askForPublish$.emit()"
       >

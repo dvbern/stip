@@ -36,16 +36,16 @@
       @if (option) {
         <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center tw:mt-6">
           @if (option.type === 'PARENT') {
-            <dv-shared-ui-icon-chip class="step-icon tw:mr-4">
+            <dv-shared-ui-icon-chip class="tw:mr-4">
               <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
             </dv-shared-ui-icon-chip>
           } @else {
             <a
               [routerLink]="option.parentRoute"
-              class="tw:dv-button fw-normal tw:flex tw:items-center tw:mr-2 tw:border-none tw:p-2"
+              class="tw:dv-button tw:flex tw:items-center tw:mr-2 tw:border-none tw:p-2"
               data-testid="gesuch-step-nav-overview"
             >
-              <i class="material-symbols-rounded tw:mr-2 text-black">arrow_back</i>
+              <i class="material-symbols-rounded tw:mr-2">arrow_back</i>
             </a>
           }
 

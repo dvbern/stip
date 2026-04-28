@@ -10,7 +10,7 @@ import { SharedModelState } from '@dv/shared/model/state-colors';
 
 const typeMap = {
   danger: {
-    baseStyle: 'tw:outline-dv-main-danger tw:bg-dv-red-subtle',
+    baseStyle: 'tw:border-dv-main-danger tw:bg-dv-red-subtle',
     color: 'tw:text-dv-red',
     icon: 'warning',
   },

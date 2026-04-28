@@ -1,5 +1,5 @@
 <ng-template #notificationTemplate>
-  <div class="py-3" matSnackBarLabel>
+  <div matSnackBarLabel>
     @if (store.mostImportantNotificationSig(); as globalNotification) {
       @for (notification of globalNotification?.list; track notification.id) {
         <div class="tw:flex tw:items-center">
