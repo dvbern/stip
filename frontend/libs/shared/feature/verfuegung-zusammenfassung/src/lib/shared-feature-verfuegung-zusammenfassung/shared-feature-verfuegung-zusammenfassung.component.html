@@ -6,26 +6,26 @@
 } @else {
   <ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.zusammenfassung'">
     <!-- resultat -->
-    <h2 class="tw:mb-6!">
+    <h2 class="tw:mb-6! tw:font-bold! tw:text-3xl!">
       {{ t('resultat.title') }}
     </h2>
 
     <div
       [ngClass]="{ accept: accepted, reject: !accepted }"
-      class="tw:min-h-20 tw:flex tw:gap-2 tw:justify-between tw:p-2 tw:items-center tw:rounded-2xl tw:mb-10 tw:bg-gray-100"
+      class="tw:min-h-24 tw:flex tw:gap-2 tw:justify-between tw:p-4 tw:items-center tw:rounded-xl tw:mb-10 tw:bg-gray-100"
     >
       <div
-        class="tw:font-semibold tw:text-xl tw:flex tw:items-center tw:gap-2 tw:ml-3"
+        class="tw:font-semibold tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3"
         data-testid="zusammenfassung-resultat"
       >
-        <span class="material-symbols-rounded tw:text-4xl">{{ accepted ? 'check_circle' : 'cancel' }}</span>
+        <span class="material-symbols-rounded tw:text-4xl!">{{ accepted ? 'check_circle' : 'cancel' }}</span>
         <span>
           {{ accepted ? t('resultat.angenommen') : t('resultat.abgelehnt') }}
         </span>
       </div>
     </div>
 
-    <h3 class="tw:mb-4!">{{ t('total') }}</h3>
+    <h3 class="tw:mb-4! tw:font-bold! tw:text-2xl!">{{ t('total') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
@@ -36,7 +36,7 @@
           zusammenfassung.totalNachKuerzungUnterbruch || zusammenfassung.totalNachKuerzungUnterbruch === 0;
         @let hasDarlehen = zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0;
 
-        <div class="tw:flex tw:justify-between tw:text-xl tw:font-semibold tw:mb-6">
+        <div class="tw:flex tw:justify-between tw:font-bold tw:mb-6">
           <div>
             {{ t('totalStipendium') }}
           </div>
@@ -47,7 +47,7 @@
         <!-- todo: nach merge von KSTIP-3223 , neues verhalten: wenn darlehen und stipendium vorhanden sind, berechnungVorTeilungDarlehen Darstellen!-->
         @if (hasDarlehen) {
           <div class="tw:border-t tw:border-gray-300 tw:my-6"></div>
-          <div class="tw:flex tw:justify-between tw:text-xl tw:font-semibold tw:mb-6">
+          <div class="tw:flex tw:justify-between tw:font-bold tw:mb-3">
             <div class="tw:flex tw:items-center tw:gap-1">
               <div>
                 {{ t('totalDarlehen') }}
@@ -58,7 +58,7 @@
                 class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
                 [attr.aria-label]="t('toggle-info-messages')"
               >
-                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+                <span class="material-symbols-rounded tw:text-xl!"> info </span>
               </button>
               <div
                 dvSharedUiInfoDialog
@@ -80,7 +80,7 @@
 
         <div class="tw:flex tw:flex-col tw:gap-1 tw:text-dv-muted">
           @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
-            <div class="tw:flex tw:justify-between tw:text-lg">
+            <div class="tw:flex tw:justify-between tw:text-sm">
               <div>
                 {{ t('totalVorKuerzungUndTeilung') }}
               </div>
@@ -90,7 +90,7 @@
             </div>
           }
           @if (hasKuerzungenNachEinreichefrist) {
-            <div class="tw:flex tw:justify-between tw:items-center tw:text-lg">
+            <div class="tw:flex tw:justify-between tw:items-center tw:text-sm">
               <div class="tw:flex tw:items-center">
                 {{ t('totalNachKuerzungNachEinreichefrist') }}
 
@@ -100,7 +100,7 @@
                   class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
                   [attr.aria-label]="t('toggle-info-messages')"
                 >
-                  <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+                  <span class="material-symbols-rounded tw:text-xl!"> info </span>
                 </button>
                 <div
                   dvSharedUiInfoDialog
@@ -123,7 +123,7 @@
             </div>
           }
           @if (hasKuerzungenUnterbruch) {
-            <div class="tw:flex tw:justify-between tw:text-lg">
+            <div class="tw:flex tw:justify-between tw:text-sm">
               <div class="tw:flex tw:items-center">
                 {{ t('totalNachKuerzungUnterbruch') }}
 
@@ -133,7 +133,7 @@
                   class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
                   [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
                 >
-                  <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+                  <span class="material-symbols-rounded tw:text-xl!"> info </span>
                 </button>
                 <div
                   dvSharedUiInfoDialog
@@ -159,20 +159,22 @@
       </mat-card-content>
     </mat-card>
 
-    <h3 class="tw:mb-4!">{{ t('berechnungen') }}</h3>
+    <h3 class="tw:mb-4! tw:font-bold! tw:text-2xl!">{{ t('berechnungen') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
         @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
           @for (teilBerechnung of berechnungen; track $index) {
             <div class="tw:mb-6">
-              <div class="tw:flex tw:justify-between tw:font-semibold">
-                <div class="tw:flex tw:gap-2 tw:text-xl">
+              <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-3">
+                <div class="tw:flex tw:gap-2 tw:font-bold">
                   <div>
                     {{
                       t('item.title', {
                         index: berechnungsIndex + 1,
                         type: teilBerechnung.type,
+                        startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
+                        endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
                       })
                     }}
                   </div>
@@ -194,7 +196,7 @@
                 </div>
               </div>
 
-              <div class="tw:text-lg tw:text-dv-muted">
+              <div class="tw:text-sm tw:text-dv-muted">
                 {{ t('item.stipendium') }}
               </div>
             </div>

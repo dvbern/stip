@@ -11,9 +11,7 @@ import { PersonValueItemComponent } from './person-value-item.component';
   template: `<div [ngClass]="{ 'tw:py-4': padding() === 'padding' }">
       <div class="tw:flex tw:gap-2">
         <div class="tw:flex-1">
-          <div
-            [ngClass]="{ 'tw:font-semibold tw:text-lg': type() === 'title' }"
-          >
+          <div [ngClass]="{ 'tw:font-bold': type() === 'title' }">
             {{ titleSig() }}
             <ng-content select="title-appendix"></ng-content>
           </div>

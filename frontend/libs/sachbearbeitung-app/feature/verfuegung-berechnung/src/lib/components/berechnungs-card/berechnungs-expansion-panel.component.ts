@@ -37,9 +37,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
           }"
         >
           <mat-panel-title class="tw:block! tw:m-0!">
-            <div
-              class="tw:flex tw:text-lg tw:font-semibold tw:flex-1 tw:justify-between"
-            >
+            <div class="tw:flex tw:font-semibold tw:flex-1 tw:justify-between">
               <div class="tw:flex tw:items-center tw:gap-2">
                 <span>
                   {{ t(view.titleKey) }}
@@ -54,7 +52,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
                 {{ view.total | formatChf }}
               </span>
             </div>
-            <span class="tw:italic">
+            <span class="tw:italic tw:text-sm">
               {{ t(view.infoKey) }}
             </span>
           </mat-panel-title>

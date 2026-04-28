@@ -674,7 +674,7 @@
 
   "sachbearbeitung-app.verfuegung.title": "Verfügung",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Zusammenfassung",
-  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Berechnung {{ index }}{{ type }} zu Tranche von {{ startDate }} bis {{ endDate }}",
   "sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr": "Ausbildungsjahr",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Monate",
   "sachbearbeitung-app.verfuegung.berechnung.steuerjahr": "Steuerjahr",
@@ -738,7 +738,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag": "Fehlbetrag",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.proKopfTeilung": "Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner",
-  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget gültig für {anzahlMonate, plural, one {1 Monat} other {# Monate}} und ergibt einen Anspruch von",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Total Anspruch von {anzahlMonate, plural, one {1 Monat} other {# Monaten}}",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Stipendium: 2/3 des Fehlbetrags",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Darlehen: 1/3 des Fehlbetrags",
 
@@ -798,7 +798,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag": "Fehlbetrag",
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Geteilt durch die Anzahl Personen im Haushalt (Pro-Kopf-Teilung)",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Ungedeckter Anteil Lebenshaltungskosten",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Total Anspruch",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
 
@@ -809,7 +809,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.total": "Total",
   "sachbearbeitung-app.verfuegung.zusammenfassung.berechnungen": "Berechnungen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Detail",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Berechnung {{ index }}{{ type }} zu Tranche {{ index }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Berechnung {{ index }}{{ type }} zu Tranche von {{ startDate }} bis {{ endDate }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Anteil an Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Anteil an Darlehen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Total Betrag ohne Kürzungen",

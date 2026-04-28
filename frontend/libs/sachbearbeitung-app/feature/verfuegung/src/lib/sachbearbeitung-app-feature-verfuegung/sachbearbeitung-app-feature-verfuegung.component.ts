@@ -16,6 +16,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { format } from 'date-fns/format';
 
 import {
   VERFUEGUNG_OPTIONS,
@@ -107,8 +108,16 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
     const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
     berechnung.berechnungsresultate.forEach((berechnungen, berechnungIndex) => {
       berechnungen.forEach((berechnung) => {
+        const startDate = format(berechnung.gueltigAb, 'dd.MM.yyyy');
+        const endDate = format(berechnung.gueltigBis, 'dd.MM.yyyy');
+
         berechnungenOptions.push(
-          createBerechnungOption(berechnungIndex, berechnung.type),
+          createBerechnungOption(
+            berechnungIndex,
+            startDate,
+            endDate,
+            berechnung.type,
+          ),
         );
       });
     });
