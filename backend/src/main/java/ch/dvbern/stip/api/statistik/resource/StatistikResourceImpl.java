@@ -69,7 +69,6 @@ public class StatistikResourceImpl implements StatistikResource {
     @Override
     @PermitAll
     public RestMulti<Buffer> getStatistikDownload(String token) {
-        statistikAuthorizer.canStatistik();
         return statistikService.getStatistikDownload(token);
     }
 }

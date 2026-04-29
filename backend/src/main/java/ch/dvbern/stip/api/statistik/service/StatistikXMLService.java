@@ -120,7 +120,6 @@ public class StatistikXMLService {
         }
     }
 
-    @Transactional
     public void createAndSave(final int year, final String triggeredBy) {
         final var startTimestamp = LocalDateTime.now();
         LOG.info("Creating and saving statistik for year {} triggered by {}", year, triggeredBy);

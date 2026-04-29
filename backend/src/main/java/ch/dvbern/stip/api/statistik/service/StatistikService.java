@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -91,6 +92,7 @@ public class StatistikService {
         final var statistiks = statistikRepository.findAll();
         return statistiks.stream()
             .map(statistikMapper::fromEntity)
+            .sorted(Comparator.comparing(StatistikDto::getTimestampErstellt).reversed())
             .toList();
     }
 

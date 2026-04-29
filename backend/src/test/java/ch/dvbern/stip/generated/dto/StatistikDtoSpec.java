@@ -121,9 +121,9 @@ public class StatistikDtoSpec {
    * Get userTriggeredCreation
    * @return userTriggeredCreation
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public String getUserTriggeredCreation() {
     return userTriggeredCreation;
@@ -131,7 +131,7 @@ public class StatistikDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_USER_TRIGGERED_CREATION)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setUserTriggeredCreation(String userTriggeredCreation) {
     this.userTriggeredCreation = userTriggeredCreation;
   }

@@ -12007,7 +12007,7 @@ components:
       required:
         - id
         - timestampErstellt
-        - userErstellt
+        - userTriggeredCreation
         - year
         - filename
         - filesize
