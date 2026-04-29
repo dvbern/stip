@@ -251,6 +251,7 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
+            true,
             BerechnungTestUtil.getPersonenImHaushaltService()
         );
         final var mapper = new ObjectMapper().registerModule(new JavaTimeModule());

@@ -1651,6 +1651,8 @@ components:
         - yearRange
         - gesuchTrancheId
         - berechnungsanteilKinder
+        - teilzeitKinderBeiPiaAnrechnen
+        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -1675,6 +1677,13 @@ components:
             getrennte eltern mit Kindern die eine Obhutsteilung haben'
           $ref: './components/common.yaml#/UUID'
         berechnungsanteilKinder:
+          description: 'Anteil dieser Berechnung am Berechnungstotal.
+            Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
+          type: number
+        teilzeitKinderBeiPiaAnrechnen:
+          description: 'Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet'
+          type: boolean
+        berechnungsanteilKinderPia:
           description: 'Anteil dieser Berechnung am Berechnungstotal.
             Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.'
           type: number

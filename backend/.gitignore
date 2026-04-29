@@ -17,6 +17,8 @@ bin/
 *.ipr
 *.iml
 *.iws
+.aiignore
+.junie
 
 # NetBeans
 nb-configuration.xml
