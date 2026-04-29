@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.datenschutzbrief.resource;
 
-import java.io.IOException;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
@@ -35,7 +34,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDtoSpec;
-import ch.dvbern.stip.generated.dto.ElternTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
@@ -94,7 +92,23 @@ class DatenschutzbriefRessourceImplTest {
     @Test
     @TestAsSachbearbeiter
     @Order(3)
-    void test_create_and_get_datenschutzbrief_token() throws IOException {
+    void test_gesuch_has_no_datenschutzbriefs_after_einreichen() {
+        final var datenschutzbriefs = datenschutzbriefApiSpec.getAllDatenschutzbriefs()
+            .gesuchIdPath(gesuchId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .as(DatenschutzbriefOverviewDtoSpec[].class);
+
+        assertEquals(0, datenschutzbriefs.length);
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(4)
+    void test_create_and_get_datenschutzbrief_token() {
         final var gesuch = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuchTrancheId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -119,8 +133,8 @@ class DatenschutzbriefRessourceImplTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(3)
-    void test_gesuch_has_datenschutzbriefs() throws IOException {
+    @Order(5)
+    void test_gesuch_has_one_datenschutzbrief_after_manual_creation() {
         final var datenschutzbriefs = datenschutzbriefApiSpec.getAllDatenschutzbriefs()
             .gesuchIdPath(gesuchId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -130,9 +144,7 @@ class DatenschutzbriefRessourceImplTest {
             .extract()
             .as(DatenschutzbriefOverviewDtoSpec[].class);
 
-        assertEquals(2, datenschutzbriefs.length);
-        assertEquals(ElternTypDtoSpec.VATER, datenschutzbriefs[0].getElternTyp());
-        assertEquals(ElternTypDtoSpec.MUTTER, datenschutzbriefs[1].getElternTyp());
+        assertEquals(1, datenschutzbriefs.length);
     }
 
     @Test
