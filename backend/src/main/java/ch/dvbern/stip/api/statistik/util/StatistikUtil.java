@@ -18,14 +18,15 @@
 package ch.dvbern.stip.api.statistik.util;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.KantonUtil;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -35,7 +36,6 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungType;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
 import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
-import ch.dvbern.stip.stipdecision.type.Kanton;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,15 +46,8 @@ public class StatistikUtil {
         return value ? 2 : 1;
     }
 
-    public Kanton getKantonFromTenantIdentifier(final String tenantIdentifier) {
-        return Arrays.stream(Kanton.values())
-            .filter(kanton -> kanton.getTenant().equals(tenantIdentifier))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("No Kanton found for tenant: " + tenantIdentifier));
-    }
-
-    public int getBfsCodeFromTenantIdentifier(final String tenantIdentifier) {
-        return getKantonFromTenantIdentifier(tenantIdentifier).getBfsCode();
+    public int getBfsCodeFromMandantIdentifier(final MandantIdentifier mandantIdentifier) {
+        return KantonUtil.getByMandantIdentifier(mandantIdentifier).getBfsCode();
     }
 
     public static GesuchTranche getLatestGesuchTrancheFromFallByYear(final Fall fall, final int year) {

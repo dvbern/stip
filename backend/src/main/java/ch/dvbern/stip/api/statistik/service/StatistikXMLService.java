@@ -19,12 +19,8 @@ package ch.dvbern.stip.api.statistik.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +37,8 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
+import ch.dvbern.stip.api.common.type.Kanton;
+import ch.dvbern.stip.api.common.util.KantonUtil;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
@@ -64,7 +62,6 @@ import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.statistik.util.StatistikUtil;
 import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.stipdecision.type.Kanton;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
@@ -120,12 +117,12 @@ public class StatistikXMLService {
             StatistikConstants.STATISTIK_FILE_PATH
         );
 
-            statistik.setUserTriggeredCreation(triggeredBy);
-            statistik.setObjectId(objectId);
-            statistik.setYear(year);
-            statistik.setFilename(fileName);
-            statistik.setFilepath(StatistikConstants.STATISTIK_FILE_PATH);
-            statistik.setFilesize(outputStream.size());
+        statistik.setUserTriggeredCreation(triggeredBy);
+        statistik.setObjectId(objectId);
+        statistik.setYear(year);
+        statistik.setFilename(fileName);
+        statistik.setFilepath(StatistikConstants.STATISTIK_FILE_PATH);
+        statistik.setFilesize(outputStream.size());
 
         statistikRepository.persistAndFlush(statistik);
 
@@ -192,8 +189,8 @@ public class StatistikXMLService {
             })
             .toList();
 
-        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-        final var bfsCode = StatistikUtil.getBfsCodeFromTenantIdentifier(tenantIdentifier);
+        final var mandantIdentifier = tenantService.getCurrentMandantIdentifier();
+        final var bfsCode = StatistikUtil.getBfsCodeFromMandantIdentifier(mandantIdentifier);
 
         return TableDto.builder()
             .head(
@@ -308,8 +305,8 @@ public class StatistikXMLService {
             var instCategory = ausbildungsstaette.getNummerTyp().getBfsIdentification();
 
             if (ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CT_NO)) {
-                final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-                final var kanton = StatistikUtil.getKantonFromTenantIdentifier(tenantIdentifier);
+                final var mandantIdentifier = tenantService.getCurrentMandantIdentifier();
+                final var kanton = KantonUtil.getByMandantIdentifier(mandantIdentifier);
                 instCategory = String.format("%s%s", instCategory, kanton.toString());
             }
 

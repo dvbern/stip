@@ -15,23 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.authorization;
+package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import ch.dvbern.stip.api.common.type.Kanton;
+import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import lombok.experimental.UtilityClass;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-@Authorizer
-public class StatistikAuthorizer extends BaseAuthorizer {
-    private final BenutzerService benutzerService;
-
-    public void canStatistik() {
-        final var benutzer = benutzerService.getCurrentBenutzer();
-
-        if (!isAdmin(benutzer)) {
-            forbidden();
-        }
+@UtilityClass
+public class KantonUtil {
+    public Kanton getByMandantIdentifier(MandantIdentifier mandantIdentifier) {
+        return switch (mandantIdentifier) {
+            case BERN, DV -> Kanton.BE;
+        };
     }
 }
