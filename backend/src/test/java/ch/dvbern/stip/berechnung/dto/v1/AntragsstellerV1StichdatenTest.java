@@ -67,7 +67,7 @@ class AntragsstellerV1StichdatenTest {
 
         // assert
         antragsstellerV1 =
-            AntragsstellerV1.buildFromDependants(gesuchFormular, 0);
+            AntragsstellerV1.buildFromDependants(gesuchFormular, 0, true);
         assertFalse(antragsstellerV1.isHalbierungElternbeitrag());
 
         // pia = 25 years old at end of current ausbildungsjahr
@@ -75,7 +75,7 @@ class AntragsstellerV1StichdatenTest {
 
         // act & assert
         antragsstellerV1 =
-            AntragsstellerV1.buildFromDependants(gesuchFormular, 0);
+            AntragsstellerV1.buildFromDependants(gesuchFormular, 0, true);
         assertTrue(antragsstellerV1.isHalbierungElternbeitrag());
     }
 }

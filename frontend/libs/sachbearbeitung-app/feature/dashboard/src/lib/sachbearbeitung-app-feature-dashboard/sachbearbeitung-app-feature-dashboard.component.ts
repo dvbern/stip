@@ -84,6 +84,7 @@ const baseFilterTabs = [
   {
     key: 'PENDENTE_GESUCHE',
     route: ['gesuche'],
+    class: 'tw:ml-auto',
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
   },
 ] satisfies Partial<DashboardFilterTabItem & { key: FilterTabParam }>[];

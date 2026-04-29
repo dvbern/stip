@@ -25,6 +25,7 @@ public interface BerechnungRequestBuilder {
     CalculatorRequest buildRequest(
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
-        final ElternTyp elternTyp
+        final ElternTyp elternTyp,
+        boolean teilzeitKinderBeiPiaAnrechnen
     );
 }
