@@ -286,8 +286,6 @@ quarkus:
         password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
         tls-configuration-name: bern
     quartz:
-      jobStore:
-        useProperties: false
       clustered: false
     liquibase:
       contexts: dev

@@ -34,7 +34,8 @@ public class StatistikXMLJob implements Job {
     @Override
     @Transactional
     public void execute(JobExecutionContext context) throws JobExecutionException {
-        final int year = context.getMergedJobDataMap().getInt(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY);
+        final int year = Integer
+            .parseInt(context.getMergedJobDataMap().getString(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY));
         final String triggeredBy =
             context.getMergedJobDataMap().getString(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY);
         final String tenant =

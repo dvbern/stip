@@ -69,7 +69,7 @@ public class StatistikService {
                 StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY,
                 tenantService.getCurrentTenantIdentifier()
             )
-            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, year)
+            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, String.valueOf(year))
             .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY, currentUserName)
             .build();
 
