@@ -163,9 +163,19 @@ $dv-all-colors: info, danger, success, warn, primary;
   --mat-dialog-container-min-width: 900px;
 }
 
-.mat-mdc-tab-nav-bar.nav-style-tabs {
-  .mat-mdc-tab-links {
-    gap: 0 24px;
+.mat-mdc-tab-nav-bar {
+  &.nav-style-tabs {
+    .mat-mdc-tab-links {
+      gap: 0 24px;
+    }
+  }
+
+  .mdc-tab--active .mdc-tab__text-label {
+    transition-delay: 0s;
+    transition-duration: var(
+      --tw-duration,
+      var(--tw-default-transition-duration)
+    );
   }
 }
 

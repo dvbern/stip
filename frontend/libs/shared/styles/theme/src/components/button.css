@@ -1,5 +1,5 @@
 @utility dv-button {
-  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer  tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
+  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
   &.disabled,
   &[disabled] {
     @apply tw:opacity-65 tw:pointer-events-none;
