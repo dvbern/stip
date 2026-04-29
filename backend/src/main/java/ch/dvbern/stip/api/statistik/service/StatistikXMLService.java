@@ -90,36 +90,6 @@ public class StatistikXMLService {
     private final S3AsyncClient s3AsyncClient;
     private final ConfigService configService;
 
-    public void create() {
-        try {
-            int year = LocalDate.now().getYear();
-            LOG.info("Generating test statistik XML for year {}", year);
-
-            var xmlOutputStream = generateStatistikXml(year);
-
-            String outputDir = "target";
-            Path outputPath = Paths.get(outputDir, "statistik-test.xml");
-
-            Files.createDirectories(outputPath.getParent());
-
-            try (FileOutputStream fos = new FileOutputStream(outputPath.toFile())) {
-                xmlOutputStream.writeTo(fos);
-            }
-
-            LOG.info("Successfully generated test statistik XML at: {}", outputPath.toAbsolutePath());
-
-            try {
-                validate(xmlOutputStream);
-            } catch (SAXException e) {
-                LOG.error("XML validation failed", e);
-                throw e;
-            }
-
-        } catch (Exception e) {
-            LOG.error("Failed to generate test statistik XML: {}", e.getMessage());
-        }
-    }
-
     public void createAndSave(final int year, final String triggeredBy) {
         final var startTimestamp = LocalDateTime.now();
         LOG.info("Creating and saving statistik for year {} triggered by {}", year, triggeredBy);
