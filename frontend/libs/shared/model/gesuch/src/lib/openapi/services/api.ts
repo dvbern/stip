@@ -44,6 +44,8 @@ export * from './plz.service';
 // import { PlzService } from './plz.service';
 export * from './sozialdienst.service';
 // import { SozialdienstService } from './sozialdienst.service';
+export * from './statistik.service';
+// import { StatistikService } from './statistik.service';
 export * from './steuerdaten.service';
 // import { SteuerdatenService } from './steuerdaten.service';
 export * from './stipDecision.service';
@@ -53,4 +55,4 @@ export * from './tenant.service';
 export * from './verfuegung.service';
 // import { VerfuegungService } from './verfuegung.service';
 // Do not generate the constant as accidental use of this prevents tree-shaking.
-// export const APIS = [AusbildungService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BuchhaltungService, ConfigurationService, DarlehenService, DatenschutzbriefService, DelegierenService, DemoDataService, DokumentService, ElternService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MassendruckService, NotificationService, PlzService, SozialdienstService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];
+// export const APIS = [AusbildungService, AusbildungsstaetteService, AuszahlungService, BenutzerService, BuchhaltungService, ConfigurationService, DarlehenService, DatenschutzbriefService, DelegierenService, DemoDataService, DokumentService, ElternService, FallService, GesuchService, GesuchNotizService, GesuchTrancheService, GesuchsjahrService, GesuchsperiodeService, LandService, MassendruckService, NotificationService, PlzService, SozialdienstService, StatistikService, SteuerdatenService, StipDecisionService, TenantService, VerfuegungService];

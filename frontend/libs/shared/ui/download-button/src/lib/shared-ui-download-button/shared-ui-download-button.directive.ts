@@ -16,10 +16,21 @@ import {
   DokumentService,
   GesuchService,
   MassendruckService,
+  StatistikService,
   VerfuegungService,
 } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 
+type IdOnlyTypes =
+  | 'darlehen'
+  | 'darlehenNegativVerfuegung'
+  | 'berechnungsblatt'
+  | 'verfuegung'
+  | 'massendruck'
+  | 'demoData'
+  | 'ausbildungUnterbruch'
+  | 'sachbearbeiterGesuchDokument'
+  | 'statistik';
 export type DownloadOptions =
   | {
       type: 'datenschutzbrief';
@@ -32,40 +43,12 @@ export type DownloadOptions =
       gesuchId: string;
     }
   | {
-      type: 'darlehen';
-      id: string;
-    }
-  | {
-      type: 'darlehenNegativVerfuegung';
-      id: string;
-    }
-  | {
-      type: 'berechnungsblatt';
-      id: string;
-    }
-  | {
-      type: 'verfuegung';
-      id: string;
-    }
-  | {
       type: 'dokument';
       id: string;
       dokumentArt: DokumentArt;
     }
   | {
-      type: 'massendruck';
-      id: string;
-    }
-  | {
-      type: 'demoData';
-      id: string;
-    }
-  | {
-      type: 'ausbildungUnterbruch';
-      id: string;
-    }
-  | {
-      type: 'sachbearbeiterGesuchDokument';
+      type: IdOnlyTypes;
       id: string;
     };
 
@@ -83,171 +66,170 @@ export class SharedUiDownloadButtonDirective {
   private massendruckService = inject(MassendruckService);
   private demoDataService = inject(DemoDataService);
   private ausbildungService = inject(AusbildungService);
+  private statistikService = inject(StatistikService);
   private dcmnt = inject(DOCUMENT, { optional: true });
 
   @HostListener('click')
   onClick() {
-    firstValueFrom(
-      getDownloadObservable$(
-        this.optionsSig(),
-        this.datenschutzbriefService,
-        this.darlehenService,
-        this.dokumentService,
-        this.gesuchService,
-        this.verfuegungService,
-        this.massendruckService,
-        this.demoDataService,
-        this.ausbildungService,
-      ),
-    ).then((href) => {
+    firstValueFrom(this.getDownloadObservable$()).then((href) => {
       this.dcmnt?.defaultView?.open(href, '_blank');
     });
   }
-}
 
-const getDownloadObservable$ = (
-  downloadOptions: DownloadOptions,
-  datenschutzbriefService: DatenschutzbriefService,
-  darlehenService: DarlehenService,
-  dokumentService: DokumentService,
-  gesuchService: GesuchService,
-  verfuegungService: VerfuegungService,
-  massendruckService: MassendruckService,
-  demoDataService: DemoDataService,
-  ausbildungService: AusbildungService,
-) => {
-  const { type, id } = downloadOptions;
-  switch (type) {
-    case 'datenschutzbrief': {
-      return datenschutzbriefService
-        .getDatenschutzbriefDownloadToken$({
-          gesuchId: downloadOptions.gesuchId,
-          datenschutzbriefId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            datenschutzbriefService.getDatenschutzbriefPath({ token }),
-          ),
-        );
-    }
-    case 'datenschutzbriefCreate': {
-      return datenschutzbriefService
-        .createAndGetDatenschutzbriefDownloadToken$({
-          gesuchId: downloadOptions.gesuchId,
-          datenschutzbriefCreate: {
-            elternId: id,
-          },
-        })
-        .pipe(
-          map(({ token }) =>
-            datenschutzbriefService.getDatenschutzbriefPath({ token }),
-          ),
-        );
-    }
-    case 'darlehen': {
-      return darlehenService
-        .getDarlehenDownloadToken$({
-          dokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            darlehenService.downloadDarlehenDokumentPath({ token }),
-          ),
-        );
-    }
-    case 'darlehenNegativVerfuegung': {
-      return darlehenService
-        .getDarlehenNegativVerfuegungDownloadToken$({
-          dokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            darlehenService.downloadDarlehenNegativVerfuegungPath({ token }),
-          ),
-        );
-    }
-    case 'berechnungsblatt': {
-      return gesuchService
-        .getBerechnungsblattDownloadToken$({
-          gesuchId: id,
-        })
-        .pipe(
-          map(({ token }) => `/api/v1/gesuch/berechnungsblatt?token=${token}`),
-        );
-    }
-    case 'dokument': {
-      return dokumentService
-        .getDokumentDownloadToken$({
-          dokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            dokumentService.getDokumentPath({
-              token,
-              dokumentArt: downloadOptions.dokumentArt,
-            }),
-          ),
-        );
-    }
-    case 'verfuegung': {
-      return verfuegungService
-        .getVerfuegungDokumentDownloadToken$({
-          verfuegungDokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            verfuegungService.getVerfuegungDokumentPath({ token }),
-          ),
-        );
-    }
-    case 'massendruck': {
-      return massendruckService
-        .getMassendruckDownloadToken$({
-          massendruckId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            massendruckService.downloadMassendruckDocumentPath({ token }),
-          ),
-        );
-    }
-    case 'demoData': {
-      return demoDataService
-        .getDemoDataDokumentDownloadToken$({ dokumentId: id })
-        .pipe(
-          map(({ token }) =>
-            demoDataService.getDemoDataDokumentPath({ token }),
-          ),
-        );
-    }
-    case 'ausbildungUnterbruch': {
-      return ausbildungService
-        .getAusbildungUnterbruchAntragDokumentDownloadToken$({
-          dokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            ausbildungService.downloadAusbildungUnterbruchAntragDokumentPath({
-              token,
-            }),
-          ),
-        );
-    }
-    case 'sachbearbeiterGesuchDokument': {
-      return dokumentService
-        .getSachbearbeiterGesuchDokumentDokumentDownloadToken$({
-          dokumentId: id,
-        })
-        .pipe(
-          map(({ token }) =>
-            dokumentService.getSachbearbeiterGesuchDokumentDokumentPath({
-              token,
-            }),
-          ),
-        );
-    }
-    default: {
-      assertUnreachable(type);
+  private getDownloadObservable$() {
+    const downloadOptions = this.optionsSig();
+    const { type, id } = downloadOptions;
+    switch (type) {
+      case 'datenschutzbrief': {
+        return this.datenschutzbriefService
+          .getDatenschutzbriefDownloadToken$({
+            gesuchId: downloadOptions.gesuchId,
+            datenschutzbriefId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.datenschutzbriefService.getDatenschutzbriefPath({ token }),
+            ),
+          );
+      }
+      case 'datenschutzbriefCreate': {
+        return this.datenschutzbriefService
+          .createAndGetDatenschutzbriefDownloadToken$({
+            gesuchId: downloadOptions.gesuchId,
+            datenschutzbriefCreate: {
+              elternId: id,
+            },
+          })
+          .pipe(
+            map(({ token }) =>
+              this.datenschutzbriefService.getDatenschutzbriefPath({ token }),
+            ),
+          );
+      }
+      case 'darlehen': {
+        return this.darlehenService
+          .getDarlehenDownloadToken$({
+            dokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.darlehenService.downloadDarlehenDokumentPath({ token }),
+            ),
+          );
+      }
+      case 'darlehenNegativVerfuegung': {
+        return this.darlehenService
+          .getDarlehenNegativVerfuegungDownloadToken$({
+            dokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.darlehenService.downloadDarlehenNegativVerfuegungPath({
+                token,
+              }),
+            ),
+          );
+      }
+      case 'berechnungsblatt': {
+        return this.gesuchService
+          .getBerechnungsblattDownloadToken$({
+            gesuchId: id,
+          })
+          .pipe(
+            map(
+              ({ token }) => `/api/v1/gesuch/berechnungsblatt?token=${token}`,
+            ),
+          );
+      }
+      case 'dokument': {
+        return this.dokumentService
+          .getDokumentDownloadToken$({
+            dokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.dokumentService.getDokumentPath({
+                token,
+                dokumentArt: downloadOptions.dokumentArt,
+              }),
+            ),
+          );
+      }
+      case 'verfuegung': {
+        return this.verfuegungService
+          .getVerfuegungDokumentDownloadToken$({
+            verfuegungDokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.verfuegungService.getVerfuegungDokumentPath({ token }),
+            ),
+          );
+      }
+      case 'massendruck': {
+        return this.massendruckService
+          .getMassendruckDownloadToken$({
+            massendruckId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.massendruckService.downloadMassendruckDocumentPath({
+                token,
+              }),
+            ),
+          );
+      }
+      case 'demoData': {
+        return this.demoDataService
+          .getDemoDataDokumentDownloadToken$({ dokumentId: id })
+          .pipe(
+            map(({ token }) =>
+              this.demoDataService.getDemoDataDokumentPath({ token }),
+            ),
+          );
+      }
+      case 'ausbildungUnterbruch': {
+        return this.ausbildungService
+          .getAusbildungUnterbruchAntragDokumentDownloadToken$({
+            dokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.ausbildungService.downloadAusbildungUnterbruchAntragDokumentPath(
+                {
+                  token,
+                },
+              ),
+            ),
+          );
+      }
+      case 'sachbearbeiterGesuchDokument': {
+        return this.dokumentService
+          .getSachbearbeiterGesuchDokumentDokumentDownloadToken$({
+            dokumentId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.dokumentService.getSachbearbeiterGesuchDokumentDokumentPath({
+                token,
+              }),
+            ),
+          );
+      }
+      case 'statistik': {
+        return this.statistikService
+          .getStatistikDownloadToken$({
+            statistikId: id,
+          })
+          .pipe(
+            map(({ token }) =>
+              this.statistikService.getStatistikDownloadPath({ token }),
+            ),
+          );
+      }
+      default: {
+        assertUnreachable(type);
+      }
     }
   }
-};
+}

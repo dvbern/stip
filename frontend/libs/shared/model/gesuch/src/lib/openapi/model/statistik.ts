@@ -13,7 +13,7 @@
 export interface Statistik { 
     id: string;
     timestampErstellt: string;
-    userTriggeredCreation?: string;
+    userTriggeredCreation: string;
     year: number;
     filename: string;
     filesize: string;
