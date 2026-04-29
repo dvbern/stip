@@ -44,7 +44,7 @@ const baseNavItems: (NavItem & {
     label: { key: 'sachbearbeitung-app.header.administration' },
     icon: 'settings',
     route: ['/administration'],
-    rolesAllowed: ['V0_Sachbearbeiter-Admin'],
+    rolesAllowed: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
   },
 ];
 
