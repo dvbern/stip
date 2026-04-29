@@ -30,6 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   StatistikDtoSpec.JSON_PROPERTY_ID,
   StatistikDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
+  StatistikDtoSpec.JSON_PROPERTY_VALID,
   StatistikDtoSpec.JSON_PROPERTY_USER_TRIGGERED_CREATION,
   StatistikDtoSpec.JSON_PROPERTY_YEAR,
   StatistikDtoSpec.JSON_PROPERTY_FILENAME,
@@ -43,6 +44,9 @@ public class StatistikDtoSpec {
 
   public static final String JSON_PROPERTY_TIMESTAMP_ERSTELLT = "timestampErstellt";
   private java.time.LocalDateTime timestampErstellt;
+
+  public static final String JSON_PROPERTY_VALID = "valid";
+  private Boolean valid;
 
   public static final String JSON_PROPERTY_USER_TRIGGERED_CREATION = "userTriggeredCreation";
   private String userTriggeredCreation;
@@ -108,6 +112,32 @@ public class StatistikDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
+  }
+
+
+  public StatistikDtoSpec valid(Boolean valid) {
+    
+    this.valid = valid;
+    return this;
+  }
+
+   /**
+   * Get valid
+   * @return valid
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getValid() {
+    return valid;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_VALID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setValid(Boolean valid) {
+    this.valid = valid;
   }
 
 
@@ -225,6 +255,7 @@ public class StatistikDtoSpec {
     StatistikDtoSpec statistik = (StatistikDtoSpec) o;
     return Objects.equals(this.id, statistik.id) &&
         Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
+        Objects.equals(this.valid, statistik.valid) &&
         Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
@@ -233,7 +264,7 @@ public class StatistikDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userTriggeredCreation, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, filename, filesize);
   }
 
   @Override
@@ -242,6 +273,7 @@ public class StatistikDtoSpec {
     sb.append("class StatistikDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");

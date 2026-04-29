@@ -84,6 +84,9 @@
       <column name="user_triggered_creation" type="VARCHAR(255)">
         <constraints nullable="false"/>
       </column>
+      <column name="valid" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
     </createTable>
   </changeSet>
   <changeSet author="luca.fondo (generated)" id="1777279266991-548">
@@ -106,6 +109,7 @@
       <column name="object_id" type="VARCHAR(255)"/>
       <column name="year" type="INTEGER"/>
       <column name="user_triggered_creation" type="VARCHAR(255)"/>
+      <column name="valid" type="BOOLEAN"/>
     </createTable>
   </changeSet>
   <changeSet author="luca.fondo (generated)" id="1777279266991-549">

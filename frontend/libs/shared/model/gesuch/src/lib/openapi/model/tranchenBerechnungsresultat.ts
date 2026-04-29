@@ -31,6 +31,14 @@ export interface TranchenBerechnungsresultat {
      * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
      */
     berechnungsanteilKinder: number;
+    /**
+     * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
+     */
+    teilzeitKinderBeiPiaAnrechnen: boolean;
+    /**
+     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
+     */
+    berechnungsanteilKinderPia: number;
     berechnungsStammdaten: BerechnungsStammdaten;
     persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**

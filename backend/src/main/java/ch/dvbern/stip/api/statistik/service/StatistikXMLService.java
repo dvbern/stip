@@ -94,13 +94,15 @@ public class StatistikXMLService {
         final var startTimestamp = LocalDateTime.now();
         LOG.info("Creating and saving statistik for year {} triggered by {}", year, triggeredBy);
 
+        final var statistik = new Statistik();
+
         final var outputStream = generateStatistikXml(year);
 
         try {
             validate(outputStream);
         } catch (SAXException e) {
             LOG.error("XML validation failed", e);
-            return;
+            statistik.setValid(false);
         }
 
         final var fileName = String.format(
@@ -118,14 +120,12 @@ public class StatistikXMLService {
             StatistikConstants.STATISTIK_FILE_PATH
         );
 
-        final var statistik = Statistik.builder()
-            .userTriggeredCreation(triggeredBy)
-            .objectId(objectId)
-            .year(year)
-            .filename(fileName)
-            .filepath(StatistikConstants.STATISTIK_FILE_PATH)
-            .filesize(outputStream.size())
-            .build();
+            statistik.setUserTriggeredCreation(triggeredBy);
+            statistik.setObjectId(objectId);
+            statistik.setYear(year);
+            statistik.setFilename(fileName);
+            statistik.setFilepath(StatistikConstants.STATISTIK_FILE_PATH);
+            statistik.setFilesize(outputStream.size());
 
         statistikRepository.persistAndFlush(statistik);
 

@@ -54,6 +54,10 @@ public class Statistik extends AbstractMandantEntity {
     private String userTriggeredCreation;
 
     @NotNull
+    @Column(name = "valid", nullable = false)
+    private boolean valid = true;
+
+    @NotNull
     @Column(name = "year", nullable = false)
     private int year;
 

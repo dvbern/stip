@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class StatistikDto  implements Serializable {
   private @Valid UUID id;
   private @Valid java.time.LocalDateTime timestampErstellt;
+  private @Valid Boolean valid;
   private @Valid String userTriggeredCreation;
   private @Valid Integer year;
   private @Valid String filename;
@@ -63,6 +64,25 @@ public class StatistikDto  implements Serializable {
   @JsonProperty("timestampErstellt")
   public void setTimestampErstellt(java.time.LocalDateTime timestampErstellt) {
     this.timestampErstellt = timestampErstellt;
+  }
+
+  /**
+   **/
+  public StatistikDto valid(Boolean valid) {
+    this.valid = valid;
+    return this;
+  }
+
+  
+  @JsonProperty("valid")
+  @NotNull
+  public Boolean getValid() {
+    return valid;
+  }
+
+  @JsonProperty("valid")
+  public void setValid(Boolean valid) {
+    this.valid = valid;
   }
 
   /**
@@ -153,6 +173,7 @@ public class StatistikDto  implements Serializable {
     StatistikDto statistik = (StatistikDto) o;
     return Objects.equals(this.id, statistik.id) &&
         Objects.equals(this.timestampErstellt, statistik.timestampErstellt) &&
+        Objects.equals(this.valid, statistik.valid) &&
         Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation) &&
         Objects.equals(this.year, statistik.year) &&
         Objects.equals(this.filename, statistik.filename) &&
@@ -161,7 +182,7 @@ public class StatistikDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, userTriggeredCreation, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, filename, filesize);
   }
 
   @Override
@@ -171,6 +192,7 @@ public class StatistikDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
+    sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
