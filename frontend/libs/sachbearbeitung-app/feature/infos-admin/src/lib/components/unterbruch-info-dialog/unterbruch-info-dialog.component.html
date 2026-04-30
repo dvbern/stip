@@ -2,40 +2,40 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
+    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:m-1"
     [attr.aria-label]="t('shared.close')"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw:!mb-8 tw:!text-xl">
+  <h1 class="tw:mb-8 tw:text-xl tw:font-semibold">
     {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.title') }}
   </h1>
-  <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:pl-0">
-    <dt class="tw:whitespace-nowrap tw:!font-semibold">
+  <dl class="tw:grid tw:grid-cols-[min-content_2fr] tw:gap-x-4 tw:gap-y-3 tw:pl-0">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ t('sachbearbeitung-app.infos.admin.table.timestamp') }}
     </dt>
     <dd class="tw:font-normal">{{ dialogData.timestampErstellt | date: 'dd.MM.yyyy' }}</dd>
 
-    <dt class="tw:whitespace-nowrap tw:!font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ t('sachbearbeitung-app.infos.admin.table.user') }}
     </dt>
     <dd class="tw:font-normal">{{ dialogData.userErstellt }}</dd>
 
-    <dt class="tw:whitespace-nowrap tw:!font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.status') }}
     </dt>
     <dd class="tw:font-normal">
       {{ t(`shared.ausbildungUnterbruchAntrag.status.${dialogData.status}`) }}
     </dd>
 
-    <dt class="tw:whitespace-nowrap tw:!font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.kommentarGS') }}
     </dt>
     <dd class="tw:font-normal tw:max-w-xl tw:max-h-56 tw:overflow-y-auto tw:whitespace-pre-wrap">
       {{ dialogData.kommentarGS }}
     </dd>
 
-    <dt class="tw:whitespace-nowrap tw:!font-semibold">
+    <dt class="tw:whitespace-nowrap tw:font-semibold">
       {{ t('shared.ausbildung-unterbrechen.dokumente.title') }}
     </dt>
     <dd class="tw:font-normal">
@@ -49,17 +49,17 @@
     </dd>
 
     @if (!dialogData.canAntragAkzeptieren) {
-      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ t('shared.ausbildung-unterbrechen.startDate') }}
       </dt>
       <dd class="tw:font-normal">{{ dialogData.startDate | date: 'dd.MM.yyyy' }}</dd>
 
-      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ t('shared.ausbildung-unterbrechen.endDate') }}
       </dt>
       <dd class="tw:font-normal">{{ dialogData.endDate | date: 'dd.MM.yyyy' }}</dd>
 
-      <dt class="tw:whitespace-nowrap tw:!font-semibold">
+      <dt class="tw:whitespace-nowrap tw:font-semibold">
         {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.anzahlMonate') }}
       </dt>
       <dd class="tw:font-normal">{{ dialogData.monateOhneAnspruch }}</dd>
@@ -151,17 +151,27 @@
       </mat-form-field>
 
       <div class="tw:mt-10 tw:flex tw:col-span-2 tw:gap-6">
-        <button type="button" class="btn btn-danger" (click)="update('ABGELEHNT')" data-testid="dialog-reject">
+        <button
+          type="button"
+          class="tw:dv-button-main-danger"
+          (click)="update('ABGELEHNT')"
+          data-testid="dialog-reject"
+        >
           {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.ABGELEHNT') }}
         </button>
-        <button type="button" class="btn btn-primary" (click)="update('AKZEPTIERT')" data-testid="dialog-accept">
+        <button
+          type="button"
+          class="tw:dv-button-main-primary"
+          (click)="update('AKZEPTIERT')"
+          data-testid="dialog-accept"
+        >
           {{ t('sachbearbeitung-app.infos.admin.ausbildung-unterbrechen.info.AKZEPTIERT') }}
         </button>
       </div>
     </form>
   } @else {
-    <div class="tw:flex tw:justify-center">
-      <button type="button" class="btn btn-secondary" (click)="close()" data-testid="dialog-close">
+    <div class="tw:flex tw:justify-center tw:mt-6">
+      <button type="button" class="tw:dv-button-outline" (click)="close()" data-testid="dialog-close">
         {{ t('shared.close') }}
       </button>
     </div>

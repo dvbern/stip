@@ -4,34 +4,40 @@
 } @else {
   <ng-container *transloco="let t">
     <!-- resultat -->
-    <mat-card class="rounded-4 mb-4">
+    <mat-card class="rounded-4 tw:mb-6">
       <mat-card-header>
         <mat-card-title>
-          <h2 class="d-flex align-items-center mb-0 gap-2">
+          <h2 class="tw:flex tw:items-center tw:mb-0 tw:gap-2">
             <dv-shared-ui-icon-chip>
-              <i class="material-symbols-rounded text-info">equal</i>
+              <i class="material-symbols-rounded tw:text-dv-blue">equal</i>
             </dv-shared-ui-icon-chip>
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title') }}
           </h2>
         </mat-card-title>
       </mat-card-header>
 
-      <div class="border-bottom mt-4 border-1"></div>
+      <div class="border-bottom tw:mt-6 border-1"></div>
 
-      <mat-card-content class="tw:!flex tw:items-center tw:gap-5 p-5">
+      <mat-card-content class="tw:!flex tw:items-center tw:gap-5 p-8">
         @if ((zusammenfassung.berechnungDarlehen ?? 0) > 0 || zusammenfassung.berechnungStipendium > 0) {
-          <div class="accept rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
+          <div
+            class="accept rounded-4 tw:text-2xl tw:font-semibold tw:flex-1 tw:p-6"
+            data-testid="zusammenfassung-resultat"
+          >
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen') }}
           </div>
         } @else {
-          <div class="reject rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
+          <div
+            class="reject rounded-4 tw:text-2xl tw:font-semibold tw:flex-1 tw:p-6"
+            data-testid="zusammenfassung-resultat"
+          >
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt') }}
           </div>
         }
         @if (gesuchIdSig(); as id) {
           <button
             type="button"
-            class="btn btn-outline-primary fs-7 tw:!p-4 tw:text-sm"
+            class="tw:dv-button-outline tw:text-sm! tw:!p-4 tw:text-sm"
             [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
           >
             <span class="material-symbols-rounded tw:align-middle">download</span>
@@ -41,22 +47,22 @@
     </mat-card>
 
     <!-- zusammenfassung -->
-    <mat-card class="rounded-4 mb-4">
+    <mat-card class="rounded-4 tw:mb-6">
       <mat-card-header>
         <mat-card-title>
-          <h3 class="fs-3 mb-0">
+          <h3 class="tw:text-2xl tw:mb-0">
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.title') }}
           </h3>
         </mat-card-title>
       </mat-card-header>
 
-      <div class="border-bottom mt-4 mb-4 border-1"></div>
+      <div class="border-bottom tw:mt-6 tw:mb-6 border-1"></div>
 
-      <mat-card-content class="d-flex flex-column gap-4">
+      <mat-card-content class="tw:flex tw:flex-col tw:gap-6">
         @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
           @for (teilBerechnung of berechnungen; track $index) {
             <div>
-              <div class="d-flex fs-4 tw:gap-1 tw:items-baseline h4">
+              <div class="tw:flex tw:text-xl tw:gap-1 tw:items-baseline h4">
                 <div>
                   {{
                     t('sachbearbeitung-app.verfuegung.zusammenfassung.item.title', {
@@ -67,18 +73,18 @@
                 </div>
 
                 <a
-                  class="text-decoration-none tw:font-normal text-info tw:text-base"
+                  class="tw:font-normal tw:text-dv-blue tw:text-base"
                   [routerLink]="['../berechnung', berechnungsIndex + 1]"
                 >
-                  <div class="d-flex align-items-center">
+                  <div class="tw:flex tw:items-center">
                     <span class="text-decoration-underline">{{
                       t('sachbearbeitung-app.verfuegung.zusammenfassung.item.link')
                     }}</span>
-                    <i class="material-symbols-rounded fs-5 text-decoration-none">open_in_new</i>
+                    <i class="material-symbols-rounded tw:text-lg!">open_in_new</i>
                   </div>
                 </a>
               </div>
-              <div class="d-flex justify-content-between fs-5">
+              <div class="tw:flex tw:justify-between tw:text-lg">
                 <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium') }}</div>
                 <div>
                   {{ teilBerechnung.total | formatChf: false }}
@@ -89,9 +95,9 @@
         }
       </mat-card-content>
 
-      <div class="border-bottom mt-4 border-1"></div>
+      <div class="border-bottom tw:mt-6 border-1"></div>
 
-      <mat-card-footer class="px-3 py-4">
+      <mat-card-footer class="tw:px-4 py-4">
         @let hasKuerzungenNachEinreichefrist =
           zusammenfassung.totalNachKuerzungNachEinreichefrist ||
           zusammenfassung.totalNachKuerzungNachEinreichefrist === 0;
@@ -100,7 +106,7 @@
         @let hasDarlehen = zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0;
 
         @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
-          <div class="d-flex justify-content-between fs-5 mb-3">
+          <div class="tw:flex tw:justify-between tw:text-lg tw:mb-4">
             <div>
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung') }}
             </div>
@@ -110,14 +116,14 @@
           </div>
         }
         @if (hasKuerzungenNachEinreichefrist) {
-          <div class="tw:flex tw:justify-between fs-5 mb-3">
+          <div class="tw:flex tw:justify-between tw:text-lg tw:mb-4">
             <div class="tw:flex tw:items-center">
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist') }}
 
               <button
                 type="button"
                 (click)="einreichefristInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md text-info"
+                class="tw:dv-button-icon tw:text-dv-blue"
                 [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
               >
                 <span class="material-symbols-rounded tw:text-2xl!"> info </span>
@@ -134,7 +140,7 @@
                       (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChf,
                 }"
                 #einreichefristInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
+                class="tw:hidden"
               ></div>
             </div>
             <div>
@@ -143,14 +149,14 @@
           </div>
         }
         @if (hasKuerzungenUnterbruch) {
-          <div class="tw:flex tw:justify-between fs-5 mb-3">
+          <div class="tw:flex tw:justify-between tw:text-lg tw:mb-4">
             <div class="tw:flex tw:items-center">
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch') }}
 
               <button
                 type="button"
                 (click)="unterbruchInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md text-info"
+                class="tw:dv-button-icon tw:text-dv-blue"
                 [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
               >
                 <span class="material-symbols-rounded tw:text-2xl!"> info </span>
@@ -167,7 +173,7 @@
                       (zusammenfassung.totalNachKuerzungUnterbruch ?? 0) | formatChf,
                 }"
                 #unterbruchInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
+                class="tw:hidden"
               ></div>
             </div>
             <div>
@@ -176,7 +182,7 @@
           </div>
         }
         @if (hasDarlehen) {
-          <div class="tw:flex tw:items-center fs-5 tw:mb-2 tw:mt-8">
+          <div class="tw:flex tw:items-center tw:text-lg tw:mb-2 tw:mt-8">
             <div>
               {{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende') }}
             </div>
@@ -184,7 +190,7 @@
             <button
               type="button"
               (click)="eigenverdienstInfoDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info"
+              class="tw:dv-button-icon tw:text-dv-blue"
               [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
             >
               <span class="material-symbols-rounded tw:text-2xl!"> info </span>
@@ -198,11 +204,11 @@
                 einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
               }"
               #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
-              class="d-none"
+              class="tw:hidden"
             ></div>
           </div>
         }
-        <div class="d-flex justify-content-between fs-4 h4">
+        <div class="tw:flex tw:justify-between tw:text-xl h4">
           <div>
             {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium') }}
           </div>
@@ -211,7 +217,7 @@
           </div>
         </div>
         @if (hasDarlehen) {
-          <div class="tw:flex tw:justify-between fs-4 h4 mt-3">
+          <div class="tw:flex tw:justify-between tw:text-xl h4 tw:mt-4">
             <div>
               {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen') }}
             </div>

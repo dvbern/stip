@@ -1,0 +1,51 @@
+@utility dv-button {
+  @apply tw:flex tw:justify-center tw:py-2.5 tw:px-5 tw:align-middle tw:border tw:border-transparent tw:rounded-xl tw:cursor-pointer tw:transition-[color,background-color,border-color,opacity,--tw-brightness];
+  &.disabled,
+  &[disabled] {
+    @apply tw:opacity-65 tw:pointer-events-none;
+  }
+}
+
+@utility dv-button-main-* {
+  --_color: --value(--color-dv-main-*);
+  @apply tw:dv-button tw:font-bold tw:text-white tw:shadow-sm tw:bg-(--_color) tw:hover:brightness-90;
+}
+
+@utility dv-button-outline {
+  @apply tw:dv-button tw:font-bold tw:hover:text-white tw:shadow-sm tw:bg-white tw:hover:bg-dv-gray-dark tw:border-dv-gray-dark;
+}
+
+@utility dv-button-outline-* {
+  --_color: --value(--color-dv-main-*, [color]);
+  @apply tw:dv-button tw:font-bold tw:hover:text-white tw:shadow-sm tw:hover:bg-(--_color) tw:border-(--_color) tw:text-(--_color);
+}
+
+@utility dv-button-icon {
+  @apply tw:flex tw:justify-center tw:items-center tw:w-10 tw:h-10 tw:[&_.material-symbols-rounded]:text-3xl tw:cursor-pointer;
+}
+
+@utility dv-button-icon-outline {
+  @apply tw:dv-button tw:font-bold tw:hover:text-white tw:shadow-sm tw:hover:bg-dv-gray-dark tw:border-dv-gray-dark tw:dv-button-icon tw:rounded;
+}
+
+@utility dv-button-icon-outline-* {
+  --_color: --value(--color-dv-main-*, [color]);
+  @apply tw:dv-button tw:font-bold tw:hover:text-white tw:shadow-sm tw:hover:bg-(--_color) tw:border-(--_color) tw:dv-button-icon tw:rounded;
+}
+
+@utility dv-nav-button {
+  @apply tw:dv-button tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
+
+  --mat-tab-active-label-text-color: white;
+  --mat-tab-active-focus-label-text-color: white;
+  --mat-tab-active-hover-label-text-color: white;
+  --mat-tab-active-indicator-color: transparent;
+  --mat-tab-active-focus-indicator-color: transparent;
+  --mat-tab-active-hover-indicator-color: transparent;
+  --mat-tab-inactive-focus-label-text-color: white;
+  --mat-tab-inactive-hover-label-text-color: white;
+
+  &:hover {
+    --mat-menu-item-label-text-color: white;
+  }
+}

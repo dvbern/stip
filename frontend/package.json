@@ -80,7 +80,6 @@
     "@popperjs/core": "^2.11.8",
     "@tailwindcss/postcss": "^4.1.18",
     "angular-oauth2-oidc": "^20.0.2",
-    "bootstrap": "^5.3.8",
     "date-fns": "^3.6.0",
     "deepmerge-ts": "^7.1.5",
     "filesize": "^11.0.13",

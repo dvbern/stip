@@ -47,12 +47,13 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
         takeUntilDestroyed(),
         startWith({}),
         switchMap(() =>
-          this.translateService.selectTranslate(Object.values(this.labelMap)),
+          this.translateService.selectTranslateObject('shared.table.paginator'),
         ),
       )
       .subscribe((translation) => {
         Object.entries(this.labelMap).forEach(([key, value]) => {
-          this[key as unknown as TranslatableProperties] = translation[value];
+          this[key as unknown as TranslatableProperties] =
+            translation[value.split('.').slice(-1)[0]];
         });
         this.changes.next();
       });
@@ -63,10 +64,6 @@ export class SharedUtilPaginatorTranslation extends MatPaginatorIntl {
     pageSize: number,
     length: number,
   ): string => {
-    if (!this.translationsInitializedSig()) {
-      return '';
-    }
-
     return (
       this.translateService.translate(
         translatableShared('shared.table.paginator.range'),

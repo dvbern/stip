@@ -26,10 +26,10 @@ const initialState: DelegationState = {
 };
 
 const statusColorMap: Record<DelegierungStatus, StatusColor> = {
-  EINGEREICHT: 'caution',
+  EINGEREICHT: 'warn',
   AKZEPTIERT: 'success',
-  ABGELEHNT: 'warn',
-  BEENDET: 'warn',
+  ABGELEHNT: 'danger',
+  BEENDET: 'danger',
 } as const;
 
 @Injectable()

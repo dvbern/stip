@@ -176,12 +176,29 @@ export interface DokumentUpload {
   error?: { translationKey: string; values?: unknown };
 }
 
+export const DOKUMENT_THEMES = {
+  danger: {
+    backgroundColor: 'tw:bg-dv-main-danger-subtle',
+    textColor: 'tw:text-dv-main-danger',
+    color: 'danger',
+  },
+  info: {
+    backgroundColor: 'tw:bg-dv-main-info-subtle',
+    textColor: 'tw:text-dv-main-info',
+    color: 'info',
+  },
+  success: {
+    backgroundColor: 'tw:bg-dv-main-success-subtle',
+    textColor: 'tw:text-dv-main-success',
+    color: 'success',
+  },
+} as const;
+export type DokumentThemes = typeof DOKUMENT_THEMES;
+export type DokumentTheme = DokumentThemes[keyof DokumentThemes];
+
 export interface DokumentView extends DokumentUpload {
   state: 'uploading' | 'deleting' | 'done' | 'error';
-  theme:
-    | { icon: 'warning'; type: 'danger'; color: 'warn' }
-    | { icon: 'sync'; type: 'info'; color: 'info' }
-    | { icon: 'check'; type: 'success'; color: 'success' };
+  theme: DokumentTheme & { icon: string };
 }
 
 export interface DokumentListView {

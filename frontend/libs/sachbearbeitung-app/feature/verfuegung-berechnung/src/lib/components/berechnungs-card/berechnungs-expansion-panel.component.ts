@@ -24,19 +24,21 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
         [togglePosition]="'before'"
       >
         <mat-expansion-panel-header>
-          <mat-panel-title class="mb-0 me-0 d-flex py-3 h5">
-            <div class="d-flex flex-column flex-grow-1 h5">
+          <mat-panel-title class="tw:mb-0 tw:mr-0 tw:flex py-3 h5">
+            <div class="tw:flex tw:flex-col tw:grow h5">
               {{ view.titleKey | transloco }}
               @if (!panel.expanded) {
-                <span class="row fw-normal mt-1 fs-6 text-muted">
-                  <div class="col-12">
+                <span
+                  class="tw:grid tw:grid-cols-12 fw-normal tw:mt-1 fs-6 tw:text-dv-gray"
+                >
+                  <div class="tw:col-span-12">
                     {{ view.infoKey | transloco }}
                   </div>
                 </span>
               }
             </div>
             @if (!panel.expanded) {
-              <span class="text-end flex-grow-1 align-self-start text-nowrap">
+              <span class="tw:text-end tw:grow tw:self-start text-nowrap">
                 {{ view.total | formatChf }}
               </span>
             }

@@ -3,20 +3,6 @@
     border-radius: 1rem;
   }
 
-  .chip {
-    width: 24px;
-    height: 24px;
-
-    &.in_bearbeitung_gs {
-      background-color: var(--dv-blue-bg-subtle);
-      color: var(--dv-blue-bg);
-    }
-    &.komplett_eingereicht {
-      background-color: var(--dv-green-bg-subtle);
-      color: var(--dv-green-bg);
-    }
-  }
-
   .range {
     min-width: 90px;
   }

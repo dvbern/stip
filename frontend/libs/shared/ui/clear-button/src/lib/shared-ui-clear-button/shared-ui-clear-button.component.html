@@ -1,12 +1,12 @@
 @if (isVisibleSig()) {
   <button
-    class="btn btn-link btn-icon tw:!no-underline"
+    class="tw:dv-button-icon tw:no-underline"
     type="button"
     [attr.aria-label]="'shared.ui.clear' | transloco"
     (click)="clear.emit(); $event.stopPropagation()"
   >
-    <dv-shared-ui-icon-chip class="fs-7">
-      <i class="icon material-symbols-rounded fs-5">clear</i>
+    <dv-shared-ui-icon-chip class="tw:text-sm!">
+      <i class="icon material-symbols-rounded tw:text-lg!">clear</i>
     </dv-shared-ui-icon-chip>
   </button>
 }

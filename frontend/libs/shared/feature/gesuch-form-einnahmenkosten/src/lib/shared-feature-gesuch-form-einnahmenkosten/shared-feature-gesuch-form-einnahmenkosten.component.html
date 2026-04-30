@@ -13,18 +13,18 @@
         (gotReenabledSig)="gotReenabled$.next({})"
         data-testid="form-einnahmen-kosten-form"
         novalidate
-        class="mt-4"
+        class="testing-library-fix tw:mt-6"
         (ngSubmit)="handleSave()"
       >
-        <h3 class="mb-4">
+        <h2 class="tw:text-2xl tw:font-semibold tw:mb-6">
           {{ t('shared.form.einnahmenkosten.einnahmen.title') }}
-        </h3>
+        </h2>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6">
           <!-- NETTOERWERBSEINKOMMEN -->
-          <div class="tw:flex gap-2 align-content-center tw:flex-wrap col-12 col-md-6 col-xl-6">
-            <div class="tw:flex gap-2 flex-grow-1">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:flex-wrap tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <div class="tw:flex tw:gap-2 tw:grow">
+              <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.nettoerwerbseinkommen.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.nettoerwerbseinkommen"
@@ -50,7 +50,7 @@
             @if (!hiddenFieldsSetSig().has(form.controls.arbeitspensumProzent)) {
               <!-- ARBEITSPENSUM PROZENT -->
               <div class="tw:flex tw:max-w-44">
-                <mat-form-field dvSharedUiFormField class="flex-grow-1">
+                <mat-form-field dvSharedUiFormField class="tw:grow">
                   <mat-label>{{ t('shared.form.einnahmenkosten.arbeitspensumProzent.label') }}</mat-label>
                   <input
                     [formControl]="form.controls.arbeitspensumProzent"
@@ -69,10 +69,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- UNTERHALTSBEITRÄGE -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.unterhaltsbeitraege.label') }}</mat-label>
               <input
                 [formControl]="form.controls.unterhaltsbeitraege"
@@ -96,10 +96,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ZULAGEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.zulagen.label') }}</mat-label>
               <input
                 data-testid="form-einnahmen-kosten-zulagen"
@@ -122,10 +122,10 @@
             }
           </div>
         </div>
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- RENTEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.renten.label') }}</mat-label>
               <input
                 [formControl]="form.controls.renten"
@@ -149,10 +149,10 @@
             }
           </div>
         </div>
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- EO_LEISTUNGEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.eoLeistungen.label') }}</mat-label>
               <input
                 [formControl]="form.controls.eoLeistungen"
@@ -176,10 +176,10 @@
             }
           </div>
         </div>
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ERGAENZUNGSLEISTUNGEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.ergaenzungsleistungen.label') }}</mat-label>
               <input
                 [formControl]="form.controls.ergaenzungsleistungen"
@@ -203,10 +203,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- BEITRAEGE -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.beitraege.label') }}</mat-label>
               <input
                 [formControl]="form.controls.beitraege"
@@ -231,10 +231,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- EINNAHMEN BGSA -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.einnahmenBGSA.label') }}</mat-label>
               <input
                 [formControl]="form.controls.einnahmenBGSA"
@@ -259,10 +259,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- TAGGELDER AHV IV -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.taggelderAHVIV.label') }}</mat-label>
               <input
                 [formControl]="form.controls.taggelderAHVIV"
@@ -286,10 +286,10 @@
           </div>
         </div>
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- ANDERE EINNAHMEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.andereEinnahmen.label') }}</mat-label>
               <input
                 [formControl]="form.controls.andereEinnahmen"
@@ -315,15 +315,15 @@
         </div>
 
         <!-- KOSTEN -->
-        <h3 class="pt-5 mb-4">
+        <h2 class="tw:text-2xl tw:font-semibold tw:pt-12 tw:mb-6">
           {{ t('shared.form.einnahmenkosten.kosten.title') }}
-        </h3>
+        </h2>
 
         @let ausbildungsStufe = formStateSig().ausbiludungsStufe;
 
         @if (!hiddenFieldsSetSig().has(form.controls.ausbildungskosten)) {
-          <div class="row g-4">
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-label>{{ t(`shared.form.einnahmenkosten.ausbildungskosten.label.${ausbildungsStufe}`) }}</mat-label>
               <input
                 [formControl]="form.controls.ausbildungskosten"
@@ -334,7 +334,7 @@
               />
               <mat-hint *dvZuvorHint="formChanges.ausbildungskosten"></mat-hint>
               @if (ausbildungsStufe && istAusbildungskostenMoreThanLimitSig()) {
-                <mat-hint class="mat-caution">
+                <mat-hint class="tw:text-yellow-700">
                   {{
                     t(`shared.form.einnahmenkosten.ausbildungskosten.warning.${ausbildungsStufe}`, {
                       max: formStateSig().ausbildungsKostenLimit,
@@ -358,10 +358,10 @@
         }
 
         @if (!hiddenFieldsSetSig().has(form.controls.betreuungskostenKinder)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- BETREUUNGKOSTEN_KINDER -->
-            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+              <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.betreuungskostenKinder.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.betreuungskostenKinder"
@@ -386,10 +386,10 @@
           </div>
         }
 
-        <div class="row g-4">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
           <!-- FAHRKOSTEN -->
-          <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ t('shared.form.einnahmenkosten.fahrkosten.label') }}</mat-label>
               <input
                 [formControl]="form.controls.fahrkosten"
@@ -414,10 +414,10 @@
         </div>
 
         @if (!hiddenFieldsSetSig().has(form.controls.wohnkosten)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- WOHNKOSTEN -->
-            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+              <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.wohnkosten.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.wohnkosten"
@@ -442,10 +442,10 @@
           </div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.verpflegungskosten)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- VERPFLEGUNGSKOSTEN -->
-            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+              <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.verpflegungskosten.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.verpflegungskosten"
@@ -463,9 +463,9 @@
           </div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.auswaertigeMittagessenProWoche)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- ANZAHL AUSWÄRTIGER MITTAGESSEN PRO WOCHE -->
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.auswaertigeMittagessenProWoche.label') }}</mat-label>
               <input
                 [formControl]="form.controls.auswaertigeMittagessenProWoche"
@@ -486,10 +486,10 @@
           </div>
         }
         @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- WG WOHNEND -->
             <mat-radio-group
-              class="d-flex flex-column"
+              class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6 tw:flex tw:flex-col"
               [formControl]="form.controls.wgWohnend"
               data-testid="form-einnahmen-kosten-wgWohnend"
               dvSharedUiFormField
@@ -507,7 +507,10 @@
               </div>
             </mat-radio-group>
             @if (!hiddenFieldsSetSig().has(form.controls.wgAnzahlPersonen)) {
-              <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+              <mat-form-field
+                dvSharedUiFormField
+                class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6 tw:md:col-start-1 tw:xl:col-start-1"
+              >
                 <mat-label>{{ t('shared.form.einnahmenkosten.wgAnzahlPersonen.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.wgAnzahlPersonen"
@@ -528,7 +531,7 @@
             @if (!hiddenFieldsSetSig().has(form.controls.alternativeWohnformWohnend)) {
               <!-- alternative wohnform wohnend -->
               <mat-radio-group
-                class="d-flex flex-column"
+                class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6 tw:flex tw:flex-col tw:md:col-start-1 tw:xl:col-start-1"
                 [formControl]="form.controls.alternativeWohnformWohnend"
                 data-testid="form-einnahmen-kosten-alternativeWohnformWohnend"
                 dvSharedUiFormField
@@ -552,14 +555,14 @@
         }
 
         <!-- STEUERRELEVANTE DATEN -->
-        <h3 class="pt-5 mb-4">
+        <h2 class="tw:text-2xl tw:font-semibold tw:mt-6">
           {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
-        </h3>
+        </h2>
         @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
-          <div class="row g-4">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
             <!-- VERMOEGEN -->
-            <div class="d-flex gap-2 align-content-center col-12 col-md-6 col-xl-6">
-              <mat-form-field dvSharedUiFormField class="flex-grow-1">
+            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+              <mat-form-field dvSharedUiFormField class="tw:grow">
                 <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
                 <input
                   [formControl]="form.controls.vermoegen"
@@ -586,8 +589,8 @@
 
         <!-- STEUERJAHR -->
         @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
-          <div class="row g-4">
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.steuerjahr.label') }}</mat-label>
               <input
                 [formControl]="form.controls.steuerjahr"
@@ -610,8 +613,8 @@
 
         <!-- veranlagungsStatus -->
         @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsStatus)) {
-          <div class="row g-4">
-            <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-6">
+          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
               <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsStatus.label') }}</mat-label>
               <input
                 [formControl]="form.controls.veranlagungsStatus"
@@ -629,8 +632,8 @@
         }
 
         <!-- STEUERN KANTON / GEMEINDE -->
-        <div class="row g-4 readonly">
-          <mat-form-field class="col-12 col-md-6 col-xl-6">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 readonly tw:mt-6">
+          <mat-form-field class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
             <mat-label>{{ t('shared.form.einnahmenkosten.steuern.label') }}</mat-label>
             <input formControlName="steuern" data-testid="form-einnahmen-kosten-steuern" matInput type="text" />
             <mat-hint *dvZuvorHint="formChanges.steuern"></mat-hint>
@@ -640,20 +643,31 @@
         <!-- Buttons -->
         <dv-shared-ui-step-form-buttons>
           @if (!view.readonly) {
-            <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+            <button
+              type="submit"
+              class="testing-library-fix tw:dv-button-main-primary"
+              data-testid="button-save-continue"
+            >
               {{ t('shared.form.save-and-continue') }}
             </button>
           } @else {
-            <button type="button" data-testid="button-next" class="btn btn-primary" (click)="handleContinue()">
+            <button
+              type="button"
+              data-testid="button-next"
+              class="tw:dv-button-main-primary"
+              (click)="handleContinue()"
+            >
               {{ t('shared.form.gonext') }}
             </button>
           }
         </dv-shared-ui-step-form-buttons>
       </form>
     } @else {
-      <div class="row">
-        <div class="col-12 col-xl-8 my-3">
-          <dv-shared-ui-info-container class="d-block" data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
+      <div class="tw:grid tw:grid-cols-12">
+        <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
+          <dv-shared-ui-info-container
+            class="tw:block"
+            data-testid="gesuch-form-einnahmenkosten-data-incomplete-warning"
             >{{ t('shared.form.einnahmenkosten.top.incomplete') }}
             @for (schritt of formStateSig().schritte; track trackByIndex($index)) {
               <span>{{ ($last && !$first ? ' und ' : !$first ? ', ' : '') + '"' + t(schritt) }}"</span>

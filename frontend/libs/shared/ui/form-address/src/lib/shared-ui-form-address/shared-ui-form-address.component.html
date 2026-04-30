@@ -1,9 +1,9 @@
-<div class="row g-4" [formGroup]="group" [class.touched]="touchedSig()">
+<div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6" [formGroup]="group" [class.touched]="touchedSig()">
   <!-- touchedSig muessen wir irgendwo lesen, damit die change detection funktioniert, deshalb hier im html -->
 
   @let changes = adresseChangesSig();
   <!-- Strasse -->
-  <mat-form-field dvSharedUiFormField class="col-8 col-lg-4 pe-0">
+  <mat-form-field dvSharedUiFormField class="tw:col-span-8 tw:lg:col-span-4">
     <mat-label>{{ 'shared.form.shared.address.street.label' | transloco }}</mat-label>
     <input matInput dvMaxLength type="text" formControlName="strasse" data-testid="form-address-strasse" />
     <mat-hint *dvZuvorHint="changes.strasse"></mat-hint>
@@ -13,7 +13,7 @@
   </mat-form-field>
 
   <!-- Nr -->
-  <mat-form-field dvSharedUiFormField class="col-4 col-lg-2 ps-2">
+  <mat-form-field dvSharedUiFormField class="tw:col-span-4 tw:lg:col-span-2">
     <mat-label>{{ 'shared.form.shared.address.number.label' | transloco }}</mat-label>
     <input
       matInput
@@ -35,7 +35,7 @@
     [plzFormSig]="group.controls.plzOrt"
     (plzLookupValuesSig)="plzValues = $event"
   >
-    <mat-form-field dvSharedUiFormField class="col-5 col-md-4 col-lg-2 pe-2">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-5 tw:md:col-span-4 tw:lg:col-span-2">
       <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
       <input
         matInput
@@ -58,7 +58,7 @@
       </mat-autocomplete>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="col-7 col-md-8 col-lg-4 ps-0">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-7 tw:md:col-span-8 tw:lg:col-span-4">
       <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
       <input matInput dvMaxLength type="text" formControlName="ort" data-testid="form-address-ort" />
       <mat-hint *dvZuvorHint="changes.ort"></mat-hint>
@@ -69,7 +69,7 @@
   </ng-container>
 
   <!-- c/o -->
-  <mat-form-field dvSharedUiFormField class="col-12 col-md-6">
+  <mat-form-field dvSharedUiFormField class="testing-library-fix tw:col-span-12 tw:md:col-span-6">
     <mat-label
       >{{ 'shared.form.shared.address.co.label' | transloco }} ({{
         'shared.form.optional.label' | transloco
@@ -80,7 +80,7 @@
   </mat-form-field>
 
   <!-- Land -->
-  <div class="col-12 col-md-6">
+  <div class="testing-library-fix tw:col-span-12 tw:md:col-span-6">
     <dv-shared-ui-select-search
       formControlName="landId"
       [testIdSig]="'form-address-land'"

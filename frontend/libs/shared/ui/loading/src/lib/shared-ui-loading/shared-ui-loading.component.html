@@ -1,14 +1,14 @@
 <div
-  class="d-flex flex-grow-1 flex-column justify-content-center align-items-center col-lg-9"
+  class="tw:flex tw:grow tw:flex-col tw:justify-center tw:items-center tw:lg:col-span-9"
   [class.compact]="type !== 'spinner'"
-  [class.mt-4]="type === 'spinner'"
+  [class.tw:mt-6]="type === 'spinner'"
   [class.overlay]="overlay"
   *transloco="let t"
 >
-  <div class="spinner" [class.mb-3]="type === 'spinner'" [class.mb-1]="type === 'compact'"></div>
+  <div class="spinner" [class.tw:mb-4]="type === 'spinner'" [class.tw:mb-1]="type === 'compact'"></div>
   @if (type !== 'icon') {
     @if (loadingTextKey; as textKey) {
-      <div class="spinner-text" [class.fs-7]="type === 'compact'">{{ t(textKey) }}</div>
+      <div class="spinner-text" [class.tw:text-sm!]="type === 'compact'">{{ t(textKey) }}</div>
     }
   }
 </div>

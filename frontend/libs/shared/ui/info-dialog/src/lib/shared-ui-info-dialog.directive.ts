@@ -25,7 +25,6 @@ import {
 
 @Directive({
   selector: '[dvSharedUiInfoDialog]',
-  standalone: true,
   exportAs: 'dvSharedUiInfoDialog',
 })
 export class SharedUiInfoDialogDirective implements OnDestroy {

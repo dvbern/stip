@@ -1,13 +1,13 @@
 <button
   type="button"
-  class="dv-icon-button dv-icon-button-lg position-absolute end-0 top-0 m-2"
+  class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-2"
   [attr.aria-label]="'shared.dialog.unsavedChanges.cancel' | transloco"
   (click)="cancel()"
 >
   <span class="material-symbols-rounded">close</span>
 </button>
 <form [formGroup]="form" class="tw:flex tw:w-full tw:flex-col tw:gap-4 tw:p-6" (ngSubmit)="returnKorrektur()">
-  <h1 class="title h5 tw:!mb-6">
+  <h1 class="tw:text-xl tw:font-semibold tw:mb-6!">
     {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
   </h1>
   <mat-form-field dvSharedUiFormField class="tw:w-full">
@@ -25,10 +25,10 @@
     </mat-error>
   </mat-form-field>
   <div class="tw:mt-6 tw:flex tw:w-full tw:justify-end tw:gap-3">
-    <button type="button" class="btn btn-secondary" (click)="cancel()" data-testid="dialog-cancel">
+    <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
       {{ 'shared.ui.confirmDialog.cancel' | transloco }}
     </button>
-    <button type="submit" class="btn btn-primary" data-testid="dialog-confirm">
+    <button type="submit" class="tw:dv-button-main-primary" data-testid="dialog-confirm">
       {{ 'shared.form.save' | transloco }}
     </button>
   </div>
