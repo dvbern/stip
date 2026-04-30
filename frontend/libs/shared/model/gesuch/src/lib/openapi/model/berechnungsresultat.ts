@@ -45,6 +45,10 @@ export interface Berechnungsresultat {
      */
     anzahlMonateUnterbruch?: number;
     /**
+     * berechneter stipendienbetrag vor der Teilung in darlehen und stipendium
+     */
+    berechnungVorTeilungDarlehen: number;
+    /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
     berechnungStipendium: number;
@@ -56,5 +60,9 @@ export interface Berechnungsresultat {
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
+    /**
+     * Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung uberschreitet
+     */
+    monateMitDarlehen: number;
 }
 
