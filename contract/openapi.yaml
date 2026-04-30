@@ -10060,9 +10060,11 @@ components:
       required:
         - year
         - berechnungVorKuerzungUndTeilung
+        - berechnungVorTeilungDarlehen
         - berechnungStipendium
         - tranchenBerechnungsresultate
         - stipendienanspruch
+        - monateMitDarlehen
       type: object
       properties:
         year:
@@ -10095,6 +10097,11 @@ components:
         anzahlMonateUnterbruch:
           description: Die Anzahl Monate von dem Unterbruch der Ausbildung
           type: integer
+        berechnungVorTeilungDarlehen:
+          description: >-
+            berechneter stipendienbetrag vor der Teilung in darlehen und
+            stipendium
+          type: integer
         berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
           type: integer
@@ -10106,6 +10113,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
+        monateMitDarlehen:
+          description: >-
+            Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung
+            uberschreitet
+          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
