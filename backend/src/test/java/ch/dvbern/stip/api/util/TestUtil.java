@@ -743,6 +743,7 @@ public class TestUtil {
         final var baseGesuch = getGesuchForBerechnung(trancheUuid);
         baseGesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().plusMonths(1));
         baseGesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        baseGesuch.setEinreichedatum(LocalDate.now());
         return baseGesuch;
     }
 
