@@ -165,6 +165,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
   languageSig = this.store.selectSignal(selectLanguage);
+  gotReenabledSig = signal({});
 
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
@@ -529,6 +530,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ),
     );
     effect(() => {
+      this.gotReenabledSig();
       const isAusbildungAusland = !!isAusbildungAuslandSig();
 
       if (isAusbildungAusland) {
@@ -606,6 +608,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     // Show / hide fachrichtungBerufsbezeichnung based on zusatzfrage of ausbildungsgang
     effect(() => {
+      this.gotReenabledSig();
       const { readonly } = this.cachedGesuchViewSig();
       const ausbildungsgang = this.currentAusbildungsgangSig();
       updateVisbilityAndDisbledState({
