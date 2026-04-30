@@ -96,7 +96,8 @@ public class AntragsstellerV1 {
 
     public static AntragsstellerV1 buildFromDependants(
         final GesuchFormular gesuchFormular,
-        final int piaWohntInElternHaushalt
+        final int piaWohntInElternHaushalt,
+        final boolean teilzeitKinderBeiPiaAnrechnen
     ) {
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
         final var piaName = personInAusbildung.getVorname();
@@ -185,7 +186,9 @@ public class AntragsstellerV1 {
             }
             for (final var kind : gesuchFormular.getKinds()) {
                 if (kind.getWohnsitzAnteilPia() > 0) {
-                    anzahlPersonenImHaushalt += 1;
+                    if (kind.getWohnsitzAnteilPia() == 100 || teilzeitKinderBeiPiaAnrechnen) {
+                        anzahlPersonenImHaushalt += 1;
+                    }
                 }
             }
 

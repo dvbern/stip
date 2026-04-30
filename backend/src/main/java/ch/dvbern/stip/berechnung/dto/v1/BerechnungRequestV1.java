@@ -97,6 +97,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
         final ElternTyp elternTyp,
+        final boolean teilzeitKinderBeiPiaAnrechnen,
         final PersonenImHaushaltService personenImHaushaltService
     ) {
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
@@ -191,7 +192,8 @@ public class BerechnungRequestV1 implements CalculatorRequest {
 
         final var antragssteller = AntragsstellerV1.buildFromDependants(
             gesuchFormular,
-            piaWohntInElternHaushalt
+            piaWohntInElternHaushalt,
+            teilzeitKinderBeiPiaAnrechnen
         );
         final var anzahlMonate = DateUtil.getMonthsBetween(
             gesuchTranche.getGueltigkeit().getGueltigAb(),

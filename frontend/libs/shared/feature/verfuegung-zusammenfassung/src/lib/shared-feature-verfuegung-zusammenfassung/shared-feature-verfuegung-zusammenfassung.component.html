@@ -97,7 +97,7 @@
                 <button
                   type="button"
                   (click)="einreichefristInfoDialog.toggle()"
-                  class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
+                  class="tw:dv-button-icon tw:text-dv-blue"
                   [attr.aria-label]="t('toggle-info-messages')"
                 >
                   <span class="material-symbols-rounded tw:text-xl!"> info </span>
@@ -114,7 +114,7 @@
                         (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChf,
                   }"
                   #einreichefristInfoDialog="dvSharedUiInfoDialog"
-                  class="d-none"
+                  class="tw:hidden"
                 ></div>
               </div>
               <div>
@@ -130,7 +130,7 @@
                 <button
                   type="button"
                   (click)="unterbruchInfoDialog.toggle()"
-                  class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
+                  class="tw:dv-button-icon tw:text-dv-blue"
                   [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
                 >
                   <span class="material-symbols-rounded tw:text-xl!"> info </span>
@@ -147,7 +147,7 @@
                         (zusammenfassung.totalNachKuerzungUnterbruch ?? 0) | formatChf,
                   }"
                   #unterbruchInfoDialog="dvSharedUiInfoDialog"
-                  class="d-none"
+                  class="tw:hidden"
                 ></div>
               </div>
               <div>

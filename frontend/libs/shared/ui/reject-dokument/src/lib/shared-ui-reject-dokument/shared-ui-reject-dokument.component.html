@@ -1,20 +1,20 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="tw:flex tw:flex-col tw:relative tw:p-6 tw:rounded-lg">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:top-0 tw:right-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 mb-4 d-flex">
+  <h1 class="tw:text-xl tw:font-semibold tw:mb-6 tw:flex">
     {{ 'shared.dokumente.reject.title' | transloco }}
   </h1>
-  <p class="content mb-0" [innerHTML]="'shared.dokumente.reject.message' | transloco"></p>
+  <p class="content tw:mb-0" [innerHTML]="'shared.dokumente.reject.message' | transloco"></p>
 
-  <form [formGroup]="form" class="mt-4" novalidate>
-    <mat-form-field dvSharedUiFormField class="col-12">
+  <form [formGroup]="form" class="tw:mt-6 tw:grid" novalidate>
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12">
       <textarea
         rows="4"
         matInput
@@ -27,11 +27,16 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="d-flex mt-4 justify-content-between">
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
+    <div class="tw:flex tw:mt-6 tw:justify-between">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="rejectDocument()">
+      <button
+        type="submit"
+        [disabled]="form.invalid"
+        class="tw:dv-button-main-primary tw:ml-2"
+        (click)="rejectDocument()"
+      >
         {{ 'shared.dokumente.reject.action' | transloco }}
       </button>
     </div>

@@ -48,7 +48,7 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
                   <i class="material-symbols-rounded">keyboard_arrow_down</i>
                 }
               </div>
-              <span class="text-end align-self-start text-nowrap">
+              <span class="tw:text-end tw:self-start tw:text-nowrap">
                 {{ view.total | formatChf }}
               </span>
             </div>

@@ -432,7 +432,7 @@ const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatusFrontend }>(
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
 const statusColorMap: Record<GueltigkeitStatusFrontend, StatusColor> = {
-  ENTWURF: 'caution',
+  ENTWURF: 'warn',
   ARCHIVIERT: 'primary',
   PUBLIZIERT: 'success',
   PUBLIZIERT_INAKTIV: 'success',

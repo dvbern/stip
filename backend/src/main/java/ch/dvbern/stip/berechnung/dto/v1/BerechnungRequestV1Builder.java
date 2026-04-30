@@ -37,12 +37,14 @@ public class BerechnungRequestV1Builder implements BerechnungRequestBuilder {
     public CalculatorRequest buildRequest(
         Gesuch gesuch,
         GesuchTranche gesuchTranche,
-        ElternTyp elternTyp
+        ElternTyp elternTyp,
+        boolean teilzeitKinderBeiPiaAnrechnen
     ) {
         return BerechnungRequestV1.createRequest(
             gesuch,
             gesuchTranche,
             elternTyp,
+            teilzeitKinderBeiPiaAnrechnen,
             personenImHaushaltService
         );
     }

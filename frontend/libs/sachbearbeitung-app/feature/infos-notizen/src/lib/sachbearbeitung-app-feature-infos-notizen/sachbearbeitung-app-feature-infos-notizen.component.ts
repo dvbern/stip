@@ -15,7 +15,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -82,7 +81,6 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   permissionStore = inject(PermissionStore);
   // eslint-disable-next-line @angular-eslint/no-input-rename
   gesuchIdSig = input.required<string>({ alias: 'gesuchId' });
-  sortSig = viewChild(MatSort);
   paginatorSig = viewChild(MatPaginator);
 
   canCreateJurNotizSig = computed(() => {
@@ -104,7 +102,6 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
   notizSig = computed(() => {
     const notiz = this.notizStore.notizenListViewSig();
     const datasource = new MatTableDataSource(notiz);
-    datasource.sort = this.sortSig() ?? null;
     datasource.paginator = this.paginatorSig() ?? null;
     return datasource;
   });

@@ -1,6 +1,6 @@
 <button
   type="button"
-  class="dv-icon-button dv-icon-button-lg tw:!absolute tw:end-0 tw:top-0 tw:!m-1"
+  class="tw:dv-button-icon tw:!absolute tw:end-0 tw:top-0 tw:!m-1"
   [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
@@ -33,13 +33,13 @@
   </div>
 
   @if (changeGesuchsperiodeErrorSig()?.length) {
-    <dv-shared-ui-info-container class="d-block" [type]="'warning'" data-testid="alert-warning">
-      <div class="d-flex gap-2">
-        <span class="text-warning material-symbols-rounded me-3">warning</span>
+    <dv-shared-ui-info-container class="tw:block" [type]="'warning'" data-testid="alert-warning">
+      <div class="tw:flex tw:gap-2">
+        <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
         <span [innerHTML]="'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error' | transloco"></span>
       </div>
 
-      <ul class="mt-4">
+      <ul class="tw:mt-6">
         @for (step of changeGesuchsperiodeErrorSig(); track step) {
           @if (step.routeParts; as link) {
             <li>
@@ -52,7 +52,7 @@
   }
 
   <div class="tw:mt-10 tw:flex tw:justify-between">
-    <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+    <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
       {{ 'shared.cancel' | transloco }}
     </button>
     <dv-shared-ui-form-save

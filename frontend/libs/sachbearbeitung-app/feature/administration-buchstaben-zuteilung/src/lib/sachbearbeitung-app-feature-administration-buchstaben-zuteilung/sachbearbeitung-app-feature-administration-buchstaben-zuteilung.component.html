@@ -17,7 +17,7 @@
 
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:whitespace-nowrap">
-            <label class="pe-none" for="fallNummer">{{
+            <label class="tw:pointer-events-none" for="fallNummer">{{
               'sachbearbeitung-app.admin.buchstabenZuteilung.table.sachbearbeiter' | transloco
             }}</label>
             <div class="tw:relative tw:flex">
@@ -37,56 +37,60 @@
                 />
               </mat-form-field>
               <dv-shared-ui-clear-button
-                class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                 (clear)="filter.value = ''"
                 [valueSig]="filter.value"
               ></dv-shared-ui-clear-button>
             </div>
           </th>
-          <td mat-cell class="py-1" *matCellDef="let element">{{ element.fullName }}</td>
+          <td mat-cell class="tw:py-1" *matCellDef="let element">{{ element.fullName }}</td>
         </ng-container>
         <ng-container matColumnDef="buchstabenDe">
           <th mat-header-cell *matHeaderCellDef class="tw:align-top">
             {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.DE' | transloco }}
           </th>
-          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
-            <mat-checkbox
-              (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'De')"
-              formControlName="enabledDe"
-              [matTooltip]="'shared.language.DEUTSCH' | transloco"
-            ></mat-checkbox>
-            <mat-form-field dvSharedUiFormField>
-              <input
-                [maskito]="zuweisungInputMask"
-                matInput
-                dvMaxLength
-                type="text"
-                formControlName="buchstabenDe"
-                (blur)="normalizeZuweisung(element.benutzerId, 'De')"
-              />
-            </mat-form-field>
+          <td mat-cell class="tw:py-1 tw:font-normal" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <div class="tw:flex">
+              <mat-checkbox
+                (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'De')"
+                formControlName="enabledDe"
+                [matTooltip]="'shared.language.DEUTSCH' | transloco"
+              ></mat-checkbox>
+              <mat-form-field dvSharedUiFormField>
+                <input
+                  [maskito]="zuweisungInputMask"
+                  matInput
+                  dvMaxLength
+                  type="text"
+                  formControlName="buchstabenDe"
+                  (blur)="normalizeZuweisung(element.benutzerId, 'De')"
+                />
+              </mat-form-field>
+            </div>
           </td>
         </ng-container>
         <ng-container matColumnDef="buchstabenFr">
           <th mat-header-cell *matHeaderCellDef class="tw:align-top">
             {{ 'sachbearbeitung-app.admin.buchstabenZuteilung.table.zuteilung.FR' | transloco }}
           </th>
-          <td mat-cell class="py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
-            <mat-checkbox
-              (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'Fr')"
-              formControlName="enabledFr"
-              [matTooltip]="'shared.language.FRANZOESISCH' | transloco"
-            ></mat-checkbox>
-            <mat-form-field dvSharedUiFormField>
-              <input
-                [maskito]="zuweisungInputMask"
-                matInput
-                dvMaxLength
-                type="text"
-                formControlName="buchstabenFr"
-                (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
-              />
-            </mat-form-field>
+          <td mat-cell class="tw:py-1" *matCellDef="let element" [formGroupName]="element.benutzerId">
+            <div class="tw:flex">
+              <mat-checkbox
+                (change)="shouldHandleLanguage($event.checked, element.benutzerId, 'Fr')"
+                formControlName="enabledFr"
+                [matTooltip]="'shared.language.FRANZOESISCH' | transloco"
+              ></mat-checkbox>
+              <mat-form-field dvSharedUiFormField>
+                <input
+                  [maskito]="zuweisungInputMask"
+                  matInput
+                  dvMaxLength
+                  type="text"
+                  formControlName="buchstabenFr"
+                  (blur)="normalizeZuweisung(element.benutzerId, 'Fr')"
+                />
+              </mat-form-field>
+            </div>
           </td>
         </ng-container>
 

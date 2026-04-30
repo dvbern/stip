@@ -1,7 +1,11 @@
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Observable, combineLatest, interval, map, takeWhile } from 'rxjs';
 
-import { DokumentUpload, DokumentView } from '@dv/shared/model/dokument';
+import {
+  DOKUMENT_THEMES,
+  DokumentUpload,
+  DokumentView,
+} from '@dv/shared/model/dokument';
 
 const PROGRESS_ANIMATION_TIME = 600;
 const FORMAT_ERROR = 'shared.file.invalidFormat';
@@ -51,15 +55,24 @@ export function toHumanReadableError(
     : { translationKey: GENERIC_ERROR };
 }
 
-export const UPLOAD_THEME_MAP: Record<
-  DokumentView['state'],
-  DokumentView['theme']
-> = {
-  error: { icon: 'warning', type: 'danger', color: 'warn' },
-  deleting: { icon: 'sync', type: 'info', color: 'info' },
-  uploading: { icon: 'sync', type: 'info', color: 'info' },
-  done: { icon: 'check', type: 'success', color: 'success' },
-};
+export const UPLOAD_THEME_MAP = {
+  error: {
+    icon: 'warning',
+    ...DOKUMENT_THEMES.danger,
+  },
+  deleting: {
+    icon: 'sync',
+    ...DOKUMENT_THEMES.info,
+  },
+  uploading: {
+    icon: 'sync',
+    ...DOKUMENT_THEMES.info,
+  },
+  done: {
+    icon: 'check',
+    ...DOKUMENT_THEMES.success,
+  },
+} satisfies Record<DokumentView['state'], unknown>;
 
 export const checkDocumentState = (
   document: DokumentUpload,

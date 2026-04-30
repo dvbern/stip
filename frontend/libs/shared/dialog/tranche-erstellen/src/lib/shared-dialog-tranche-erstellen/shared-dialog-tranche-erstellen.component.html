@@ -1,6 +1,6 @@
 <button
   type="button"
-  class="dv-icon-button dv-icon-button-lg position-absolute end-0 top-0 m-2"
+  class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-2"
   [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
@@ -9,15 +9,15 @@
 <form
   [formGroup]="form"
   data-testid="form-aenderung-melden-dialog-form"
-  class="tw:block tw:max-w-[580px] p-4"
+  class="tw:block tw:max-w-145 tw:p-6"
   (ngSubmit)="confirm()"
 >
-  <h3 class="mb-4">
+  <h1 class="tw:text-2xl tw:font-semibold tw:mb-6">
     {{ titleKeys.title | transloco }}
-  </h3>
-  <div class="mb-4" [innerHTML]="titleKeys.text | transloco"></div>
-  <div class="row">
-    <div class="col-6">
+  </h1>
+  <div class="tw:mb-6" [innerHTML]="titleKeys.text | transloco"></div>
+  <div class="tw:grid tw:grid-cols-12 tw:gap-3">
+    <div class="tw:col-span-6">
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.von.label' | transloco }}</mat-label>
         <input
@@ -43,7 +43,7 @@
         </mat-error>
       </mat-form-field>
     </div>
-    <div class="col-6">
+    <div class="tw:col-span-6">
       <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ 'shared.dialog.gesuch-aenderung.bis.label' | transloco }}</mat-label>
         <input
@@ -72,8 +72,8 @@
       <mat-error> {{ 'shared.form.error.dateRangeTooShort' | transloco }}</mat-error>
     }
   </div>
-  <div class="row mt-4">
-    <mat-form-field class="col-12" dvSharedUiFormField>
+  <div class="tw:grid tw:grid-cols-12 tw:mt-6">
+    <mat-form-field class="tw:col-span-12" dvSharedUiFormField>
       <mat-label>{{ 'shared.dialog.gesuch-aenderung.comment.label' | transloco }}</mat-label>
       <textarea
         matInput
@@ -87,13 +87,13 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="d-flex justify-content-between mt-5">
-    <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="cancel()">
+  <div class="tw:flex tw:justify-between tw:mt-8">
+    <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
       {{ 'shared.cancel' | transloco }}
     </button>
     <dv-shared-ui-form-save
       data-testid="dialog-confirm"
-      class="ms-2"
+      class="tw:ml-2"
       [disabled]="form.invalid || form.pristine"
       [loading]="gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending: { ignoreInitial: true }"
     ></dv-shared-ui-form-save>

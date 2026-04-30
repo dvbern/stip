@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
@@ -32,6 +33,7 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -274,7 +276,7 @@ public class BerechnungService {
             kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
         }
 
-        final var teilZeitKinderInHaushalten = kinderDerElternInHaushalten.stream()
+        final var teilzeitKinderDerElternInHaushalten = kinderDerElternInHaushalten.stream()
             .filter(
                 geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(), BigDecimal.ZERO)
                     .intValue() > 0
@@ -283,121 +285,178 @@ public class BerechnungService {
             )
             .toList();
 
-        int noKinderOhneEigenenHaushalt = teilZeitKinderInHaushalten.size();
+        int noKinderDerElternOhneEigenenHaushalt = teilzeitKinderDerElternInHaushalten.size();
+
+        final var teilzeitKinderDerPia = gesuchFormular.getKinds()
+            .stream()
+            .filter(kind -> kind.getWohnsitzAnteilPia() > 0 && kind.getWohnsitzAnteilPia() < 100)
+            .toList();
 
         List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
         List<ElternTyp> toSolveFor;
         if (gesuchFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
             toSolveFor = List.of(ElternTyp.VATER);
+        } else if (gesuchFormular.getElterns().isEmpty()) {
+            toSolveFor = List.of(ElternTyp.MUTTER);
         } else {
-            toSolveFor = List.of(ElternTyp.MUTTER, ElternTyp.VATER);
+            toSolveFor = gesuchFormular.getElterns().stream().map(Eltern::getElternTyp).toList();
         }
 
-        for (final var elternTypToSolveFor : toSolveFor) {
-            final var berechnungsRequest = getBerechnungRequest(
-                majorVersion,
-                minorVersion,
-                gesuchTranche.getGesuch(),
-                gesuchTranche,
-                elternTypToSolveFor
-            );
+        var teilzeitKinderBeiPiaAnrechnenLoopVals = Set.of(Boolean.TRUE);
+        if (!teilzeitKinderDerPia.isEmpty()) {
+            teilzeitKinderBeiPiaAnrechnenLoopVals = Set.of(Boolean.TRUE, Boolean.FALSE);
+        }
 
-            final var stipendienCalculated = calculateStipendien(berechnungsRequest);
-
-            final List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
-
-            final var steuerdatenList = steuerdaten.stream()
-                .sorted(
-                    Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
-                )
-                .toList();
-
-            for (int i = 0; i < steuerdatenList.size(); i++) {
-                familienBudgetresultatList.add(
-                    stipendienCalculated.getFamilienBudgetresultate().get(i)
+        for (final var teilzeitKinderBeiPiaAnrechnenLoopVal : teilzeitKinderBeiPiaAnrechnenLoopVals) {
+            for (final var elternTypToSolveFor : toSolveFor) {
+                final var berechnungsRequest = getBerechnungRequest(
+                    majorVersion,
+                    minorVersion,
+                    gesuchTranche.getGesuch(),
+                    gesuchTranche,
+                    elternTypToSolveFor,
+                    teilzeitKinderBeiPiaAnrechnenLoopVal
                 );
+
+                final var stipendienCalculated = calculateStipendien(berechnungsRequest);
+
+                final List<FamilienBudgetresultatDto> familienBudgetresultatList = new ArrayList<>();
+
+                final var steuerdatenList = steuerdaten.stream()
+                    .sorted(
+                        Comparator.comparing(Steuerdaten::getSteuerdatenTyp)
+                    )
+                    .toList();
+
+                for (int i = 0; i < steuerdatenList.size(); i++) {
+                    familienBudgetresultatList.add(
+                        stipendienCalculated.getFamilienBudgetresultate().get(i)
+                    );
+                }
+
+                if (
+                    steuerdaten.size() <= 1
+                    || noKinderDerElternOhneEigenenHaushalt == 0
+                ) {
+                    if (
+                        berechnungsresultatDtoList.size() == teilzeitKinderBeiPiaAnrechnenLoopVals.size()
+                    ) {
+                        continue;
+                    }
+
+                    // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
+                    final var total = Math.min(0, stipendienCalculated.getStipendien());
+
+                    berechnungsresultatDtoList.add(
+                        new TranchenBerechnungsresultatDto(
+                            total,
+                            gesuchTranche.getGueltigkeit().getGueltigAb(),
+                            gesuchTranche.getGueltigkeit().getGueltigBis(),
+                            DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
+                            DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
+                            yearRange,
+                            gesuchTranche.getId(),
+                            BigDecimal.ONE,
+                            teilzeitKinderBeiPiaAnrechnenLoopVal,
+                            BigDecimal.ONE,
+                            berechnungsStammdatenFromRequest(
+                                berechnungsRequest,
+                                majorVersion,
+                                minorVersion
+                            ),
+                            stipendienCalculated.getPersoenlichesBudgetresultat(),
+                            familienBudgetresultatList
+                        )
+                    );
+                } else {
+                    // To address differences in the stipendienberechnung based on how many kids are in the households
+                    // and
+                    // how their care is divided between father and mother,
+                    // we calculate how many "kidpercentages" each household has and divide this by the total number of
+                    // kids
+                    // in all households.
+                    // This value can then be multiplied with the respective stipendienberechnung to get a proportianal
+                    // stipendienamount.
+                    BigDecimal kinderDerElternProzente = BigDecimal.ZERO;
+
+                    for (final var kindDerElternInHaushalten : teilzeitKinderDerElternInHaushalten) {
+                        kinderDerElternProzente =
+                            kinderDerElternProzente
+                                .add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
+                    }
+
+                    final BigDecimal kinderDerElternProzenteNormalized = kinderDerElternProzente.divide(
+                        BigDecimal.valueOf(teilzeitKinderDerElternInHaushalten.size()),
+                        2,
+                        RoundingMode.HALF_UP
+                    );
+
+                    // Calculate the total stipendien amount based on the respective amounts and their relative kid
+                    // percentages.
+                    var berechnetStipendien = kinderDerElternProzenteNormalized.multiply(
+                        BigDecimal.valueOf(stipendienCalculated.getStipendien())
+                            .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+                    ).intValue();
+
+                    // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
+                    berechnetStipendien = Math.min(0, berechnetStipendien);
+
+                    berechnungsresultatDtoList.add(
+                        new TranchenBerechnungsresultatDto(
+                            berechnetStipendien,
+                            gesuchTranche.getGueltigkeit().getGueltigAb(),
+                            gesuchTranche.getGueltigkeit().getGueltigBis(),
+                            DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
+                            DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
+                            yearRange,
+                            gesuchTranche.getId(),
+                            kinderDerElternProzenteNormalized,
+                            teilzeitKinderBeiPiaAnrechnenLoopVal,
+                            BigDecimal.ONE,
+                            berechnungsStammdatenFromRequest(
+                                berechnungsRequest,
+                                majorVersion,
+                                minorVersion
+                            ),
+                            stipendienCalculated.getPersoenlichesBudgetresultat(),
+                            familienBudgetresultatList
+                        )
+                    );
+                }
+            }
+        }
+        if (teilzeitKinderBeiPiaAnrechnenLoopVals.size() > 1) {
+            BigDecimal kinderDerPiaProzente = BigDecimal.ZERO;
+
+            for (final var kindDerPia : teilzeitKinderDerPia) {
+                kinderDerPiaProzente =
+                    kinderDerPiaProzente.add(BigDecimal.valueOf(kindDerPia.getWohnsitzAnteilPia()));
             }
 
-            if (
-                steuerdaten.size() <= 1
-                || noKinderOhneEigenenHaushalt == 0
-            ) {
-                if (!berechnungsresultatDtoList.isEmpty()) {
-                    continue;
+            final BigDecimal kinderDerPiAProzenteNormalized = kinderDerPiaProzente.divide(
+                BigDecimal.valueOf(teilzeitKinderDerPia.size()),
+                2,
+                RoundingMode.HALF_UP
+            );
+
+            final BigDecimal kinderDerPiAProzenteNormalizedInverted =
+                BigDecimal.valueOf(100).subtract(kinderDerPiAProzenteNormalized);
+
+            for (final var berechnungsresultatDto : berechnungsresultatDtoList) {
+                var kinderDerPiAProzenteToUse = kinderDerPiAProzenteNormalized;
+                if (!berechnungsresultatDto.getTeilzeitKinderBeiPiaAnrechnen()) {
+                    kinderDerPiAProzenteToUse = kinderDerPiAProzenteNormalizedInverted;
                 }
-
-                // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
-                final var total = Math.min(0, stipendienCalculated.getStipendien());
-
-                berechnungsresultatDtoList.add(
-                    new TranchenBerechnungsresultatDto(
-                        total,
-                        gesuchTranche.getGueltigkeit().getGueltigAb(),
-                        gesuchTranche.getGueltigkeit().getGueltigBis(),
-                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
-                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
-                        yearRange,
-                        gesuchTranche.getId(),
-                        BigDecimal.ONE,
-                        berechnungsStammdatenFromRequest(
-                            berechnungsRequest,
-                            majorVersion,
-                            minorVersion
-                        ),
-                        stipendienCalculated.getPersoenlichesBudgetresultat(),
-                        familienBudgetresultatList
-                    )
-                );
-            } else {
-                // To address differences in the stipendienberechnung based on how many kids are in the households and
-                // how their care is divided between father and mother,
-                // we calculate how many "kidpercentages" each household has and divide this by the total number of kids
-                // in all households.
-                // This value can then be multiplied with the respective stipendienberechnung to get a proportianal
-                // stipendienamount.
-                BigDecimal kinderProzente = BigDecimal.ZERO;
-
-                for (final var kindDerElternInHaushalten : teilZeitKinderInHaushalten) {
-                    kinderProzente =
-                        kinderProzente.add(kindDerElternInHaushalten.getWohnsitzAnteil(elternTypToSolveFor));
-                }
-
-                final BigDecimal kinderProzenteNormalized = kinderProzente.divide(
-                    BigDecimal.valueOf(teilZeitKinderInHaushalten.size()),
-                    2,
-                    RoundingMode.HALF_UP
-                );
 
                 // Calculate the total stipendien amount based on the respective amounts and their relative kid
                 // percentages.
-                var berechnetStipendien = kinderProzenteNormalized.multiply(
-                    BigDecimal.valueOf(stipendienCalculated.getStipendien())
+                var berechnetStipendien = kinderDerPiAProzenteToUse.multiply(
+                    BigDecimal.valueOf(berechnungsresultatDto.getTotal())
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
-
-                // KSTIP-2548: positive Zwischenbeiträge/Teilrechnungen auf 0 setzen
-                berechnetStipendien = Math.min(0, berechnetStipendien);
-
-                berechnungsresultatDtoList.add(
-                    new TranchenBerechnungsresultatDto(
-                        berechnetStipendien,
-                        gesuchTranche.getGueltigkeit().getGueltigAb(),
-                        gesuchTranche.getGueltigkeit().getGueltigBis(),
-                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
-                        DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
-                        yearRange,
-                        gesuchTranche.getId(),
-                        kinderProzenteNormalized,
-                        berechnungsStammdatenFromRequest(
-                            berechnungsRequest,
-                            majorVersion,
-                            minorVersion
-                        ),
-                        stipendienCalculated.getPersoenlichesBudgetresultat(),
-                        familienBudgetresultatList
-                    )
-                );
+                berechnungsresultatDto.setTotal(berechnetStipendien);
+                berechnungsresultatDto.setBerechnungsanteilKinderPia(kinderDerPiaProzente);
             }
         }
         return berechnungsresultatDtoList.stream();
@@ -408,7 +467,8 @@ public class BerechnungService {
         final int minorVersion,
         final Gesuch gesuch,
         final GesuchTranche gesuchTranche,
-        final ElternTyp elternTyp
+        final ElternTyp elternTyp,
+        final boolean teilzeitKinderBeiPiaAnrechnen
     ) {
         final var builder = berechnungRequests.stream().filter(berechnungRequestBuilder -> {
             final var versionAnnotation = berechnungRequestBuilder.getClass().getAnnotation(CalculatorVersion.class);
@@ -427,7 +487,8 @@ public class BerechnungService {
             .buildRequest(
                 gesuch,
                 gesuchTranche,
-                elternTyp
+                elternTyp,
+                teilzeitKinderBeiPiaAnrechnen
             );
     }
 

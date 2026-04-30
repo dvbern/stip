@@ -1,6 +1,6 @@
 <ng-container *transloco="let t">
-  <div class="tw:flex tw:justify-between tw:mb-3">
-    <h1 class="tw:text-2xl!" data-testid="cockpit-title">
+  <div class="tw:flex tw:justify-between tw:mb-4">
+    <h1 class="tw:text-2xl tw:font-semibold" data-testid="cockpit-title">
       @if (isDarlehenModeSig()) {
         {{ t('sachbearbeitung-app.darlehen.title') }}
       } @else {
@@ -13,7 +13,7 @@
       <button
         [disabled]="massendruckStore.createMassendruckLoadingSig()"
         type="button"
-        class="btn btn-danger tw:font-semibold! tw:whitespace-nowrap"
+        class="tw:dv-button-main-danger tw:font-semibold! tw:whitespace-nowrap"
         (click)="createMassendruckJobForQueryType$()"
       >
         @if (queryFromInputsSig().query.includes('VERFUEGUNGEN')) {
@@ -48,7 +48,7 @@
   @if (!isDarlehenModeSig()) {
     <div class="tw:dv-table tw:shadow-none tw:mt-0">
       <form class="tw:relative tw:flex tw:flex-col tw:max-h-full" [formGroup]="filterForm">
-        <div [class.opacity-50]="gesuchStore.cockpitViewSig().loading" class="tw:overflow-auto tw:shrink">
+        <div [class.tw:opacity-50]="gesuchStore.cockpitViewSig().loading" class="tw:overflow-auto tw:shrink">
           <table
             class="tw:dv-full-width-table"
             [dvSharedUiFocusableList]="items"
@@ -69,7 +69,9 @@
 
             <ng-container matColumnDef="FALLNUMMER">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                <label class="pe-none" for="fallNummer">{{ t('sachbearbeitung-app.cockpit.table.fall') }}</label>
+                <label class="tw:pointer-events-none" for="fallNummer">{{
+                  t('sachbearbeitung-app.cockpit.table.fall')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -84,7 +86,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.fallNummer.reset()"
                     [valueSig]="filterForm.controls.fallNummer.value"
                   ></dv-shared-ui-clear-button>
@@ -96,6 +98,7 @@
                 class="tw:w-32 tw:whitespace-nowrap"
               >
                 <a
+                  class="tw:underline"
                   [routerLink]="
                     typSig() === 'AENDERUNG'
                       ? ['/gesuch/info', gesuch.id, 'aenderung', gesuch.trancheId]
@@ -110,7 +113,9 @@
 
             <ng-container matColumnDef="PIA_NACHNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="piaNachname">{{ t('sachbearbeitung-app.cockpit.table.nachname') }}</label>
+                <label class="tw:pointer-events-none" for="piaNachname">{{
+                  t('sachbearbeitung-app.cockpit.table.nachname')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -124,7 +129,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaNachname.reset()"
                     [valueSig]="filterForm.controls.piaNachname.value"
                   ></dv-shared-ui-clear-button>
@@ -142,7 +147,9 @@
 
             <ng-container matColumnDef="PIA_VORNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="piaVorname">{{ t('sachbearbeitung-app.cockpit.table.vorname') }}</label>
+                <label class="tw:pointer-events-none" for="piaVorname">{{
+                  t('sachbearbeitung-app.cockpit.table.vorname')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -156,7 +163,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaVorname.reset()"
                     [valueSig]="filterForm.controls.piaVorname.value"
                   ></dv-shared-ui-clear-button>
@@ -179,9 +186,8 @@
                 mat-sort-header
                 [start]="'desc'"
                 class="filtered tw:w-40 tw:whitespace-nowrap"
-                example="01.01.2000"
               >
-                <label class="pe-none" for="piaGeburtsdatum">{{
+                <label class="tw:pointer-events-none" for="piaGeburtsdatum">{{
                   t('sachbearbeitung-app.cockpit.table.geburtsdatum')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -199,18 +205,18 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="tw:dv-button tw:text-gray-400 tw:p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaGeburtsdatum.reset()"
                     [valueSig]="filterForm.controls.piaGeburtsdatum.value"
                   ></dv-shared-ui-clear-button>
@@ -228,7 +234,6 @@
                   <mat-select
                     [aria-label]="t('sachbearbeitung-app.cockpit.table.status')"
                     formControlName="status"
-                    class="tw:!font-normal"
                     [placeholder]="t('sachbearbeitung-app.cockpit.no-status-filter')"
                     panelClass="table-select"
                   >
@@ -256,7 +261,9 @@
 
             <ng-container matColumnDef="BEARBEITER">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="bearbeiter">{{ t('sachbearbeitung-app.cockpit.table.bearbeiter') }}</label>
+                <label class="tw:pointer-events-none" for="bearbeiter">{{
+                  t('sachbearbeitung-app.cockpit.table.bearbeiter')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -270,7 +277,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.bearbeiter.reset()"
                     [valueSig]="filterForm.controls.bearbeiter.value"
                   ></dv-shared-ui-clear-button>
@@ -294,7 +301,7 @@
                 [start]="'desc'"
                 class="filtered tw:w-40 tw:whitespace-nowrap"
               >
-                <label class="pe-none" for="letzteAktivitaet">{{
+                <label class="tw:pointer-events-none" for="letzteAktivitaet">{{
                   t('sachbearbeitung-app.cockpit.table.letzteAktivitaet')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -312,16 +319,16 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="tw:dv-button tw:text-gray-400 tw:p-1!"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="letzteAktivitaetRangePicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-date-range-input
-                      class="d-none w-100"
+                      class="tw:hidden! tw:w-full"
                       [rangePicker]="letzteAktivitaetRangePicker"
                       (click)="$event.stopPropagation()"
                     >
@@ -339,7 +346,7 @@
                     <mat-date-range-picker #letzteAktivitaetRangePicker></mat-date-range-picker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="
                       filterStartEndForm.controls.letzteAktivitaetFrom.reset();
                       filterStartEndForm.controls.letzteAktivitaetTo.reset()
@@ -387,7 +394,7 @@
         ></mat-paginator>
         @if (gesuchStore.cockpitViewSig().loading) {
           <dv-shared-ui-loading
-            class="position-absolute translate-middle start-50 top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }
@@ -399,7 +406,7 @@
   @if (isDarlehenModeSig()) {
     <div class="tw:dv-table tw:shadow-none">
       <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
-        <div [class.opacity-50]="darlehenStore.dashboardViewSig().loading">
+        <div [class.tw:opacity-50]="darlehenStore.dashboardViewSig().loading">
           <table
             [dvSharedUiFocusableList]="items"
             [dataSource]="darlehenDataSourceSig()"
@@ -417,7 +424,7 @@
 
             <ng-container matColumnDef="FALLNUMMER">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                <label class="pe-none" for="darlehenFallNummer">{{
+                <label class="tw:pointer-events-none" for="darlehenFallNummer">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.fallNummer')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -434,7 +441,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.fallNummer.reset()"
                     [valueSig]="filterForm.controls.fallNummer.value"
                   ></dv-shared-ui-clear-button>
@@ -446,6 +453,7 @@
                 class="tw:w-32 tw:whitespace-nowrap"
               >
                 <a
+                  class="tw:underline"
                   [routerLink]="['/gesuch', 'darlehen', darlehen.id, 'gesuch', darlehen.relatedGesuchId]"
                   (click)="$event.stopPropagation()"
                 >
@@ -456,7 +464,7 @@
 
             <ng-container matColumnDef="PIA_NACHNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="darlehenPiaNachname">{{
+                <label class="tw:pointer-events-none" for="darlehenPiaNachname">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.nachname')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -472,7 +480,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaNachname.reset()"
                     [valueSig]="filterForm.controls.piaNachname.value"
                   ></dv-shared-ui-clear-button>
@@ -490,7 +498,7 @@
 
             <ng-container matColumnDef="PIA_VORNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="darlehenPiaVorname">{{
+                <label class="tw:pointer-events-none" for="darlehenPiaVorname">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.vorname')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -506,7 +514,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaVorname.reset()"
                     [valueSig]="filterForm.controls.piaVorname.value"
                   ></dv-shared-ui-clear-button>
@@ -531,7 +539,7 @@
                 class="filtered tw:w-40 tw:whitespace-nowrap"
                 example="01.01.2000"
               >
-                <label class="pe-none" for="darlehenPiaGeburtsdatum">{{
+                <label class="tw:pointer-events-none" for="darlehenPiaGeburtsdatum">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.geburtsdatum')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -549,18 +557,18 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="tw:dv-button tw:text-gray-400 tw:p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="darlehenGeburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #darlehenGeburtsdatumDatepicker></mat-datepicker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.piaGeburtsdatum.reset()"
                     [valueSig]="filterForm.controls.piaGeburtsdatum.value"
                   ></dv-shared-ui-clear-button>
@@ -583,7 +591,6 @@
                     [aria-label]="t('sachbearbeitung-app.darlehen-dashboard.table.status')"
                     [formControl]="filterForm.controls.status"
                     (click)="$event.stopPropagation()"
-                    class="tw:!font-normal"
                     [placeholder]="t('sachbearbeitung-app.darlehen-dashboard.no-status-filter')"
                     panelClass="table-select"
                   >
@@ -611,7 +618,7 @@
 
             <ng-container matColumnDef="BEARBEITER">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="darlehenBearbeiter">{{
+                <label class="tw:pointer-events-none" for="darlehenBearbeiter">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.bearbeiter')
                 }}</label>
                 <div class="tw:relative tw:flex">
@@ -627,7 +634,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.bearbeiter.reset()"
                     [valueSig]="filterForm.controls.bearbeiter.value"
                   ></dv-shared-ui-clear-button>
@@ -651,14 +658,14 @@
                 [start]="'desc'"
                 class="filtered tw:w-40 tw:whitespace-nowrap"
               >
-                <label class="pe-none" for="darlehenLetzteAktivitaet">{{
+                <label class="tw:pointer-events-none" for="darlehenLetzteAktivitaet">{{
                   t('sachbearbeitung-app.darlehen-dashboard.table.letzteAktivitaet')
                 }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
                       id="darlehenLetzteAktivitaet"
-                      class="range"
+                      class="tw:min-w-22.5"
                       matInput
                       dvMaxLength
                       [value]="letzteAktivitaetRangeSig()"
@@ -669,16 +676,16 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="tw:dv-button tw:text-gray-400 tw:p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="darlehenLetzteAktivitaetRangePicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-sm!">
+                        <i class="material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-date-range-input
-                      class="d-none w-100"
+                      class="tw:hidden! tw:w-full"
                       [rangePicker]="darlehenLetzteAktivitaetRangePicker"
                       (click)="$event.stopPropagation()"
                     >
@@ -696,7 +703,7 @@
                     <mat-date-range-picker #darlehenLetzteAktivitaetRangePicker></mat-date-range-picker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="
                       filterStartEndForm.controls.letzteAktivitaetFrom.reset();
                       filterStartEndForm.controls.letzteAktivitaetTo.reset()
@@ -744,7 +751,7 @@
         </div>
         @if (darlehenStore.dashboardViewSig().loading) {
           <dv-shared-ui-loading
-            class="position-absolute translate-middle start-50 top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }
@@ -752,5 +759,5 @@
     </div>
   }
 
-  <dv-shared-ui-version-text [version]="versionSig()" class="text-muted"></dv-shared-ui-version-text>
+  <dv-shared-ui-version-text [version]="versionSig()" class="tw:text-gray-400"></dv-shared-ui-version-text>
 </ng-container>

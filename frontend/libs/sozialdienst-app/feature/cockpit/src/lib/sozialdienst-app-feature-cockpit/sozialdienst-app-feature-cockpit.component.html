@@ -1,5 +1,5 @@
 <ng-container *dvTranslocoSd="let t">
-  <div class="container">
+  <div class="tw:dv-container">
     <!-- filters -->
     <div
       class="tw:mt-2 tw:grid tw:grid-cols-1 tw:gap-6 tw:pt-6 tw:md:grid-cols-3 tw:lg:grid-cols-4 tw:xl:grid-cols-6"
@@ -9,21 +9,20 @@
         <button
           type="button"
           (click)="quickFilterForm.controls.query.patchValue(quickFilter.typ)"
-          class="btn tw:!flex tw:grow tw:items-center tw:!p-2 tw:!px-4 tw:shadow-md"
+          class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border! tw:items-center tw:py-1"
           [attr.data-testid]="'cockpit-quick-filter-' + quickFilter.typ"
-          [class.btn-danger]="radio.checked"
-          [class.btn-light]="!radio.checked"
+          [class.active]="radio.checked"
         >
-          <dv-shared-ui-icon-chip class="chip me-3">
-            <i class="icon material-symbols-rounded fs-4">{{ quickFilter.icon }}</i>
+          <dv-shared-ui-icon-chip class="tw:mr-4">
+            <i class="icon material-symbols-rounded tw:text-xl!">{{ quickFilter.icon }}</i>
           </dv-shared-ui-icon-chip>
-          <div class="tw:text-start tw:leading-4 flex-grow-1">
-            <span class="fw-bold fs-7 mb-0">
+          <div class="tw:text-start tw:leading-4 tw:grow">
+            <span class="tw:text-sm! tw:mb-0">
               {{ t(`sozialdienst-app.cockpit.quick-filter.${quickFilter.typ}`) }}
             </span>
             <input
               #radio
-              class="fs-7 cdk-visually-hidden"
+              class="tw:text-sm! cdk-visually-hidden"
               type="radio"
               name="query"
               labelPosition="before"
@@ -37,7 +36,7 @@
     </div>
 
     <!-- table -->
-    <h1 class="tw:!mb-6 tw:!mt-8 tw:!text-2xl" data-testid="cockpit-title">
+    <h1 class="tw:mb-6 tw:mt-8 tw:text-2xl tw:font-semibold" data-testid="cockpit-title">
       {{ t('sozialdienst-app.cockpit.delegierungen') }}
     </h1>
 
@@ -61,7 +60,9 @@
 
             <ng-container matColumnDef="FALLNUMMER">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
-                <label class="pe-none" for="fallNummer">{{ t('sozialdienst-app.cockpit.table.fall') }}</label>
+                <label class="tw:pointer-events-none" for="fallNummer">{{
+                  t('sozialdienst-app.cockpit.table.fall')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -76,7 +77,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.fallNummer.reset()"
                     [valueSig]="filterForm.controls.fallNummer.value"
                   ></dv-shared-ui-clear-button>
@@ -88,7 +89,11 @@
                 class="tw:w-32 tw:whitespace-nowrap"
               >
                 @if (delegierung.status === 'AKZEPTIERT') {
-                  <a [routerLink]="['/fall', delegierung.id]" (click)="$event.stopPropagation()">
+                  <a
+                    class="tw:underline"
+                    [routerLink]="['/fall', delegierung.fallId]"
+                    (click)="$event.stopPropagation()"
+                  >
                     {{ delegierung.fallNummer }}
                   </a>
                 } @else {
@@ -99,7 +104,9 @@
 
             <ng-container matColumnDef="NACHNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="nachname">{{ t('sozialdienst-app.cockpit.table.nachname') }}</label>
+                <label class="tw:pointer-events-none" for="nachname">{{
+                  t('sozialdienst-app.cockpit.table.nachname')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -113,7 +120,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.nachname.reset()"
                     [valueSig]="filterForm.controls.nachname.value"
                   ></dv-shared-ui-clear-button>
@@ -131,7 +138,9 @@
 
             <ng-container matColumnDef="VORNAME">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="vorname">{{ t('sozialdienst-app.cockpit.table.vorname') }}</label>
+                <label class="tw:pointer-events-none" for="vorname">{{
+                  t('sozialdienst-app.cockpit.table.vorname')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -145,7 +154,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.vorname.reset()"
                     [valueSig]="filterForm.controls.vorname.value"
                   ></dv-shared-ui-clear-button>
@@ -170,7 +179,9 @@
                 class="filtered tw:w-40 tw:whitespace-nowrap"
                 example="01.01.2000"
               >
-                <label class="pe-none" for="geburtsdatum">{{ t('sozialdienst-app.cockpit.table.geburtsdatum') }}</label>
+                <label class="tw:pointer-events-none" for="geburtsdatum">{{
+                  t('sozialdienst-app.cockpit.table.geburtsdatum')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -186,18 +197,18 @@
                     <button
                       matIconSuffix
                       type="button"
-                      class="btn btn-link text-muted tw:!p-1"
+                      class="tw:dv-button tw:text-dv-gray tw:!p-1"
                       [attr.aria-label]="'shared.ui.open-date-picker'"
                       (click)="geburtsdatumDatepicker.open(); $event.stopPropagation()"
                     >
-                      <dv-shared-ui-icon-chip class="fs-8">
-                        <i class="icon material-symbols-rounded fs-5">event</i>
+                      <dv-shared-ui-icon-chip class="tw:text-xs">
+                        <i class="icon material-symbols-rounded tw:text-lg!">event</i>
                       </dv-shared-ui-icon-chip>
                     </button>
                     <mat-datepicker #geburtsdatumDatepicker></mat-datepicker>
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.geburtsdatum.reset()"
                     [valueSig]="filterForm.controls.geburtsdatum.value"
                   ></dv-shared-ui-clear-button>
@@ -215,7 +226,9 @@
             <!-- wohnort -->
             <ng-container matColumnDef="WOHNORT">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-40 tw:whitespace-nowrap">
-                <label class="pe-none" for="ort">{{ t('sozialdienst-app.cockpit.table.wohnort') }}</label>
+                <label class="tw:pointer-events-none" for="ort">{{
+                  t('sozialdienst-app.cockpit.table.wohnort')
+                }}</label>
                 <div class="tw:relative tw:flex">
                   <mat-form-field>
                     <input
@@ -229,7 +242,7 @@
                     />
                   </mat-form-field>
                   <dv-shared-ui-clear-button
-                    class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+                    class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
                     (clear)="filterForm.controls.wohnort.reset()"
                     [valueSig]="filterForm.controls.wohnort.value"
                   ></dv-shared-ui-clear-button>
@@ -254,7 +267,6 @@
                     <mat-select
                       [formControl]="filterForm.controls.status"
                       (click)="$event.stopPropagation()"
-                      class="tw:!font-normal"
                       [placeholder]="t('sozialdienst-app.cockpit.no-status-filter')"
                       panelClass="table-select"
                     >
@@ -286,13 +298,13 @@
               <td mat-cell *dvMatCellDef="let delegierung; dataSource: faelleDataSourceSig()" class="tw:w-11">
                 <button
                   type="button"
-                  class="dv-icon-button dv-icon-button-md text-info"
+                  class="tw:dv-button-icon tw:text-dv-blue"
                   (click)="openDialog(delegierung); $event.stopPropagation()"
                 >
                   @if (permissionStore.rolesMapSig()['V0_Sozialdienst-Admin'] && !delegierung.status) {
-                    <span class="material-symbols-rounded"> approval_delegation</span>
+                    <span class="material-symbols-rounded tw:text-3xl!"> approval_delegation</span>
                   } @else {
-                    <span class="material-symbols-rounded"> info </span>
+                    <span class="material-symbols-rounded tw:text-3xl!"> info </span>
                   }
                 </button>
               </td>
@@ -316,7 +328,7 @@
         </div>
         @if (delegationStore.cockpitViewSig().loading) {
           <dv-shared-ui-loading
-            class="position-absolute translate-middle start-50 top-50"
+            class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"
             [type]="'compact'"
           ></dv-shared-ui-loading>
         }
@@ -332,5 +344,5 @@
       ></mat-paginator>
     </div>
   </div>
-  <dv-shared-ui-version-text [version]="versionSig()" class="text-muted"></dv-shared-ui-version-text>
+  <dv-shared-ui-version-text [version]="versionSig()" class="tw:text-dv-gray"></dv-shared-ui-version-text>
 </ng-container>

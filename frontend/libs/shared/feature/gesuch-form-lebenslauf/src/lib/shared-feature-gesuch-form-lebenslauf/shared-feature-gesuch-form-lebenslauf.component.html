@@ -18,8 +18,8 @@
     @if (minDatesSig() && maxDateSig()) {
       <!-- Infobx -->
       @if (!viewSig().readonly) {
-        <div class="row">
-          <div class="col-12 col-xl-8 my-3">
+        <div class="tw:grid tw:grid-cols-12">
+          <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
             <span>{{
               'shared.form.lebenslauf.top.info'
                 | transloco
@@ -32,28 +32,29 @@
         </div>
 
         <!-- ADD -->
-        <div class="row">
-          <div class="col-12 col-xl-8 my-3">
-            <div class="row add-buttons">
-              <div class="col-6 my-3">
+        <div class="tw:grid tw:grid-cols-12">
+          <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
+            <div class="tw:grid tw:grid-cols-12 add-buttons tw:gap-6">
+              <div class="tw:col-span-6 tw:my-4">
+                <!-- class="tw:dv-button-outline tw:border-dv-blue tw:text-dv-blue tw:hover:bg-dv-blue tw:hover:text-white tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg" -->
                 <button
                   type="button"
-                  class="btn btn-outline-info w-100 d-flex flex-column align-items-center rounded-2 fs-5"
+                  class="tw:dv-button-outline-info tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
                   (click)="handleAddAusbildung(undefined)"
                   data-testid="lebenslauf-add-ausbildung"
                 >
-                  <i class="material-symbols-rounded fs-1">school</i>
+                  <i class="material-symbols-rounded tw:text-4xl!">school</i>
                   {{ 'shared.form.lebenslauf.add.ausbildung' | transloco }}
                 </button>
               </div>
-              <div class="col-6 my-3">
+              <div class="tw:col-span-6 tw:my-4">
                 <button
                   type="button"
-                  class="btn btn-outline-dark w-100 d-flex flex-column align-items-center rounded-2 fs-5"
+                  class="tw:dv-button-outline tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
                   (click)="handleAddTaetigkeit(undefined)"
                   data-testid="lebenslauf-add-taetigkeit"
                 >
-                  <i class="material-symbols-rounded fs-1">work</i>
+                  <i class="material-symbols-rounded tw:text-4xl!">work</i>
                   {{ 'shared.form.lebenslauf.add.taetigkeit' | transloco }}
                 </button>
               </div>
@@ -64,9 +65,9 @@
 
       <!-- visual -->
       @if (viewSig().lebenslaufItems; as items) {
-        <div class="row">
+        <div class="tw:grid tw:grid-cols-12">
           @if (viewSig().ausbildung; as ausbildung) {
-            <div class="col-12 col-xl-8 my-3">
+            <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
               <dv-shared-feature-gesuch-form-lebenslauf-visual
                 [startDate]="minDatesSig()?.required ?? null"
                 [language]="languageSig()"
@@ -86,7 +87,7 @@
       <dv-shared-ui-step-form-buttons>
         <button
           type="button"
-          class="btn btn-primary"
+          class="tw:dv-button-main-primary"
           (click)="handleContinue()"
           [disabled]="!viewSig().gesuch?.id"
           data-testid="button-continue"
@@ -95,8 +96,8 @@
         </button>
       </dv-shared-ui-step-form-buttons>
     } @else {
-      <div class="row">
-        <div class="col-12 col-xl-8 my-3">
+      <div class="tw:grid tw:grid-cols-12">
+        <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
           <dv-shared-ui-info-container>{{
             'shared.form.lebenslauf.top.missing-dates' | transloco
           }}</dv-shared-ui-info-container>

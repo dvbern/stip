@@ -4,7 +4,7 @@
 
 <ng-container *dvTranslocoShared="let t">
   <ng-template dvHeaderSuffix>
-    <h2 data-testid="dynamic-tranche-step-title" class="tw:!font-bold tw:flex tw:gap-8 tw:items-center">
+    <h2 data-testid="dynamic-tranche-step-title" class="tw:font-bold tw:text-3xl tw:flex tw:gap-8 tw:items-center">
       @if (tranche) {
         @if (currentTrancheNumberSig(); as currentTrancheNumber) {
           {{ t(`shared.form.title.suffix.${tranche.typ}`, { position: currentTrancheNumber }) }}
@@ -15,11 +15,11 @@
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
       @if (exportValuesSig(); as exportValues) {
-        <div class="tw:relative">
+        <div class="tw:relative tw:text-base">
           @if (isExportingSig()) {
             <dv-shared-ui-loading [type]="'icon'" [overlay]="true"></dv-shared-ui-loading>
           }
-          <button *dvIfSachbearbeiter class="btn btn-primary" (click)="exportTranche(exportValues)">
+          <button *dvIfSachbearbeiter class="tw:dv-button-main-primary" (click)="exportTranche(exportValues)">
             {{ t('shared.form.tranche.export') }}
           </button>
         </div>
@@ -95,7 +95,7 @@
       @if (gesuchId && einreichedatum && minDate && maxDate && canAendern) {
         <button
           type="button"
-          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
           (click)="changeEinreichedatum(gesuchId, einreichedatum, minDate, maxDate)"
         >
           <i class="material-symbols-rounded tw:!text-3xl/none">calendar_month</i>
@@ -120,7 +120,7 @@
       @if (isSbApp && gesuchInfoStore?.gesuchInfo()?.data?.state?.canChangeGesuchsperiode) {
         <button
           type="button"
-          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
           [attr.aria-label]="t('shared.form.tranche.gesuchsperiode.change')"
           data-testid="form-tranche-gesuchsperiode-change-button"
           (click)="changeGesuchsperiode(tranche?.id)"
@@ -148,7 +148,7 @@
       @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
         <button
           type="button"
-          class="btn btn-outline-primary tw:flex tw:h-[56px] tw:!p-3"
+          class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"
           [attr.aria-label]="t('shared.form.tranche.aenderung.update-von-bis')"
           data-testid="form-tranche-aenderung-von-bis-update"
           (click)="updateAenderungVonBis(gesuch)"
@@ -214,21 +214,21 @@
       @if (gesuchId && tranche && tranche.typ === 'AENDERUNG' && tranche.status === 'UEBERPRUEFEN') {
         @if (abschlussPhase === 'NOT_READY' && specialValidationErrors.length === 0) {
           <div
-            class="alert alert-warning tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+            class="tw:bg-dv-main-warn-subtle tw:text-dv-main-warn tw:border-dv-main-warn tw:border tw:rounded-2xl tw:p-6 tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
             role="alert"
             data-testid="alert-warning"
           >
-            <span class="text-warning material-symbols-rounded">warning</span>
+            <span class="material-symbols-rounded">warning</span>
             <span [innerHTML]="t('shared.form.tranche-abschluss.notReady')"></span>
           </div>
         } @else if (abschlussPhase === 'NOT_READY') {
           @for (error of specialValidationErrors; track error) {
             <div
-              class="alert alert-danger tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
+              class="tw:bg-dv-main-danger-subtle tw:text-dv-main-danger tw:border-dv-main-danger tw:border tw:rounded-2xl tw:p-6 tw:mt-8 tw:flex tw:gap-2 tw:xl:max-w-3xl"
               role="alert"
               data-testid="alert-danger"
             >
-              <span class="text-danger material-symbols-rounded">error</span>
+              <span class="material-symbols-rounded">error</span>
               <div>
                 <span [innerHTML]="t($any(error.validationErrorKey))"></span>
                 &nbsp;<a [routerLink]="['/gesuch', error.step.route, gesuchId]">{{ t($any(error.linkKey)) }}</a>
@@ -244,7 +244,7 @@
             </div>
           }
           <button
-            class="btn btn-outline-primary flex-grow-1"
+            class="tw:dv-button-outline tw:grow"
             data-testid="aenderung-reject"
             type="button"
             (click)="changeAenderungState(tranche.id, 'ABGELEHNT', gesuchId)"
@@ -253,7 +253,7 @@
             {{ t('shared.form.aenderung.action.reject') }}
           </button>
           <button
-            class="btn btn-primary flex-grow-1"
+            class="tw:dv-button-main-primary tw:grow"
             data-testid="aenderung-accept"
             type="button"
             (click)="changeAenderungState(tranche.id, 'AKZEPTIERT', gesuchId)"
@@ -262,7 +262,7 @@
             {{ t('shared.form.aenderung.action.accept') }}
           </button>
           <button
-            class="btn btn-link"
+            class="tw:dv-button-outline"
             data-testid="aenderung-manually-change"
             type="button"
             [disabled]="hasValidationErrors"
