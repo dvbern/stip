@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
@@ -157,10 +158,24 @@ public class DatenschutzbriefService {
             final var empfaenger = trancheToUse.getGesuchFormular()
                 .getElternteilOfTyp(empfaengerToCreate)
                 .orElseThrow(IllegalStateException::new);
+
+            // Do not create a Datenschutzbrief for Eltern living outside Switzerland
+            if (!livesInSwitzerland(empfaenger)) {
+                continue;
+            }
+
             final var datenschutzbrief = createDatenschutzbrief(gesuch.getId(), empfaenger, false);
 
             gesuch.getDatenschutzbriefs().add(datenschutzbrief);
         }
+    }
+
+    private boolean livesInSwitzerland(final Eltern elternteil) {
+        final var adresse = elternteil.getAdresse();
+        if (adresse == null || adresse.getLand() == null) {
+            return false;
+        }
+        return adresse.getLand().is(WellKnownLand.CHE);
     }
 
     private List<ElternTyp> getRequiredDatenschutzbriefEmpfaenger(
