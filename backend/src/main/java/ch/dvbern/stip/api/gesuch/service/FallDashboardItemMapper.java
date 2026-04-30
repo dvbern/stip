@@ -17,14 +17,11 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.time.LocalDate;
-
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.api.gesuchsperioden.repo.GesuchsperiodeRepository;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
@@ -37,7 +34,7 @@ public abstract class FallDashboardItemMapper {
     @Inject
     BenutzerService benutzerService;
     @Inject
-    GesuchsperiodeRepository gesuchsperiodeRepository;
+    GesuchsperiodenService gesuchsperiodeService;
 
     @Mapping(source = "ausbildungs", target = "ausbildungDashboardItems")
     @Mapping(source = ".", target = "fall")
@@ -56,8 +53,7 @@ public abstract class FallDashboardItemMapper {
         final Fall entity,
         @MappingTarget final FallDashboardItemDto dto
     ) {
-        gesuchsperiodeRepository.findEarliestActive(LocalDate.now())
-            .map(Gesuchsperiode::getGesuchsperiodeStart)
+        gesuchsperiodeService.findEarliestActiveNow()
             .ifPresent(dto::setEarliestActiveGesuchPeriodeStart);
     }
 }

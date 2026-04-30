@@ -15,28 +15,18 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.ausbildung.entity;
+package ch.dvbern.stip.api;
 
-import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
-import io.quarkus.arc.profile.UnlessBuildProfile;
-import jakarta.inject.Inject;
-import jakarta.validation.ConstraintValidator;
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
+import ch.dvbern.stip.api.ausbildung.entity.AusbildungEndDateMustBeAfterEarliestActiveGesuchsperiodeValidator;
+import io.quarkus.test.Mock;
 import jakarta.validation.ConstraintValidatorContext;
 
-@UnlessBuildProfile("test")
-public class AusbildungEndDateMustBeAfterEarliestActiveGesuchsperiodeValidator
-    implements ConstraintValidator<AusbildungEndDateMustBeAfterEarliestActiveGesuchsperiodeConstraint, Ausbildung> {
-
-    @Inject
-    GesuchsperiodenService gesuchsperiodenService;
-
+@Mock
+public class AusbildungEndDateMustBeAfterEarliestActiveGesuchsperiodeValidatorMock
+extends AusbildungEndDateMustBeAfterEarliestActiveGesuchsperiodeValidator {
     @Override
     public boolean isValid(Ausbildung value, ConstraintValidatorContext context) {
-        if (value == null || value.getAusbildungEnd() == null) {
-            return true;
-        }
-
-        final var earliestActiveOpt = gesuchsperiodenService.findEarliestActiveNow();
-        return earliestActiveOpt.map(localDate -> !value.getAusbildungEnd().isBefore(localDate)).orElse(true);
+        return true;
     }
 }
