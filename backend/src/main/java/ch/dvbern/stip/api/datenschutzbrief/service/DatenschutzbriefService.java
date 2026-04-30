@@ -181,6 +181,7 @@ public class DatenschutzbriefService {
 
         return gesuch.getDatenschutzbriefs()
             .stream()
+            .filter(Datenschutzbrief::isVersendet)
             .sorted(Comparator.comparing(Datenschutzbrief::getTimestampErstellt).reversed())
             .map(datenschutzbriefMapper::toDto)
             .toList();
