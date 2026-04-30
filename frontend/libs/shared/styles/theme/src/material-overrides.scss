@@ -202,9 +202,9 @@ $dv-all-colors: info, danger, success, warn, primary;
 
 dv-sachbearbeitung-app-feature-verfuegung {
   .mat-mdc-card {
-    background-color: var(--dv-gray-100);
+    background-color: var(--tw-color-gray-100);
     border-width: 1px;
-    border-color: var(--dv-gray-100);
+    border-color: var(--tw-color-gray-100);
     border-style: solid;
     border-radius: var(--dv-border-radius);
     box-shadow: none;

@@ -106,18 +106,13 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
     const berechnungenOptions: VerfuegungOption[] = [];
 
     const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
-    berechnung.berechnungsresultate.forEach((berechnungen, berechnungIndex) => {
-      berechnungen.forEach((berechnung) => {
+    berechnung.berechnungsresultate.forEach((berechnungen) => {
+      berechnungen.forEach((berechnung, index) => {
         const startDate = format(berechnung.gueltigAb, 'dd.MM.yyyy');
         const endDate = format(berechnung.gueltigBis, 'dd.MM.yyyy');
 
         berechnungenOptions.push(
-          createBerechnungOption(
-            berechnungIndex,
-            startDate,
-            endDate,
-            berechnung.type,
-          ),
+          createBerechnungOption(index, startDate, endDate),
         );
       });
     });

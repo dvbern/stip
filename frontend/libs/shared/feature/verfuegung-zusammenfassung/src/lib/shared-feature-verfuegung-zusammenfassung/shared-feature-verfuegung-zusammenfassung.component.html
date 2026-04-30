@@ -163,8 +163,8 @@
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
-        @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
-          @for (teilBerechnung of berechnungen; track $index) {
+        @for (berechnungen of zusammenfassung.berechnungsresultate; track $index) {
+          @for (teilBerechnung of berechnungen; track $index; let berechnungsIndex = $index) {
             <div class="tw:mb-6">
               <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-3">
                 <div class="tw:flex tw:gap-2 tw:font-bold">
@@ -172,7 +172,6 @@
                     {{
                       t('item.title', {
                         index: berechnungsIndex + 1,
-                        type: teilBerechnung.type,
                         startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
                         endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
                       })

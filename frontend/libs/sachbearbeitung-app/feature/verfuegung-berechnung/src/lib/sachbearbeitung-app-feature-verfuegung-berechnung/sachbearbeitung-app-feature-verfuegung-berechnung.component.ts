@@ -119,12 +119,5 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
 }
 
 const getBerechnungByIndex = <T>(berechnung: T[][], rawIndex: string) => {
-  const [index, subIndex] = isNaN(+rawIndex)
-    ? [
-        +rawIndex.slice(0, -1),
-        ['a', 'b'].findIndex((s) => s === rawIndex.slice(-1)),
-      ]
-    : [+rawIndex, 0];
-
-  return berechnung[index - 1][Math.max(subIndex, 0)];
+  return berechnung[0][+rawIndex - 1];
 };

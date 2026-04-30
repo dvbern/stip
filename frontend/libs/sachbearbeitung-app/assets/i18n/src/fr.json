@@ -674,7 +674,7 @@
 
   "sachbearbeitung-app.verfuegung.title": "Décision",
   "sachbearbeitung-app.verfuegung.option.zusammenfassung": "Résumé",
-  "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }}{{ type }} à la tranche de {{ startDate }} à {{ endDate }}",
+  "sachbearbeitung-app.verfuegung.option.berechnung": "Calcul {{ index }} à la tranche de {{ startDate }} à {{ endDate }}",
   "sachbearbeitung-app.verfuegung.berechnung.ausbildungsjahr": "Année de formation",
   "sachbearbeitung-app.verfuegung.berechnung.months": "Mois",
   "sachbearbeitung-app.verfuegung.berechnung.steuerjahr": "Année fiscale",
@@ -809,7 +809,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.total": "Total",
   "sachbearbeitung-app.verfuegung.zusammenfassung.berechnungen": "Calculations",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.link": "Detail",
-  "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Calcul {{ index }}{{ type }} pour la tranche de {{ startDate }} à {{ endDate }}",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Calcul {{ index }} pour la tranche de {{ startDate }} à {{ endDate }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Part de la bourse",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Part du prêt",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Montant total sans réductions",
