@@ -812,6 +812,7 @@
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.title": "Berechnung {{ index }} zu Tranche von {{ startDate }} bis {{ endDate }}",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium": "Anteil an Stipendium",
   "sachbearbeitung-app.verfuegung.zusammenfassung.item.darlehen": "Anteil an Darlehen",
+  "sachbearbeitung-app.verfuegung.zusammenfassung.berechnungVorTeilungDarlehen": "Total Betrag",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung": "Total Betrag ohne Kürzungen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist": "Kürzung wegen verspäteten Einreichen",
   "sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch": "Kürzung wegen Unterbruch",

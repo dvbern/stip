@@ -54,6 +54,7 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
+      berechnungVorTeilungDarlehen: number | undefined;
       berechnungVorKuerzungUndTeilung: number;
       totalNachKuerzungNachEinreichefrist?: number;
       anzahlMonateEinreichefrist?: number;
@@ -65,6 +66,8 @@ export class BerechnungStore extends signalStore(
       stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
+      berechnungVorTeilungDarlehen:
+        berechnungRd.data?.berechnungVorTeilungDarlehen,
       berechnungVorKuerzungUndTeilung:
         berechnungRd.data?.berechnungVorKuerzungUndTeilung ?? 0,
       totalNachKuerzungNachEinreichefrist:
