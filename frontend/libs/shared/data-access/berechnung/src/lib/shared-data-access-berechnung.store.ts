@@ -9,7 +9,7 @@ import {
   GesuchService,
   TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
-// import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
+import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
@@ -54,7 +54,6 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
-      berechnungVorTeilungDarlehen: number | undefined;
       berechnungVorKuerzungUndTeilung: number;
       totalNachKuerzungNachEinreichefrist?: number;
       anzahlMonateEinreichefrist?: number;
@@ -66,8 +65,6 @@ export class BerechnungStore extends signalStore(
       stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
-      berechnungVorTeilungDarlehen:
-        berechnungRd.data?.berechnungVorTeilungDarlehen,
       berechnungVorKuerzungUndTeilung:
         berechnungRd.data?.berechnungVorKuerzungUndTeilung ?? 0,
       totalNachKuerzungNachEinreichefrist:
@@ -97,7 +94,17 @@ export class BerechnungStore extends signalStore(
     return {
       loading: isPending(berechnungRd),
       ...byTrancheId,
-      berechnungsresultate: byTrancheId.berechnungsresultate,
+      berechnungsresultate: Object.values(byTrancheId.berechnungsresultate).map(
+        (r) =>
+          r.map((b, index) => ({
+            ...b,
+            type:
+              r.length > 1
+                ? // It should only be possible to split a berechnung into two parts, a and b
+                  ('ab'.charAt(index % 2) as TeilberechnungsArt)
+                : '',
+          })),
+      ),
     };
   });
 

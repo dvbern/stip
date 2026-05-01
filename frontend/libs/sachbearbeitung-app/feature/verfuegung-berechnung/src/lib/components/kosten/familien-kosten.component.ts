@@ -8,7 +8,6 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
@@ -18,7 +17,6 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
-    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -29,7 +27,6 @@ import { PositionComponent } from '../position/position.component';
     >
       @let budget = budgetSig();
       @let kosten = budget.kosten;
-      @let hideZero = hideZeroSig();
       <!-- Grundbedarf  -->
       <dv-position
         [titleSig]="t('grundbedarf')"
@@ -39,7 +36,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.grundbedarf | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.grundbedarf"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -55,7 +51,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.wohnkosten | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.wohnkosten"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -71,7 +66,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.medizinischeGrundversorgung | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.medizinischeGrundversorgung"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -91,7 +85,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.integrationszulageTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.integrationszulageTotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -103,7 +96,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.kantonsGemeindesteuern"
       >
       </dv-position>
 
@@ -112,7 +104,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.bundessteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.bundessteuern"
       >
       </dv-position>
 
@@ -122,7 +113,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('fahrkosten.info')"
         [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
         [personValueItemsSig]="kosten.fahrkosten"
-        *dvHideZero="hideZero; value: kosten.fahrkostenTotal"
       >
       </dv-position>
 
@@ -132,7 +122,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('verpflegung.info')"
         [amountSig]="kosten.verpflegungTotal | formatChfPositive"
         [personValueItemsSig]="kosten.verpflegung"
-        *dvHideZero="hideZero; value: kosten.verpflegungTotal"
       >
       </dv-position>
 
@@ -148,7 +137,6 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienKostenComponent {
-  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<FamilienBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }

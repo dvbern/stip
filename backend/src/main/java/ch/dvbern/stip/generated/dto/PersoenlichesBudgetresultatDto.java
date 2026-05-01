@@ -31,6 +31,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer total;
   private @Valid Integer einnahmenMinusKosten;
   private @Valid Integer fehlbetrag;
+  private @Valid Integer proKopfTeilung;
   private @Valid Boolean eigenerHaushalt;
   private @Valid Integer budgetTranche;
   private @Valid Integer anzahlMonate;
@@ -39,8 +40,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid PersoenlichesBudgetresultatKostenDto kosten;
   private @Valid String vornamePartner;
   private @Valid String nachnamePartner;
-  private @Valid Integer proKopfTeilung;
-  private @Valid Integer totalNachProKopfTeilung;
 
   /**
    **/
@@ -174,6 +173,25 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   @JsonProperty("fehlbetrag")
   public void setFehlbetrag(Integer fehlbetrag) {
     this.fehlbetrag = fehlbetrag;
+  }
+
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto proKopfTeilung(Integer proKopfTeilung) {
+    this.proKopfTeilung = proKopfTeilung;
+    return this;
+  }
+
+  
+  @JsonProperty("proKopfTeilung")
+  @NotNull
+  public Integer getProKopfTeilung() {
+    return proKopfTeilung;
+  }
+
+  @JsonProperty("proKopfTeilung")
+  public void setProKopfTeilung(Integer proKopfTeilung) {
+    this.proKopfTeilung = proKopfTeilung;
   }
 
   /**
@@ -326,42 +344,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     this.nachnamePartner = nachnamePartner;
   }
 
-  /**
-   **/
-  public PersoenlichesBudgetresultatDto proKopfTeilung(Integer proKopfTeilung) {
-    this.proKopfTeilung = proKopfTeilung;
-    return this;
-  }
-
-  
-  @JsonProperty("proKopfTeilung")
-  public Integer getProKopfTeilung() {
-    return proKopfTeilung;
-  }
-
-  @JsonProperty("proKopfTeilung")
-  public void setProKopfTeilung(Integer proKopfTeilung) {
-    this.proKopfTeilung = proKopfTeilung;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatDto totalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
-    this.totalNachProKopfTeilung = totalNachProKopfTeilung;
-    return this;
-  }
-
-  
-  @JsonProperty("totalNachProKopfTeilung")
-  public Integer getTotalNachProKopfTeilung() {
-    return totalNachProKopfTeilung;
-  }
-
-  @JsonProperty("totalNachProKopfTeilung")
-  public void setTotalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
-    this.totalNachProKopfTeilung = totalNachProKopfTeilung;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -379,6 +361,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.total, persoenlichesBudgetresultat.total) &&
         Objects.equals(this.einnahmenMinusKosten, persoenlichesBudgetresultat.einnahmenMinusKosten) &&
         Objects.equals(this.fehlbetrag, persoenlichesBudgetresultat.fehlbetrag) &&
+        Objects.equals(this.proKopfTeilung, persoenlichesBudgetresultat.proKopfTeilung) &&
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.budgetTranche, persoenlichesBudgetresultat.budgetTranche) &&
         Objects.equals(this.anzahlMonate, persoenlichesBudgetresultat.anzahlMonate) &&
@@ -386,14 +369,12 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
         Objects.equals(this.einnahmen, persoenlichesBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, persoenlichesBudgetresultat.kosten) &&
         Objects.equals(this.vornamePartner, persoenlichesBudgetresultat.vornamePartner) &&
-        Objects.equals(this.nachnamePartner, persoenlichesBudgetresultat.nachnamePartner) &&
-        Objects.equals(this.proKopfTeilung, persoenlichesBudgetresultat.proKopfTeilung) &&
-        Objects.equals(this.totalNachProKopfTeilung, persoenlichesBudgetresultat.totalNachProKopfTeilung);
+        Objects.equals(this.nachnamePartner, persoenlichesBudgetresultat.nachnamePartner);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner, proKopfTeilung, totalNachProKopfTeilung);
+    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner);
   }
 
   @Override
@@ -408,6 +389,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    einnahmenMinusKosten: ").append(toIndentedString(einnahmenMinusKosten)).append("\n");
     sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
+    sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
@@ -416,8 +398,6 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
     sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
-    sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
-    sb.append("    totalNachProKopfTeilung: ").append(toIndentedString(totalNachProKopfTeilung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

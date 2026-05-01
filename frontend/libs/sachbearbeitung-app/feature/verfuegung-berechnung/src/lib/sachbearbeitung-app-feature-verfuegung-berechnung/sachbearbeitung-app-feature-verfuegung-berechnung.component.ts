@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-input-rename */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,13 +8,11 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
-import { TranchenBerechnungsresultat } from '@dv/shared/model/gesuch';
 import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -31,7 +28,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
   selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
   imports: [
     MatCardModule,
-    MatSlideToggleModule,
+    TranslocoPipe,
     MatExpansionModule,
     BerechnungsCardComponent,
     PersoenlicheEinnahmenComponent,
@@ -39,7 +36,6 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
     FamilienEinnahmenComponent,
     FamilienKostenComponent,
     SharedUiLoadingComponent,
-    TranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
@@ -47,10 +43,8 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
-
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   indexSig = input.required<string>({ alias: 'index' });
-  tranchenIdSig = input<string | null>(null, { alias: 'trancheId' });
-
   expansionState = {
     persoenlich: {
       einnahmen: false,
@@ -66,7 +60,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     },
   };
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
-
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
   berechnungStore = inject(BerechnungStore);
 
@@ -74,15 +68,10 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     const zusammenfassung =
       this.berechnungStore.berechnungZusammenfassungViewSig();
 
-    const r = getBerechnungByTrancheIdByIndex(
+    const r = getBerechnungByIndex(
       zusammenfassung.berechnungsresultate,
-      this.tranchenIdSig(),
       this.indexSig(),
     );
-
-    if (!r) {
-      throw new Error('Berechnung nicht gefunden');
-    }
 
     const view: BerechnungView = {
       persoenlich: {
@@ -119,30 +108,21 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       }
 
       if (verfuegungId) {
-        // case mit verfuegungId => versionierte Berechnung für Verfuegung
         this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
       } else {
-        // case aktuelles gesuch
         this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
       }
     });
   }
 }
 
-const getBerechnungByTrancheIdByIndex = (
-  berechnung: Record<string, TranchenBerechnungsresultat[]>,
-  trancheId: string | null,
-  rawIndex: string,
-) => {
-  if (!trancheId) {
-    return undefined;
-  }
+const getBerechnungByIndex = <T>(berechnung: T[][], rawIndex: string) => {
+  const [index, subIndex] = isNaN(+rawIndex)
+    ? [
+        +rawIndex.slice(0, -1),
+        ['a', 'b'].findIndex((s) => s === rawIndex.slice(-1)),
+      ]
+    : [+rawIndex, 0];
 
-  const trancheBerechnungsresultate = berechnung[trancheId];
-
-  if (!trancheBerechnungsresultate) {
-    return undefined;
-  }
-
-  return trancheBerechnungsresultate[+rawIndex - 1];
+  return berechnung[index - 1][Math.max(subIndex, 0)];
 };

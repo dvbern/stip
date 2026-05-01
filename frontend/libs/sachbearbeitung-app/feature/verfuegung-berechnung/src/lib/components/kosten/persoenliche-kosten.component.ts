@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { PersoenlichesBudgetresultatView } from '@dv/shared/model/verfuegung';
@@ -12,7 +7,6 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
@@ -22,7 +16,6 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
-    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -33,8 +26,6 @@ import { PositionComponent } from '../position/position.component';
     >
       @let budget = budgetSig();
       @let kosten = budget.kosten;
-      @let hideZero = hideZeroSig();
-
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
         [titleSig]="t('ausbildungskosten')"
@@ -45,7 +36,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.ausbildungskostenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.ausbildungskostenTotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -62,7 +52,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.fahrkostenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.fahrkostenTotal"
       >
       </dv-position>
 
@@ -71,7 +60,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('mehrkostenVerpflegung')"
         [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kosten.verpflegungskosten | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.verpflegungskosten"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -87,7 +75,6 @@ import { PositionComponent } from '../position/position.component';
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.grundbedarf | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.grundbedarf"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -103,7 +90,6 @@ import { PositionComponent } from '../position/position.component';
         "
         [infoSig]="t('nurEigenerHaushalt.info')"
         [amountSig]="kosten.wohnkosten | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.wohnkosten"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -122,7 +108,6 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           kosten.medizinischeGrundversorgungTotal | formatChfPositive
         "
-        *dvHideZero="hideZero; value: kosten.medizinischeGrundversorgungTotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           2)
@@ -139,7 +124,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.fahrkostenPartner | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.fahrkostenPartner"
       >
       </dv-position>
 
@@ -153,7 +137,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="kosten.verpflegungPartner | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.verpflegungPartner"
       >
       </dv-position>
 
@@ -161,7 +144,6 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('betreuungskostenKinder')"
         [amountSig]="kosten.betreuungskostenKinder | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.betreuungskostenKinder"
       >
       </dv-position>
 
@@ -170,7 +152,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.kantonsGemeindesteuern"
       >
       </dv-position>
 
@@ -179,7 +160,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.bundessteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.bundessteuern"
       >
       </dv-position>
 
@@ -188,7 +168,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('anteilLebenshaltungskosten')"
         [infoSig]="t('anteilLebenshaltungskosten.info')"
         [amountSig]="kosten.anteilLebenshaltungskosten | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.anteilLebenshaltungskosten"
       >
       </dv-position>
 
@@ -204,7 +183,5 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheKostenComponent {
-  @HostBinding('class') classes = 'tw:dv-verfuegung-position-list';
-  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<PersoenlichesBudgetresultatView>();
 }
