@@ -235,7 +235,6 @@
       "@dv/shared/ui/select-search": ["libs/shared/ui/select-search/src/index.ts"],
       "@dv/shared/ui/step-form-buttons": ["libs/shared/ui/step-form-buttons/src/index.ts"],
       "@dv/shared/ui/stepper-navigation": ["libs/shared/ui/stepper-navigation/src/index.ts"],
-      "@dv/shared/ui/table-header-filter": ["libs/shared/ui/table-header-filter/src/index.ts"],
       "@dv/shared/ui/table-helper": ["libs/shared/ui/table-helper/src/index.ts"],
       "@dv/shared/ui/tooltip-date": ["libs/shared/ui/tooltip-date/src/index.ts"],
       "@dv/shared/ui/translate-change": ["libs/shared/ui/translate-change/src/index.ts"],

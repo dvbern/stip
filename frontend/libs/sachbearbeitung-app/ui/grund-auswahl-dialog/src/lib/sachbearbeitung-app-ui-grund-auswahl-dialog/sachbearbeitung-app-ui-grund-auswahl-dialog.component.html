@@ -2,13 +2,13 @@
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 tw:!mb-5 tw:flex">
+  <h1 class="tw:text-xl tw:font-semibold tw:mb-5 tw:flex">
     {{ dialogData.titleKey | transloco }}
   </h1>
   <p class="content tw:mb-0" [innerHTML]="dialogData.messageKey | transloco"></p>
@@ -86,10 +86,10 @@
     </div>
 
     <div class="tw:mt-5 tw:flex tw:justify-between">
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary tw:ml-2" (click)="confirm()">
+      <button type="submit" [disabled]="form.invalid" class="tw:dv-button-main-primary tw:ml-2" (click)="confirm()">
         {{ dialogData.confirmKey | transloco }}
       </button>
     </div>

@@ -10,7 +10,7 @@
           t(`shared.ui.${rawValue.value ? 'yes' : 'no'}`)
         }}</span>
         <i
-          class="material-symbols-rounded tw:text-sm tw:text-gray-500 tw:select-none"
+          class="material-symbols-rounded tw:text-sm! tw:text-gray-500 tw:select-none"
           [ngClass]="{ 'tw:text-dv-red!': !rawValue.value, 'tw:text-dv-green!': rawValue.value }"
           [matTooltip]="t(`shared.ui.${rawValue.value ? 'yes' : 'no'}`)"
         >
@@ -20,7 +20,7 @@
     }
     @default {
       @if (!!rawValue.value) {
-        <i class="material-symbols-rounded tw:text-sm tw:text-dv-warning" [matTooltip]="rawValue.value"> warning </i>
+        <i class="material-symbols-rounded tw:text-sm! tw:text-dv-warning" [matTooltip]="rawValue.value"> warning </i>
       }
     }
   }

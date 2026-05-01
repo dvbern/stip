@@ -7,8 +7,8 @@
   border-color: var(--dv-border-color) !important;
 
   &.dragging {
-    background-color: var(--dv-blue-bg-subtle);
-    --dv-border-color: var(--dv-blue-bg);
+    background-color: var(--dv-blue-subtle);
+    --dv-border-color: var(--dv-blue);
   }
   &.disabled {
     cursor: block;

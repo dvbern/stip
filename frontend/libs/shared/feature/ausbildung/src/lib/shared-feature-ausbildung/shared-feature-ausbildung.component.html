@@ -9,13 +9,13 @@
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
-    class="testing-library-fix tw:mt-6 tw:grid tw:min-w-[425px] tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:min-w-[640px] tw:md:grid-cols-2"
+    class="testing-library-fix tw:mt-6 tw:grid tw:min-w-106.25 tw:grid-cols-1 tw:gap-x-6 tw:gap-y-6 tw:pt-4 tw:md:min-w-160 tw:md:grid-cols-2"
     [class.tw:lg:grid-cols-3]="!fallIdSig()"
     (ngSubmit)="handleSave()"
   >
-    <h3 class="tw:md:col-span-2 tw:lg:col-span-3">
+    <h2 class="tw:md:col-span-2 tw:lg:col-span-3 tw:text-2xl tw:font-semibold tw:mb-2">
       {{ 'shared.form.ausbildung.place.title' | transloco }}
-    </h3>
+    </h2>
 
     <div class="testing-library-fix tw:flex tw:w-full tw:gap-2">
       @if (!form.value['ausbildungNichtGefunden']) {
@@ -51,10 +51,10 @@
       <button
         type="button"
         (click)="ausbildungsstaetteInfoDialog.toggle()"
-        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
-        <span class="material-symbols-rounded"> info </span>
+        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
     </div>
 
@@ -99,10 +99,10 @@
       <button
         type="button"
         (click)="ausbildungsgangInfoDialog.toggle()"
-        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
-        <span class="material-symbols-rounded"> info </span>
+        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
     </div>
 
@@ -125,10 +125,10 @@
         <button
           type="button"
           (click)="fachrichtungInfoDialog.toggle()"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
         >
-          <span class="material-symbols-rounded"> info </span>
+          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
         </button>
       }
     </div>
@@ -249,7 +249,7 @@
       </div>
     </div>
 
-    <h3 class="tw:!mt-6 tw:md:col-span-2 tw:lg:col-span-3">
+    <h3 class="tw:mt-6 tw:mb-2 tw:md:col-span-2 tw:lg:col-span-3 tw:text-2xl tw:font-semibold">
       {{ 'shared.form.ausbildung.duration.title' | transloco }}
     </h3>
 
@@ -361,7 +361,7 @@
       <div class="tw:md:col-span-2 tw:lg:col-span-3">
         <button
           type="submit"
-          class="btn btn-primary"
+          class="tw:dv-button-main-primary"
           data-testid="button-save"
           [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending: { ignoreInitial: true })"
         >

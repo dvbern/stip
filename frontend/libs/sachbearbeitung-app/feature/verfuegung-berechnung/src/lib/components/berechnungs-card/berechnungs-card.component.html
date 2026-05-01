@@ -5,7 +5,7 @@
         <h1 class="tw:text-lg! tw:mb-1">
           {{ t(titleKeySig()) }}
         </h1>
-        <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
+        <div class="tw:text-lg tw:flex tw:flex-col tw:pb-4">
           <span>{{ berechnung.name }}</span>
           <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
             <span>
@@ -53,7 +53,7 @@
       </mat-accordion>
     </mat-card-content>
 
-    <mat-card-footer class="px-3 py-4">
+    <mat-card-footer class="tw:px-4 py-4">
       @switch (berechnung.typ) {
         @case ('persoenlich') {
           <div class="tw:mt-3">

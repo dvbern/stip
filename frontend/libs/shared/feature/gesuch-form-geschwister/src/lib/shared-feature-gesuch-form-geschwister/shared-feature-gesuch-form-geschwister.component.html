@@ -12,41 +12,41 @@
   />
 } @else {
   <!-- Infobx -->
-  <div class="row">
-    <div class="col-12 col-xl-8 my-3">
+  <div class="tw:grid tw:grid-cols-12">
+    <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
       <dv-shared-ui-info-container>
-        <div class="d-flex gap-3">
-          <span class="material-symbols-rounded text-info"> info </span>
+        <div class="tw:flex tw:gap-3">
+          <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
           <span>{{ 'shared.form.geschwister.top.info' | transloco }}</span>
         </div>
       </dv-shared-ui-info-container>
     </div>
   </div>
 
-  <div class="row">
+  <div class="tw:grid tw:grid-cols-12">
     <!-- Table -->
     @if (view.gesuchFormular?.geschwisters; as geschwisters) {
-      <div class="col-12 col-xl-8">
+      <div class="tw:col-span-12 tw:xl:col-span-8">
         @if (geschwisters.length) {
-          <table class="table" aria-describedby="List von Geschwister">
+          <table class="tw:dv-simple-table" aria-describedby="List von Geschwister">
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">
+                <th></th>
+                <th>
                   {{ 'shared.form.geschwister.name' | transloco }}
                 </th>
-                <th scope="col">
+                <th>
                   {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
                 </th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
               @for (geschwisterRaw of geschwisters; track trackByIndex($index)) {
                 <tr data-testid="geschwister-row">
                   @if (asGeschwister(geschwisterRaw); as geschwister) {
-                    <td class="position-relative">
+                    <td class="tw:relative">
                       @if (
                         view.listChanges?.hasChangesByIdentifier?.[geschwister.entryId] ||
                         view.listChanges?.newEntriesByIdentifier?.[geschwister.entryId]
@@ -63,7 +63,7 @@
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.edit' | transloco"
                         >
@@ -75,7 +75,7 @@
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleDeleteGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.delete' | transloco"
                         >
@@ -84,7 +84,7 @@
                       } @else {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
+                          class="tw:dv-button tw:p-0 lh-1"
                           (click)="handleSelectGeschwister(geschwister)"
                           [title]="'shared.form.geschwister.view' | transloco"
                         >
@@ -103,11 +103,11 @@
   </div>
 
   <!-- ADD -->
-  <div class="d-flex flex-column flex-md-row">
+  <div class="tw:flex tw:flex-col flex-md-row">
     @if (!view.readonly) {
       <button
         type="button"
-        class="btn btn-outline-primary"
+        class="tw:dv-button-outline tw:self-start"
         (click)="handleAddGeschwister()"
         data-testid="button-add-geschwister"
       >
@@ -120,7 +120,7 @@
   <dv-shared-ui-step-form-buttons>
     <button
       type="button"
-      class="btn btn-primary"
+      class="tw:dv-button-main-primary"
       (click)="handleContinue()"
       [disabled]="!view.gesuchId"
       data-testid="button-continue"

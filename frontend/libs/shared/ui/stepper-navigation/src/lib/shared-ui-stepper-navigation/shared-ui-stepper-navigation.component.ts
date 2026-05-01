@@ -11,7 +11,6 @@ import { TranslocoPipe } from '@jsverse/transloco';
   selector: 'dv-shared-ui-stepper-navigation',
   imports: [TranslocoPipe],
   templateUrl: './shared-ui-stepper-navigation.component.html',
-  styleUrls: ['./shared-ui-stepper-navigation.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiStepperNavigationComponent {

@@ -3,8 +3,8 @@
     <div class="gray-bg"></div>
   </div>
 
-  <div class="tw:relative tw:my-12 tw:justify-between container">
-    <h1 class="tw:!mb-8 tw:!text-white">
+  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
+    <h1 class="tw:mb-8 tw:text-white tw:text-4xl tw:font-semibold">
       {{ t('welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
@@ -30,7 +30,7 @@
               data-testid="cockpit-create-ausbildung"
               type="button"
               (click)="createAusbildung(fall.id)"
-              class="btn btn-danger d-flex align-items-center tw:w-max"
+              class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
             >
               <dv-shared-ui-icon-chip>
                 <i class="material-symbols-rounded">add</i>
@@ -54,14 +54,14 @@
 
           <!-- INFOS -->
           <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
-            <h3 class="tw:!mb-4">Allgemeine Informationen</h3>
+            <h3 class="tw:mb-4 tw:text-2xl tw:font-semibold">Allgemeine Informationen</h3>
             <p>
               Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
               Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
               Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
               sind und weitere nützliche Grundlagen.
             </p>
-            <a class="btn btn-outline-primary tw:mt-3 tw:w-full"> Stipendien und Darlehen </a>
+            <a class="tw:dv-button-outline tw:mt-6 tw:w-full"> Stipendien und Darlehen </a>
           </div>
         </div>
       </div>

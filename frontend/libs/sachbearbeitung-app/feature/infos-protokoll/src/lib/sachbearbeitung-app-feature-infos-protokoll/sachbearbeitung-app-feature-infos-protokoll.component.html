@@ -1,9 +1,6 @@
-<!-- Table -->
-<div class="row g-4 mt-2">
-  <p>
-    {{ 'sachbearbeitung-app.infos.protokoll.text' | transloco }}
-  </p>
-</div>
+<p>
+  {{ 'sachbearbeitung-app.infos.protokoll.text' | transloco }}
+</p>
 <div class="tw:dv-table">
   <table mat-table [dataSource]="statusprotokollSig()" matSort>
     <caption class="cdk-visually-hidden">
@@ -79,7 +76,7 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
     <tr class="mat-mdc-row" *matNoDataRow>
-      <td class="mat-mdc-cell px-3" [colSpan]="displayedColumns.length">
+      <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
         {{ 'shared.table.noData' | transloco }}
       </td>
     </tr>

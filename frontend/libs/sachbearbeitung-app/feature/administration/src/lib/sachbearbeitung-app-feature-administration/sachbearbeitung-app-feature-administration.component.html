@@ -1,21 +1,19 @@
 <ng-container *transloco="let t">
-  <div class="d-flex h-100">
+  <div class="tw:flex tw:h-full">
     <ng-template #navigation cdkPortal>
-      <div class="sidenav p-4">
+      <div class="sidenav tw:p-6">
         @for (option of options; track $index) {
           @let isActive = route.isActive(option.route, false);
           <a
             *dvHasRoles="option.allowedRoles"
             type="button"
-            class="btn btn-nav d-flex justify-content-start align-items-center fw-normal mb-3 w-100"
-            [class.btn-light]="!isActive"
-            [class.shadow-none]="!isActive"
+            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
             [routerLink]="['/', 'administration', option.route]"
             routerLinkActive="active"
             [attr.data-testid]="'option-nav-' + option.route"
           >
-            <i class="material-symbols-rounded me-3">{{ option.iconSymbolName }}</i>
-            <span class="text-start">
+            <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
+            <span class="tw:text-start">
               {{ t(option.translationKey) }}
             </span>
           </a>
@@ -23,33 +21,35 @@
       </div>
     </ng-template>
     <!-- left step nav (Desktop) -->
-    <div class="d-none d-lg-block border-end bg-white">
+    <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
     </div>
-    <div class="pt-lg-4 px-lg-4 tw:w-full container tw:dv-pass-height">
+    <div class="tw:lg:pt-6 tw:lg:px-6 tw:w-full tw:dv-container tw:dv-pass-height">
       <!-- step header (mobile) -->
-      <div class="d-flex align-items-center justify-content-between border-bottom d-lg-none mt-3 mb-4 border-1 pb-3">
+      <div
+        class="tw:flex tw:items-center tw:justify-between border-bottom tw:lg:hidden tw:mt-4 tw:mb-6 border-1 tw:pb-4"
+      >
         <ng-container *ngTemplateOutlet="navigation"></ng-container>
       </div>
 
       <!-- title (desktop) -->
       @if (option) {
-        <div class="d-none d-lg-flex justify-content-start align-items-center">
+        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center tw:mt-6">
           @if (option.type === 'PARENT') {
-            <dv-shared-ui-icon-chip class="step-icon me-3">
+            <dv-shared-ui-icon-chip class="tw:mr-4">
               <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
             </dv-shared-ui-icon-chip>
           } @else {
             <a
               [routerLink]="option.parentRoute"
-              class="btn btn-link text-decoration-none fw-normal d-flex align-items-center tw:mr-2 tw:border-none p-2 shadow-none"
+              class="tw:dv-button tw:flex tw:items-center tw:mr-2 tw:border-none tw:p-2"
               data-testid="gesuch-step-nav-overview"
             >
-              <i class="material-symbols-rounded me-2 text-black">arrow_back</i>
+              <i class="material-symbols-rounded tw:mr-2">arrow_back</i>
             </a>
           }
 
-          <h2 class="fw-bold d-flex m-0" data-testid="step-title">
+          <h2 class="tw:text-3xl tw:font-bold tw:flex" data-testid="step-title">
             {{ t(option.titleTranslationKey) }}
             <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
           </h2>

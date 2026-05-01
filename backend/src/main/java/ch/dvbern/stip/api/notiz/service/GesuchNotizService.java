@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.notiz.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,10 +49,14 @@ public class GesuchNotizService {
         List<Gesuch> gesuchs = new ArrayList<>();
         ausbildungs.stream().map(Ausbildung::getGesuchs).forEach(gesuchs::addAll);
         final var notizes = new ArrayList<GesuchNotiz>();
+        // @REFACTOR: use queries
         gesuchs.stream()
             .map(gesuch -> gesuchNotizRepository.findAllByGesuchId(gesuch.getId()))
             .forEach(notizes::addAll);
-        return notizes.stream().map(gesuchNotizMapper::toDto).toList();
+        return notizes.stream()
+            .sorted(Comparator.comparing(GesuchNotiz::getTimestampErstellt).reversed())
+            .map(gesuchNotizMapper::toDto)
+            .toList();
     }
 
     @Transactional

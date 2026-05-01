@@ -2,12 +2,12 @@
   <button
     type="button"
     (click)="close()"
-    class="dv-icon-button dv-icon-button-md position-absolute tw:end-0 tw:top-0 tw:!m-1"
+    class="tw:dv-button-icon tw:absolute tw:end-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
-  <h1 class="tw:!mb-8 tw:!text-2xl">
+  <h1 class="tw:mb-8 tw:text-2xl tw:font-semibold">
     @if (dialogData.land) {
       {{ 'sachbearbeitung-app.admin.euEftaLaender.editdialog.title.edit' | transloco }}
     } @else {
@@ -22,7 +22,7 @@
   >
     <!-- Ländercode BFS -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
-      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label' | transloco }}*</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.laendercodeBfs.label' | transloco }}</mat-label>
       <input
         data-testid="form-euEftaLaender-laendercodeBfs"
         matInput
@@ -69,7 +69,7 @@
     </mat-form-field>
     <!-- De Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
-      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | transloco }}*</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.deKurzform.label' | transloco }}</mat-label>
       <input data-testid="form-euEftaLaender-deKurzform" matInput type="text" formControlName="deKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -77,7 +77,7 @@
     </mat-form-field>
     <!-- Fr Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
-      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | transloco }}*</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.frKurzform.label' | transloco }}</mat-label>
       <input data-testid="form-euEftaLaender-frKurzform" matInput type="text" formControlName="frKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -85,7 +85,7 @@
     </mat-form-field>
     <!-- It Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
-      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.itKurzform.label' | transloco }}*</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.itKurzform.label' | transloco }}</mat-label>
       <input data-testid="form-euEftaLaender-itKurzform" matInput type="text" formControlName="itKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -93,7 +93,7 @@
     </mat-form-field>
     <!-- Eng Kurzform -->
     <mat-form-field dvSharedUiFormField class="tw:w-full">
-      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.enKurzform.label' | transloco }}*</mat-label>
+      <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.enKurzform.label' | transloco }}</mat-label>
       <input data-testid="form-euEftaLaender-enKurzform" matInput type="text" formControlName="enKurzform" />
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
@@ -108,15 +108,15 @@
       <mat-label>{{ 'sachbearbeitung-app.admin.euEftaLaender.euEfta.label' | transloco }}</mat-label>
     </mat-checkbox>
 
-    <div class="d-flex justify-content-between tw:col-span-full mt-4">
-      <button type="button" data-testid="dialog-cancel" class="btn btn-secondary" (click)="close()">
+    <div class="tw:flex tw:justify-between tw:col-span-full tw:mt-6">
+      <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="close()">
         {{ 'shared.cancel' | transloco }}
       </button>
       <button
         type="submit"
         data-testid="dialog-submit"
         [disabled]="form.invalid || form.pristine"
-        class="btn btn-primary ms-2"
+        class="tw:dv-button-main-primary tw:ml-2"
         (click)="confirm()"
       >
         {{ 'sachbearbeitung-app.admin.euEftaLaender-dialog.submit' | transloco }}
