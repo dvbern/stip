@@ -1,25 +1,25 @@
-<div class="stepper-navigation">
+<div class="stepper-navigation tw:flex tw:justify-center tw:min-h-6 tw:mt-1">
   @if (prevStepVisible) {
     <button
       type="button"
-      class="navigation-button d-flex justify-content-start align-items-center"
+      class="tw:dv-button tw:text-dv-blue tw:p-0.5 tw:flex tw:justify-start tw:items-center"
       (click)="prevStep.emit()"
       data-testid="stepper-previous"
     >
-      <i class="material-symbols-rounded title-icon" aria-hidden="true">west</i>
-      <span class="visually-hidden">{{ 'shared.form.previous' | transloco }}</span>
+      <i class="material-symbols-rounded" aria-hidden="true">west</i>
+      <span class="cdk-visually-hidden">{{ 'shared.form.previous' | transloco }}</span>
     </button>
   }
-  <div class="flex-grow-1"></div>
+  <div class="tw:grow"></div>
   @if (nextStepVisible) {
     <button
       type="button"
-      class="navigation-button d-flex justify-content-start align-items-center"
+      class="tw:dv-button tw:text-dv-blue tw:p-0.5 tw:flex tw:justify-start tw:items-center"
       (click)="nextStep.emit()"
       data-testid="stepper-next"
     >
-      <i class="material-symbols-rounded title-icon" aria-hidden="true">east</i>
-      <span class="visually-hidden">{{ 'shared.form.next' | transloco }}</span>
+      <i class="material-symbols-rounded" aria-hidden="true">east</i>
+      <span class="cdk-visually-hidden">{{ 'shared.form.next' | transloco }}</span>
     </button>
   }
 </div>

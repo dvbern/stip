@@ -1,7 +1,7 @@
 <!-- Beschwerde Verlauf -->
-<h3 class="tw:!mb-6">
+<h2 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
   {{ 'sachbearbeitung-app.infos.beschwerde.verlauf' | transloco }}
-</h3>
+</h2>
 
 <div class="tw:dv-table tw:mb-6">
   @let datasource = beschwerdeVerlaufSig();
@@ -89,7 +89,7 @@
         @if (dokumentId) {
           <button
             type="button"
-            class="btn btn-link fs-7 tw:p-4 tw:text-sm"
+            class="tw:dv-button tw:text-sm! tw:p-4 tw:text-sm"
             [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
             [dvDownloadButton]="{
               type: 'dokument',
@@ -110,7 +110,7 @@
         <button
           type="button"
           (click)="showDetails(beschwerde)"
-          class="dv-icon-button dv-icon-button-md text-info"
+          class="tw:dv-button-icon tw:text-dv-blue"
           [matTooltip]="'sachbearbeitung-app.infos.beschwerde.table.moreInfo' | transloco"
         >
           <span class="material-symbols-rounded">info</span>

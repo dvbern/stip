@@ -26,7 +26,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './shared-ui-notifications.component.html',
-  styleUrl: './shared-ui-notifications.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNotificationsComponent {

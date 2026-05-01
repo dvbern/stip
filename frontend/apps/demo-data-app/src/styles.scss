@@ -9,14 +9,7 @@
 @include mat.elevation-classes();
 @include mat.app-background();
 
-// override boostrap variables + add custom
-@import 'theme';
-@include dv-variables;
-
 @import 'components';
 
-@import 'bootstrap/scss/bootstrap';
-
-@import 'bootstrap-overrides';
 @import 'material-overrides';
 @import 'base-styles';

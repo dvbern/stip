@@ -1,6 +1,6 @@
 @if (timeline.items) {
   <div
-    class="wrapper"
+    class="tw:gap-2 tw:md:gap-x-6 tw:grid tw:grid-cols-2"
     data-testid="two-columns-timeline-wrapper"
     [style]="
       'grid-template-rows: repeat(' +
@@ -13,11 +13,13 @@
   >
     @for (item of timeline.items; track item; let last = $last) {
       <div
-        class="box"
-        [class.left]="item.col === 'LEFT'"
-        [class.right]="item.col === 'RIGHT'"
-        [class.both]="item.col === 'BOTH'"
-        [class.show-contents-on-hover]="isTimelineGapBlock(item)"
+        class="tw:group tw:relative tw:border tw:rounded-lg tw:p-4"
+        [ngClass]="{
+          'tw:border-dv-blue tw:bg-dv-blue-subtle': item.col === 'LEFT',
+          'tw:border-dv-gray-light tw:bg-white': item.col === 'RIGHT',
+          'tw:border-dv-red tw:bg-dv-red-subtle': item.col === 'BOTH',
+        }"
+        [class.tw:group/both]="isTimelineGapBlock(item)"
         [style]="
           'grid-column: ' +
           item.positionStartCol +
@@ -35,11 +37,14 @@
           <!-- busy block -->
           @if (asBusyBlock(item); as busyItem) {
             @if (busyItem.children; as children) {
-              <div class="d-flex flex-column gap-3">
+              <div class="tw:flex tw:flex-col tw:gap-3">
                 @for (child of children; track child) {
                   <div>
                     <ng-template #content>
-                      <h5 data-testid="two-column-timeline-label">
+                      <h5
+                        data-testid="two-column-timeline-label"
+                        class="tw:font-semibold tw:text-lg tw:mb-2 tw:group-hover:underline"
+                      >
                         @if (child.label.type === 'TEXT') {
                           {{ child.label.title }}
                         } @else {
@@ -50,20 +55,23 @@
                         }
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
-                        <small class="d-block" data-testid="two-column-timeline-sub-label">
+                        <small
+                          class="tw:text-sm tw:text-dv-gray-light tw:block"
+                          data-testid="two-column-timeline-sub-label"
+                        >
                           {{ subTitle.key | transloco }}: {{ subTitle.value }}
                         </small>
                       }
                       @if (child.wohnsitz) {
-                        <small class="d-block">
+                        <small class="tw:text-sm tw:text-dv-gray-light tw:block">
                           {{ 'shared.kanton.' + child.wohnsitz | transloco }}
                         </small>
                       }
-                      <small class="d-block">
+                      <small class="tw:text-sm tw:text-dv-gray-light tw:block">
                         {{ printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis) }}
                       </small>
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="d-flex align-items-center mt-2 gap-1">
+                        <small class="tw:text-sm tw:text-dv-gray-light tw:flex tw:items-center tw:mt-2 tw:gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
@@ -72,7 +80,7 @@
                           <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
                         </small>
                       } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="d-flex align-items-center mt-2 gap-1">
+                        <small class="tw:text-sm tw:text-dv-gray-light tw:flex tw:items-center tw:mt-2 tw:gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
@@ -85,7 +93,7 @@
                     @if (child.editable) {
                       <button
                         type="button"
-                        class="btn btn-link tw:block tw:w-full tw:border-0 tw:!p-0 tw:!text-left"
+                        class="tw:group tw:dv-button tw:block tw:w-full tw:border-0 tw:p-0 tw:text-left"
                         (click)="handleEditItem(child)"
                       >
                         <ng-container *ngTemplateOutlet="content"></ng-container>
@@ -101,31 +109,35 @@
           }
         } @else if (isTimelineGapBlock(item)) {
           <!-- gap -->
-          <div class="position-relative" data-testid="timeline-gap-block">
-            <div class="hide-on-hover">
-              <h5>{{ 'shared.form.lebenslauf.missingEntries' | transloco }}</h5>
-              <small>{{ printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis) }}</small>
+          <div class="tw:relative tw:flex tw:justify-between" data-testid="timeline-gap-block">
+            <div class="tw:group-hover/both:opacity-0 tw:transition-opacity">
+              <h5 class="tw:text-lg tw:font-semibold">{{ 'shared.form.lebenslauf.missingEntries' | transloco }}</h5>
+              <small class="tw:text-sm tw:text-dv-gray-light">{{
+                printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis)
+              }}</small>
             </div>
-            <div class="plus-and-buttons d-flex justify-content-end align-items-center gap-3">
-              <div class="hiding-wrapper">
-                <div class="show-on-hover d-flex align-items-center gap-3">
+            <div class="tw:flex tw:justify-end tw:items-center tw:gap-3">
+              <div class="tw:relative tw:overflow-hidden">
+                <div
+                  class="tw:relative tw:opacity-0 tw:group-hover/both:right-0 tw:group-hover/both:opacity-100 tw:transition-[opacity_right] tw:-right-full tw:flex tw:items-center tw:gap-3"
+                >
                   <button
                     type="button"
-                    class="btn btn-info d-flex align-items-center add-button-40"
+                    class="tw:dv-button-main-info tw:flex tw:items-center tw:h-10 tw:rounded-full"
                     (click)="handleAddAusbildung(asGapBlock(item))"
                   >
                     <i class="material-symbols-rounded">school</i>
-                    <span class="d-none d-sm-block ms-2">{{
+                    <span class="tw:hidden tw:sm:block tw:ml-2">{{
                       'shared.form.lebenslauf.add.ausbildung.short' | transloco
                     }}</span>
                   </button>
                   <button
                     type="button"
-                    class="btn btn-dark d-flex align-items-center add-button-40"
+                    class="tw:dv-button-main-primary tw:flex tw:items-center tw:h-10 tw:rounded-full"
                     (click)="handleAddTaetigkeit(asGapBlock(item))"
                   >
                     <i class="material-symbols-rounded">work</i>
-                    <span class="d-none d-sm-block ms-2">{{
+                    <span class="tw:hidden tw:sm:block tw:ml-2">{{
                       'shared.form.lebenslauf.add.taetigkeit.short' | transloco
                     }}</span>
                   </button>
@@ -133,9 +145,11 @@
               </div>
               <button
                 type="button"
-                class="btn d-flex align-items-center justify-content-center add-chip z-1 flex-shrink-0"
+                class="tw:dv-button-main-danger tw:flex tw:items-center tw:justify-center tw:z-10 tw:shrink-0 tw:rounded-full tw:w-10 tw:h-10"
               >
-                <i class="material-symbols-rounded fs-2 rotate-on-hover">add</i>
+                <i class="material-symbols-rounded tw:text-3xl! tw:transition-transform tw:group-hover:rotate-45"
+                  >add</i
+                >
               </button>
             </div>
           </div>

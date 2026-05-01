@@ -1,20 +1,20 @@
-<section class="d-flex flex-column position-relative p-4 rounded">
+<section class="tw:flex tw:flex-col tw:relative tw:p-4 tw:rounded-lg">
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute top-0 end-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:top-0 tw:right-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="title h5 mb-4 d-flex">
+  <h1 class="tw:text-xl tw:font-semibold tw:mb-6 tw:flex">
     {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.titel' | transloco }}
   </h1>
   <div>{{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.message' | transloco }}</div>
 
-  <form [formGroup]="form" class="mt-4" novalidate>
-    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+  <form [formGroup]="form" class="tw:mt-6" novalidate>
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:mt-6">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -22,7 +22,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:mt-6">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -30,7 +30,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="col-12 mt-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:mt-6">
       <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
       <input matInput dvMaxLength formControlName="email" type="email" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -41,11 +41,11 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="d-flex mt-4 justify-content-between">
-      <button type="button" class="btn btn-secondary" (click)="cancel()">
+    <div class="tw:flex tw:mt-6 tw:justify-between">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>
-      <button type="submit" [disabled]="form.invalid" class="btn btn-primary ms-2" (click)="confirm()">
+      <button type="submit" [disabled]="form.invalid" class="tw:dv-button-main-primary tw:ml-2" (click)="confirm()">
         {{ 'sachbearbeitung-app.admin.sozialdienst.admin-dialog.confirm' | transloco }}
       </button>
     </div>

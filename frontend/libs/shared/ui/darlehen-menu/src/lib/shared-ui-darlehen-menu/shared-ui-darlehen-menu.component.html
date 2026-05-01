@@ -4,30 +4,30 @@
 @if (displayModeSig() === 'menu') {
   <button
     type="button"
-    class="btn btn-nav fw-normal d-flex align-items-center shadow-none"
+    class="tw:dv-nav-button fw-normal tw:flex tw:items-center"
     data-testid="header-nav-darlehen-menu"
     [matMenuTriggerFor]="darlehenMenu"
     [disabled]="!darlehenListSig()?.length && !canCreateDarlehenSig()"
     [class.active]="darlehenRouteIdSig()"
   >
     <span>{{ 'shared.header.darlehen' | transloco }}</span>
-    <i class="material-symbols-rounded ms-2">expand_more</i>
+    <i class="material-symbols-rounded tw:ml-2">expand_more</i>
   </button>
 
-  <mat-menu #darlehenMenu="matMenu" class="header-menu-panel mt-2 rounded">
-    <div class="d-flex flex-column gap-2">
+  <mat-menu #darlehenMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+    <div class="tw:flex tw:flex-col tw:gap-2">
       @for (state of darlehenCompletedStates; track $index) {
         @if (darlehens[state] && darlehens[state].length) {
-          <div class="d-flex align-items-center text-muted small gap-2">
-            <hr class="flex-grow-1" />
+          <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+            <hr class="tw:grow tw:border-t tw:border-dv-border" />
             {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-            <hr class="flex-grow-1" />
+            <hr class="tw:grow tw:border-t tw:border-dv-border" />
           </div>
           @for (darlehen of darlehens[state]; track $index) {
             @if (idType.id) {
               <a
                 [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
-                class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+                class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
                 data-testid="header-nav-darlehen-menu-item"
                 [class.active]="darlehenRouteIdSig() === darlehen.id"
                 mat-menu-item
@@ -48,10 +48,10 @@
       }
 
       @if (idType.type === 'fall' && idType.id && canCreateDarlehenSig()) {
-        <hr class="flex-grow-1 tw:hidden tw:not-first:block" />
+        <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
         <button
           type="button"
-          class="btn tw:font-normal tw:shadow-none!"
+          class="tw:dv-button tw:font-normal tw:shadow-none!"
           data-testid="cockpit-gesuch-darlehen-create"
           (click)="createDarlehen.emit({ fallId: idType.id })"
           mat-menu-item
@@ -65,19 +65,19 @@
     </div>
   </mat-menu>
 } @else {
-  <div class="d-flex flex-column gap-2">
+  <div class="tw:flex tw:flex-col tw:gap-2">
     @for (state of darlehenCompletedStates; track $index) {
       @if (darlehens[state] && darlehens[state].length) {
-        <div class="d-flex align-items-center text-muted small gap-2">
-          <hr class="flex-grow-1" />
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ 'shared.header.darlehen.complete-states.' + state | transloco }}
-          <hr class="flex-grow-1" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (darlehen of darlehens[state]; track $index) {
           @if (idType.id) {
             <a
               [routerLink]="['/gesuch', 'darlehen', darlehen.id, idType.type, idType.id]"
-              class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+              class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
               data-testid="header-nav-darlehen-menu-item"
               [class.active]="darlehenRouteIdSig() === darlehen.id"
               mat-menu-item
@@ -98,10 +98,10 @@
     }
 
     @if (idType.type === 'fall' && idType.id && canCreateDarlehenSig()) {
-      <hr class="flex-grow-1 tw:hidden tw:not-first:block" />
+      <hr class="tw:grow tw:border-t tw:border-dv-border tw:hidden tw:not-first:block" />
       <button
         type="button"
-        class="btn tw:font-normal tw:shadow-none!"
+        class="tw:dv-button tw:font-normal tw:shadow-none!"
         data-testid="cockpit-gesuch-darlehen-create"
         (click)="createDarlehen.emit({ fallId: idType.id })"
         mat-menu-item

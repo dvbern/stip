@@ -2,7 +2,7 @@
   [formGroup]="form"
   data-testid="form-benutzerverwaltung-form"
   novalidate
-  class="tw:dv-form-grid tw:mt-6"
+  class="tw:dv-form-grid tw:mt-6 tw:px-2"
   (ngSubmit)="handleSubmit()"
 >
   @let controls = form.controls;
@@ -106,7 +106,7 @@
       </mat-error>
     </mat-form-field>
 
-    <h2 class="h4 tw:col-start-1 tw:pt-3">
+    <h2 class="tw:text-2xl tw:font-semibold tw:col-start-1 tw:pt-3">
       {{ 'sachbearbeitung-app.admin.benutzerverwaltung.rollen.title' | transloco }}
     </h2>
     <mat-selection-list [formControl]="controls.sachbearbeiterRollen" class="tw:col-start-1" [disableRipple]="true">

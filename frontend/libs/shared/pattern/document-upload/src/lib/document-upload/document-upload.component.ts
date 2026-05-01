@@ -64,14 +64,14 @@ export class SharedPatternDocumentUploadComponent {
   mainDocumentSig = computed(() => {
     const { dokuments } = this.uploadStore.dokumentListView();
     if (!dokuments.length) return;
-    return (
+    const dokument =
       // If there are any documents in error state, show the first one
       dokuments.find((document) => document.state === 'error') ??
       // else show the first document that is still uploading
       dokuments.find((document) => document.state === 'uploading') ??
       // else show the first document that is done
-      dokuments.find((document) => document.state === 'done')
-    );
+      dokuments.find((document) => document.state === 'done');
+    return dokument;
   });
 
   initialOptionsSig = computed(
