@@ -1,5 +1,3 @@
-import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
-
 export type VerfuegungOption = {
   route: string;
   translationKey: string;
@@ -19,11 +17,16 @@ export const OPTION_ZUSAMMENFASSUNG: VerfuegungOption = {
 export const BERECHNUNG_ROUTE = 'berechnung';
 export const createBerechnungOption = (
   index: number,
-  type: TeilberechnungsArt,
+  startDate: string,
+  endDate: string,
 ): VerfuegungOption => ({
-  route: `berechnung/${index + 1}${type}`,
+  route: `berechnung/${index + 1}`,
   translationKey: 'sachbearbeitung-app.verfuegung.option.berechnung',
-  translationOptions: { index: (index + 1).toString(), type: type },
+  translationOptions: {
+    index: (index + 1).toString(),
+    startDate: startDate,
+    endDate: endDate,
+  },
   titleTranslationKey: 'sachbearbeitung-app.verfuegung.option.berechnung',
   iconSymbolName: 'description',
 });
