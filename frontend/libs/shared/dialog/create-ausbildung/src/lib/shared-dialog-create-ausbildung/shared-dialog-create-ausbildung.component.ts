@@ -10,6 +10,7 @@ import { SharedFeatureAusbildungComponent } from '@dv/shared/feature/ausbildung'
 
 export type CreateAusbildungData = {
   fallId: string;
+  minAusbildungEnd: string | undefined;
 };
 
 @Component({
@@ -30,13 +31,17 @@ export class SharedDialogCreateAusbildungComponent {
     this.dialogRef.close(true);
   }
 
-  static open(matDialog: MatDialog, fallId: string) {
+  static open(
+    matDialog: MatDialog,
+    fallId: string,
+    minAusbildungEnd: string | undefined,
+  ) {
     return matDialog.open<
       SharedDialogCreateAusbildungComponent,
       CreateAusbildungData
     >(SharedDialogCreateAusbildungComponent, {
       panelClass: 'dv-dialog-formular',
-      data: { fallId },
+      data: { fallId, minAusbildungEnd },
     });
   }
 }

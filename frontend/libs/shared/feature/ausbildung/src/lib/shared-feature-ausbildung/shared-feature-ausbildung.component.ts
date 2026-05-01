@@ -29,7 +29,7 @@ import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { addYears } from 'date-fns';
+import { addYears, subDays } from 'date-fns';
 import { diff } from 'json-diff-ts';
 import { startWith } from 'rxjs';
 
@@ -162,7 +162,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   readonly ausbildungspensumValues = Object.values(AusbildungsPensum);
 
   // If this input is set, the component is used in a dialog context
-  fallIdSig = input.required<string | null>();
+  dialogDataSig = input.required<{
+    fallId: string;
+    minAusbildungEnd: string | undefined;
+  } | null>();
   ausbildungSaved = output<void>();
   languageSig = this.store.selectSignal(selectLanguage);
 
@@ -200,7 +203,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.gesuchViewSig,
   );
   private usageTypeSig = computed(() => {
-    const fallId = this.fallIdSig();
+    const fallId = this.dialogDataSig()?.fallId;
     const gesuchFallId = this.cachedGesuchViewSig().cache.gesuch?.fallId;
 
     return fallId
@@ -251,6 +254,17 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     return this.currentAusbildungsstaetteSig().data?.ausbildungsgaenge.find(
       (ausbildungsgang) => ausbildungsgang.id === ausbildungsgangId,
     );
+  });
+
+  minAusbildungEndSig = computed(() => {
+    const minAusbildungEndDate =
+      this.dialogDataSig()?.minAusbildungEnd ??
+      this.gesuchViewSig().gesuchFormular?.ausbildung
+        ?.earliestActiveGesuchPeriodeStart;
+
+    return minAusbildungEndDate
+      ? subDays(new Date(minAusbildungEndDate), 1)
+      : undefined;
   });
 
   ausbildungsstaettenOptionsSig = computed(
@@ -420,21 +434,28 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       { control: controls.ausbildungBegin, getAdditionalValidators: () => [] },
       {
         control: controls.ausbildungEnd,
-        getAdditionalValidators: () => [
-          minDateValidatorForLocale(
-            this.languageSig(),
-            this.ausbildungStore.ausbildungViewSig().minEndDatum,
-            'monthYear',
-          ),
-          createDateDependencyValidator(
-            'after',
-            controls.ausbildungBegin,
-            true,
-            new Date(),
-            this.languageSig(),
-            'monthYear',
-          ),
-        ],
+        getAdditionalValidators: () => {
+          const minAusbildungEnd = this.minAusbildungEndSig();
+          return [
+            ...(minAusbildungEnd
+              ? [
+                  minDateValidatorForLocale(
+                    this.languageSig(),
+                    minAusbildungEnd,
+                    'monthYear',
+                  ),
+                ]
+              : []),
+            createDateDependencyValidator(
+              'after',
+              controls.ausbildungBegin,
+              true,
+              new Date(),
+              this.languageSig(),
+              'monthYear',
+            ),
+          ];
+        },
       },
     ].forEach(({ control, getAdditionalValidators }) =>
       effect(() => {
@@ -641,7 +662,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (!this.fallIdSig()) {
+    if (!this.dialogDataSig()?.fallId) {
       this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
     }
   }

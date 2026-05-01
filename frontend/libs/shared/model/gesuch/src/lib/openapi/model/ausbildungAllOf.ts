@@ -16,6 +16,7 @@ export interface AusbildungAllOf {
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
     editable: boolean;
+    earliestActiveGesuchPeriodeStart?: string;
 }
 
 
