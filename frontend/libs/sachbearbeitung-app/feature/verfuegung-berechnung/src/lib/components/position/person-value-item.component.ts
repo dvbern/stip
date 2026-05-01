@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { PersonValueItem } from '@dv/shared/model/gesuch';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -12,17 +7,20 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
   selector: 'dv-person-value-item',
   imports: [SharedUiFormatChfPipe],
   template: `
-    @for (i of itemsSig(); track $index) {
-      <div class="tw:flex tw:justify-between tw:text-gray-500 tw:text-sm">
-        <div>{{ i.vorname }}</div>
-        <div>{{ i.value | formatChf }}</div>
-      </div>
-    }
+    <div class="tw:flex tw:gap-1">
+      @for (i of itemsSig(); track $index) {
+        <div class="tw:text-gray-500 tw:text-sm">
+          <span>{{ i.vorname }}: </span>
+          <span>{{ i.value | formatChf }}</span>
+          @if (!$last) {
+            <span>,</span>
+          }
+        </div>
+      }
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonValueItemComponent {
-  @HostBinding('class')
-  readonly klass = 'tw:block';
   itemsSig = input.required<PersonValueItem[]>();
 }

@@ -35,7 +35,6 @@
     white
   );
   --color-dv-border: #dee2e6;
-  --color-dv-muted: var(--tw-color-dv-gray);
 
   --color-dv-main-info: var(--tw-color-dv-blue);
   --color-dv-main-info-subtle: var(--tw-color-dv-blue-subtle);
@@ -175,12 +174,4 @@
   &:hover {
     @apply tw:bg-dv-red tw:text-white;
   }
-}
-
-@utility dv-verfuegung-position-list {
-  @apply tw:flex tw:flex-col;
-}
-
-@utility dv-divider {
-  @apply tw:border-t tw:border-dv-border tw:my-4;
 }

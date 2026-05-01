@@ -4,6 +4,8 @@ import {
   PersoenlichesBudgetresultat,
 } from '@dv/shared/model/gesuch';
 
+export type TeilberechnungsArt = 'a' | 'b' | '';
+
 export interface PersoenlichesBudgetresultatView extends PersoenlichesBudgetresultat {
   typ: 'persoenlich';
   yearRange: string;

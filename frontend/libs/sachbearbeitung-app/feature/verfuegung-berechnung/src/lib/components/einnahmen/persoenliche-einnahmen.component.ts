@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { TranslocoDirective } from '@jsverse/transloco';
 
@@ -9,18 +8,15 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
-import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
   selector: 'dv-persoenliche-einnahmen',
   imports: [
-    CommonModule,
     TranslocoDirective,
     SharedUiFormatChfPipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
-    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -30,8 +26,6 @@ import { PositionComponent } from '../position/position.component';
       "
     >
       @let einnahmen = budgetSig().einnahmen;
-      @let hideZero = hideZeroSig();
-
       <!-- Nettoerwerbseinkommen -->
       <dv-position
         [titleSig]="t('nettoerwerbseinkommen')"
@@ -43,15 +37,18 @@ import { PositionComponent } from '../position/position.component';
         "
         [personValueItemsSig]="einnahmen.nettoerwerbseinkommen"
         [amountSig]="einnahmen.nettoerwerbseinkommenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.nettoerwerbseinkommenTotal"
       >
       </dv-position>
 
       <!-- BGSA -->
+      <!-- <dv-position
+        [titleSig]="t('einnahmenBGSA')"
+        [personValueItemsSig]="einnahmen.einnahmenBGSA"
+        [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
+      > -->
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.einnahmenBGSATotal"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           1)
@@ -65,7 +62,6 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           einnahmen.kinderAusbildungszulagenTotal | formatChfPositive
         "
-        *dvHideZero="hideZero; value: einnahmen.kinderAusbildungszulagenTotal"
       >
       </dv-position>
 
@@ -74,7 +70,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('unterhaltsbeitraege')"
         [personValueItemsSig]="einnahmen.unterhaltsbeitraege"
         [amountSig]="einnahmen.unterhaltsbeitraegeTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.unterhaltsbeitraegeTotal"
       >
       </dv-position>
 
@@ -84,7 +79,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('eoLeistungen.info')"
         [personValueItemsSig]="einnahmen.eoLeistungen"
         [amountSig]="einnahmen.eoLeistungenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.eoLeistungenTotal"
       >
       </dv-position>
 
@@ -94,7 +88,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('taggelderAHVIV.info')"
         [personValueItemsSig]="einnahmen.taggelderAHVIV"
         [amountSig]="einnahmen.taggelderAHVIVTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.taggelderAHVIVTotal"
       >
       </dv-position>
 
@@ -104,7 +97,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('renten.info')"
         [personValueItemsSig]="einnahmen.renten"
         [amountSig]="einnahmen.rentenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.rentenTotal"
       >
       </dv-position>
 
@@ -113,7 +105,6 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('ergaenzungsleistungen')"
         [personValueItemsSig]="einnahmen.ergaenzungsleistungen"
         [amountSig]="einnahmen.ergaenzungsleistungenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.ergaenzungsleistungenTotal"
       >
       </dv-position>
 
@@ -123,7 +114,6 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="
           einnahmen.beitraegeGemeindeInstitutionen | formatChfPositive
         "
-        *dvHideZero="hideZero; value: einnahmen.beitraegeGemeindeInstitutionen"
       >
       </dv-position>
 
@@ -133,7 +123,6 @@ import { PositionComponent } from '../position/position.component';
         [infoSig]="t('andereEinnahmen.info')"
         [personValueItemsSig]="einnahmen.andereEinnahmen"
         [amountSig]="einnahmen.andereEinnahmenTotal | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.andereEinnahmenTotal"
       >
       </dv-position>
 
@@ -148,7 +137,6 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.anrechenbaresVermoegen"
       >
       </dv-position>
 
@@ -156,7 +144,6 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('elterlicheLeistung')"
         [amountSig]="einnahmen.elterlicheLeistung | formatChfPositive"
-        *dvHideZero="hideZero; value: einnahmen.elterlicheLeistung"
       >
       </dv-position>
 
@@ -172,7 +159,6 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersoenlicheEinnahmenComponent {
-  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<PersoenlichesBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }

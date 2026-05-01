@@ -3,11 +3,11 @@
 }
 
 .accept {
-  border: 2px solid var(--dv-green);
-  color: var(--dv-green);
+  background-color: var(--dv-green-bg-subtle);
+  color: var(--dv-green-bg);
 }
 
 .reject {
-  border: 2px solid var(--dv-red);
+  background-color: var(--dv-red-bg-subtle);
   color: var(--dv-red);
 }

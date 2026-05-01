@@ -138,10 +138,9 @@ public class BerechnungService {
         if (berechnungVorKuerzungUndTeilung < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungVorKuerzungUndTeilung = 0;
         }
-        final var monateMitDarlehen = getMonateMitDarlehen(gesuch);
-        final Integer ungekuerztDarlehen = getDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
+        final Integer ungekuerztDarlehen = getDarlehen(gesuch, berechnungVorKuerzungUndTeilung);
         final int ungekuerztStipendien =
-            BerechnungUtil.substractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
+            BerechnungUtil.substractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, ungekuerztDarlehen);
 
         final var monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
@@ -176,17 +175,15 @@ public class BerechnungService {
         final int totalVorTeilungDarlehen =
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
 
-        final var berechnungDarlehen = getDarlehen(totalVorTeilungDarlehen, monateMitDarlehen);
+        final var berechnungDarlehen = getDarlehen(gesuch, totalVorTeilungDarlehen);
         final var berechnungStipendium =
-            BerechnungUtil.substractGesezlichesDarlehen(totalVorTeilungDarlehen, monateMitDarlehen);
+            BerechnungUtil.substractGesezlichesDarlehen(totalVorTeilungDarlehen, berechnungDarlehen);
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
             berechnungVorKuerzungUndTeilung,
-            totalVorTeilungDarlehen,
             berechnungStipendium,
             berechnungsresultate,
-            monateMitDarlehen,
             ungekuerztStipendien,
             ungekuerztDarlehen,
             totalNachKuerzungNachEinreichefrist,
@@ -197,56 +194,39 @@ public class BerechnungService {
         );
     }
 
-    private static Integer getDarlehen(final int stipendium, final int monateMitDarlehen) {
-        if (monateMitDarlehen == 0) {
+    private static Integer getDarlehen(Gesuch gesuch, int stipendium) {
+        if (!gesuch.getAusbildung().getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
             return null;
         }
 
-        final var darlehenFuer12MonateMitDarlehen = BerechnungUtil.calculateGesetzlichesDarlehen(stipendium);
-
-        if (monateMitDarlehen == 12) {
-            return darlehenFuer12MonateMitDarlehen;
-        }
-        return darlehenFuer12MonateMitDarlehen * monateMitDarlehen / 12;
-    }
-
-    public static int getMonateMitDarlehen(Gesuch gesuch) {
-        final var ausbildung = gesuch.getAusbildung();
-
-        if (!ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
-            return 0;
-        }
-
-        int monateTertiaerstufeLebenslauf = 0;
+        int monateTertiaerstufe = 0;
 
         for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {
             if (
                 item.isAusbildung()
                 && item.getAbschluss().getBildungskategorie().isTertiaerstufe()
             ) {
-                monateTertiaerstufeLebenslauf += DateUtil.getMonthsBetween(item.getVon(), item.getBis());
+                monateTertiaerstufe += DateUtil.getMonthsBetween(item.getVon(), item.getBis());
             }
         }
 
-        final var gesuchStartDate = gesuch.getEarliestGesuchTranche().getGueltigkeit().getGueltigAb();
+        final var ausbildung = gesuch.getAusbildung();
 
-        final var monateTertiaerstufeBisGesuchStart = monateTertiaerstufeLebenslauf + DateUtil.getMonthsBetween(
-            ausbildung.getAusbildungBegin(),
-            gesuchStartDate.atStartOfDay().toLocalDate()
-        );
-
-        final var monateTertiaerStufeBisGesuchEnde = monateTertiaerstufeLebenslauf + 12;
-
-        if (monateTertiaerStufeBisGesuchEnde < BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
-            return 0;
+        if (ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
+            monateTertiaerstufe += DateUtil.getMonthsBetween(
+                ausbildung.getAusbildungBegin(),
+                ausbildung.getAusbildungEnd()
+            );
         }
 
-        if (monateTertiaerstufeBisGesuchStart < BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
-            final var monateMitDarlehen =
-                monateTertiaerStufeBisGesuchEnde - BerechnungUtil.monthLimitAusbildungTertiaerstufe;
-            return monateMitDarlehen;
+        Integer darlehen = null;
+
+        if (monateTertiaerstufe > BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
+            // divide by 300 then round and multiply by 100 to get a rounded (to the nearest 100) third of the
+            // stipendium
+            darlehen = BerechnungUtil.calculateGesetzlichesDarlehen(stipendium);
         }
-        return 12;
+        return darlehen;
     }
 
     public Stream<TranchenBerechnungsresultatDto> getBerechnungsresultatFromGesuchTranche(
