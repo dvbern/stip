@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Input,
   Output,
+  computed,
   effect,
   inject,
   input,
@@ -162,6 +163,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
 
   languageSig = this.store.selectSignal(selectLanguage);
   plzValues?: Plz[];
+  currentlyLivesInSwitzerlandSig = computed(() => {
+    const landId = this.elternteilSig().adresse?.landId;
+    const laender = this.landStore.landListViewSig();
+    return (
+      laender?.find((l) => l.id === landId)?.laendercodeBfs === BFSCODE_SCHWEIZ
+    );
+  });
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],

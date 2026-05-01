@@ -47,6 +47,7 @@ import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CaseUtils;
@@ -86,6 +87,10 @@ public class DatenschutzbriefService {
     @Transactional
     public UUID createDatenschutzbrief(final UUID gesuchId, final UUID elternteilId) {
         final var elternteil = elternRepository.requireById(elternteilId);
+        // Do not create a Datenschutzbrief for Eltern living outside Switzerland
+        if (!livesInSwitzerland(elternteil)) {
+            throw new BadRequestException("No Datenschutzbrief for Elternteil in Ausland");
+        }
         return createDatenschutzbrief(gesuchId, elternteil, true).getId();
     }
 
