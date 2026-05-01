@@ -180,3 +180,7 @@
 @utility dv-verfuegung-position-list {
   @apply tw:flex tw:flex-col;
 }
+
+@utility dv-divider {
+  @apply tw:border-t tw:border-dv-border tw:my-4;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,6 +15,7 @@ import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
+import { TranchenBerechnungsresultat } from '@dv/shared/model/gesuch';
 import { BerechnungView } from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
@@ -45,8 +47,10 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
-  // eslint-disable-next-line @angular-eslint/no-input-rename
+
   indexSig = input.required<string>({ alias: 'index' });
+  tranchenIdSig = input<string | null>(null, { alias: 'trancheId' });
+
   expansionState = {
     persoenlich: {
       einnahmen: false,
@@ -62,7 +66,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     },
   };
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
-  // eslint-disable-next-line @angular-eslint/no-input-rename
+
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
   berechnungStore = inject(BerechnungStore);
 
@@ -70,10 +74,15 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     const zusammenfassung =
       this.berechnungStore.berechnungZusammenfassungViewSig();
 
-    const r = getBerechnungByIndex(
+    const r = getBerechnungByTrancheIdByIndex(
       zusammenfassung.berechnungsresultate,
+      this.tranchenIdSig(),
       this.indexSig(),
     );
+
+    if (!r) {
+      throw new Error('Berechnung nicht gefunden');
+    }
 
     const view: BerechnungView = {
       persoenlich: {
@@ -110,14 +119,30 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
       }
 
       if (verfuegungId) {
+        // case mit verfuegungId => versionierte Berechnung für Verfuegung
         this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
       } else {
+        // case aktuelles gesuch
         this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
       }
     });
   }
 }
 
-const getBerechnungByIndex = <T>(berechnung: T[][], rawIndex: string) => {
-  return berechnung[0][+rawIndex - 1];
+const getBerechnungByTrancheIdByIndex = (
+  berechnung: Record<string, TranchenBerechnungsresultat[]>,
+  trancheId: string | null,
+  rawIndex: string,
+) => {
+  if (!trancheId) {
+    return undefined;
+  }
+
+  const trancheBerechnungsresultate = berechnung[trancheId];
+
+  if (!trancheBerechnungsresultate) {
+    return undefined;
+  }
+
+  return trancheBerechnungsresultate[+rawIndex - 1];
 };

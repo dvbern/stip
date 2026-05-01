@@ -1,4 +1,4 @@
-@let zusammenfassung = berechnungStore.berechnungZusammenfassungViewSig();
+@let zusammenfassung = zusammenfassungViewSig();
 @let accepted = (zusammenfassung.berechnungDarlehen ?? 0) > 0 || zusammenfassung.berechnungStipendium > 0;
 
 @if (berechnungStore.berechnung() | rdIsPendingWithoutCache) {
@@ -163,8 +163,8 @@
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
-        @for (berechnungen of zusammenfassung.berechnungsresultate; track $index) {
-          @for (teilBerechnung of berechnungen; track $index; let berechnungsIndex = $index) {
+        @for (berechnungen of zusammenfassung.berechnungsresultateGroup; track $index) {
+          @for (teilBerechnung of berechnungen.berechnungen; track $index; let berechnungsIndex = $index) {
             <div class="tw:mb-6">
               <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-3">
                 <div class="tw:flex tw:gap-2 tw:font-bold">
@@ -180,7 +180,7 @@
 
                   <a
                     class="tw:no-underline! tw:font-light tw:text-dv-blue!"
-                    [routerLink]="['../berechnung', berechnungsIndex + 1]"
+                    [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
                   >
                     <div class="tw:flex tw:items-center">
                       <span>{{ t('item.link') }}</span>

@@ -94,18 +94,7 @@ export class BerechnungStore extends signalStore(
     return {
       loading: isPending(berechnungRd),
       ...byTrancheId,
-      berechnungsresultate: Object.values(byTrancheId.berechnungsresultate),
-      // .map(
-      //   (r) =>
-      //     r.map((b, index) => ({
-      //       ...b,
-      //       type:
-      //         r.length > 1
-      //           ? // It should only be possible to split a berechnung into two parts, a and b
-      //             ('ab'.charAt(index % 2) as TeilberechnungsArt)
-      //           : '',
-      //     })),
-      // ),
+      berechnungsresultate: byTrancheId.berechnungsresultate,
     };
   });
 

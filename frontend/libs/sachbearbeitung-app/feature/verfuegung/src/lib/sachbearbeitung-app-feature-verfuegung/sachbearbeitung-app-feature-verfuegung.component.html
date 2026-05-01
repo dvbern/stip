@@ -18,29 +18,34 @@
           </span>
         </a>
       }
-      <hr />
-      @for (option of berechnungenSig(); track $index) {
-        <a
-          type="button"
-          class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
-          [attr.data-testid]="'option-nav-' + option.route"
-          [routerLink]="option.fullRoute"
-          routerLinkActive="active"
-          queryParamsHandling="merge"
-          (click)="navClicked$.emit()"
-        >
-          <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
-          <span class="tw:text-start">
-            {{ t(option.translationKey, option.translationOptions) }}
-          </span>
-        </a>
+      <hr class="tw:dv-divider" />
+      @for (group of berechnungenSig(); track group.trancheId) {
+        @if (!$first) {
+          <hr class="tw:dv-divider" />
+        }
+        @for (option of group.options; track $index) {
+          <a
+            type="button"
+            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
+            [attr.data-testid]="'option-nav-' + option.route"
+            [routerLink]="option.fullRoute"
+            routerLinkActive="active"
+            queryParamsHandling="merge"
+            (click)="navClicked$.emit()"
+          >
+            <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
+            <span class="tw:text-start">
+              {{ t(option.translationKey, option.translationOptions) }}
+            </span>
+          </a>
+        }
       }
     </div>
   </ng-template>
 
   <!-- MAIN CONTENT -->
   <!-- left step nav (Desktop) -->
-  <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
+  <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:overflow-y-auto tw:bg-white">
     <ng-container *ngTemplateOutlet="navigation"></ng-container>
   </div>
   <div class="tw:p-6 tw:dv-container tw:bg-white tw:dv-pass-height">

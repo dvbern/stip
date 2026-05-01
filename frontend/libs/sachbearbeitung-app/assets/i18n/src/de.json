@@ -682,7 +682,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.from": "Von",
   "sachbearbeitung-app.verfuegung.berechnung.to": "Bis",
   "sachbearbeitung-app.verfuegung.berechnung.details": "Details der Berechnung",
-  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Nullwerte ausblenden",
+  "sachbearbeitung-app.verfuegung.berechnung.hideZeroValues": "Details mit einem Wert von 0 ausblenden",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.title": "Persönliches Budget",
   "sachbearbeitung-app.verfuegung.berechnung.familie.title": "Familienbudget",
   "sachbearbeitung-app.verfuegung.berechnung.vater.title": "Vaterbudget",
