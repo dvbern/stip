@@ -9061,6 +9061,8 @@ components:
           $ref: '#/components/schemas/Ausbildungsgang'
         editable:
           type: boolean
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     GesuchsperiodeSelectErrorType:
