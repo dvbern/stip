@@ -61,7 +61,8 @@ public class PersoenlichesBudgetCalculatorV1 {
         final var einnahmenMinusKosten = BigDecimal.valueOf(einnahmen.getTotal() - kosten.getTotal());
         var total = BigDecimal.ZERO;
         var fehlbetrag = BigDecimal.ZERO;
-        var proKopfTeilung = 0;
+        Integer proKopfTeilung = null;
+        BigDecimal totalProKopfTeilung = null;
         final var anzahlMonate = stammdaten.getAnzahlMonate();
         var budgetTranche = BigDecimal.ZERO;
 
@@ -72,6 +73,7 @@ public class PersoenlichesBudgetCalculatorV1 {
                 proKopfTeilung = antragssteller.getAnzahlPersonenImHaushalt();
                 total = total
                     .divide(BigDecimal.valueOf(proKopfTeilung), RoundingMode.HALF_UP);;
+                totalProKopfTeilung = total;
             }
             budgetTranche = total;
             if (anzahlMonate != 12) {
@@ -89,6 +91,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             .einnahmenMinusKosten(roundHalfUp(einnahmenMinusKosten))
             .fehlbetrag(roundHalfUp(fehlbetrag))
             .proKopfTeilung(proKopfTeilung)
+            .totalNachProKopfTeilung(Objects.nonNull(totalProKopfTeilung) ? roundHalfUp(totalProKopfTeilung) : null)
             .eigenerHaushalt(antragssteller.isEigenerHaushalt())
             .budgetTranche(roundHalfUp(budgetTranche))
             .anzahlMonate(anzahlMonate)

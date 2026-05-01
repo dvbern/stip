@@ -738,6 +738,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag": "Déficit",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.fehlbetrag.info": "Revenus moins coûts",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.proKopfTeilung": "Répartition par tête pour le calcul avec un(e) partenaire",
+  "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budget12Monate": "Budget pour 12 mois",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget valable pour {{ anzahlMonate }} mois",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Bourse : 2/3 du déficit",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Prêt : 1/3 du déficit",

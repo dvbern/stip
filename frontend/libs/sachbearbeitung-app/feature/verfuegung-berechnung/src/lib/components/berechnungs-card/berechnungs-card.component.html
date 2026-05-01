@@ -105,15 +105,15 @@
             <dv-position
               class="tw:text-dv-muted tw:text-sm"
               [titleSig]="t('persoenlich.proKopfTeilung')"
-              [amountSig]="berechnung.proKopfTeilung | formatChf"
+              [amountSig]="berechnung.proKopfTeilung ?? 0 | formatChf"
             ></dv-position>
 
             @if (berechnung.anzahlMonate !== 12) {
               <!-- proKopfTeilungBetrag12Monate -->
               <dv-position
-                class="tw:text-dv-muted tw:text-sm"
-                [titleSig]="'Todo: Budget für 12 Monate'"
-                [amountSig]="0 | formatChf"
+                class="tw:text-sm"
+                [titleSig]="t('persoenlich.budget12Monate')"
+                [amountSig]="berechnung.totalNachProKopfTeilung ?? berechnung.fehlbetrag | formatChf: false"
               ></dv-position>
             }
 
@@ -121,7 +121,7 @@
             <dv-position
               type="title"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
-              [amountSig]="berechnung.budgetTranche | formatChf"
+              [amountSig]="berechnung.budgetTranche | formatChf: false"
             ></dv-position>
 
             <!-- Hinweis 1. schwarzarbeitBGSA -->
@@ -200,7 +200,7 @@
             }
 
             <!-- Hinweis 1. schwarzarbeit BGSA -->
-            <div class="cctw:text-gray-500 tw:text-sm tw:italic">
+            <div class="tw:text-gray-500 tw:text-sm tw:italic">
               {{ t('hinweis.schwarzarbeitBGSA') }}
             </div>
             <!-- Hinweis 2. -->

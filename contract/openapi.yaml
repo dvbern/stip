@@ -10063,7 +10063,6 @@ components:
         - berechnungVorTeilungDarlehen
         - berechnungStipendium
         - tranchenBerechnungsresultate
-        - stipendienanspruch
         - monateMitDarlehen
       type: object
       properties:
@@ -10234,7 +10233,6 @@ components:
         - total
         - einnahmenMinusKosten
         - fehlbetrag
-        - proKopfTeilung
         - eigenerHaushalt
         - budgetTranche
         - anzahlMonate
@@ -10263,6 +10261,8 @@ components:
         fehlbetrag:
           type: integer
         proKopfTeilung:
+          type: integer
+        totalNachProKopfTeilung:
           type: integer
         eigenerHaushalt:
           type: boolean

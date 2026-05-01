@@ -207,13 +207,13 @@
                   </div>
 
                   <a
-                    class="tw:no-underline! tw:font-light tw:text-dv-blue!"
+                    class="tw:font-light tw:text-dv-blue"
                     [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
                   >
-                    <div class="tw:flex tw:items-center">
-                      <span>{{ t('item.link') }}</span>
+                    <div class="tw:flex">
+                      {{ t('item.link') }}
                       <sub>
-                        <i class="material-symbols-rounded tw:text-lg">arrow_right_alt</i>
+                        <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
                       </sub>
                     </div>
                   </a>
