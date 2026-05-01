@@ -28,7 +28,8 @@ export interface PersoenlichesBudgetresultat {
     total: number;
     einnahmenMinusKosten: number;
     fehlbetrag: number;
-    proKopfTeilung: number;
+    proKopfTeilung?: number;
+    totalNachProKopfTeilung?: number;
     eigenerHaushalt: boolean;
     budgetTranche: number;
     anzahlMonate: number;

@@ -9,6 +9,7 @@ import {
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
 
+import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
 
 @Component({
@@ -19,6 +20,7 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfNegativePipe,
     SharedUiFormatChfPositivePipe,
     PositionComponent,
+    HideZeroDirective,
   ],
   template: `
     <ng-container
@@ -30,12 +32,14 @@ import { PositionComponent } from '../position/position.component';
       @let budget = budgetSig();
       @let einnahmen = budget.einnahmen;
       @let stammdaten = stammdatenSig();
+      @let hideZero = hideZeroSig();
 
       <!-- Total Einkünfte -->
       <dv-position
         [titleSig]="t('totalEinkuenfte')"
         [infoSig]="t('totalEinkuenfte.info')"
         [amountSig]="einnahmen.totalEinkuenfte | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.totalEinkuenfte"
       >
       </dv-position>
 
@@ -43,6 +47,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSA | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.einnahmenBGSA"
       >
         <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
           1)
@@ -53,6 +58,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('ergaenzungsleistungen')"
         [amountSig]="einnahmen.ergaenzungsleistungen | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.ergaenzungsleistungen"
       >
       </dv-position>
 
@@ -60,6 +66,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('andereEinnahmen')"
         [amountSig]="einnahmen.andereEinnahmen | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.andereEinnahmen"
       >
       </dv-position>
 
@@ -67,6 +74,7 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('mietwert')"
         [amountSig]="einnahmen.eigenmietwert | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.eigenmietwert"
       >
       </dv-position>
 
@@ -75,6 +83,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('unterhaltsbeitraege')"
         [infoSig]="t('unterhaltsbeitraege.info')"
         [amountSig]="einnahmen.unterhaltsbeitraege | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.unterhaltsbeitraege"
       >
       </dv-position>
 
@@ -83,6 +92,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('beitraegeSaule3a')"
         [infoSig]="t('beitraegeSaule3a.info')"
         [amountSig]="einnahmen.sauele3 | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.sauele3"
       >
       </dv-position>
 
@@ -91,6 +101,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('beitraegeSaule2')"
         [infoSig]="t('beitraegeSaule2.info')"
         [amountSig]="einnahmen.sauele2 | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.sauele2"
       >
       </dv-position>
 
@@ -99,14 +110,17 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('renten')"
         [infoSig]="t('renten.info')"
         [amountSig]="einnahmen.renten | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.renten"
       >
       </dv-position>
 
       <!--  Einkommensfreibetrag  -->
       <dv-position
         [titleSig]="t('einkommensfreibeitrag')"
+        class="tw:border-b tw:border-gray-500"
         [infoSig]="einnahmen.einkommensfreibetrag | formatChf"
         [amountSig]="einnahmen.einkommensfreibetrag | formatChfNegative: true"
+        *dvHideZero="hideZero; value: einnahmen.einkommensfreibetrag"
       >
       </dv-position>
 
@@ -115,6 +129,7 @@ import { PositionComponent } from '../position/position.component';
         [titleSig]="t('zwischentotal')"
         [infoSig]="t('zwischentotal.info')"
         [amountSig]="einnahmen.zwischentotal | formatChf"
+        *dvHideZero="hideZero; value: einnahmen.zwischentotal"
       >
       </dv-position>
 
@@ -129,6 +144,7 @@ import { PositionComponent } from '../position/position.component';
           })
         "
         [amountSig]="einnahmen.anrechenbaresVermoegen | formatChfPositive"
+        *dvHideZero="hideZero; value: einnahmen.anrechenbaresVermoegen"
       >
       </dv-position>
 
@@ -144,6 +160,7 @@ import { PositionComponent } from '../position/position.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FamilienEinnahmenComponent {
+  hideZeroSig = input<boolean>(false);
   budgetSig = input.required<FamilienBudgetresultatView>();
   stammdatenSig = input.required<BerechnungsStammdaten>();
 }
