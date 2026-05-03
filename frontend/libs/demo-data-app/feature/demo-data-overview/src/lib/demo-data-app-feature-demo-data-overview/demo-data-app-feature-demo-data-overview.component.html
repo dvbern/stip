@@ -18,21 +18,21 @@
             @if (demoDataStore.demoDataTestBerechnungResultats().data; as berechnungResultats) {
               @if (previousBerechnungsResult.valueSig(); as previousValue) {
                 <button
-                  class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                  class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center"
                   type="button"
                   (click)="compareResults(previousValue, berechnungResultats)"
                   [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-compare')"
                 >
-                  <i class="material-symbols-rounded tw:text-sm!">alt_route</i>
+                  <i class="material-symbols-rounded tw:text-base!">alt_route</i>
                 </button>
               }
               <button
-                class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center tw:p-2"
+                class="tw:dv-button-outline tw:font-normal! tw:inline-flex! tw:items-center"
                 type="button"
                 (click)="saveResult(berechnungResultats)"
                 [matTooltip]="t('demo-data-app.overview.apply-demo-data.berechnung-save')"
               >
-                <i class="material-symbols-rounded tw:text-sm!">add_to_photos</i>
+                <i class="material-symbols-rounded tw:text-base!">add_to_photos</i>
               </button>
             }
             <button
@@ -80,7 +80,7 @@
                   >
                     <i class="material-symbols-rounded tw:text-xl!">add</i>
                   </button>
-                  <div class="tw:relative tw:flex tw:gap-1" role="status">
+                  <div class="tw:flex tw:gap-1" role="status">
                     @if (demoData.testResult) {
                       @if (demoData.testResult.allValid) {
                         <i class="material-symbols-rounded tw:cursor-default tw:text-3xl! tw:text-dv-green tw:peer"
