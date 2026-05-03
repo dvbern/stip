@@ -701,13 +701,13 @@ public class GenerateDemoDataService {
             if (demoData.getAnzahlMonate() != 12) {
                 if (Objects.nonNull(stipendien)) {
                     stipendien = BigDecimal.valueOf(stipendien)
-                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP)
+                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.UP)
                         .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
                         .intValue();
                 }
                 if (Objects.nonNull(darlehen)) {
                     darlehen = BigDecimal.valueOf(darlehen)
-                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP)
+                        .divide(BigDecimal.valueOf(12), 2, RoundingMode.UP)
                         .multiply(BigDecimal.valueOf(demoData.getAnzahlMonate()))
                         .intValue();
                 }
