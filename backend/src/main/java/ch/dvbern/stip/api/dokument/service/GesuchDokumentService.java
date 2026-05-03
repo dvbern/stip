@@ -289,21 +289,22 @@ public class GesuchDokumentService {
         return new NullableGesuchDokumentDto(dto);
     }
 
-    public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
-        gesuchRepository.requireById(gesuchId)
+    public List<String> removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
+        final var gesuchDokumente = gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
-            .forEach(gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId()));
-    }
+            .stream()
+            .flatMap(tranche -> tranche.getGesuchDokuments().stream())
+            .toList();
+        final var objectIds = gesuchDokumente.stream()
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
+            .map(Dokument::getObjectId)
+            .toList();
 
-    @Transactional
-    public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
-        gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
-            .forEach(
-                gesuchDokument -> {
-                    gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
-                    removeGesuchDokument(gesuchDokument.getId());
-                }
-            );
+        for (GesuchDokument gesuchDokument : gesuchDokumente) {
+            gesuchDokumentRepository.delete(gesuchDokument);
+        }
+
+        return objectIds;
     }
 
     private static void validateGesuchAndTrancheAreInCorrectStateOrElseThrow(final GesuchDokument gesuchDokument) {
