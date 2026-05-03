@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
+import java.util.Optional;
+
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -24,6 +26,7 @@ import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,17 +43,16 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
-        );
-
-        final int berechnungsresultat = stipendien.getBerechnungStipendium();
-
+        BerechnungsresultatDto stipendien = null;
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
-
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
+            stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+                gesuch,
+                configService.getCurrentDmnMajorVersion(),
+                configService.getCurrentDmnMinorVersion()
+            );
+
+            final int berechnungsresultat = stipendien.getBerechnungStipendium();
             final boolean hasAnspruch = berechnungsresultat > 0;
 
             latestVerfuegung.setVerfuegungStatus(
@@ -66,6 +68,6 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             }
         }
 
-        verfuegungPdfService.createVerfuegungsDocuments(gesuch, stipendien);
+        verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
     }
 }
