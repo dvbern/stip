@@ -40,7 +40,7 @@ public class DarlehenBuchhaltungEntryRepository implements BaseRepository<Darleh
     public List<DarlehenBuchhaltungEntry> getByFallId(final UUID fallId) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(darlehenBuchhaltungEntry)
-            .where(darlehenBuchhaltungEntry.fall.id.eq(fallId))
+            .where(darlehenBuchhaltungEntry.fall.id.eq(fallId).and(darlehenBuchhaltungEntry.betrag.isNotNull()))
             .stream()
             .toList()
             .reversed();
