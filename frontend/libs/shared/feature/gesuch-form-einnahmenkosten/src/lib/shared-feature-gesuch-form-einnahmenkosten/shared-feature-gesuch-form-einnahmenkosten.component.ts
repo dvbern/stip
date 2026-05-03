@@ -143,7 +143,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       <string | undefined>undefined,
       [Validators.required],
     ],
-    zulagen: [<string | null>null, [Validators.required]],
+    zulagen: [<string | undefined>undefined],
     renten: [<string | undefined>undefined],
     eoLeistungen: [<string | undefined>undefined],
     ergaenzungsleistungen: [<string | undefined>undefined],
@@ -427,11 +427,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         return;
       }
 
-      this.formUtils.setRequired(
-        this.form.controls.zulagen,
-        hatKinder && !isEKPartner,
-      );
-
       this.setDisabledStateAndHide(
         this.form.controls.verpflegungskosten,
         !isEKPartner,
@@ -606,7 +601,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       'steuerjahr',
       'veranlagungsStatus',
       ...(hatKinder && !isEKPartner
-        ? (['zulagen', 'betreuungskostenKinder'] as const)
+        ? (['betreuungskostenKinder'] as const)
         : []),
     ]);
 

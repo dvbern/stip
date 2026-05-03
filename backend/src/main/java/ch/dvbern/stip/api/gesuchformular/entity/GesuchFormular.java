@@ -123,13 +123,6 @@ import org.hibernate.envers.Audited;
         LebenslaufItemPageValidation.class
     }, property = "lebenslaufItems"
 )
-@EinnahmenKostenZulagenRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKosten",
-    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
-)
 @EinnahmenKostenPartnerNeglectedFieldsNullConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -137,13 +130,6 @@ import org.hibernate.envers.Audited;
     }, property = "einnahmenKostenPartner"
 )
 
-@EinnahmenKostenZulagenRequiredConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        EinnahmenKostenPageValidation.class
-    }, property = "einnahmenKostenPartner",
-    einnahmenKostenType = EinnahmenKostenType.PARTNER
-)
 @EinnahmenKostenWohnkostenRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,

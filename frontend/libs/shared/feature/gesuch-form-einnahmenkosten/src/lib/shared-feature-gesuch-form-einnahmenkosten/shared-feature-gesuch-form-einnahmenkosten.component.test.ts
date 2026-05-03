@@ -203,22 +203,6 @@ describe(SharedFeatureGesuchFormEinnahmenkostenComponent.name, () => {
         'ng-valid',
       );
     });
-
-    it('field zulagen should not be optional if a kind has been specified', async () => {
-      const { getByTestId, detectChanges } =
-        await setupWithPreparedGesuchWithWohnsitz(Wohnsitz.FAMILIE, {
-          kinds: [{} as never],
-        });
-
-      detectChanges();
-      await userEvent.click(getByTestId('button-save-continue'));
-
-      detectChanges();
-
-      expect(getByTestId('form-einnahmen-kosten-zulagen')).toHaveClass(
-        'ng-invalid',
-      );
-    });
   });
 
   describe('should display betreuungskostenKinder field correctly based on current state', () => {
