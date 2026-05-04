@@ -314,10 +314,17 @@ public class DarlehenService {
     }
 
     @Transactional
-    public FreiwilligDarlehenDto getFreiwilligDarlehen(final UUID darlehenId) {
+    public FreiwilligDarlehenDto getFreiwilligDarlehenGs(final UUID darlehenId) {
         final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
 
         return freiwilligDarlehenMapper.toDtoGs(darlehen);
+    }
+
+    @Transactional
+    public FreiwilligDarlehenDto getFreiwilligDarlehenSb(final UUID darlehenId) {
+        final var darlehen = freiwilligDarlehenRepository.requireById(darlehenId);
+
+        return freiwilligDarlehenMapper.toDtoSb(darlehen);
     }
 
     @Transactional
