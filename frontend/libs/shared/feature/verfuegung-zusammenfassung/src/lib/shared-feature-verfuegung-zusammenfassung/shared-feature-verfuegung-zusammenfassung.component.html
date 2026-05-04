@@ -6,7 +6,7 @@
 } @else {
   <ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.zusammenfassung'">
     <!-- resultat -->
-    <h2 class="tw:mb-6! tw:font-bold! tw:text-3xl!">
+    <h2 class="tw:mb-6 tw:font-bold tw:text-3xl">
       {{ t('resultat.title') }}
     </h2>
 
@@ -25,16 +25,13 @@
       </div>
     </div>
 
-    <h3 class="tw:mb-4! tw:font-bold! tw:text-2xl!">{{ t('total') }}</h3>
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('total') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
-        @let hasKuerzungenNachEinreichefrist =
-          zusammenfassung.totalNachKuerzungNachEinreichefrist ||
-          zusammenfassung.totalNachKuerzungNachEinreichefrist === 0;
-        @let hasKuerzungenUnterbruch =
-          zusammenfassung.totalNachKuerzungUnterbruch || zusammenfassung.totalNachKuerzungUnterbruch === 0;
-        @let hasDarlehen = zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0;
+        @let hasKuerzungenNachEinreichefrist = !!zusammenfassung.totalNachKuerzungNachEinreichefrist;
+        @let hasKuerzungenUnterbruch = !!zusammenfassung.totalNachKuerzungUnterbruch;
+        @let hasDarlehen = !!zusammenfassung.berechnungDarlehen;
 
         <ng-template #kuerzungUndInfoTemplate>
           <div class="tw:flex tw:flex-col tw:text-dv-muted tw:mt-2">
@@ -149,7 +146,7 @@
               <button
                 type="button"
                 (click)="eigenverdienstInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md tw:text-dv-blue"
+                class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
                 [attr.aria-label]="t('toggle-info-messages')"
               >
                 <span class="material-symbols-rounded tw:text-xl!"> info </span>
@@ -163,7 +160,7 @@
                   einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
                 }"
                 #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
+                class="tw:hidden"
               ></div>
             </div>
             <div>
@@ -187,44 +184,36 @@
       </mat-card-content>
     </mat-card>
 
-    <h3 class="tw:mb-4! tw:font-bold! tw:text-2xl!">{{ t('berechnungen') }}</h3>
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('berechnungen') }}</h3>
 
     <mat-card class="tw:mb-10">
       <mat-card-content>
         @for (berechnungen of zusammenfassung.berechnungsresultateGroup; track $index) {
           @for (teilBerechnung of berechnungen.berechnungen; track $index; let berechnungsIndex = $index) {
-            <div class="tw:mb-6">
-              <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-3">
-                <div class="tw:flex tw:gap-2 tw:font-bold">
-                  <div>
-                    {{
-                      t('item.title', {
-                        index: berechnungsIndex + 1,
-                        startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
-                        endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
-                      })
-                    }}
-                  </div>
-
-                  <a
-                    class="tw:font-light tw:text-dv-blue"
-                    [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
-                  >
-                    <div class="tw:flex">
-                      {{ t('item.link') }}
-                      <sub>
-                        <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
-                      </sub>
-                    </div>
-                  </a>
-                </div>
+            <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-6">
+              <div class="tw:flex tw:gap-2 tw:font-bold">
                 <div>
-                  {{ teilBerechnung.total | formatChf: false }}
+                  {{
+                    t('item.title', {
+                      index: berechnungsIndex + 1,
+                      startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
+                      endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
+                    })
+                  }}
                 </div>
-              </div>
 
-              <div class="tw:text-sm tw:text-dv-muted">
-                {{ t('item.stipendium') }}
+                <a
+                  class="tw:font-light tw:text-dv-blue"
+                  [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
+                >
+                  <div class="tw:flex">
+                    {{ t('item.link') }}
+                    <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
+                  </div>
+                </a>
+              </div>
+              <div>
+                {{ teilBerechnung.total | formatChf: false }}
               </div>
             </div>
           }

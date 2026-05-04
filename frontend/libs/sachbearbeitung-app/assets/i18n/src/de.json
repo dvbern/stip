@@ -772,6 +772,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.renten": "abzüglich Renten für Person in Ausbildung",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.renten.info": "IV-Renten, PK-Renten, etc.. Abzug sofern bereits im Total der Einkünfte enthalten.",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag": "abzüglich Einkommensfreibetrag",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.einkommensfreibeitrag.info": "Der Einkommensfreibetrag beträgt CHF {{ einkommensfreibetrag }}",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.zwischentotal": "Zwischentotal anrechenbare, jährliche Einnahmen",
   "sachbearbeitung-app.verfuegung.berechnung.familien.einnahmen.zwischentotal.info": "Einnahmen nach Abzug des Einkommensfreibetrags können nicht negativ sein",
   "sachbearbeitung-app.verfuegung.berechnung.familien.kosten.title": "Kosten",

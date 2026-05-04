@@ -70,7 +70,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
   berechnungStore = inject(BerechnungStore);
 
-  berechnungenRawSig = computed<BerechnungView>(() => {
+  berechnungenRawSig = computed<BerechnungView | null>(() => {
     const zusammenfassung =
       this.berechnungStore.berechnungZusammenfassungViewSig();
 
@@ -81,7 +81,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     );
 
     if (!r) {
-      throw new Error('Berechnung nicht gefunden');
+      return null;
     }
 
     const view: BerechnungView = {

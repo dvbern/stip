@@ -9,7 +9,6 @@ import {
   GesuchService,
   TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
-// import { TeilberechnungsArt } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
@@ -54,7 +53,7 @@ export class BerechnungStore extends signalStore(
 
     const value: {
       year: number;
-      berechnungVorTeilungDarlehen: number | undefined;
+      berechnungVorTeilungDarlehen?: number;
       berechnungVorKuerzungUndTeilung: number;
       totalNachKuerzungNachEinreichefrist?: number;
       anzahlMonateEinreichefrist?: number;
