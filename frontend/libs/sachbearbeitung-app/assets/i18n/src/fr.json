@@ -742,9 +742,10 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Budget valable pour {{ anzahlMonate }} mois",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Bourse : 2/3 du déficit",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Prêt : 1/3 du déficit",
-
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Revenus selon la procédure de décompte simplifiée (Loi fédérale contre le travail au noir)",
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Les plafonds reconnus donnant droit à une bourse se trouvent dans l'appendice (Annexe 1) ou sur www.be.ch/ausbildungsbeitraege > Bases légales > Plafonds reconnus donnant droit à une bourse",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.title": "Avis BGSA",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.message": "Revenus selon la procédure de décompte simplifiée (Loi fédérale contre le travail au noir)",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.title": "Information sur les plafonds reconnus donnant droit à une bourse",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.message": "Les plafonds reconnus donnant droit à une bourse se trouvent dans l'appendice (Annexe 1) ou sur www.be.ch/ausbildungsbeitraege > Bases légales > Plafonds reconnus donnant droit à une bourse",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title": "Réductions Délai de dépôt",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info": "La demande a été déposée avec {{ anzahlMonate }} mois de retard.<br>Cela entraîne une réduction de CHF {{ betrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title": "Réductions pour interruption",

@@ -742,9 +742,10 @@
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.budgetAnzahlMonate": "Total Anspruch von {anzahlMonate, plural, one {1 Monat} other {# Monaten}}",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.zweiDrittel": "Stipendium: 2/3 des Fehlbetrags",
   "sachbearbeitung-app.verfuegung.berechnung.persoenlich.hinweis.einDrittel": "Darlehen: 1/3 des Fehlbetrags",
-
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA": "1) Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)",
-  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte": "2) Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.title": "Hinweis BGSA",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.message": "Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.title": "Information Höchstwerte",
+  "sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.message": "Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title": "Kürzungen Einreichefrist",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info": "Das Gesuch wurde {anzahlMonate, plural, one {1 Monat} other {# Monate}} zu spät eingereicht.<br>Dies ergibt eine Reduktion von CHF {{ betrag }}.",
   "sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title": "Kürzungen Unterbruch",

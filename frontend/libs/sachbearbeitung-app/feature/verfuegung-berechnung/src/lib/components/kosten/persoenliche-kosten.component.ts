@@ -11,6 +11,7 @@ import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
@@ -23,6 +24,7 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPositivePipe,
     PositionComponent,
     HideZeroDirective,
+    SharedUiInfoDialogDirective,
   ],
   template: `
     <ng-container
@@ -37,6 +39,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Ausbildungskosten der/des Auszubildenden -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('ausbildungskosten')"
         [infoSig]="
           t('ausbildungskosten.info', {
@@ -47,13 +50,20 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="kosten.ausbildungskostenTotal | formatChfPositive"
         *dvHideZero="hideZero; value: kosten.ausbildungskostenTotal"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          2)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweishoechstwerte.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Fahrkosten der/des Auszubildenden -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('fahrkosten')"
         [infoSig]="
           t('fahrkosten.info', {
@@ -68,18 +78,26 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Mehrkosten für auswärtige Verpflegung -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('mehrkostenVerpflegung')"
         [infoSig]="t('nurElternWohnend.info')"
         [amountSig]="kosten.verpflegungskosten | formatChfPositive"
         *dvHideZero="hideZero; value: kosten.verpflegungskosten"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          2)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweishoechstwerte.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Grundbedarf für 0 Personenhaushalt -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="
           t('grundbedarfPersonen', {
             anzahl: budget.anzahlPersonenImHaushalt,
@@ -89,13 +107,20 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="kosten.grundbedarf | formatChfPositive"
         *dvHideZero="hideZero; value: kosten.grundbedarf"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          2)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweishoechstwerte.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Wohnkosten für anz Personenhaushalt -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="
           t('wohnkostenPersonen', {
             anzahl: budget.anzahlPersonenImHaushalt,
@@ -105,13 +130,20 @@ import { PositionComponent } from '../position/position.component';
         [amountSig]="kosten.wohnkosten | formatChfPositive"
         *dvHideZero="hideZero; value: kosten.wohnkosten"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          2)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweishoechstwerte.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Medizinische Grundversorgung für anz Personenhaushalt -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="
           t('medizinischeGrundversorgungPersonen', {
             anzahl: budget.anzahlPersonenImHaushalt,
@@ -124,13 +156,20 @@ import { PositionComponent } from '../position/position.component';
         "
         *dvHideZero="hideZero; value: kosten.medizinischeGrundversorgungTotal"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          2)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweishoechstwerte.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Fahrkosten Ehepartnerin/Ehepartner -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('fahrkostenPartner')"
         [infoSig]="
           t('fahrkostenPartner.info', {
@@ -145,6 +184,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Verpflegung Ehepartnerin/Ehepartner -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('verpflegungPartner')"
         [infoSig]="
           t('verpflegungPartner.info', {
@@ -159,6 +199,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Betreuungskosten für Kinder -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('betreuungskostenKinder')"
         [amountSig]="kosten.betreuungskostenKinder | formatChfPositive"
         *dvHideZero="hideZero; value: kosten.betreuungskostenKinder"
@@ -167,6 +208,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Kantons- und Gemeindesteuern -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('kantonsGemeindesteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
@@ -176,6 +218,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Bundessteuern -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('bundessteuern')"
         [infoSig]="t('steuern.info')"
         [amountSig]="kosten.bundessteuern | formatChfPositive"
@@ -185,6 +228,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Ungedeckter Anteil Lebenshaltungskosten  -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('anteilLebenshaltungskosten')"
         [infoSig]="t('anteilLebenshaltungskosten.info')"
         [amountSig]="kosten.anteilLebenshaltungskosten | formatChfPositive"
@@ -194,12 +238,21 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Total -->
       <dv-position
+        class="tw:pt-4"
         type="title"
-        sepparator="no-separator"
         [titleSig]="t('total')"
         [amountSig]="kosten.total | formatChf"
       >
       </dv-position>
+
+      <div
+        dvSharedUiInfoDialog
+        [forceDialogPosition]="true"
+        [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.title'"
+        [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.hoechstwerte.message'"
+        #hinweishoechstwerte="dvSharedUiInfoDialog"
+        class="tw:hidden"
+      ></div>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
