@@ -290,18 +290,27 @@ public class GesuchDokumentService {
     }
 
     public List<String> removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
-        final var gesuchDokumente = gesuchRepository.requireById(gesuchId)
+        final var gesuchTranches = gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
+            .stream()
+            .toList();
+        final var gesuchDokuments = gesuchTranches
             .stream()
             .flatMap(tranche -> tranche.getGesuchDokuments().stream())
             .toList();
-        final var objectIds = gesuchDokumente.stream()
+        final var dokuments = gesuchDokuments.stream()
             .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
+            .toList();
+        final var objectIds = dokuments.stream()
             .map(Dokument::getObjectId)
             .toList();
 
-        for (GesuchDokument gesuchDokument : gesuchDokumente) {
-            gesuchDokumentRepository.delete(gesuchDokument);
+        for (final var gesuchDokument : gesuchDokuments) {
+            gesuchDokument.getDokumente().clear();
+            gesuchDokument.getGesuchDokumentKommentare().clear();
+        }
+        for (final var gesuchTranche : gesuchTranches) {
+            gesuchTranche.getGesuchDokuments().clear();
         }
 
         return objectIds;

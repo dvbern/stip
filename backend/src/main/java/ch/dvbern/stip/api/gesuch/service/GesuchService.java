@@ -129,7 +129,6 @@ import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -518,31 +517,25 @@ public class GesuchService {
         return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
     }
 
+    @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        try {
-            QuarkusTransaction.begin(QuarkusTransaction.beginOptions().timeout(60));
-            final var gesuch = gesuchRepository.requireById(gesuchId);
-            final var ausbildung = gesuch.getAusbildung();
-            final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
-            notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
-            buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
-            gesuchNotizService.deleteAllByGesuchId(gesuchId);
-            statusprotokollService.deleteAllByGesuchId(gesuchId);
-            ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
-            statisticsdataService.deleteForGesuch(gesuchId);
-            gesuchRepository.delete(gesuch);
-            ausbildung.getGesuchs().remove(gesuch);
-            gesuch.getDatenschutzbriefs().clear();
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var ausbildung = gesuch.getAusbildung();
+        final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
+        notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
+        buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
+        gesuchNotizService.deleteAllByGesuchId(gesuchId);
+        statusprotokollService.deleteAllByGesuchId(gesuchId);
+        ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
+        statisticsdataService.deleteForGesuch(gesuchId);
+        gesuchRepository.delete(gesuch);
+        ausbildung.getGesuchs().remove(gesuch);
+        gesuch.getDatenschutzbriefs().clear();
 
-            if (ausbildung.getGesuchs().isEmpty()) {
-                ausbildungRepository.delete(ausbildung);
-            }
-            QuarkusTransaction.commit();
-            gesuchDokumentService.executeDeleteDokumentsFromS3(objectIds);
-        } catch (Exception e) {
-            QuarkusTransaction.rollback();
-            throw e;
+        if (ausbildung.getGesuchs().isEmpty()) {
+            ausbildungRepository.delete(ausbildung);
         }
+        gesuchDokumentService.executeDeleteDokumentsFromS3(objectIds);
     }
 
     @Transactional
