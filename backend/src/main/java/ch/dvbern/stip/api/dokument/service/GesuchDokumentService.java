@@ -456,7 +456,7 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeDokument(final Dokument dokument) {
-        removeDokument(dokument);
+        removeDokument(dokument, false);
     }
 
     @Transactional
