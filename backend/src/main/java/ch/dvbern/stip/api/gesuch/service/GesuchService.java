@@ -521,7 +521,7 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
-        gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
+        final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
@@ -535,6 +535,7 @@ public class GesuchService {
         if (ausbildung.getGesuchs().isEmpty()) {
             ausbildungRepository.delete(ausbildung);
         }
+        gesuchDokumentService.executeDeleteDokumentsFromS3(objectIds);
     }
 
     @Transactional
