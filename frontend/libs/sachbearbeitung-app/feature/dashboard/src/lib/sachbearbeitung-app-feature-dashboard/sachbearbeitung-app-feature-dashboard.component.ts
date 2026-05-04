@@ -41,6 +41,16 @@ const resetTableFilterObj: Record<
 
 const baseFilterTabs = [
   {
+    key: 'JURISTISCHE_ABKLAERUNG',
+    route: ['gesuche'],
+    roles: ['V0_Jurist'],
+  },
+  {
+    key: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
+    route: ['gesuche'],
+    roles: ['V0_Jurist'],
+  },
+  {
     key: 'GESUCHE',
     route: ['gesuche'],
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
@@ -59,16 +69,6 @@ const baseFilterTabs = [
     key: 'DRUCKBAR_DATENSCHUTZBRIEFE',
     route: ['gesuche'],
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-  },
-  {
-    key: 'JURISTISCHE_ABKLAERUNG',
-    route: ['gesuche'],
-    roles: ['V0_Jurist'],
-  },
-  {
-    key: 'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
-    route: ['gesuche'],
-    roles: ['V0_Jurist'],
   },
   {
     key: 'DARLEHEN',

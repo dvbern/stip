@@ -165,6 +165,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
   fallIdSig = input.required<string | null>();
   ausbildungSaved = output<void>();
   languageSig = this.store.selectSignal(selectLanguage);
+  gotReenabledSig = signal({});
 
   ausbildungStore = inject(AusbildungStore);
   ausbildungsstatteStore = inject(AusbildungsstaetteStore);
@@ -529,6 +530,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ),
     );
     effect(() => {
+      this.gotReenabledSig();
       const isAusbildungAusland = !!isAusbildungAuslandSig();
 
       if (isAusbildungAusland) {
@@ -606,6 +608,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
 
     // Show / hide fachrichtungBerufsbezeichnung based on zusatzfrage of ausbildungsgang
     effect(() => {
+      this.gotReenabledSig();
       const { readonly } = this.cachedGesuchViewSig();
       const ausbildungsgang = this.currentAusbildungsgangSig();
       updateVisbilityAndDisbledState({
@@ -685,9 +688,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ...formValues
     } = convertTempFormToRealValues(this.form, ['pensum']);
 
+    const gesuch = this.cachedGesuchViewSig().cache.gesuch;
     const ausbildungId =
-      this.cachedGesuchViewSig().cache.gesuch?.gesuchTrancheToWorkWith
-        .gesuchFormular?.ausbildung.id;
+      gesuch?.gesuchTrancheToWorkWith.gesuchFormular?.ausbildung.id;
     const { type, fallId } = this.usageTypeSig();
 
     switch (type) {
@@ -709,7 +712,7 @@ export class SharedFeatureAusbildungComponent implements OnInit {
         break;
       }
       case 'gesuch-form': {
-        if (!ausbildungId || !fallId) {
+        if (!gesuch || !ausbildungId || !fallId) {
           return;
         }
         this.ausbildungStore.saveAusbildung$({
@@ -726,6 +729,10 @@ export class SharedFeatureAusbildungComponent implements OnInit {
             this.globalNotificationStore.createSuccessNotification({
               messageKey: 'shared.ausbildung.saved.success',
             });
+            this.einreichenStore.validateSteps$({
+              gesuchTrancheId: gesuch.gesuchTrancheToWorkWith.id,
+            });
+
             this.router.navigate(['.'], {
               onSameUrlNavigation: 'reload',
               relativeTo: this.route,
