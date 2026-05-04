@@ -1,7 +1,9 @@
 <ng-container *transloco="let t">
   <div class="tw:flex tw:h-full">
     <!-- left step nav (Desktop) -->
-    <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white">
+    <div
+      class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white tw:overflow-y-auto tw:overflow-x-hidden"
+    >
       <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
     </div>
 

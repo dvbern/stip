@@ -44,6 +44,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.util.DeleteChangedDocumentsUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularDiffUtil;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.service.KindMapper;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
@@ -227,7 +228,11 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetSteuererdatenTabs(newFormular, targetFormular);
 
         if (!documentsToDelete.isEmpty()) {
-            gesuchDokumentService.deleteDokumenteForTranche(targetFormular.getTranche().getId(), documentsToDelete);
+            gesuchDokumentService.deleteDokumenteForTranche(
+                targetFormular.getTranche().getId(),
+                documentsToDelete,
+                targetFormular.getTranche().getTyp() == GesuchTrancheTyp.AENDERUNG
+            );
         }
     }
 

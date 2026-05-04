@@ -248,7 +248,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(UUID gesuchId) {
         darlehenAuthorizer.canGetDarlehenBuchhaltungEntrys();
-        return darlehenService.getDarlehenBuchhaltungEntryOverviewByFallId(gesuchId);
+        return darlehenService.getDarlehenBuchhaltungEntryOverviewByGesuchId(gesuchId);
     }
 
     @Override
