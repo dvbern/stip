@@ -20,9 +20,9 @@
    <img width="400" src="docs/release/gitlab-pipeline.png">
 
 3. On the pipeline with the used Tag name click on the 3rd circle:
-   1. (If data reset is requested) Run `db-clear:uat:start`
-   2. Wait for it to finish, it is possible to check the progress at [OpenShift](https://console-openshift-console.apps.apollo.ocp.dvbern.ch/topology/ns/stip-stip-default-uat?view=graph)
-   3. Run `deploy:uat`
+   1. Back in the Gitlab pipeline, run `deploy:uat`
+   2. (If data reset is requested) go to Openshift at [CronJobs](https://console-openshift-console.apps.apollo.ocp.dvbern.ch/k8s/ns/stip-stip-default-uat/batch~v1~CronJob), click the three dots and start the job.
+   3. Wait for it to finish, it is possible to check the progress at [OpenShift](https://console-openshift-console.apps.apollo.ocp.dvbern.ch/topology/ns/stip-stip-default-uat?view=graph)
 4. Test a random feature on `https://uat-stip.kibon.ch/`
 5. Create an _Änderung_ on `https://uat-stip.kibon.ch/` and _Verfügung_ for an _Änderung_
 6. If a DB clear is necessary, go to [OpenShift](https://console-openshift-console.apps.apollo.ocp.dvbern.ch) => Administartor View -> UAT Project -> Workloads -> CronJobs -> `uat-stip-dbclear` -> Click on the Job and check the logs for progress.
