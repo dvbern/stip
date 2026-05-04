@@ -236,6 +236,7 @@ const toGesuchDashboardItemView =
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
       canDeleteAenderung:
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
+      canCreateAenderung: gesuch.canCreateAenderung && canCurrentlyEditGesuch,
       hasPendingAusbildungUnterbruchAntrag,
       einreichefristAbgelaufen,
       reduzierterBeitrag,
