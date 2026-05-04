@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
@@ -39,6 +40,7 @@ import ch.dvbern.stip.generated.dto.GesuchDokumentRefDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.KindUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
+import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -62,7 +64,7 @@ public class DeleteChangedDocumentsUtil {
             )
         );
 
-        for (final Eltern oldEltern : oldFormular.getElterns()) {
+        for (final var oldEltern : oldFormular.getElterns()) {
             final var newEltern = newFormular.getElterns()
                 .stream()
                 .filter(
@@ -82,6 +84,22 @@ public class DeleteChangedDocumentsUtil {
                     }
                 );
             }
+        }
+
+        for (final var oldWeitereAngaben : oldFormular.getSteuererklaerung()) {
+            final var newWeitereAngaben = newFormular.getSteuererklaerung()
+                .stream()
+                .filter(
+                    steuererklaerungUpdateDto -> steuererklaerungUpdateDto.getSteuerdatenTyp() == oldWeitereAngaben
+                        .getSteuerdatenTyp()
+                )
+                .findFirst();
+
+            newWeitereAngaben.ifPresent(
+                steuererklaerungUpdateDto -> documentTypesToDelete.addAll(
+                    getDocumentsToDeleteForWeitereAngabenElternteil(steuererklaerungUpdateDto, oldWeitereAngaben)
+                )
+            );
         }
 
         documentTypesToDelete.addAll(
@@ -107,12 +125,17 @@ public class DeleteChangedDocumentsUtil {
         }
 
         documentTypesToDelete.addAll(
-            getDocumentsToDeleteForEinnahmenKosten(newFormular.getEinnahmenKosten(), oldFormular.getEinnahmenKosten())
+            getDocumentsToDeleteForEinnahmenKosten(
+                newFormular.getEinnahmenKosten(),
+                oldFormular.getEinnahmenKosten(),
+                false
+            )
         );
         documentTypesToDelete.addAll(
             getDocumentsToDeleteForEinnahmenKosten(
                 newFormular.getEinnahmenKostenPartner(),
-                oldFormular.getEinnahmenKostenPartner()
+                oldFormular.getEinnahmenKostenPartner(),
+                true
             )
         );
 
@@ -162,53 +185,113 @@ public class DeleteChangedDocumentsUtil {
 
     List<GesuchDokumentRefDto> getDocumentsToDeleteForEinnahmenKosten(
         final EinnahmenKostenUpdateDto newEk,
-        final EinnahmenKosten oldEk
+        final EinnahmenKosten oldEk,
+        final boolean isPartner
     ) {
         if (Objects.isNull(oldEk) || Objects.isNull(newEk)) {
             return List.of();
         }
         final var toDelete = new ArrayList<GesuchDokumentRefDto>();
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getNettoerwerbseinkommen(), newEk.getNettoerwerbseinkommen())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_LOHNABRECHNUNG));
+            toDelete.add(toRefDto(!isPartner ? DokumentTyp.EK_LOHNABRECHNUNG : DokumentTyp.EK_PARTNER_LOHNABRECHNUNG));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getBetreuungskostenKinder(), newEk.getBetreuungskostenKinder())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER
+                        : DokumentTyp.EK_PARTNER_BELEG_BETREUUNGSKOSTEN_KINDER
+                )
+            );
         }
 
-        if (hasChangedAndNewIsGreaterThanZero(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
+        if (!isPartner && hasChangedAndNewIsGreaterThanZero(oldEk.getWohnkosten(), newEk.getWohnkosten())) {
             toDelete.add(toRefDto(DokumentTyp.EK_MIETVERTRAG));
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getFahrkosten(), newEk.getFahrkosten())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_OV_ABONNEMENT));
+            toDelete.add(
+                toRefDto(!isPartner ? DokumentTyp.EK_BELEG_OV_ABONNEMENT : DokumentTyp.EK_PARTNER_BELEG_OV_ABONNEMENT)
+            );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getEoLeistungen(), newEk.getEoLeistungen())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+                        : DokumentTyp.EK_PARTNER_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
+                )
+            );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getRenten(), newEk.getRenten())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN : DokumentTyp.EK_PARTNER_BELEG_BEZAHLTE_RENTEN
+                )
+            );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getBeitraege(), newEk.getBeitraege())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
+                        : DokumentTyp.EK_PARTNER_VERFUEGUNG_GEMEINDE_INSTITUTION
+                )
+            );
+        }
+
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getEinnahmenBGSA(), newEk.getEinnahmenBGSA())) {
+            toDelete.add(
+                toRefDto(!isPartner ? DokumentTyp.EK_BELEG_EINNAHMEN_BGSA : DokumentTyp.EK_PARTNER_BELEG_EINNAHMEN_BGSA)
+            );
+        }
+
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getTaggelderAHVIV(), newEk.getTaggelderAHVIV())) {
+            toDelete
+                .add(
+                    toRefDto(
+                        !isPartner ? DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV
+                            : DokumentTyp.EK_PARTNER_BELEG_TAGGELDER_AHV_IV
+                    )
+                );
+        }
+
+        if (hasChangedAndNewIsGreaterThanZero(oldEk.getAndereEinnahmen(), newEk.getAndereEinnahmen())) {
+            toDelete
+                .add(
+                    toRefDto(
+                        !isPartner ? DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN
+                            : DokumentTyp.EK_PARTNER_BELEG_ANDERE_EINNAHMEN
+                    )
+                );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getZulagen(), newEk.getZulagen())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_KINDERZULAGEN));
+            toDelete.add(
+                toRefDto(!isPartner ? DokumentTyp.EK_BELEG_KINDERZULAGEN : DokumentTyp.EK_PARTNER_BELEG_KINDERZULAGEN)
+            );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getUnterhaltsbeitraege(), newEk.getUnterhaltsbeitraege())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+                        : DokumentTyp.EK_PARTNER_BELEG_UNTERHALTSBEITRAEGE
+                )
+            );
         }
 
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getErgaenzungsleistungen(), newEk.getErgaenzungsleistungen())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN));
+            toDelete.add(
+                toRefDto(
+                    !isPartner ? DokumentTyp.EK_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+                        : DokumentTyp.EK_PARTNER_VERFUEGUNG_ERGAENZUNGSLEISTUNGEN
+                )
+            );
         }
         if (hasChangedAndNewIsGreaterThanZero(oldEk.getVermoegen(), newEk.getVermoegen())) {
-            toDelete.add(toRefDto(DokumentTyp.EK_VERMOEGEN));
+            toDelete.add(toRefDto(!isPartner ? DokumentTyp.EK_VERMOEGEN : DokumentTyp.EK_PARTNER_VERMOEGEN));
         }
 
         return toDelete;
@@ -254,6 +337,81 @@ public class DeleteChangedDocumentsUtil {
             toDelete.add(toDeleteDoc);
             toDelete.add(toRefDto(DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_FAMILIE));
         }
+        return toDelete;
+    }
+
+    List<GesuchDokumentRefDto> getDocumentsToDeleteForWeitereAngabenElternteil(
+        final SteuererklaerungUpdateDto newSteuererklaerung,
+        final Steuererklaerung oldSteuererklaerung
+    ) {
+        if (newSteuererklaerung == null || oldSteuererklaerung == null) {
+            return List.of();
+        }
+
+        final var toDelete = new ArrayList<GesuchDokumentRefDto>();
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                oldSteuererklaerung.getUnterhaltsbeitraege(),
+                newSteuererklaerung.getUnterhaltsbeitraege()
+            )
+        ) {
+            final var toDeleteDoc = switch (newSteuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_VATER);
+                case FAMILIE -> toRefDto(DokumentTyp.STEUERERKLAERUNG_UNTERHALTSBEITRAEGE_FAMILIE);
+            };
+            toDelete.add(toDeleteDoc);
+        }
+        if (
+            hasChangedAndNewIsGreaterThanZero(oldSteuererklaerung.getRenten(), newSteuererklaerung.getRenten())
+        ) {
+            final var toDeleteDoc = switch (newSteuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_RENTEN_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_RENTEN_VATER);
+                case FAMILIE -> toRefDto(DokumentTyp.STEUERERKLAERUNG_RENTEN_FAMILIE);
+            };
+            toDelete.add(toDeleteDoc);
+        }
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                oldSteuererklaerung.getErgaenzungsleistungen(),
+                newSteuererklaerung.getErgaenzungsleistungen()
+            )
+        ) {
+            final var toDeleteDoc = switch (newSteuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_VATER);
+                case FAMILIE -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ERGAENZUNGSLEISTUNGEN_FAMILIE);
+            };
+            toDelete.add(toDeleteDoc);
+        }
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                oldSteuererklaerung.getEinnahmenBGSA(),
+                newSteuererklaerung.getEinnahmenBGSA()
+            )
+        ) {
+            final var toDeleteDoc = switch (newSteuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_VATER);
+                case FAMILIE -> toRefDto(DokumentTyp.STEUERERKLAERUNG_EINNAHMEN_BGSA_FAMILIE);
+            };
+            toDelete.add(toDeleteDoc);
+        }
+        if (
+            hasChangedAndNewIsGreaterThanZero(
+                oldSteuererklaerung.getAndereEinnahmen(),
+                newSteuererklaerung.getAndereEinnahmen()
+            )
+        ) {
+            final var toDeleteDoc = switch (newSteuererklaerung.getSteuerdatenTyp()) {
+                case MUTTER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_MUTTER);
+                case VATER -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_VATER);
+                case FAMILIE -> toRefDto(DokumentTyp.STEUERERKLAERUNG_ANDERE_EINNAHMEN_FAMILIE);
+            };
+            toDelete.add(toDeleteDoc);
+        }
+
         return toDelete;
     }
 

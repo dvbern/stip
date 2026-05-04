@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractPerson;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
+import ch.dvbern.stip.api.common.validation.NullOrNotBlank;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
@@ -77,6 +78,7 @@ public class Eltern extends AbstractPerson {
     private Adresse adresse;
 
     @NullableUnlessGenerated
+    @NullOrNotBlank
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "sozialversicherungsnummer", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String sozialversicherungsnummer;

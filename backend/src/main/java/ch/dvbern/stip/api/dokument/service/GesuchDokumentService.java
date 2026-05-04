@@ -289,21 +289,31 @@ public class GesuchDokumentService {
         return new NullableGesuchDokumentDto(dto);
     }
 
-    public void removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
-        gesuchRepository.requireById(gesuchId)
+    public List<String> removeAllGesuchDokumentsForGesuch(final UUID gesuchId) {
+        final var gesuchTranches = gesuchRepository.requireById(gesuchId)
             .getGesuchTranchen()
-            .forEach(gesuchTranche -> removeAllDokumentsForGesuchTranche(gesuchTranche.getId()));
-    }
+            .stream()
+            .toList();
+        final var gesuchDokuments = gesuchTranches
+            .stream()
+            .flatMap(tranche -> tranche.getGesuchDokuments().stream())
+            .toList();
+        final var dokuments = gesuchDokuments.stream()
+            .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
+            .toList();
+        final var objectIds = dokuments.stream()
+            .map(Dokument::getObjectId)
+            .toList();
 
-    @Transactional
-    public void removeAllDokumentsForGesuchTranche(final UUID gesuchTrancheId) {
-        gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
-            .forEach(
-                gesuchDokument -> {
-                    gesuchDokumentKommentarRepository.deleteAllByGesuchDokumentId(gesuchDokument.getId());
-                    removeGesuchDokument(gesuchDokument.getId());
-                }
-            );
+        for (final var gesuchDokument : gesuchDokuments) {
+            gesuchDokument.getDokumente().clear();
+            gesuchDokument.getGesuchDokumentKommentare().clear();
+        }
+        for (final var gesuchTranche : gesuchTranches) {
+            gesuchTranche.getGesuchDokuments().clear();
+        }
+
+        return objectIds;
     }
 
     private static void validateGesuchAndTrancheAreInCorrectStateOrElseThrow(final GesuchDokument gesuchDokument) {
@@ -426,13 +436,17 @@ public class GesuchDokumentService {
     }
 
     @Transactional
-    public void deleteDokumenteForTranche(final UUID trancheId, final List<GesuchDokumentRefDto> dokumentRefs) {
+    public void deleteDokumenteForTranche(
+        final UUID trancheId,
+        final List<GesuchDokumentRefDto> dokumentRefs,
+        final boolean forceDokumentDelete
+    ) {
         final var gesuchDokumente = gesuchDokumentRepository.findByDokumentRefs(trancheId, dokumentRefs).toList();
         final var dokumente = gesuchDokumente.stream()
             .flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream())
             .toList();
 
-        dokumente.forEach(this::removeDokument);
+        dokumente.forEach(dokument -> this.removeDokument(dokument, forceDokumentDelete));
 
         for (final var gesuchDokument : gesuchDokumente) {
             if (gesuchDokument.getStatus() != GesuchDokumentStatus.AUSSTEHEND) {
@@ -452,9 +466,15 @@ public class GesuchDokumentService {
 
     @Transactional
     public void removeDokument(final Dokument dokument) {
+        removeDokument(dokument, false);
+    }
+
+    @Transactional
+    public void removeDokument(final Dokument dokument, final boolean force) {
         final var dokumentObjectIds = new ArrayList<String>();
 
         if (
+            force ||
             canDeleteDokumentFromS3(dokument, dokument.getGesuchDokument().getGesuchTranche())
         ) {
             dokumentObjectIds.add(dokument.getObjectId());
