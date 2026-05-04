@@ -40,12 +40,14 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.pdf.service.DatenschutzbriefPdfService;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.generated.dto.DatenschutzbriefOverviewDto;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.CaseUtils;
@@ -85,6 +87,10 @@ public class DatenschutzbriefService {
     @Transactional
     public UUID createDatenschutzbrief(final UUID gesuchId, final UUID elternteilId) {
         final var elternteil = elternRepository.requireById(elternteilId);
+        // Do not create a Datenschutzbrief for Eltern living outside Switzerland
+        if (!livesInSwitzerland(elternteil)) {
+            throw new BadRequestException("No Datenschutzbrief for Elternteil in Ausland");
+        }
         return createDatenschutzbrief(gesuchId, elternteil, true).getId();
     }
 
@@ -157,10 +163,24 @@ public class DatenschutzbriefService {
             final var empfaenger = trancheToUse.getGesuchFormular()
                 .getElternteilOfTyp(empfaengerToCreate)
                 .orElseThrow(IllegalStateException::new);
+
+            // Do not create a Datenschutzbrief for Eltern living outside Switzerland
+            if (!livesInSwitzerland(empfaenger)) {
+                continue;
+            }
+
             final var datenschutzbrief = createDatenschutzbrief(gesuch.getId(), empfaenger, false);
 
             gesuch.getDatenschutzbriefs().add(datenschutzbrief);
         }
+    }
+
+    private boolean livesInSwitzerland(final Eltern elternteil) {
+        final var adresse = elternteil.getAdresse();
+        if (adresse == null || adresse.getLand() == null) {
+            return false;
+        }
+        return adresse.getLand().is(WellKnownLand.CHE);
     }
 
     private List<ElternTyp> getRequiredDatenschutzbriefEmpfaenger(

@@ -704,8 +704,8 @@ public class VerfuegungPdfService {
         );
     }
 
-    public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
-        final int berechnungsresultat = stipendien.getBerechnungStipendium();
+    public void createVerfuegungsDocuments(final Gesuch gesuch, final Optional<BerechnungsresultatDto> stipendienOpt) {
+        final int berechnungsresultat = stipendienOpt.map(BerechnungsresultatDto::getBerechnungStipendium).orElse(0);
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
@@ -719,7 +719,7 @@ public class VerfuegungPdfService {
             );
         } else {
             List<Anhangs> anhangs = new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER));
-            if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
+            if (stipendienOpt.map(BerechnungsresultatDto::getBerechnungDarlehen).orElse(0) > 0) {
                 anhangs.add(Anhangs.DARLEHENS_VERFUEGUNG);
             }
             verfuegungsBrief = createVerfuegungMitAnspruchPdf(
@@ -734,7 +734,8 @@ public class VerfuegungPdfService {
             verfuegungsBrief
         );
 
-        if (!verfuegung.getVerfuegungStatus().isNegativ()) {
+        if (!verfuegung.getVerfuegungStatus().isNegativ() && stipendienOpt.isPresent()) {
+            final var stipendien = stipendienOpt.get();
             ByteArrayOutputStream berechnungsBlaetter;
             Optional<ByteArrayOutputStream> darlehensVerfuegung = Optional.empty();
 

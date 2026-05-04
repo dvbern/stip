@@ -6,6 +6,7 @@ import {
   EventEmitter,
   Input,
   Output,
+  computed,
   effect,
   inject,
   input,
@@ -40,7 +41,12 @@ import {
   MASK_SOZIALVERSICHERUNGSNUMMER,
   Plz,
 } from '@dv/shared/model/gesuch';
-import { capitalized, isDefined, lowercased } from '@dv/shared/model/type-util';
+import {
+  capitalized,
+  isDefined,
+  lowercased,
+  undefinedIfEmpty,
+} from '@dv/shared/model/type-util';
 import { BFSCODE_SCHWEIZ } from '@dv/shared/model/ui-constants';
 import {
   SharedPatternDocumentUploadComponent,
@@ -157,6 +163,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
 
   languageSig = this.store.selectSignal(selectLanguage);
   plzValues?: Plz[];
+  currentlyLivesInSwitzerlandSig = computed(() => {
+    const landId = this.elternteilSig().adresse?.landId;
+    const laender = this.landStore.landListViewSig();
+    return (
+      laender?.find((l) => l.id === landId)?.laendercodeBfs === BFSCODE_SCHWEIZ
+    );
+  });
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -374,6 +387,9 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     if (this.form.valid && geburtsdatum) {
       this.saveTriggered.emit({
         ...formValues,
+        sozialversicherungsnummer: undefinedIfEmpty(
+          formValues.sozialversicherungsnummer,
+        ),
         adresse: {
           ...SharedUiFormAddressComponent.getRealValues(
             this.form.controls.adresse,
