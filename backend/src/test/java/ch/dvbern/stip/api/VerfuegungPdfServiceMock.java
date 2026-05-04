@@ -19,6 +19,7 @@ package ch.dvbern.stip.api;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
@@ -71,7 +72,7 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     }
 
     @Override
-    public void createVerfuegungsDocuments(Gesuch gesuch, BerechnungsresultatDto stipendien) {
+    public void createVerfuegungsDocuments(Gesuch gesuch, Optional<BerechnungsresultatDto> stipendien) {
         var versendeteVerfuegung = new VerfuegungDokument();
         versendeteVerfuegung.setTyp(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG);
         versendeteVerfuegung.setObjectId(UUID.randomUUID().toString());

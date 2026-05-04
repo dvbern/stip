@@ -48,7 +48,7 @@ export class DarlehenDokumenteComponent {
   private dialog = inject(MatDialog);
 
   // eslint-disable-next-line @angular-eslint/no-input-rename
-  gesuchId = input.required<string>({ alias: 'id' });
+  gesuchId = input.required<string>({ alias: 'gesuchId' });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
