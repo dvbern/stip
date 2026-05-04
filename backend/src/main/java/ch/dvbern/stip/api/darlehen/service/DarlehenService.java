@@ -563,7 +563,7 @@ public class DarlehenService {
         );
 
         freiwilligDarlehenRepository.persistAndFlush(darlehen);
-        return freiwilligDarlehenMapper.toDtoGs(darlehen);
+        return freiwilligDarlehenMapper.toDtoSb(darlehen);
     }
 
     @Transactional
@@ -628,8 +628,8 @@ public class DarlehenService {
             )
                 .await()
                 .indefinitely()
-                .close();;
-        } else {
+                .close();
+        } else if (darlehen.getStatus() == DarlehenStatus.EINGEGEBEN) {
             deleteFreiwilligDarlehenManuelleVerfuegungIfPresent(darlehen);
         }
 
