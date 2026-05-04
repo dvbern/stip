@@ -56,10 +56,10 @@
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
       <div
-        class="tw:grid tw:grid-cols-[2fr_1fr] tw:gap-6 tw:px-8 tw:items-start tw:min-h-0 tw:relative"
+        class="tw:grid tw:grid-cols-[2fr_1fr] tw:gap-6 tw:px-8 tw:items-start tw:min-h-0 tw:relative tw:overflow-y-auto"
         [class.busy]="demoDataStore.demoDataTestBerechnungResultats() | rdIsPending: { ignoreInitial: true }"
       >
-        <div class="tw:flex tw:flex-col tw:overflow-y-auto tw:max-h-full">
+        <div class="tw:flex tw:flex-col tw:max-h-full">
           <ul class="tw:mb-4 tw:list-none tw:px-0! tw:grid tw:grid-cols-[minmax(210px,1fr)_auto_auto] tw:gap-6">
             @for (demoData of demoDatasSig(); track $index) {
               <li
@@ -130,7 +130,7 @@
             }
           </ul>
         </div>
-        <aside class="tw:overflow-y-auto tw:max-h-full">
+        <aside class="tw:overflow-y-auto tw:sticky tw:top-0 tw:max-h-full">
           @if (demoDataList) {
             <h2 class="tw:font-semibold tw:mb-4 tw:text-xl">
               {{ t('demo-data-app.overview.import-details.title') }}
