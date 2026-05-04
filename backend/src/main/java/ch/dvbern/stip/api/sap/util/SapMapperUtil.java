@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.sap.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Comparator;
@@ -39,6 +40,21 @@ import lombok.experimental.UtilityClass;
 public class SapMapperUtil {
     public static int SOZIALDIENST_PAYMENT_DETAIL_MONTHS_VALID = 12;
     private static int EXT_ID_UNIQUE_ID_NUM_DIGITS = 4;
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final String CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    public String getRandomNamePrefix() {
+        StringBuilder id = new StringBuilder(6);
+
+        for (int i = 0; i < 6; i++) {
+            int index = SECURE_RANDOM.nextInt(CHARS.length());
+            id.append(CHARS.charAt(index));
+        }
+
+        return id.toString();
+    }
 
     public PersonInAusbildung getPia(
         Fall fall
