@@ -118,7 +118,11 @@ import { PositionComponent } from '../position/position.component';
       <dv-position
         [titleSig]="t('einkommensfreibeitrag')"
         class="tw:border-b tw:border-gray-500"
-        [infoSig]="einnahmen.einkommensfreibetrag | formatChf"
+        [infoSig]="
+          t('einkommensfreibeitrag.info', {
+            einkommensfreibetrag: einnahmen.einkommensfreibetrag | formatChf,
+          })
+        "
         [amountSig]="einnahmen.einkommensfreibetrag | formatChfNegative: true"
         *dvHideZero="hideZero; value: einnahmen.einkommensfreibetrag"
       >
@@ -151,6 +155,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total -->
       <dv-position
         type="title"
+        sepparator="no-separator"
         [titleSig]="t('total')"
         [amountSig]="einnahmen.total | formatChf"
       >

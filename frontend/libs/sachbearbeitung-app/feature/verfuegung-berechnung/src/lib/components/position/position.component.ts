@@ -8,7 +8,10 @@ import { PersonValueItemComponent } from './person-value-item.component';
 @Component({
   selector: 'dv-position',
   imports: [PersonValueItemComponent, CommonModule],
-  template: `<div [ngClass]="{ 'tw:py-4': padding() === 'padding' }">
+  template: `<div
+      [ngClass]="{ 'tw:pt-4': padding() === 'padding' }"
+      class="tw:pb-4"
+    >
       <div class="tw:flex tw:gap-2">
         <div class="tw:flex-1">
           <div [ngClass]="{ 'tw:font-bold': type() === 'title' }">
@@ -42,7 +45,7 @@ import { PersonValueItemComponent } from './person-value-item.component';
         ></dv-person-value-item>
       }
     </div>
-    @if (type() === 'default' && padding() !== 'no-padding') {
+    @if (sepparator() === 'separator') {
       <div class="tw:border-b tw:border-b-gray-300"></div>
     } `,
 })
@@ -63,4 +66,5 @@ export class PositionComponent {
   amountSig = input<string | number>();
   type = input<'default' | 'title'>('default');
   padding = input<'padding' | 'no-padding'>('padding');
+  sepparator = input<'separator' | 'no-separator'>('separator');
 }

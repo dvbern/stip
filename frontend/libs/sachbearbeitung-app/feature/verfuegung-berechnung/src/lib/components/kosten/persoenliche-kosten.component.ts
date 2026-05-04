@@ -195,6 +195,7 @@ import { PositionComponent } from '../position/position.component';
       <!-- Total -->
       <dv-position
         type="title"
+        sepparator="no-separator"
         [titleSig]="t('total')"
         [amountSig]="kosten.total | formatChf"
       >
