@@ -68,7 +68,7 @@ public class SwisstopoAddrFetchJobData {
         ) {
             throw new BadRequestException("SwisstopoAddrFetchJobData: missing some required keys in the map");
         }
-        this.gesuchId = (UUID) map.get(GESUCH_ID_KEY);
+        this.gesuchId = UUID.fromString((String) map.get(GESUCH_ID_KEY));
         this.hausnummer = (String) map.get(HAUSNUMMER_KEY);
         this.strasse = (String) map.get(STRASSE_KEY);
         this.plz = (String) map.get(PLZ_KEY);
@@ -89,7 +89,7 @@ public class SwisstopoAddrFetchJobData {
         }
 
         final Map<String, Object> ret = new HashMap<>();
-        ret.put(GESUCH_ID_KEY, this.gesuchId);
+        ret.put(GESUCH_ID_KEY, this.gesuchId.toString());
         ret.put(HAUSNUMMER_KEY, this.hausnummer);
         ret.put(STRASSE_KEY, this.strasse);
         ret.put(PLZ_KEY, this.plz);
