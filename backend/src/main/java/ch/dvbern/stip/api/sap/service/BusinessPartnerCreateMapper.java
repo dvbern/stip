@@ -59,6 +59,8 @@ public abstract class BusinessPartnerCreateMapper {
         return SapMapperUtil.getAhvNr(fall);
     }
 
+    @Mapping(source = "vorname", target = "FIRSTNAME")
+    @Mapping(source = "nachname", target = "LASTNAME")
     @Mapping(source = "nationalitaet.iso2code", target = "NATIONALITYISO")
     @Mapping(source = "geburtsdatum", target = "BIRTHDATE")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
