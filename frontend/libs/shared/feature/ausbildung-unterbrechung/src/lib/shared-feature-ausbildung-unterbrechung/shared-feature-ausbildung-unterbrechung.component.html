@@ -1,9 +1,9 @@
 <ng-container *dvTranslocoShared="let t">
-  <div class="tw:relative tw:my-12 tw:justify-between container">
+  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
     <form class="tw:dv-form-grid" [formGroup]="form" [dvSharedUiFormReadonly]="!viewSig().canEdit">
       <dv-shared-ui-info-container [type]="'warning'" class="tw:col-span-2">
-        <span class="text-warning material-symbols-rounded me-3">warning</span>
-        <div class="ms-3">{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
+        <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
+        <div class="tw:ml-4">{{ t('shared.ausbildung-unterbrechen.warning') }}</div>
       </dv-shared-ui-info-container>
 
       <!-- startDate -->
@@ -96,7 +96,12 @@
       }
 
       <div class="tw:col-span-2 tw:mt-8 tw:mb-10 tw:flex tw:gap-3 tw:items-center">
-        <button type="button" (click)="deleteUnterbruch()" class="btn btn-danger" data-testid="button-delete-darlehen">
+        <button
+          type="button"
+          (click)="deleteUnterbruch()"
+          class="tw:dv-button-main-danger"
+          data-testid="button-delete-darlehen"
+        >
           {{ t('shared.cancel') }}
         </button>
 
@@ -104,7 +109,7 @@
           [disabled]="!ausbildungUnterbruchIdSig()"
           type="button"
           (click)="unterbruchEinreichen()"
-          class="btn btn-primary"
+          class="tw:dv-button-main-primary"
           data-testid="button-eingeben-darlehen"
         >
           {{ t('shared.ausbildung-unterbrechen.confirm') }}

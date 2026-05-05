@@ -414,8 +414,9 @@ export class SharedPatternDarlehenFormComponent {
               darlehenId: darlehen.id,
             },
             onSuccess: () => {
-              this.sbFormSavedSig.set(true);
+              this.formSb.markAsPristine();
               this.formSb.markAsUntouched();
+              this.sbFormSavedSig.set(true);
             },
           });
         }
@@ -474,9 +475,9 @@ export class SharedPatternDarlehenFormComponent {
               ...updatedDarlehen,
             },
             onSuccess: () => {
+              this.formSb.markAsPristine();
               this.sbFormSavedSig.set(true);
               this.darlehenUpdatedSig.emit();
-              this.formSb.markAsPristine();
             },
           });
         }

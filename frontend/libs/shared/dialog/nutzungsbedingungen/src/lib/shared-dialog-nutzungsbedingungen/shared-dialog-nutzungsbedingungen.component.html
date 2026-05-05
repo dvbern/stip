@@ -5,20 +5,20 @@
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
     [attr.aria-label]="t('shared.close')"
   >
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="tw:!text-3xl">
+  <h1 class="tw:text-3xl tw:font-semibold">
     {{ t('shared.user.consent.dialog.title') }}
   </h1>
 
   <div class="tw:mt-4" [innerHTML]="t('shared.user.consent.dialog.text')"></div>
 
   <div class="tw:mt-5 tw:flex tw:justify-between">
-    <button type="button" class="btn btn-secondary" (click)="cancel()">
+    <button type="button" class="tw:dv-button-outline" (click)="cancel()">
       @if (dialogData.nutzungsbedingungenAkzeptiert) {
         {{ t('shared.close') }}
       } @else {
@@ -26,7 +26,7 @@
       }
     </button>
     @if (!dialogData.nutzungsbedingungenAkzeptiert) {
-      <button type="button" class="btn btn-primary tw:ml-2" (click)="accept()">
+      <button type="button" class="tw:dv-button-main-primary tw:ml-2" (click)="accept()">
         {{ t('shared.user.consent.dialog.accept') }}
       </button>
     }

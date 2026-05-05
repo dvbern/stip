@@ -1,17 +1,8 @@
-<div class="d-flex gap-1 align-items-center text-nowrap">
-  @switch (type) {
-    @case ('success') {
-      <i class="material-symbols-rounded fs-4">check_circle</i>
-    }
-    @case ('warning') {
-      <i class="material-symbols-rounded fs-4">error</i>
-    }
-    @case ('danger') {
-      <i class="material-symbols-rounded fs-4">warning</i>
-    }
-    @case ('info') {
-      <i class="material-symbols-rounded fs-4">schedule</i>
-    }
-  }
+@let type = typeSig();
+<div
+  class="tw:flex tw:gap-1 tw:items-center tw:text-nowrap tw:border tw:rounded-md tw:py-1.5 tw:px-2"
+  [ngClass]="type.baseStyle"
+>
+  <i class="material-symbols-rounded tw:text-xl/0!" [ngClass]="type.color">{{ type.icon }}</i>
   <ng-content></ng-content>
 </div>

@@ -25,6 +25,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { Adresse, Plz } from '@dv/shared/model/gesuch';
 import { Language } from '@dv/shared/model/language';
+import { undefinedIfEmpty } from '@dv/shared/model/type-util';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -137,6 +138,7 @@ export class SharedUiFormAddressComponent implements DoCheck {
     ]);
     return {
       ...values,
+      coAdresse: undefinedIfEmpty(values.coAdresse),
       plz: plzOrt.plz,
       ort: plzOrt.ort,
     };

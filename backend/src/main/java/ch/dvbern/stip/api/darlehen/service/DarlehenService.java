@@ -818,7 +818,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByFallId(
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByGesuchId(
         final UUID gesuchId
     ) {
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);

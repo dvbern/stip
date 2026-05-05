@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -5,7 +6,7 @@ import {
   input,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 
 import {
   BerechnungPersonalOrFam,
@@ -15,31 +16,45 @@ import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 
 @Component({
   selector: 'dv-berechnungs-expansion-panel',
-  imports: [TranslocoPipe, MatExpansionModule, SharedUiFormatChfPipe],
+  imports: [
+    MatExpansionModule,
+    SharedUiFormatChfPipe,
+    TranslocoDirective,
+    CommonModule,
+  ],
   template: `
     @if (viewSig(); as view) {
       <mat-expansion-panel
         #panel
-        class="mat-elevation-z0 border-top border-bottom"
-        [togglePosition]="'before'"
+        class="mat-elevation-z0 tw:bg-gray-100! tw:rounded-lg! dv-large"
+        [hideToggle]="true"
+        *transloco="let t"
       >
-        <mat-expansion-panel-header>
-          <mat-panel-title class="mb-0 me-0 d-flex py-3 h5">
-            <div class="d-flex flex-column flex-grow-1 h5">
-              {{ view.titleKey | transloco }}
-              @if (!panel.expanded) {
-                <span class="row fw-normal mt-1 fs-6 text-muted">
-                  <div class="col-12">
-                    {{ view.infoKey | transloco }}
-                  </div>
+        <mat-expansion-panel-header
+          [ngClass]="{
+            'tw:border-b tw:border-b-gray-500 tw:rounded-b-none!':
+              panel.expanded,
+          }"
+        >
+          <mat-panel-title class="tw:block! tw:m-0!">
+            <div class="tw:flex tw:font-semibold tw:flex-1 tw:justify-between">
+              <div class="tw:flex tw:items-center tw:gap-2">
+                <span>
+                  {{ t(view.titleKey) }}
                 </span>
-              }
-            </div>
-            @if (!panel.expanded) {
-              <span class="text-end flex-grow-1 align-self-start text-nowrap">
+                @if (panel.expanded) {
+                  <i class="material-symbols-rounded">keyboard_arrow_up</i>
+                } @else {
+                  <i class="material-symbols-rounded">keyboard_arrow_down</i>
+                }
+              </div>
+              <span class="tw:text-end tw:self-start tw:text-nowrap">
                 {{ view.total | formatChf }}
               </span>
-            }
+            </div>
+            <span class="tw:italic tw:text-sm">
+              {{ t(view.infoKey) }}
+            </span>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ng-content></ng-content>

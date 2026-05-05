@@ -23,16 +23,16 @@
         {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
       </span>
     }
-    <i class="material-symbols-rounded ms-2">expand_more</i>
+    <i class="material-symbols-rounded tw:ml-2">expand_more</i>
   </button>
-  <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel col-12 mt-2 rounded">
-    <div class="d-flex flex-column gap-2">
+  <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
+    <div class="tw:flex tw:flex-col tw:gap-2">
       @if (anederungen?.offen; as offeneAenderung) {
         <a
           [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
           [queryParamsHandling]="'merge'"
-          class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
           data-testid="aenderungen-nav-menu-item"
           mat-menu-item
           [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
@@ -49,17 +49,17 @@
         </a>
       }
       @if (anederungen?.akzeptiert?.length) {
-        <div class="d-flex align-items-center text-muted small gap-2">
-          <hr class="flex-grow-1" />
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.completed') }}
-          <hr class="flex-grow-1" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (aenderung of anederungen?.akzeptiert; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id"
@@ -78,17 +78,17 @@
         }
       }
       @if (anederungen?.abgelehnt?.length) {
-        <div class="d-flex align-items-center text-muted small gap-2">
-          <hr class="flex-grow-1" />
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.rejected') }}
-          <hr class="flex-grow-1" />
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         @for (aenderung of anederungen?.abgelehnt; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="btn btn-nav fw-normal d-flex align-items-center px-3 shadow-none"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
             [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"

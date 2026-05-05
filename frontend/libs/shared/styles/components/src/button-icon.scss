@@ -1,10 +1,7 @@
-@use '../../theme/src/theme' as t;
-
-.dv-icon-button {
+.tw:dv-button-icon {
   background: none;
   border: none;
   width: calc(var(--dv-size-unit) * 10);
-  height: calc(var(--dv-size-unit) * 10);
   padding: 0;
   display: flex;
   align-items: center;
@@ -30,13 +27,13 @@
     opacity: 0.5;
   }
 
-  &.#{t.$prefix}button-icon-sm {
+  &.dv-button-icon-sm {
     span {
       font-size: calc(var(--dv-size-unit) * 4);
     }
   }
 
-  &.#{t.$prefix}button-icon-md {
+  &.dv-button-icon-md {
     span {
       font-size: calc(var(--dv-size-unit) * 6);
     }

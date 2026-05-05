@@ -53,6 +53,7 @@ build/
 
 
 ### Editors & IDEs ###
+.github/*
 
 ## IntelliJ
 *.iml

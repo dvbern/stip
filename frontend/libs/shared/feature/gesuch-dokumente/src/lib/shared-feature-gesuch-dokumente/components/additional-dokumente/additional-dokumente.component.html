@@ -3,11 +3,11 @@
   <dv-shared-ui-loading [overlay]="true" type="icon"></dv-shared-ui-loading>
 }
 
-<h3>
+<h2 class="tw:text-2xl tw:font-semibold">
   {{ 'shared.dokumente.table.title.additionalDocuments' | transloco }}
-</h3>
+</h2>
 
-<div class="tw:dv-table dv-table">
+<div class="tw:dv-table">
   <table mat-table [dataSource]="dokumenteDataSourceSig()" [trackBy]="trackByFn" multiTemplateDataRows>
     <caption class="cdk-visually-hidden">
       {{

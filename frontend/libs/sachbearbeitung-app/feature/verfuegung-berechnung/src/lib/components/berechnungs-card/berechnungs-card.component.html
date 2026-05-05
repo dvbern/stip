@@ -1,164 +1,233 @@
-@if (berechnungSig(); as berechnung) {
-  <mat-card class="rounded-4" *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.berechnung'">
-    <mat-card-header>
-      <mat-card-title>
-        <h1 class="tw:text-lg! tw:mb-1">
-          {{ t(titleKeySig()) }}
-        </h1>
-        <div class="tw:text-lg tw:flex tw:flex-col tw:pb-3">
-          <span>{{ berechnung.name }}</span>
-          <span class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500">
-            <span>
-              {{ t('persoenlich.sv-nummer') }}
-              {{ berechnung.sozialversicherungsnummer }},
-              {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
-            </span>
+<ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.berechnung'">
+  @if (berechnungSig(); as berechnung) {
+    <h2 class="tw:mb-6 tw:font-bold tw:text-2xl">
+      {{ t(titleKeySig()) }}
+    </h2>
 
-            <span>
-              {{ t('from') }}: {{ berechnung.gueltigAb | date: 'MM.yyyy' }},
+    <!-- badges -->
+    <div class="tw:text-sm tw:flex tw:flex-col tw:gap-2 tw:pb-3">
+      <div class="tw:flex tw:gap-2">
+        <!-- name -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1 tw:font-semibold">{{ berechnung.name }}</div>
 
-              {{ t('to') }}: {{ berechnung.gueltigBis | date: 'MM.yyyy' }},
-
-              {{ t('months') }}: {{ berechnung.anzahlMonate }}
-            </span>
+        <!-- sv-numer -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('sv-nummer') }}: </span>
+          <span>
+            {{ berechnung.sozialversicherungsnummer }}
           </span>
-
-          @switch (berechnung.typ) {
-            @case ('persoenlich') {
-              <span class="tw:text-gray-500 tw:text-sm"> {{ t('ausbildungsjahr') }} {{ berechnung.yearRange }} </span>
-            }
-            @case ('familien') {
-              <span
-                class="tw:flex tw:md:min-w-2xl tw:md:justify-between tw:md:pl-0 tw:pl-4 tw:text-sm tw:text-gray-500"
-              >
-                <span class="tw:text-gray-500 tw:text-sm"> {{ t('steuerjahr') }}: {{ berechnung.steuerjahr }} </span>
-                <span class="tw:text-gray-500 tw:text-sm">
-                  {{ t('veranlagungscode') }}:
-                  {{ berechnung.veranlagungscode }}
-                </span>
-              </span>
-            }
-          }
         </div>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-accordion class="full-width large" multi>
-        <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
-          <ng-content select="dv-persoenliche-einnahmen,dv-familien-einnahmen"></ng-content>
-        </dv-berechnungs-expansion-panel>
-        <dv-berechnungs-expansion-panel [berechnungSig]="berechnung" [variantSig]="'kosten'">
-          <ng-content select="dv-persoenliche-kosten,dv-familien-kosten"></ng-content>
-        </dv-berechnungs-expansion-panel>
-      </mat-accordion>
-    </mat-card-content>
 
-    <mat-card-footer class="px-3 py-4">
-      @switch (berechnung.typ) {
-        @case ('persoenlich') {
-          <div class="tw:mt-3">
+        <!-- geburtsdatum -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('geburtsdatum') }}: </span>
+          <span>
+            {{ berechnung.geburtsdatum | date: 'dd.MM.yyyy' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="tw:flex tw:gap-2">
+        @switch (berechnung.typ) {
+          @case ('persoenlich') {
+            <!-- ausbildungsjahr -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('ausbildungsjahr') }}: </span>
+              <span> {{ berechnung.yearRange }} </span>
+            </div>
+          }
+          @case ('familien') {
+            <!-- steuerjahr  -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('steuerjahr') }}: </span>
+              <span>
+                {{ berechnung.steuerjahr }}
+              </span>
+            </div>
+
+            <!-- veranlagungscode -->
+            <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+              <span class="tw:font-semibold"> {{ t('veranlagungscode') }}: </span>
+              <span>
+                {{ berechnung.veranlagungscode }}
+              </span>
+            </div>
+          }
+        }
+        <!-- von -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('from') }}: </span>
+          <span>
+            {{ berechnung.gueltigAb | date: 'MM.yyyy' }}
+          </span>
+        </div>
+
+        <!-- bis -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('to') }}: </span>
+          <span>
+            {{ berechnung.gueltigBis | date: 'MM.yyyy' }}
+          </span>
+        </div>
+
+        <!-- anzahl monate -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('months') }}: </span>
+          <span>
+            {{ berechnung.anzahlMonate }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <mat-accordion multi>
+      <dv-berechnungs-expansion-panel class="tw:block tw:mb-4" [berechnungSig]="berechnung" [variantSig]="'einnahmen'">
+        <ng-content select="dv-persoenliche-einnahmen,dv-familien-einnahmen"></ng-content>
+      </dv-berechnungs-expansion-panel>
+      <dv-berechnungs-expansion-panel class="tw:block tw:mb-4" [berechnungSig]="berechnung" [variantSig]="'kosten'">
+        <ng-content select="dv-persoenliche-kosten,dv-familien-kosten"></ng-content>
+      </dv-berechnungs-expansion-panel>
+    </mat-accordion>
+
+    <mat-card>
+      <mat-card-content>
+        @switch (berechnung.typ) {
+          @case ('persoenlich') {
+            @let hasProKopfTeilung = !!berechnung.proKopfTeilung;
+
             <!-- fehlbetrag -->
             <dv-position
-              type="title"
+              padding="no-padding"
+              [sepparator]="hasProKopfTeilung ? 'no-separator' : 'separator'"
               [titleSig]="t('persoenlich.fehlbetrag')"
               [infoSig]="t('persoenlich.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf"
             ></dv-position>
 
             <!-- proKopfTeilung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('persoenlich.proKopfTeilung')"
-              [amountSig]="berechnung.proKopfTeilung | formatChf"
-            ></dv-position>
+            @if (hasProKopfTeilung) {
+              <dv-position
+                class="tw:text-dv-muted tw:text-sm"
+                [titleSig]="t('persoenlich.proKopfTeilung')"
+                [amountSig]="berechnung.proKopfTeilung | formatChf"
+              ></dv-position>
+
+              @if (berechnung.anzahlMonate !== 12) {
+                <!-- proKopfTeilungBetrag12Monate -->
+                <dv-position
+                  class="tw:text-sm"
+                  [titleSig]="t('persoenlich.budget12Monate')"
+                  [amountSig]="berechnung.totalNachProKopfTeilung | formatChf: false"
+                ></dv-position>
+              }
+            }
 
             <!-- budgetTranche -->
             <dv-position
               type="title"
-              class="tw:mt-2"
+              sepparator="no-separator"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
-              [amountSig]="berechnung.budgetTranche | formatChf"
+              [amountSig]="berechnung.budgetTranche | formatChf: false"
             ></dv-position>
 
             <!-- Hinweis 1. schwarzarbeitBGSA -->
-            <div class="tw:mt-6 tw:text-gray-500 tw:text-sm">
+            <div class="tw:text-gray-500 tw:text-sm tw:italic">
               {{ t('hinweis.schwarzarbeitBGSA') }}
             </div>
 
             <!-- Hinweis 2. hoechstwerte -->
-            <div class="tw:text-gray-500 tw:text-sm">
+            <div class="tw:text-gray-500 tw:text-sm tw:italic">
               {{ t('hinweis.hoechstwerte') }}
             </div>
-          </div>
-        }
-        @case ('familien') {
-          <div class="tw:mt-3">
-            <!--  einnahmeUeberschuss -->
-            <dv-position
-              type="title"
-              [titleSig]="t('familien.einnahmeueberschuss')"
-              [infoSig]="t('familien.einnahmeueberschuss.info')"
-              [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
-            ></dv-position>
+          }
+          @case ('familien') {
+            <!-- if ueberschuss -->
+            @if (berechnung.einnahmeUeberschuss > 0) {
+              @let hasProKopfTeilungKinderInAusbildung = !!berechnung.proKopfTeilungKinderInAusbildung;
+              <!--  einnahmeUeberschuss -->
+              <dv-position
+                padding="no-padding"
+                [sepparator]="hasProKopfTeilungKinderInAusbildung ? 'no-separator' : 'separator'"
+                [titleSig]="t('familien.einnahmeueberschuss')"
+                [infoSig]="t('familien.einnahmeueberschuss.info')"
+                [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
+              ></dv-position>
 
-            <!-- proKopfTeilungKinderInAusbildung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.anzahlKinderInAusbildung')"
-              [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
-            ></dv-position>
+              @if (hasProKopfTeilungKinderInAusbildung) {
+                <!-- proKopfTeilungKinderInAusbildung -->
+                <dv-position
+                  class="tw:text-dv-muted tw:text-sm"
+                  [titleSig]="t('familien.anzahlKinderInAusbildung')"
+                  [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
+                ></dv-position>
+              }
 
-            <!-- anrechenbareElterlicheLeistung -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.elterlicheLeistung')"
-              [infoSig]="t('familien.elterlicheLeistung.info')"
-              [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
-            ></dv-position>
+              @let hasHalbierungsReduktion = berechnung.halbierungsReduktion > 0;
 
-            <!-- halbierungsReduktion -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.reduktionArt15Abs2ABG')"
-              [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
-              [amountSig]="berechnung.halbierungsReduktion | formatChf"
-            ></dv-position>
+              @if (berechnung.anrechenbareElterlicheLeistung) {
+                <!-- anrechenbareElterlicheLeistung -->
+                <dv-position
+                  [type]="hasHalbierungsReduktion ? 'default' : 'title'"
+                  [titleSig]="t('familien.elterlicheLeistung')"
+                  [infoSig]="t('familien.elterlicheLeistung.info')"
+                  [amountSig]="berechnung.anrechenbareElterlicheLeistung | formatChf"
+                ></dv-position>
+              }
 
-            <!-- Fehlbetrag -->
-            <dv-position
-              type="title"
-              class="tw:mt-10"
-              [titleSig]="t('familien.fehlbetrag')"
-              [infoSig]="t('familien.fehlbetrag.info')"
-              [amountSig]="berechnung.fehlbetrag | formatChf"
-            ></dv-position>
+              @if (hasHalbierungsReduktion) {
+                <!-- halbierungsReduktion -->
+                <dv-position
+                  type="title"
+                  sepparator="no-separator"
+                  [titleSig]="t('familien.reduktionArt15Abs2ABG')"
+                  [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
+                  [amountSig]="berechnung.halbierungsReduktion | formatChf"
+                ></dv-position>
+              }
+            }
 
-            <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.proKopfTeilung')"
-              [amountSig]="berechnung.proKopfTeilung | formatChf"
-            ></dv-position>
+            <!-- if fehlbetrag -->
+            @if (berechnung.fehlbetrag > 0) {
+              <!-- Fehlbetrag -->
+              @let hasProKopfTeilung = !!berechnung.proKopfTeilung;
+              <dv-position
+                padding="no-padding"
+                [sepparator]="hasProKopfTeilung ? 'no-separator' : 'separator'"
+                [titleSig]="t('familien.fehlbetrag')"
+                [infoSig]="t('familien.fehlbetrag.info')"
+                [amountSig]="berechnung.fehlbetrag | formatChf"
+              ></dv-position>
 
-            <!-- Ungedeckter Anteil Lebenshaltungskosten -->
-            <dv-position
-              class="tw:mt-2"
-              [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
-              [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
-              [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
-            ></dv-position>
+              @if (hasProKopfTeilung) {
+                <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
+                <dv-position
+                  class="tw:text-dv-muted tw:text-sm"
+                  [titleSig]="t('familien.proKopfTeilung')"
+                  [amountSig]="berechnung.proKopfTeilung | formatChf"
+                ></dv-position>
+              }
+
+              <!-- Ungedeckter Anteil Lebenshaltungskosten -->
+              <dv-position
+                [type]="'title'"
+                sepparator="no-separator"
+                [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
+                [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
+                [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
+              ></dv-position>
+            }
 
             <!-- Hinweis 1. schwarzarbeit BGSA -->
-            <div class="tw:mt-10 tw:text-gray-500 tw:text-sm">
+            <div class="tw:text-gray-500 tw:text-sm tw:italic">
               {{ t('hinweis.schwarzarbeitBGSA') }}
             </div>
             <!-- Hinweis 2. -->
-            <div class="tw:text-gray-500 tw:text-sm">
+            <div class="tw:text-gray-500 tw:text-sm tw:italic">
               {{ t('hinweis.hoechstwerte') }}
             </div>
-          </div>
+          }
         }
-      }
-    </mat-card-footer>
-  </mat-card>
-}
+      </mat-card-content>
+    </mat-card>
+  }
+</ng-container>

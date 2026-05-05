@@ -24,6 +24,10 @@ type AllowedValues =
   selector: 'dv-shared-ui-clear-button',
   imports: [SharedUiIconChipComponent, TranslocoPipe],
   templateUrl: './shared-ui-clear-button.component.html',
+  host: {
+    class:
+      'tw:flex tw:h-7 tw:w-7 tw:items-center tw:justify-center tw:rounded-full',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiClearButtonComponent implements OnInit {
