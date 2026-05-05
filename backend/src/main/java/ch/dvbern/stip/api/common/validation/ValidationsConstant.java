@@ -81,6 +81,8 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.ausbildungsstaette.nummer.format.not.valid.message}";
     public static final String VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE =
         "{jakarta.validation.constraints.ausbildung.required.null.message}";
+    public static final String VALIDATION_AUSBILDUNG_END_AFTER_VALID_GESUCH_PERIODE_START =
+        "{jakarta.validation.constraints.ausbildung.end.after.valid.gesuch.periode.start.message}";
     public static final String VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.werZahltAlimente.required.message}";
     public static final String VALIDATION_WER_ZAHLT_ALIMENTE_FIELD_REQUIRED_NULL_MESSAGE =

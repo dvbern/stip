@@ -109,6 +109,24 @@ class AusbildungResourceTest {
     @Test
     @TestAsGesuchsteller
     @Order(3)
+    void createAusbildungFailEndBeforeActiveGesuchPeriode() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setFallId(fall.getId());
+        ausbildungUpdateDtoSpec.setAusbildungBegin(DateMapperImpl.dateToMonthYear(LocalDate.now().minusYears(2)));
+        ausbildungUpdateDtoSpec.setAusbildungEnd(DateMapperImpl.dateToMonthYear(LocalDate.now().minusYears(1)));
+
+        ausbildungApiSpec.createAusbildung()
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.BAD_REQUEST.getStatusCode());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(4)
     void createAusbildung() {
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuchNoElterns(gesuchApiSpec, dokumentApiSpec, gesuch);
@@ -127,7 +145,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(4)
+    @Order(5)
     void gesuchStatusChangeToInBearbeitungSB() {
         var foundGesuch = TestUtil.executeAndExtract(
             GesuchWithChangesDtoSpec.class,
@@ -140,7 +158,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(5)
+    @Order(6)
     void getAusbildung() {
         final var ausbildung = ausbildungApiSpec.getAusbildung()
             .ausbildungIdPath(gesuch.getAusbildungId())
@@ -157,7 +175,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(7)
     void updateAusbildungFail() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
@@ -175,7 +193,7 @@ class AusbildungResourceTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(7)
+    @Order(8)
     void updateAusbildung() {
         final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
