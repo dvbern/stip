@@ -50,6 +50,7 @@ import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateReques
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
 import ch.dvbern.stip.api.sap.util.SOAPLoggingHandler;
 import ch.dvbern.stip.api.sap.util.SapMapperUtil;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.xml.ws.BindingProvider;
@@ -61,6 +62,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Slf4j
 @RequestScoped
+@UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapEndpointService {
     private final BusinessPartnerCreateMapper businessPartnerCreateMapper;

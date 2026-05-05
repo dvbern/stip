@@ -38,7 +38,7 @@ import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 
 @RequestScoped
-@UnlessBuildProfile(anyOf = { "test", "dev", "prod" })
+@UnlessBuildProfile(anyOf = { "dev", "prod" })
 public class SapEndpointServiceMock extends SapEndpointService {
     public static final String SUCCESS_STRING = "S";
     public static final String WARNING_STRING = "W";
