@@ -34,9 +34,11 @@ import ch.dvbern.stip.api.sap.generated.general.ReturnCodeID;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
+import io.quarkus.arc.profile.UnlessBuildProfile;
 import jakarta.enterprise.context.RequestScoped;
 
 @RequestScoped
+@UnlessBuildProfile(anyOf = { "test", "dev", "prod" })
 public class SapEndpointServiceMock extends SapEndpointService {
     public static final String SUCCESS_STRING = "S";
     public static final String WARNING_STRING = "W";
