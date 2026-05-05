@@ -123,7 +123,7 @@
             <!-- budgetTranche -->
             <dv-position
               type="title"
-              class="tw:border-t tw:border-gray-300 tw:py-4"
+              class="tw:border-t tw:border-gray-300 tw:pt-4"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
               [amountSig]="berechnung.budgetTranche | formatChf: false"
             ></dv-position>
@@ -154,7 +154,8 @@
               @if (berechnung.anrechenbareElterlicheLeistung) {
                 <!-- anrechenbareElterlicheLeistung -->
                 <dv-position
-                  class="tw:border-t tw:border-gray-300 tw:py-4"
+                  class="tw:border-t tw:border-gray-300 tw:pt-4"
+                  [ngClass]="{ 'tw:pb-4': hasHalbierungsReduktion }"
                   [type]="hasHalbierungsReduktion ? 'default' : 'title'"
                   [titleSig]="t('familien.elterlicheLeistung')"
                   [infoSig]="t('familien.elterlicheLeistung.info')"
@@ -166,7 +167,7 @@
                 <!-- halbierungsReduktion -->
                 <dv-position
                   type="title"
-                  class="tw:border-t tw:border-gray-300 tw:py-4"
+                  class="tw:border-t tw:border-gray-300 tw:pt-4"
                   [titleSig]="t('familien.reduktionArt15Abs2ABG')"
                   [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
                   [amountSig]="berechnung.halbierungsReduktion | formatChf"
@@ -197,7 +198,7 @@
               <!-- Ungedeckter Anteil Lebenshaltungskosten -->
               <dv-position
                 [type]="'title'"
-                class="tw:border-t tw:border-gray-300 tw:py-4"
+                class="tw:border-t tw:border-gray-300 tw:pt-4"
                 [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
                 [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
                 [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
