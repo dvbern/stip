@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.demo.util;
 
+import java.security.SecureRandom;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -27,6 +28,10 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DemoDataAnonymizerUtil {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+    private static final String CHARS =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
     public void anonymizeGesuch(DemoData demoData, Gesuch gesuch) {
         anonymizeZahlungsverbindung(gesuch);
         anonymizePersonInAusbildung(demoData, gesuch);
@@ -45,8 +50,8 @@ public class DemoDataAnonymizerUtil {
     }
 
     private void anonymizeAbstractPerson(DemoData demoData, AbstractPerson person, String prefix, String suffix) {
-        person.setVorname("%s-%s".formatted(prefix, suffix));
-        person.setNachname("%s-%s".formatted(demoData.getTestFall(), suffix));
+        person.setVorname("%s-%s-%s".formatted(getRandomNamePrefix(), prefix, suffix));
+        person.setNachname("%s-%s-%s".formatted(getRandomNamePrefix(), demoData.getTestFall(), suffix));
     }
 
     private void anonymizePersonInAusbildung(DemoData demoData, Gesuch gesuch) {
@@ -102,5 +107,16 @@ public class DemoDataAnonymizerUtil {
     private String getLastGesuchNummerPart(Gesuch gesuch) {
         final var gesuchNummer = gesuch.getGesuchNummer();
         return gesuchNummer.substring(gesuchNummer.lastIndexOf('.') + 1);
+    }
+
+    public String getRandomNamePrefix() {
+        StringBuilder id = new StringBuilder(6);
+
+        for (int i = 0; i < 6; i++) {
+            int index = SECURE_RANDOM.nextInt(CHARS.length());
+            id.append(CHARS.charAt(index));
+        }
+
+        return id.toString();
     }
 }

@@ -59,8 +59,6 @@ public abstract class BusinessPartnerCreateMapper {
         return SapMapperUtil.getAhvNr(fall);
     }
 
-    @Mapping(source = ".", target = "FIRSTNAME", qualifiedByName = "getFirstName")
-    @Mapping(source = ".", target = "LASTNAME", qualifiedByName = "getLastName")
     @Mapping(source = "nationalitaet.iso2code", target = "NATIONALITYISO")
     @Mapping(source = "geburtsdatum", target = "BIRTHDATE")
     @Mapping(target = "CORRESPONDLANGUAGEISO", constant = "DE")
@@ -144,16 +142,6 @@ public abstract class BusinessPartnerCreateMapper {
             sysid,
             deliveryid
         );
-    }
-
-    @Named("getFirstName")
-    public String getFirstName(PersonInAusbildung pia) {
-        return SapMapperUtil.getRandomNamePrefix() + pia.getVorname();
-    }
-
-    @Named("getLastName")
-    public String getLastName(PersonInAusbildung pia) {
-        return SapMapperUtil.getRandomNamePrefix() + pia.getNachname();
     }
 
     @Mapping(source = ".", target = "BUSINESSPARTNER")
