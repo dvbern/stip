@@ -18,9 +18,11 @@
 package ch.dvbern.stip.api.benutzer.service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -31,6 +33,7 @@ import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
+import ch.dvbern.stip.api.benutzer.type.RoleFeature;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
@@ -101,6 +104,19 @@ public class BenutzerService {
         }
 
         throw new NotFoundException("Benutzer not found");
+    }
+
+    @SafeVarargs
+    public final <T> Set<T> getSetByUserRole(RoleFeature<T>... roleFeatures) {
+        final var result = new HashSet<T>();
+        final var currentBenutzer = getCurrentBenutzer();
+        for (final var role : roleFeatures) {
+            if (currentBenutzer.hasRole(role.getRole())) {
+                result.addAll(List.of(role.getFeature()));
+            }
+        }
+
+        return result;
     }
 
     @Transactional
