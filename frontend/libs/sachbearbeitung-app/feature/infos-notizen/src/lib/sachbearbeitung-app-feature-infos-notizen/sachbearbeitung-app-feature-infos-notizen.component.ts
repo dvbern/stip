@@ -113,6 +113,9 @@ export class SachbearbeitungAppFeatureInfosNotizenComponent {
       this.notizStore.loadNotizen$({
         gesuchId,
       });
+      this.gesuchInfoStore.loadGesuchInfo$({
+        gesuchId,
+      });
     });
   }
 
