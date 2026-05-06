@@ -67,15 +67,7 @@ public class AusbildungService {
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
 
-        if (!ausbildungEndValid(ausbildung)) {
-            throw new CustomValidationsException(
-                "Ausbildung end date must be after valid gesuchperiode start date",
-                new CustomConstraintViolation(
-                    ValidationsConstant.VALIDATION_AUSBILDUNG_END_AFTER_VALID_GESUCH_PERIODE_START,
-                    "ausbildung"
-                )
-            );
-        }
+        assertAusbildungEndDateIsValid(ausbildung);
 
         // Manual check here is necessary, because otherwise the Ausbildung would be persisted
         // but creation of a Gesuch would fail. But because none of that throws an exception,
@@ -124,15 +116,7 @@ public class AusbildungService {
         final var oldAusbildungsGang = ausbildung.getAusbildungsgang();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
 
-        if (!ausbildungEndValid(ausbildung)) {
-            throw new CustomValidationsException(
-                "Ausbildung end date must be after valid gesuchperiode start date",
-                new CustomConstraintViolation(
-                    ValidationsConstant.VALIDATION_AUSBILDUNG_END_AFTER_VALID_GESUCH_PERIODE_START,
-                    "ausbildung"
-                )
-            );
-        }
+        assertAusbildungEndDateIsValid(ausbildung);
 
         if (ausbildungUpdateDto.getAusbildungsgangId() != null) {
             if (!ausbildung.getAusbildungsgang().isAktiv()) {
@@ -178,13 +162,24 @@ public class AusbildungService {
         return ausbildungMapper.toDto(ausbildung);
     }
 
-    public boolean ausbildungEndValid(Ausbildung ausbildung) {
+    public void assertAusbildungEndDateIsValid(Ausbildung ausbildung) {
         if (ausbildung == null || ausbildung.getAusbildungEnd() == null) {
-            return true;
+            return;
         }
 
         final var earliestActiveOpt = gesuchsperiodeService.findEarliestActiveNow();
-        return earliestActiveOpt.map(localDate -> !ausbildung.getAusbildungEnd().isBefore(localDate)).orElse(true);
+        final var isValid =
+            earliestActiveOpt.map(localDate -> !ausbildung.getAusbildungEnd().isBefore(localDate)).orElse(true);
+
+        if (!isValid) {
+            throw new CustomValidationsException(
+                "Ausbildung end date must be after valid gesuchperiode start date",
+                new CustomConstraintViolation(
+                    ValidationsConstant.VALIDATION_AUSBILDUNG_END_AFTER_VALID_GESUCH_PERIODE_START,
+                    "ausbildung"
+                )
+            );
+        }
     }
 
 }
