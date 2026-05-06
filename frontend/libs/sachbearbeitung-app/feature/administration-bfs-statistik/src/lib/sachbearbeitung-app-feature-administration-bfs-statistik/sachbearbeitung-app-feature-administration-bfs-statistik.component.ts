@@ -11,6 +11,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -32,6 +33,7 @@ import {
 import { debounceTime } from 'rxjs';
 
 import { BfsStatistikStore } from '@dv/sachbearbeitung-app/data-access/bfs-statistik';
+import { SachbearbeitungAppDialogCreateBfsStatistikComponent } from '@dv/sachbearbeitung-app/dialog/create-bfs-statistik';
 import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { Statistik } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -86,6 +88,7 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
   private bfsStatistikStore = inject(BfsStatistikStore);
   private sortSig = viewChild(MatSort);
   private paginatorSig = viewChild(MatPaginator);
+  private dialog = inject(MatDialog);
   displayedColumns: string[] = [
     'year',
     'timestampErstellt',
@@ -94,7 +97,7 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
   ];
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
-  maskitoYear = maskitoYear;
+  maskitoYear = maskitoYear({ max: new Date().getFullYear() });
 
   filterForm = this.formBuilder.group({
     year: [<string | null>null],
@@ -153,12 +156,18 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
   });
 
   createStatistik() {
-    this.bfsStatistikStore.createBfsStatistik$({
-      year: new Date().getFullYear(),
-      onSuccess: () => {
-        this.bfsStatistikStore.loadAllBfsStatistik$();
-      },
-    });
+    SachbearbeitungAppDialogCreateBfsStatistikComponent.open(this.dialog)
+      .afterClosed()
+      .subscribe((year) => {
+        if (year) {
+          this.bfsStatistikStore.createBfsStatistik$({
+            year,
+            onSuccess: () => {
+              this.bfsStatistikStore.loadAllBfsStatistik$();
+            },
+          });
+        }
+      });
   }
 
   constructor() {

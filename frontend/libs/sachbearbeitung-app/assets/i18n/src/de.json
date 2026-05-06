@@ -65,6 +65,8 @@
   "sachbearbeitung-app.admin.bfs-statistik.userTriggeredCreation": "Erstellt von",
   "sachbearbeitung-app.admin.bfs-statistik.file": "Datei",
   "sachbearbeitung-app.admin.bfs-statistik.create": "BFS-Statistik erstellen",
+  "sachbearbeitung-app.admin.bfs-statistik.createDialog.title": "BFS-Statistik erstellen",
+  "sachbearbeitung-app.admin.bfs-statistik.createDialog.year": "Jahr",
   "sachbearbeitung-app.admin.bfs-statistik.createSuccess": "Die BFS-Statistik wird nun erstellt",
   "sachbearbeitung-app.admin.bfs-statistik.route.overview": "BFS-Statistiken",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Übersicht aller Buchstaben-Zuteilungen",

@@ -65,6 +65,8 @@
   "sachbearbeitung-app.admin.bfs-statistik.userTriggeredCreation": "Créé par",
   "sachbearbeitung-app.admin.bfs-statistik.file": "Fichier",
   "sachbearbeitung-app.admin.bfs-statistik.create": "Créer une statistique OFS",
+  "sachbearbeitung-app.admin.bfs-statistik.createDialog.title": "Créer une statistique OFS",
+  "sachbearbeitung-app.admin.bfs-statistik.createDialog.year": "Année",
   "sachbearbeitung-app.admin.bfs-statistik.createSuccess": "Les statistiques de l'OFS sont en cours d'élaboration",
   "sachbearbeitung-app.admin.bfs-statistik.route.overview": "Statistiques de l'OFS",
   "sachbearbeitung-app.admin.buchstabenZuteilung.table.description": "Aperçu de la distribution des lettres",

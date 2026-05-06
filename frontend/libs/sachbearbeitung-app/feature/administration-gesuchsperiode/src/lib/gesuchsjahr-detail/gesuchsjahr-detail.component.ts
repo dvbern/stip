@@ -69,7 +69,7 @@ export class GesuchsjahrDetailComponent {
   private elementRef = inject(ElementRef);
 
   readonly = false;
-  masktitoYear = maskitoYear;
+  masktitoYear = maskitoYear();
   store = inject(GesuchsperiodeStore);
   router = inject(Router);
   route = inject(ActivatedRoute);
