@@ -8,6 +8,7 @@ import {
   SharedUiFormatChfPipe,
   SharedUiFormatChfPositivePipe,
 } from '@dv/shared/ui/format-chf-pipe';
+import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 
 import { HideZeroDirective } from '../../hide-zero.directive';
 import { PositionComponent } from '../position/position.component';
@@ -21,6 +22,7 @@ import { PositionComponent } from '../position/position.component';
     SharedUiFormatChfPositivePipe,
     PositionComponent,
     HideZeroDirective,
+    SharedUiInfoDialogDirective,
   ],
   template: `
     <ng-container
@@ -34,6 +36,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Nettoerwerbseinkommen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('nettoerwerbseinkommen')"
         [infoSig]="
           t('nettoerwerbseinkommen.info', {
@@ -49,17 +52,25 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- BGSA -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('einnahmenBGSA')"
         [amountSig]="einnahmen.einnahmenBGSATotal | formatChfPositive"
         *dvHideZero="hideZero; value: einnahmen.einnahmenBGSATotal"
       >
-        <span ngProjectAs="title-appendix" class="tw:text-xs tw:align-text-top">
-          1)
-        </span>
+        <button
+          ngProjectAs="title-appendix"
+          type="button"
+          (click)="hinweisBGSADialog.toggle()"
+          class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue tw:inline tw:align-middle"
+          [attr.aria-label]="t('toggle-info-messages')"
+        >
+          <span class="material-symbols-rounded tw:text-xl!"> info </span>
+        </button>
       </dv-position>
 
       <!-- Kinder- und Ausbildungszulagen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('kinderUndAusbildungszulagen')"
         [personValueItemsSig]="einnahmen.kinderAusbildungszulagen"
         [amountSig]="
@@ -71,6 +82,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Unterhaltsbeiträge -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('unterhaltsbeitraege')"
         [personValueItemsSig]="einnahmen.unterhaltsbeitraege"
         [amountSig]="einnahmen.unterhaltsbeitraegeTotal | formatChfPositive"
@@ -80,6 +92,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- EO -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('eoLeistungen')"
         [infoSig]="t('eoLeistungen.info')"
         [personValueItemsSig]="einnahmen.eoLeistungen"
@@ -90,6 +103,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Taggelder -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('taggelderAHVIV')"
         [infoSig]="t('taggelderAHVIV.info')"
         [personValueItemsSig]="einnahmen.taggelderAHVIV"
@@ -100,6 +114,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Renten -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('renten')"
         [infoSig]="t('renten.info')"
         [personValueItemsSig]="einnahmen.renten"
@@ -110,6 +125,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Ergänzungsleistungen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('ergaenzungsleistungen')"
         [personValueItemsSig]="einnahmen.ergaenzungsleistungen"
         [amountSig]="einnahmen.ergaenzungsleistungenTotal | formatChfPositive"
@@ -119,6 +135,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Beiträge an Gemeindeinstitutionen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('beitraegeGemeindeInstitutionen')"
         [amountSig]="
           einnahmen.beitraegeGemeindeInstitutionen | formatChfPositive
@@ -129,6 +146,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Andere Einnahmen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('andereEinnahmen')"
         [infoSig]="t('andereEinnahmen.info')"
         [personValueItemsSig]="einnahmen.andereEinnahmen"
@@ -139,6 +157,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Anrechenbares Vermögen -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('anrechenbaresVermoegen')"
         [infoSig]="
           t('anrechenbaresVermoegen.info', {
@@ -154,6 +173,7 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Elterliche Leistung -->
       <dv-position
+        class="tw:border-b tw:border-b-gray-300 tw:py-4"
         [titleSig]="t('elterlicheLeistung')"
         [amountSig]="einnahmen.elterlicheLeistung | formatChfPositive"
         *dvHideZero="hideZero; value: einnahmen.elterlicheLeistung"
@@ -162,12 +182,21 @@ import { PositionComponent } from '../position/position.component';
 
       <!-- Total -->
       <dv-position
+        class="tw:pt-4"
         type="title"
-        sepparator="no-separator"
         [titleSig]="t('total')"
         [amountSig]="einnahmen.total | formatChf"
       >
       </dv-position>
+
+      <div
+        dvSharedUiInfoDialog
+        [forceDialogPosition]="true"
+        [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.title'"
+        [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.schwarzarbeitBGSA.message'"
+        #hinweisBGSADialog="dvSharedUiInfoDialog"
+        class="tw:hidden"
+      ></div>
     </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

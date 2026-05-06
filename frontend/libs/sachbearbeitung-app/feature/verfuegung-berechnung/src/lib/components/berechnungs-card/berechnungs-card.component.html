@@ -94,11 +94,9 @@
         @switch (berechnung.typ) {
           @case ('persoenlich') {
             @let hasProKopfTeilung = !!berechnung.proKopfTeilung;
-
             <!-- fehlbetrag -->
             <dv-position
-              padding="no-padding"
-              [sepparator]="hasProKopfTeilung ? 'no-separator' : 'separator'"
+              class="tw:pb-4"
               [titleSig]="t('persoenlich.fehlbetrag')"
               [infoSig]="t('persoenlich.fehlbetrag.info')"
               [amountSig]="berechnung.fehlbetrag | formatChf"
@@ -107,7 +105,7 @@
             <!-- proKopfTeilung -->
             @if (hasProKopfTeilung) {
               <dv-position
-                class="tw:text-dv-muted tw:text-sm"
+                class="tw:text-dv-muted tw:text-sm tw:pb-4"
                 [titleSig]="t('persoenlich.proKopfTeilung')"
                 [amountSig]="berechnung.proKopfTeilung | formatChf"
               ></dv-position>
@@ -115,7 +113,7 @@
               @if (berechnung.anzahlMonate !== 12) {
                 <!-- proKopfTeilungBetrag12Monate -->
                 <dv-position
-                  class="tw:text-sm"
+                  class="tw:text-sm tw:border-t tw:border-gray-300 tw:py-4"
                   [titleSig]="t('persoenlich.budget12Monate')"
                   [amountSig]="berechnung.totalNachProKopfTeilung | formatChf: false"
                 ></dv-position>
@@ -125,20 +123,10 @@
             <!-- budgetTranche -->
             <dv-position
               type="title"
-              sepparator="no-separator"
+              class="tw:border-t tw:border-gray-300 tw:pt-4"
               [titleSig]="t('persoenlich.budgetAnzahlMonate', { anzahlMonate: berechnung.anzahlMonate })"
               [amountSig]="berechnung.budgetTranche | formatChf: false"
             ></dv-position>
-
-            <!-- Hinweis 1. schwarzarbeitBGSA -->
-            <div class="tw:text-gray-500 tw:text-sm tw:italic">
-              {{ t('hinweis.schwarzarbeitBGSA') }}
-            </div>
-
-            <!-- Hinweis 2. hoechstwerte -->
-            <div class="tw:text-gray-500 tw:text-sm tw:italic">
-              {{ t('hinweis.hoechstwerte') }}
-            </div>
           }
           @case ('familien') {
             <!-- if ueberschuss -->
@@ -146,8 +134,7 @@
               @let hasProKopfTeilungKinderInAusbildung = !!berechnung.proKopfTeilungKinderInAusbildung;
               <!--  einnahmeUeberschuss -->
               <dv-position
-                padding="no-padding"
-                [sepparator]="hasProKopfTeilungKinderInAusbildung ? 'no-separator' : 'separator'"
+                class="tw:pb-4"
                 [titleSig]="t('familien.einnahmeueberschuss')"
                 [infoSig]="t('familien.einnahmeueberschuss.info')"
                 [amountSig]="berechnung.einnahmeUeberschuss | formatChf"
@@ -156,7 +143,7 @@
               @if (hasProKopfTeilungKinderInAusbildung) {
                 <!-- proKopfTeilungKinderInAusbildung -->
                 <dv-position
-                  class="tw:text-dv-muted tw:text-sm"
+                  class="tw:text-dv-muted tw:text-sm tw:pb-4"
                   [titleSig]="t('familien.anzahlKinderInAusbildung')"
                   [amountSig]="berechnung.proKopfTeilungKinderInAusbildung"
                 ></dv-position>
@@ -167,6 +154,8 @@
               @if (berechnung.anrechenbareElterlicheLeistung) {
                 <!-- anrechenbareElterlicheLeistung -->
                 <dv-position
+                  class="tw:border-t tw:border-gray-300 tw:pt-4"
+                  [ngClass]="{ 'tw:pb-4': hasHalbierungsReduktion }"
                   [type]="hasHalbierungsReduktion ? 'default' : 'title'"
                   [titleSig]="t('familien.elterlicheLeistung')"
                   [infoSig]="t('familien.elterlicheLeistung.info')"
@@ -178,7 +167,7 @@
                 <!-- halbierungsReduktion -->
                 <dv-position
                   type="title"
-                  sepparator="no-separator"
+                  class="tw:border-t tw:border-gray-300 tw:pt-4"
                   [titleSig]="t('familien.reduktionArt15Abs2ABG')"
                   [infoSig]="t('familien.reduktionArt15Abs2ABG.info')"
                   [amountSig]="berechnung.halbierungsReduktion | formatChf"
@@ -191,8 +180,7 @@
               <!-- Fehlbetrag -->
               @let hasProKopfTeilung = !!berechnung.proKopfTeilung;
               <dv-position
-                padding="no-padding"
-                [sepparator]="hasProKopfTeilung ? 'no-separator' : 'separator'"
+                class="tw:pb-4"
                 [titleSig]="t('familien.fehlbetrag')"
                 [infoSig]="t('familien.fehlbetrag.info')"
                 [amountSig]="berechnung.fehlbetrag | formatChf"
@@ -201,7 +189,7 @@
               @if (hasProKopfTeilung) {
                 <!-- Geteilt durch die Anzahl Personen im Haushalt (proKopfTeilung) -->
                 <dv-position
-                  class="tw:text-dv-muted tw:text-sm"
+                  class="tw:text-dv-muted tw:text-sm tw:pb-4"
                   [titleSig]="t('familien.proKopfTeilung')"
                   [amountSig]="berechnung.proKopfTeilung | formatChf"
                 ></dv-position>
@@ -210,21 +198,12 @@
               <!-- Ungedeckter Anteil Lebenshaltungskosten -->
               <dv-position
                 [type]="'title'"
-                sepparator="no-separator"
+                class="tw:border-t tw:border-gray-300 tw:pt-4"
                 [titleSig]="t('familien.ungedeckterAnteilLebenshaltungskosten')"
                 [infoSig]="t('familien.ungedeckterAnteilLebenshaltungskosten.info')"
                 [amountSig]="berechnung.ungedeckterAnteilLebenshaltungskosten | formatChf"
               ></dv-position>
             }
-
-            <!-- Hinweis 1. schwarzarbeit BGSA -->
-            <div class="tw:text-gray-500 tw:text-sm tw:italic">
-              {{ t('hinweis.schwarzarbeitBGSA') }}
-            </div>
-            <!-- Hinweis 2. -->
-            <div class="tw:text-gray-500 tw:text-sm tw:italic">
-              {{ t('hinweis.hoechstwerte') }}
-            </div>
           }
         }
       </mat-card-content>
