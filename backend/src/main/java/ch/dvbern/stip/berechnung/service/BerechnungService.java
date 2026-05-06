@@ -148,7 +148,11 @@ public class BerechnungService {
             : 12;
 
         final var totalNachKuerzungNachEinreichefrist =
-            monateUebrigNachEinreichefrist < 12 ? berechnungVorKuerzungUndTeilung * monateUebrigNachEinreichefrist / 12
+            monateUebrigNachEinreichefrist < 12
+                ? BigDecimal.valueOf(berechnungVorKuerzungUndTeilung)
+                    .multiply(BigDecimal.valueOf(monateUebrigNachEinreichefrist))
+                    .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP)
+                    .intValue()
                 : null;
 
         final var totalVorKuerzungUnterbruch =
@@ -171,7 +175,12 @@ public class BerechnungService {
             .orElse(0);
 
         final var totalNachKuerzungUnterbruch =
-            anzahlMonateUnterbruch > 0 ? totalVorKuerzungUnterbruch * (12 - anzahlMonateUnterbruch) / 12 : null;
+            anzahlMonateUnterbruch > 0
+                ? BigDecimal.valueOf(totalVorKuerzungUnterbruch)
+                    .multiply(BigDecimal.valueOf(12 - anzahlMonateUnterbruch))
+                    .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP)
+                    .intValue()
+                : null;
 
         final int totalVorTeilungDarlehen =
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
