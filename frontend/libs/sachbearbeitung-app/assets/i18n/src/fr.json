@@ -64,6 +64,7 @@
   "sachbearbeitung-app.admin.bfs-statistik.timestampErstellt": "Créé le",
   "sachbearbeitung-app.admin.bfs-statistik.userTriggeredCreation": "Créé par",
   "sachbearbeitung-app.admin.bfs-statistik.file": "Fichier",
+  "sachbearbeitung-app.admin.bfs-statistik.invalid": "La structure du fichier a posé des problèmes lors de la validation et n'est pas valide.\nVeuillez contacter un administrateur.",
   "sachbearbeitung-app.admin.bfs-statistik.create": "Créer une statistique OFS",
   "sachbearbeitung-app.admin.bfs-statistik.createDialog.title": "Créer une statistique OFS",
   "sachbearbeitung-app.admin.bfs-statistik.createDialog.year": "Année",

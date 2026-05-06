@@ -1,4 +1,4 @@
-<div class="container tw:mt-4" *dvTranslocoSb="let t">
+<div class="tw:mt-4" *dvTranslocoSb="let t">
   <button
     class="tw:dv-button-main-primary tw:mt-6"
     type="button"
@@ -70,7 +70,7 @@
                 <button
                   matIconSuffix
                   type="button"
-                  class="btn btn-link text-muted tw:p-1!"
+                  class="tw:dv-button text-muted tw:p-1"
                   [attr.aria-label]="'shared.ui.open-date-picker'"
                   (click)="timestampErstelltRangePicker.open(); $event.stopPropagation()"
                 >
@@ -156,7 +156,7 @@
           <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">
             <button
               type="button"
-              class="btn btn-link tw:px-0!"
+              class="tw:dv-button tw:inline-flex tw:px-0!"
               [attr.aria-label]="t('sachbearbeitung-app.admin.bfs-statistik.file')"
               [dvDownloadButton]="{
                 type: 'statistik',
@@ -168,6 +168,14 @@
               </span>
               <span class="material-symbols-rounded tw:underline tw:text-sm!">download</span>
             </button>
+            @if (!element.valid) {
+              <i
+                class="material-symbols-rounded tw:cursor-default tw:text-xl! tw:align-middle tw:ml-1 tw:text-dv-warning"
+                [matTooltip]="t('sachbearbeitung-app.admin.bfs-statistik.invalid')"
+              >
+                check_circle
+              </i>
+            }
           </td>
         </ng-container>
 

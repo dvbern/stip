@@ -64,6 +64,7 @@
   "sachbearbeitung-app.admin.bfs-statistik.timestampErstellt": "Erstellt am",
   "sachbearbeitung-app.admin.bfs-statistik.userTriggeredCreation": "Erstellt von",
   "sachbearbeitung-app.admin.bfs-statistik.file": "Datei",
+  "sachbearbeitung-app.admin.bfs-statistik.invalid": "Die Dateistruktur hat bei der Validierung Probleme verursacht und ist ungültig.\nBitte wenden Sie sich an einen Administrator.",
   "sachbearbeitung-app.admin.bfs-statistik.create": "BFS-Statistik erstellen",
   "sachbearbeitung-app.admin.bfs-statistik.createDialog.title": "BFS-Statistik erstellen",
   "sachbearbeitung-app.admin.bfs-statistik.createDialog.year": "Jahr",
