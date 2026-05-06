@@ -44,14 +44,14 @@ public class DemoDataAnonymizerUtil {
     private void anonymizeZahlungsverbindung(Gesuch gesuch) {
         final var zahlungsverbindung = gesuch.getAusbildung().getFall().getAuszahlung().getZahlungsverbindung();
         final var gesuchSuffix = getLastGesuchNummerPart(gesuch);
-        zahlungsverbindung.setVorname("Vorname-%s".formatted(gesuchSuffix));
-        zahlungsverbindung.setNachname("Nachname-%s".formatted(gesuchSuffix));
+        zahlungsverbindung.setVorname("%s-Vorname-%s".formatted(getRandomNamePrefix(), gesuchSuffix));
+        zahlungsverbindung.setNachname("%s-Nachname-%s".formatted(getRandomNamePrefix(), gesuchSuffix));
         anonymizeAdresse(gesuch, zahlungsverbindung.getAdresse());
     }
 
     private void anonymizeAbstractPerson(DemoData demoData, AbstractPerson person, String prefix, String suffix) {
-        person.setVorname("%s-%s-%s".formatted(getRandomNamePrefix(), prefix, suffix));
-        person.setNachname("%s-%s-%s".formatted(getRandomNamePrefix(), demoData.getTestFall(), suffix));
+        person.setVorname("%s-%s".formatted(prefix, suffix));
+        person.setNachname("%s-%s".formatted(demoData.getTestFall(), suffix));
     }
 
     private void anonymizePersonInAusbildung(DemoData demoData, Gesuch gesuch) {
