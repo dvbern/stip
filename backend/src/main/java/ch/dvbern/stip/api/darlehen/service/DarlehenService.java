@@ -820,7 +820,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByFallId(
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByGesuchId(
         final UUID gesuchId
     ) {
         final Fall fall = gesuchRepository.requireById(gesuchId).getAusbildung().getFall();

@@ -12,7 +12,4 @@
     {{ dialogData.titleKey | transloco: dialogData.titleParams }}
   </h1>
   <p class="tw:mb-4" [innerHTML]="dialogData.messageKey | transloco: dialogData.messageParams"></p>
-  <button (click)="close()" type="button" class="tw:dv-button-outline tw:mt-auto tw:self-center">
-    {{ 'shared.close' | transloco }}
-  </button>
 </section>

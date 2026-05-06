@@ -18,6 +18,7 @@
 package ch.dvbern.stip.stipdecision.decider;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.type.MandantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
@@ -85,7 +86,9 @@ public class BernStipDecider extends BaseStipDecider {
     }
 
     private static boolean eingabefristAbgelaufen(final GesuchTranche gesuchTranche) {
-        return LocalDate.now().isAfter(gesuchTranche.getGesuch().getGesuchsperiode().getEinreichefristReduziert());
+        final var einreichedatum = gesuchTranche.getGesuch().getEinreichedatum();
+        return Objects.nonNull(einreichedatum) &&
+        einreichedatum.isAfter(gesuchTranche.getGesuch().getGesuchsperiode().getEinreichefristReduziert());
     }
 
     private static boolean ausbildungNichtAnerkannt(final GesuchTranche gesuchTranche) {

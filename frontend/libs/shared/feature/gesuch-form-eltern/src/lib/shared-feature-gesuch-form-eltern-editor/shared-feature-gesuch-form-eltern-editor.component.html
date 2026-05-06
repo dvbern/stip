@@ -19,10 +19,16 @@
             >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
           >
         </div>
-        @if (elternteil.id && viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' && viewSig().gesuchId; as gesuchId) {
+        @if (
+          elternteil.id &&
+            currentlyLivesInSwitzerlandSig() &&
+            viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' &&
+            viewSig().gesuchId;
+          as gesuchId
+        ) {
           <button
             type="button"
-            class="tw:dv-button tw:p-0"
+            class="tw:dv-button tw:p-0 tw:inline-flex tw:flex-col"
             [attr.aria-label]="'shared.dokumente.table.download' | transloco"
             [dvDownloadButton]="{
               type: 'datenschutzbriefCreate',

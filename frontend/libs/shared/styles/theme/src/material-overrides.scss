@@ -183,6 +183,35 @@ $dv-all-colors: info, danger, success, warn, primary;
   color: var(--tw-color-dv-main-danger);
 }
 
+.mat-accordion.dv-large .mat-expansion-panel-header,
+.mat-expansion-panel.dv-large .mat-expansion-panel-header {
+  height: auto;
+}
+
+.mat-expansion-panel.dv-large {
+  .mat-content-hide-toggle {
+    margin: 0;
+  }
+  .mat-expansion-panel-header {
+    padding: 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem 1rem 1rem;
+  }
+}
+
+dv-sachbearbeitung-app-feature-verfuegung {
+  .mat-mdc-card {
+    background-color: var(--tw-color-gray-100);
+    border-width: 1px;
+    border-color: var(--tw-color-gray-100);
+    border-style: solid;
+    border-radius: var(--dv-border-radius);
+    box-shadow: none;
+    padding-block: 1rem;
+  }
+}
+
 dv-sachbearbeitung-app-feature-gesuch-layout {
   .tw\:dv-table {
     box-shadow: none;

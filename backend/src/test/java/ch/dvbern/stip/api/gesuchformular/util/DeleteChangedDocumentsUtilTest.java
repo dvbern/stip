@@ -50,17 +50,21 @@ class DeleteChangedDocumentsUtilTest {
         final var oldEKPartner = new EinnahmenKosten();
 
         // Both null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, null));
+        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, null, false));
 
         // Old null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, null));
+        assertDoesNotThrow(
+            () -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, null, false)
+        );
 
         // New null
-        assertDoesNotThrow(() -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, oldEKPartner));
+        assertDoesNotThrow(
+            () -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(null, oldEKPartner, false)
+        );
 
         // Neither is null
         assertDoesNotThrow(
-            () -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner)
+            () -> DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner, false)
         );
     }
 
@@ -117,7 +121,7 @@ class DeleteChangedDocumentsUtilTest {
     ) {
         // Act
         final var actual =
-            DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner);
+            DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEKPartner, oldEKPartner, false);
 
         // Assert
         assertExpectedResult(actual, expected);
@@ -131,7 +135,7 @@ class DeleteChangedDocumentsUtilTest {
         final DokumentTyp expected
     ) {
         // Act
-        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEk, oldEk);
+        final var actual = DeleteChangedDocumentsUtil.getDocumentsToDeleteForEinnahmenKosten(newEk, oldEk, false);
 
         // Assert
         assertExpectedResult(actual, expected);

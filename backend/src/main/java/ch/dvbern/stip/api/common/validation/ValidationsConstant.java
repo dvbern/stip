@@ -138,8 +138,6 @@ public final class ValidationsConstant {
         "{jakarta.validation.constraints.einnahmen.kosten.wohnkosten.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_REQUIRED_MESSAGE =
         "{jakarta.validation.constraints.einnahmen.kosten.vermoegen.required.message}";
-    public static final String VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE =
-        "{jakarta.validation.constraints.einnahmen.kosten.zulagen.required.message}";
     public static final String VALIDATION_DARLEHEN_NOT_VALID_MESSAGE =
         "{jakarta.validation.constraints.darlehen.required.message}";
     public static final String VALIDATION_EINNAHMEN_KOSTEN_VERMOEGEN_INVALID_VALUE_MESSAGE =
