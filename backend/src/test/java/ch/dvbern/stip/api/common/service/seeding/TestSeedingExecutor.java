@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.common.service.seeding;
 import java.util.Comparator;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -34,7 +34,7 @@ public class TestSeedingExecutor {
     private final Instance<Seeder> seeders;
 
     @Startup
-    @RunForTenant(MandantIdentifier.BERN)
+    @RunForTenant(TenantIdentifier.BERN)
     public void seedForBern() {
         LOG.info("SeedingExecutor starting execution for testing");
         seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);

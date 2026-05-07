@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import io.quarkus.scheduler.Scheduled;
 import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
@@ -34,8 +34,8 @@ public class UnterschriftenblattUploadCheckScheduledTask {
     private final UnterschriftenblattService unterschriftenblattService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
-    @RunForTenant(MandantIdentifier.BERN)
+    @Scheduled(cron = "{kstip.scheduler.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @RunForTenant(TenantIdentifier.BERN)
     public void run() {
         try {
             LOG.info("Checking Unterschriftenblaetter for Bern");

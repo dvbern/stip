@@ -28,10 +28,10 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class NeskoGetBearerTokenService {
-    @ConfigProperty(name = "kstip.nesko.username")
+    @ConfigProperty(name = "old.nesko.username")
     String username;
 
-    @ConfigProperty(name = "kstip.nesko.password")
+    @ConfigProperty(name = "old.nesko.password")
     String password;
 
     @Inject

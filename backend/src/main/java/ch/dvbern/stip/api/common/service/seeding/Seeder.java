@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
-import java.util.List;
+import java.util.Set;
 
 public abstract class Seeder {
     public static final int DEFAULT_PRIORITY = 1_000;
@@ -34,5 +34,5 @@ public abstract class Seeder {
     /**
      * Returns a list of profiles on which to run seeding.
      */
-    protected abstract List<String> getProfiles();
+    protected abstract Set<String> getProfiles();
 }

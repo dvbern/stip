@@ -51,7 +51,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
 import ch.dvbern.stip.api.demo.repo.DemoDataAbschlussRepository;
@@ -82,7 +82,6 @@ import ch.dvbern.stip.api.geschwister.entity.GeschwisterBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -105,6 +104,7 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
@@ -140,10 +140,10 @@ public class GenerateDemoDataService {
     private final DemoDataAusbildungsgangRepository demoDataAusbildungsgangRepository;
     private final DemoDataAbschlussRepository demoDataAbschlussRepository;
     private final BenutzerService benutzerService;
-    private final GesuchService gesuchService;
     private final S3AsyncClient s3;
     private final EntityCopyMapper copyMapper;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
 
     private final Instance<RequiredDokumentsProducer> requiredDokumentProducers;
     private final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers;
@@ -684,13 +684,14 @@ public class GenerateDemoDataService {
         final var berechnungResultatSoll = demoData.parseDemoDataDto().getBerechnungValues();
         var berechnungsResultat = new BerechnungsresultatDto();
         var berechnungsResultatIst = new DemoDataTestBerechnungValuesDto();
+        final var tenantConfig = tenantService.getConfigForCurrentTenant();
         String message = null;
         VerfuegungStatus statusIst = null;
         try {
             berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch,
-                configService.getCurrentDmnMajorVersion(),
-                configService.getCurrentDmnMinorVersion()
+                tenantConfig.berechnung().currentMajorVersion(),
+                tenantConfig.berechnung().currentMinorVersion()
             );
             statusIst = InputUtils.sumNullables(
                 berechnungsResultat.getBerechnungStipendium(),
@@ -845,7 +846,7 @@ public class GenerateDemoDataService {
     }
 
     private void createS3EntriesForDokumente(List<Dokument> dokuments) {
-        final var pngBody = AsyncRequestBody.fromBytes(Base64.decodeBase64(configService.getSmallestPng()));
+        final var pngBody = AsyncRequestBody.fromBytes(Base64.decodeBase64(config.demo().smallestPng()));
         String firstDokumentKey = null;
         CompletableFuture<String> dokumentUploadOrCopyRequest = CompletableFuture.supplyAsync(() -> "pending");
         for (Dokument dokument : dokuments) {
@@ -866,7 +867,7 @@ public class GenerateDemoDataService {
 
     private PutObjectRequest buildPutRequest(final String objectId) {
         return PutObjectRequest.builder()
-            .bucket(configService.getBucketName())
+            .bucket(config.s3().bucketName())
             .key(objectId)
             .contentType("image/png")
             .build();
@@ -874,8 +875,8 @@ public class GenerateDemoDataService {
 
     private CopyObjectRequest buildCopyRequest(final String sourceObjectId, final String objectId) {
         return CopyObjectRequest.builder()
-            .sourceBucket(configService.getBucketName())
-            .destinationBucket(configService.getBucketName())
+            .sourceBucket(config.s3().bucketName())
+            .destinationBucket(config.s3().bucketName())
             .sourceKey(sourceObjectId)
             .destinationKey(objectId)
             .build();

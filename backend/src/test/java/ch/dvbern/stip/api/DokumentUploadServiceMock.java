@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.test.Mock;
@@ -42,7 +42,7 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
@@ -55,7 +55,7 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
@@ -68,7 +68,7 @@ public class DokumentUploadServiceMock extends DokumentUploadService {
         final byte[] byteArray,
         final String fileName,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String documentPathPrefix
     ) {
         return FileUtil.generateUUIDWithFileExtension(fileName);

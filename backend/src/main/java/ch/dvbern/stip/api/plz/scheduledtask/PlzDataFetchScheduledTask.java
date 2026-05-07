@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.plz.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.plz.service.PlzDataFetchService;
 import io.quarkus.runtime.Startup;
 import io.quarkus.scheduler.Scheduled;
@@ -34,8 +34,8 @@ public class PlzDataFetchScheduledTask {
     private final PlzDataFetchService plzDataFetchService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.plzdata.cron}")
-    @RunForTenant(MandantIdentifier.BERN)
+    @Scheduled(cron = "{kstip.scheduler.plz-data.cron}")
+    @RunForTenant(TenantIdentifier.BERN)
     public void run() {
         try {
             LOG.info("Fetching PLZ data from scheduled task");

@@ -19,7 +19,7 @@ package ch.dvbern.stip.api;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.CustomDokumentTypRepository;
 import ch.dvbern.stip.api.dokument.repo.DokumentHistoryRepository;
@@ -79,7 +79,7 @@ public class GesuchDokumentServiceMock extends GesuchDokumentService {
     GesuchRepository gesuchRepository,
     GesuchTrancheRepository gesuchTrancheRepository,
     S3AsyncClient s3,
-    ConfigService configService,
+    StipConfig config,
     GesuchDokumentstatusService gesuchDokumentstatusService,
     RequiredDokumentService requiredDokumentService,
     Antivirus antivirus,
@@ -98,7 +98,7 @@ public class GesuchDokumentServiceMock extends GesuchDokumentService {
             gesuchRepository,
             gesuchTrancheRepository,
             s3,
-            configService,
+            config,
             gesuchDokumentstatusService,
             requiredDokumentService,
             antivirus,

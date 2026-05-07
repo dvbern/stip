@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -59,7 +59,7 @@ public class DokumentUploadService {
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final Antivirus antivirus,
         final Set<String> allowedMimetypes,
         final String dokumentPathPrefix,
@@ -82,7 +82,7 @@ public class DokumentUploadService {
         return uploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             dokumentPathPrefix,
             serviceCallback,
             onFailure
@@ -92,7 +92,7 @@ public class DokumentUploadService {
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final Antivirus antivirus,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
@@ -101,9 +101,9 @@ public class DokumentUploadService {
         return validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
-            configService.getAllowedMimeTypes(),
+            config.upload().allowedMimetypes(),
             dokumentPathPrefix,
             serviceCallback,
             onFailure
@@ -113,12 +113,12 @@ public class DokumentUploadService {
     public Uni<Response> validateScanUploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final Antivirus antivirus,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
-        if (!checkFileUpload(fileUpload, configService.getAllowedMimeTypes())) {
+        if (!checkFileUpload(fileUpload, config.upload().allowedMimetypes())) {
             return Uni.createFrom().item(Response.status(Status.BAD_REQUEST).build());
         }
 
@@ -127,7 +127,7 @@ public class DokumentUploadService {
         return uploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             dokumentPathPrefix,
             serviceCallback
         );
@@ -136,7 +136,7 @@ public class DokumentUploadService {
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback,
         final @Nullable Consumer<Throwable> onFailure
@@ -147,7 +147,7 @@ public class DokumentUploadService {
         final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
             s3,
             fileUpload,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             key
         );
 
@@ -171,7 +171,7 @@ public class DokumentUploadService {
     public Uni<Response> uploadDokument(
         final FileUpload fileUpload,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String dokumentPathPrefix,
         final Consumer<String> serviceCallback
     ) {
@@ -181,7 +181,7 @@ public class DokumentUploadService {
         final Supplier<CompletionStage<PutObjectResponse>> stageSupplier = () -> getUploadDokumentFuture(
             s3,
             fileUpload,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             key
         );
 
@@ -200,14 +200,14 @@ public class DokumentUploadService {
         final byte[] byteArray,
         final String fileName,
         final S3AsyncClient s3,
-        final ConfigService configService,
+        final StipConfig config,
         final String documentPathPrefix
     ) {
         final var objectId = FileUtil.generateUUIDWithFileExtension(fileName);
         final var key = documentPathPrefix + objectId;
 
         Uni.createFrom()
-            .completionStage(getUploadDokumentFuture(s3, byteArray, configService.getBucketName(), key))
+            .completionStage(getUploadDokumentFuture(s3, byteArray, config.s3().bucketName(), key))
             .await()
             .indefinitely();
 

@@ -24,7 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.exception.DemoDataImportException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoDataImport;
 import ch.dvbern.stip.api.demo.repo.DemoDataImportRepository;
@@ -57,7 +57,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @AllArgsConstructor
 public class DemoDataService {
     private final S3AsyncClient s3;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final Antivirus antivirus;
     private final Validator validator;
     private final DemoDataRepository demoDataRepository;
@@ -85,9 +85,9 @@ public class DemoDataService {
             dokumentUploadService.validateScanUploadDokument(
                 fileUpload,
                 s3,
-                configService,
+                config,
                 antivirus,
-                configService.getTestcaseAllowedMimeTypes(),
+                config.upload().allowedMimetypes(),
                 DEMODATA_DOKUMENT_PATH,
                 objectId -> demoDataImport.setDokument(
                     uploadDokument(
@@ -145,7 +145,7 @@ public class DemoDataService {
         final var dokument = dokumentRepository.requireById(dokumentId);
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             DEMODATA_DOKUMENT_PATH,
             dokument.getFilename()

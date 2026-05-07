@@ -15,24 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.api.config.util;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.TenantConfig;
+import lombok.experimental.UtilityClass;
 
-@Getter
-@RequiredArgsConstructor
-public enum MandantIdentifier {
-    BERN("bern"),
-    DV("dv");
-
-    private final String identifier;
-
-    public static MandantIdentifier of(final String identifier) {
-        return switch (identifier) {
-            case "bern" -> BERN;
-            case "dv" -> DV;
-            default -> throw new IllegalArgumentException("Invalid mandant identifier: " + identifier);
-        };
+@UtilityClass
+public class ConfigUtil {
+    public String getWelcomeMailURI(
+        TenantConfig tenantConfig,
+        StipConfig config,
+        String tenantIdentifier,
+        String redirectUri
+    ) {
+        return config.oidc().frontendUrl() +
+        tenantConfig.welcomeMail().kcPath().replace("<TENANT>", tenantIdentifier) +
+        tenantConfig.welcomeMail().kcQueryParameter().replace("<REDIRECT_URI>", redirectUri) +
+        tenantConfig.welcomeMail().kcScope();
     }
 }

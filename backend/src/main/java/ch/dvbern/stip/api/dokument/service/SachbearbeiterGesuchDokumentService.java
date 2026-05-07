@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.repo.SachbearbeiterGesuchDokumentRepository;
@@ -50,7 +50,7 @@ public class SachbearbeiterGesuchDokumentService {
     private final Antivirus antivirus;
     private final S3AsyncClient s3;
 
-    private final ConfigService configService;
+    private final StipConfig config;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentDeleteService dokumentDeleteService;
@@ -81,7 +81,7 @@ public class SachbearbeiterGesuchDokumentService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH,
             objectId -> uploadDokument(
@@ -136,7 +136,7 @@ public class SachbearbeiterGesuchDokumentService {
 
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH + dokument.getObjectId()
         );
     }
@@ -155,7 +155,7 @@ public class SachbearbeiterGesuchDokumentService {
             dokumentId,
             DokumentDownloadConstants.SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -164,7 +164,7 @@ public class SachbearbeiterGesuchDokumentService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_PATH,
             dokument.getFilename()

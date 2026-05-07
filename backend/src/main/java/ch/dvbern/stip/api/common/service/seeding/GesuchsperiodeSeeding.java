@@ -21,9 +21,10 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsjahr.repo.GesuchsjahrRepository;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -40,7 +41,7 @@ public class GesuchsperiodeSeeding extends Seeder {
     private static final LocalDate HALF_OF_YEAR = LocalDate.of(Year.now().getValue(), 7, 1);
     private final GesuchsperiodeRepository gesuchsperiodeRepository;
     private final GesuchsjahrRepository gesuchsjahrRepository;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     @Override
     public int getPriority() {
@@ -122,8 +123,8 @@ public class GesuchsperiodeSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 
     Gesuchsjahr getJahrForSeeding(final int technischesJahr) {

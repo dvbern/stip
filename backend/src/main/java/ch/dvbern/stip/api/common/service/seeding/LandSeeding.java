@@ -21,8 +21,9 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Set;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.repo.LandRepository;
 import com.opencsv.CSVParserBuilder;
@@ -40,7 +41,7 @@ public class LandSeeding extends Seeder {
     private static final String PATH_TO_CSV = "/seeding/land/laender.csv";
 
     private final LandRepository landRepository;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     @Override
     public int getPriority() {
@@ -61,8 +62,8 @@ public class LandSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 
     @SneakyThrows

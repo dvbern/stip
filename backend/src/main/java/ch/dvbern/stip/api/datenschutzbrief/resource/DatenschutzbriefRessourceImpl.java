@@ -23,7 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.auth.DatenschutzbriefAuthorizer;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -49,7 +49,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final DatenschutzbriefService datenschutzbriefService;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtParser;
     private final DatenschutzbriefAuthorizer authorizer;
     private final DokumentDownloadService dokumentDownloadService;
@@ -68,7 +68,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
         final var datenschutzbriefId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
 
@@ -83,7 +83,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
             datenschutzbriefId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -100,7 +100,7 @@ public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
             datenschutzbriefId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 }

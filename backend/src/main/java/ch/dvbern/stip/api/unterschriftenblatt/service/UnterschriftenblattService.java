@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
@@ -68,7 +68,7 @@ public class UnterschriftenblattService {
     private final UnterschriftenblattRepository unterschriftenblattRepository;
     private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final S3AsyncClient s3;
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
@@ -87,7 +87,7 @@ public class UnterschriftenblattService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
             objectId -> uploadDokument(
@@ -210,7 +210,7 @@ public class UnterschriftenblattService {
 
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH + dokument.getObjectId()
         );
 
@@ -224,7 +224,7 @@ public class UnterschriftenblattService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             UNTERSCHRIFTENBLATT_DOKUMENT_PATH,
             dokument.getFilename()
@@ -249,7 +249,7 @@ public class UnterschriftenblattService {
 
         dokumentDeleteService.executeDeleteDokumentsFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             toRemoveFromS3
         );
     }

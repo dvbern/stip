@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;
@@ -56,7 +56,7 @@ public class DelegierenService {
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final PersoenlicheAngabenMapper persoenlicheAngabenMapper;
     private final SozialdienstDashboardQueryBuilder sozDashboardQueryBuilder;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final DelegierungMapper delegierungMapper;
     private final NotificationService notificationService;
     private final EntityCopyMapper entityCopyMapper;
@@ -172,7 +172,7 @@ public class DelegierenService {
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 

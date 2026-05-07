@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
@@ -69,7 +69,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
     private final DarlehenService darlehenService;
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtPar;
     private final DarlehenAuthorizer darlehenAuthorizer;
 
@@ -231,7 +231,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM
         );
         return darlehenService.getDokument(dokumentId);
@@ -267,7 +267,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
             dokumentId,
             DokumentDownloadConstants.DARLEHEN_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -278,7 +278,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtPar,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM
         );
         return darlehenService.getDarlehenNegativVerfuegung(dokumentId);
@@ -292,7 +292,7 @@ public class DarlehenResourceImpl implements DarlehenResource {
             dokumentId,
             DokumentDownloadConstants.DARLEHEN_VERFUEGUNG_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 

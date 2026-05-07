@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.sap.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.sap.service.SapService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.scheduler.Scheduled;
@@ -45,15 +45,21 @@ public class SapRemainderAuszahlungScheduledTask {
     }
 
     @Transactional
-    @Scheduled(cron = "{kstip.sapremainderauszahlung.bern.cron}", concurrentExecution = ConcurrentExecution.SKIP)
-    @RunForTenant(MandantIdentifier.BERN)
+    @Scheduled(
+        cron = "{kstip.tenant.bern.scheduler.sap-remainder-auszahlung.cron}",
+        concurrentExecution = ConcurrentExecution.SKIP
+    )
+    @RunForTenant(TenantIdentifier.BERN)
     public void runForBern() {
         run();
     }
 
     @Transactional
-    @Scheduled(cron = "{kstip.sapremainderauszahlung.dv.cron}", concurrentExecution = ConcurrentExecution.SKIP)
-    @RunForTenant(MandantIdentifier.DV)
+    @Scheduled(
+        cron = "{kstip.tenant.dv.scheduler.sap-remainder-auszahlung.cron}",
+        concurrentExecution = ConcurrentExecution.SKIP
+    )
+    @RunForTenant(TenantIdentifier.DV)
     public void runForDv() {
         run();
     }

@@ -69,7 +69,7 @@ public class SwisstopoService {
         final var jobData = new SwisstopoAddrFetchJobData(
             gesuch.getId(),
             adresse,
-            tenantService.getCurrentTenantIdentifier()
+            tenantService.getCurrentStringIdentifier()
         );
 
         final JobDetail jobDetail = JobBuilder.newJob(SwisstopoAddrFetchScheduledJob.class)

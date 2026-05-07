@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,9 +53,9 @@ public class SozialdienstSeeding extends Seeder {
     private final ObjectMapper objectMapper;
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final SozialdienstRepository sozialdienstRepository;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final LandService landService;
-    private final TenantConfigService tenantConfigService;
+    private final TenantService tenantService;
 
     @Builder
     @Jacksonized
@@ -83,7 +83,7 @@ public class SozialdienstSeeding extends Seeder {
     @Override
     protected void seed() {
         LOG.info("Seeding Sozialdienste");
-        var envSeeding = tenantConfigService.getSozialdienstSeeding().orElse(null);
+        var envSeeding = tenantService.getConfigForCurrentTenant().seeding().sozialdienste().orElse(null);
         if (envSeeding == null) {
             return;
         }
@@ -182,7 +182,7 @@ public class SozialdienstSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 }

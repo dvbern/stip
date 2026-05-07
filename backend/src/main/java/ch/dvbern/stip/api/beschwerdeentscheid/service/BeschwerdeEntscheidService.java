@@ -23,7 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
@@ -58,7 +58,7 @@ public class BeschwerdeEntscheidService {
     private final GesuchRepository gesuchRepository;
     private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final S3AsyncClient s3;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final GesuchStatusService gesuchStatusService;
@@ -87,7 +87,7 @@ public class BeschwerdeEntscheidService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
             objectId -> uploadDokument(
@@ -127,7 +127,7 @@ public class BeschwerdeEntscheidService {
         final var dokument = dokumentRepository.requireById(dokumentId);
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             BESCHWERDEENTSCHEID_DOKUMENT_PATH,
             dokument.getFilename()

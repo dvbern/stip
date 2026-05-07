@@ -21,15 +21,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.TenantApiSpec;
 import ch.dvbern.stip.generated.dto.TenantInfoDtoSpec;
+import com.google.inject.Inject;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -43,8 +44,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TenantResourceTest {
 
     private final TenantApiSpec api = TenantApiSpec.tenant(RequestSpecUtil.quarkusSpec());
-    @ConfigProperty(name = "keycloak.url")
-    String keycloakUrlString;
+
+    @Inject
+    StipConfig config;
 
     @Test
     @TestAsGesuchsteller
@@ -60,7 +62,7 @@ class TenantResourceTest {
 
         assertThat(tenantInfo.getIdentifier()).isEqualTo(tenant);
 
-        final var keycloakUrl = new URL(keycloakUrlString);
+        final var keycloakUrl = new URL(config.oidc().url());
 
         assertThat(new URL(tenantInfo.getClientAuth().getAuthServerUrl()))
             .isEqualToWithSortedQueryParameters(keycloakUrl);

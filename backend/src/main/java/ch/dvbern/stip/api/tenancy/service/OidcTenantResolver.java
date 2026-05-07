@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import io.quarkus.oidc.TenantResolver;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -28,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class OidcTenantResolver implements TenantResolver {
     private final TenantService tenantService;
 
-    public static final String DEFAULT_TENANT_IDENTIFIER = MandantIdentifier.BERN.getIdentifier();
+    public static final String DEFAULT_TENANT_IDENTIFIER = TenantIdentifier.BERN.getIdentifier();
     public static final String TENANT_IDENTIFIER_CONTEXT_NAME = "tenantId";
 
     @Override

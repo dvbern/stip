@@ -46,7 +46,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @RequestScoped
 @RequiredArgsConstructor
 public class NeskoGetSteuerdatenService {
-    @ConfigProperty(name = "kstip.nesko.wsdl-url")
+    @ConfigProperty(name = "old.nesko.wsdl-url")
     String wsdlLocation;
 
     private final NeskoGetBearerTokenService neskoGetBearerTokenService;

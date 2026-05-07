@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
@@ -49,7 +50,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
@@ -59,16 +59,11 @@ import org.eclipse.microprofile.rest.client.inject.RestClient;
 public class PlzDataFetchService {
     private final PlzRepository plzRepository;
     private final ScheduledtaskRepository scheduledtaskRepository;
+    private final StipConfig config;
 
     @Inject
     @RestClient
     GeoCollectionService geoCollectionService;
-
-    @ConfigProperty(name = "kstip.plzdata.featurekey")
-    String geoCollectionFeatureKey;
-
-    @ConfigProperty(name = "kstip.plzdata.hashkey")
-    String geoCollectionHashKey;
 
     public void fetchData() throws IOException, CsvException {
         final GeoCollectionItem geoCollection = geoCollectionService.get();
@@ -84,7 +79,7 @@ public class PlzDataFetchService {
 
         if (isNewDataAvailable(geoCollectionAssetJSON)) {
             final JsonNode uriNode = geoCollectionAssetJSON
-                .findValue(geoCollectionFeatureKey)
+                .findValue(config.plzData().featureKey())
                 .findValue("href");
             if (uriNode != null) {
                 loadNewData(URI.create(uriNode.asText()));
@@ -112,11 +107,11 @@ public class PlzDataFetchService {
             final String lastHash = latestScheduledTask
                 .get()
                 .getPayload()
-                .findValue(geoCollectionHashKey)
+                .findValue(config.plzData().hashKey())
                 .asText();
 
             final String currentHash = currentGeoCollectionAssetJSON
-                .findValue(geoCollectionHashKey)
+                .findValue(config.plzData().hashKey())
                 .asText();
             if (lastHash.equals(currentHash)) {
                 newDataAvailable = false;

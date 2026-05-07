@@ -17,17 +17,22 @@
 
 package ch.dvbern.stip.api.common.type;
 
-import io.quarkus.runtime.annotations.StaticInitSafe;
-import io.smallrye.config.ConfigMapping;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@StaticInitSafe
-@ConfigMapping(prefix = "kstip.features")
-public interface TenantFeature {
-    interface Feature {
-        boolean nesko();
+@Getter
+@RequiredArgsConstructor
+public enum TenantIdentifier {
+    BERN("bern"),
+    DV("dv");
+
+    private final String identifier;
+
+    public static TenantIdentifier of(final String identifier) {
+        return switch (identifier) {
+            case "bern" -> BERN;
+            case "dv" -> DV;
+            default -> throw new IllegalArgumentException("Invalid tenant identifier: " + identifier);
+        };
     }
-
-    Feature bern();
-
-    Feature dv();
 }

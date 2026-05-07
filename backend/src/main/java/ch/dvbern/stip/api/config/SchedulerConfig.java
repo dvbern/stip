@@ -15,23 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.scheduledtask;
+package ch.dvbern.stip.api.config;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import jakarta.enterprise.util.Nonbinding;
-import jakarta.interceptor.InterceptorBinding;
-
-@InterceptorBinding
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface RunForTenant {
-    @Nonbinding
-    TenantIdentifier value();
+public interface SchedulerConfig {
+    String cron();
 }

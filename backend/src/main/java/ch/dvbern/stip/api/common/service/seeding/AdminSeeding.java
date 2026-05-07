@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
-import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.benutzer.entity.Rolle;
@@ -27,7 +26,7 @@ import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class AdminSeeding extends Seeder {
-    private final ConfigService configService;
+    private final StipConfig config;
     private final SachbearbeiterRepository sachbearbeiterRepository;
     private final RolleRepository rolleRepository;
 
@@ -64,8 +63,8 @@ public class AdminSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 
     private Rolle getOrCreateRolle(final String rolle) {

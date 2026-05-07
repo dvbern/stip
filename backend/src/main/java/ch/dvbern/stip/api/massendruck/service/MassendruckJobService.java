@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.SbDashboardQueryBuilder;
@@ -68,7 +68,7 @@ public class MassendruckJobService {
     private final VerfuegungMassendruckMapper verfuegungMassendruckMapper;
     private final GesuchService gesuchService;
     private final TenantService tenantService;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     public PaginatedMassendruckJobDto getAllMassendruckJobs(
         final GetMassendruckJobQueryType queryTyp,
@@ -81,7 +81,7 @@ public class MassendruckJobService {
         final MassendruckJobSortColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
@@ -158,7 +158,7 @@ public class MassendruckJobService {
     }
 
     public void combineDocument(final UUID massendruckJobId) {
-        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
+        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentStringIdentifier());
     }
 
     @Transactional

@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AbschlussDto;
 import ch.dvbern.stip.generated.dto.AbschlussSlimDto;
@@ -50,7 +50,7 @@ public class AbschlussService {
     private final AbschlussQueryBuilder abschlussQueryBuilder;
     private final AbschlussMapper abschlussMapper;
     private final AusbildungsgangService ausbildungsgangService;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     @Transactional
     public Abschluss requireById(final UUID abschlussId) {
@@ -103,7 +103,7 @@ public class AbschlussService {
         final String bezeichnungFr,
         final Boolean aktiv
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 

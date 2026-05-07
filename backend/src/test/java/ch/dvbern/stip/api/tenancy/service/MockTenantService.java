@@ -17,19 +17,24 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import ch.dvbern.stip.api.common.type.TenantFeature;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.config.StipConfig;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @Mock
 @ApplicationScoped
 public class MockTenantService extends TenantService {
+
+    @Inject
+    StipConfig config;
+
     public MockTenantService() {
-        super(null, null, null);
+        super(null, null);
     }
 
     @Override
@@ -39,28 +44,23 @@ public class MockTenantService extends TenantService {
             .features(new TenantFeatureDto().nesko(false))
             .clientAuth(
                 new TenantAuthConfigDto()
-                    .authServerUrl(keycloakFrontendUrl)
+                    .authServerUrl(config.oidc().frontendUrl())
                     .realm("bern")
             );
     }
 
     @Override
-    public TenantFeature.Feature getFeatures() {
-        return () -> false;
+    public String getCurrentStringIdentifier() {
+        return TenantIdentifier.BERN.getIdentifier();
     }
 
     @Override
-    public String getCurrentTenantIdentifier() {
-        return MandantIdentifier.BERN.getIdentifier();
+    public TenantIdentifier getCurrentTenantIdentifier() {
+        return TenantIdentifier.BERN;
     }
 
     @Override
-    public MandantIdentifier getCurrentMandantIdentifier() {
-        return MandantIdentifier.BERN;
-    }
-
-    @Override
-    public MandantIdentifier resolveTenant(String subdomain) {
-        return MandantIdentifier.BERN;
+    public TenantIdentifier resolveTenant(String subdomain) {
+        return TenantIdentifier.BERN;
     }
 }
