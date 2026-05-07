@@ -40,6 +40,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN_MINUS_KOSTEN,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_FEHLBETRAG,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_PRO_KOPF_TEILUNG,
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_EIGENER_HAUSHALT,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_BUDGET_TRANCHE,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE,
@@ -79,6 +80,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_PRO_KOPF_TEILUNG = "proKopfTeilung";
   private Integer proKopfTeilung;
+
+  public static final String JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG = "totalNachProKopfTeilung";
+  private Integer totalNachProKopfTeilung;
 
   public static final String JSON_PROPERTY_EIGENER_HAUSHALT = "eigenerHaushalt";
   private Boolean eigenerHaushalt;
@@ -345,9 +349,9 @@ public class PersoenlichesBudgetresultatDtoSpec {
    * Get proKopfTeilung
    * @return proKopfTeilung
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_PRO_KOPF_TEILUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Integer getProKopfTeilung() {
     return proKopfTeilung;
@@ -355,9 +359,35 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_PRO_KOPF_TEILUNG)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setProKopfTeilung(Integer proKopfTeilung) {
     this.proKopfTeilung = proKopfTeilung;
+  }
+
+
+  public PersoenlichesBudgetresultatDtoSpec totalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
+    
+    this.totalNachProKopfTeilung = totalNachProKopfTeilung;
+    return this;
+  }
+
+   /**
+   * Get totalNachProKopfTeilung
+   * @return totalNachProKopfTeilung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getTotalNachProKopfTeilung() {
+    return totalNachProKopfTeilung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TOTAL_NACH_PRO_KOPF_TEILUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setTotalNachProKopfTeilung(Integer totalNachProKopfTeilung) {
+    this.totalNachProKopfTeilung = totalNachProKopfTeilung;
   }
 
 
@@ -535,6 +565,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
         Objects.equals(this.einnahmenMinusKosten, persoenlichesBudgetresultat.einnahmenMinusKosten) &&
         Objects.equals(this.fehlbetrag, persoenlichesBudgetresultat.fehlbetrag) &&
         Objects.equals(this.proKopfTeilung, persoenlichesBudgetresultat.proKopfTeilung) &&
+        Objects.equals(this.totalNachProKopfTeilung, persoenlichesBudgetresultat.totalNachProKopfTeilung) &&
         Objects.equals(this.eigenerHaushalt, persoenlichesBudgetresultat.eigenerHaushalt) &&
         Objects.equals(this.budgetTranche, persoenlichesBudgetresultat.budgetTranche) &&
         Objects.equals(this.anzahlMonate, persoenlichesBudgetresultat.anzahlMonate) &&
@@ -545,7 +576,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten);
+    return Objects.hash(vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, totalNachProKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten);
   }
 
   @Override
@@ -562,6 +593,7 @@ public class PersoenlichesBudgetresultatDtoSpec {
     sb.append("    einnahmenMinusKosten: ").append(toIndentedString(einnahmenMinusKosten)).append("\n");
     sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
     sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
+    sb.append("    totalNachProKopfTeilung: ").append(toIndentedString(totalNachProKopfTeilung)).append("\n");
     sb.append("    eigenerHaushalt: ").append(toIndentedString(eigenerHaushalt)).append("\n");
     sb.append("    budgetTranche: ").append(toIndentedString(budgetTranche)).append("\n");
     sb.append("    anzahlMonate: ").append(toIndentedString(anzahlMonate)).append("\n");
