@@ -180,6 +180,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerSearchResponse searchBusinessPartner(
+        Fall fall,
         String sozialversicherungsnummer
     ) {
         return businessPartnerSearchResponse;
@@ -203,13 +204,17 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerReadResponse;
     }
 
     @Override
-    public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
+    public ImportStatusReadResponse readImportStatus(
+        Fall fall,
+        BigDecimal deliveryid
+    ) {
         return importStatusReadResponse;
     }
 

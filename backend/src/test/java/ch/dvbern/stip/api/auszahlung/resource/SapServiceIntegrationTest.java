@@ -23,6 +23,8 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sap.service.SapEndpointService;
 import ch.dvbern.stip.api.sap.util.SapReturnCodeType;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
@@ -56,6 +58,12 @@ class SapServiceIntegrationTest {
     private static @NotNull Auszahlung createAuszahlung() {
         final var auszahlung = new Auszahlung();
 
+        final var fall = new Fall();
+        fall.setFallNummer("123");
+        final var buchhaltung = new Buchhaltung();
+        buchhaltung.setFall(fall);
+        auszahlung.setBuchhaltung(buchhaltung);
+        auszahlung.getBuchhaltung().setFall(fall);
         auszahlung.setAuszahlungAnSozialdienst(false);
         auszahlung.setId(UUID.randomUUID());
         auszahlung.setZahlungsverbindung(new Zahlungsverbindung());
@@ -110,7 +118,7 @@ class SapServiceIntegrationTest {
         auszahlung.getZahlungsverbindung();
 
         final var businessPartnerReadResponse =
-            sapEndpointService.readBusinessPartnerByDeliveryId(BigDecimal.ZERO);
+            sapEndpointService.readBusinessPartnerByDeliveryId(auszahlung.getBuchhaltung().getFall(), BigDecimal.ZERO);
         assertThat(
             SapReturnCodeType.isSuccess(businessPartnerReadResponse.getRETURNCODE().get(0).getTYPE()),
             is(false)
@@ -120,7 +128,9 @@ class SapServiceIntegrationTest {
     // @Test
     @Order(4)
     void readImportStatusTest() {
-        final var importStatusReadResponse = sapEndpointService.readImportStatus(deliveryid);
+        final var auszahlung = createAuszahlung().setSapBusinessPartnerId(TEST_BUSINESS_PARTNER_ID);
+        final var importStatusReadResponse =
+            sapEndpointService.readImportStatus(auszahlung.getBuchhaltung().getFall(), deliveryid);
 
         assertThat(
             SapReturnCodeType.isSuccess(importStatusReadResponse.getRETURNCODE().get(0).getTYPE()),
