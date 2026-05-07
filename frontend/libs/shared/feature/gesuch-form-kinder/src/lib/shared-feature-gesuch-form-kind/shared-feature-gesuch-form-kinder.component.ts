@@ -4,6 +4,7 @@ import {
   OnInit,
   computed,
   inject,
+  signal,
 } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -38,10 +39,11 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormKinderView);
   changesSig = computed<Record<string, Partial<Kind>>>(() => {
     const { listChanges } = this.viewSig();
-    if (!this.editedKind?.entryId) {
+    const editedKind = this.editedKindSig();
+    if (!editedKind?.entryId) {
       return {};
     }
-    return listChanges?.changesByIdentifier[this.editedKind?.entryId] ?? {};
+    return listChanges?.changesByIdentifier[editedKind?.entryId] ?? {};
   });
 
   hasUnsavedChanges = false;
@@ -49,18 +51,18 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
 
   parseBackendLocalDateAndPrint = parseBackendLocalDateAndPrint;
 
-  editedKind?: Partial<KindUpdate>;
+  editedKindSig = signal<Partial<KindUpdate> | undefined>(undefined);
 
   ngOnInit(): void {
     this.store.dispatch(SharedEventGesuchFormKinder.init());
   }
 
   public handleAddKinder(): void {
-    this.editedKind = {};
+    this.editedKindSig.set({});
   }
 
   public handleSelectKinder(ge: KindUpdate): void {
-    this.editedKind = ge;
+    this.editedKindSig.set(ge);
   }
 
   handleEditorSave(kind: KindUpdate) {
@@ -75,7 +77,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
           origin: KINDER,
         }),
       );
-      this.editedKind = undefined;
+      this.editedKindSig.set(undefined);
     }
   }
 
@@ -91,7 +93,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
           origin: KINDER,
         }),
       );
-      this.editedKind = undefined;
+      this.editedKindSig.set(undefined);
     }
   }
 
@@ -107,7 +109,7 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
   }
 
   handleEditorClose() {
-    this.editedKind = undefined;
+    this.editedKindSig.set(undefined);
   }
 
   private buildUpdatedGesuchWithDeletedKinder(kind: KindUpdate) {
@@ -149,9 +151,5 @@ export class SharedFeatureGesuchFormKinderComponent implements OnInit {
         kinds: updatedKinders,
       },
     };
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 }
