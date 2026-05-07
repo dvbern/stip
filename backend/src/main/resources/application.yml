@@ -288,8 +288,8 @@ quarkus:
       database:
         generation: 'drop-and-create'
     oidc:
-      auth-server-url: '${keycloak.url:replaced-by-test-resource}/realms/quarkus/'
-      client-id: '${keycloak.client-id}'
+      auth-server-url: '${kstip.oidc.url:replaced-by-test-resource}/realms/quarkus/'
+      client-id: '${kstip.oidc.client-id}'
       application-type: service
     s3:
       aws:
@@ -303,7 +303,7 @@ quarkus:
         buckets: '${bucket.name}'
     keycloak:
       admin-client:
-        server-url: ${keycloak.url}
+        server-url: ${kstip.oidc.url}
         grant-type: password
         username: 'test'
         password: 'test'
@@ -311,24 +311,25 @@ quarkus:
       clustered: false
     liquibase:
       contexts: test
-  bucket:
-    name: 'stip-usercontent-test'
-  keycloak:
-    url: 'http://dummy.keycloak'
-    frontend-url: 'http://dummy.keycloak'
   kstip:
-    allowed:
-      mimetypes: 'text/plain,image/png'
+    s3:
+      bucket-name: 'stip-usercontent-test'
+    upload:
+      allowed-mimetypes: 'text/plain,image/png'
+    oidc:
+      url: 'http://dummy.keycloak'
+      frontend-url: 'http://dummy.keycloak'
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
-    bern:
-      welcome-mail:
-        kc-url: 'http://dummy.keycloak'
-        kc-path: '/realms/bern/protocol/openid-connect/auth'
-        kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
-        kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+    tenant:
+      bern:
+        welcome-mail:
+          kc-path: '/realms/bern/protocol/openid-connect/auth'
+          kc-query-parameter: '?response_type=code&client_id=stip-gesuch-app&redirect_uri=localhost:4200'
+          kc-scope: '&scope=openid%20profile%20email%20offline_access&kc_idp_hint=belogin'
+  old:
     nesko:
       username: 'username'
       password: 'password'

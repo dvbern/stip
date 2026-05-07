@@ -314,7 +314,7 @@ class GesuchGetGesucheTest {
         return gesuchApiSpec.getGesucheSb()
             .getGesucheSBQueryTypePath(queryType)
             .pageQuery(0)
-            .pageSizeQuery(config.getMaxAllowedPageSize())
+            .pageSizeQuery(config.pagination().maxAllowedPageSize())
             .typQuery(GesuchTrancheTypDtoSpec.TRANCHE)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

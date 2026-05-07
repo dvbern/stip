@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.tenancy.service;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.TenantConfig;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
@@ -28,12 +29,12 @@ import jakarta.inject.Inject;
 
 @Mock
 @ApplicationScoped
-public class MockTenantService extends TenantService {
+public class TenantServiceMock extends TenantService {
 
     @Inject
     StipConfig config;
 
-    public MockTenantService() {
+    public TenantServiceMock() {
         super(null, null);
     }
 
@@ -47,6 +48,11 @@ public class MockTenantService extends TenantService {
                     .authServerUrl(config.oidc().frontendUrl())
                     .realm("bern")
             );
+    }
+
+    @Override
+    public TenantConfig getConfigForCurrentTenant() {
+        return config.tenant().get(TenantIdentifier.BERN);
     }
 
     @Override

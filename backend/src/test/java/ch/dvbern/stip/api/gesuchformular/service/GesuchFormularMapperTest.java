@@ -671,7 +671,7 @@ class GesuchFormularMapperTest {
             unterschriftenblattRepositoryMock,
             null,
             null,
-            Mockito.mock(StipConfig.class), s3,
+            Mockito.mock(StipConfig.class, Mockito.RETURNS_DEEP_STUBS), s3,
             null,
             null,
             null,
