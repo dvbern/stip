@@ -263,7 +263,7 @@ export class SharedPatternDarlehenFormComponent {
         ),
       });
 
-      if (darlehen.status === 'IN_FREIGABE') {
+      if (darlehen.status === 'IN_FREIGABE' && !darlehen.negativeVerfuegung) {
         this.formSb.controls.negativeVerfuegung.addValidators(
           Validators.required,
         );
