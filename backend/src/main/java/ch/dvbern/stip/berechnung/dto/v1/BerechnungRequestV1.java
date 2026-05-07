@@ -185,7 +185,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
                         .count(),
                     elternTyp,
                     gesuchFormular.getFamiliensituation(),
-                    gesuch.getAusbildung().getAusbildungBegin()
+                    gesuch.getGesuchGueltigkeitAb().getYear()
                 )
             );
         }
@@ -251,12 +251,12 @@ public class BerechnungRequestV1 implements CalculatorRequest {
 
     public static int getMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
-        final LocalDate ausbildungsBegin,
+        final int gesuchsjahr,
         final Gesuchsperiode gesuchsperiode
     ) {
         int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
             geburtsdatum,
-            ausbildungsBegin,
+            gesuchsjahr,
             gesuchsperiode
         );
         // Per Stichtag 25 Jahre alt oder älter (inkl. 25. Geburtstag am Stichtag) = Erwachsene
