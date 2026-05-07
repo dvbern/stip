@@ -2,6 +2,7 @@ package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -38,6 +39,7 @@ public class AusbildungDto  implements Serializable {
   private @Valid Boolean isAusbildungAusland;
   private @Valid UUID landId;
   private @Valid AusbildungsgangDto ausbildungsgang;
+  private @Valid LocalDate earliestActiveGesuchPeriodeStart;
 
   /**
    **/
@@ -358,6 +360,24 @@ public class AusbildungDto  implements Serializable {
     this.ausbildungsgang = ausbildungsgang;
   }
 
+  /**
+   **/
+  public AusbildungDto earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+  
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -384,12 +404,13 @@ public class AusbildungDto  implements Serializable {
         Objects.equals(this.ausbildungsort, ausbildung.ausbildungsort) &&
         Objects.equals(this.isAusbildungAusland, ausbildung.isAusbildungAusland) &&
         Objects.equals(this.landId, ausbildung.landId) &&
-        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang);
+        Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildung.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
@@ -414,6 +435,7 @@ public class AusbildungDto  implements Serializable {
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");
     return sb.toString();
   }

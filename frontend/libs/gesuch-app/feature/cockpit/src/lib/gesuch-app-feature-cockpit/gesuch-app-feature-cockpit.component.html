@@ -33,7 +33,7 @@
             <button
               data-testid="cockpit-create-ausbildung"
               type="button"
-              (click)="createAusbildung(fall.id)"
+              (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
               class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
             >
               <dv-shared-ui-icon-chip>

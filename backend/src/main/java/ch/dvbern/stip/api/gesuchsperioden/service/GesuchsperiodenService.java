@@ -220,4 +220,9 @@ public class GesuchsperiodenService {
             .map(gesuchsperiodeMapper::toDto)
             .toList();
     }
+
+    @Transactional
+    public Optional<LocalDate> findEarliestActiveNow() {
+        return gesuchsperiodeRepository.findEarliestActive(LocalDate.now());
+    }
 }

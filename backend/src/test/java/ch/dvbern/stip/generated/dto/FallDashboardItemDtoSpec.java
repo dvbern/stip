@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FallDashboardItemDtoSpec.JSON_PROPERTY_FALL,
   FallDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS,
   FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS,
-  FallDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG
+  FallDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG,
+  FallDashboardItemDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START
 })
 @JsonTypeName("FallDashboardItem")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -53,6 +55,9 @@ public class FallDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
   private DelegierungSlimDtoSpec currentDelegierung;
+
+  public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
+  private LocalDate earliestActiveGesuchPeriodeStart;
 
   public FallDashboardItemDtoSpec() {
   }
@@ -176,6 +181,32 @@ public class FallDashboardItemDtoSpec {
     this.currentDelegierung = currentDelegierung;
   }
 
+
+  public FallDashboardItemDtoSpec earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+   /**
+   * Get earliestActiveGesuchPeriodeStart
+   * @return earliestActiveGesuchPeriodeStart
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -188,12 +219,13 @@ public class FallDashboardItemDtoSpec {
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications) &&
-        Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung);
+        Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, fallDashboardItem.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
@@ -204,6 +236,7 @@ public class FallDashboardItemDtoSpec {
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
     sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");
     return sb.toString();
   }
