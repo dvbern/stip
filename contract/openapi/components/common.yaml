@@ -635,6 +635,8 @@ Ausbildung:
       $ref: '#/Ausbildungsgang'
     editable:
       type: boolean
+    earliestActiveGesuchPeriodeStart:
+      $ref: '#/LocalDate'
   allOf:
     - $ref: '#/AusbildungBase'
 GesuchsperiodeSelectError:

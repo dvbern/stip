@@ -74,5 +74,5 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
     });
   }
 
-  maskitoOptionsPercent = maskitoPercent;
+  maskitoOptionsPercent = maskitoPercent();
 }

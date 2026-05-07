@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.AusbildungsgangDto;
 import ch.dvbern.stip.generated.dto.GesuchDashboardItemDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid Boolean isAusbildungAusland;
   private @Valid UUID landId;
   private @Valid AusbildungsgangDto ausbildungsgang;
+  private @Valid LocalDate earliestActiveGesuchPeriodeStart;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
   private @Valid UUID openAusbildungUnterbruchAntragId;
 
@@ -406,6 +408,24 @@ public class AusbildungDashboardItemDto  implements Serializable {
 
   /**
    **/
+  public AusbildungDashboardItemDto earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+  
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+  }
+
+  /**
+   **/
   public AusbildungDashboardItemDto gesuchs(List<GesuchDashboardItemDto> gesuchs) {
     this.gesuchs = gesuchs;
     return this;
@@ -485,13 +505,14 @@ public class AusbildungDashboardItemDto  implements Serializable {
         Objects.equals(this.isAusbildungAusland, ausbildungDashboardItem.isAusbildungAusland) &&
         Objects.equals(this.landId, ausbildungDashboardItem.landId) &&
         Objects.equals(this.ausbildungsgang, ausbildungDashboardItem.ausbildungsgang) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildungDashboardItem.earliestActiveGesuchPeriodeStart) &&
         Objects.equals(this.gesuchs, ausbildungDashboardItem.gesuchs) &&
         Objects.equals(this.openAusbildungUnterbruchAntragId, ausbildungDashboardItem.openAusbildungUnterbruchAntragId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, gesuchs, openAusbildungUnterbruchAntragId);
+    return Objects.hash(fallId, ausbildungBegin, ausbildungEnd, pensum, status, editable, canCreateAusbildungUnterbruchAntrag, hasPendingAusbildungUnterbruchAntrag, id, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, besuchtBMS, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId, ausbildungsgang, earliestActiveGesuchPeriodeStart, gesuchs, openAusbildungUnterbruchAntragId);
   }
 
   @Override
@@ -518,6 +539,7 @@ public class AusbildungDashboardItemDto  implements Serializable {
     sb.append("    isAusbildungAusland: ").append(toIndentedString(isAusbildungAusland)).append("\n");
     sb.append("    landId: ").append(toIndentedString(landId)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("    gesuchs: ").append(toIndentedString(gesuchs)).append("\n");
     sb.append("    openAusbildungUnterbruchAntragId: ").append(toIndentedString(openAusbildungUnterbruchAntragId)).append("\n");
     sb.append("}");

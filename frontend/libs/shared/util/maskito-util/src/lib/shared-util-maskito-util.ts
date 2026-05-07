@@ -12,24 +12,29 @@ import {
 export const NUMBER_THOUSAND_SEPARATOR = "'";
 
 export const postfix = '%';
-const { plugins, ...numberOptions } = maskitoNumberOptionsGenerator({
-  postfix,
-  min: 0,
-  max: 100,
-  maximumFractionDigits: 2,
-});
 
-export const maskitoPercent = {
-  ...numberOptions,
-  plugins: [
-    ...plugins,
-    // Forbids caret to be placed after postfix
-    maskitoCaretGuard((value) => [0, value.length - 1]),
-    maskitoEventHandler('blur', (element) => {
-      maskitoUpdateElement(element, element.value.replace(/ /g, ''));
-    }),
-  ],
-} satisfies MaskitoOptions;
+export const maskitoPercent = (min = 0) => {
+  const { plugins, ...numberOptions } = maskitoNumberOptionsGenerator({
+    postfix,
+    min,
+    max: 100,
+    maximumFractionDigits: 2,
+  });
+  return {
+    ...numberOptions,
+    plugins: [
+      ...plugins,
+      // Forbids caret to be placed after postfix
+      maskitoCaretGuard((value) => [min, value.length - 1]),
+      maskitoEventHandler('blur', (element) => {
+        maskitoUpdateElement(
+          element,
+          element.value.replace(/ /g, '').replace(/^%$/, `${min}`),
+        );
+      }),
+    ],
+  } satisfies MaskitoOptions;
+};
 
 export const maskitoNumberWithNegative = maskitoNumberOptionsGenerator({
   thousandSeparator: NUMBER_THOUSAND_SEPARATOR,

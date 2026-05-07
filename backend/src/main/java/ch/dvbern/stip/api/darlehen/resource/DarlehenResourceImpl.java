@@ -77,14 +77,14 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenGs(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenGs(darlehenId);
-        return darlehenService.getFreiwilligDarlehen(darlehenId);
+        return darlehenService.getFreiwilligDarlehenGs(darlehenId);
     }
 
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public FreiwilligDarlehenDto getFreiwilligDarlehenSb(UUID darlehenId) {
         darlehenAuthorizer.canGetDarlehenSb();
-        return darlehenService.getFreiwilligDarlehen(darlehenId);
+        return darlehenService.getFreiwilligDarlehenSb(darlehenId);
     }
 
     @Override

@@ -19,5 +19,6 @@ export interface FallDashboardItem {
     ausbildungDashboardItems: Array<AusbildungDashboardItem>;
     notifications: Array<Notification>;
     currentDelegierung?: DelegierungSlim;
+    earliestActiveGesuchPeriodeStart?: string;
 }
 

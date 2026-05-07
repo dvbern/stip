@@ -9061,6 +9061,8 @@ components:
           $ref: '#/components/schemas/Ausbildungsgang'
         editable:
           type: boolean
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     GesuchsperiodeSelectErrorType:
@@ -9703,6 +9705,8 @@ components:
             $ref: '#/components/schemas/Notification'
         currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
     AusbildungDashboardItem:
       type: object
       required:

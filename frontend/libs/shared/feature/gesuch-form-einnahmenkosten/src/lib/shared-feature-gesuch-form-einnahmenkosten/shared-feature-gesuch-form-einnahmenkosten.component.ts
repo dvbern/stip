@@ -217,7 +217,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
 
   maskitoNumber = maskitoNumber;
   maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
-  maskitoPercent = maskitoPercent;
+  maskitoPercent = maskitoPercent(1);
   hiddenFieldsSetSig = signal(new Set());
   MIN_WG_ANZAHL_PERSONEN = MIN_WG_ANZAHL_PERSONEN;
 

@@ -52,6 +52,19 @@ public class GesuchsperiodeRepository implements BaseRepository<Gesuchsperiode> 
         return query.stream().toList();
     }
 
+    public Optional<LocalDate> findEarliestActive(LocalDate date) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        return queryFactory
+            .selectFrom(gesuchsperiode)
+            .where(gesuchsperiode.gueltigkeitStatus.eq(GueltigkeitStatus.PUBLIZIERT))
+            .where(gesuchsperiode.aufschaltterminStart.loe(date))
+            .where(gesuchsperiode.gesuchsperiodeStopp.goe(date))
+            .orderBy(gesuchsperiode.gesuchsperiodeStart.asc())
+            .stream()
+            .findFirst()
+            .map(Gesuchsperiode::getGesuchsperiodeStart);
+    }
+
     public Gesuchsperiode findPubliziertStartBeforeOrAt(LocalDate date) {
         var queryFactory = new JPAQueryFactory(entityManager);
         var query = queryFactory

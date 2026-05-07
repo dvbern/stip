@@ -99,6 +99,24 @@ public class GesuchsperiodenService {
             return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
         }
 
+        // Eine Gesuchsperiode darf nur zugeordnet werden, wenn der Ausbildungsbeginn saisonal
+        // (Frühling/Herbst) auch zur Periode passt. Sonst würde z.B. ein Ausbildungsbeginn im
+        // Februar 2027 fälschlicherweise der HP 2026 (01.07.2026 - 30.06.2027) zugeordnet werden,
+        // obwohl die FP 2027 (noch) nicht publiziert ist.
+        final var ausbildungIstFruehling = DateUtil.isFruehling(ausbildungBegin);
+        final var matchingSeasonPerioden = overlappingPerioden.stream()
+            .filter(periode -> {
+                final var periodeStart = periode.getGesuchsperiodeStart();
+                return ausbildungIstFruehling
+                    ? DateUtil.isFruehling(periodeStart)
+                    : DateUtil.isHerbst(periodeStart);
+            })
+            .toList();
+
+        if (matchingSeasonPerioden.isEmpty()) {
+            return Pair.of(null, GesuchsperiodeSelectErrorType.KEINE_AKTIVE_PERIODE_GEFUNDEN);
+        }
+
         // get is fine here, as the list is guaranteed not empty
         final var toAssign =
             overlappingPerioden.stream().max(Comparator.comparing(Gesuchsperiode::getAufschaltterminStart)).get();
@@ -201,5 +219,10 @@ public class GesuchsperiodenService {
             .stream()
             .map(gesuchsperiodeMapper::toDto)
             .toList();
+    }
+
+    @Transactional
+    public Optional<LocalDate> findEarliestActiveNow() {
+        return gesuchsperiodeRepository.findEarliestActive(LocalDate.now());
     }
 }

@@ -21,6 +21,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.delegieren.service.DelegierungMapper;
 import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
@@ -32,6 +33,8 @@ import org.mapstruct.MappingTarget;
 public abstract class FallDashboardItemMapper {
     @Inject
     BenutzerService benutzerService;
+    @Inject
+    GesuchsperiodenService gesuchsperiodeService;
 
     @Mapping(source = "ausbildungs", target = "ausbildungDashboardItems")
     @Mapping(source = ".", target = "fall")
@@ -45,4 +48,12 @@ public abstract class FallDashboardItemMapper {
         dto.setNotifications(benutzerService.getNotificationsForUser(entity.getGesuchsteller().getId()));
     }
 
+    @AfterMapping
+    protected void setEarliestActiveGesuchPeriodeStart(
+        final Fall entity,
+        @MappingTarget final FallDashboardItemDto dto
+    ) {
+        gesuchsperiodeService.findEarliestActiveNow()
+            .ifPresent(dto::setEarliestActiveGesuchPeriodeStart);
+    }
 }
