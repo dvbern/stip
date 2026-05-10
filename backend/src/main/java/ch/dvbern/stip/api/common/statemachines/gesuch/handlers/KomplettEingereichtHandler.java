@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
@@ -28,6 +29,8 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 
 @ApplicationScoped
 @Slf4j
@@ -50,6 +53,11 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
         // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
         final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
         gesuch.setEinreichedatum(todayInZuerich);
+        final var gesuchFormular = gesuch.getLatestGesuchTranche().getGesuchFormular();
+        gesuchFormular.getEinnahmenKosten().setVeranlagungsStatus(VERANLAGUNGSSTATUS_DEFAULT_VALUE);
+        if (Objects.nonNull(gesuchFormular.getEinnahmenKostenPartner())) {
+            gesuchFormular.getEinnahmenKostenPartner().setVeranlagungsStatus(VERANLAGUNGSSTATUS_DEFAULT_VALUE);
+        }
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.INITIAL);
     }
 

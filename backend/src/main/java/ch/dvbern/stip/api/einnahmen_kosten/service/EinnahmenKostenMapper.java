@@ -41,17 +41,30 @@ public abstract class EinnahmenKostenMapper {
     public abstract EinnahmenKostenUpdateDto toUpdateDto(EinnahmenKosten einnahmenKosten);
 
     @BeforeMapping
-    protected void resetDependentDataBeforeUpdate(
+    protected void resetDependentWgDataBeforeUpdate(
         EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
         @MappingTarget EinnahmenKosten einnahmenKosten
     ) {
         if (Objects.isNull(einnahmenKostenUpdateDto.getWgWohnend())) {
+            einnahmenKostenUpdateDto.setAlternativeWohnformWohnend(null);
+            einnahmenKostenUpdateDto.setWgAnzahlPersonen(null);
             return;
         }
         if (einnahmenKostenUpdateDto.getWgWohnend()) {
             einnahmenKostenUpdateDto.setAlternativeWohnformWohnend(null);
         } else {
             einnahmenKostenUpdateDto.setWgAnzahlPersonen(null);
+        }
+    }
+
+    @BeforeMapping
+    protected void resetDependentArbeitspensumBeforeUpdate(
+        EinnahmenKostenUpdateDto einnahmenKostenUpdateDto,
+        @MappingTarget EinnahmenKosten einnahmenKosten
+    ) {
+        final var einkommen = einnahmenKostenUpdateDto.getNettoerwerbseinkommen();
+        if (Objects.isNull(einkommen) || einkommen == 0) {
+            einnahmenKostenUpdateDto.setArbeitspensumProzent(null);
         }
     }
 }
