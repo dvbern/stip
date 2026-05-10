@@ -252,7 +252,8 @@
             matInput
             min="1900"
             [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
-            type="number"
+            type="text"
+            [maskito]="maskitoYear"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ 'shared.form.error.required' | transloco }}

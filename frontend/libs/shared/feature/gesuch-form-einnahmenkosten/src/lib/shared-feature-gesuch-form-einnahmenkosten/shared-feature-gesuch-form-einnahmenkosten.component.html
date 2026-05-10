@@ -471,9 +471,8 @@
                 [formControl]="form.controls.auswaertigeMittagessenProWoche"
                 data-testid="form-einnahmen-kosten-auswaertigeMittagessenProWoche"
                 matInput
-                type="number"
-                min="0"
-                max="5"
+                type="text"
+                [maskito]="maskitoNumber"
               />
               <mat-hint *dvZuvorHint="formChanges.auswaertigeMittagessenProWoche"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
@@ -516,7 +515,8 @@
                   [formControl]="form.controls.wgAnzahlPersonen"
                   data-testid="form-einnahmen-kosten-wgAnzahlPersonen"
                   matInput
-                  type="number"
+                  type="text"
+                  [maskito]="maskitoNumber"
                   [min]="MIN_WG_ANZAHL_PERSONEN"
                 />
                 <mat-hint *dvZuvorHint="formChanges.wgAnzahlPersonen"></mat-hint>
@@ -598,9 +598,10 @@
                 matInput
                 min="1900"
                 [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
-                type="number"
+                type="text"
+                [maskito]="maskitoYear"
               />
-              <mat-hint *dvZuvorHint="formChanges.steuerjahr"></mat-hint>
+              <mat-hint *dvZuvorHint="formChanges.steuerjahr; disableFormatting: true"></mat-hint>
               <mat-error *dvSharedUiFormMessageError="'required'">
                 {{ t('shared.form.error.required') }}
               </mat-error>
