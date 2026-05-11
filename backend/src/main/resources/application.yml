@@ -311,9 +311,11 @@ quarkus:
       clustered: false
     liquibase:
       contexts: test
+  bucket:
+    name: 'stip-usercontent-test'
   kstip:
     s3:
-      bucket-name: 'stip-usercontent-test'
+      bucket-name: '${bucket.name}' 
     upload:
       allowed-mimetypes: 'text/plain,image/png'
     oidc:
