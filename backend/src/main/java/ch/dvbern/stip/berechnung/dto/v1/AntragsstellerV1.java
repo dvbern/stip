@@ -185,10 +185,11 @@ public class AntragsstellerV1 {
                 anzahlPersonenImHaushalt += 1;
             }
             for (final var kind : gesuchFormular.getKinds()) {
-                if (kind.getWohnsitzAnteilPia() > 0) {
-                    if (kind.getWohnsitzAnteilPia() == 100 || teilzeitKinderBeiPiaAnrechnen) {
-                        anzahlPersonenImHaushalt += 1;
-                    }
+                if (
+                    kind.getWohnsitzAnteilPia() > 0
+                    && (kind.getWohnsitzAnteilPia() == 100 || teilzeitKinderBeiPiaAnrechnen)
+                ) {
+                    anzahlPersonenImHaushalt += 1;
                 }
             }
 
@@ -282,8 +283,14 @@ public class AntragsstellerV1 {
         }
 
         for (var kind : gesuchFormular.getKinds()) {
-            if (kind.getWohnsitzAnteilPia() > 0) {
-                kinderAusbildungszulagens.addKindValue(kind, toJahresWert(kind.getKinderUndAusbildungszulagen()));
+            if (
+                kind.getWohnsitzAnteilPia() > 0
+                && (kind.getWohnsitzAnteilPia() == 100 || teilzeitKinderBeiPiaAnrechnen)
+            ) {
+                kinderAusbildungszulagens.addKindValue(
+                    kind,
+                    toJahresWert(kind.getKinderUndAusbildungszulagen())
+                );
                 unterhaltsbeitraeges.addKindValue(kind, toJahresWert(kind.getUnterhaltsbeitraege()));
                 rentens.addKindValue(kind, kind.getRenten());
                 ergaenzungsleistungens.addKindValue(kind, kind.getErgaenzungsleistungen());
