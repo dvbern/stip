@@ -15,7 +15,7 @@ import { SozialdienstAppPatternMainLayoutComponent } from '@dv/sozialdienst-app/
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  @HostBinding('class') klass = 'app-container shadow';
+  @HostBinding('class') klass = 'app-container';
 
   constructor() {
     const store = inject(Store);
