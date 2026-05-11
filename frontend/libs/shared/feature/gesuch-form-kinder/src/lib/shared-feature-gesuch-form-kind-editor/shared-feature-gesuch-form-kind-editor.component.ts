@@ -279,10 +279,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
     }
   }
 
-  trackByIndex(index: number) {
-    return index;
-  }
-
   handleCancel() {
     this.closeTriggered.emit();
     this.form.markAsPristine();

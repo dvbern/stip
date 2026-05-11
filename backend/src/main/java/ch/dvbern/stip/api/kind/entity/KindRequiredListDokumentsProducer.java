@@ -41,7 +41,7 @@ public class KindRequiredListDokumentsProducer implements RequiredRefDokumentsPr
 
         final var requiredDocs = new HashSet<Pair<DokumentTyp, UUID>>();
         for (var kind : kinds) {
-            if (kind.getUnterhaltsbeitraege() != null) {
+            if (greaterThanZero(kind.getUnterhaltsbeitraege())) {
                 requiredDocs.add(Pair.of(DokumentTyp.KINDER_ALIMENTENVERORDUNG, kind.getEntryId()));
             }
 

@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedField
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKostenVeranlagungsStatusRequiredConstraint;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -42,6 +43,7 @@ import ch.dvbern.stip.api.gesuchformular.validation.GeschwisterPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.KindPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.LandMustBeGueltigValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
@@ -174,6 +176,18 @@ import org.hibernate.envers.Audited;
         Default.class,
         SteuerdatenPageValidation.class
     }, property = "steuerdaten"
+)
+@EinnahmenKostenVeranlagungsStatusRequiredConstraint(
+    groups = {
+        GesuchNachInFreigabeValidationGroup.class
+    }, property = "einnahmenKosten",
+    einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER
+)
+@EinnahmenKostenVeranlagungsStatusRequiredConstraint(
+    groups = {
+        GesuchNachInFreigabeValidationGroup.class
+    }, property = "einnahmenKostenPartner",
+    einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
 @AusbildungskostenStufeRequiredConstraint(
     groups = {
