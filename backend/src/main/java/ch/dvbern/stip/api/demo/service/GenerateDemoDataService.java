@@ -51,7 +51,7 @@ import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.common.validation.RequiredRefDokumentsProducer;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoPerson;
 import ch.dvbern.stip.api.demo.repo.DemoDataAbschlussRepository;

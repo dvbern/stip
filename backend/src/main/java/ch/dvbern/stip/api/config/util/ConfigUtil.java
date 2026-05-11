@@ -17,8 +17,8 @@
 
 package ch.dvbern.stip.api.config.util;
 
-import ch.dvbern.stip.api.config.StipConfig;
-import ch.dvbern.stip.api.config.TenantConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.config.type.TenantConfig;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

@@ -27,7 +27,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.security.UnauthorizedException;

@@ -23,7 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeentscheid.repo.BeschwerdeEntscheidRepository;
 import ch.dvbern.stip.api.beschwerdeverlauf.service.BeschwerdeverlaufService;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;

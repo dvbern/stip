@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.benutzer.service.RolleService;
 import ch.dvbern.stip.api.benutzer.type.BenutzerStatus;
 import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.util.OidcConstants;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.land.type.WellKnownLand;

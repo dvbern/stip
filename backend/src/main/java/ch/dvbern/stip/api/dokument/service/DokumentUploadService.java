@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.exception.AppValidationMessage;
 import ch.dvbern.stip.api.common.util.FileUtil;
 import ch.dvbern.stip.api.common.util.StringUtil;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkiverse.antivirus.runtime.AntivirusScanResult;
 import io.quarkus.arc.profile.UnlessBuildProfile;

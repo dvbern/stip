@@ -21,7 +21,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import ch.dvbern.stip.api.common.util.FileUtil;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.quarkus.test.Mock;

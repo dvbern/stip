@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config;
+package ch.dvbern.stip.api.config.type;
 
 public interface SchedulerConfig {
     String cron();

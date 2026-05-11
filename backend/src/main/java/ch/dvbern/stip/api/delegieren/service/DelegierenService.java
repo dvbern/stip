@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.delegieren.type.GetDelegierungSozQueryTypeAdmin;

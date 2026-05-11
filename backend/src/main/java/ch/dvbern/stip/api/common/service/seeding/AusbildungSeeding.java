@@ -39,7 +39,7 @@ import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.exception.CancelInvocationException;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderHeaderAwareBuilder;
 import io.quarkus.runtime.configuration.ConfigUtils;

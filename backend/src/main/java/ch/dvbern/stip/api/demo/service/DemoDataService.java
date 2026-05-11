@@ -24,7 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.exception.DemoDataApplyException;
 import ch.dvbern.stip.api.common.exception.DemoDataImportException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.entity.DemoData;
 import ch.dvbern.stip.api.demo.entity.DemoDataImport;
 import ch.dvbern.stip.api.demo.repo.DemoDataImportRepository;

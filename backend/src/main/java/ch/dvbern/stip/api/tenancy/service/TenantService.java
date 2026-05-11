@@ -20,8 +20,8 @@ package ch.dvbern.stip.api.tenancy.service;
 import java.util.regex.Pattern;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.api.config.StipConfig;
-import ch.dvbern.stip.api.config.TenantConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;

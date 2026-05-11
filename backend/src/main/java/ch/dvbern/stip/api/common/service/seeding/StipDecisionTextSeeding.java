@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.StipDecision;
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;

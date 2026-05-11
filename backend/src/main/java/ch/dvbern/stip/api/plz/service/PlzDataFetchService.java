@@ -33,7 +33,7 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import ch.dvbern.stip.api.config.StipConfig;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
