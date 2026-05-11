@@ -87,7 +87,7 @@ public class DemoDataService {
                 s3,
                 config,
                 antivirus,
-                config.upload().allowedMimetypes(),
+                config.upload().allowedTestcaseMimetypes(),
                 DEMODATA_DOKUMENT_PATH,
                 objectId -> demoDataImport.setDokument(
                     uploadDokument(
