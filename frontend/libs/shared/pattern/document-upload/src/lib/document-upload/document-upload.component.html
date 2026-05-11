@@ -3,6 +3,7 @@
   type="button"
   [attr.aria-label]="'shared.dokumente.upload' | transloco"
   [attr.data-testid]="'button-document-upload-' + optionsSig().dokument.dokumentTyp"
+  [disabled]="isDisabledSig()"
   (click)="openDialog()"
 >
   <span class="material-symbols-rounded">{{ iconSig() }}</span>

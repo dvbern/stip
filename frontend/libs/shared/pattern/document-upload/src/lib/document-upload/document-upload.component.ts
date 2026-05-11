@@ -22,6 +22,10 @@ import {
   SharedModelGesuchDokument,
 } from '@dv/shared/model/dokument';
 import { Dokument } from '@dv/shared/model/gesuch';
+import {
+  DarlehenPermissionMap,
+  PermissionMap,
+} from '@dv/shared/model/permission-state';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 import { SharedPatternDocumentUploadDialogComponent } from '../document-upload-dialog/document-upload-dialog.component';
@@ -55,6 +59,21 @@ export class SharedPatternDocumentUploadComponent {
   iconSig = input<'upload' | 'download'>('upload');
 
   hasEntriesSig = this.uploadStore.hasEntriesSig;
+
+  isDisabledSig = computed(() => {
+    const options = this.optionsSig();
+    const hasEntries = this.uploadStore.hasEntriesSig();
+
+    if (options.dokument.art === 'GENERIC_DOKUMENT') {
+      return !hasEntries && options.dokument.readonly;
+    }
+
+    if (isDokumentArtWithPermissions(options.dokument)) {
+      return !hasEntries && !options.dokument.permissions.canUploadDocuments;
+    }
+
+    return false;
+  });
 
   gesuchDokumentSig = computed(() => {
     const { gesuchDokument } = this.uploadStore.dokumentListView();
@@ -179,3 +198,12 @@ export class SharedPatternDocumentUploadComponent {
     }
   }
 }
+
+const isDokumentArtWithPermissions = (
+  dokument: SharedModelGesuchDokument,
+): dokument is Extract<
+  SharedModelGesuchDokument,
+  { permissions: PermissionMap | DarlehenPermissionMap }
+> => {
+  return 'permissions' in dokument;
+};

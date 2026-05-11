@@ -1,22 +1,5 @@
-.tw:dv-button-icon {
-  background: none;
-  border: none;
-  width: calc(var(--dv-size-unit) * 10);
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-
-  span {
-    overflow: hidden;
-    font-size: calc(var(--dv-size-unit) * 8);
-  }
-
-  &:active {
-    position: relative;
-    top: 1px;
-  }
+.tw\:dv-button-icon {
+  border-radius: var(--dv-border-radius);
 
   &:focus {
     outline: var(--dv-size-unit) solid var(--dv-border-color);
