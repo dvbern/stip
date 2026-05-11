@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -96,6 +97,8 @@ class NotificationServiceTest {
     void gesuchEinreichenSuccessful() {
         GesuchFormular gesuchFormular = new GesuchFormular()
             .setPersonInAusbildung(personInAusbildung);
+
+        gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
 
         GesuchTranche gesuchTranche = new GesuchTranche()
             .setGesuchFormular(gesuchFormular)
