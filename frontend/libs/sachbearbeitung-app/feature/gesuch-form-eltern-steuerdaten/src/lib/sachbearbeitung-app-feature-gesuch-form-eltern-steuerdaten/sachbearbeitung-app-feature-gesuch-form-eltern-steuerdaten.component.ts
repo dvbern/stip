@@ -46,7 +46,11 @@ import {
   SharedUtilFormService,
   convertTempFormToRealValues,
 } from '@dv/shared/util/form';
-import { maskitoMaxNumber, maskitoNumber } from '@dv/shared/util/maskito-util';
+import {
+  maskitoMaxNumber,
+  maskitoNumber,
+  maskitoYear,
+} from '@dv/shared/util/maskito-util';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 import { prepareSteuerjahrValidation } from '@dv/shared/util/validator-steuerdaten';
 
@@ -87,6 +91,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   gotReenabled$ = new Subject<object>();
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   maskitoNumber = maskitoNumber;
+  maskitoYear = maskitoYear();
   maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
 
   form = this.formBuilder.group({
@@ -103,7 +108,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     verpflegung: [<string | null>null, [Validators.required]],
     verpflegungPartner: [<string | undefined>undefined],
     steuerjahr: [
-      <number | null>null,
+      <string | undefined>undefined,
       [
         /** @see // this.steuerjahrValidation */
       ],
@@ -146,6 +151,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     'fahrkostenPartner',
     'verpflegung',
     'verpflegungPartner',
+    'steuerjahr',
   ]);
 
   steuerjahrValidation = prepareSteuerjahrValidation(

@@ -66,6 +66,7 @@ import {
   maskitoMaxNumber,
   maskitoNumber,
   maskitoPercent,
+  maskitoYear,
   toFormatedNumber,
 } from '@dv/shared/util/maskito-util';
 import {
@@ -163,8 +164,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     ],
     wgWohnend: [<boolean | null>null, [Validators.required]],
     wgAnzahlPersonen: [
-      <number | undefined>undefined,
-      [Validators.required, Validators.min(MIN_WG_ANZAHL_PERSONEN)],
+      <string | undefined>undefined,
+      [Validators.required, sharedUtilValidatorRange(MIN_WG_ANZAHL_PERSONEN)],
     ],
     alternativeWohnformWohnend: [
       <boolean | undefined>undefined,
@@ -180,7 +181,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
     steuern: [<string | null>null, []],
     veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
-      <number | null>null,
+      <string | undefined>undefined,
       [
         /** @see // this.steuerjahrValidation */
       ],
@@ -218,6 +219,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   maskitoNumber = maskitoNumber;
   maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
   maskitoPercent = maskitoPercent(1);
+  maskitoYear = maskitoYear();
   hiddenFieldsSetSig = signal(new Set());
   MIN_WG_ANZAHL_PERSONEN = MIN_WG_ANZAHL_PERSONEN;
 
@@ -534,7 +536,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
             einnahmenKosten.betreuungskostenKinder?.toString(),
           vermoegen: einnahmenKosten.vermoegen?.toString(),
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
-          steuerjahr: einnahmenKosten.steuerjahr,
+          wgAnzahlPersonen: einnahmenKosten.wgAnzahlPersonen?.toString(),
+          steuerjahr: einnahmenKosten.steuerjahr?.toString(),
           steuern: toFormatedNumber(einnahmenKosten.steuern ?? 0),
         });
       }
@@ -627,13 +630,14 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       ausbildungskosten: fromFormatedNumber(formValues.ausbildungskosten),
       fahrkosten: fromFormatedNumber(formValues.fahrkosten),
       wohnkosten: fromFormatedNumber(formValues.wohnkosten),
+      wgAnzahlPersonen: fromFormatedNumber(formValues.wgAnzahlPersonen),
       verpflegungskosten: fromFormatedNumber(formValues.verpflegungskosten),
       betreuungskostenKinder: fromFormatedNumber(
         formValues.betreuungskostenKinder,
       ),
       vermoegen: fromFormatedNumber(formValues.vermoegen),
       steuern: undefined,
-      steuerjahr: formValues.steuerjahr,
+      steuerjahr: fromFormatedNumber(formValues.steuerjahr),
       veranlagungsStatus: formValues.veranlagungsStatus,
     };
 

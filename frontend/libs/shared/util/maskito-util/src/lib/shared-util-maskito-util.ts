@@ -52,7 +52,7 @@ export const maskitoPositiveNumber = maskitoNumberOptionsGenerator({
 
 export const maskitoYear = (options: { max: number } = { max: 9999 }) =>
   maskitoNumberOptionsGenerator({
-    min: 0,
+    min: 1900,
     maximumFractionDigits: 2,
     thousandSeparator: '',
     max: options.max,

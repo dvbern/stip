@@ -38,7 +38,7 @@ describe('SharedUtilValidatorRangeService', () => {
     control.setValue(tooLow);
     const result = runValidation(min, max, control);
     expect(result).not.toBeNull();
-    expect(result).toEqual({ range: { min: { actual: tooLow, min } } });
+    expect(result).toEqual({ min: true });
   });
 
   it('should have outOfRange error if number larger than max is provided', () => {
@@ -46,7 +46,7 @@ describe('SharedUtilValidatorRangeService', () => {
     control.setValue(tooLarge);
     const result = runValidation(min, max, control);
     expect(result).not.toBeNull();
-    expect(result).toEqual({ range: { max: { actual: tooLarge, max } } });
+    expect(result).toEqual({ range: { max: true } });
   });
 });
 
