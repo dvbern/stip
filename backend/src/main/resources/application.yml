@@ -5,11 +5,6 @@ old:
     connectionTimeout: 6000
     receiveTimeout: 1000
 
-  nesko:
-    wsdl-url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
-    username: '${NESKO_TECHNICAL_USER_NAME}'
-    password: '${NESKO_TECHNICAL_USER_PASSWORD}'
-
 kstip:
   s3:
     bucket-name: '${bucket.name}'
@@ -53,6 +48,17 @@ kstip:
           cron: '0 2/2 * * * ? *' # Every 2 minutes, starting at XX:02
         sap-retry-failed-auszahlungs-buchhaltung:
           cron: '0 3/2 * * * ? *' # Every 2 minutes, starting at XX:03
+      port:
+        steuerdaten:
+          enabled: true
+          adapter-type: nesko
+      adapter:
+        steuerdaten:
+          nesko:
+            url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
+            username: '${NESKO_TECHNICAL_USER_NAME}'
+            password: '${NESKO_TECHNICAL_USER_PASSWORD}'
+
 
     dv:
       subdomains:
@@ -325,10 +331,11 @@ quarkus:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
-  old:
-    nesko:
-      username: 'username'
-      password: 'password'
+    tenant:
+      bern:
+        port:
+          steuerdaten:
+            adapter-type: dummy
 '%prod':
   quarkus:
     s3:

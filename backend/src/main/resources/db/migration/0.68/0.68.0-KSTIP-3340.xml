@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="luca.fondo (generated)" id="1778514120718-547">
+      <createTable tableName="steuerdaten_access">
+         <column name="id" type="UUID">
+            <constraints nullable="false"
+                         primaryKey="true"
+                         primaryKeyName="steuerdaten_accessPK"/>
+         </column>
+         <column name="timestamp_erstellt" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+            <constraints nullable="false"/>
+         </column>
+         <column name="timestamp_mutiert" type="TIMESTAMP(6) WITHOUT TIME ZONE">
+            <constraints nullable="false"/>
+         </column>
+         <column name="user_erstellt" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="user_mutiert" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="version" type="BIGINT"/>
+         <column name="mandant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="fallnr" type="VARCHAR(20)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="gesuch_nr" type="VARCHAR(20)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="steuerdaten_adapter" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+         <column name="svnr" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </createTable>
+   </changeSet>
+  <changeSet author="luca.fondo (generated)" id="1778514120718-548">
+    <createIndex indexName="IX_steuerdaten_access_mandant"
+                 tableName="steuerdaten_access">
+      <column name="mandant"/>
+    </createIndex>
+  </changeSet>
+</databaseChangeLog>

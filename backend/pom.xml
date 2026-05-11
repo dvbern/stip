@@ -737,7 +737,8 @@
                     VerfuegungStatus=ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus,
                     AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
                     InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
-                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus
+                    DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus,
+                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

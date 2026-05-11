@@ -40,6 +40,10 @@ public interface TenantConfig {
 
     Map<String, SchedulerConfig> scheduler();
 
+    PortConfig port();
+
+    AdapterConfig adapter();
+
     interface Features {
         boolean nesko();
     }

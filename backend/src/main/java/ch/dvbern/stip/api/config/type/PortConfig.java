@@ -15,14 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.exception;
+package ch.dvbern.stip.api.config.type;
 
-public class ExceptionConstants {
-    public static final String NESKO_INVALID_TOKEN = "nesko.invalid.token";
-    public static final String NESKO_SVN_NOT_FOUND = "nesko.svn.not.found";
-    public static final String NESKO_STEUERJAHR_NOT_READY = "nesko.steuerjahr.not.ready";
-    public static final String NESKO_STEUERJAHR_PRESENT_OR_FUTURE = "nesko.steuerjahr.present.or.future";
-    public static final String NESKO_STEUERJAHR_PAST_NOT_FOUND = "nesko.steuerjahr.past.not.found";
-    public static final String NESKO_STEUERJAHR_NOT_PARSABLE = "nesko.steuerjahr.not.parsable";
-    public static final String NESKO_SERVICE_UNAVAILABLE = "nesko.service.unavailable";
+import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
+import io.smallrye.config.WithDefault;
+
+import java.util.Optional;
+
+public interface PortConfig {
+    Steuerdaten steuerdaten();
+
+    interface Port {
+        @WithDefault("false")
+        Boolean enabled();
+    }
+
+    interface Steuerdaten extends Port {
+        Optional<SteuerdatenAdapterType> adapterType();
+    }
 }
