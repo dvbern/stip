@@ -3,6 +3,9 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="luca.fondo (generated)" id="1778596451480-547">
+    <dropTable tableName="nesko_access"/>
+  </changeSet>
    <changeSet author="luca.fondo (generated)" id="1778514120718-547">
       <createTable tableName="steuerdaten_access">
          <column name="id" type="UUID">
