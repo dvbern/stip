@@ -768,13 +768,14 @@ public class TestUtil {
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
+        final var baseRange = DateRange.getFruehlingOrHerbst(LocalDate.now());
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
                 )
-                .setAusbildungBegin(LocalDate.now().minusYears(1))
-                .setAusbildungEnd(LocalDate.now().plusYears(5))
+                .setAusbildungBegin(baseRange.getGueltigAb().minusYears(1))
+                .setAusbildungEnd(baseRange.getGueltigAb().plusYears(5))
         );
         baseGesuch.getAusbildung()
             .getAusbildungsgang()
