@@ -562,7 +562,7 @@ public class SapService {
             relevantBuchhaltung =
                 buchhaltungService.createAuszahlungBuchhaltungForGesuch(
                     gesuch,
-                    lastBuchhaltungEntry.getBetrag(),
+                    lastBuchhaltungEntry.getSaldo(),
                     BuchhaltungType.AUSZAHLUNG_REMAINDER
                 );
         } else {

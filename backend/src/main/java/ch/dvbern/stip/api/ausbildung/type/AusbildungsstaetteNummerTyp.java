@@ -17,6 +17,16 @@
 
 package ch.dvbern.stip.api.ausbildung.type;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum AusbildungsstaetteNummerTyp {
-    CH_SHIS, BUR_NO, CT_NO, OHNE_NO;
+    CH_SHIS("CH.SHIS"),
+    BUR_NO("CH.BUR"),
+    CT_NO("CT."),
+    OHNE_NO("");
+
+    private final String bfsIdentification;
 }

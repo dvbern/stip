@@ -103,7 +103,8 @@ public class AntragsstellerV1 {
         final var piaName = personInAusbildung.getVorname();
         final var partner = gesuchFormular.getPartner();
         final var einnahmenKosten = gesuchFormular.getEinnahmenKosten();
-        final var gesuchsperiode = gesuchFormular.getTranche().getGesuch().getGesuchsperiode();
+        final var gesuch = gesuchFormular.getTranche().getGesuch();
+        final var gesuchsperiode = gesuch.getGesuchsperiode();
         final var ausbildung = gesuchFormular.getAusbildung();
 
         final var einkommens = new PersonValueList();
@@ -176,7 +177,7 @@ public class AntragsstellerV1 {
                 BerechnungRequestV1
                     .getMedizinischeGrundversorgung(
                         personInAusbildung.getGeburtsdatum(),
-                        ausbildung.getAusbildungBegin(),
+                        gesuch.getGesuchGueltigkeitAb().getYear(),
                         gesuchsperiode
                     )
             );
@@ -243,7 +244,7 @@ public class AntragsstellerV1 {
             getHalbierungElternbeitrag(
                 personInAusbildung.getGeburtsdatum(),
                 gesuchFormular.getLebenslaufItems(),
-                gesuchFormular.getTranche().getGesuch()
+                gesuch
             )
         );
 
@@ -274,7 +275,7 @@ public class AntragsstellerV1 {
                     partner.getVorname(),
                     BerechnungRequestV1.getMedizinischeGrundversorgung(
                         partner.getGeburtsdatum(),
-                        ausbildung.getAusbildungBegin(),
+                        gesuch.getGesuchGueltigkeitAb().getYear(),
                         gesuchsperiode
                     )
                 );
@@ -293,7 +294,7 @@ public class AntragsstellerV1 {
                         kind,
                         BerechnungRequestV1.getMedizinischeGrundversorgung(
                             kind.getGeburtsdatum(),
-                            ausbildung.getAusbildungBegin(),
+                            gesuch.getGesuchGueltigkeitAb().getYear(),
                             gesuchsperiode
                         )
                     );
@@ -343,12 +344,11 @@ public class AntragsstellerV1 {
 
     static int getAlterForMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
-        final LocalDate ausbildungsbegin,
+        final int gesuchsjahr,
         final Gesuchsperiode gesuchsperiode
     ) {
-        final int yearOfAusbildungsbegin = ausbildungsbegin.getYear();
         final var stichtag =
-            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung().withYear(yearOfAusbildungsbegin);
+            gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung().withYear(gesuchsjahr);
         return DateUtil.getAgeInYearsAtDate(
             geburtsdatum,
             stichtag

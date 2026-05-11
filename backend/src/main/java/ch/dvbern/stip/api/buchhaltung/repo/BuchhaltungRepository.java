@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.buchhaltung.repo;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -119,5 +121,22 @@ public class BuchhaltungRepository implements BaseRepository<Buchhaltung> {
                 Q_BUCHHALTUNG.sapDeliverys.size().lt(SapDeliverysLengthConstraintValidator.MAX_SAP_DELIVERYS_AUSZAHLUNG)
             )
             .stream();
+    }
+
+    public List<Buchhaltung> findByYear(int year) {
+        LocalDateTime startOfYear = LocalDateTime.of(year, 1, 1, 0, 0, 0);
+        LocalDateTime endOfYear = LocalDateTime.of(year, 12, 31, 23, 59, 59);
+
+        return new JPAQueryFactory(entityManager)
+            .select(Q_BUCHHALTUNG)
+            .from(Q_BUCHHALTUNG)
+            .where(
+                Q_BUCHHALTUNG.timestampMutiert.between(startOfYear, endOfYear)
+                    .and(
+                        Q_BUCHHALTUNG.buchhaltungType.in(BuchhaltungType.AUSZAHLUNGS)
+                            .and(Q_BUCHHALTUNG.sapDeliverys.any().sapStatus.eq(SapStatus.SUCCESS))
+                    )
+            )
+            .fetch();
     }
 }

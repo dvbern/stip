@@ -50,7 +50,6 @@ import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
@@ -119,13 +118,13 @@ public class DarlehenService {
     private final StatusprotokollService statusprotokollService;
 
     private DarlehenBuchhaltungEntry createDarlehenBuchhaltungEntry(
-        final Fall fall,
+        final Gesuch gesuch,
         final Dokument dokument,
         final Integer betrag,
         final DarlehenBuchhaltungEntryKategorie kategorie
     ) {
         final DarlehenBuchhaltungEntry darlehenBuchhaltungEntry = new DarlehenBuchhaltungEntry();
-        darlehenBuchhaltungEntry.setFall(fall);
+        darlehenBuchhaltungEntry.setGesuch(gesuch);
         darlehenBuchhaltungEntry.setKategorie(kategorie);
         darlehenBuchhaltungEntry.setVerfuegung(dokument);
         darlehenBuchhaltungEntry.setBetrag(betrag);
@@ -143,8 +142,7 @@ public class DarlehenService {
                 .mapToInt(GesetzlichDarlehen::getBetrag)
                 .sum();
         }
-        final Fall fall = gesuch.getAusbildung().getFall();
-        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fall.getId());
+        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
         final int darlehenBisher = darlehenBuchhaltungEntrys.stream()
             .map(DarlehenBuchhaltungEntry::getBetrag)
             .filter(Objects::nonNull)
@@ -184,7 +182,7 @@ public class DarlehenService {
         gesetzlichDarlehen.setVerfuegung(darlehensVerfuegung);
 
         createDarlehenBuchhaltungEntry(
-            gesuch.getAusbildung().getFall(),
+            gesuch,
             darlehensVerfuegung,
             darlehenBetrag,
             DarlehenBuchhaltungEntryKategorie.GESETZLICH
@@ -229,7 +227,7 @@ public class DarlehenService {
         );
 
         final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
-            darlehen.getFall(),
+            darlehen.getRelatedGesuch(),
             darlehensVerfuegung,
             darlehen.getBetrag(),
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
@@ -256,7 +254,7 @@ public class DarlehenService {
     @Transactional
     public void createNegativeFreiwilligDarlehenVerfuegung(FreiwilligDarlehen darlehen) {
         final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
-            darlehen.getFall(),
+            darlehen.getRelatedGesuch(),
             darlehen.getManuelleVerfuegung(),
             null,
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
@@ -817,10 +815,10 @@ public class DarlehenService {
         final UUID gesuchId,
         final DarlehenBuchhaltungSaldokorrekturDto buchhaltungSaldokorrekturDto
     ) {
-        final Fall fall = gesuchRepository.requireById(gesuchId).getAusbildung().getFall();
+        final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var darlehenBuchhaltungSaldoKorrektur =
             darlehenBuchhaltungEntryMapper.toEntity(buchhaltungSaldokorrekturDto);
-        darlehenBuchhaltungSaldoKorrektur.setFall(fall);
+        darlehenBuchhaltungSaldoKorrektur.setGesuch(gesuch);
         darlehenBuchhaltungSaldoKorrektur.setKategorie(DarlehenBuchhaltungEntryKategorie.MANUELLE_KORREKTUR);
         darlehenBuchhaltungEntryRepository.persist(darlehenBuchhaltungSaldoKorrektur);
         return darlehenBuchhaltungEntryMapper.toDto(darlehenBuchhaltungSaldoKorrektur);
@@ -830,8 +828,8 @@ public class DarlehenService {
     public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByGesuchId(
         final UUID gesuchId
     ) {
-        final Fall fall = gesuchRepository.requireById(gesuchId).getAusbildung().getFall();
-        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fall.getId());
+        final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
+        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
         final DarlehenBuchhaltungOverviewDto darlehenBuchhaltungOverviewDto = new DarlehenBuchhaltungOverviewDto();
         final List<DarlehenBuchhaltungEntry> nonNullBetragEntrys = darlehenBuchhaltungEntrys.stream()
             .filter(darlehenBuchhaltungEntry -> Objects.nonNull(darlehenBuchhaltungEntry.getBetrag()))
@@ -867,4 +865,13 @@ public class DarlehenService {
         );
         return darlehenBuchhaltungOverviewDto;
     }
+
+    @Transactional
+    public void deleteForGesuch(final UUID gesuchId) {
+        final var darlehenBuchhaltungEntries = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuchId);
+        for (var entry : darlehenBuchhaltungEntries) {
+            darlehenBuchhaltungEntryRepository.delete(entry);
+        }
+    }
+
 }

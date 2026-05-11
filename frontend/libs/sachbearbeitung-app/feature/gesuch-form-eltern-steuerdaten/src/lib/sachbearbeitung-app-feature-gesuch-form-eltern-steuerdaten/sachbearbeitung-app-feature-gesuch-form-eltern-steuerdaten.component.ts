@@ -91,7 +91,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   gotReenabled$ = new Subject<object>();
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   maskitoNumber = maskitoNumber;
-  maskitoYear = maskitoYear;
+  maskitoYear = maskitoYear();
   maskitoMaxNumber = maskitoMaxNumber(MAX_EINKOMMEN);
 
   form = this.formBuilder.group({

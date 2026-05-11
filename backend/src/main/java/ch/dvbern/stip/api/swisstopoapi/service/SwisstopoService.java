@@ -17,11 +17,13 @@
 
 package ch.dvbern.stip.api.swisstopoapi.service;
 
+import java.util.Collections;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.service.StatisticsdataService;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
@@ -29,6 +31,7 @@ import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.Swiss
 import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
 import ch.dvbern.stip.api.swisstopoapi.scheduledtask.SwisstopoAddrFetchScheduledJob;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -53,7 +56,6 @@ public class SwisstopoService {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
     private static final String SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX = "SwisstopoAddrFetchScheduledJob-";
 
-    private final GesuchService gesuchService;
     private final StatisticsdataService statisticsdataService;
     private final TenantService tenantService;
     private final Scheduler scheduler;
@@ -83,13 +85,7 @@ public class SwisstopoService {
         try {
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            LOG.error(
-                String.format(
-                    "Could not schedule %s",
-                    SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX
-                ),
-                e
-            );
+            LOG.error("Could not schedule {}", SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX, e);
         }
     }
 
@@ -135,15 +131,41 @@ public class SwisstopoService {
                 );
             setGemeindeDataOfGesuch(gesuchId, swisstopoApiFindAddrResponseElementAttribute);
         } catch (Exception e) {
-            LOG.error(
-                String.format(
-                    "Could not perform Building lookup in Swisstopo data with properties, Street: %s, No: %s",
+
+            final var gemeindeDataByPlz = getGemeindeDataByPlz(plz);
+            if (gemeindeDataByPlz != null) {
+                setGemeindeDataOfGesuch(gesuchId, gemeindeDataByPlz);
+            } else {
+                LOG.warn(
+                    "Could not perform Building lookup in Swisstopo data with properties, Street: {}, No: {}",
                     strasse,
                     hausnummer
-                ),
-                e
-            );
+                );
+            }
         }
+    }
+
+    @Nullable
+    public SwisstopoApiFindAddrResponseElementAttributes getGemeindeDataByPlz(final String plz) {
+        final var result =
+            swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(plz);
+
+        var counted = result.getResults()
+            .stream()
+            .map(SwisstopoApiFindAddrResponseElement::getAttributes)
+            .collect(
+                Collectors.groupingBy(
+                    Function.identity(),
+                    Collectors.counting()
+                )
+            );
+        var max = Collections.max(counted.values());
+        for (var entry : counted.entrySet()) {
+            if (entry.getValue().equals(max)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 
     @Transactional(TxType.REQUIRES_NEW)

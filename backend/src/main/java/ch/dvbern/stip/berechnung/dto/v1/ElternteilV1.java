@@ -101,7 +101,7 @@ public class ElternteilV1 {
         final int anzahlGeschwisterInAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation,
-        final LocalDate ausbildungsBegin
+        final int gesuchsjahr
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
         final var steuernElternTyp = InputUtils.fromSteuerdatenTyp(steuerdaten.getSteuerdatenTyp());
@@ -145,14 +145,14 @@ public class ElternteilV1 {
             for (final var e : eltern) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     e.getGeburtsdatum(),
-                    ausbildungsBegin,
+                    gesuchsjahr,
                     gesuchsperiode
                 );
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kindDerElternInHaushalten.getGeburtsdatum(),
-                    ausbildungsBegin,
+                    gesuchsjahr,
                     gesuchsperiode
                 );
             }
@@ -167,7 +167,7 @@ public class ElternteilV1 {
             for (final var kind : kindDesElternteilsVollzeit) {
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kind.getGeburtsdatum(),
-                    ausbildungsBegin,
+                    gesuchsjahr,
                     gesuchsperiode
                 );
             }
@@ -186,7 +186,7 @@ public class ElternteilV1 {
                 for (final var kind : kinderDerElternTeilzeit) {
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         kind.getGeburtsdatum(),
-                        ausbildungsBegin,
+                        gesuchsjahr,
                         gesuchsperiode
                     );
                 }
@@ -197,7 +197,7 @@ public class ElternteilV1 {
         if (steuerdaten.getSteuerdatenTyp() != SteuerdatenTyp.FAMILIE) {
             medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                 elternteil.getGeburtsdatum(),
-                ausbildungsBegin,
+                gesuchsjahr,
                 gesuchsperiode
             );
             final var wiederverheiratet = switch (steuerdaten.getSteuerdatenTyp()) {
@@ -262,7 +262,7 @@ public class ElternteilV1 {
         final int anzahlGeschwisterInAusbildung,
         final ElternTyp elternTyp,
         final Familiensituation familiensituation,
-        final LocalDate ausbildungsBegin
+        final int gesuchsjahr
     ) {
         return builderFromDependants(
             elternhaushalt,
@@ -275,7 +275,7 @@ public class ElternteilV1 {
             anzahlGeschwisterInAusbildung,
             elternTyp,
             familiensituation,
-            ausbildungsBegin
+            gesuchsjahr
         ).build();
     }
 }

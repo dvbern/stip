@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -195,6 +196,7 @@ public class GesuchService {
     private final VerfuegungHistoryService verfuegungHistoryService;
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
     private final StatisticsdataService statisticsdataService;
+    private final DarlehenService darlehenService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -528,6 +530,7 @@ public class GesuchService {
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
         statisticsdataService.deleteForGesuch(gesuchId);
+        darlehenService.deleteForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();

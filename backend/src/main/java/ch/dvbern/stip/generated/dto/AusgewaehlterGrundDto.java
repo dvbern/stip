@@ -1,5 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.api.common.type.Kanton;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -8,10 +9,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
 
 
 @JsonTypeName("AusgewaehlterGrund")
@@ -21,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusgewaehlterGrundDto  implements Serializable {
   private @Valid UUID decisionId;
-  private @Valid ch.dvbern.stip.stipdecision.type.Kanton kanton;
+  private @Valid Kanton kanton;
 
   /**
    **/
@@ -30,7 +27,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("decisionId")
   @NotNull
   public UUID getDecisionId() {
@@ -44,19 +41,19 @@ public class AusgewaehlterGrundDto  implements Serializable {
 
   /**
    **/
-  public AusgewaehlterGrundDto kanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+  public AusgewaehlterGrundDto kanton(Kanton kanton) {
     this.kanton = kanton;
     return this;
   }
 
-  
+
   @JsonProperty("kanton")
-  public ch.dvbern.stip.stipdecision.type.Kanton getKanton() {
+  public Kanton getKanton() {
     return kanton;
   }
 
   @JsonProperty("kanton")
-  public void setKanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+  public void setKanton(Kanton kanton) {
     this.kanton = kanton;
   }
 
@@ -83,7 +80,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusgewaehlterGrundDto {\n");
-    
+
     sb.append("    decisionId: ").append(toIndentedString(decisionId)).append("\n");
     sb.append("    kanton: ").append(toIndentedString(kanton)).append("\n");
     sb.append("}");

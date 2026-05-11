@@ -193,7 +193,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
         if (
             !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                entry.getFall(),
+                entry.getGesuch().getAusbildung().getFall(),
                 benutzer,
                 sozialdienstService
             ) && !isSbOrFreigabestelleOrJurist(benutzer)

@@ -53,6 +53,10 @@ public class StatisticsdataService {
         statisticsdataRepository.persist(statisticsdata);
     }
 
+    public Statisticsdata getStatisticsdataOfGesuch(final UUID gesuchId) {
+        return statisticsdataRepository.findByGesuchId(gesuchId);
+    }
+
     public void deleteForGesuch(final UUID gesuchId) {
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         if (Objects.isNull(gesuch.getStatisticsdata())) {
