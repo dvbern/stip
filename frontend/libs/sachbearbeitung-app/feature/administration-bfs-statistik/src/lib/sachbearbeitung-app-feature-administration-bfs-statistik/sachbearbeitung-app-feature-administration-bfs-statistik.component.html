@@ -1,0 +1,195 @@
+<div class="tw:mt-4" *dvTranslocoSb="let t">
+  <button
+    class="tw:dv-button-main-primary tw:mt-6"
+    type="button"
+    data-testid="button-create-statistik"
+    (click)="createStatistik()"
+  >
+    {{ t('sachbearbeitung-app.admin.bfs-statistik.create') }}
+  </button>
+
+  <div class="tw:dv-table">
+    <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
+      <table mat-table [dataSource]="bfsStatistikDataSourceSig()" matSort>
+        <caption class="cdk-visually-hidden">
+          {{
+            t('sachbearbeitung-app.admin.bfs-statistik.table.description')
+          }}
+        </caption>
+
+        <!-- Year -->
+        <ng-container matColumnDef="year">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+            <label class="tw:pointer-none:" for="year">
+              {{ t('sachbearbeitung-app.admin.bfs-statistik.year') }}
+            </label>
+            <div class="tw:relative tw:flex">
+              <mat-form-field>
+                <input
+                  id="year"
+                  class="tw:w-full"
+                  matInput
+                  type="text"
+                  data-testid="bfs-statistik-year"
+                  [maskito]="maskitoYear"
+                  [formControl]="filterForm.controls.year"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                (clear)="filterForm.controls.year.reset()"
+                [valueSig]="filterForm.controls.year.value"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">{{ element.year }}</td>
+        </ng-container>
+
+        <!-- TimestampErstellt -->
+        <ng-container matColumnDef="timestampErstellt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+            <label class="tw:pointer-none:" for="timestampErstellt">
+              {{ t('sachbearbeitung-app.admin.bfs-statistik.timestampErstellt') }}
+            </label>
+            <div class="tw:relative tw:flex">
+              <mat-form-field>
+                <input
+                  id="timestampErstellt"
+                  class="tw:w-full"
+                  matInput
+                  type="text"
+                  data-testid="bfs-statistik-timestampErstellt"
+                  disabled
+                  [value]="timestampErstelltRangeSig()"
+                  [dvMaxLength]="'small'"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
+                />
+                <button
+                  matIconSuffix
+                  type="button"
+                  class="tw:dv-button text-muted tw:p-1"
+                  [attr.aria-label]="'shared.ui.open-date-picker'"
+                  (click)="timestampErstelltRangePicker.open(); $event.stopPropagation()"
+                >
+                  <dv-shared-ui-icon-chip class="tw:text-sm!">
+                    <i class="icon material-symbols-rounded tw:text-lg!">event</i>
+                  </dv-shared-ui-icon-chip>
+                </button>
+                <mat-date-range-input
+                  class="tw:hidden! tw:w-full"
+                  [rangePicker]="timestampErstelltRangePicker"
+                  (click)="$event.stopPropagation()"
+                >
+                  <input
+                    [formControl]="filterForm.controls.timestampErstelltVon"
+                    matStartDate
+                    [placeholder]="t('shared.label.von')"
+                  />
+                  <input
+                    [formControl]="filterForm.controls.timestampErstelltBis"
+                    matEndDate
+                    [placeholder]="t('shared.label.bis')"
+                  />
+                </mat-date-range-input>
+                <mat-date-range-picker #timestampErstelltRangePicker></mat-date-range-picker>
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                (clear)="
+                  filterForm.controls.timestampErstelltVon.reset(); filterForm.controls.timestampErstelltBis.reset()
+                "
+                [valueSig]="[
+                  filterForm.controls.timestampErstelltVon.value,
+                  filterForm.controls.timestampErstelltBis.value,
+                ]"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">
+            {{ element.timestampErstellt | date: 'dd.MM.yyyy HH:mm' }}
+          </td>
+        </ng-container>
+
+        <!-- UserTriggeredCreation -->
+        <ng-container matColumnDef="userTriggeredCreation">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-32 tw:whitespace-nowrap">
+            <label class="tw:pointer-none:" for="userTriggeredCreation">
+              {{ t('sachbearbeitung-app.admin.bfs-statistik.userTriggeredCreation') }}
+            </label>
+            <div class="tw:relative tw:flex">
+              <mat-form-field>
+                <input
+                  id="userTriggeredCreation"
+                  class="tw:w-full"
+                  matInput
+                  type="text"
+                  data-testid="bfs-statistik-userTriggeredCreation"
+                  [dvMaxLength]="'medium'"
+                  [formControl]="filterForm.controls.userTriggeredCreation"
+                  (click)="$event.stopPropagation()"
+                  (keydown)="$event.stopPropagation()"
+                />
+              </mat-form-field>
+              <dv-shared-ui-clear-button
+                class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
+                (clear)="filterForm.controls.userTriggeredCreation.reset()"
+                [valueSig]="filterForm.controls.userTriggeredCreation.value"
+              ></dv-shared-ui-clear-button>
+            </div>
+          </th>
+          <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">
+            {{ element.userTriggeredCreation }}
+          </td>
+        </ng-container>
+
+        <!-- File -->
+        <ng-container matColumnDef="file">
+          <th mat-header-cell *matHeaderCellDef class="filtered tw:w-32 tw:whitespace-nowrap">
+            <label class="tw:pointer-none:" for="file">
+              {{ t('sachbearbeitung-app.admin.bfs-statistik.file') }}
+            </label>
+            <div>&nbsp;</div>
+          </th>
+          <td mat-cell *dvMatCellDef="let element; dataSource: bfsStatistikDataSourceSig()">
+            <button
+              type="button"
+              class="tw:dv-button tw:inline-flex tw:px-0!"
+              [attr.aria-label]="t('sachbearbeitung-app.admin.bfs-statistik.file')"
+              [dvDownloadButton]="{
+                type: 'statistik',
+                id: element.id,
+              }"
+            >
+              <span class="tw:underline">
+                {{ element.filename }}
+              </span>
+              <span class="material-symbols-rounded tw:underline tw:text-sm!">download</span>
+            </button>
+            @if (!element.valid) {
+              <i
+                class="material-symbols-rounded tw:cursor-default tw:text-xl! tw:align-middle tw:ml-1 tw:text-dv-warning"
+                [matTooltip]="t('sachbearbeitung-app.admin.bfs-statistik.invalid')"
+              >
+                check_circle
+              </i>
+            }
+          </td>
+        </ng-container>
+
+        <!-- Table Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <mat-paginator
+        [pageSizeOptions]="pageSizes"
+        [pageSize]="defaultPageSize"
+        [length]="bfsStatistikDataSourceSig().data.length"
+        showFirstLastButtons
+      >
+      </mat-paginator>
+    </form>
+  </div>
+</div>

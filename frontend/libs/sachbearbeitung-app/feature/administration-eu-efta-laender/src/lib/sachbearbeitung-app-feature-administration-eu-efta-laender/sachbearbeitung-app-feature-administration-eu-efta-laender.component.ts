@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  signal,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -51,17 +50,16 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    SharedUiMaxLengthDirective,
-    MatInputModule,
     MatCheckboxModule,
-    SharedUiClearButtonComponent,
     MatButtonModule,
     MatSortModule,
     MatTooltipModule,
     MatTableModule,
     MatIconModule,
-    TypeSafeMatCellDefDirective,
     MatPaginator,
+    SharedUiMaxLengthDirective,
+    SharedUiClearButtonComponent,
+    TypeSafeMatCellDefDirective,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -79,8 +77,6 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private destroyRef = inject(DestroyRef);
   private notificationStore = inject(GlobalNotificationStore);
   paginatorSig = viewChild(MatPaginator);
-
-  filterChangedSig = signal<string | null>(null);
 
   laenderStore = inject(LandStore);
   countryFilter = new FormControl<string | null>(null);
@@ -127,7 +123,6 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     const datasource = new MatTableDataSource(allCountries);
 
     this.configureDatasource(datasource);
-    this.applyFilterToDataSource(datasource);
 
     return datasource;
   });
@@ -266,12 +261,5 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       return true;
     }
     return dataValue === filterValue;
-  }
-
-  private applyFilterToDataSource(datasource: MatTableDataSource<Land>): void {
-    const filter = this.filterChangedSig();
-    if (filter) {
-      datasource.filter = filter.trim().toLowerCase();
-    }
   }
 }

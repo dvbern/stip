@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.plz.service;
 import java.util.List;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.api.plz.repo.PlzRepository;
 import ch.dvbern.stip.generated.dto.PlzDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -51,5 +52,9 @@ public class PlzService {
 
         final var plz = adresse.getPlz();
         return isInBern(plz);
+    }
+
+    public Plz findByPostleitzahl(String postleitzahl) {
+        return plzRepository.findByPostleitzahl(postleitzahl);
     }
 }

@@ -266,6 +266,7 @@ export * from './sozialdienstCreate';
 export * from './sozialdienstSlim';
 export * from './sozialdienstUpdate';
 export * from './sprache';
+export * from './statistik';
 export * from './statusprotokollEntry';
 export * from './statusprotokollEntryTyp';
 export * from './steuerdaten';

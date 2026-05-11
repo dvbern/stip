@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.stipdecision.type.Kanton;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

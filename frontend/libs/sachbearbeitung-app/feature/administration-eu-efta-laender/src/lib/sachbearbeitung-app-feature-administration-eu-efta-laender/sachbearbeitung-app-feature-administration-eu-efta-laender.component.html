@@ -35,7 +35,7 @@
               ></dv-shared-ui-clear-button>
             </div>
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.iso3code }}</td>
+          <td mat-cell *dvMatCellDef="let element; dataSource: countryDataSourceSig()">{{ element.iso3code }}</td>
         </ng-container>
 
         <!-- De Kurzform -->
@@ -63,7 +63,7 @@
               ></dv-shared-ui-clear-button>
             </div>
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.deKurzform }}</td>
+          <td mat-cell *dvMatCellDef="let element; dataSource: countryDataSourceSig()">{{ element.deKurzform }}</td>
         </ng-container>
 
         <!-- Fr Kurzform -->
@@ -91,7 +91,7 @@
               ></dv-shared-ui-clear-button>
             </div>
           </th>
-          <td mat-cell *matCellDef="let element">{{ element.frKurzform }}</td>
+          <td mat-cell *dvMatCellDef="let element; dataSource: countryDataSourceSig()">{{ element.frKurzform }}</td>
         </ng-container>
 
         <!-- Eintrag Gueltig -->

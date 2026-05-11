@@ -105,6 +105,9 @@ public class ApiClient {
     public SozialdienstApiSpec sozialdienst() {
         return SozialdienstApiSpec.sozialdienst(config.reqSpecSupplier);
     }
+    public StatistikApiSpec statistik() {
+        return StatistikApiSpec.statistik(config.reqSpecSupplier);
+    }
     public SteuerdatenApiSpec steuerdaten() {
         return SteuerdatenApiSpec.steuerdaten(config.reqSpecSupplier);
     }
