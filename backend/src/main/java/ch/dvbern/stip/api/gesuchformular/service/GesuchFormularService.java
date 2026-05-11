@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.PersonInAusbildungPageValidation;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
@@ -54,6 +55,7 @@ public class GesuchFormularService {
         }
         if (gesuchFormular.getTranche().getGesuch().getGesuchStatus() == Gesuchstatus.IN_BEARBEITUNG_SB) {
             validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
+            validationGroups.add(GesuchNachInFreigabeValidationGroup.class);
         }
 
         final var violations = new HashSet<>(

@@ -42,15 +42,11 @@ public class ValidateUpdateLegalityUtil {
                 )
             )
         ) {
-            return Objects.requireNonNullElse(
-                existingValue,
-                defaultValue
-            );
+            return Objects.nonNull(existingValue) ? existingValue
+                : defaultValue;
         }
 
-        return Objects.requireNonNullElse(
-            dtoValue,
-            defaultValue
-        );
+        return Objects.nonNull(dtoValue) ? dtoValue
+            : defaultValue;
     }
 }

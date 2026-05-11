@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuch.validation.GesuchFehlendeDokumenteValidationGro
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LandMustBeGueltigValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import com.github.oxo42.stateless4j.transitions.Transition;
@@ -47,7 +48,8 @@ public class GesuchValidatorService {
         Default.class,
         GesuchEinreichenValidationGroup.class,
         GesuchDokumentsAcceptedValidationGroup.class,
-        GesuchNachInBearbeitungSBValidationGroup.class
+        GesuchNachInBearbeitungSBValidationGroup.class,
+        GesuchNachInFreigabeValidationGroup.class
     );
     static {
         destinationValidationGroups.put(Gesuchstatus.EINGEREICHT, List.of(GesuchEinreichenValidationGroup.class));

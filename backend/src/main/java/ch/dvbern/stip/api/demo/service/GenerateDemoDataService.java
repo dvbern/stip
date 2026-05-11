@@ -400,7 +400,7 @@ public class GenerateDemoDataService {
             .betreuungskostenKinder(
                 DemoDataDefaults.defaultByKindsIfNull(ekDto.getBetreuungskostenKinder(), demoDataDto)
             )
-            .veranlagungsStatus(null)
+            .veranlagungsStatus("Manuell")
             .steuerjahr(DemoDataDefaults.getSteuerjahr(ausbildungDto.getAusbildungBeginn()))
             .vermoegen(ekDto.getVermoegen())
             .einnahmenBGSA(ekDto.getEinnahmenBGSA())

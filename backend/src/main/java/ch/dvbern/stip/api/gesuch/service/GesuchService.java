@@ -142,7 +142,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -248,8 +247,6 @@ public class GesuchService {
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
-        String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
-
         if (einnahmenKostenToUpdate != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKostenToUpdate.getSteuerjahr();
@@ -263,15 +260,15 @@ public class GesuchService {
 
             final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
             final String veranlagungsStatusExistingValue = einnahmenKostenToUpdate.getVeranlagungsStatus();
-            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+            final String veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
                 veranlagungsStatusExistingValue,
-                VERANLAGUNGSSTATUS_DEFAULT_VALUE
+                null
             );
+            einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
     @Transactional
