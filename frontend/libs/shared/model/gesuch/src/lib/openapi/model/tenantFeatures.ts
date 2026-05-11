@@ -9,12 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TenantAuthConfig } from './tenantAuthConfig';
-import { TenantFeatures } from './tenantFeatures';
+import { TenantFeature } from './tenantFeature';
 
-export interface TenantInfo { 
-    clientAuth: TenantAuthConfig;
-    features: TenantFeatures;
-    identifier: string;
+export interface TenantFeatures { 
+    steuerdaten?: TenantFeature;
 }
 

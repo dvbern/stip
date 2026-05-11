@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
+import ch.dvbern.stip.generated.dto.TenantFeaturesDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
@@ -49,14 +50,23 @@ public class TenantService {
     }
 
     public TenantInfoDto getCurrentTenant() {
-        final String tenantId = getCurrentStringIdentifier();
+        final var tenantId = getCurrentStringIdentifier();
 
-        final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
+        final var tenantConfig = getConfigForCurrentTenant();
+
+        final var tenantAuthConfig = new TenantAuthConfigDto();
         tenantAuthConfig.setAuthServerUrl(config.oidc().frontendUrl());
         tenantAuthConfig.setRealm(tenantId);
 
+        final var steuerdatenFeature = new TenantFeatureDto();
+        steuerdatenFeature.enabled(tenantConfig.port().steuerdaten().enabled());
+        steuerdatenFeature.setAdapterType(tenantConfig.port().steuerdaten().adapterType().orElse(null));
+
+        final var tenantFeatures = new TenantFeaturesDto();
+        tenantFeatures.setSteuerdaten(steuerdatenFeature);
+
         return new TenantInfoDto()
-            .features(new TenantFeatureDto(getConfigForCurrentTenant().features().nesko()))
+            .features(tenantFeatures)
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
     }

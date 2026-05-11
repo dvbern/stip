@@ -9,12 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TenantAuthConfig } from './tenantAuthConfig';
-import { TenantFeatures } from './tenantFeatures';
 
-export interface TenantInfo { 
-    clientAuth: TenantAuthConfig;
-    features: TenantFeatures;
-    identifier: string;
-}
+export type SteuerdatenAdapterType = 'DUMMY' | 'NESKO';
+
+export const SteuerdatenAdapterType = {
+    DUMMY: 'DUMMY' as SteuerdatenAdapterType,
+    NESKO: 'NESKO' as SteuerdatenAdapterType
+};
 

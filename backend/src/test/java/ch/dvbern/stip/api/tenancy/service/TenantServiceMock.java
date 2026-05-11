@@ -24,6 +24,7 @@ import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
@@ -31,42 +32,12 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class TenantServiceMock extends TenantService {
 
-    @Inject
-    StipConfig config;
-
     public TenantServiceMock() {
         super(null, null);
     }
 
-    @Override
-    public TenantInfoDto getCurrentTenant() {
-        return new TenantInfoDto()
-            .identifier("bern")
-            .features(new TenantFeatureDto().nesko(false))
-            .clientAuth(
-                new TenantAuthConfigDto()
-                    .authServerUrl(config.oidc().frontendUrl())
-                    .realm("bern")
-            );
-    }
-
-    @Override
-    public TenantConfig getConfigForCurrentTenant() {
-        return config.tenant().get(TenantIdentifier.BERN);
-    }
-
-    @Override
-    public String getCurrentStringIdentifier() {
-        return TenantIdentifier.BERN.getIdentifier();
-    }
-
-    @Override
-    public TenantIdentifier getCurrentTenantIdentifier() {
-        return TenantIdentifier.BERN;
-    }
-
-    @Override
-    public TenantIdentifier resolveTenant(String subdomain) {
-        return TenantIdentifier.BERN;
+    @PostConstruct
+    void init() {
+        TenantService.setTenantId(TenantIdentifier.BERN.getIdentifier());
     }
 }

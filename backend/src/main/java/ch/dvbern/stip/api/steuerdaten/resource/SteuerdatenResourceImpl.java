@@ -66,7 +66,7 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
         UUID gesuchTrancheId,
         NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequestDto
     ) {
-        steuerdatenAuthorizer.canUpdateFromNesko(gesuchTrancheId);
+        steuerdatenAuthorizer.canUpdateFromSteuerdatenPort(gesuchTrancheId);
         return steuerdatenService.updateSteuerdatenFromPort(
             gesuchTrancheId,
             neskoGetSteuerdatenRequestDto.getSteuerdatenTyp(),

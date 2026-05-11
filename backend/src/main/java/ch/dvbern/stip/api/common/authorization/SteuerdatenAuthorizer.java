@@ -70,9 +70,9 @@ public class SteuerdatenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canUpdateFromNesko(UUID gesuchTrancheId) {
+    public void canUpdateFromSteuerdatenPort(UUID gesuchTrancheId) {
         canUpdate(gesuchTrancheId);
-        if (tenantService.getConfigForCurrentTenant().features().nesko()) {
+        if (tenantService.getConfigForCurrentTenant().port().steuerdaten().enabled()) {
             return;
         }
 

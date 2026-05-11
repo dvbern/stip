@@ -16,7 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDtoSpec;
-import ch.dvbern.stip.generated.dto.TenantFeatureDtoSpec;
+import ch.dvbern.stip.generated.dto.TenantFeaturesDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * Client Application Info about a &#x60;Tenant&#x60;
+ * TenantInfoDtoSpec
  */
 @JsonPropertyOrder({
   TenantInfoDtoSpec.JSON_PROPERTY_CLIENT_AUTH,
@@ -40,7 +40,7 @@ public class TenantInfoDtoSpec {
   private TenantAuthConfigDtoSpec clientAuth;
 
   public static final String JSON_PROPERTY_FEATURES = "features";
-  private TenantFeatureDtoSpec features;
+  private TenantFeaturesDtoSpec features;
 
   public static final String JSON_PROPERTY_IDENTIFIER = "identifier";
   private String identifier;
@@ -74,7 +74,7 @@ public class TenantInfoDtoSpec {
   }
 
 
-  public TenantInfoDtoSpec features(TenantFeatureDtoSpec features) {
+  public TenantInfoDtoSpec features(TenantFeaturesDtoSpec features) {
     
     this.features = features;
     return this;
@@ -88,14 +88,14 @@ public class TenantInfoDtoSpec {
   @JsonProperty(JSON_PROPERTY_FEATURES)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public TenantFeatureDtoSpec getFeatures() {
+  public TenantFeaturesDtoSpec getFeatures() {
     return features;
   }
 
 
   @JsonProperty(JSON_PROPERTY_FEATURES)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFeatures(TenantFeatureDtoSpec features) {
+  public void setFeatures(TenantFeaturesDtoSpec features) {
     this.features = features;
   }
 

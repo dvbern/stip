@@ -28,8 +28,6 @@ public interface TenantConfig {
 
     String frontendUri();
 
-    Features features();
-
     Berechnung berechnung();
 
     WelcomeMail welcomeMail();
@@ -43,10 +41,6 @@ public interface TenantConfig {
     PortConfig port();
 
     AdapterConfig adapter();
-
-    interface Features {
-        boolean nesko();
-    }
 
     interface Berechnung {
         @WithDefault("1")

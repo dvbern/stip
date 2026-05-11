@@ -123,24 +123,33 @@ components:
         realm: some text
     TenantFeature:
       required:
-        - nesko
+        - enabled
       type: object
       properties:
-        nesko:
+        enabled:
           type: boolean
+        adapterType:
+          $ref: '#/components/schemas/SteuerdatenAdapterType'
+#          use as soon as more enums join the party !!!
+#          oneOf:
+#            - $ref: '#/components/schemas/SteuerdatenAdapterType'
+#            - ...
+    TenantFeatures:
+      type: object
+      properties:
+        steuerdaten:
+          $ref: '#/components/schemas/TenantFeature'
     TenantInfo:
-      title: Root Type for TenantInfo
-      description: Client Application Info about a `Tenant`
+      type: object
       required:
         - clientAuth
         - features
         - identifier
-      type: object
       properties:
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
         features:
-          $ref: '#/components/schemas/TenantFeature'
+          $ref: '#/components/schemas/TenantFeatures'
         identifier:
           type: string
     StipDecisionText:
@@ -196,5 +205,10 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    SteuerdatenAdapterType:
+      type: string
+      enum:
+        - DUMMY
+        - NESKO
 security:
   $ref: './components/security.yaml#/security'
