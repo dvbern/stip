@@ -21,7 +21,7 @@
 }
 
 @utility dv-button-icon {
-  @apply tw:flex tw:justify-center tw:items-center tw:w-10 tw:h-10 tw:[&_.material-symbols-rounded]:text-3xl tw:cursor-pointer;
+  @apply tw:flex tw:justify-center tw:items-center tw:w-10 tw:h-10 tw:[&_.material-symbols-rounded]:text-3xl tw:cursor-pointer tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:rounded-lg;
 }
 
 @utility dv-button-icon-outline {

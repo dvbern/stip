@@ -12,7 +12,7 @@ import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notifica
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  @HostBinding('class') klass = 'app-container shadow';
+  @HostBinding('class') klass = 'app-container';
 
   constructor() {
     const store = inject(Store);
