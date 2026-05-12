@@ -7,11 +7,15 @@ import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapte
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessService;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
-@RequiredArgsConstructor
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.DUMMY)
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 public class DummySteuerdatenAdapter implements SteuerdatenPort {
 
     private final SteuerdatenAccessService steuerdatenAccessService;

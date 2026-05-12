@@ -17,16 +17,8 @@
 
 package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.service;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
-import ch.dvbern.stip.api.config.type.AdapterConfig;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
@@ -35,8 +27,6 @@ import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendien
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.InfrastructureFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.InvalidArgumentsFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.PermissionDeniedFault;
-import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
-import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftService;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.type.NeskoSteuerdatenError;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenPortData;
 import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPort;
@@ -46,29 +36,28 @@ import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessSe
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.InternalServerErrorException;
-import jakarta.xml.ws.BindingProvider;
-import jakarta.xml.ws.handler.MessageContext;
 import jakarta.xml.ws.soap.SOAPFaultException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @RequestScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 @SteuerdatenAdapterQualifier(SteuerdatenAdapterType.NESKO)
 public class NeskoSteuerdatenAdapter implements SteuerdatenPort {
 
-    @Inject
-    @RestClient
-    NeskoGetBearerTokenRequestService neskoGetBearerTokenRequestService;
-    private final TenantService tenantService;
+    private final StipendienAuskunftPortFactory stipendienAuskunftPortFactory;
     private final SteuerdatenAccessService steuerdatenAccessService;
+    private final TenantService tenantService;
 
     @Override
     public SteuerdatenPortData getSteuerdaten(String svn, Integer jahr, SteuerdatenTyp steuerdatenTyp, String fallNr, String gesuchNr) {
         var request = new GetSteuerdaten();
         request.setSteuerjahr(jahr);
         request.setSozialversicherungsnummer(Long.valueOf(svn.replace(".", "")));
-        final var port = getStipendienAuskunftPort();
+        final var config = tenantService.getConfigForCurrentTenant().adapter().steuerdaten().get(SteuerdatenAdapterType.NESKO);
+        final var port = stipendienAuskunftPortFactory.create(config);
         final Optional<GetSteuerdatenResponse> response;
 
         try {
@@ -87,36 +76,5 @@ public class NeskoSteuerdatenAdapter implements SteuerdatenPort {
                     .toSteuerdatenPortData(getSteuerdatenResponse, steuerdatenTyp)
             )
             .orElse(null);
-    }
-
-    public StipendienAuskunftPort getStipendienAuskunftPort() {
-        final var config =
-            tenantService.getConfigForCurrentTenant().adapter().steuerdaten().get(SteuerdatenAdapterType.NESKO);
-
-        StipendienAuskunftService stipendienAuskunftService =
-            new StipendienAuskunftService(toUrl(config.url().orElseThrow()));
-
-        Map<String, List<String>> headers = new HashMap<>();
-        headers.put("authorization", Collections.singletonList("Bearer " + getToken(config)));
-        var port = stipendienAuskunftService.getStipendienAuskunft();
-        ((BindingProvider) port).getRequestContext()
-            .put(MessageContext.HTTP_REQUEST_HEADERS, headers);
-        return port;
-    }
-
-    public String getToken(AdapterConfig.SteuerdatenAdapter config) {
-        return neskoGetBearerTokenRequestService.post(
-            neskoGetBearerTokenRequestService
-                .getAuthorization(config.username().orElseThrow(), config.password().orElseThrow()),
-            neskoGetBearerTokenRequestService.getGrantType()
-        ).getAccessToken();
-    }
-
-    private static URL toUrl(String url) {
-        try {
-            return URI.create(url).toURL();
-        } catch (MalformedURLException e) {
-            throw new InternalServerErrorException(e);
-        }
     }
 }

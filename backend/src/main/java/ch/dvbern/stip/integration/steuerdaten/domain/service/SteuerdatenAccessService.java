@@ -21,11 +21,15 @@ import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAccess;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.repository.SteuerdatenAccessRepository;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @RequestScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 public class SteuerdatenAccessService {
     private final SteuerdatenAccessRepository steuerdatenAccessRepository;
 
