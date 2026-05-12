@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlende
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
@@ -68,7 +67,6 @@ public class GesuchStatusConfigProducer {
     private final StipendienAnspruchHandler stipendienAnspruchHandler;
     private final JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandler;
     private final StatusprotokollService statusprotokollService;
-    private final BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private final AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandler;
     private final VerfuegtHandler verfuegtHandler;
     private final AenderungAkzeptierenHandler aenderungAkzeptierenHandler;

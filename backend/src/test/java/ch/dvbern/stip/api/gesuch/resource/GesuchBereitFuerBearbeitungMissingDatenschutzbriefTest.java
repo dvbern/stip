@@ -134,7 +134,7 @@ public class GesuchBereitFuerBearbeitungMissingDatenschutzbriefTest {
     @Test
     @TestAsSachbearbeiter
     @Order(6)
-    void manualDatenschutzbriefVersenden() {
+    void bereitFuerBearbeitung() {
         TestUtil.executeAndAssertOk(
             gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
@@ -167,8 +167,8 @@ public class GesuchBereitFuerBearbeitungMissingDatenschutzbriefTest {
     @Test
     @TestAsSachbearbeiter
     @Order(9)
-    void assertGesuchstatusIsBereitFuerBearbeitung() {
-        assertGesuchStatus(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG);
+    void assertGesuchstatusStillGoesToDatenschutzbriefDruckbereit() {
+        assertGesuchStatus(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT);
     }
 
     @Test
