@@ -21,5 +21,11 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenPortData;
 
 public interface SteuerdatenPort {
-    SteuerdatenPortData getSteuerdaten(final String svn, final Integer jahr, final SteuerdatenTyp steuerdatenTyp, String fallNr, String gesuchNr);
+    SteuerdatenPortData getSteuerdaten(
+        final String svn,
+        final Integer jahr,
+        final SteuerdatenTyp steuerdatenTyp,
+        String fallNr,
+        String gesuchNr
+    );
 }

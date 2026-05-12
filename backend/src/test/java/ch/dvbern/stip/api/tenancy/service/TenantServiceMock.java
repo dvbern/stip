@@ -18,15 +18,9 @@
 package ch.dvbern.stip.api.tenancy.service;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.config.type.TenantConfig;
-import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
-import ch.dvbern.stip.generated.dto.TenantFeatureDto;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.test.Mock;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 @Mock
 @ApplicationScoped

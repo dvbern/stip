@@ -116,13 +116,14 @@ public class SteuerdatenService {
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
-        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenPort().getSteuerdaten(
-            ssvn,
-            steuerjahr,
-            steuerdatenTyp,
-            gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
-            gesuchtranche.getGesuch().getGesuchNummer()
-        );
+        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenPort()
+            .getSteuerdaten(
+                ssvn,
+                steuerjahr,
+                steuerdatenTyp,
+                gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
+                gesuchtranche.getGesuch().getGesuchNummer()
+            );
 
         steuerdaten = steuerdatenMapper.partialUpdate(steuerdatenPortData, steuerdaten);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);

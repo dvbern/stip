@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.service;
 
 import java.math.BigDecimal;
@@ -91,7 +108,6 @@ class NeskoSteuerdatenMapperTest {
         sd.setMietwertKanton(BigDecimal.valueOf(MIETWERT_KANTON));
         return sd;
     }
-
 
     @Test
     void toSteuerdatenPortData_basicFields_areMappedCorrectly() {
@@ -236,10 +252,12 @@ class NeskoSteuerdatenMapperTest {
         sd.setFrauErwerbstaetigkeitSUS(true);
 
         // mann max(1000,900)=1000, frau max(800,700)=800 → total 1800
-        sd.setBeitraegeSaeule3A(mannFrau(
-            effSatz(SAEULE3A_MANN_EFFEKTIV, SAEULE3A_MANN_SATZBESTIMMEND),
-            effSatz(SAEULE3A_FRAU_EFFEKTIV, SAEULE3A_FRAU_SATZBESTIMMEND)
-        ));
+        sd.setBeitraegeSaeule3A(
+            mannFrau(
+                effSatz(SAEULE3A_MANN_EFFEKTIV, SAEULE3A_MANN_SATZBESTIMMEND),
+                effSatz(SAEULE3A_FRAU_EFFEKTIV, SAEULE3A_FRAU_SATZBESTIMMEND)
+            )
+        );
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
@@ -281,14 +299,18 @@ class NeskoSteuerdatenMapperTest {
     void toSteuerdatenPortData_familie_fahrkostenTakesMannForHauptAndFrauForPartner() {
         final var sd = minimalSteuerdaten();
         // Mann effektiv=1000, Frau effektiv=600
-        sd.setFahrkosten(mannFrau(
-            effSatz(FAHRKOSTEN_MANN_EFFEKTIV, FAHRKOSTEN_MANN_SATZBESTIMMEND),
-            effSatz(FAHRKOSTEN_FRAU_EFFEKTIV, FAHRKOSTEN_FRAU_SATZBESTIMMEND)
-        ));
-        sd.setKostenAuswaertigeVerpflegung(mannFrau(
-            effSatz(VERPFLEGUNG_MANN_EFFEKTIV, VERPFLEGUNG_MANN_SATZBESTIMMEND),
-            effSatz(VERPFLEGUNG_FRAU_EFFEKTIV, VERPFLEGUNG_FRAU_SATZBESTIMMEND)
-        ));
+        sd.setFahrkosten(
+            mannFrau(
+                effSatz(FAHRKOSTEN_MANN_EFFEKTIV, FAHRKOSTEN_MANN_SATZBESTIMMEND),
+                effSatz(FAHRKOSTEN_FRAU_EFFEKTIV, FAHRKOSTEN_FRAU_SATZBESTIMMEND)
+            )
+        );
+        sd.setKostenAuswaertigeVerpflegung(
+            mannFrau(
+                effSatz(VERPFLEGUNG_MANN_EFFEKTIV, VERPFLEGUNG_MANN_SATZBESTIMMEND),
+                effSatz(VERPFLEGUNG_FRAU_EFFEKTIV, VERPFLEGUNG_FRAU_SATZBESTIMMEND)
+            )
+        );
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
@@ -301,20 +323,24 @@ class NeskoSteuerdatenMapperTest {
     @Test
     void toSteuerdatenPortData_mutter_fahrkostenTakesFrauForHauptAndMannForPartner() {
         final var sd = minimalSteuerdaten();
-        sd.setFahrkosten(mannFrau(
-            effSatz(FAHRKOSTEN_MANN_EFFEKTIV, FAHRKOSTEN_MANN_SATZBESTIMMEND),
-            effSatz(FAHRKOSTEN_FRAU_EFFEKTIV, FAHRKOSTEN_FRAU_SATZBESTIMMEND)
-        ));
-        sd.setKostenAuswaertigeVerpflegung(mannFrau(
-            effSatz(VERPFLEGUNG_MANN_EFFEKTIV, VERPFLEGUNG_MANN_SATZBESTIMMEND),
-            effSatz(VERPFLEGUNG_FRAU_EFFEKTIV, VERPFLEGUNG_FRAU_SATZBESTIMMEND)
-        ));
+        sd.setFahrkosten(
+            mannFrau(
+                effSatz(FAHRKOSTEN_MANN_EFFEKTIV, FAHRKOSTEN_MANN_SATZBESTIMMEND),
+                effSatz(FAHRKOSTEN_FRAU_EFFEKTIV, FAHRKOSTEN_FRAU_SATZBESTIMMEND)
+            )
+        );
+        sd.setKostenAuswaertigeVerpflegung(
+            mannFrau(
+                effSatz(VERPFLEGUNG_MANN_EFFEKTIV, VERPFLEGUNG_MANN_SATZBESTIMMEND),
+                effSatz(VERPFLEGUNG_FRAU_EFFEKTIV, VERPFLEGUNG_FRAU_SATZBESTIMMEND)
+            )
+        );
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.MUTTER);
 
-        assertThat(result.getFahrkosten(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV));        // Frau
+        assertThat(result.getFahrkosten(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV)); // Frau
         assertThat(result.getFahrkostenPartner(), is((int) FAHRKOSTEN_MANN_EFFEKTIV)); // Mann
-        assertThat(result.getVerpflegung(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV));      // Frau
+        assertThat(result.getVerpflegung(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV)); // Frau
         assertThat(result.getVerpflegungPartner(), is((int) VERPFLEGUNG_MANN_EFFEKTIV)); // Mann
     }
 

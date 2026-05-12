@@ -17,10 +17,10 @@
 
 package ch.dvbern.stip.api.config.type;
 
+import java.util.Optional;
+
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
-
-import java.util.Optional;
 
 public interface PortConfig {
     Steuerdaten steuerdaten();

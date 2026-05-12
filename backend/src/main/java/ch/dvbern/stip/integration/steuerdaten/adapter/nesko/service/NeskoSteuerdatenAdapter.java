@@ -28,10 +28,10 @@ import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendien
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.InvalidArgumentsFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.PermissionDeniedFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.type.NeskoSteuerdatenError;
+import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenPortData;
 import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPort;
 import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapterQualifier;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessService;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -52,11 +52,18 @@ public class NeskoSteuerdatenAdapter implements SteuerdatenPort {
     private final TenantService tenantService;
 
     @Override
-    public SteuerdatenPortData getSteuerdaten(String svn, Integer jahr, SteuerdatenTyp steuerdatenTyp, String fallNr, String gesuchNr) {
+    public SteuerdatenPortData getSteuerdaten(
+        String svn,
+        Integer jahr,
+        SteuerdatenTyp steuerdatenTyp,
+        String fallNr,
+        String gesuchNr
+    ) {
         var request = new GetSteuerdaten();
         request.setSteuerjahr(jahr);
         request.setSozialversicherungsnummer(Long.valueOf(svn.replace(".", "")));
-        final var config = tenantService.getConfigForCurrentTenant().adapter().steuerdaten().get(SteuerdatenAdapterType.NESKO);
+        final var config =
+            tenantService.getConfigForCurrentTenant().adapter().steuerdaten().get(SteuerdatenAdapterType.NESKO);
         final var port = stipendienAuskunftPortFactory.create(config);
         final Optional<GetSteuerdatenResponse> response;
 

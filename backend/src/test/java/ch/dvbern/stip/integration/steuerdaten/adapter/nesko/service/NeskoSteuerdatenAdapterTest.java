@@ -1,8 +1,29 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.service;
+
+import java.math.BigDecimal;
+import java.util.Map;
 
 import ch.dvbern.stip.api.config.type.AdapterConfig;
 import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.EffSatzType;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
@@ -12,7 +33,6 @@ import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendien
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapterQualifier;
 import ch.dvbern.stip.integration.steuerdaten.domain.service.SteuerdatenAccessService;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
@@ -21,9 +41,6 @@ import jakarta.xml.ws.soap.SOAPFaultException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-
-import java.math.BigDecimal;
-import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -97,11 +114,16 @@ class NeskoSteuerdatenAdapterTest {
         when(portMock.getSteuerdaten(any())).thenReturn(response);
 
         final var result = neskoSteuerdatenAdapter.getSteuerdaten(
-            DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR
+            DEFAULT_SVN,
+            DEFAULT_STEUERJAHR,
+            DEFAULT_STEUERDATEN_TYP,
+            DEFAULT_FALL_NR,
+            DEFAULT_GESUCH_NR
         );
 
         assertThat(result, is(notNullValue()));
-        verify(steuerdatenAccessService).logAccess(SteuerdatenAdapterType.NESKO, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR, DEFAULT_SVN);
+        verify(steuerdatenAccessService)
+            .logAccess(SteuerdatenAdapterType.NESKO, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR, DEFAULT_SVN);
     }
 
     @Test
@@ -135,8 +157,15 @@ class NeskoSteuerdatenAdapterTest {
         when(soapEx.getMessage()).thenReturn("Some unexpected SOAP error");
         when(portMock.getSteuerdaten(any())).thenThrow(soapEx);
 
-        assertThrows(InternalServerErrorException.class, () ->
-            neskoSteuerdatenAdapter.getSteuerdaten(DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR)
+        assertThrows(
+            InternalServerErrorException.class,
+            () -> neskoSteuerdatenAdapter.getSteuerdaten(
+                DEFAULT_SVN,
+                DEFAULT_STEUERJAHR,
+                DEFAULT_STEUERDATEN_TYP,
+                DEFAULT_FALL_NR,
+                DEFAULT_GESUCH_NR
+            )
         );
     }
 
@@ -146,8 +175,15 @@ class NeskoSteuerdatenAdapterTest {
         when(businessFault.getMessage()).thenReturn("Some unknown business fault");
         when(portMock.getSteuerdaten(any())).thenThrow(businessFault);
 
-        assertThrows(InternalServerErrorException.class, () ->
-            neskoSteuerdatenAdapter.getSteuerdaten(DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR)
+        assertThrows(
+            InternalServerErrorException.class,
+            () -> neskoSteuerdatenAdapter.getSteuerdaten(
+                DEFAULT_SVN,
+                DEFAULT_STEUERJAHR,
+                DEFAULT_STEUERDATEN_TYP,
+                DEFAULT_FALL_NR,
+                DEFAULT_GESUCH_NR
+            )
         );
     }
 
