@@ -43,7 +43,7 @@
       @if (firstAenderungIdSig(); as firstAenderungId) {
         <a
           [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderungIdSig()]"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="isAenderungRouteSig()"
         >
@@ -52,7 +52,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           disabled
         >
@@ -64,7 +64,7 @@
       @if (firstDarlehenIdSig(); as firstDarlehenId) {
         <a
           [routerLink]="['/gesuch', 'darlehen', firstDarlehenId, 'gesuch', gesuchId]"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           [class.active]="isDarlehenRouteSig()"
         >
@@ -73,7 +73,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           disabled
         >
@@ -82,24 +82,23 @@
       }
 
       <!-- infos -->
-      <a
-        [routerLink]="['/gesuch', 'infos', gesuchId]"
-        class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
-        data-testid="sb-gesuch-header-infos-nav-link"
-        [class.active]="isInfosRouteSig()"
-      >
-        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
-      </a>
-
-      <!-- Beschwerden -->
-      @if (isBeschwerdeHaengigSig()) {
-        <div class="tw:w-full tw:grow"></div>
-        <div class="tw:text-sm">
-          <mat-chip [color]="'info'" highlighted>
-            {{ t('sachbearbeitung-app.infos.beschwerde.haengig.title') }}
-          </mat-chip>
-        </div>
-      }
+      <div class="tw:relative tw:inline-flex">
+        <a
+          [routerLink]="['/gesuch', 'infos', gesuchId]"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          data-testid="sb-gesuch-header-infos-nav-link"
+          [class.active]="isInfosRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+        </a>
+        @if (isBeschwerdeHaengigSig()) {
+          <span
+            class="tw:absolute tw:-top-1 tw:-right-1 tw:flex tw:items-center tw:justify-center tw:w-5 tw:h-5 tw:rounded-full tw:bg-dv-warning tw:text-white tw:font-bold tw:leading-none"
+            [matTooltip]="t('sachbearbeitung-app.infos.beschwerde.haengig.title')"
+            >!</span
+          >
+        }
+      </div>
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 

@@ -49,3 +49,7 @@
     --mat-menu-item-label-text-color: white;
   }
 }
+
+@utility dv-nav-button-outline {
+  @apply tw:dv-nav-button tw:hover:bg-dv-gray-dark tw:hover:text-white tw:outline tw:border-dv-gray-dark tw:hover:outline-dv-red;
+}

@@ -8,6 +8,7 @@ import {
   HostBinding,
   OnDestroy,
   ViewChild,
+  computed,
   inject,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -20,6 +21,7 @@ import {
   InfosOptions,
 } from '@dv/sachbearbeitung-app/model/infos';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
@@ -48,6 +50,13 @@ export class SachbearbeitungAppFeatureInfosComponent
 
   private navigationStore = inject(NavigationStore);
   private store = inject(Store);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+
+  isBeschwerdeHaengigSig = computed(() => {
+    const beschwerdeHaengig =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.beschwerdeHaengig;
+    return beschwerdeHaengig;
+  });
 
   option?: InfosOptions;
   infosOptions = INFOS_OPTIONS;
