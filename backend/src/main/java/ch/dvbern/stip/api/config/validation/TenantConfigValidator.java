@@ -46,8 +46,12 @@ public class TenantConfigValidator {
                 .map(TenantIdentifier::getIdentifier)
                 .collect(Collectors.joining(", "));
             throw new IllegalStateException(
-                "Missing tenant configuration under 'kstip.tenant' for: " + missingIdentifiers
-                + ". Every TenantIdentifier must have a corresponding configuration entry."
+                String.format(
+                    "%s%s%s",
+                    "Missing tenant configuration under 'kstip.tenant' for: ",
+                    missingIdentifiers,
+                    ". Every TenantIdentifier must have a corresponding configuration entry."
+                )
             );
         }
     }
