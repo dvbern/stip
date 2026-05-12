@@ -139,10 +139,6 @@ public class GesuchStatusConfigProducer {
                 fehlendeDokumenteEinreichenHandler::handle
             )
             .onEntryFrom(
-                triggers.get(GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG),
-                bereitFuerBearbeitungHandler::handle
-            )
-            .onEntryFrom(
                 triggers.get(GesuchStatusChangeEvent.AENDERUNG_FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
                 aenderungFehlendeDokumenteZurueckweisenHandler::handle
             );
