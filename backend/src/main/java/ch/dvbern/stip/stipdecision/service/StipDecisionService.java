@@ -60,7 +60,7 @@ public class StipDecisionService {
     }
 
     public StipDeciderResult decide(GesuchTranche gesuchTranche) {
-        final var decider = getDeciderForTenantId(tenantService.getCurrentTenant().getIdentifier());
+        final var decider = getDeciderForTenantId(tenantService.getCurrentStringIdentifier());
 
         return decider.decide(gesuchTranche);
     }
@@ -74,7 +74,7 @@ public class StipDecisionService {
     }
 
     public GesuchStatusChangeEvent getGesuchStatusChangeEvent(final StipDeciderResult decision) {
-        final var decider = getDeciderForTenantId(tenantService.getCurrentTenant().getIdentifier());
+        final var decider = getDeciderForTenantId(tenantService.getCurrentStringIdentifier());
 
         return decider.getGesuchStatusChangeEvent(decision);
     }

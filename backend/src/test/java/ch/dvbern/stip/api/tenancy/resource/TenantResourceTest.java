@@ -18,9 +18,10 @@
 package ch.dvbern.stip.api.tenancy.resource;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -35,7 +36,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -51,7 +51,7 @@ class TenantResourceTest {
     @Test
     @TestAsGesuchsteller
     void test_get_current() throws MalformedURLException {
-        final var tenant = DEFAULT_TENANT_IDENTIFIER;
+        final var tenant = TenantIdentifier.BERN.getIdentifier();
         final var tenantInfo = api.getCurrentTenant()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -62,9 +62,9 @@ class TenantResourceTest {
 
         assertThat(tenantInfo.getIdentifier()).isEqualTo(tenant);
 
-        final var keycloakUrl = new URL(config.oidc().url());
+        final var keycloakUrl = URI.create(config.oidc().url()).toURL();
 
-        assertThat(new URL(tenantInfo.getClientAuth().getAuthServerUrl()))
+        assertThat(URI.create(tenantInfo.getClientAuth().getAuthServerUrl()).toURL())
             .isEqualToWithSortedQueryParameters(keycloakUrl);
     }
 }

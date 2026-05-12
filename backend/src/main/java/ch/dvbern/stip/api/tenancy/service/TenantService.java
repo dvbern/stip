@@ -29,12 +29,13 @@ import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
 
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 @UnlessBuildProfile("test")
 public class TenantService {
     private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
