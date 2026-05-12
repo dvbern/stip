@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
@@ -288,6 +289,32 @@ class BerechnungServiceTest {
         var terResult = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
 
         assertThat(sekResult.getBerechnungStipendium(), equalTo(terResult.getBerechnungStipendium() - 6000));
+    }
+
+    @Test
+    void testGetMonateMitDarlehen() {
+        final var gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
+
+        var monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        assertThat(monateMitDarlehen, equalTo(0));
+
+        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(4));
+        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        assertThat(monateMitDarlehen, equalTo(12));
+
+        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        gesuch.getGesuchTranchen()
+            .get(0)
+            .getGesuchFormular()
+            .getLebenslaufItems()
+            .add(
+                new LebenslaufItem()
+                    .setVon(LocalDate.now().minusYears(3))
+                    .setBis(LocalDate.now().minusYears(1))
+                    .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
+            );
+        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        assertThat(monateMitDarlehen, equalTo(7));
     }
 
 }
