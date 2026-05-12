@@ -15,10 +15,10 @@
       </a>
       @if (gesuchInfoDataSig(); as infoData) {
         <span>|</span>
-        <div class="tw:font-semibold tw:ml-4">
+        <div class="tw:ml-4">
           <span>{{ infoData.fallNummer }} / </span>
-          <span>{{ infoData.gesuchNummer }} - </span>
-          <span>{{ infoData.name }}, </span>
+          <span>{{ infoData.gesuchNummer }} / </span>
+          <span>{{ infoData.name }} / </span>
           <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${infoData.status}`) }}</span>
         </div>
       } @else {
