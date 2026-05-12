@@ -256,7 +256,7 @@ public class DarlehenService {
         final var darlehenBuchhaltungEntry = createDarlehenBuchhaltungEntry(
             darlehen.getRelatedGesuch(),
             darlehen.getManuelleVerfuegung(),
-            null,
+            0,
             DarlehenBuchhaltungEntryKategorie.FREIWILLIG
         );
         darlehen.setDarlehenBuchhaltungEntry(darlehenBuchhaltungEntry);
