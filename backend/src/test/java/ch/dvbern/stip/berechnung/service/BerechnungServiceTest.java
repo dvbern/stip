@@ -136,11 +136,17 @@ class BerechnungServiceTest {
                     .setId(UUID.randomUUID())
             )
         );
-        final var eingereicht = LocalDate.now().withDayOfMonth(1);
+        var eingereicht = LocalDate.now().withDayOfMonth(15);
         gesuch.setEinreichedatum(eingereicht);
 
-        final var monthsBetween = DateUtil.getStipendiumDurationRoundDown(gesuch);
+        var monthsBetween = DateUtil.getStipendiumDurationRoundDown(gesuch);
         assertThat(monthsBetween, equalTo(monthsToBeBetween));
+
+        eingereicht = LocalDate.now().withDayOfMonth(16);
+        gesuch.setEinreichedatum(eingereicht);
+
+        monthsBetween = DateUtil.getStipendiumDurationRoundDown(gesuch);
+        assertThat(monthsBetween, equalTo(monthsToBeBetween - 1));
     }
 
     @Test
