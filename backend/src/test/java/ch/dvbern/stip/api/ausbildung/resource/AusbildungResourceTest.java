@@ -21,7 +21,9 @@ import java.time.LocalDate;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
+import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -35,6 +37,7 @@ import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungCreateResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
@@ -48,6 +51,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
+import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -213,6 +219,51 @@ class AusbildungResourceTest {
             .as(AusbildungDto.class);
 
         assertThat(updatedAusbildung.getAusbildungsort(), is(ausbildungsOrtToSet));
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(9)
+    void updateAusbildungBegin() {
+        final var ausbildungUpdateDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
+        ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
+        ausbildungUpdateDtoSpec.setFallId(gesuch.getFallId());
+
+        final DateRange gueltigkeitsRange;
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
+        } else {
+            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
+        }
+        final var newAusbildungBegin = gueltigkeitsRange.getGueltigAb().plusMonths(1);
+        ausbildungUpdateDtoSpec.setAusbildungBegin(newAusbildungBegin.format(DATE_TIME_FORMATTER));
+        ausbildungUpdateDtoSpec.setAusbildungEnd(newAusbildungBegin.plusYears(1).format(DATE_TIME_FORMATTER));
+
+        ausbildungApiSpec.updateAusbildung()
+            .ausbildungIdPath(gesuch.getAusbildungId())
+            .body(ausbildungUpdateDtoSpec)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(AusbildungDto.class);
+
+        var gesuchWithChangesDto = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDto.class);
+
+        assertThat(
+            gesuchWithChangesDto.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems(),
+            nullValue()
+        );
         gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .body(
@@ -226,10 +277,10 @@ class AusbildungResourceTest {
     }
 
     @Test
-    @TestAsGesuchsteller
+    @TestAsSuperUser
     @StepwiseExtension.AlwaysRun
     @Order(99)
     void deleteAusbildung() {
-        TestUtil.deleteAusbildung(gesuchApiSpec, gesuch.getAusbildungId());
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }

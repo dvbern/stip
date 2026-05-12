@@ -169,7 +169,7 @@ public class TestUtil {
         }
     }
 
-    public static void deleteGesucheOfSb(final GesuchApiSpec gesuchApiSpec) {
+    public static void deleteGesucheOfGs(final GesuchApiSpec gesuchApiSpec) {
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
