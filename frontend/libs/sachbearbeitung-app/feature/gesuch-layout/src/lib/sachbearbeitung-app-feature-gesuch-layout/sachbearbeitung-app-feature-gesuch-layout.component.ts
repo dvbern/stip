@@ -10,8 +10,8 @@ import {
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { MatChip } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -84,10 +84,10 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatMenuModule,
     MatTooltipModule,
     SharedPatternGesuchInfoBarComponent,
-    MatChip,
     SharedPatternGlobalHeaderPartsDirective,
     TranslocoDirective,
     SharedUiVersionenMenuComponent,
+    MatIconModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

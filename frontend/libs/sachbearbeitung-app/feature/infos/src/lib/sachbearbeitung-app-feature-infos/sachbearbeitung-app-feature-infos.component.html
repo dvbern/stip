@@ -2,10 +2,10 @@
   <div class="tw:flex tw:h-full">
     <ng-template #navigation cdkPortal>
       <div class="sidenav tw:p-6">
-        @for (option of infosOptions; track $index) {
+        @for (option of infosOptions(); track $index) {
           <a
             type="button"
-            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
+            class="tw:dv-nav-button tw:relative tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
             [routerLink]="['/gesuch', infosRoute, option.route, gesuchIdSig()]"
             routerLinkActive="active"
             (click)="navClicked$.emit()"
@@ -14,6 +14,19 @@
             <span class="tw:text-start">
               {{ t(option.translationKey, option.translationOptions) }}
             </span>
+            @if (option.badge) {
+              <span
+                class="tw:-left-1.5 tw:absolute tw:flex tw:items-center tw:justify-center tw:font-dv-icon rounded-full tw:text-2xl tw:w-3 tw:h-3 tw:bg-white tw:font-bold tw:leading-none"
+                [ngClass]="{
+                  'tw:text-dv-warning': option.badge.type === 'warning',
+                  'tw:text-dv-red': option.badge.type === 'error',
+                  'tw:text-dv-blue': option.badge.type === 'info',
+                }"
+                [matTooltip]="t(option.badge.titleKey)"
+                [attr.aria-label]="t(option.badge.titleKey)"
+                >{{ option.badge.icon }}</span
+              >
+            }
           </a>
         }
       </div>

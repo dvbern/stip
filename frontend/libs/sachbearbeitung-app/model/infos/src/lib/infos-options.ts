@@ -4,6 +4,11 @@ export type InfosOptions = {
   translationOptions?: Record<string, string>;
   titleTranslationKey: string;
   iconSymbolName: string;
+  badge?: {
+    type: 'warning' | 'error' | 'info';
+    titleKey: string;
+    icon: string;
+  };
 };
 
 export const INFOS_ROUTE = 'infos';

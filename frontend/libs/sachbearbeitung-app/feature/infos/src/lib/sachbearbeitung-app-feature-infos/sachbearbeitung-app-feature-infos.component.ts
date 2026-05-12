@@ -11,11 +11,13 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import {
+  BESCHWERDEN_ROUTE,
   INFOS_OPTIONS,
   INFOS_ROUTE,
   InfosOptions,
@@ -37,6 +39,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
     TranslocoDirective,
     SharedUiIconChipComponent,
     PortalModule,
+    MatTooltipModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,7 +62,26 @@ export class SachbearbeitungAppFeatureInfosComponent
   });
 
   option?: InfosOptions;
-  infosOptions = INFOS_OPTIONS;
+  infosOptions = computed(() => {
+    const isBeschwerdeHaengig = this.isBeschwerdeHaengigSig();
+
+    const options = INFOS_OPTIONS.map((option) => {
+      if (option.route === BESCHWERDEN_ROUTE.route && isBeschwerdeHaengig) {
+        return {
+          ...option,
+          badge: {
+            type: 'warning',
+            titleKey: 'sachbearbeitung-app.infos.beschwerde.haengig.title',
+            icon: 'info',
+          },
+        };
+      }
+      return option;
+    });
+
+    return options;
+  });
+
   infosRoute = INFOS_ROUTE;
   navClicked$ = new EventEmitter();
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
