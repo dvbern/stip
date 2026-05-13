@@ -19,7 +19,7 @@
       </caption>
 
       <ng-container matColumnDef="AUSBILDUNGSSTAETTE">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-96 tw:whitespace-nowrap">
           <label class="tw:pointer-events-none" for="ausbildungsstaette">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.ausbildungsstaette.table.ausbildungsstaette'
               | transloco
@@ -46,7 +46,7 @@
         <td
           mat-cell
           *dvMatCellDef="let ausbildungsstaette; dataSource: ausbildungsstaettenDataSourceSig()"
-          class="tw:whitespace-nowrap"
+          class="tw:max-w-32 tw:whitespace-nowrap"
           [dvTruncateTooltip]="ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang()"
         >
           {{ ausbildungsstaette | translatedProp: 'name' : translate.getActiveLang() }}
