@@ -19,10 +19,10 @@ package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.type;
 
 import java.util.function.Function;
 
+import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortExceptionConstants;
 import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortInternalException;
 import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortNotFoundException;
-import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import io.quarkus.logging.Log;
 import jakarta.xml.ws.WebServiceException;
 import jakarta.xml.ws.soap.SOAPFaultException;
@@ -35,11 +35,15 @@ import lombok.SneakyThrows;
 public enum NeskoSteuerdatenError {
     INVALID_TOKEN(
     SOAPFaultException.class, "Invalid access token",
-    params -> new SteuerdatenPortInternalException(SteuerdatenPortExceptionConstants.INVALID_TOKEN, params.faultCode, params.userMessage)
+    params -> new SteuerdatenPortInternalException(
+        SteuerdatenPortExceptionConstants.INVALID_TOKEN, params.faultCode, params.userMessage
+    )
     ),
     SVN_NOT_FOUND(
     BusinessFault.class, "Die angefragte Person kann nicht oder nicht eindeutig ermittelt werden",
-    params -> new SteuerdatenPortNotFoundException(SteuerdatenPortExceptionConstants.SVN_NOT_FOUND, params.faultCode, params.userMessage)
+    params -> new SteuerdatenPortNotFoundException(
+        SteuerdatenPortExceptionConstants.SVN_NOT_FOUND, params.faultCode, params.userMessage
+    )
     ),
     STEUERJAHR_NOT_READY(
     BusinessFault.class,

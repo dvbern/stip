@@ -27,7 +27,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/token")
-@RegisterRestClient(configKey = "NeskoGetBearerToken-api")
+@RegisterRestClient(configKey = "nesko-get-bearer-token-api")
 public interface NeskoGetBearerTokenRequestService {
     default String getAuthorization(final String username, final String password) {
         final String userPassword = String.format("%s:%s", username, password);

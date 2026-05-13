@@ -23,7 +23,7 @@ import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
 @Path("/items")
-@RegisterRestClient(configKey = "GeoCollection-api")
+@RegisterRestClient(configKey = "geo-collection-api")
 public interface GeoCollectionService {
 
     @GET
