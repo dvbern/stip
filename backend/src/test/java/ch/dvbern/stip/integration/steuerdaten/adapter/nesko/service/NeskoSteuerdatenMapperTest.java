@@ -114,11 +114,11 @@ class NeskoSteuerdatenMapperTest {
         final var sd = minimalSteuerdaten();
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getSteuerJahr(), is(STEUERJAHR));
-        assertThat(result.getVeranlagungsStatus(), is(VeranlagungsStatusType.AUTOMATISCH_DEFINITIV_VERANLAGT.value()));
-        assertThat(result.getSteuernKantonGemeinde(), is((int) STEUERBETRAG_KANTON));
-        assertThat(result.getSteuernBund(), is((int) STEUERBETRAG_BUND));
-        assertThat(result.getEigenmietwert(), is((int) MIETWERT_KANTON));
+        assertThat(result.steuerJahr(), is(STEUERJAHR));
+        assertThat(result.veranlagungsStatus(), is(VeranlagungsStatusType.AUTOMATISCH_DEFINITIV_VERANLAGT.value()));
+        assertThat(result.steuernKantonGemeinde(), is((int) STEUERBETRAG_KANTON));
+        assertThat(result.steuernBund(), is((int) STEUERBETRAG_BUND));
+        assertThat(result.eigenmietwert(), is((int) MIETWERT_KANTON));
     }
 
     @Test
@@ -129,7 +129,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getTotalEinkuenfte(), is((int) TOTAL_EINKUENFTE_EFFEKTIV));
+        assertThat(result.totalEinkuenfte(), is((int) TOTAL_EINKUENFTE_EFFEKTIV));
     }
 
     @Test
@@ -139,7 +139,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getVermoegen(), is(0));
+        assertThat(result.vermoegen(), is(0));
     }
 
     @Test
@@ -149,7 +149,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getVermoegen(), is((int) VERMOEGEN_EFFEKTIV));
+        assertThat(result.vermoegen(), is((int) VERMOEGEN_EFFEKTIV));
     }
 
     @Test
@@ -159,7 +159,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getEigenmietwert(), is(0));
+        assertThat(result.eigenmietwert(), is(0));
     }
 
     @Test
@@ -170,8 +170,8 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getSteuernKantonGemeinde(), is(0));
-        assertThat(result.getSteuernBund(), is(0));
+        assertThat(result.steuernKantonGemeinde(), is(0));
+        assertThat(result.steuernBund(), is(0));
     }
 
     @Test
@@ -182,7 +182,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getIsArbeitsverhaeltnisSelbstaendig(), is(false));
+        assertThat(result.isArbeitsverhaeltnisSelbstaendig(), is(false));
     }
 
     @Test
@@ -193,7 +193,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getIsArbeitsverhaeltnisSelbstaendig(), is(true));
+        assertThat(result.isArbeitsverhaeltnisSelbstaendig(), is(true));
     }
 
     @Test
@@ -203,7 +203,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.MUTTER);
 
-        assertThat(result.getIsArbeitsverhaeltnisSelbstaendig(), is(true));
+        assertThat(result.isArbeitsverhaeltnisSelbstaendig(), is(true));
     }
 
     @Test
@@ -213,7 +213,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.VATER);
 
-        assertThat(result.getIsArbeitsverhaeltnisSelbstaendig(), is(true));
+        assertThat(result.isArbeitsverhaeltnisSelbstaendig(), is(true));
     }
 
     @Test
@@ -224,7 +224,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getIsArbeitsverhaeltnisSelbstaendig(), is(false));
+        assertThat(result.isArbeitsverhaeltnisSelbstaendig(), is(false));
     }
 
     @Test
@@ -241,8 +241,8 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getSaeule3a(), is(0));
-        assertThat(result.getSaeule2(), is(0));
+        assertThat(result.saeule3a(), is(0));
+        assertThat(result.saeule2(), is(0));
     }
 
     @Test
@@ -261,7 +261,7 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getSaeule3a(), is(SAEULE3A_TOTAL));
+        assertThat(result.saeule3a(), is(SAEULE3A_TOTAL));
     }
 
     @Test
@@ -292,7 +292,7 @@ class NeskoSteuerdatenMapperTest {
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
         // saeule2 = (500-200) + (300-100) = 300 + 200 = 500
-        assertThat(result.getSaeule2(), is(SAEULE2_TOTAL));
+        assertThat(result.saeule2(), is(SAEULE2_TOTAL));
     }
 
     @Test
@@ -314,10 +314,10 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getFahrkosten(), is((int) FAHRKOSTEN_MANN_EFFEKTIV));
-        assertThat(result.getFahrkostenPartner(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV));
-        assertThat(result.getVerpflegung(), is((int) VERPFLEGUNG_MANN_EFFEKTIV));
-        assertThat(result.getVerpflegungPartner(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV));
+        assertThat(result.fahrkosten(), is((int) FAHRKOSTEN_MANN_EFFEKTIV));
+        assertThat(result.fahrkostenPartner(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV));
+        assertThat(result.verpflegung(), is((int) VERPFLEGUNG_MANN_EFFEKTIV));
+        assertThat(result.verpflegungPartner(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV));
     }
 
     @Test
@@ -338,10 +338,10 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.MUTTER);
 
-        assertThat(result.getFahrkosten(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV)); // Frau
-        assertThat(result.getFahrkostenPartner(), is((int) FAHRKOSTEN_MANN_EFFEKTIV)); // Mann
-        assertThat(result.getVerpflegung(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV)); // Frau
-        assertThat(result.getVerpflegungPartner(), is((int) VERPFLEGUNG_MANN_EFFEKTIV)); // Mann
+        assertThat(result.fahrkosten(), is((int) FAHRKOSTEN_FRAU_EFFEKTIV)); // Frau
+        assertThat(result.fahrkostenPartner(), is((int) FAHRKOSTEN_MANN_EFFEKTIV)); // Mann
+        assertThat(result.verpflegung(), is((int) VERPFLEGUNG_FRAU_EFFEKTIV)); // Frau
+        assertThat(result.verpflegungPartner(), is((int) VERPFLEGUNG_MANN_EFFEKTIV)); // Mann
     }
 
     @Test
@@ -352,9 +352,9 @@ class NeskoSteuerdatenMapperTest {
 
         final var result = NeskoSteuerdatenMapper.toSteuerdatenPortData(minimalResponse(sd), SteuerdatenTyp.FAMILIE);
 
-        assertThat(result.getFahrkosten(), is(0));
-        assertThat(result.getFahrkostenPartner(), is(0));
-        assertThat(result.getVerpflegung(), is(0));
-        assertThat(result.getVerpflegungPartner(), is(0));
+        assertThat(result.fahrkosten(), is(0));
+        assertThat(result.fahrkostenPartner(), is(0));
+        assertThat(result.verpflegung(), is(0));
+        assertThat(result.verpflegungPartner(), is(0));
     }
 }

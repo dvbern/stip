@@ -20,21 +20,21 @@ package ch.dvbern.stip.integration.steuerdaten.domain.model;
 import lombok.Builder;
 import lombok.Data;
 
-@Data
 @Builder
-public class SteuerdatenPortData {
-    private Integer totalEinkuenfte;
-    private Integer eigenmietwert;
-    private Boolean isArbeitsverhaeltnisSelbstaendig;
-    private Integer saeule3a;
-    private Integer saeule2;
-    private Integer vermoegen;
-    private Integer steuernKantonGemeinde;
-    private Integer steuernBund;
-    private Integer steuerJahr;
-    private String veranlagungsStatus;
-    private Integer fahrkosten;
-    private Integer fahrkostenPartner;
-    private Integer verpflegung;
-    private Integer verpflegungPartner;
+public record SteuerdatenPortData(
+    Integer totalEinkuenfte,
+    Integer eigenmietwert,
+    Boolean isArbeitsverhaeltnisSelbstaendig,
+    Integer saeule3a,
+    Integer saeule2,
+    Integer vermoegen,
+    Integer steuernKantonGemeinde,
+    Integer steuernBund,
+    Integer steuerJahr,
+    String veranlagungsStatus,
+    Integer fahrkosten,
+    Integer fahrkostenPartner,
+    Integer verpflegung,
+    Integer verpflegungPartner
+) {
 }
