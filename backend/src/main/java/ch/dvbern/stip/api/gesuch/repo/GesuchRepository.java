@@ -19,10 +19,13 @@ package ch.dvbern.stip.api.gesuch.repo;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.type.RoleFeature;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -51,6 +54,7 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
     private final QGesuch Q_GESUCH = QGesuch.gesuch;
     private final QGesuchTranche Q_TRANCHE = QGesuchTranche.gesuchTranche;
+    private final BenutzerService benutzerService;
 
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
@@ -81,17 +85,22 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return switch (trancheTyp) {
             case TRANCHE -> addStatusFilter(
                 query,
-                Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-                Gesuchstatus.IN_BEARBEITUNG_SB,
-                Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-                Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
-                Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-                Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
-                Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
-                Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
-                Gesuchstatus.VERFUEGUNG_VERSENDET,
-                Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
-                Gesuchstatus.VERFUEGUNG_VERSANDBEREIT
+                benutzerService.getSetByUserRole(
+                    RoleFeature.forFreigabe(Gesuchstatus.IN_FREIGABE),
+                    RoleFeature.forSachbearbeiter(
+                        Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+                        Gesuchstatus.IN_BEARBEITUNG_SB,
+                        Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
+                        Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
+                        Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                        Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
+                        Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
+                        Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
+                        Gesuchstatus.VERFUEGUNG_VERSENDET,
+                        Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
+                        Gesuchstatus.VERFUEGUNG_VERSANDBEREIT
+                    )
+                )
             );
             case AENDERUNG -> addStatusFilter(
                 query,
@@ -145,6 +154,14 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
 
     public JPAQuery<Gesuch> getAlleMeineWithDruckbarerDatenschutzbrief(final UUID benutzerId) {
         return addMeineFilter(benutzerId, getAlleWithDruckbarerDatenschutzbrief());
+    }
+
+    private JPAQuery<Gesuch> addStatusFilter(
+        final JPAQuery<Gesuch> query,
+        final Set<Gesuchstatus> toInclude
+    ) {
+        query.where(Q_GESUCH.gesuchStatus.in(toInclude));
+        return query;
     }
 
     private JPAQuery<Gesuch> addStatusFilter(
