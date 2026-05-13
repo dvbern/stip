@@ -817,7 +817,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag": "Fehlbetrag",
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Geteilt durch die Anzahl Personen im Haushalt (Pro-Kopf-Teilung)",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Total Anspruch",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Ungedeckter Anteil Lebenshaltungskosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
 
