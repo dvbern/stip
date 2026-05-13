@@ -40,7 +40,6 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -264,23 +263,13 @@ class AusbildungResourceTest {
             gesuchWithChangesDto.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems(),
             nullValue()
         );
-        gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(
-                new KommentarDtoSpec()
-                    .text("DONT_CARE")
-            )
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
     }
 
     @Test
     @TestAsSuperUser
     @StepwiseExtension.AlwaysRun
     @Order(99)
-    void deleteAusbildung() {
+    void deleteGesuch() {
         TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }
