@@ -92,8 +92,12 @@ export class SozialdienstAppFeatureGesuchCockpitComponent {
 
   compareById = compareById;
 
-  createAusbildung(fallId: string) {
-    SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+  createAusbildung(fallId: string, minAusbildungEnd: string | undefined) {
+    SharedDialogCreateAusbildungComponent.open(
+      this.dialog,
+      fallId,
+      minAusbildungEnd,
+    )
       .afterClosed()
       .subscribe(() => {
         this.dashboardStore.loadSozialdienstDashboard$({ fallId });

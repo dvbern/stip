@@ -22,7 +22,7 @@
 
   @if (showUplaodSig()) {
     <dv-shared-ui-drop-file
-      class="tw:flex tw:items-center tw:flex-col tw:rounded-lg tw:top-3 tw:mt-6 border tw:border-2 tw:bg-white tw:p-4 shadow"
+      class="tw:flex tw:items-center tw:flex-col tw:rounded-lg tw:top-3 tw:mt-6 border tw:border-2 tw:bg-white tw:p-4"
       [disabled]="data.store.isLoading()"
       [class.rounded-bottom-3]="!data.store.hasEntriesSig()"
       (filesDropped)="handleMultipleDocumentsAdded($event)"

@@ -28,6 +28,7 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 public interface SwisstopoApiRestService {
     String LAYER_VALUE_AMTLICHES_GEBAEUDEADRESSVERZEICHNIS = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
     String SEARCH_FIELD_VALUE_STREET_NAME_LABEL = "stn_label";
+    String SEARCH_FIELD_VALUE_ZIP_LABEL = "zip_label";
 
     default SwisstopoApiFindAddrResponse findAllMatchingBuildings(String searchText, String layerDefs) {
         return findAllMatchingBuildings(
@@ -38,11 +39,26 @@ public interface SwisstopoApiRestService {
         );
     }
 
+    default SwisstopoApiFindAddrResponse findAllMatchingBuildingsByZipLabel(String searchText) {
+        return findAllMatchingBuildings(
+            LAYER_VALUE_AMTLICHES_GEBAEUDEADRESSVERZEICHNIS,
+            SEARCH_FIELD_VALUE_ZIP_LABEL,
+            searchText
+        );
+    }
+
     @GET
     SwisstopoApiFindAddrResponse findAllMatchingBuildings(
         @QueryParam("layer") String layer,
         @QueryParam("searchField") String searchField,
         @QueryParam("searchText") String searchText,
         @QueryParam("layerDefs") String layerDefs
+    );
+
+    @GET
+    SwisstopoApiFindAddrResponse findAllMatchingBuildings(
+        @QueryParam("layer") String layer,
+        @QueryParam("searchField") String searchField,
+        @QueryParam("searchText") String searchText
     );
 }

@@ -216,8 +216,8 @@
               [formControl]="formGs.controls.anzahlBetreibungen"
               data-testid="form-darlehen-anzahlBetreibungen"
               matInput
-              type="number"
-              min="0"
+              type="text"
+              [maskito]="maskitoNumber"
             />
 
             <mat-error *dvSharedUiFormMessageError="'required'">

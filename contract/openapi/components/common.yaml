@@ -202,6 +202,10 @@ LocalDate:
   format: date
   type: string
   example: '2022-03-10'
+LocalDateTime:
+  format: date-time
+  type: string
+  example: '2022-03-10T12:00:00'
 SteuerdatenTyp:
   enum:
     - FAMILIE
@@ -635,6 +639,8 @@ Ausbildung:
       $ref: '#/Ausbildungsgang'
     editable:
       type: boolean
+    earliestActiveGesuchPeriodeStart:
+      $ref: '#/LocalDate'
   allOf:
     - $ref: '#/AusbildungBase'
 GesuchsperiodeSelectError:

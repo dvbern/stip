@@ -30,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlzRepository implements BaseRepository<Plz> {
     private final EntityManager em;
+    private final QPlz Q_PLZ = QPlz.plz1;
 
     public boolean isPlzInKanton(String postleitzahl, String kantonsKuerzel) {
         final var plz = QPlz.plz1;
@@ -46,5 +47,12 @@ public class PlzRepository implements BaseRepository<Plz> {
             .isPresent();
         em.setFlushMode(flushmode);
         return ret;
+    }
+
+    public Plz findByPostleitzahl(String postleitzahl) {
+        return new JPAQueryFactory(em)
+            .selectFrom(Q_PLZ)
+            .where(Q_PLZ.plz.eq(postleitzahl))
+            .fetchFirst();
     }
 }

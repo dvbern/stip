@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -38,7 +39,6 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
-import ch.dvbern.stip.stipdecision.type.Kanton;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.enterprise.context.RequestScoped;

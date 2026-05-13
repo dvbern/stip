@@ -1,34 +1,32 @@
-import {
-  AbstractControl,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { isDefined } from '@dv/shared/model/type-util';
 
 export function sharedUtilValidatorRange(
   min: number,
-  max: number,
+  max?: number,
 ): ValidatorFn {
-  return (control: AbstractControl<number | null>): ValidationErrors | null => {
+  return (control: AbstractControl<string | null>): ValidationErrors | null => {
     if (!isDefined(control?.value)) {
       return null;
     }
-    if (isNaN(control.value)) {
+    if (isNaN(+control.value)) {
       return { notANumber: true };
     }
 
-    const minErrors = Validators.min(min)(control);
-    const maxErrors = Validators.max(max)(control);
+    const value = +control.value;
+    const errors = {
+      ...(value < min ? { min: true } : {}),
+      ...(isDefined(max) && value > max ? { max: true } : {}),
+    };
 
-    if (minErrors || maxErrors) {
-      return {
-        range: {
-          ...minErrors,
-          ...maxErrors,
-        },
-      };
+    if (Object.keys(errors).length) {
+      if (isDefined(errors.max)) {
+        return {
+          range: errors,
+        };
+      }
+      return errors;
     }
 
     return null;

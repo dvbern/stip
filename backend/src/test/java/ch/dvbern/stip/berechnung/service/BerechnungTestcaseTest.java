@@ -70,7 +70,7 @@ public class BerechnungTestcaseTest {
     @BeforeEach
     void setup() {
         Mockito.when(landService.requireLandById(Mockito.any())).thenReturn(new Land());
-        Mockito.when(darlehenBuchhaltungEntryRepository.getByFallId(Mockito.any())).thenReturn(List.of());
+        Mockito.when(darlehenBuchhaltungEntryRepository.getByGesuchId(Mockito.any())).thenReturn(List.of());
     }
 
     @ParameterizedTest

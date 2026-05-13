@@ -67,6 +67,8 @@ tags:
     x-displayName: Gesuchsperiode
   - name: Land
     x-displayName: Land
+  - name: Statistik
+    x-displayName: Statistik
 paths:
   /config/deployment:
     get:
@@ -6832,6 +6834,115 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /statistik:
+    post:
+      tags:
+        - Statistik
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: Job creation accepted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createStatistikJob
+      summary: Creates background statistik job
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statistik'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllStatistiks
+      summary: Get All statistiks
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/{statistikId}/token:
+    parameters:
+      - name: statistikId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: Token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getStatistikDownloadToken
+      summary: get Token to download Statistik
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: File returned
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+      operationId: getStatistikDownload
+      summary: Download statistik dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
 components:
   securitySchemes:
     auth-uat-bern:
@@ -9071,6 +9182,8 @@ components:
           $ref: '#/components/schemas/Ausbildungsgang'
         editable:
           type: boolean
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     GesuchsperiodeSelectErrorType:
@@ -9713,6 +9826,8 @@ components:
             $ref: '#/components/schemas/Notification'
         currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
     AusbildungDashboardItem:
       type: object
       required:
@@ -11925,6 +12040,36 @@ components:
           type: string
         enKurzform:
           type: string
+    Statistik:
+      type: object
+      required:
+        - id
+        - timestampErstellt
+        - valid
+        - userTriggeredCreation
+        - year
+        - filename
+        - filesize
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDateTime'
+        valid:
+          type: boolean
+        userTriggeredCreation:
+          type: string
+        year:
+          type: integer
+          format: int32
+        filename:
+          type: string
+        filesize:
+          type: string
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
   responses:
     Unauthorized:
       content:

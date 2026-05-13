@@ -1,6 +1,6 @@
 <button
   type="button"
-  class="tw:dv-button-icon tw:!absolute tw:end-0 tw:top-0 tw:!m-1"
+  class="tw:dv-button-icon tw:absolute! tw:end-0 tw:top-0 tw:m-1!"
   [attr.aria-label]="'shared.cancel' | transloco"
   (click)="cancel()"
 >
@@ -9,12 +9,12 @@
 <form
   [formGroup]="form"
   data-testid="form-change-gesuchsperiode-dialog-form"
-  class="tw:block tw:max-w-[580px] tw:p-4"
+  class="tw:block tw:max-w-145 tw:p-4"
   (ngSubmit)="confirm()"
 >
-  <h3 class="tw:!mb-6">
+  <h1 class="tw:text-xl tw:font-semibold tw:mb-6">
     {{ 'shared.dialog.change-gesuchsperiode.title' | transloco }}
-  </h3>
+  </h1>
   <div class="tw:mb-10" [innerHTML]="'shared.dialog.change-gesuchsperiode.text' | transloco"></div>
 
   <div class="tw:w-full">
@@ -33,17 +33,17 @@
   </div>
 
   @if (changeGesuchsperiodeErrorSig()?.length) {
-    <dv-shared-ui-info-container class="tw:block" [type]="'warning'" data-testid="alert-warning">
+    <dv-shared-ui-info-container class="tw:flex tw:flex-col" [type]="'warning'" data-testid="alert-warning">
       <div class="tw:flex tw:gap-2">
         <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
         <span [innerHTML]="'shared.dialog.change-gesuchsperiode.gesuchsperiode.steuerjahr.error' | transloco"></span>
       </div>
 
-      <ul class="tw:mt-6">
+      <ul class="tw:mt-6 tw:list-none tw:pl-0 tw:mb-0">
         @for (step of changeGesuchsperiodeErrorSig(); track step) {
           @if (step.routeParts; as link) {
             <li>
-              <a (click)="cancel()" [routerLink]="link">{{ step.translationKey | transloco }}</a>
+              <a class="tw:underline" (click)="cancel()" [routerLink]="link">{{ step.translationKey | transloco }}</a>
             </li>
           }
         }

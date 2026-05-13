@@ -98,7 +98,7 @@ export class GesuchsperiodeDetailComponent {
   router = inject(Router);
   route = inject(ActivatedRoute);
   translate = inject(TranslocoService);
-  maskitoYear = maskitoYear;
+  maskitoYear = maskitoYear();
   maskitoNumber = maskitoNumber;
   // eslint-disable-next-line @angular-eslint/no-input-rename
   idSig = input.required<string | undefined>({ alias: 'id' });

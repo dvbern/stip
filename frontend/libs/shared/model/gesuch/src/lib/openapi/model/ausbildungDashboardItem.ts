@@ -53,6 +53,7 @@ export interface AusbildungDashboardItem {
     status: AusbildungsStatus;
     ausbildungsgang?: Ausbildungsgang;
     editable: boolean;
+    earliestActiveGesuchPeriodeStart?: string;
     gesuchs?: Array<GesuchDashboardItem>;
     canCreateAusbildungUnterbruchAntrag: boolean;
     hasPendingAusbildungUnterbruchAntrag: boolean;

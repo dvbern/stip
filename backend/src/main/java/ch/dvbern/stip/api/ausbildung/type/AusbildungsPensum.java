@@ -17,8 +17,14 @@
 
 package ch.dvbern.stip.api.ausbildung.type;
 
-public enum AusbildungsPensum {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    VOLLZEIT,
-    TEILZEIT
+@Getter
+@AllArgsConstructor
+public enum AusbildungsPensum {
+    VOLLZEIT(1),
+    TEILZEIT(2);
+
+    private final int bfsCode;
 }

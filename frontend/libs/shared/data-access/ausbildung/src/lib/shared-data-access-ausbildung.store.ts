@@ -1,7 +1,6 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { endOfDay, format } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
@@ -48,12 +47,9 @@ export class AusbildungStore extends signalStore(
 
   ausbildungViewSig = computed(() => {
     const ausbildung = fromCachedDataSig(this.ausbildung);
-    const minEndDatum = endOfDay(new Date());
 
     return {
       ausbildung,
-      minEndDatum,
-      minEndDatumFormatted: format(minEndDatum, 'MM.yyyy'),
     };
   });
 

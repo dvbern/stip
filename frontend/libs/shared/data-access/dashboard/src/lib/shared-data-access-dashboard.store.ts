@@ -116,6 +116,8 @@ export class DashboardStore extends signalStore(
 
     return {
       fall: fallDashboardItem.fall,
+      earliestActiveGesuchPeriodeStart:
+        fallDashboardItem.earliestActiveGesuchPeriodeStart,
       currentDelegierung: fallDashboardItem.currentDelegierung,
       canCreateAusbildung: isNotReadonly(
         this.appType,

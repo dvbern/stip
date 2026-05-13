@@ -1,0 +1,126 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.statistik.service;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
+import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
+import ch.dvbern.stip.api.statistik.util.StatistikConstants;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
+import ch.dvbern.stip.generated.dto.StatistikDto;
+import io.smallrye.jwt.auth.principal.JWTParser;
+import io.vertx.mutiny.core.buffer.Buffer;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.jboss.resteasy.reactive.RestMulti;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
+
+@Slf4j
+@RequestScoped
+@RequiredArgsConstructor
+public class StatistikService {
+    private final Scheduler scheduler;
+    private final StatistikRepository statistikRepository;
+    private final StatistikMapper statistikMapper;
+    private final DokumentDownloadService dokumentDownloadService;
+    private final BenutzerService benutzerService;
+    private final StipConfig config;
+    private final JWTParser jwtParser;
+    private final S3AsyncClient s3AsyncClient;
+    private final TenantService tenantService;
+
+    public void createStatistikJob(final int year) {
+        final var currentUserName = benutzerService.getCurrentBenutzer().getFullName();
+
+        final JobDetail jobDetail = JobBuilder.newJob(StatistikXMLJob.class)
+            .withIdentity(
+                StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
+                "statistik"
+            )
+            .usingJobData(
+                StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY,
+                tenantService.getCurrentStringIdentifier()
+            )
+            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY, String.valueOf(year))
+            .usingJobData(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_USER_KEY, currentUserName)
+            .build();
+
+        final Trigger trigger = TriggerBuilder.newTrigger()
+            .withIdentity(
+                StatistikConstants.STATISTIK_JOB_PREFIX + "trigger-" + year + "-" + System.currentTimeMillis(),
+                "statistik"
+            )
+            .startNow()
+            .build();
+
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            LOG.error("Could not schedule statistik job", e);
+        }
+    }
+
+    public List<StatistikDto> getAllStatistiks() {
+        final var statistiks = statistikRepository.findAll();
+        return statistiks.stream()
+            .map(statistikMapper::fromEntity)
+            .sorted(Comparator.comparing(StatistikDto::getTimestampErstellt).reversed())
+            .toList();
+    }
+
+    public RestMulti<Buffer> getStatistikDownload(String token) {
+        final var statistikId = dokumentDownloadService.getClaimId(
+            jwtParser,
+            token,
+            config.preSignedRequest().secret(),
+            StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID
+        );
+
+        final var statistik = statistikRepository.requireById(statistikId);
+
+        return dokumentDownloadService.getDokument(
+            s3AsyncClient,
+            config.s3().bucketName(),
+            statistik.getObjectId(),
+            statistik.getFilepath(),
+            statistik.getFilename()
+        );
+    }
+
+    public FileDownloadTokenDto getStatistikDownloadToken(UUID statistikId) {
+        return dokumentDownloadService.getFileDownloadToken(
+            statistikId,
+            StatistikConstants.STATISTIK_FILE_DOWNLOAD_TOKEN_CLAIM_ID,
+            benutzerService,
+            config
+        );
+    }
+}

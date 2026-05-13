@@ -17,8 +17,14 @@
 
 package ch.dvbern.stip.api.common.type;
 
-public enum Anrede {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    HERR,
-    FRAU
+@Getter
+@AllArgsConstructor
+public enum Anrede {
+    HERR(1),
+    FRAU(2);
+
+    private final int bfsCode;
 }

@@ -57,6 +57,7 @@ const generatedApis = [
   'Sozialdienst',
   'SozialdienstAdmin',
   'Stammdaten',
+  'Statistik',
   'Steuerdaten',
   'Steuerdaten',
   'StipDecision',

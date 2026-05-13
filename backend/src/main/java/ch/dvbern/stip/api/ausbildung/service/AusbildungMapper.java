@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.service.MonthYearToBeginOfMonth;
 import ch.dvbern.stip.api.common.service.MonthYearToEndOfMonth;
 import ch.dvbern.stip.api.fall.service.FallMapper;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.generated.dto.AusbildungDto;
@@ -54,6 +55,8 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
 
     @Inject
     AusbildungsgangService ausbildungsgangService;
+    @Inject
+    GesuchsperiodenService gesuchsperiodenService;
 
     @Mapping(
         source = "ausbildungBegin",
@@ -198,4 +201,13 @@ public abstract class AusbildungMapper extends EntityUpdateMapper<AusbildungUpda
         qualifiedBy = { DateMapper.class, DateToMonthYear.class }
     )
     public abstract AusbildungUpdateDto toUpdateDto(Ausbildung ausbildung);
+
+    @AfterMapping
+    protected void setEarliestActiveGesuchPeriodeStart(
+        final Ausbildung entity,
+        @MappingTarget final AusbildungDto dto
+    ) {
+        gesuchsperiodenService.findEarliestActiveNow()
+            .ifPresent(dto::setEarliestActiveGesuchPeriodeStart);
+    }
 }

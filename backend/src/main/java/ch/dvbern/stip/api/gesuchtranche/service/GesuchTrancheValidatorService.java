@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -57,6 +58,10 @@ public class GesuchTrancheValidatorService {
         exceptionalGesuchStatusToValidationGroups.put(
             Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
             List.of(GesuchNachInBearbeitungSBValidationGroup.class)
+        );
+        exceptionalGesuchStatusToValidationGroups.put(
+            Gesuchstatus.IN_BEARBEITUNG_SB,
+            List.of(GesuchNachInFreigabeValidationGroup.class)
         );
         trancheStatusToValidationGroups
             .put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));

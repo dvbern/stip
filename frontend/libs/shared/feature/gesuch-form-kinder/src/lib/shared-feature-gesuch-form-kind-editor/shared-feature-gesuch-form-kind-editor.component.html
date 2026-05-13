@@ -89,7 +89,7 @@
         data-testid="form-kind-ausbildungssituation"
         dvSharedUiFormField
       >
-        @for (a of ausbildungssituationValues; track trackByIndex($index)) {
+        @for (a of ausbildungssituationValues; track $index) {
           <mat-radio-button [attr.data-testid]="a" [value]="a">{{
             'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
           }}</mat-radio-button>

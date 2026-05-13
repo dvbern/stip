@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class AusgewaehlterGrundDto  implements Serializable {
   private @Valid UUID decisionId;
-  private @Valid ch.dvbern.stip.stipdecision.type.Kanton kanton;
+  private @Valid ch.dvbern.stip.api.common.type.Kanton kanton;
 
   /**
    **/
@@ -44,19 +44,19 @@ public class AusgewaehlterGrundDto  implements Serializable {
 
   /**
    **/
-  public AusgewaehlterGrundDto kanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+  public AusgewaehlterGrundDto kanton(ch.dvbern.stip.api.common.type.Kanton kanton) {
     this.kanton = kanton;
     return this;
   }
 
   
   @JsonProperty("kanton")
-  public ch.dvbern.stip.stipdecision.type.Kanton getKanton() {
+  public ch.dvbern.stip.api.common.type.Kanton getKanton() {
     return kanton;
   }
 
   @JsonProperty("kanton")
-  public void setKanton(ch.dvbern.stip.stipdecision.type.Kanton kanton) {
+  public void setKanton(ch.dvbern.stip.api.common.type.Kanton kanton) {
     this.kanton = kanton;
   }
 

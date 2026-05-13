@@ -44,7 +44,7 @@ export class SachbearbeitungAppDialogUpdateSteuerdatenComponent {
         UpdateSteuerdatenDialogResult
       >
     >(MatDialogRef);
-  maskitoYear = maskitoYear;
+  maskitoYear = maskitoYear();
 
   form = this.formBuilder.group({
     steuerjahr: [<string | null>null, [Validators.required]],

@@ -213,8 +213,8 @@
             formControlName="fristNachreichenDokumente"
             data-testid="form-gesuchsperiode-frist-nachreichen-dokumente"
             matInput
-            type="number"
-            min="0"
+            type="text"
+            [maskito]="maskitoNumber"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
             {{ t('shared.form.error.required') }}
@@ -229,6 +229,7 @@
             formControlName="stichtagVolljaehrigkeitMedizinischeGrundversorgung"
             data-testid="form-gesuchsperiode-einreichefrist-reduziert"
             matInput
+            type="text"
             [dvMaxLength]="'small'"
             [matDatepicker]="stichtagVolljaehrigkeitMedizinischeGrundversorgungDatepicker"
           />
@@ -254,8 +255,8 @@
             formControlName="zweiterAuszahlungsterminMonat"
             data-testid="form-gesuchsperiode-zweiterAuszahlungsterminMonat"
             matInput
-            type="number"
-            min="0"
+            type="text"
+            [maskito]="maskitoNumber"
             [max]="maxZweiterAuszahlungsterminMonat"
           />
           <mat-hint>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.info') }}</mat-hint>
@@ -274,7 +275,8 @@
             formControlName="zweiterAuszahlungsterminTag"
             data-testid="form-gesuchsperiode-zweiterAuszahlungsterminTag"
             matInput
-            type="number"
+            type="text"
+            [maskito]="maskitoNumber"
             [min]="minZweiterAuszahlungsterminTag"
             [max]="maxZweiterAuszahlungsterminTag"
           />
@@ -417,7 +419,7 @@
         </mat-form-field>
 
         <!-- StipLimite_Minimalstipendium -->
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:max-md:mt-8">
           <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.stipLimite_Minimalstipendium.label') }}</mat-label>
           <input
             formControlName="stipLimite_Minimalstipendium"
@@ -432,7 +434,7 @@
         </mat-form-field>
       </div>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1 tw:md:mt-9">
         <!-- Preis pro Mahlzeit -->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
           <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.preisProMahlzeit.label') }}</mat-label>
@@ -523,7 +525,8 @@
             data-testid="form-gesuchsperiode-limiteAlterAntragsstellerHalbierungElternbeitrag"
             matInput
             min="1"
-            type="number"
+            type="text"
+            [maskito]="maskitoNumber"
           />
           <mat-hint>{{
             t('sachbearbeitung-app.admin.gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag.info')

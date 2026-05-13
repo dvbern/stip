@@ -1237,6 +1237,8 @@ components:
             $ref: './components/common.yaml#/Notification'
         currentDelegierung:
           $ref: './components/common.yaml#/DelegierungSlim'
+        earliestActiveGesuchPeriodeStart:
+          $ref: './components/common.yaml#/LocalDate'
     AusbildungDashboardItem:
       type: object
       required:

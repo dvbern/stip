@@ -88,6 +88,9 @@ public class Abschluss extends AbstractMandantEntity {
     @Column(name = "bfs_kategorie", nullable = false)
     private Integer bfsKategorie;
 
+    @Column(name = "bfs_studien_stufe")
+    private Integer bfsStudienStufe;
+
     @NotNull
     @Column(name = "berufsbefaehigender_abschluss", nullable = false)
     private boolean berufsbefaehigenderAbschluss;

@@ -4,7 +4,7 @@
   </div>
 
   <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
-    <h1 class="tw:!mb-8 tw:!text-white tw:font-semibold tw:text-4xl">
+    <h1 class="tw:mb-8 tw:text-white tw:font-semibold tw:text-4xl">
       {{ t('gesuch-app.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
@@ -33,7 +33,7 @@
             <button
               data-testid="cockpit-create-ausbildung"
               type="button"
-              (click)="createAusbildung(fall.id)"
+              (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
               class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
             >
               <dv-shared-ui-icon-chip>

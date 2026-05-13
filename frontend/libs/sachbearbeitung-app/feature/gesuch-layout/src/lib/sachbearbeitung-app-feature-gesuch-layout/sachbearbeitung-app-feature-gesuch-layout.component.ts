@@ -375,9 +375,23 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     switch (nextStatus) {
       case 'SET_TO_BEARBEITUNG':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.einreichenStore.validateSteps$({ gesuchTrancheId });
+          },
+        });
+        break;
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'STATUS_PRUEFUNG_AUSLOESEN':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.einreichenStore.validateSteps$({ gesuchTrancheId });
+          },
+        });
+        break;
       case 'BEREIT_FUER_BEARBEITUNG':
       case 'VERFUEGT':
       case 'VERSENDET':

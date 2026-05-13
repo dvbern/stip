@@ -123,7 +123,7 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
   gotReenabled$ = new Subject<object>();
   updateValidity$ = new Subject();
   maskitoNumber = maskitoNumber;
-  maskitoOptionsPercent = maskitoPercent;
+  maskitoOptionsPercent = maskitoPercent();
 
   form = this.formBuilder.group({
     nachname: ['', [Validators.required]],
@@ -277,10 +277,6 @@ export class SharedFeatureGesuchFormKinderEditorComponent implements OnChanges {
       });
       this.form.markAsPristine();
     }
-  }
-
-  trackByIndex(index: number) {
-    return index;
   }
 
   handleCancel() {

@@ -96,7 +96,10 @@ export class GesuchStore extends signalStore(
   );
 
   setStatus$ = {
-    SET_TO_BEARBEITUNG: rxMethod<{ gesuchTrancheId: string }>(
+    SET_TO_BEARBEITUNG: rxMethod<{
+      gesuchTrancheId: string;
+      onSuccess: () => void;
+    }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.changeGesuchStatusToInBearbeitung$({
@@ -204,7 +207,10 @@ export class GesuchStore extends signalStore(
       ),
     ),
 
-    STATUS_PRUEFUNG_AUSLOESEN: rxMethod<{ gesuchTrancheId: string }>(
+    STATUS_PRUEFUNG_AUSLOESEN: rxMethod<{
+      gesuchTrancheId: string;
+      onSuccess: () => void;
+    }>(
       pipe(
         this.handleStatusChange(({ gesuchTrancheId }) =>
           this.gesuchService.gesuchManuellPruefenSB$({ gesuchTrancheId }),

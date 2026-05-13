@@ -4,13 +4,14 @@
 ) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
+  @let fallId = dialogDataSig()?.fallId;
   <form
     [formGroup]="form"
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
     novalidate
     class="testing-library-fix tw:mt-6 tw:grid tw:min-w-106.25 tw:grid-cols-1 tw:gap-x-6 tw:gap-y-6 tw:pt-4 tw:md:min-w-160 tw:md:grid-cols-2"
-    [class.tw:lg:grid-cols-3]="!fallIdSig()"
+    [class.tw:lg:grid-cols-3]="!fallId"
     (gotReenabledSig)="gotReenabledSig.set({})"
     (ngSubmit)="handleSave()"
   >
@@ -63,7 +64,7 @@
       dvSharedUiInfoDialog
       [dialogTitleKey]="'shared.form.ausbildung.ausbildungsstaette.label'"
       [dialogMessageKey]="'shared.form.ausbildung.ausbildungsstaette.info'"
-      [forceDialogPosition]="!!fallIdSig()"
+      [forceDialogPosition]="!!fallId"
       #ausbildungsstaetteInfoDialog="dvSharedUiInfoDialog"
       class="tw:xl:col-start-3"
     ></div>
@@ -139,14 +140,14 @@
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.ausbildung.ausbildungsgang.label'"
         [dialogMessageKey]="'shared.form.ausbildung.ausbildungsgang.info'"
-        [forceDialogPosition]="!!fallIdSig()"
+        [forceDialogPosition]="!!fallId"
         #ausbildungsgangInfoDialog="dvSharedUiInfoDialog"
       ></div>
       <div
         dvSharedUiInfoDialog
         [dialogTitleKey]="'shared.form.ausbildung.fachrichtung.label.' + zusatzfrageSig()"
         [dialogMessageKey]="'shared.form.ausbildung.fachrichtung.info'"
-        [forceDialogPosition]="!!fallIdSig()"
+        [forceDialogPosition]="!!fallId"
         #fachrichtungInfoDialog="dvSharedUiInfoDialog"
       ></div>
     </div>
@@ -326,7 +327,7 @@
       <mat-error *dvSharedUiFormMessageError="'minDate'">
         {{
           'shared.form.ausbildung.form.error.monthYearAfter'
-            | transloco: { date: ausbildungStore.ausbildungViewSig().minEndDatumFormatted }
+            | transloco: { date: minAusbildungEndSig() | date: 'MM.yyyy' }
         }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">

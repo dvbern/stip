@@ -287,6 +287,14 @@ public class Gesuch extends AbstractMandantEntity {
             .findFirst();
     }
 
+    public LocalDate getGesuchGueltigkeitAb() {
+        return getTranchenTranchen().findFirst()
+            .map(tranche -> tranche.getGueltigkeit().getGueltigAb())
+            .orElseThrow(
+                IllegalStateException::new
+            );
+    }
+
     public Stream<Datenschutzbrief> getAllPendingDatenschutschbriefsForMassendruck() {
         return datenschutzbriefs.stream().filter(d -> !d.isVersendet());
     }

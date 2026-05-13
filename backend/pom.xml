@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ch.dvbern.oss.stip</groupId>
   <artifactId>stip-api</artifactId>
@@ -246,6 +245,10 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jaxb</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>
       <scope>test</scope>
     </dependency>
@@ -373,13 +376,13 @@
     <dependency>
       <groupId>com.itextpdf</groupId>
       <artifactId>svg</artifactId>
-      <version>${itext.version}</version>
+      <version>${itext.version}</version> <!-- Jilt is not needed at runtime -->
     </dependency>
     <dependency>
       <groupId>cc.jilt</groupId>
       <artifactId>jilt</artifactId>
       <version>1.9.1</version>
-      <scope>provided</scope> <!-- Jilt is not needed at runtime -->
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
@@ -682,44 +685,44 @@
                   <apiNameSuffix>Resource</apiNameSuffix>
                   <generateSupportingFiles>false</generateSupportingFiles>
                   <schemaMappings>FileUpload=org.jboss.resteasy.reactive.multipart.FileUpload,
-                    DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
-                    DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
-                    DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
-                    SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
-                    Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
-                    Anrede=ch.dvbern.stip.api.common.type.Anrede,
-                    Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
-                    Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
-                    Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
-                    ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
-                    ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
-                    Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
-                    ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
-                    DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
-                    Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
-                    Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
-                    Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
-                    WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
-                    LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
-                    SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
-                    GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
-                    NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
-                    Dokumentstatus=ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus,
-                    GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
-                    GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
-                    SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
-                    SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
-                    AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
-                    AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
-                    StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
-                    GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
-                    UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
-                    DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
-                    SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
-                    BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
-                    ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
-                    Kanton=ch.dvbern.stip.stipdecision.type.Kanton,
+                      DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
+                      DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
+                      DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
+                      GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
+                      SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
+                      Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
+                      Anrede=ch.dvbern.stip.api.common.type.Anrede,
+                      Niederlassungsstatus=ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus,
+                      Sprache=ch.dvbern.stip.api.personinausbildung.type.Sprache,
+                      Zivilstand=ch.dvbern.stip.api.personinausbildung.type.Zivilstand,
+                      ElternAbwesenheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund,
+                      ElternUnbekanntheitsGrund=ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund,
+                      Elternschaftsteilung=ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung,
+                      ElternTyp=ch.dvbern.stip.api.eltern.type.ElternTyp,
+                      DokumentTyp=ch.dvbern.stip.api.dokument.type.DokumentTyp,
+                      Taetigkeitsart=ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart,
+                      Ausbildungssituation=ch.dvbern.stip.api.common.type.Ausbildungssituation,
+                      Wohnsitz=ch.dvbern.stip.api.common.type.Wohnsitz,
+                      WohnsitzKanton=ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton,
+                      LebenslaufAusbildungsArt=ch.dvbern.stip.api.lebenslauf.type.LebenslaufAusbildungsArt,
+                      SteuerdatenTyp=ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp,
+                      GetGesucheSBQueryType=ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType,
+                      NotificationType=ch.dvbern.stip.api.notification.type.NotificationType,
+                      Dokumentstatus=ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus,
+                      GesuchTrancheStatus=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus,
+                      GesuchTrancheTyp=ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp,
+                      SbGesucheDashboardColumn=ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn,
+                      SortOrder=ch.dvbern.stip.api.gesuch.type.SortOrder,
+                      AusbildungsPensum=ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum,
+                      AusbildungsStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus,
+                      StipDecision=ch.dvbern.stip.api.common.type.StipDecision,
+                      GesuchNotizTyp=ch.dvbern.stip.api.notiz.type.GesuchNotizTyp,
+                      UnterschriftenblattDokumentTyp=ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp,
+                      DokumentArt=ch.dvbern.stip.api.dokument.type.DokumentArt,
+                      SapStatus=ch.dvbern.stip.api.buchhaltung.type.SapStatus,
+                      BuchhaltungType=ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType,
+                      ZustaendigerKanton=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigerKanton,
+                      Kanton=ch.dvbern.stip.api.common.type.Kanton,
                     ZustaendigeKESB=ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB,
                     GesuchsperiodeSelectErrorType=ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType,
                     Ausbildungskategorie=ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie,
@@ -769,9 +772,7 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
-                  <additionalProperties>
-                    removeEnumValuePrefix=false
-                  </additionalProperties>
+                  <additionalProperties>removeEnumValuePrefix=false</additionalProperties>
                 </configuration>
               </execution>
               <execution>
@@ -807,9 +808,7 @@
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>
                     <typeMapping>dateTime=java.time.LocalDateTime</typeMapping>
                   </typeMappings>
-                  <additionalProperties>
-                    removeEnumValuePrefix=false
-                  </additionalProperties>
+                  <additionalProperties>removeEnumValuePrefix=false</additionalProperties>
                 </configuration>
               </execution>
             </executions>

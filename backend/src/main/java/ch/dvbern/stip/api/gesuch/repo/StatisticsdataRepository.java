@@ -17,12 +17,27 @@
 
 package ch.dvbern.stip.api.gesuch.repo;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.gesuch.entity.QStatisticsdata;
 import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class StatisticsdataRepository implements BaseRepository<Statisticsdata> {
+
+    private final EntityManager entityManager;
+    private final QStatisticsdata Q_STATISTICSDATA = QStatisticsdata.statisticsdata;
+
+    public Statisticsdata findByGesuchId(final UUID gesuchId) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_STATISTICSDATA)
+            .where(Q_STATISTICSDATA.gesuch.id.eq(gesuchId))
+            .fetchFirst();
+    }
 }

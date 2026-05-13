@@ -28,6 +28,7 @@ class MatDialogRefMock {
 
 const dialogData: CreateAusbildungData = {
   fallId: 'asdf',
+  minAusbildungEnd: new Date().toISOString(),
 };
 
 describe('SharedDialogCreateAusbildungComponent', () => {

@@ -39,6 +39,9 @@ export class SharedUiZuvorHintDirective {
   private viewContainerRef = inject(ViewContainerRef);
 
   dvZuvorHintSuffixSig = input<string>('', { alias: 'dvZuvorHintSuffix' });
+  dvZuvorHintDisableFormattingSig = input<boolean>(false, {
+    alias: 'dvZuvorHintDisableFormatting',
+  });
   dvZuvorHintSig = input<FormularChangeTypes>(undefined, {
     alias: 'dvZuvorHint',
   });
@@ -50,6 +53,7 @@ export class SharedUiZuvorHintDirective {
     effect(() => {
       let value = this.dvZuvorHintSig();
       const suffix = this.dvZuvorHintSuffixSig();
+      const disableFormatting = this.dvZuvorHintDisableFormattingSig();
 
       if (value === null) {
         value = '';
@@ -65,7 +69,7 @@ export class SharedUiZuvorHintDirective {
             this.dvZuvorHintTestId(),
           );
         }
-        if (typeof value === 'number') {
+        if (typeof value === 'number' && !disableFormatting) {
           value = toFormatedNumber(value);
         }
         componentRef.setInput(

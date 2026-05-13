@@ -400,7 +400,7 @@ public class GenerateDemoDataService {
             .betreuungskostenKinder(
                 DemoDataDefaults.defaultByKindsIfNull(ekDto.getBetreuungskostenKinder(), demoDataDto)
             )
-            .veranlagungsStatus(null)
+            .veranlagungsStatus(DemoDataDefaults.STEUERDATEN_VERANLAGUNGSSTATUS)
             .steuerjahr(DemoDataDefaults.getSteuerjahr(ausbildungDto.getAusbildungBeginn()))
             .vermoegen(ekDto.getVermoegen())
             .einnahmenBGSA(ekDto.getEinnahmenBGSA())
@@ -437,7 +437,7 @@ public class GenerateDemoDataService {
                 .betreuungskostenKinder(
                     DemoDataDefaults.defaultByKindsIfNull(ekDto.getBetreuungskostenKinder(), demoDataDto)
                 )
-                .veranlagungsStatus(null)
+                .veranlagungsStatus(DemoDataDefaults.STEUERDATEN_VERANLAGUNGSSTATUS)
                 .steuerjahr(DemoDataDefaults.getSteuerjahr(ausbildungDto.getAusbildungBeginn()))
                 .vermoegen(Objects.requireNonNullElse(ekPartnerDto.getVermoegen(), DemoDataDefaults.EK_VERMOEGEN))
                 .einnahmenBGSA(ekPartnerDto.getEinnahmenBGSA())
