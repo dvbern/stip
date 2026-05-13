@@ -13,19 +13,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("NeskoError")
+@JsonTypeName("SteuerdatenPortError")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class NeskoErrorDto  implements Serializable {
+public class SteuerdatenPortErrorDto  implements Serializable {
   private @Valid String type;
-  private @Valid String neskoError;
+  private @Valid String error;
   private @Valid String userMessage;
 
   /**
    **/
-  public NeskoErrorDto type(String type) {
+  public SteuerdatenPortErrorDto type(String type) {
     this.type = type;
     return this;
   }
@@ -44,26 +44,26 @@ public class NeskoErrorDto  implements Serializable {
 
   /**
    **/
-  public NeskoErrorDto neskoError(String neskoError) {
-    this.neskoError = neskoError;
+  public SteuerdatenPortErrorDto error(String error) {
+    this.error = error;
     return this;
   }
 
   
-  @JsonProperty("neskoError")
+  @JsonProperty("error")
   @NotNull
-  public String getNeskoError() {
-    return neskoError;
+  public String getError() {
+    return error;
   }
 
-  @JsonProperty("neskoError")
-  public void setNeskoError(String neskoError) {
-    this.neskoError = neskoError;
+  @JsonProperty("error")
+  public void setError(String error) {
+    this.error = error;
   }
 
   /**
    **/
-  public NeskoErrorDto userMessage(String userMessage) {
+  public SteuerdatenPortErrorDto userMessage(String userMessage) {
     this.userMessage = userMessage;
     return this;
   }
@@ -89,24 +89,24 @@ public class NeskoErrorDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NeskoErrorDto neskoError = (NeskoErrorDto) o;
-    return Objects.equals(this.type, neskoError.type) &&
-        Objects.equals(this.neskoError, neskoError.neskoError) &&
-        Objects.equals(this.userMessage, neskoError.userMessage);
+    SteuerdatenPortErrorDto steuerdatenPortError = (SteuerdatenPortErrorDto) o;
+    return Objects.equals(this.type, steuerdatenPortError.type) &&
+        Objects.equals(this.error, steuerdatenPortError.error) &&
+        Objects.equals(this.userMessage, steuerdatenPortError.userMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, neskoError, userMessage);
+    return Objects.hash(type, error, userMessage);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NeskoErrorDto {\n");
+    sb.append("class SteuerdatenPortErrorDto {\n");
     
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
-    sb.append("    neskoError: ").append(toIndentedString(neskoError)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    userMessage: ").append(toIndentedString(userMessage)).append("\n");
     sb.append("}");
     return sb.toString();

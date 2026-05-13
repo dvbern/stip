@@ -15,19 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.exception;
+package ch.dvbern.stip.integration.steuerdaten.domain.exception;
 
 import lombok.Getter;
 
 @Getter
-public class NeskoInternalException extends RuntimeException implements NeskoException {
+public class SteuerdatenPortInternalException extends RuntimeException implements SteuerdatenPortException {
 
-    private final transient String neskoError;
+    private final transient String error;
     private final transient String userMessage;
 
-    public NeskoInternalException(String message, String neskoError, String userMessage) {
+    public SteuerdatenPortInternalException(String message, String error, String userMessage) {
         super(message);
-        this.neskoError = neskoError;
+        this.error = error;
         this.userMessage = userMessage;
     }
 }

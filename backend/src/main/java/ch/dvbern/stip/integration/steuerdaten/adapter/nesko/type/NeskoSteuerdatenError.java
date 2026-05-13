@@ -19,9 +19,9 @@ package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.type;
 
 import java.util.function.Function;
 
-import ch.dvbern.stip.api.common.exception.ExceptionConstants;
-import ch.dvbern.stip.api.common.exception.NeskoInternalException;
-import ch.dvbern.stip.api.common.exception.NeskoNotFoundException;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortExceptionConstants;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortInternalException;
+import ch.dvbern.stip.integration.steuerdaten.domain.exception.SteuerdatenPortNotFoundException;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import io.quarkus.logging.Log;
 import jakarta.xml.ws.WebServiceException;
@@ -35,41 +35,41 @@ import lombok.SneakyThrows;
 public enum NeskoSteuerdatenError {
     INVALID_TOKEN(
     SOAPFaultException.class, "Invalid access token",
-    params -> new NeskoInternalException(ExceptionConstants.NESKO_INVALID_TOKEN, params.faultCode, params.userMessage)
+    params -> new SteuerdatenPortInternalException(SteuerdatenPortExceptionConstants.INVALID_TOKEN, params.faultCode, params.userMessage)
     ),
     SVN_NOT_FOUND(
     BusinessFault.class, "Die angefragte Person kann nicht oder nicht eindeutig ermittelt werden",
-    params -> new NeskoNotFoundException(ExceptionConstants.NESKO_SVN_NOT_FOUND, params.faultCode, params.userMessage)
+    params -> new SteuerdatenPortNotFoundException(SteuerdatenPortExceptionConstants.SVN_NOT_FOUND, params.faultCode, params.userMessage)
     ),
     STEUERJAHR_NOT_READY(
     BusinessFault.class,
     "Die Steuerdaten der angefragten Person können für das angefragte Steuerjahr nicht ermittelt werden",
-    params -> new NeskoNotFoundException(
-        ExceptionConstants.NESKO_STEUERJAHR_NOT_READY, params.faultCode, params.userMessage
+    params -> new SteuerdatenPortNotFoundException(
+        SteuerdatenPortExceptionConstants.STEUERJAHR_NOT_READY, params.faultCode, params.userMessage
     )
     ),
     STEUERJAHR_PRESENT_OR_FUTURE(
     BusinessFault.class, "Für die angefragte Person kann in NESKO-VA-NP kein Dossier ermittelt werden",
-    params -> new NeskoNotFoundException(
-        ExceptionConstants.NESKO_STEUERJAHR_PRESENT_OR_FUTURE, params.faultCode, params.userMessage
+    params -> new SteuerdatenPortNotFoundException(
+        SteuerdatenPortExceptionConstants.STEUERJAHR_PRESENT_OR_FUTURE, params.faultCode, params.userMessage
     )
     ),
     STEUERJAHR_PAST_NOT_FOUND(
     BusinessFault.class, "Für die angefragte Person kann im Register keine Haushaltstruktur ermittelt werden",
-    params -> new NeskoNotFoundException(
-        ExceptionConstants.NESKO_STEUERJAHR_PAST_NOT_FOUND, params.faultCode, params.userMessage
+    params -> new SteuerdatenPortNotFoundException(
+        SteuerdatenPortExceptionConstants.STEUERJAHR_PAST_NOT_FOUND, params.faultCode, params.userMessage
     )
     ),
     STEUERJAHR_NOT_PARSEABLE(
     SOAPFaultException.class, "is not facet-valid with respect to pattern '[2-9][0-9][0-9][0-9]'",
-    params -> new NeskoNotFoundException(
-        ExceptionConstants.NESKO_STEUERJAHR_NOT_PARSABLE, params.faultCode, params.userMessage
+    params -> new SteuerdatenPortNotFoundException(
+        SteuerdatenPortExceptionConstants.STEUERJAHR_NOT_PARSABLE, params.faultCode, params.userMessage
     )
     ),
     NESKO_SERVICE_UNAVAILABLE(
     WebServiceException.class, "",
-    params -> new NeskoInternalException(
-        ExceptionConstants.NESKO_SERVICE_UNAVAILABLE, params.faultCode, params.userMessage
+    params -> new SteuerdatenPortInternalException(
+        SteuerdatenPortExceptionConstants.SERVICE_UNAVAILABLE, params.faultCode, params.userMessage
     )
     ),
     ;

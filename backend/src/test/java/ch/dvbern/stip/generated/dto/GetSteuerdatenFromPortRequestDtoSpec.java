@@ -25,25 +25,25 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * NeskoGetSteuerdatenRequestDtoSpec
+ * GetSteuerdatenFromPortRequestDtoSpec
  */
 @JsonPropertyOrder({
-  NeskoGetSteuerdatenRequestDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
-  NeskoGetSteuerdatenRequestDtoSpec.JSON_PROPERTY_STEUERJAHR
+  GetSteuerdatenFromPortRequestDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
+  GetSteuerdatenFromPortRequestDtoSpec.JSON_PROPERTY_STEUERJAHR
 })
-@JsonTypeName("NeskoGetSteuerdatenRequest")
+@JsonTypeName("GetSteuerdatenFromPortRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class NeskoGetSteuerdatenRequestDtoSpec {
+public class GetSteuerdatenFromPortRequestDtoSpec {
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
 
-  public NeskoGetSteuerdatenRequestDtoSpec() {
+  public GetSteuerdatenFromPortRequestDtoSpec() {
   }
 
-  public NeskoGetSteuerdatenRequestDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
+  public GetSteuerdatenFromPortRequestDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
     
     this.steuerdatenTyp = steuerdatenTyp;
     return this;
@@ -69,7 +69,7 @@ public class NeskoGetSteuerdatenRequestDtoSpec {
   }
 
 
-  public NeskoGetSteuerdatenRequestDtoSpec steuerjahr(Integer steuerjahr) {
+  public GetSteuerdatenFromPortRequestDtoSpec steuerjahr(Integer steuerjahr) {
     
     this.steuerjahr = steuerjahr;
     return this;
@@ -102,9 +102,9 @@ public class NeskoGetSteuerdatenRequestDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NeskoGetSteuerdatenRequestDtoSpec neskoGetSteuerdatenRequest = (NeskoGetSteuerdatenRequestDtoSpec) o;
-    return Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
-        Objects.equals(this.steuerjahr, neskoGetSteuerdatenRequest.steuerjahr);
+    GetSteuerdatenFromPortRequestDtoSpec getSteuerdatenFromPortRequest = (GetSteuerdatenFromPortRequestDtoSpec) o;
+    return Objects.equals(this.steuerdatenTyp, getSteuerdatenFromPortRequest.steuerdatenTyp) &&
+        Objects.equals(this.steuerjahr, getSteuerdatenFromPortRequest.steuerjahr);
   }
 
   @Override
@@ -115,7 +115,7 @@ public class NeskoGetSteuerdatenRequestDtoSpec {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NeskoGetSteuerdatenRequestDtoSpec {\n");
+    sb.append("class GetSteuerdatenFromPortRequestDtoSpec {\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("}");

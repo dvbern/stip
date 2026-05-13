@@ -24,7 +24,7 @@ import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
-import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDto;
+import ch.dvbern.stip.generated.dto.GetSteuerdatenFromPortRequestDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
@@ -62,15 +62,15 @@ public class SteuerdatenResourceImpl implements SteuerdatenResource {
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
-    public List<SteuerdatenDto> updateSteuerdatenFromNesko(
+    public List<SteuerdatenDto> updateSteuerdatenFromPort(
         UUID gesuchTrancheId,
-        NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequestDto
+        GetSteuerdatenFromPortRequestDto getSteuerdatenRequest
     ) {
         steuerdatenAuthorizer.canUpdateFromSteuerdatenPort(gesuchTrancheId);
         return steuerdatenService.updateSteuerdatenFromPort(
             gesuchTrancheId,
-            neskoGetSteuerdatenRequestDto.getSteuerdatenTyp(),
-            neskoGetSteuerdatenRequestDto.getSteuerjahr()
+            getSteuerdatenRequest.getSteuerdatenTyp(),
+            getSteuerdatenRequest.getSteuerjahr()
         );
     }
 }

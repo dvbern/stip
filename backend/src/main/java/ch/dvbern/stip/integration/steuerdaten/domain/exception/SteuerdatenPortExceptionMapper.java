@@ -15,12 +15,23 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.exception;
+package ch.dvbern.stip.integration.steuerdaten.domain.exception;
 
-public interface NeskoException {
-    String getMessage();
+import ch.dvbern.stip.generated.dto.SteuerdatenPortErrorDto;
+import lombok.NoArgsConstructor;
 
-    String getNeskoError();
+@NoArgsConstructor
+public final class SteuerdatenPortExceptionMapper {
+    public static SteuerdatenPortErrorDto toDto(SteuerdatenPortException exception) {
+        SteuerdatenPortErrorDto errorDto = new SteuerdatenPortErrorDto();
+        if (exception == null) {
+            return errorDto;
+        }
 
-    String getUserMessage();
+        errorDto.setType(exception.getMessage());
+        errorDto.setError(exception.getError());
+        errorDto.setUserMessage(exception.getUserMessage());
+
+        return errorDto;
+    }
 }

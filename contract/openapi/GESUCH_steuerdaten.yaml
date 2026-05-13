@@ -11,7 +11,7 @@ servers:
       port:
         default: '8080'
 paths:
-  /steuerdaten/nesko/{gesuchTrancheId}:
+  /steuerdaten/port/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -23,7 +23,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+              $ref: '#/components/schemas/GetSteuerdatenFromPortRequest'
         required: true
       tags:
         - Steuerdaten
@@ -46,7 +46,7 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: updateSteuerdatenFromNesko
+      operationId: updateSteuerdatenFromPort
       summary: Updates the Steuerdaten from Nesko
   /steuerdaten/{gesuchTrancheId}:
     parameters:
@@ -113,7 +113,7 @@ components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'
   schemas:
-    NeskoGetSteuerdatenRequest:
+    GetSteuerdatenFromPortRequest:
       required:
         - steuerdatenTyp
         - steuerjahr

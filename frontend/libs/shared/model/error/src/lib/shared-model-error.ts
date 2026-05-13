@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import {
   DemoDataError as DvDemoDataError,
-  NeskoError as DvNeskoError,
+  SteuerdatenPortError as DvSteuerdatenPortError,
   ValidationMessage as DvValidationMessage,
   ValidationReport,
 } from '@dv/shared/model/gesuch';
@@ -62,12 +62,12 @@ export type UnknownHttpError = Extends<
   HttpErrorResponse
 >;
 
-export const NeskoError = z.object({
+export const SteuerdatenPortError = z.object({
   type: z.string(),
-  neskoError: z.string(),
+  error: z.string(),
   userMessage: z.string(),
 });
-export type NeskoError = Extends<z.infer<typeof NeskoError>, DvNeskoError>;
+export type SteuerdatenPortError = Extends<z.infer<typeof SteuerdatenPortError>, DvSteuerdatenPortError>;
 
 export const DemoDataError = z.object({
   internalMessage: z.string(),
@@ -83,8 +83,8 @@ export const ParseError = z.instanceof(z.ZodError);
 export type ParseError = z.infer<typeof ParseError>;
 
 const ErrorTypes = {
-  neskoError: z.object({
-    error: NeskoError,
+  steuerdatenPortError: z.object({
+    error: SteuerdatenPortError,
   }),
   demoDataError: z.object({
     error: DemoDataError,
@@ -117,11 +117,11 @@ export type SharedModelErrorTypes = keyof typeof ErrorTypes;
 
 export const SharedModelError = z.intersection(
   z.union([
-    ErrorTypes.neskoError.transform(({ error: { neskoError, userMessage } }) =>
-      createError('neskoError', {
+    ErrorTypes.steuerdatenPortError.transform(({ error: { error, userMessage } }) =>
+      createError('steuerdatenPortError', {
         message: userMessage,
         messageKey: 'shared.genericError.nesko',
-        errorCode: neskoError,
+        errorCode: error,
       }),
     ),
     ErrorTypes.genericValidationError.transform(({ error }) =>

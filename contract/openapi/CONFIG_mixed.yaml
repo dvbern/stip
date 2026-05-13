@@ -187,16 +187,16 @@ components:
           type: string
         redirectUri:
           type: string
-    NeskoError:
+    SteuerdatenPortError:
       required:
         - type
-        - neskoError
+        - error
         - userMessage
       type: object
       properties:
         type:
           type: string
-        neskoError:
+        error:
           type: string
         userMessage:
           type: string

@@ -13,7 +13,7 @@
 
 package ch.dvbern.stip.generated.api;
 
-import ch.dvbern.stip.generated.dto.NeskoGetSteuerdatenRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.GetSteuerdatenFromPortRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.ValidationReportDtoSpec;
@@ -61,7 +61,7 @@ public class SteuerdatenApiSpec {
         return Arrays.asList(
                 getSteuerdaten(),
                 updateSteuerdaten(),
-                updateSteuerdatenFromNesko()
+                updateSteuerdatenFromPort()
         );
     }
 
@@ -73,8 +73,8 @@ public class SteuerdatenApiSpec {
         return new UpdateSteuerdatenOper(createReqSpec());
     }
 
-    public UpdateSteuerdatenFromNeskoOper updateSteuerdatenFromNesko() {
-        return new UpdateSteuerdatenFromNeskoOper(createReqSpec());
+    public UpdateSteuerdatenFromPortOper updateSteuerdatenFromPort() {
+        return new UpdateSteuerdatenFromPortOper(createReqSpec());
     }
 
     /**
@@ -252,15 +252,15 @@ public class SteuerdatenApiSpec {
      * @see #body  (required)
      * return List&lt;SteuerdatenDtoSpec&gt;
      */
-    public static class UpdateSteuerdatenFromNeskoOper implements Oper {
+    public static class UpdateSteuerdatenFromPortOper implements Oper {
 
         public static final Method REQ_METHOD = POST;
-        public static final String REQ_URI = "/steuerdaten/nesko/{gesuchTrancheId}";
+        public static final String REQ_URI = "/steuerdaten/port/{gesuchTrancheId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public UpdateSteuerdatenFromNeskoOper(RequestSpecBuilder reqSpec) {
+        public UpdateSteuerdatenFromPortOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setContentType("application/json");
             reqSpec.setAccept("application/json");
@@ -268,7 +268,7 @@ public class SteuerdatenApiSpec {
         }
 
         /**
-         * POST /steuerdaten/nesko/{gesuchTrancheId}
+         * POST /steuerdaten/port/{gesuchTrancheId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -279,7 +279,7 @@ public class SteuerdatenApiSpec {
         }
 
         /**
-         * POST /steuerdaten/nesko/{gesuchTrancheId}
+         * POST /steuerdaten/port/{gesuchTrancheId}
          * @param handler handler
          * @return List&lt;SteuerdatenDtoSpec&gt;
          */
@@ -289,11 +289,11 @@ public class SteuerdatenApiSpec {
         }
 
          /**
-         * @param neskoGetSteuerdatenRequestDtoSpec (NeskoGetSteuerdatenRequestDtoSpec)  (required)
+         * @param getSteuerdatenFromPortRequestDtoSpec (GetSteuerdatenFromPortRequestDtoSpec)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper body(NeskoGetSteuerdatenRequestDtoSpec neskoGetSteuerdatenRequestDtoSpec) {
-            reqSpec.setBody(neskoGetSteuerdatenRequestDtoSpec);
+        public UpdateSteuerdatenFromPortOper body(GetSteuerdatenFromPortRequestDtoSpec getSteuerdatenFromPortRequestDtoSpec) {
+            reqSpec.setBody(getSteuerdatenFromPortRequestDtoSpec);
             return this;
         }
 
@@ -303,7 +303,7 @@ public class SteuerdatenApiSpec {
          * @param gesuchTrancheId (UUID)  (required)
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper gesuchTrancheIdPath(Object gesuchTrancheId) {
+        public UpdateSteuerdatenFromPortOper gesuchTrancheIdPath(Object gesuchTrancheId) {
             reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
             return this;
         }
@@ -313,7 +313,7 @@ public class SteuerdatenApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public UpdateSteuerdatenFromPortOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -323,7 +323,7 @@ public class SteuerdatenApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public UpdateSteuerdatenFromNeskoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public UpdateSteuerdatenFromPortOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

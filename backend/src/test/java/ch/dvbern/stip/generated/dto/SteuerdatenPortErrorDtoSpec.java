@@ -24,29 +24,29 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /**
- * NeskoErrorDtoSpec
+ * SteuerdatenPortErrorDtoSpec
  */
 @JsonPropertyOrder({
-  NeskoErrorDtoSpec.JSON_PROPERTY_TYPE,
-  NeskoErrorDtoSpec.JSON_PROPERTY_NESKO_ERROR,
-  NeskoErrorDtoSpec.JSON_PROPERTY_USER_MESSAGE
+  SteuerdatenPortErrorDtoSpec.JSON_PROPERTY_TYPE,
+  SteuerdatenPortErrorDtoSpec.JSON_PROPERTY_ERROR,
+  SteuerdatenPortErrorDtoSpec.JSON_PROPERTY_USER_MESSAGE
 })
-@JsonTypeName("NeskoError")
+@JsonTypeName("SteuerdatenPortError")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class NeskoErrorDtoSpec {
+public class SteuerdatenPortErrorDtoSpec {
   public static final String JSON_PROPERTY_TYPE = "type";
   private String type;
 
-  public static final String JSON_PROPERTY_NESKO_ERROR = "neskoError";
-  private String neskoError;
+  public static final String JSON_PROPERTY_ERROR = "error";
+  private String error;
 
   public static final String JSON_PROPERTY_USER_MESSAGE = "userMessage";
   private String userMessage;
 
-  public NeskoErrorDtoSpec() {
+  public SteuerdatenPortErrorDtoSpec() {
   }
 
-  public NeskoErrorDtoSpec type(String type) {
+  public SteuerdatenPortErrorDtoSpec type(String type) {
     
     this.type = type;
     return this;
@@ -72,33 +72,33 @@ public class NeskoErrorDtoSpec {
   }
 
 
-  public NeskoErrorDtoSpec neskoError(String neskoError) {
+  public SteuerdatenPortErrorDtoSpec error(String error) {
     
-    this.neskoError = neskoError;
+    this.error = error;
     return this;
   }
 
    /**
-   * Get neskoError
-   * @return neskoError
+   * Get error
+   * @return error
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NESKO_ERROR)
+  @JsonProperty(JSON_PROPERTY_ERROR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getNeskoError() {
-    return neskoError;
+  public String getError() {
+    return error;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NESKO_ERROR)
+  @JsonProperty(JSON_PROPERTY_ERROR)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNeskoError(String neskoError) {
-    this.neskoError = neskoError;
+  public void setError(String error) {
+    this.error = error;
   }
 
 
-  public NeskoErrorDtoSpec userMessage(String userMessage) {
+  public SteuerdatenPortErrorDtoSpec userMessage(String userMessage) {
     
     this.userMessage = userMessage;
     return this;
@@ -131,23 +131,23 @@ public class NeskoErrorDtoSpec {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NeskoErrorDtoSpec neskoError = (NeskoErrorDtoSpec) o;
-    return Objects.equals(this.type, neskoError.type) &&
-        Objects.equals(this.neskoError, neskoError.neskoError) &&
-        Objects.equals(this.userMessage, neskoError.userMessage);
+    SteuerdatenPortErrorDtoSpec steuerdatenPortError = (SteuerdatenPortErrorDtoSpec) o;
+    return Objects.equals(this.type, steuerdatenPortError.type) &&
+        Objects.equals(this.error, steuerdatenPortError.error) &&
+        Objects.equals(this.userMessage, steuerdatenPortError.userMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, neskoError, userMessage);
+    return Objects.hash(type, error, userMessage);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NeskoErrorDtoSpec {\n");
+    sb.append("class SteuerdatenPortErrorDtoSpec {\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
-    sb.append("    neskoError: ").append(toIndentedString(neskoError)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    userMessage: ").append(toIndentedString(userMessage)).append("\n");
     sb.append("}");
     return sb.toString();

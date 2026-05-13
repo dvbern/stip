@@ -13,18 +13,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 
-@JsonTypeName("NeskoGetSteuerdatenRequest")
+@JsonTypeName("GetSteuerdatenFromPortRequest")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
 @lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
-public class NeskoGetSteuerdatenRequestDto  implements Serializable {
+public class GetSteuerdatenFromPortRequestDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
   private @Valid Integer steuerjahr;
 
   /**
    **/
-  public NeskoGetSteuerdatenRequestDto steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+  public GetSteuerdatenFromPortRequestDto steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
     this.steuerdatenTyp = steuerdatenTyp;
     return this;
   }
@@ -43,7 +43,7 @@ public class NeskoGetSteuerdatenRequestDto  implements Serializable {
 
   /**
    **/
-  public NeskoGetSteuerdatenRequestDto steuerjahr(Integer steuerjahr) {
+  public GetSteuerdatenFromPortRequestDto steuerjahr(Integer steuerjahr) {
     this.steuerjahr = steuerjahr;
     return this;
   }
@@ -69,9 +69,9 @@ public class NeskoGetSteuerdatenRequestDto  implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NeskoGetSteuerdatenRequestDto neskoGetSteuerdatenRequest = (NeskoGetSteuerdatenRequestDto) o;
-    return Objects.equals(this.steuerdatenTyp, neskoGetSteuerdatenRequest.steuerdatenTyp) &&
-        Objects.equals(this.steuerjahr, neskoGetSteuerdatenRequest.steuerjahr);
+    GetSteuerdatenFromPortRequestDto getSteuerdatenFromPortRequest = (GetSteuerdatenFromPortRequestDto) o;
+    return Objects.equals(this.steuerdatenTyp, getSteuerdatenFromPortRequest.steuerdatenTyp) &&
+        Objects.equals(this.steuerjahr, getSteuerdatenFromPortRequest.steuerjahr);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class NeskoGetSteuerdatenRequestDto  implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NeskoGetSteuerdatenRequestDto {\n");
+    sb.append("class GetSteuerdatenFromPortRequestDto {\n");
     
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
