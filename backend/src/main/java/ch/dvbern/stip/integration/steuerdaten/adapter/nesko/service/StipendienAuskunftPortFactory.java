@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ch.dvbern.stip.api.config.type.AdapterConfig;
+import ch.dvbern.stip.api.config.type.TenantAdapterConfig;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,7 +42,7 @@ public class StipendienAuskunftPortFactory {
     @RestClient
     NeskoGetBearerTokenRequestService neskoGetBearerTokenRequestService;
 
-    public StipendienAuskunftPort create(AdapterConfig.SteuerdatenAdapter config) {
+    public StipendienAuskunftPort create(TenantAdapterConfig.SteuerdatenAdapter config) {
         StipendienAuskunftService stipendienAuskunftService =
             new StipendienAuskunftService(toUrl(config.url().orElseThrow()));
 
@@ -54,7 +54,7 @@ public class StipendienAuskunftPortFactory {
         return port;
     }
 
-    public String getToken(AdapterConfig.SteuerdatenAdapter config) {
+    public String getToken(TenantAdapterConfig.SteuerdatenAdapter config) {
         return neskoGetBearerTokenRequestService.post(
             neskoGetBearerTokenRequestService
                 .getAuthorization(config.username().orElseThrow(), config.password().orElseThrow()),

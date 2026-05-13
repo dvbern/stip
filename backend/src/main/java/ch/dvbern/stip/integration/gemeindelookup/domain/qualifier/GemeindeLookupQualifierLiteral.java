@@ -15,22 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.integration.gemeindelookup.domain.qualifier;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.integration.gemeindelookup.domain.service.GemeindeLookupService;
-import jakarta.enterprise.context.ApplicationScoped;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import jakarta.enterprise.util.AnnotationLiteral;
 import lombok.RequiredArgsConstructor;
 
-@ApplicationScoped
 @RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final GemeindeLookupService gemeindeLookupService;
+public class GemeindeLookupQualifierLiteral
+extends AnnotationLiteral<GemeindeLookupQualifier> implements GemeindeLookupQualifier {
+    private final GemeindeLookupAdapterType value;
 
     @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        gemeindeLookupService.createFetchGemeindeDataScheduledJob(gesuch);
+    public GemeindeLookupAdapterType value() {
+        return this.value;
     }
 }

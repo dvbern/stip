@@ -20,7 +20,7 @@ package ch.dvbern.stip.integration.steuerdaten.adapter.nesko.service;
 import java.math.BigDecimal;
 import java.util.Map;
 
-import ch.dvbern.stip.api.config.type.AdapterConfig;
+import ch.dvbern.stip.api.config.type.TenantAdapterConfig;
 import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -80,14 +80,14 @@ class NeskoSteuerdatenAdapterTest {
     GetSteuerdatenResponse getSteuerdatenResponseMock;
 
     private StipendienAuskunftPort portMock;
-    private AdapterConfig.SteuerdatenAdapter adapterConfigMock;
+    private TenantAdapterConfig.SteuerdatenAdapter adapterConfigMock;
 
     @BeforeEach
     void setUp() {
         portMock = mock(StipendienAuskunftPort.class);
-        adapterConfigMock = mock(AdapterConfig.SteuerdatenAdapter.class);
+        adapterConfigMock = mock(TenantAdapterConfig.SteuerdatenAdapter.class);
 
-        final var adapterConfig = mock(AdapterConfig.class);
+        final var adapterConfig = mock(TenantAdapterConfig.class);
         when(adapterConfig.steuerdaten()).thenReturn(Map.of(SteuerdatenAdapterType.NESKO, adapterConfigMock));
 
         final var tenantConfig = mock(TenantConfig.class);

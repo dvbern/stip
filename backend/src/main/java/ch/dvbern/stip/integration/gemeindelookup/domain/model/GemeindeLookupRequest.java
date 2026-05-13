@@ -15,77 +15,66 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.swisstopoapi.entity;
+package ch.dvbern.stip.integration.gemeindelookup.domain.model;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import jakarta.ws.rs.BadRequestException;
-import lombok.Getter;
+import lombok.Builder;
 import org.quartz.JobDataMap;
 
-public class SwisstopoAddrFetchJobData {
+@Builder
+public record GemeindeLookupRequest(
+UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnummer, String plz, String ort
+) {
+
     private static final String GESUCH_ID_KEY = "gesuchId";
     private static final String HAUSNUMMER_KEY = "hausnummer";
     private static final String STRASSE_KEY = "strasse";
     private static final String PLZ_KEY = "plz";
     private static final String ORT_KEY = "ort";
-    private static final String MANDANT_IDENTIFIER_KEY = "mandantIdentifier";
+    private static final String TENANT_IDENTIFIER_KEY = "tenantIdentifier";
 
-    @Getter
-    private final UUID gesuchId;
-    @Getter
-    private final String hausnummer;
-    @Getter
-    private final String strasse;
-    @Getter
-    private final String plz;
-    @Getter
-    private final String ort;
-    @Getter
-    private final String mandantIdentifier;
-
-    public SwisstopoAddrFetchJobData(final UUID gesuchId, final Adresse adresse, final String mandantIdentifier) {
-        this.gesuchId = gesuchId;
-        this.hausnummer = adresse.getHausnummer();
-        this.strasse = adresse.getStrasse();
-        this.plz = adresse.getPlz();
-        this.ort = adresse.getOrt();
-        this.mandantIdentifier = mandantIdentifier;
+    public GemeindeLookupRequest(final JobDataMap map) {
+        this(
+            parseGesuchId(map),
+            TenantIdentifier.of((String) map.get(TENANT_IDENTIFIER_KEY)),
+            (String) map.get(HAUSNUMMER_KEY),
+            (String) map.get(STRASSE_KEY),
+            (String) map.get(PLZ_KEY),
+            (String) map.get(ORT_KEY)
+        );
     }
 
-    public SwisstopoAddrFetchJobData(final JobDataMap map) {
+    private static UUID parseGesuchId(final JobDataMap map) {
         if (
             !(map.containsKey(GESUCH_ID_KEY)
             && map.containsKey(HAUSNUMMER_KEY)
             && map.containsKey(STRASSE_KEY)
             && map.containsKey(PLZ_KEY)
             && map.containsKey(ORT_KEY)
-            && map.containsKey(MANDANT_IDENTIFIER_KEY))
+            && map.containsKey(TENANT_IDENTIFIER_KEY))
         ) {
             throw new BadRequestException("SwisstopoAddrFetchJobData: missing some required keys in the map");
         }
-        this.gesuchId = UUID.fromString((String) map.get(GESUCH_ID_KEY));
-        this.hausnummer = (String) map.get(HAUSNUMMER_KEY);
-        this.strasse = (String) map.get(STRASSE_KEY);
-        this.plz = (String) map.get(PLZ_KEY);
-        this.ort = (String) map.get(ORT_KEY);
-        this.mandantIdentifier = (String) map.get(MANDANT_IDENTIFIER_KEY);
+
+        return UUID.fromString((String) map.get(GESUCH_ID_KEY));
     }
 
     public JobDataMap toMap() {
         if (
             Objects.isNull(gesuchId)
+            || Objects.isNull(tenantIdentifier)
             || Objects.isNull(hausnummer)
             || Objects.isNull(strasse)
             || Objects.isNull(plz)
             || Objects.isNull(ort)
-            || Objects.isNull(mandantIdentifier)
         ) {
-            throw new BadRequestException("SwisstopoAddrFetchJobData: fields must not be null");
+            throw new BadRequestException("GemeindeLookupRequest: fields must not be null");
         }
 
         final Map<String, Object> ret = new HashMap<>();
@@ -94,7 +83,7 @@ public class SwisstopoAddrFetchJobData {
         ret.put(STRASSE_KEY, this.strasse);
         ret.put(PLZ_KEY, this.plz);
         ret.put(ORT_KEY, this.ort);
-        ret.put(MANDANT_IDENTIFIER_KEY, this.mandantIdentifier);
+        ret.put(TENANT_IDENTIFIER_KEY, this.tenantIdentifier.getIdentifier());
         return new JobDataMap(ret);
     }
 }

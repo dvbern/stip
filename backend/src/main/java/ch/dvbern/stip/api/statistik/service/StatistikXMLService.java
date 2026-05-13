@@ -60,8 +60,8 @@ import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.statistik.util.StatistikUtil;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPortFactory;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
@@ -81,7 +81,7 @@ public class StatistikXMLService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final TenantService tenantService;
-    private final SwisstopoService swisstopoService;
+    private final GemeindeLookupPortFactory gemeindeLookupPortFactory;
     private final PlzService plzService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3AsyncClient;
@@ -240,7 +240,13 @@ public class StatistikXMLService {
             .build();
 
         final var bfsGemeindeCode =
-            Optional.ofNullable(StatistikUtil.getBfsGemeindeNrFromGesuch(gesuchTranche, swisstopoService));
+            Optional.ofNullable(
+                StatistikUtil.getBfsGemeindeNrFromGesuch(
+                    gesuchTranche,
+                    tenantService.getCurrentTenantIdentifier(),
+                    gemeindeLookupPortFactory
+                )
+            );
 
         if (bfsGemeindeCode.isEmpty()) {
             persDto.setCountry(Integer.valueOf(pia.getAdresse().getLand().getLaendercodeBfs()));

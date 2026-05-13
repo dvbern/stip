@@ -15,9 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.swisstopoapi.service;
+package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
-import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse;
+import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.QueryParam;

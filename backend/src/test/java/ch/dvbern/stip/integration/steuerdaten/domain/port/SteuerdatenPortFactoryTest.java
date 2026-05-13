@@ -19,8 +19,8 @@ package ch.dvbern.stip.integration.steuerdaten.domain.port;
 
 import java.util.Optional;
 
-import ch.dvbern.stip.api.config.type.PortConfig;
 import ch.dvbern.stip.api.config.type.TenantConfig;
+import ch.dvbern.stip.api.config.type.TenantPortConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.steuerdaten.adapter.dummy.service.DummySteuerdatenAdapter;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
@@ -48,8 +48,8 @@ class SteuerdatenPortFactoryTest {
 
     @BeforeEach
     void setUp() {
-        final var portConfig = Mockito.mock(PortConfig.class);
-        final var steuerdatenPortConfig = Mockito.mock(PortConfig.Steuerdaten.class);
+        final var portConfig = Mockito.mock(TenantPortConfig.class);
+        final var steuerdatenPortConfig = Mockito.mock(TenantPortConfig.Steuerdaten.class);
         final var tenantConfig = Mockito.mock(TenantConfig.class);
 
         Mockito.when(steuerdatenPortConfig.adapterType()).thenReturn(Optional.of(SteuerdatenAdapterType.DUMMY));

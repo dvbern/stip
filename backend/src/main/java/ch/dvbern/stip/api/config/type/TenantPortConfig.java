@@ -15,22 +15,30 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
+package ch.dvbern.stip.api.config.type;
 
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.integration.gemeindelookup.domain.service.GemeindeLookupService;
-import jakarta.enterprise.context.ApplicationScoped;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 
-@ApplicationScoped
-@RequiredArgsConstructor
-public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final GemeindeLookupService gemeindeLookupService;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
+import io.smallrye.config.WithDefault;
 
-    @Override
-    public void handle(Gesuch gesuch) {
-        gesuch.setVerfuegt(true);
-        gesuch.setInBearbeitungSbReason(null);
-        gemeindeLookupService.createFetchGemeindeDataScheduledJob(gesuch);
+public interface TenantPortConfig {
+    Steuerdaten steuerdaten();
+
+    GemeindeLookup gemeindeLookup();
+
+    interface Port {
+        @WithDefault("false")
+        Boolean enabled();
+    }
+
+    interface Steuerdaten extends Port {
+        Optional<SteuerdatenAdapterType> adapterType();
+    }
+
+    interface GemeindeLookup {
+        @WithDefault("swisstopo")
+        GemeindeLookupAdapterType adapterType();
     }
 }

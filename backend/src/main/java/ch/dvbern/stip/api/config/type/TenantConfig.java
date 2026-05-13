@@ -38,9 +38,9 @@ public interface TenantConfig {
 
     Map<String, SchedulerConfig> scheduler();
 
-    PortConfig port();
+    TenantPortConfig port();
 
-    AdapterConfig adapter();
+    TenantAdapterConfig adapter();
 
     interface Berechnung {
         @WithDefault("1")

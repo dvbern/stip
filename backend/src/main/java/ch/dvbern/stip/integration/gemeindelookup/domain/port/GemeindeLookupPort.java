@@ -15,29 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.swisstopoapi.entity;
+package ch.dvbern.stip.integration.gemeindelookup.domain.port;
 
-import java.util.List;
+import java.util.Optional;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Getter
-public class SwisstopoApiFindAddrResponse {
-    List<SwisstopoApiFindAddrResponseElement> results;
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @Getter
-    public static class SwisstopoApiFindAddrResponseElement {
-        SwisstopoApiFindAddrResponseElementAttributes attributes;
-    }
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @Getter
-    public static class SwisstopoApiFindAddrResponseElementAttributes {
-        String zip_label;
-        Integer com_fosnr;
-        String com_name;
-    }
+public interface GemeindeLookupPort {
+    Optional<GemeindeData> findGemeindeData(GemeindeLookupRequest request);
 }

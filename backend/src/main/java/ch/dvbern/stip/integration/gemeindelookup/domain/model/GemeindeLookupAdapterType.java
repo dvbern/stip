@@ -15,22 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.type;
+package ch.dvbern.stip.integration.gemeindelookup.domain.model;
 
-import java.util.Optional;
-
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import io.smallrye.config.WithDefault;
-
-public interface PortConfig {
-    Steuerdaten steuerdaten();
-
-    interface Port {
-        @WithDefault("false")
-        Boolean enabled();
-    }
-
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
+public enum GemeindeLookupAdapterType {
+    SWISSTOPO
 }

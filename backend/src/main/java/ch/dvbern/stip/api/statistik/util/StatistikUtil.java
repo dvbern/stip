@@ -35,7 +35,9 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungType;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
+import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPortFactory;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -77,20 +79,27 @@ public class StatistikUtil {
 
     public static Integer getBfsGemeindeNrFromGesuch(
         final GesuchTranche gesuchTranche,
-        final SwisstopoService swisstopoService
+        final TenantIdentifier tenantIdentifier,
+        final GemeindeLookupPortFactory gemeindeLookupPortFactory
     ) {
         final var gesuch = gesuchTranche.getGesuch();
         final var statisticsdata = Optional.ofNullable(gesuch.getStatisticsdata());
 
         if (statisticsdata.isEmpty()) {
             final var address = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse();
-            swisstopoService.getGemeindeDataOfGesuch(
-                gesuch.getId(),
-                address.getStrasse(),
-                address.getHausnummer(),
-                address.getPlz(),
-                address.getOrt()
-            );
+            final var gemeindeLookupRequest = GemeindeLookupRequest.builder()
+                .gesuchId(gesuch.getId())
+                .tenantIdentifier(tenantIdentifier)
+                .strasse(address.getStrasse())
+                .hausnummer(address.getHausnummer())
+                .plz(address.getPlz())
+                .ort(address.getOrt())
+                .build();
+
+            return gemeindeLookupPortFactory.getGemeindeLookupPort()
+                .findGemeindeData(gemeindeLookupRequest)
+                .map(GemeindeData::bfsNummer)
+                .orElse(null);
         }
 
         return statisticsdata

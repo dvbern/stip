@@ -15,21 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.type;
+package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
-import java.util.Map;
-import java.util.Optional;
+import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
+import lombok.experimental.UtilityClass;
 
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-
-public interface AdapterConfig {
-    Map<SteuerdatenAdapterType, SteuerdatenAdapter> steuerdaten();
-
-    interface SteuerdatenAdapter {
-        Optional<String> url();
-
-        Optional<String> username();
-
-        Optional<String> password();
+@UtilityClass
+public class SwisstopoGeimeindeDataMapper {
+    public GemeindeData toGemeindeData(
+        final SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes attributes
+    ) {
+        return GemeindeData.builder()
+            .bfsNummer(attributes.comFosnr())
+            .name(attributes.comName())
+            .build();
     }
 }
