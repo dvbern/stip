@@ -55,14 +55,13 @@ export function buildGesuchNavItems(
         label: { key: `${baseKey}.header.gesuch` },
         icon: 'description',
         active: !!gesuchId,
-        children: tranchen.map((tranche, index) => ({
+        children: tranchen.map((tranche) => ({
           type: 'link' as const,
           id: tranche.id,
           label: {
             key: `${baseKey}.header.tranche.item`,
             context: {
               date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
-              index: index + 1,
             },
           },
           route: ['/gesuch', gesuchId, 'tranche', tranche.id],

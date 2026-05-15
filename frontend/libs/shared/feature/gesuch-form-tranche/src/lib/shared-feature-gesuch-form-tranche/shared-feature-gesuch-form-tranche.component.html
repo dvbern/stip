@@ -6,11 +6,8 @@
   <ng-template dvHeaderSuffix>
     <h2 data-testid="dynamic-tranche-step-title" class="tw:font-bold tw:text-3xl tw:flex tw:gap-8 tw:items-center">
       @if (tranche) {
-        @if (currentTrancheNumberSig(); as currentTrancheNumber) {
-          {{ t(`shared.form.title.suffix.${tranche.typ}`, { position: currentTrancheNumber }) }}
-        } @else {
-          {{ t(`shared.form.title.suffix.AENDERUNG.new`) }}
-        }
+        {{ t(`shared.form.title.suffix.${tranche.typ}`) }}
+
         {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }

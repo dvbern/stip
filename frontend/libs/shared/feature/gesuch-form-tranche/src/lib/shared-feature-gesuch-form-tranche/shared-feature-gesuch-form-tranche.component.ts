@@ -61,7 +61,6 @@ import {
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
-import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -138,21 +137,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     }
 
     return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
-  });
-
-  currentTrancheNumberSig = computed(() => {
-    const { tranche: currentTranche, trancheSetting } = this.viewSig();
-    const revision = this.revisionSig();
-
-    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
-
-    return currentTrancheNumber(
-      trancheSetting,
-      currentTranche,
-      header,
-      revision,
-      isLoading,
-    );
   });
 
   currentGesuchSig = computed(

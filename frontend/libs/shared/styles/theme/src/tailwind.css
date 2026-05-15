@@ -173,9 +173,12 @@
 }
 
 @utility dv-btn-tranche {
-  @apply tw:flex tw:items-center tw:bg-white tw:px-4 tw:py-[10px] tw:border tw:border-gray-300 tw:rounded-xl! tw:w-full;
+  @apply tw:flex tw:items-center tw:bg-white tw:p-4 tw:border tw:border-gray-300 tw:rounded-md! tw:w-full;
   &:hover {
-    @apply tw:bg-dv-red tw:text-white;
+    @apply tw:cursor-pointer tw:bg-gray-100;
+  }
+  &:disabled {
+    @apply tw:pointer-events-none;
   }
 }
 

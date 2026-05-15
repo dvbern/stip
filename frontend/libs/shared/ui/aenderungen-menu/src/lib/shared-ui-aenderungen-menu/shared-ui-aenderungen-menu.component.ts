@@ -25,6 +25,22 @@ export class SharedUiAenderungenMenuComponent {
   aenderungenSig = input.required<GesuchAenderungs | undefined>();
   isAenderungRouteSig = input.required<boolean | undefined>();
 
+  aenderungenCountSig = computed(() => {
+    const aenderungen = this.aenderungenSig();
+    if (!aenderungen) {
+      return 0;
+    }
+    const offeneAenderungCount = aenderungen.offen ? 1 : 0;
+    const akzeptierteAenderungenCount = aenderungen.akzeptiert?.length ?? 0;
+    const abgelehnteAenderungenCount = aenderungen.abgelehnt?.length ?? 0;
+
+    return (
+      offeneAenderungCount +
+      akzeptierteAenderungenCount +
+      abgelehnteAenderungenCount
+    );
+  });
+
   currentAenderungSig = computed(() => {
     const aenderungen = this.aenderungenSig();
     const trancheId = this.trancheIdSig();
@@ -34,10 +50,19 @@ export class SharedUiAenderungenMenuComponent {
 
     const allAenderungen = [
       ...(offeneAenderung
-        ? [offeneAenderung].map((a, index) => ({ ...a, index }))
+        ? [offeneAenderung].map((a) => ({
+            ...a,
+            completeState: 'open' as const,
+          }))
         : []),
-      ...(akzeptierteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
-      ...(abgelehnteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
+      ...(akzeptierteAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'completed' as const,
+      })) ?? []),
+      ...(abgelehnteAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'rejected' as const,
+      })) ?? []),
     ];
 
     return allAenderungen.find((aenderung) => aenderung.id === trancheId);

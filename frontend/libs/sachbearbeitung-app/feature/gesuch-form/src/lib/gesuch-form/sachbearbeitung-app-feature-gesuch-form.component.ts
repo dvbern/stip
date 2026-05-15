@@ -13,6 +13,8 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -45,7 +47,6 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
@@ -60,6 +61,8 @@ import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
     RouterLink,
     PortalModule,
     SharedUiAenderungenMenuComponent,
+    MatFormFieldModule,
+    FormsModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -174,22 +177,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     return trancheId && tranchen
       ? tranchen.find((tranche) => tranche.id === trancheId)
       : undefined;
-  });
-
-  currentTrancheNumberSig = computed(() => {
-    const { trancheSetting } = this.viewSig();
-    const currentTranche = this.currentTrancheSig();
-    const revision = this.revisionSig();
-
-    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
-
-    return currentTrancheNumber(
-      trancheSetting,
-      currentTranche,
-      header,
-      revision,
-      isLoading,
-    );
   });
 
   ngAfterViewInit(): void {
