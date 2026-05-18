@@ -1,15 +1,11 @@
-@for (step of stepsViewSig(); track $index; let index = $index) {
-  @if (step.prependLine) {
-    <hr class="tw:mt-6 tw:mb-6 tw:border-t tw:border-dv-border tw:pb-2" />
-  }
-
+<ng-template #navItem dvStepView let-step="step">
   <a
     class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center tw:relative tw:mb-4 tw:w-full"
     [class.active]="step.active()"
     [class.disabled]="step.disabled"
     [class.tw:dv-historized]="isHistorizedSig()"
-    [class.tw:pointer-events-none]="!step.route"
-    [routerLink]="step.route ?? '#'"
+    [class.tw:pointer-events-none]="!step.routerLink"
+    [routerLink]="step.routerLink"
     [queryParamsHandling]="'preserve'"
     [attr.data-testid]="'step-nav-' + step.name"
     (click)="navClicked.emit({})"
@@ -19,19 +15,40 @@
     }
     <div class="tw:relative tw:flex tw:mr-4 align-middle">
       <i class="material-symbols-rounded">{{ step.iconSymbolName }}</i>
-      @if (step.status) {
-        <i
-          class="validator-indicator material-symbols-rounded tw:absolute"
-          [class.tw:text-dv-yellow]="step.status === 'WARNING'"
-          [class.tw:text-dv-green]="step.status === 'VALID'"
-          [class.tw:text-dv-red]="step.status === 'INVALID'"
-        >
-          {{ statusIconMap[step.status] }}
-        </i>
-      }
+      <i
+        class="validator-indicator material-symbols-rounded tw:absolute"
+        [class.tw:text-dv-yellow]="step.status === 'WARNING'"
+        [class.tw:text-dv-green]="step.status === 'VALID'"
+        [class.tw:text-dv-red]="step.status === 'INVALID'"
+      >
+        {{ step.statusIconSymbolName }}
+      </i>
     </div>
     <span class="tw:text-start">
       {{ step.translationKey | transloco }}
     </span>
   </a>
+</ng-template>
+
+@for (entry of groupedStepsViewSig(); track $index) {
+  @if (entry.type === 'group') {
+    <mat-expansion-panel
+      class="dv-nav-expansion-panel mat-elevation-z0 tw:border-b tw:border-dv-border!"
+      [ngClass]="{ 'tw:border-t tw:border-dv-border': entry.prependDivider }"
+      [expanded]="entry.hasActive || openedGroupsSig()[entry.group]"
+      (opened)="openGroup(entry.group)"
+      (closed)="closeGroup(entry.group)"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title class="tw:font-semibold tw:text-dv-gray">
+          {{ 'shared.form.step.group.' + entry.group | transloco }}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      @for (step of entry.steps; track step.name) {
+        <ng-container *ngTemplateOutlet="navItem; context: { step }"></ng-container>
+      }
+    </mat-expansion-panel>
+  } @else {
+    <ng-container *ngTemplateOutlet="navItem; context: { step: entry.step }"></ng-container>
+  }
 }

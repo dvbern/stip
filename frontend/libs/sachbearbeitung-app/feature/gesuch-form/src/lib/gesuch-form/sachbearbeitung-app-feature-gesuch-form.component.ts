@@ -140,6 +140,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       invalidFormularProps.validations,
     );
   });
+
   currentStepProgressSig = computed(() => {
     const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;

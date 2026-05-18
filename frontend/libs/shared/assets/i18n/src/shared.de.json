@@ -426,6 +426,9 @@
   "shared.verfuegung.status.KEIN_ANSPRUCH": "Kein Stipendienanspruch",
   "shared.verfuegung.status.NEGATIV": "Negative Verfügung",
 
+  "shared.form.step.group.FAMILIENANGABEN": "Familienangaben",
+  "shared.form.step.group.PERSOENLICHE_ANGABEN": "Persönliche Angaben",
+
   "shared.form.next": "Nächstes",
   "shared.form.previous": "Vorheriges",
   "shared.form.gonext": "Weiter",

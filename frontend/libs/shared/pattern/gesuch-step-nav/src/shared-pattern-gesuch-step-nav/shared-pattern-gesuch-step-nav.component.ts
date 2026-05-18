@@ -1,13 +1,18 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  Directive,
   EventEmitter,
   HostBinding,
   Output,
   computed,
+  effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { Router, RouterLink, isActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -15,7 +20,7 @@ import { Store } from '@ngrx/store';
 import { isHistorizedView } from '@dv/shared/data-access/gesuch';
 import {
   GesuchFormStepView,
-  PERSON,
+  StepGroup,
   StepState,
 } from '@dv/shared/model/gesuch-form';
 import { SharedUiChangeIndicatorComponent } from '@dv/shared/ui/change-indicator';
@@ -23,9 +28,51 @@ import { stepHasChanges } from '@dv/shared/util-fn/gesuch-util';
 
 import { sharedPatternGesuchStepNavView } from './shared-pattern-gesuch-step-nav.selectors';
 
+type StepView = {
+  hasChanges: boolean | undefined;
+  name: string;
+  routerLink: (string | null)[] | null;
+  active: () => boolean;
+  group?: StepGroup;
+  statusIconSymbolName?: string;
+} & GesuchFormStepView;
+
+type GroupEntry = {
+  type: 'group';
+  group: StepGroup;
+  steps: StepView[];
+  hasActive: boolean;
+  prependDivider: boolean;
+};
+
+type StandaloneEntry = {
+  type: 'standalone';
+  step: StepView;
+};
+
+type NavEntry = GroupEntry | StandaloneEntry;
+
+@Directive({ selector: 'ng-template[dvStepView]', standalone: true })
+export class StepViewTemplateDirective {
+  static ngTemplateContextGuard(
+    _dir: StepViewTemplateDirective,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ctx: unknown,
+  ): ctx is { step: StepView } {
+    return true;
+  }
+}
+
 @Component({
   selector: 'dv-shared-pattern-gesuch-step-nav',
-  imports: [RouterLink, TranslocoPipe, SharedUiChangeIndicatorComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    TranslocoPipe,
+    SharedUiChangeIndicatorComponent,
+    MatExpansionModule,
+    StepViewTemplateDirective,
+  ],
   templateUrl: './shared-pattern-gesuch-step-nav.component.html',
   styleUrls: ['./shared-pattern-gesuch-step-nav.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,16 +87,24 @@ export class SharedPatternGesuchStepNavComponent {
     INVALID: 'error',
     WARNING: 'error',
   };
+
   isHistorizedSig = this.store.selectSignal(isHistorizedView);
   stepsSig = input<GesuchFormStepView[]>();
-  stepsViewSig = computed(() => {
+  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
+  route = inject(Router);
+
+  openedGroupsSig = signal<Record<StepGroup, boolean>>({
+    PERSOENLICHE_ANGABEN: true,
+    FAMILIENANGABEN: true,
+  });
+
+  stepsViewSig = computed<StepView[] | undefined>(() => {
     const { cachedGesuchId, trancheSetting, tranchenChanges } = this.viewSig();
     return this.stepsSig()?.map((step) => ({
       ...step,
       hasChanges: stepHasChanges(tranchenChanges, step),
       name: step.route,
-      prependLine: step.route === PERSON.route,
-      route: trancheSetting
+      routerLink: trancheSetting
         ? [
             '/',
             'gesuch',
@@ -64,13 +119,56 @@ export class SharedPatternGesuchStepNavComponent {
         fragment: 'ignored',
         matrixParams: 'ignored',
       }),
+      statusIconSymbolName: step.status
+        ? this.statusIconMap[step.status]
+        : undefined,
     }));
   });
-  viewSig = this.store.selectSignal(sharedPatternGesuchStepNavView);
 
-  route = inject(Router);
+  groupedStepsViewSig = computed<NavEntry[]>(() => {
+    const steps = this.stepsViewSig() ?? [];
 
-  trackByIndex(index: number): number {
-    return index;
+    return steps.reduce<NavEntry[]>((acc, step) => {
+      const last = acc[acc.length - 1];
+      if (step.group && last?.type === 'group' && last.group === step.group) {
+        last.steps.push(step);
+        if (step.active()) last.hasActive = true;
+        return acc;
+      }
+      return [
+        ...acc,
+        step.group
+          ? {
+              type: 'group',
+              group: step.group,
+              steps: [step],
+              hasActive: step.active(),
+              prependDivider: last?.type === 'standalone',
+            }
+          : { type: 'standalone', step },
+      ];
+    }, []);
+  });
+
+  constructor() {
+    effect(() => {
+      const grouped = this.groupedStepsViewSig();
+      for (const entry of grouped) {
+        if (entry.type === 'group' && entry.hasActive) {
+          this.openedGroupsSig.update((rec) => {
+            if (rec[entry.group]) return rec;
+            return { ...rec, [entry.group]: true };
+          });
+        }
+      }
+    });
+  }
+
+  openGroup(group: StepGroup): void {
+    this.openedGroupsSig.update((rec) => ({ ...rec, [group]: true }));
+  }
+
+  closeGroup(group: StepGroup): void {
+    this.openedGroupsSig.update((rec) => ({ ...rec, [group]: false }));
   }
 }

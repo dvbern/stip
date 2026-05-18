@@ -200,6 +200,18 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
+.mat-expansion-panel.dv-nav-expansion-panel {
+  border-radius: 1px;
+
+  overflow: visible;
+  .mat-expansion-panel-header {
+    padding: 0.5rem 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem;
+  }
+}
+
 dv-sachbearbeitung-app-feature-verfuegung {
   .mat-mdc-card {
     background-color: var(--tw-color-gray-100);
