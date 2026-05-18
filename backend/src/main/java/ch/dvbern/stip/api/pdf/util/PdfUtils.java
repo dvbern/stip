@@ -197,6 +197,16 @@ public class PdfUtils {
         return paragraph;
     }
 
+    public Stream<Paragraph> createParagraphsForEachDoubleNewline(
+        final PdfFont font,
+        float fontSize,
+        float leftMargin,
+        final String multilineText
+    ) {
+        final var texts = Arrays.stream(multilineText.split("\n\n")).filter(text -> !text.isBlank());
+        return texts.map(text -> createParagraph(font, fontSize, leftMargin, text));
+    }
+
     public Paragraph createParagraph(
         float fontSize,
         float leftMargin
@@ -244,7 +254,9 @@ public class PdfUtils {
             .setPaddingBottom(SPACING_SMALL);
 
         for (final String text : paragraphs) {
-            cell.add(createParagraph(font, fontSize, 0, text));
+            cell.add(
+                createParagraph(font, fontSize, 0, text)
+            );
         }
         return cell;
     }

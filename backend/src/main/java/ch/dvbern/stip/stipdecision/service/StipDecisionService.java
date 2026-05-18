@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.stipdecision.service;
 
+import java.util.Comparator;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
@@ -28,6 +29,7 @@ import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.StipDecisionTextDto;
 import ch.dvbern.stip.stipdecision.decider.BaseStipDecider;
 import ch.dvbern.stip.stipdecision.decider.StipDeciderTenant;
+import ch.dvbern.stip.stipdecision.entity.StipDecisionText;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -80,6 +82,10 @@ public class StipDecisionService {
     }
 
     public List<StipDecisionTextDto> getAll() {
-        return stipDecisionTextRepository.findAll().stream().map(stipDecisionTextMapper::toDto).toList();
+        return stipDecisionTextRepository.findAll()
+            .stream()
+            .sorted(Comparator.comparing(StipDecisionText::getStipDecision))
+            .map(stipDecisionTextMapper::toDto)
+            .toList();
     }
 }
