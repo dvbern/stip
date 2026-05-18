@@ -38,6 +38,7 @@ public class PdfConstants {
     public static final int SPACING_BIG = 30;
     public static final int SPACING_MEDIUM = 20;
     public static final int SPACING_SMALL = 10;
+    public static final int SPACING_TINY = 4;
     public static final float FONT_SIZE_BIG = 10.5f;
     public static final float FONT_SIZE_MEDIUM = 8.5f;
     public static final float FONT_SIZE_SMALL = 6.5f;
