@@ -147,6 +147,7 @@ public class DatenschutzbriefPdfService {
                     FONT_SIZE_BIG,
                     leftMargin,
                     translator.translate("stip.pdf.datenschutzbrief.textBlock.zwei.title"),
+                    ". ",
                     translator.translate("stip.pdf.datenschutzbrief.textBlock.zwei.body")
                 )
             );
@@ -157,6 +158,7 @@ public class DatenschutzbriefPdfService {
                     FONT_SIZE_BIG,
                     leftMargin,
                     translator.translate("stip.pdf.datenschutzbrief.textBlock.drei.title"),
+                    ". ",
                     translator.translate("stip.pdf.datenschutzbrief.textBlock.drei.body")
                 )
             );
