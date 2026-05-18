@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlende
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
@@ -73,7 +72,6 @@ class GesuchStatusStateMachineTest {
     private AenderungFehlendeDokumenteZurueckweisenHandler aenderungFehlendeDokumenteZurueckweisenHandlerMock;
     private StipendienAnspruchHandler stipendienAnspruchHandlerSpy;
     private JuristischeAbklaerungDurchPruefungHandler juristischeAbklaerungDurchPruefungHandlerSpy;
-    private BereitFuerBearbeitungHandler bereitFuerBearbeitungHandler;
     private StatusprotokollService statusprotokollService;
     private VerfuegtHandler verfuegtHandlerMock;
     private AenderungAkzeptierenHandler aenderungAkzeptierenHandler;
@@ -99,7 +97,6 @@ class GesuchStatusStateMachineTest {
         stipendienAnspruchHandlerSpy = Mockito.mock(StipendienAnspruchHandler.class);
         juristischeAbklaerungDurchPruefungHandlerSpy = Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class);
         statusprotokollService = Mockito.mock(StatusprotokollService.class);
-        bereitFuerBearbeitungHandler = Mockito.mock(BereitFuerBearbeitungHandler.class);
         aenderungFehlendeDokumenteZurueckweisenHandlerMock =
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class);
         verfuegtHandlerMock = Mockito.mock(VerfuegtHandler.class);
@@ -122,7 +119,6 @@ class GesuchStatusStateMachineTest {
             stipendienAnspruchHandlerSpy,
             juristischeAbklaerungDurchPruefungHandlerSpy,
             statusprotokollService,
-            bereitFuerBearbeitungHandler,
             aenderungFehlendeDokumenteZurueckweisenHandlerMock,
             verfuegtHandlerMock,
             aenderungAkzeptierenHandler,

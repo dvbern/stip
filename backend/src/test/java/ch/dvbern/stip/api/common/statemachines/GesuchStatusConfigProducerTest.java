@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlende
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungFehlendeDokumenteZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AenderungZurueckweisenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.AusbildungUnterbruchAkzeptierenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BereitFuerBearbeitungHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.BeschwerdeErfolgreichAkzeptierenHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.DatenschutzbriefDruckbereitHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.FehlendeDokumenteEinreichenHandler;
@@ -67,7 +66,6 @@ class GesuchStatusConfigProducerTest {
             Mockito.mock(StipendienAnspruchHandler.class),
             Mockito.mock(JuristischeAbklaerungDurchPruefungHandler.class),
             Mockito.mock(StatusprotokollService.class),
-            Mockito.mock(BereitFuerBearbeitungHandler.class),
             Mockito.mock(AenderungFehlendeDokumenteZurueckweisenHandler.class),
             Mockito.mock(VerfuegtHandler.class),
             Mockito.mock(AenderungAkzeptierenHandler.class),
