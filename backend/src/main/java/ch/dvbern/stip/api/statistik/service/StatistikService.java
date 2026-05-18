@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -62,7 +63,7 @@ public class StatistikService {
 
         final JobDetail jobDetail = JobBuilder.newJob(StatistikXMLJob.class)
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
+                StatistikConstants.STATISTIK_JOB_PREFIX + year + '-' + LocalDate.now().toString(),
                 "statistik"
             )
             .usingJobData(
@@ -75,7 +76,7 @@ public class StatistikService {
 
         final Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + "trigger-" + year + "-" + System.currentTimeMillis(),
+                StatistikConstants.STATISTIK_JOB_PREFIX + "trigger-" + year + '-' + System.currentTimeMillis(),
                 "statistik"
             )
             .startNow()
