@@ -149,7 +149,7 @@ export default async function (tree: Tree, options: LibGeneratorSchema) {
   addFiles(tree, normalizedOptions);
   postprocess(tree, normalizedOptions);
   updateSpecTsConfig(tree, normalizedOptions);
-  await formatFiles(tree);
+  await formatFiles(tree, { sortRootTsconfigPaths: true });
 
   return async () => {
     console['log'](`\nProject: --project ${normalizedOptions.projectName}\n`);

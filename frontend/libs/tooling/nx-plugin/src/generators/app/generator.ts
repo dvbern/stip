@@ -40,7 +40,7 @@ export default async function (tree: Tree, options: AppGeneratorSchema) {
   updateProjectJson(tree, projectRoot);
   addScope(tree, projectName);
 
-  await formatFiles(tree);
+  await formatFiles(tree, { sortRootTsconfigPaths: true });
 
   return async () => {
     console['log'](
