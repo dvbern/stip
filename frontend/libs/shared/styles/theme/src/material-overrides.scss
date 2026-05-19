@@ -144,6 +144,7 @@ $dv-all-colors: info, danger, success, warn, primary;
 .cdk-overlay-container .header-menu-panel {
   padding: 5px 12px;
   max-width: 450px;
+  min-width: 250px;
 }
 
 .mat-mdc-list-item {
