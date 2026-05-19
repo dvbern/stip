@@ -35,6 +35,7 @@ type StepView = {
   active: () => boolean;
   group?: StepGroup;
   statusIconSymbolName?: string;
+  marginTop?: boolean;
 } & GesuchFormStepView;
 
 type GroupEntry = {
@@ -42,7 +43,9 @@ type GroupEntry = {
   group: StepGroup;
   steps: StepView[];
   hasActive: boolean;
-  prependDivider: boolean;
+  hasChanges: boolean;
+  borderTop?: boolean;
+  groupStatus?: StepState;
 };
 
 type StandaloneEntry = {
@@ -94,8 +97,8 @@ export class SharedPatternGesuchStepNavComponent {
   route = inject(Router);
 
   openedGroupsSig = signal<Record<StepGroup, boolean>>({
-    PERSOENLICHE_ANGABEN: true,
-    FAMILIENANGABEN: true,
+    PERSOENLICHE_ANGABEN: false,
+    FAMILIENANGABEN: false,
   });
 
   stepsViewSig = computed<StepView[] | undefined>(() => {
@@ -133,6 +136,8 @@ export class SharedPatternGesuchStepNavComponent {
       if (step.group && last?.type === 'group' && last.group === step.group) {
         last.steps.push(step);
         if (step.active()) last.hasActive = true;
+        if (step.hasChanges) last.hasChanges = true;
+        last.groupStatus = this.mergeGroupStatus(last.groupStatus, step.status);
         return acc;
       }
       return [
@@ -143,12 +148,28 @@ export class SharedPatternGesuchStepNavComponent {
               group: step.group,
               steps: [step],
               hasActive: step.active(),
-              prependDivider: last?.type === 'standalone',
+              hasChanges: !!step.hasChanges,
+              borderTop: last?.type === 'standalone',
+              groupStatus: step.status,
             }
-          : { type: 'standalone', step },
+          : {
+              type: 'standalone',
+              step:
+                last?.type === 'group' ? { ...step, marginTop: true } : step,
+            },
       ];
     }, []);
   });
+
+  private mergeGroupStatus(
+    current: StepState | undefined,
+    next: StepState | undefined,
+  ): StepState | undefined {
+    if (current === 'INVALID' || next === 'INVALID') return 'INVALID';
+    if (current === 'WARNING' || next === 'WARNING') return 'WARNING';
+    if (current === 'VALID' || next === 'VALID') return 'VALID';
+    return undefined;
+  }
 
   constructor() {
     effect(() => {

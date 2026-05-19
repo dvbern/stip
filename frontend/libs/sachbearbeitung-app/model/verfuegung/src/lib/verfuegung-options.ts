@@ -2,7 +2,7 @@ export type VerfuegungOption = {
   route: string;
   translationKey: string;
   translationOptions?: Record<string, string>;
-  titleTranslationKey: string; // todo: check if used?
+  titleTranslationKey: string;
   iconSymbolName: string;
 };
 
@@ -22,7 +22,7 @@ export const createBerechnungOption = (
   endDate: string,
 ): VerfuegungOption => {
   const key =
-    totalBerechnungen > 0
+    totalBerechnungen > 1
       ? 'sachbearbeitung-app.verfuegung.option.berechnung.withIndex'
       : 'sachbearbeitung-app.verfuegung.option.berechnung';
 
