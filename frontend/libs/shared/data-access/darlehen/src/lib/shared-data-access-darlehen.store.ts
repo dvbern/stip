@@ -26,6 +26,7 @@ import {
   handleApiResponse,
   initial,
   isPending,
+  mapCachedData,
   pending,
 } from '@dv/shared/util/remote-data';
 
@@ -235,8 +236,10 @@ export class DarlehenStore extends signalStore(
     rxMethod<DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams>(
       pipe(
         tap(() => {
-          patchState(this, () => ({
-            paginatedSbDarlehenDashboard: pending(),
+          patchState(this, (state) => ({
+            paginatedSbDarlehenDashboard: cachedPending(
+              state.paginatedSbDarlehenDashboard,
+            ),
           }));
         }),
         switchMap((req) =>
@@ -435,4 +438,13 @@ export class DarlehenStore extends signalStore(
       ),
     ),
   );
+
+  softDeleteNegativVerfuegung() {
+    patchState(this, (state) => ({
+      cachedDarlehen: mapCachedData(state.cachedDarlehen, (d) => ({
+        ...d,
+        negativeVerfuegung: undefined,
+      })),
+    }));
+  }
 }

@@ -26,7 +26,10 @@ const language = 'de';
 async function setup() {
   return await render(SharedFeatureAusbildungComponent, {
     inputs: {
-      fallIdSig: 'fall123',
+      dialogDataSig: {
+        fallId: 'fall123',
+        minAusbildungEnd: '2019-03-01',
+      },
     },
     imports: [getTranslocoModule(), NoopAnimationsModule],
     providers: [

@@ -13,6 +13,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -72,9 +73,9 @@ export class SharedUiKommentarDialogComponent<T extends string> {
     }
   }
 
-  static open<T extends string>(
+  static open<T extends string = SharedTranslationKey>(
     dialog: MatDialog,
-    data: KommentarDialogData<T>,
+    data: KommentarDialogData<NoInfer<T>>,
   ) {
     return dialog.open<
       SharedUiKommentarDialogComponent<T>,
@@ -83,9 +84,9 @@ export class SharedUiKommentarDialogComponent<T extends string> {
     >(SharedUiKommentarDialogComponent, { data: { ...data, optional: false } });
   }
 
-  static openOptional<T extends string>(
+  static openOptional<T extends string = SharedTranslationKey>(
     dialog: MatDialog,
-    data: KommentarDialogData<T>,
+    data: KommentarDialogData<NoInfer<T>>,
   ) {
     return dialog.open<
       SharedUiKommentarDialogComponent<T>,

@@ -18,8 +18,11 @@
 package ch.dvbern.stip.api.datenschutzbrief.entity;
 
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.massendruck.entity.DatenschutzbriefMassendruck;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,29 +33,38 @@ import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH;
+import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_LENGTH;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_NACHNAME_NOTBLANK_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_VORNAME_NOTBLANK_MESSAGE;
 
 @Audited
 @Entity
-@Table(
-    name = "datenschutzbrief",
-    indexes = {
-        @Index(name = "IX_datenschutzbrief_mandant", columnList = "mandant")
-    }
-)
+@Table(name = "datenschutzbrief", indexes = { @Index(name = "IX_datenschutzbrief_mandant", columnList = "mandant") })
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Datenschutzbrief extends AbstractMandantEntity {
+
+    @Nullable
+    @OneToOne(mappedBy = "datenschutzbrief")
+    private DatenschutzbriefMassendruck datenschutzbriefMassendruck;
+
     @NotNull
     @Column(name = "is_versendet")
     private boolean isVersendet = false;
@@ -61,6 +73,11 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     @Column(name = "datenschutzbrief_empfaenger", nullable = false)
     @Enumerated(EnumType.STRING)
     private ElternTyp datenschutzbriefEmpfaenger;
+
+    @NotNull
+    @Size(max = DB_DEFAULT_STRING_SMALL_LENGTH)
+    @Column(name = "sozialversicherungsnummer", nullable = false, length = DB_DEFAULT_STRING_SMALL_LENGTH)
+    private String sozialversicherungsnummer;
 
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
@@ -76,4 +93,13 @@ public class Datenschutzbrief extends AbstractMandantEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_datenschutzbrief_gesuch_id"))
     private Gesuch gesuch;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+        name = "dokument_id",
+        foreignKey = @ForeignKey(name = "FK_datenschutzbrief_dokument_id"),
+        nullable = false
+    )
+    private Dokument dokument;
 }

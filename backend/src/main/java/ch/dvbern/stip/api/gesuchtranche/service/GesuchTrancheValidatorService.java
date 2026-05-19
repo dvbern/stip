@@ -32,6 +32,7 @@ import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularValidatorService;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -47,6 +48,8 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheValidatorService {
+    private static final Map<Gesuchstatus, List<Class<?>>> gesuchStatusToValidationGroups =
+        new EnumMap<>(Gesuchstatus.class);
     private static final Map<GesuchTrancheStatus, List<Class<?>>> trancheStatusToValidationGroups =
         new EnumMap<>(GesuchTrancheStatus.class);
 
@@ -57,6 +60,10 @@ public class GesuchTrancheValidatorService {
         exceptionalGesuchStatusToValidationGroups.put(
             Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG,
             List.of(GesuchNachInBearbeitungSBValidationGroup.class)
+        );
+        gesuchStatusToValidationGroups.put(
+            Gesuchstatus.IN_BEARBEITUNG_SB,
+            List.of(GesuchNachInFreigabeValidationGroup.class)
         );
         trancheStatusToValidationGroups
             .put(GesuchTrancheStatus.UEBERPRUEFEN, List.of(GesuchEinreichenValidationGroup.class));
@@ -85,14 +92,21 @@ public class GesuchTrancheValidatorService {
     private final Validator validator;
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
-    public void validateGesuchTrancheForStatus(final GesuchTranche toValidate, final GesuchTrancheStatus status) {
-        var validationGroups = Stream.concat(
+    public void validateGesuchTrancheForStatus(
+        final GesuchTranche toValidate,
+        final GesuchTrancheStatus trancheStatus
+    ) {
+        final var gesuchstatus = toValidate.getGesuch().getGesuchStatus();
+        final var validationGroups = Stream.concat(
             Stream.of(Default.class),
             // First check for exceptional gesuch status validation groups defined by the current gesuch status
             exceptionalGesuchStatusToValidationGroups.getOrDefault(
-                toValidate.getGesuch().getGesuchStatus(),
-                // Otherwise use regular tranche validation groups defined by their current status
-                trancheStatusToValidationGroups.getOrDefault(status, List.of())
+                gesuchstatus,
+                // Otherwise use regular gesuch and tranche validation groups defined by their current status
+                Stream.concat(
+                    gesuchStatusToValidationGroups.getOrDefault(gesuchstatus, List.of()).stream(),
+                    trancheStatusToValidationGroups.getOrDefault(trancheStatus, List.of()).stream()
+                ).toList()
             ).stream()
         ).toList();
 

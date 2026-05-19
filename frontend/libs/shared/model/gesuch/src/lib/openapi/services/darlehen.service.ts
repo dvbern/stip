@@ -26,7 +26,6 @@ import { FileDownloadToken } from '../model/fileDownloadToken';
 import { FreiwilligDarlehen } from '../model/freiwilligDarlehen';
 import { FreiwilligDarlehenGsResponse } from '../model/freiwilligDarlehenGsResponse';
 import { FreiwilligDarlehenUpdateGs } from '../model/freiwilligDarlehenUpdateGs';
-import { FreiwilligDarlehenUpdateSb } from '../model/freiwilligDarlehenUpdateSb';
 import { GetFreiwilligDarlehenSbQueryType } from '../model/getFreiwilligDarlehenSbQueryType';
 import { Kommentar } from '../model/kommentar';
 import { NullableDarlehenDokument } from '../model/nullableDarlehenDokument';
@@ -52,6 +51,7 @@ export interface DarlehenServiceCreateDarlehenDokumentRequestParams {
 }
 
 export interface DarlehenServiceCreateFreiwilligDarlehenRequestParams {
+    /** Die ID vom Fall */
     fallId: string;
 }
 
@@ -64,6 +64,10 @@ export interface DarlehenServiceDeleteFreiwilligDarlehenGsRequestParams {
 }
 
 export interface DarlehenServiceDownloadDarlehenDokumentRequestParams {
+    token: string;
+}
+
+export interface DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams {
     token: string;
 }
 
@@ -90,7 +94,10 @@ export interface DarlehenServiceFreiwilligDarlehenUpdateGsRequestParams {
 
 export interface DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams {
     darlehenId: string;
-    freiwilligDarlehenUpdateSb: FreiwilligDarlehenUpdateSb;
+    gewaehren?: boolean;
+    negativeVerfuegung?: Blob;
+    betrag?: number;
+    kommentar?: string;
 }
 
 export interface DarlehenServiceFreiwilligDarlehenZurueckweisenRequestParams {
@@ -117,6 +124,10 @@ export interface DarlehenServiceGetDarlehenDokumentRequestParams {
 }
 
 export interface DarlehenServiceGetDarlehenDownloadTokenRequestParams {
+    dokumentId: string;
+}
+
+export interface DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams {
     dokumentId: string;
 }
 
@@ -808,6 +819,94 @@ export class DarlehenService {
         );
     }
 
+    public downloadDarlehenNegativVerfuegungPath = (requestParameters: DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams) => {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadDarlehenNegativVerfuegung$.');
+        }
+        let path = `/api/v1/darlehen/negativ-verfuegung/download`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+
+        if (token !== undefined && token !== null) {
+          queryParams.append('token', token.toString());
+        }
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * Download Darlehen negativeVerfuegung Dokument
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public downloadDarlehenNegativVerfuegung$(requestParameters: DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<Blob>;
+     public downloadDarlehenNegativVerfuegung$(requestParameters: DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpResponse<Blob>>;
+     public downloadDarlehenNegativVerfuegung$(requestParameters: DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<HttpEvent<Blob>>;
+     public downloadDarlehenNegativVerfuegung$(requestParameters: DarlehenServiceDownloadDarlehenNegativVerfuegungRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/octet-stream', context?: HttpContext}): Observable<any> {
+        const token = requestParameters.token;
+        if (token === null || token === undefined) {
+            throw new Error('Required parameter token was null or undefined when calling downloadDarlehenNegativVerfuegung$.');
+        }
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (token !== undefined && token !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>token, 'token');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/octet-stream'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        const localVarPath = `/darlehen/negativ-verfuegung/download`;
+        return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters,
+                responseType: "blob",
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
     public freiwilligDarlehenAblehenPath = (requestParameters: DarlehenServiceFreiwilligDarlehenAblehenRequestParams) => {
         const darlehenId = requestParameters.darlehenId;
         if (darlehenId === null || darlehenId === undefined) {
@@ -1276,10 +1375,10 @@ export class DarlehenService {
         if (darlehenId === null || darlehenId === undefined) {
             throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenUpdateSb$.');
         }
-        const freiwilligDarlehenUpdateSb = requestParameters.freiwilligDarlehenUpdateSb;
-        if (freiwilligDarlehenUpdateSb === null || freiwilligDarlehenUpdateSb === undefined) {
-            throw new Error('Required parameter freiwilligDarlehenUpdateSb was null or undefined when calling freiwilligDarlehenUpdateSb$.');
-        }
+        const gewaehren = requestParameters.gewaehren;
+        const negativeVerfuegung = requestParameters.negativeVerfuegung;
+        const betrag = requestParameters.betrag;
+        const kommentar = requestParameters.kommentar;
         let path = `/api/v1/darlehen/${this.configuration.encodeParam({name: "darlehenId", value: darlehenId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/sb`;
 
         // Query Params
@@ -1305,10 +1404,10 @@ export class DarlehenService {
         if (darlehenId === null || darlehenId === undefined) {
             throw new Error('Required parameter darlehenId was null or undefined when calling freiwilligDarlehenUpdateSb$.');
         }
-        const freiwilligDarlehenUpdateSb = requestParameters.freiwilligDarlehenUpdateSb;
-        if (freiwilligDarlehenUpdateSb === null || freiwilligDarlehenUpdateSb === undefined) {
-            throw new Error('Required parameter freiwilligDarlehenUpdateSb was null or undefined when calling freiwilligDarlehenUpdateSb$.');
-        }
+        const gewaehren = requestParameters.gewaehren;
+        const negativeVerfuegung = requestParameters.negativeVerfuegung;
+        const betrag = requestParameters.betrag;
+        const kommentar = requestParameters.kommentar;
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -1343,14 +1442,36 @@ export class DarlehenService {
             localVarHttpContext = new HttpContext();
         }
 
-
         // to determine the Content-Type header
         const consumes: string[] = [
-            'application/json'
+            'multipart/form-data'
         ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+
+        const canConsumeForm = this.canConsumeForm(consumes);
+
+        let localVarFormParams: { append(param: string, value: any): any; };
+        let localVarUseForm = false;
+        const localVarConvertFormParamsToString = false;
+        // use FormData to transmit files using content-type "multipart/form-data"
+        // see https://stackoverflow.com/questions/4007969/application-x-www-form-urlencoded-or-multipart-form-data
+        localVarUseForm = canConsumeForm;
+        if (localVarUseForm) {
+            localVarFormParams = new FormData();
+        } else {
+            localVarFormParams = new HttpParams({encoder: this.encoder});
+        }
+
+        if (gewaehren !== undefined) {
+            localVarFormParams = localVarFormParams.append('gewaehren', <any>gewaehren) as any || localVarFormParams;
+        }
+        if (negativeVerfuegung !== undefined) {
+            localVarFormParams = localVarFormParams.append('negativeVerfuegung', <any>negativeVerfuegung) as any || localVarFormParams;
+        }
+        if (betrag !== undefined) {
+            localVarFormParams = localVarFormParams.append('betrag', <any>betrag) as any || localVarFormParams;
+        }
+        if (kommentar !== undefined) {
+            localVarFormParams = localVarFormParams.append('kommentar', <any>kommentar) as any || localVarFormParams;
         }
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
@@ -1368,7 +1489,7 @@ export class DarlehenService {
         return this.httpClient.request<FreiwilligDarlehen>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: freiwilligDarlehenUpdateSb,
+                body: localVarConvertFormParamsToString ? localVarFormParams.toString() : localVarFormParams,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -1866,7 +1987,7 @@ export class DarlehenService {
     }
 
     /**
-     * get Token to downlaod Darlehen Dokument
+     * get Token to download Darlehen Dokument
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -1926,6 +2047,95 @@ export class DarlehenService {
         }
 
         const localVarPath = `/darlehen/dokument/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+        return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: <any>observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    public getDarlehenNegativVerfuegungDownloadTokenPath = (requestParameters: DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams) => {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDarlehenNegativVerfuegungDownloadToken$.');
+        }
+        let path = `/api/v1/darlehen/negativ-verfuegung/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
+
+        // Query Params
+        let queryParams = new URLSearchParams();
+        const queryParamsString = queryParams.toString();
+        if (queryParamsString) {
+            return `${path}?${queryParamsString}`;
+        }
+        return `${path}`;
+    }
+
+    /**
+     * get Token to download Darlehen negativeVerfuegung
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+     public getDarlehenNegativVerfuegungDownloadToken$(requestParameters: DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<FileDownloadToken>;
+     public getDarlehenNegativVerfuegungDownloadToken$(requestParameters: DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<FileDownloadToken>>;
+     public getDarlehenNegativVerfuegungDownloadToken$(requestParameters: DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<FileDownloadToken>>;
+     public getDarlehenNegativVerfuegungDownloadToken$(requestParameters: DarlehenServiceGetDarlehenNegativVerfuegungDownloadTokenRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+        const dokumentId = requestParameters.dokumentId;
+        if (dokumentId === null || dokumentId === undefined) {
+            throw new Error('Required parameter dokumentId was null or undefined when calling getDarlehenNegativVerfuegungDownloadToken$.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarCredential: string | undefined;
+        // authentication (auth-uat-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        // authentication (auth-dev-bern) required
+        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
+        if (localVarCredential) {
+            // using credentials
+        }
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json',
+                'text/plain'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        const localVarPath = `/darlehen/negativ-verfuegung/${this.configuration.encodeParam({name: "dokumentId", value: dokumentId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/token`;
         return this.httpClient.request<FileDownloadToken>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

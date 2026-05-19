@@ -559,22 +559,16 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
       this.form.controls.identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort.updateValueAndValidity();
     });
 
-    // visibility and disabled state for heimatort, vormundschaft and niederlassungsstatus
+    // visibility and disabled state for heimatort and niederlassungsstatus
 
     effect(() => {
       this.gotReenabledSig();
-      // If nationality is Switzerland, show heimatort and vormundschaft
+      // If nationality is Switzerland, show heimatort
       const nationalitaetBfsCode = this.nationalitaetBfsCodeSig();
       if (nationalitaetBfsCode === BFSCODE_SCHWEIZ) {
         updateVisbilityAndDisbledState({
           hiddenFieldsSetSig: this.hiddenFieldsSetSig,
           formControl: this.form.controls.heimatortPlzOrt,
-          visible: true,
-          disabled: this.viewSig().readonly,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.vormundschaft,
           visible: true,
           disabled: this.viewSig().readonly,
         });
@@ -602,13 +596,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           disabled: this.viewSig().readonly,
           resetOnInvisible: false,
         });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.vormundschaft,
-          visible: false,
-          disabled: this.viewSig().readonly,
-          resetOnInvisible: false,
-        });
       }
       // Any other nationality was selected
       else {
@@ -624,12 +611,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
           visible: false,
           disabled: this.viewSig().readonly,
           resetOnInvisible: true,
-        });
-        updateVisbilityAndDisbledState({
-          hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-          formControl: this.form.controls.vormundschaft,
-          visible: false,
-          disabled: this.viewSig().readonly,
         });
       }
     });

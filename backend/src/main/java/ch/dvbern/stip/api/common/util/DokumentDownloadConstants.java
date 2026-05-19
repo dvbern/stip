@@ -27,6 +27,7 @@ public final class DokumentDownloadConstants {
     public static final String AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_ID_CLAIM =
         "ausbildung_unterbruch_antrag_dokument_id";
     public static final String DARLEHEN_ID_CLAIM = "darlehen_id";
+    public static final String DARLEHEN_VERFUEGUNG_ID_CLAIM = "verfuegung_darlehen_id";
     public static final String VERFUEGUNG_DOKUMENT_ID_CLAIM = "verfuegung_dokument_id";
     public static final String MASSENDRUCK_JOB_ID_CLAIM = "massendruck_id";
     public static final String DEMO_DATA_IMPORT_ID_CLAIM = "demo_data_import_id";

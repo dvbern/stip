@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.darlehen.entity;
 import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
-import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,8 +54,8 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 public class DarlehenBuchhaltungEntry extends AbstractMandantEntity {
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "fall_id", nullable = false)
-    private Fall fall;
+    @JoinColumn(name = "gesuch_id", nullable = false)
+    private Gesuch gesuch;
 
     @NotNull
     @Enumerated(EnumType.STRING)

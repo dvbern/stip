@@ -65,7 +65,6 @@ const ROLE_TRANSATION_PREFIX = 'shared.role.';
     SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './benutzer-overview.component.html',
-  styleUrls: ['./benutzer-overview.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [paginatorTranslationProvider()],
 })

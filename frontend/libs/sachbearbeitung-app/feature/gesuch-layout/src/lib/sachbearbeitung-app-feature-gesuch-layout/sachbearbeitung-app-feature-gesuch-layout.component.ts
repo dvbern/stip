@@ -160,9 +160,18 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
 
-  gesuchstellerNameSig = computed(() => {
+  gesuchInfoDataSig = computed(() => {
     const info = this.headerViewSig().gesuchInfo;
-    return info ? `${info.piaVorname} ${info.piaNachname}` : '';
+    if (!info) {
+      return;
+    }
+
+    return {
+      name: `${info.piaVorname} ${info.piaNachname}`,
+      fallNummer: info.fallNummer,
+      gesuchNummer: info.gesuchNummer,
+      status: info.state.gesuchStatus,
+    };
   });
 
   tabsSig = computed<TabNavItem[]>(() => {
@@ -189,14 +198,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
-      name: 'formular',
+      key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
       queryParams: { berechnungId },
-      name: 'verfuegung',
+      key: 'verfuegung',
     };
 
     if (gesuchInfo?.state.canGetBerechnung) {
@@ -309,6 +318,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
       inBearbeitungSbReason,
+      canSBInitAenderung,
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
@@ -323,9 +333,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const hasValidationErrors = !!validations.errors?.length;
     const hasValidationWarnings = !!validations.warnings?.length;
-    const list = StatusUebergaengeMap[gesuchStatus]
-      ?.concat(canTriggerManuellPruefen ? ['STATUS_PRUEFUNG_AUSLOESEN'] : [])
-      ?.map((status) => ({
+
+    const statusAbhaengigUebergange = StatusUebergaengeMap[gesuchStatus] ?? [];
+
+    const flagAbhaengigUebergange: StatusUebergang[] = [];
+    if (canSBInitAenderung) {
+      flagAbhaengigUebergange.push('BEREIT_FUER_BEARBEITUNG_AS_AENDERUNG');
+    }
+    if (canTriggerManuellPruefen) {
+      flagAbhaengigUebergange.push('STATUS_PRUEFUNG_AUSLOESEN');
+    }
+
+    const list = [...statusAbhaengigUebergange, ...flagAbhaengigUebergange]
+      .filter(isDefined)
+      .map((status) => ({
         ...StatusUebergaengeOptions[status]({
           permissions,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
@@ -354,9 +375,23 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     switch (nextStatus) {
       case 'SET_TO_BEARBEITUNG':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.einreichenStore.validateSteps$({ gesuchTrancheId });
+          },
+        });
+        break;
       case 'ANSPRUCH_PRUEFEN':
       case 'BEARBEITUNG_ABSCHLIESSEN':
       case 'STATUS_PRUEFUNG_AUSLOESEN':
+        this.gesuchStore.setStatus$[nextStatus]({
+          gesuchTrancheId,
+          onSuccess: () => {
+            this.einreichenStore.validateSteps$({ gesuchTrancheId });
+          },
+        });
+        break;
       case 'BEREIT_FUER_BEARBEITUNG':
       case 'VERFUEGT':
       case 'VERSENDET':

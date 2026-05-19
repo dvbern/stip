@@ -84,7 +84,7 @@ include:
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:
       name: 'deploy:schulung'
-      deployment-environment: 'schulung'
+      deployment-environment: 'uat'
       deployment-environment-url: 'https://schulung-stip.kibon.ch'
       deployment-environment-values-path: 'charts/stip/environments/schulung/values.yaml'
       deployment-on: 'tag'
@@ -92,7 +92,7 @@ include:
       deployment-config-tracking-mode: "release"  # Enable release mode
       argocd-server: '$ARGOCD_SERVER'
       argocd-token: '$ARGOCD_TOKEN'
-      argocd-app-name: '$ARGOCD_APP'
+      argocd-app-name: 'schulung'
 
   - component: 'gitlab.dvbern.ch/components/deploy/argocd-helm@1.15.0'
     inputs:

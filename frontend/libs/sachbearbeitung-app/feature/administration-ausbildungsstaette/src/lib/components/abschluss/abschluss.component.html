@@ -9,7 +9,7 @@
       data-testid="cockpit-table"
       mat-table
       matSort
-      class="tw:w-full tw:!table-fixed"
+      class="tw:w-full tw:table-fixed"
     >
       <caption class="cdk-visually-hidden">
         {{
@@ -18,8 +18,8 @@
       </caption>
 
       <ng-container matColumnDef="ABSCHLUSS">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="abschluss">{{
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-64 tw:whitespace-nowrap">
+          <label class="tw:pointer-events-none" for="abschluss">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.abschluss' | transloco
           }}</label>
           <div class="tw:relative tw:flex">
@@ -35,7 +35,7 @@
               />
             </mat-form-field>
             <dv-shared-ui-clear-button
-              class="tw:absolute tw:right-[-26px] tw:flex tw:items-center"
+              class="tw:absolute tw:-right-6.5 tw:flex tw:items-center"
               (clear)="filterForm.controls.abschluss.reset()"
               [valueSig]="filterForm.controls.abschluss.value"
             ></dv-shared-ui-clear-button>
@@ -44,7 +44,8 @@
         <td
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
-          class="tw:w-32 tw:whitespace-nowrap"
+          class="tw:max-w-32 tw:whitespace-nowrap"
+          [dvTruncateTooltip]="abschluss | translatedProp: 'bezeichnung' : translate.getActiveLang()"
         >
           {{ abschluss | translatedProp: 'bezeichnung' : translate.getActiveLang() }}
         </td>
@@ -52,7 +53,7 @@
 
       <ng-container matColumnDef="AUSBILDUNGSKATEGORIE">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="ausbildungskategorie">{{
+          <label class="tw:pointer-events-none" for="ausbildungskategorie">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.ausbildungskategorie'
               | transloco
           }}</label>
@@ -64,7 +65,7 @@
               "
               [formControl]="filterForm.controls.ausbildungskategorie"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
+              class="tw:font-normal!"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.ausbildungskategorie'
                   | transloco
@@ -89,7 +90,7 @@
         <td
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
-          class="tw:w-32 tw:whitespace-nowrap"
+          class="tw:max-w-32 tw:whitespace-nowrap"
           [dvTruncateTooltip]="'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | transloco"
         >
           {{ 'shared.ausbildungskategorie.' + abschluss.ausbildungskategorie | transloco }}
@@ -98,7 +99,7 @@
 
       <ng-container matColumnDef="BILDUNGSRICHTUNG">
         <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
-          <label class="pe-none" for="bildungsrichtung">{{
+          <label class="tw:pointer-events-none" for="bildungsrichtung">{{
             'sachbearbeitung-app.feature.administration.ausbildungsstaette.abschluss.table.bildungsrichtung' | transloco
           }}</label>
           <mat-form-field class="tw:w-full">
@@ -109,7 +110,6 @@
               "
               [formControl]="filterForm.controls.bildungsrichtung"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.bildungsrichtung' | transloco
               "
@@ -132,7 +132,7 @@
         <td
           mat-cell
           *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()"
-          class="tw:w-32 tw:whitespace-nowrap"
+          class="tw:max-w-32 tw:whitespace-nowrap"
           [dvTruncateTooltip]="'shared.bildungsrichtung.' + abschluss.bildungsrichtung | transloco"
         >
           {{ 'shared.bildungsrichtung.' + abschluss.bildungsrichtung | transloco }}
@@ -149,7 +149,6 @@
               "
               [formControl]="filterForm.controls.status"
               (click)="$event.stopPropagation()"
-              class="tw:!font-normal"
               [placeholder]="
                 'sachbearbeitung-app.feature.administration.ausbildungsstaette.no-filter.status' | transloco
               "
@@ -180,40 +179,40 @@
 
       <!-- aktionen -->
       <ng-container matColumnDef="AKTIONEN">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-28 tw:whitespace-nowrap tw:!text-right">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-28 tw:whitespace-nowrap tw:justify-items-end">
           <button
             type="button"
-            class="btn btn-outline-primary btn-sm"
+            class="tw:dv-button-icon-outline"
             [matTooltip]="'sachbearbeitung-app.admin.gesuchsperiode.table.erstellen' | transloco"
             (click)="createAbschluss()"
           >
-            <i class="material-symbols-rounded fs-4 tw:align-middle">add</i>
+            <i class="material-symbols-rounded tw:text-xl! tw:align-middle">add</i>
           </button>
         </th>
         <td mat-cell *dvMatCellDef="let abschluss; dataSource: abschluesseDataSourceSig()" class="tw:w-11">
           <div class="tw:flex tw:justify-end">
             <button
               type="button"
-              class="dv-icon-button dv-icon-button-md tw:text-gray-500"
+              class="tw:dv-button-icon tw:text-gray-500"
               (click)="editAbschluss(abschluss); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:!text-xl/none">edit</span>
+              <span class="material-symbols-rounded tw:text-xl/none!">edit</span>
             </button>
             @if (abschluss.canArchive) {
               <button
                 type="button"
-                class="dv-icon-button dv-icon-button-md tw:text-gray-500"
+                class="tw:dv-button-icon tw:text-gray-500"
                 (click)="archive(abschluss); $event.stopPropagation()"
               >
-                <span class="material-symbols-rounded tw:!text-2xl/none">cancel</span>
+                <span class="material-symbols-rounded tw:text-2xl/none!">cancel</span>
               </button>
             }
             <button
               type="button"
-              class="dv-icon-button dv-icon-button-md text-info"
+              class="tw:dv-button-icon tw:text-dv-blue"
               (click)="showInfo(abschluss); $event.stopPropagation()"
             >
-              <span class="material-symbols-rounded tw:!text-2xl/none">info</span>
+              <span class="material-symbols-rounded tw:text-2xl/none!">info</span>
             </button>
           </div>
         </td>

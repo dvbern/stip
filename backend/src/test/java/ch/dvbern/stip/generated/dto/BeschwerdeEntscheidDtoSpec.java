@@ -21,9 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -33,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_KOMMENTAR,
   BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_BESCHWERDE_ERFOLGREICH,
-  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_DOKUMENTE
+  BeschwerdeEntscheidDtoSpec.JSON_PROPERTY_DOKUMENT
 })
 @JsonTypeName("BeschwerdeEntscheid")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -44,8 +41,8 @@ public class BeschwerdeEntscheidDtoSpec {
   public static final String JSON_PROPERTY_BESCHWERDE_ERFOLGREICH = "beschwerdeErfolgreich";
   private Boolean beschwerdeErfolgreich;
 
-  public static final String JSON_PROPERTY_DOKUMENTE = "dokumente";
-  private List<DokumentDtoSpec> dokumente;
+  public static final String JSON_PROPERTY_DOKUMENT = "dokument";
+  private DokumentDtoSpec dokument;
 
   public BeschwerdeEntscheidDtoSpec() {
   }
@@ -102,37 +99,29 @@ public class BeschwerdeEntscheidDtoSpec {
   }
 
 
-  public BeschwerdeEntscheidDtoSpec dokumente(List<DokumentDtoSpec> dokumente) {
+  public BeschwerdeEntscheidDtoSpec dokument(DokumentDtoSpec dokument) {
     
-    this.dokumente = dokumente;
-    return this;
-  }
-
-  public BeschwerdeEntscheidDtoSpec addDokumenteItem(DokumentDtoSpec dokumenteItem) {
-    if (this.dokumente == null) {
-      this.dokumente = new ArrayList<>();
-    }
-    this.dokumente.add(dokumenteItem);
+    this.dokument = dokument;
     return this;
   }
 
    /**
-   * Get dokumente
-   * @return dokumente
+   * Get dokument
+   * @return dokument
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(JSON_PROPERTY_DOKUMENT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<DokumentDtoSpec> getDokumente() {
-    return dokumente;
+  public DokumentDtoSpec getDokument() {
+    return dokument;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_DOKUMENTE)
+  @JsonProperty(JSON_PROPERTY_DOKUMENT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setDokumente(List<DokumentDtoSpec> dokumente) {
-    this.dokumente = dokumente;
+  public void setDokument(DokumentDtoSpec dokument) {
+    this.dokument = dokument;
   }
 
   @Override
@@ -146,12 +135,12 @@ public class BeschwerdeEntscheidDtoSpec {
     BeschwerdeEntscheidDtoSpec beschwerdeEntscheid = (BeschwerdeEntscheidDtoSpec) o;
     return Objects.equals(this.kommentar, beschwerdeEntscheid.kommentar) &&
         Objects.equals(this.beschwerdeErfolgreich, beschwerdeEntscheid.beschwerdeErfolgreich) &&
-        Objects.equals(this.dokumente, beschwerdeEntscheid.dokumente);
+        Objects.equals(this.dokument, beschwerdeEntscheid.dokument);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kommentar, beschwerdeErfolgreich, dokumente);
+    return Objects.hash(kommentar, beschwerdeErfolgreich, dokument);
   }
 
   @Override
@@ -160,7 +149,7 @@ public class BeschwerdeEntscheidDtoSpec {
     sb.append("class BeschwerdeEntscheidDtoSpec {\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    beschwerdeErfolgreich: ").append(toIndentedString(beschwerdeErfolgreich)).append("\n");
-    sb.append("    dokumente: ").append(toIndentedString(dokumente)).append("\n");
+    sb.append("    dokument: ").append(toIndentedString(dokument)).append("\n");
     sb.append("}");
     return sb.toString();
   }

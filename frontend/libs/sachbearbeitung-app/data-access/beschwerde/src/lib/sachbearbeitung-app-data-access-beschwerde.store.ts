@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   BeschwerdeVerlaufEntry,
@@ -43,7 +44,7 @@ export class BeschwerdeStore extends signalStore(
 
     return beschwerde.map((entry) => ({
       ...entry,
-      document: entry.beschwerdeEntscheid?.dokumente[0],
+      document: entry.beschwerdeEntscheid?.dokument,
     }));
   });
 
@@ -92,11 +93,11 @@ export class BeschwerdeStore extends signalStore(
               },
               {
                 onSuccess: () => {
-                  this.globalNotificationStore.createSuccessNotification({
-                    messageKey:
-                      'sachbearbeitung-app.infos.beschwerde.create.success.' +
-                      values.beschwerdeSetTo,
-                  });
+                  this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                    {
+                      messageKey: `sachbearbeitung-app.infos.beschwerde.create.success.${values.beschwerdeSetTo}`,
+                    },
+                  );
                   onSucces?.();
                 },
               },
@@ -141,10 +142,12 @@ export class BeschwerdeStore extends signalStore(
                 },
                 {
                   onSuccess: () => {
-                    this.globalNotificationStore.createSuccessNotification({
-                      messageKey:
-                        'sachbearbeitung-app.infos.beschwerde-entscheid.create.success',
-                    });
+                    this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                      {
+                        messageKey:
+                          'sachbearbeitung-app.infos.beschwerde-entscheid.create.success',
+                      },
+                    );
                     onSucces?.();
                   },
                 },

@@ -2,7 +2,7 @@
   <button
     type="button"
     (click)="cancel()"
-    class="dv-icon-button dv-icon-button-md position-absolute end-0 top-0 m-1"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-1"
     [attr.aria-label]="'shared.close' | transloco"
   >
     <span class="material-symbols-rounded">close</span>
@@ -13,7 +13,7 @@
   </h1>
 
   <dv-shared-feature-ausbildung
-    [fallIdSig]="dialogData.fallId"
+    [dialogDataSig]="dialogData"
     (ausbildungSaved)="savedSuccess()"
   ></dv-shared-feature-ausbildung>
 </section>

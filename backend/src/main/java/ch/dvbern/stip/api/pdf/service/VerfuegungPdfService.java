@@ -71,7 +71,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_TINY;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -135,7 +135,7 @@ public class VerfuegungPdfService {
             final Link ausbildungsbeitraegeUri =
                 new Link(AUSBILDUNGSBEITRAEGE_LINK, PdfAction.createURI(AUSBILDUNGSBEITRAEGE_LINK));
 
-            if (gesuch.getAusbildung().getFall().getDelegierung() != null) {
+            if (gesuch.getAusbildung().getFall().isDelegiert()) {
                 addVerfuegung(
                     verfuegung,
                     document,
@@ -199,7 +199,7 @@ public class VerfuegungPdfService {
         // Add the main content and footer sections.
         section.render(verfuegung, document, leftMargin, translator, pdfFont, pdfFontBold, ausbildungsbeitraegeUri);
         anhangs.addFirst(Anhangs.RECHTSMITTELBELEHRUNG);
-        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs, true);
+        PdfUtils.footer(gesuch, document, leftMargin, translator, pdfFont, anhangs);
         PdfUtils.rechtsmittelbelehrung(translator, document, leftMargin, pdfFont, pdfFontBold);
         PdfUtils.makePageNumberEven(document);
     }
@@ -425,8 +425,8 @@ public class VerfuegungPdfService {
 
         final float[] columnWidths = { 50, 50 };
         final Table calculationTable = PdfUtils.createTable(columnWidths, leftMargin);
-        calculationTable.setMarginTop(SPACING_MEDIUM);
-        calculationTable.setMarginBottom(SPACING_MEDIUM);
+        calculationTable.setMarginTop(SPACING_TINY);
+        calculationTable.setMarginBottom(SPACING_TINY);
         calculationTable.setPaddingRight(SPACING_MEDIUM);
 
         final var actualDuration = DateUtil.wasEingereichtAfterDueDate(verfuegung.getGesuch())
@@ -444,7 +444,7 @@ public class VerfuegungPdfService {
                     "X_MONATE",
                     actualDuration
                 )
-            ).setPadding(1)
+            ).setPaddings(0, 0, 1, 0)
         );
 
         final int anspruch = Objects.requireNonNullElse(relevantBuchhaltung.getStipendium(), 0);
@@ -456,7 +456,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(anspruch)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(0, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -466,7 +466,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.ausbezahlt")
-            ).setPadding(1)
+            ).setPaddings(1, 0, 1, 0)
         );
 
         final int ausbezahlt = isRueckforderung ? 0 : anspruch - relevantBuchhaltung.getSaldo();
@@ -478,7 +478,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(ausbezahlt)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -488,7 +488,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.rueckforderungen")
-            ).setPadding(1)
+            ).setPaddings(1, 0, 1, 0)
         );
 
         final int rueckforderungen =
@@ -501,18 +501,14 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(rueckforderungen)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         int total = relevantBuchhaltung.getSaldo();
         var totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.total");
 
         if (isRueckforderung || total < 0) {
-            totalLabel = String.format(
-                "%s %s",
-                totalLabel,
-                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.rueckforderung")
-            );
+            totalLabel = translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.standard.rueckforderung");
         } else {
             totalLabel = String.format(
                 "%s %s",
@@ -528,7 +524,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 totalLabel
-            ).setPadding(1)
+            ).setPaddings(1, 0, 0, 0)
         );
 
         calculationTable.addCell(
@@ -538,7 +534,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(Math.abs(total))
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 0, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         document.add(calculationTable);
@@ -689,7 +685,8 @@ public class VerfuegungPdfService {
             decision = decision.replace("{WOHNSITZKANTON}", wohnsitzKantonName);
         }
 
-        document.add(PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
+        PdfUtils.createParagraphsForEachDoubleNewline(pdfFont, FONT_SIZE_BIG, leftMargin, decision)
+            .forEach(document::add);
 
         document.add(
             PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
@@ -704,12 +701,12 @@ public class VerfuegungPdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate("stip.pdf.verfuegung.glueckWunsch")
-            ).setPaddingTop(SPACING_SMALL)
+            )
         );
     }
 
-    public void createVerfuegungsDocuments(final Gesuch gesuch, final BerechnungsresultatDto stipendien) {
-        final int berechnungsresultat = stipendien.getBerechnungStipendium();
+    public void createVerfuegungsDocuments(final Gesuch gesuch, final Optional<BerechnungsresultatDto> stipendienOpt) {
+        final int berechnungsresultat = stipendienOpt.map(BerechnungsresultatDto::getBerechnungStipendium).orElse(0);
 
         final var verfuegung = verfuegungService.getLatestVerfuegung(gesuch.getId());
 
@@ -723,7 +720,7 @@ public class VerfuegungPdfService {
             );
         } else {
             List<Anhangs> anhangs = new ArrayList<>(List.of(Anhangs.BERECHNUNGSBLAETTER));
-            if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
+            if (stipendienOpt.map(BerechnungsresultatDto::getBerechnungDarlehen).orElse(0) > 0) {
                 anhangs.add(Anhangs.DARLEHENS_VERFUEGUNG);
             }
             verfuegungsBrief = createVerfuegungMitAnspruchPdf(
@@ -738,7 +735,8 @@ public class VerfuegungPdfService {
             verfuegungsBrief
         );
 
-        if (!verfuegung.getVerfuegungStatus().isNegativ()) {
+        if (!verfuegung.getVerfuegungStatus().isNegativ() && stipendienOpt.isPresent()) {
+            final var stipendien = stipendienOpt.get();
             ByteArrayOutputStream berechnungsBlaetter;
             Optional<ByteArrayOutputStream> darlehensVerfuegung = Optional.empty();
 

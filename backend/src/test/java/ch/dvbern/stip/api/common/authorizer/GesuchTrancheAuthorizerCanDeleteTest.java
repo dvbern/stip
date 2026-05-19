@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -207,7 +208,8 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         sozialdienst.setId(UUID.randomUUID());
         Delegierung delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
-        fall.setDelegierung(delegierung);
+        delegierung.akzeptieren();
+        fall.setCurrentDelegierung(delegierung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         ausbildung.setGesuchs(List.of(gesuch));
@@ -236,12 +238,14 @@ public class GesuchTrancheAuthorizerCanDeleteTest {
         Delegierung delegierung = new Delegierung();
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(new SozialdienstBenutzer());
-        fall.setDelegierung(delegierung);
+        delegierung.akzeptieren();
+        fall.setCurrentDelegierung(delegierung);
         Ausbildung ausbildung = new Ausbildung();
         ausbildung.setFall(fall);
         ausbildung.setGesuchs(List.of(gesuch));
         gesuch.setAusbildung(ausbildung);
         fall.setAusbildungs(Set.of(ausbildung));
+        gesuch.setGesuchStatus(Gesuchstatus.STIPENDIENANSPRUCH);
 
         final var uuid = UUID.randomUUID();
         // assert

@@ -67,6 +67,8 @@ tags:
     x-displayName: Gesuchsperiode
   - name: Land
     x-displayName: Land
+  - name: Statistik
+    x-displayName: Statistik
 paths:
   /config/deployment:
     get:
@@ -226,11 +228,7 @@ paths:
         - auth-dev-bern: []
   /darlehen/{fallId}:
     parameters:
-      - name: fallId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/fallId'
     post:
       tags:
         - Darlehen
@@ -282,7 +280,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getDarlehenDownloadToken
-      summary: get Token to downlaod Darlehen Dokument
+      summary: get Token to download Darlehen Dokument
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -306,6 +304,63 @@ paths:
           description: File returned
       operationId: downloadDarlehenDokument
       summary: Download Darlehen Dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/{dokumentId}/token:
+    parameters:
+      - name: dokumentId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenNegativVerfuegungDownloadToken
+      summary: get Token to download Darlehen negativeVerfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/negativ-verfuegung/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: File returned
+      operationId: downloadDarlehenNegativVerfuegung
+      summary: Download Darlehen negativeVerfuegung Dokument
       x-quarkus-response-type: >-
         org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
       security:
@@ -722,9 +777,8 @@ paths:
       tags:
         - Darlehen
       requestBody:
-        required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/FreiwilligDarlehenUpdateSb'
       responses:
@@ -830,6 +884,34 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /delegierung/{gesuchId}/all:
+    parameters:
+      - $ref: '#/components/parameters/gesuchId'
+    get:
+      tags:
+        - Delegieren
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Delegierung'
+          description: All delegierungs for the given gesuch
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllDelegierungsForGesuch
+      summary: Returns all delegierungs for a given gesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /delegierung/{delegierungId}/mitarbeiterDelegieren:
     parameters:
       - $ref: '#/components/parameters/delegierungId'
@@ -914,7 +996,7 @@ paths:
         - $ref: '#/components/parameters/vorname'
         - $ref: '#/components/parameters/geburtsdatum'
         - $ref: '#/components/parameters/wohnort'
-        - $ref: '#/components/parameters/delegierungAngenommen'
+        - $ref: '#/components/parameters/status'
         - $ref: '#/components/parameters/page'
         - $ref: '#/components/parameters/pageSize'
         - name: sortColumn
@@ -1501,7 +1583,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DemoDataTestBerechnungResult'
+                  $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
           description: The results of comparing all Berechnung tests
         '401':
           $ref: '#/components/responses/Unauthorized'
@@ -1518,12 +1600,8 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /datenschutzbrief/{trancheId}/download:
+  /datenschutzbrief/download:
     parameters:
-      - name: trancheId
-        schema:
-          $ref: '#/components/schemas/UUID'
-        in: path
       - name: token
         schema:
           type: string
@@ -1547,14 +1625,20 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /datenschutzbrief/{elternId}/token:
+  /datenschutzbrief/{gesuchId}/token:
     parameters:
-      - name: elternId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
         required: true
     get:
+      parameters:
+        - name: datenschutzbriefId
+          schema:
+            $ref: '#/components/schemas/UUID'
+          in: query
+          required: true
       tags:
         - Datenschutzbrief
       responses:
@@ -1577,6 +1661,72 @@ paths:
           description: Datenschutzbrief File Download Token returned
       operationId: getDatenschutzbriefDownloadToken
       summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatenschutzbriefCreate'
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Datenschutzbrief File Download Token returned
+      operationId: createAndGetDatenschutzbriefDownloadToken
+      summary: get Token to downlaod Verfuegung
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /datenschutzbrief/{gesuchId}/all:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Datenschutzbrief
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatenschutzbriefOverview'
+          description: The list of related DatenschutzbriefOverview
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+          description: Get all Datenschutzbriefs for given Gesuch
+      operationId: getAllDatenschutzbriefs
+      summary: Get all Datenschutzbriefs for given Gesuch
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -6684,6 +6834,115 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /statistik:
+    post:
+      tags:
+        - Statistik
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '204':
+          description: Job creation accepted
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: createStatistikJob
+      summary: Creates background statistik job
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Statistik'
+          description: Token returned
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllStatistiks
+      summary: Get All statistiks
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/{statistikId}/token:
+    parameters:
+      - name: statistikId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: Token returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileDownloadToken'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getStatistikDownloadToken
+      summary: get Token to download Statistik
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/download:
+    parameters:
+      - name: token
+        schema:
+          type: string
+        in: query
+        required: true
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          description: File returned
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+      operationId: getStatistikDownload
+      summary: Download statistik dokument
+      x-quarkus-response-type: >-
+        org.jboss.resteasy.reactive.RestMulti<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
 components:
   securitySchemes:
     auth-uat-bern:
@@ -6821,6 +7080,7 @@ components:
         - AUSBILDUNG_IM_LEBENSLAUF
         - PIA_AELTER_35_JAHRE
         - KEIN_WOHNSITZ_KANTON_BE
+        - KEIN_WOHNSITZ_SCHWEIZ
         - SCHULJAHR_9_SEKSTUFE_1
         - AUSBILDUNG_PBI1
         - ART_32_BBV
@@ -6983,6 +7243,8 @@ components:
       properties:
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/FileUpload'
         betrag:
           type: integer
           minimum: 0
@@ -7116,13 +7378,6 @@ components:
         - IN_FREIGABE
         - AKZEPTIERT
         - ABGELEHNT
-    DarlehenGrund:
-      enum:
-        - NICHT_BERECHTIGT
-        - AUSBILDUNG_ZWOELF_JAHRE
-        - HOHE_GEBUEHREN
-        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
-        - ZWEITAUSBILDUNG
     Dokument:
       required:
         - id
@@ -7144,6 +7399,13 @@ components:
           type: string
         objectId:
           type: string
+    DarlehenGrund:
+      enum:
+        - NICHT_BERECHTIGT
+        - AUSBILDUNG_ZWOELF_JAHRE
+        - HOHE_GEBUEHREN
+        - ANSCHAFFUNGEN_FUER_AUSBILDUNG
+        - ZWEITAUSBILDUNG
     FreiwilligDarlehen:
       type: object
       required:
@@ -7159,6 +7421,8 @@ components:
           $ref: '#/components/schemas/DarlehenStatus'
         gewaehren:
           type: boolean
+        negativeVerfuegung:
+          $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
           minimum: 0
@@ -7204,6 +7468,9 @@ components:
       type: object
       required:
         - id
+        - sozialdienst
+        - persoenlicheAngaben
+        - status
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -7211,26 +7478,27 @@ components:
           $ref: '#/components/schemas/SozialdienstSlim'
         delegierterMitarbeiter:
           $ref: '#/components/schemas/SozialdienstBenutzer'
-        delegierungAngenommen:
-          type: boolean
         persoenlicheAngaben:
           $ref: '#/components/schemas/PersoenlicheAngaben'
-    FallWithDelegierung:
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
+        startDate:
+          $ref: '#/components/schemas/LocalDate'
+        endDate:
+          $ref: '#/components/schemas/LocalDate'
+    DelegierungEntry:
       required:
-        - id
-        - fallNummer
         - mandant
-        - delegierung
       type: object
+      allOf:
+        - $ref: '#/components/schemas/Delegierung'
       properties:
-        id:
+        fallId:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
         mandant:
           type: string
-        delegierung:
-          $ref: '#/components/schemas/Delegierung'
     PaginatedSozDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -7238,7 +7506,7 @@ components:
         entries:
           type: array
           items:
-            $ref: '#/components/schemas/FallWithDelegierung'
+            $ref: '#/components/schemas/DelegierungEntry'
     SozDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7324,11 +7592,26 @@ components:
           type: string
         ort:
           type: string
+    ZahlungsverbindungSlim:
+      title: Root Type for Zahlungsverbindung
+      required:
+        - adresse
+      type: object
+      properties:
+        vorname:
+          type: string
+        nachname:
+          type: string
+        institution:
+          type: string
+        adresse:
+          $ref: '#/components/schemas/Adresse'
     SozialdienstSlim:
       required:
         - id
         - name
         - aktiv
+        - zahlungsverbindung
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -7336,6 +7619,8 @@ components:
           type: string
         aktiv:
           type: boolean
+        zahlungsverbindung:
+          $ref: '#/components/schemas/ZahlungsverbindungSlim'
     SozialdienstBenutzerBase:
       required:
         - vorname
@@ -7384,6 +7669,12 @@ components:
           $ref: '#/components/schemas/Sprache'
         adresse:
           $ref: '#/components/schemas/Adresse'
+    DelegierungStatus:
+      enum:
+        - EINGEREICHT
+        - AKZEPTIERT
+        - ABGELEHNT
+        - BEENDET
     SozialdienstBenutzerCreate:
       required:
         - redirectUri
@@ -7443,43 +7734,23 @@ components:
     Sozialdienst:
       allOf:
         - $ref: '#/components/schemas/SozialdienstSlim'
-        - type: object
-          required:
-            - id
-            - name
-            - sozialdienstAdmin
-            - zahlungsverbindung
-            - aktiv
-          properties:
-            sozialdienstAdmin:
-              $ref: '#/components/schemas/SozialdienstBenutzer'
-            zahlungsverbindung:
-              $ref: '#/components/schemas/Zahlungsverbindung'
-            aktiv:
-              type: boolean
-    ZahlungsverbindungUpdate:
-      title: Root Type for Zahlungsverbindung
       required:
-        - adresse
+        - sozialdienstAdmin
+        - zahlungsverbindung
+      properties:
+        sozialdienstAdmin:
+          $ref: '#/components/schemas/SozialdienstBenutzer'
+        zahlungsverbindung:
+          $ref: '#/components/schemas/Zahlungsverbindung'
+    Zahlungsverbindung:
+      allOf:
+        - $ref: '#/components/schemas/ZahlungsverbindungSlim'
+      required:
         - iban
       type: object
       properties:
-        vorname:
-          type: string
-        adresse:
-          $ref: '#/components/schemas/Adresse'
         iban:
           type: string
-        nachname:
-          type: string
-        institution:
-          type: string
-    Zahlungsverbindung:
-      title: Root Type for Zahlungsverbindung
-      type: object
-      allOf:
-        - type: object
-        - $ref: '#/components/schemas/ZahlungsverbindungUpdate'
     DemoDataList:
       required:
         - importiertVon
@@ -8187,26 +8458,38 @@ components:
           $ref: '#/components/schemas/DemoAuszahlung'
         darlehen:
           $ref: '#/components/schemas/DemoDarlehen'
-        stipendienanspruch:
-          required:
-            - status
-          type: object
-          properties:
-            status:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
-    DemoDataTestBerechnungResult:
+        berechnungValues:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+    DemoDataTestBerechnungValid:
+      type: object
+      properties:
+        status:
+          type: boolean
+        ungekuerztStipendien:
+          type: boolean
+        ungekuerztDarlehen:
+          type: boolean
+        stipendien:
+          type: boolean
+        darlehen:
+          type: boolean
+    DemoDataTestBerechnungValues:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/VerfuegungStatus'
+        ungekuerztStipendien:
+          type: integer
+        ungekuerztDarlehen:
+          type: integer
+        stipendien:
+          type: integer
+        darlehen:
+          type: integer
+    DemoDataTestBerechnungResultat:
       required:
         - demoDataId
         - testFall
-        - valid
       type: object
       properties:
         demoDataId:
@@ -8214,13 +8497,13 @@ components:
         testFall:
           type: string
         valid:
-          type: boolean
-        soll:
-          type: integer
-        ist:
-          type: integer
+          $ref: '#/components/schemas/DemoDataTestBerechnungValid'
         message:
           type: string
+        soll:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
+        ist:
+          $ref: '#/components/schemas/DemoDataTestBerechnungValues'
     ApplyDemoDataResponse:
       required:
         - gesuchId
@@ -8228,7 +8511,7 @@ components:
         - gueltigAb
         - gueltigBis
         - gesuchStatus
-        - stipendienanspruch
+        - berechnungResultat
       type: object
       properties:
         gesuchId:
@@ -8243,25 +8526,8 @@ components:
           format: date
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
-        stipendienanspruch:
-          required:
-            - success
-          type: object
-          properties:
-            success:
-              type: boolean
-            statusSoll:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            statusIst:
-              $ref: '#/components/schemas/VerfuegungStatus'
-            betragStipendienSoll:
-              type: integer
-            betragStipendienIst:
-              type: integer
-            betragDarlehenSoll:
-              type: integer
-            betragDarlehenIst:
-              type: integer
+        berechnungResultat:
+          $ref: '#/components/schemas/DemoDataTestBerechnungResultat'
     GesuchTrancheTyp:
       enum:
         - AENDERUNG
@@ -8409,6 +8675,46 @@ components:
         - VATER
         - MUTTER
       type: string
+    DatenschutzbriefCreate:
+      required:
+        - elternId
+      type: object
+      properties:
+        elternId:
+          $ref: '#/components/schemas/UUID'
+    DatenschutzbriefTyp:
+      enum:
+        - MANUELL
+        - MASSENDRUCK
+      type: string
+    DatenschutzbriefOverview:
+      required:
+        - id
+        - userErstellt
+        - sozialversicherungsnummer
+        - nachname
+        - vorname
+        - elternTyp
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+        userErstellt:
+          type: string
+        sozialversicherungsnummer:
+          type: string
+        nachname:
+          type: string
+        vorname:
+          type: string
+        elternTyp:
+          $ref: '#/components/schemas/ElternTyp'
+        dokument:
+          $ref: '#/components/schemas/Dokument'
+        massendruckJobId:
+          $ref: '#/components/schemas/UUID'
     MassendruckJobTyp:
       enum:
         - DATENSCHUTZBRIEF
@@ -8866,6 +9172,8 @@ components:
           $ref: '#/components/schemas/Ausbildungsgang'
         editable:
           type: boolean
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
       allOf:
         - $ref: '#/components/schemas/AusbildungBase'
     GesuchsperiodeSelectErrorType:
@@ -9506,8 +9814,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
-        delegierung:
+        currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
+        earliestActiveGesuchPeriodeStart:
+          $ref: '#/components/schemas/LocalDate'
     AusbildungDashboardItem:
       type: object
       required:
@@ -9600,17 +9910,15 @@ components:
       required:
         - kommentar
         - beschwerdeErfolgreich
-        - dokumente
+        - dokument
       type: object
       properties:
         kommentar:
           type: string
         beschwerdeErfolgreich:
           type: boolean
-        dokumente:
-          type: array
-          items:
-            $ref: '#/components/schemas/Dokument'
+        dokument:
+          $ref: '#/components/schemas/Dokument'
     BeschwerdeVerlaufEntryCreate:
       type: object
       required:
@@ -9722,6 +10030,7 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - canAenderungEinreichen
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
@@ -9733,6 +10042,8 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        canAenderungEinreichen:
+          type: boolean
     VerfuegtGesuch:
       type: object
       required:
@@ -9864,9 +10175,10 @@ components:
       required:
         - year
         - berechnungVorKuerzungUndTeilung
+        - berechnungVorTeilungDarlehen
         - berechnungStipendium
         - tranchenBerechnungsresultate
-        - stipendienanspruch
+        - monateMitDarlehen
       type: object
       properties:
         year:
@@ -9875,6 +10187,17 @@ components:
           description: >-
             Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
             Kürzungen und Teilung des Gesetzlichen Darlehens
+          type: integer
+        ungekuerztStipendien:
+          description: >-
+            Die Summe der berechneten Stpendiumansprüche für das Gesuch vor
+            Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und
+            debugging verwendet)
+          type: integer
+        ungekuerztDarlehen:
+          description: >-
+            Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen
+            (wird nur für Vergleiche und debugging verwendet)
           type: integer
         totalNachKuerzungNachEinreichefrist:
           description: Die Summe nach der Kürzung der verspäteten Eingabe
@@ -9888,6 +10211,11 @@ components:
         anzahlMonateUnterbruch:
           description: Die Anzahl Monate von dem Unterbruch der Ausbildung
           type: integer
+        berechnungVorTeilungDarlehen:
+          description: >-
+            berechneter stipendienbetrag vor der Teilung in darlehen und
+            stipendium
+          type: integer
         berechnungStipendium:
           description: Berechneter Stpendiumsanspruch für das Gesuch
           type: integer
@@ -9899,6 +10227,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/TranchenBerechnungsresultat'
+        monateMitDarlehen:
+          description: >-
+            Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung
+            uberschreitet
+          type: integer
     TranchenBerechnungsresultat:
       description: Resultat der Berechnung (eine Tranche)
       required:
@@ -9910,6 +10243,8 @@ components:
         - yearRange
         - gesuchTrancheId
         - berechnungsanteilKinder
+        - teilzeitKinderBeiPiaAnrechnen
+        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -9937,6 +10272,16 @@ components:
             eltern mit Kindern die eine Obhutsteilung haben
           $ref: '#/components/schemas/UUID'
         berechnungsanteilKinder:
+          description: >-
+            Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
+            nur eine Berechnung haben ist dieser wert == 1.
+          type: number
+        teilzeitKinderBeiPiaAnrechnen:
+          description: >-
+            Werden kinder der PiA bei der berechnung dieser Tranche dem Budget
+            der PiA angerechnet
+          type: boolean
+        berechnungsanteilKinderPia:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
             nur eine Berechnung haben ist dieser wert == 1.
@@ -10003,7 +10348,6 @@ components:
         - total
         - einnahmenMinusKosten
         - fehlbetrag
-        - proKopfTeilung
         - eigenerHaushalt
         - budgetTranche
         - anzahlMonate
@@ -10032,6 +10376,8 @@ components:
         fehlbetrag:
           type: integer
         proKopfTeilung:
+          type: integer
+        totalNachProKopfTeilung:
           type: integer
         eigenerHaushalt:
           type: boolean
@@ -10924,10 +11270,13 @@ components:
         typ:
           $ref: '#/components/schemas/GesuchTrancheTyp'
     DelegierungSlim:
+      required:
+        - status
+        - sozialdienst
       type: object
       properties:
-        delegierungAngenommen:
-          type: boolean
+        status:
+          $ref: '#/components/schemas/DelegierungStatus'
         sozialdienst:
           $ref: '#/components/schemas/SozialdienstSlim'
     Gesuch:
@@ -10972,6 +11321,8 @@ components:
         einreichedatum:
           format: date
           type: string
+        hadDelegierungs:
+          type: boolean
         delegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         nachfristDokumente:
@@ -11004,6 +11355,7 @@ components:
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
+        - canSBInitAenderung
       type: object
       properties:
         gesuchStatus:
@@ -11017,6 +11369,8 @@ components:
         canTriggerManuellPruefen:
           type: boolean
         canBearbeitungAbschliessen:
+          type: boolean
+        canSBInitAenderung:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
@@ -11676,6 +12030,36 @@ components:
           type: string
         enKurzform:
           type: string
+    Statistik:
+      type: object
+      required:
+        - id
+        - timestampErstellt
+        - valid
+        - userTriggeredCreation
+        - year
+        - filename
+        - filesize
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDateTime'
+        valid:
+          type: boolean
+        userTriggeredCreation:
+          type: string
+        year:
+          type: integer
+          format: int32
+        filename:
+          type: string
+        filesize:
+          type: string
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
   responses:
     Unauthorized:
       content:
@@ -11760,6 +12144,13 @@ components:
       name: sortOrder
       schema:
         $ref: '#/components/schemas/SortOrder'
+    fallId:
+      name: fallId
+      in: path
+      required: true
+      description: Die ID vom Fall
+      schema:
+        $ref: '#/components/schemas/UUID'
     gesuchId:
       name: gesuchId
       in: path
@@ -11778,11 +12169,6 @@ components:
       schema:
         type: string
         format: date
-    delegierungAngenommen:
-      in: query
-      name: delegierungAngenommen
-      schema:
-        type: boolean
     nachname:
       in: query
       name: nachname
@@ -11798,13 +12184,6 @@ components:
       in: path
       required: true
       description: Die ID der Delegierung
-      schema:
-        $ref: '#/components/schemas/UUID'
-    fallId:
-      name: fallId
-      in: path
-      required: true
-      description: Die ID vom Fall
       schema:
         $ref: '#/components/schemas/UUID'
     sozialdienstId:

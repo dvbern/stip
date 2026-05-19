@@ -40,10 +40,10 @@ import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
-import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -95,7 +95,7 @@ class GesuchUpdateDefaultValuesTest {
             tranche,
             tranche.getGesuchFormular().getEinnahmenKosten()
         );
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), nullValue());
     }
 
     @Test
@@ -119,7 +119,7 @@ class GesuchUpdateDefaultValuesTest {
             tranche,
             tranche.getGesuchFormular().getEinnahmenKosten()
         );
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), nullValue());
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
@@ -131,7 +131,7 @@ class GesuchUpdateDefaultValuesTest {
             tranche,
             tranche.getGesuchFormular().getEinnahmenKosten()
         );
-        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), is(VERANLAGUNGSSTATUS_DEFAULT_VALUE));
+        assertThat(einnahmeKostenUpdateDto.getVeranlagungsStatus(), nullValue());
     }
 
     @Test

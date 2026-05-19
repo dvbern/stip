@@ -1,8 +1,11 @@
 @let view = viewSig();
 <!-- loading -->
+@let editedKind = editedKindSig();
+
 @if (view.loading) {
   <dv-shared-ui-loading data-testid="form-kinder-loading"></dv-shared-ui-loading>
 } @else if (editedKind) {
+  <!-- Editor -->
   <dv-shared-feature-gesuch-form-kinder-editor
     [kindSig]="editedKind"
     [changesSig]="changesSig()"
@@ -11,48 +14,48 @@
     (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
     <!-- Table -->
     @if (view.gesuchFormular?.kinds; as kinder) {
-      <div class="col-12 col-xl-8">
+      <div class="tw:col-span-12 tw:xl:col-span-8">
         @if (kinder.length) {
-          <table class="table" aria-describedby="List von Kinder">
+          <table class="tw:dv-simple-table">
             <thead>
               <tr>
-                <th scope="col"></th>
-                <th scope="col">
+                <th></th>
+                <th>
                   {{ 'shared.form.geschwister.name' | transloco }}
                 </th>
-                <th scope="col">
+                <th>
                   {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
                 </th>
-                <th scope="col"></th>
-                <th scope="col"></th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              @for (kindRaw of kinder; track trackByIndex($index)) {
+              @for (kindRaw of kinder; track kindRaw.entryId) {
                 <tr>
-                  @if (kindRaw; as kinder) {
-                    <td class="position-relative">
+                  @if (kindRaw; as kind) {
+                    <td class="tw:relative">
                       @if (
                         view.listChanges?.hasChangesByIdentifier?.[kindRaw.entryId] ||
                         view.listChanges?.newEntriesByIdentifier?.[kindRaw.entryId]
                       ) {
                         <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                       }
-                      <i class="material-symbols-rounded align-middle" aria-hidden="true">done</i>
+                      <i class="material-symbols-rounded tw:align-middle" aria-hidden="true">done</i>
                     </td>
-                    <td>{{ kinder.vorname }} {{ kinder.nachname }}</td>
+                    <td>{{ kind.vorname }} {{ kind.nachname }}</td>
                     <td>
-                      {{ parseBackendLocalDateAndPrint(kinder.geburtsdatum, languageSig()) }}
+                      {{ parseBackendLocalDateAndPrint(kind.geburtsdatum, languageSig()) }}
                     </td>
                     <td>
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectKinder(kinder)"
+                          class="tw:dv-button tw:p-0 tw:align-middle"
+                          (click)="handleSelectKinder(kind)"
                           [title]="'shared.form.kinder.edit' | transloco"
                         >
                           <i class="material-symbols-rounded">edit</i>
@@ -63,8 +66,8 @@
                       @if (!view.readonly) {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
-                          (click)="handleDeleteKinder(kinder)"
+                          class="tw:dv-button tw:p-0 tw:align-middle"
+                          (click)="handleDeleteKinder(kind)"
                           [title]="'shared.form.kinder.delete' | transloco"
                         >
                           <i class="material-symbols-rounded">delete</i>
@@ -72,8 +75,8 @@
                       } @else {
                         <button
                           type="button"
-                          class="btn btn-link p-0 lh-1"
-                          (click)="handleSelectKinder(kinder)"
+                          class="tw:dv-button tw:p-0 tw:align-middle"
+                          (click)="handleSelectKinder(kind)"
                           [title]="'shared.form.kinder.view' | transloco"
                         >
                           <i class="material-symbols-rounded">visibility</i>
@@ -91,9 +94,14 @@
   </div>
 
   <!-- ADD -->
-  <div class="d-flex flex-column flex-md-row">
+  <div class="tw:flex tw:flex-col flex-md-row">
     @if (!view.readonly) {
-      <button type="button" class="btn btn-outline-primary" (click)="handleAddKinder()" data-testid="button-add-kind">
+      <button
+        type="button"
+        class="tw:dv-button-outline tw:self-start"
+        (click)="handleAddKinder()"
+        data-testid="button-add-kind"
+      >
         {{ 'shared.form.kinder.add' | transloco }}
       </button>
     }
@@ -103,7 +111,7 @@
   <dv-shared-ui-step-form-buttons>
     <button
       type="button"
-      class="btn btn-primary"
+      class="tw:dv-button-main-primary"
       (click)="handleContinue()"
       [disabled]="!view.gesuchId"
       data-testid="button-continue"

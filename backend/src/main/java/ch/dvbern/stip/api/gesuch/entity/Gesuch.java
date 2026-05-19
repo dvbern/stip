@@ -56,6 +56,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
@@ -218,6 +219,10 @@ public class Gesuch extends AbstractMandantEntity {
     @Column(name = "in_bearbeitung_sb_reason")
     private InBearbeitungSbReason inBearbeitungSbReason;
 
+    @Nullable
+    @OneToOne(mappedBy = "gesuch")
+    private Statisticsdata statisticsdata;
+
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
     private @Valid List<SachbearbeiterGesuchDokument> sachbearbeiterGesuchDokuments = new ArrayList<>();
 
@@ -280,6 +285,38 @@ public class Gesuch extends AbstractMandantEntity {
                 && tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN
             )
             .findFirst();
+    }
+
+    public LocalDate getGesuchGueltigkeitBis() {
+        final var relevantGesuchTranche = getTranchenTranchen().max(
+            Comparator.comparing(tranche -> {
+                assert tranche.getGueltigkeit().getGueltigBis() != null;
+                return tranche.getGueltigkeit().getGueltigBis();
+            })
+        )
+            .orElseThrow(IllegalStateException::new);
+        assert relevantGesuchTranche.getGueltigkeit().getGueltigBis() != null;
+        return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
+    }
+
+    public LocalDate getGesuchGueltigkeitAb() {
+        final var relevantGesuchTranche = getTranchenTranchen().min(
+            Comparator.comparing(tranche -> {
+                assert tranche.getGueltigkeit().getGueltigAb() != null;
+                return tranche.getGueltigkeit().getGueltigAb();
+            })
+        )
+            .orElseThrow(IllegalStateException::new);
+        assert relevantGesuchTranche.getGueltigkeit().getGueltigAb() != null;
+        return relevantGesuchTranche.getGueltigkeit().getGueltigAb();
+    }
+
+    public Stream<Datenschutzbrief> getAllPendingDatenschutschbriefsForMassendruck() {
+        return datenschutzbriefs.stream().filter(d -> !d.isVersendet());
+    }
+
+    public Stream<Verfuegung> getAllPendingVerfuegungsForMassendruck() {
+        return verfuegungs.stream().filter(d -> !d.isVersendet());
     }
 
     public boolean isFirstVerfuegung() {

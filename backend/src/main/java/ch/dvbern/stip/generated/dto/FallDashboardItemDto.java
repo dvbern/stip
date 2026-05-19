@@ -5,6 +5,7 @@ import ch.dvbern.stip.generated.dto.DelegierungSlimDto;
 import ch.dvbern.stip.generated.dto.FallDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,8 @@ public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
   private @Valid List<NotificationDto> notifications = new ArrayList<>();
-  private @Valid DelegierungSlimDto delegierung;
+  private @Valid DelegierungSlimDto currentDelegierung;
+  private @Valid LocalDate earliestActiveGesuchPeriodeStart;
 
   /**
    **/
@@ -122,20 +124,38 @@ public class FallDashboardItemDto  implements Serializable {
   }
   /**
    **/
-  public FallDashboardItemDto delegierung(DelegierungSlimDto delegierung) {
-    this.delegierung = delegierung;
+  public FallDashboardItemDto currentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
     return this;
   }
 
   
-  @JsonProperty("delegierung")
-  public DelegierungSlimDto getDelegierung() {
-    return delegierung;
+  @JsonProperty("currentDelegierung")
+  public DelegierungSlimDto getCurrentDelegierung() {
+    return currentDelegierung;
   }
 
-  @JsonProperty("delegierung")
-  public void setDelegierung(DelegierungSlimDto delegierung) {
-    this.delegierung = delegierung;
+  @JsonProperty("currentDelegierung")
+  public void setCurrentDelegierung(DelegierungSlimDto currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
+  }
+
+  /**
+   **/
+  public FallDashboardItemDto earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+  
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+  @JsonProperty("earliestActiveGesuchPeriodeStart")
+  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
   }
 
 
@@ -151,12 +171,13 @@ public class FallDashboardItemDto  implements Serializable {
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
         Objects.equals(this.notifications, fallDashboardItem.notifications) &&
-        Objects.equals(this.delegierung, fallDashboardItem.delegierung);
+        Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, fallDashboardItem.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, delegierung);
+    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
@@ -167,7 +188,8 @@ public class FallDashboardItemDto  implements Serializable {
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
     sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
-    sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
+    sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");
     return sb.toString();
   }

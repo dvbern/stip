@@ -20,7 +20,7 @@ import { Observable }                                        from 'rxjs';
 
 import { ApplyDemoDataResponse } from '../model/applyDemoDataResponse';
 import { DemoDataList } from '../model/demoDataList';
-import { DemoDataTestBerechnungResult } from '../model/demoDataTestBerechnungResult';
+import { DemoDataTestBerechnungResultat } from '../model/demoDataTestBerechnungResultat';
 import { FileDownloadToken } from '../model/fileDownloadToken';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -618,9 +618,9 @@ export class DemoDataService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public testAllDemoDataBerechnung$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<DemoDataTestBerechnungResult>>;
-     public testAllDemoDataBerechnung$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<DemoDataTestBerechnungResult>>>;
-     public testAllDemoDataBerechnung$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<DemoDataTestBerechnungResult>>>;
+     public testAllDemoDataBerechnung$(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<DemoDataTestBerechnungResultat>>;
+     public testAllDemoDataBerechnung$(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<DemoDataTestBerechnungResultat>>>;
+     public testAllDemoDataBerechnung$(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<DemoDataTestBerechnungResultat>>>;
      public testAllDemoDataBerechnung$(observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
@@ -669,7 +669,7 @@ export class DemoDataService {
         }
 
         const localVarPath = `/demo-data/test-all-berechnung`;
-        return this.httpClient.request<Array<DemoDataTestBerechnungResult>>('get', `${this.configuration.basePath}${localVarPath}`,
+        return this.httpClient.request<Array<DemoDataTestBerechnungResultat>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

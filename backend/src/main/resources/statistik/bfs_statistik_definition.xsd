@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:STIP="http://www.bfs.admin.ch/xmlns/STIP/2"
+  xmlns:eCH-0006="http://www.ech.ch/xmlns/eCH-0006/2"
+  xmlns:eCH-0007="http://www.ech.ch/xmlns/eCH-0007/3"
+  xmlns:eCH-0008="http://www.ech.ch/xmlns/eCH-0008/2"
+  xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/1"
+  targetNamespace="http://www.bfs.admin.ch/xmlns/STIP/2"
+  elementFormDefault="qualified" attributeFormDefault="unqualified"
+  version="0">
+
+  <xs:annotation>
+    <xs:documentation xml:lang="de">
+      Das vorliegende XML Schema definiert die Syntax für XML Dokumente für die
+      Datenerhebung und Datenlieferung zur Statistik der kantonalen Stipendien und Darlehen.
+      Details zur Semantik sind dem folgenden Dokument zu entnehmen:
+      Statistik der kantonalen Stipendien und Darlehen. Technisches Handbuch. Juni 2009.
+      http://www.bfs.admin.ch/bfs/portal/de/index/infothek/erhebungen__quellen/blank/blank/sksd/02.Document.121863.pdf
+    </xs:documentation>
+    <xs:documentation>
+      Copyright (c) 2007-2008 Swiss Federal Statistical Office. All Rights Reserved.
+      info@bfs.admin.ch
+    </xs:documentation>
+  </xs:annotation>
+
+  <xs:import namespace="http://www.ech.ch/xmlns/eCH-0006/2" schemaLocation="imports/eCH-0006-2-0.xsd"/>
+  <xs:import namespace="http://www.ech.ch/xmlns/eCH-0007/3" schemaLocation="imports/eCH-0007-3-0.xsd"/>
+  <xs:import namespace="http://www.ech.ch/xmlns/eCH-0008/2" schemaLocation="imports/eCH-0008-2-0.xsd"/>
+  <xs:import namespace="http://www.ech.ch/xmlns/eCH-0044/1" schemaLocation="imports/eCH-0044-1-0.xsd"/>
+
+
+  <xs:element name="table">
+    <xs:annotation>
+      <xs:documentation xml:lang="de">
+        Wurzelelement für die Datenlieferung.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="head">
+          <xs:annotation>
+            <xs:documentation xml:lang="de">
+              Kopfdaten.
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="version" type="xs:gYear">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de">
+                    Referenzjahr.
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="canton">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de">
+                    Numerischer Code des Kantons gemäss Nomenklatur, z.B 1=ZH.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:int">
+                    <xs:minInclusive value="1"/>
+                    <xs:maxInclusive value="26"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="dataDelivery">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de">
+                    Code der Datenlieferung.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:maxLength value="15"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="deliveryDate" type="xs:date">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de">
+                    Lieferdatum
+                  </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="pers" minOccurs="0" maxOccurs="unbounded">
+          <xs:annotation>
+            <xs:documentation xml:lang="de">
+              Bezügerin/Bezüger
+            </xs:documentation>
+          </xs:annotation>
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="personIdentificationRoot">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de"> Ähnlich (!) zu eCH-0044:personIdentificationRoot.
+                  </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="localPersonId" type="eCH-0044:namedPersonIdType"/>
+                    <xs:element name="sex" type="eCH-0044:sexType"/>
+                    <xs:element name="dateOfBirth" type="xs:date"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="nationality" type="eCH-0008:countryIdType">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de"> Staatsangehörigkeit gemäss Nomenklatur Staaten
+                    &amp; Gebiete (eCH-0008) </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:element name="residencePermitCategory" type="eCH-0006:residencePermitCategoryType"
+                minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de"> Ausländerkategorie, Basiskategorie für Ausländer
+                    (eCH-0006). Nur vorhanden, wenn nationality != 8100 (d.h. nur für Ausländer
+                    vorhanden. </xs:documentation>
+                </xs:annotation>
+              </xs:element>
+              <xs:choice>
+                <xs:sequence>
+                  <xs:element name="place" type="eCH-0007:municipalityIdType">
+                    <xs:annotation>
+                      <xs:documentation xml:lang="de"> Wohnsitz, gemäss Nomenklatur der Gemeinden
+                        (eCH-0007). BFS Nummer, nicht die Historisierte Gemeindenummer!
+                      </xs:documentation>
+                    </xs:annotation>
+                  </xs:element>
+                  <xs:element name="placeHist" type="eCH-0007:historyMunicipalityId" minOccurs="0"/>
+                  <xs:element name="country" type="eCH-0008:countryIdType"  minOccurs="0"/>
+                </xs:sequence>
+                <xs:sequence>
+                  <xs:element name="placeHist" type="eCH-0007:historyMunicipalityId"/>
+                  <xs:element name="country" type="eCH-0008:countryIdType"  minOccurs="0"/>
+                </xs:sequence>
+                <xs:sequence>
+                  <xs:element name="country" type="eCH-0008:countryIdType"/>
+                </xs:sequence>
+              </xs:choice>
+              <xs:element name="com" minOccurs="0">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de"> Fakultativer Kommentar. </xs:documentation>
+                </xs:annotation>
+                <xs:simpleType>
+                  <xs:restriction base="xs:token">
+                    <xs:maxLength value="256"/>
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="form" maxOccurs="unbounded">
+                <xs:annotation>
+                  <xs:documentation xml:lang="de"> Ausbildung </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="formId" type="xs:positiveInteger">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Identifikator der Ausbildung. Laufnummer 1,
+                          2, 3, ... </xs:documentation>
+                      </xs:annotation>
+                    </xs:element>
+                    <xs:element name="formation">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Ausbildung </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="formLevel">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Ausbildungsstufe, gemäss Nomenklatur
+                                der Ausbildungsstufen </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:minInclusive value="1"/>
+                                <xs:maxInclusive value="10"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="matuProf" minOccurs="0">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Berufsmaturität während der
+                                beruflichen Grundbildung. 1=ja, 2=nein. Nur vorhanden, wenn
+                                formLevel = 4 oder 5. </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:enumeration value="1"/>
+                                <xs:enumeration value="2"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="diploma" minOccurs="0">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Studienstufe,
+                                Bachelor/Master/Doktorat. Nur vorhanden, wenn formLevel den Wert 8,
+                                9 oder 10 hat. Gemäss Nomenklatur der Hochschulen CH.SHIS
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:enumeration value="15"/>
+                                <xs:enumeration value="25"/>
+                                <xs:enumeration value="31"/>
+                                <xs:enumeration value="39"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="task">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Vollzeit- oder Teilzeitausbildung. 1
+                                = Vollzeit, 2 = Teilzeit. </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:enumeration value="1"/>
+                                <xs:enumeration value="2"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="firstForm">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Erstausbildung. 1=ja, 2=nein.
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:enumeration value="1"/>
+                                <xs:enumeration value="2"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="instIdentificationRoot">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Identifikator der Bildungsinstitution
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:choice>
+                          <xs:sequence>
+                            <xs:element name="instCode">
+                              <xs:annotation>
+                                <xs:documentation xml:lang="de"> Code der Institution. Nur
+                                  vorhanden, wenn formLevel den Wert 8, 9 oder 10 hat. Gemäss
+                                  Nomenklatur der Hochschulen CH.SHIS </xs:documentation>
+                              </xs:annotation>
+                              <xs:complexType>
+                                <xs:sequence>
+                                  <xs:element name="instCategory">
+                                    <xs:annotation>
+                                      <xs:documentation xml:lang="de"> Typ des Identifikators der
+                                        Bildungsinstitution. CH.SHIS gilt für die
+                                        Bildungsinstiutionen die gemäss SHIS codiert werden.
+                                      </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:token">
+                                        <xs:maxLength value="20"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:element>
+                                  <xs:element name="instId">
+                                    <xs:annotation>
+                                      <xs:documentation xml:lang="de"> Wert des Identifikators der
+                                        Bildungsinstitution. Code der Bildungsinstitution.
+                                      </xs:documentation>
+                                    </xs:annotation>
+                                    <xs:simpleType>
+                                      <xs:restriction base="xs:token">
+                                        <xs:pattern value="[0-9]{1,4}"/>
+                                      </xs:restriction>
+                                    </xs:simpleType>
+                                  </xs:element>
+                                </xs:sequence>
+                              </xs:complexType>
+                            </xs:element>
+                          </xs:sequence>
+                          <xs:element name="instName">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Name der Bildungsinstitution.
+                                Kantonale Bezeichnung. </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:token">
+                                <xs:maxLength value="256"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:choice>
+                      </xs:complexType>
+                    </xs:element>
+
+                    <xs:element name="formPlace">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Ausbildungsort. Nomenklatur der Kantone
+                          (01-26) oder Nomenklatur der Staaten und Gebiete (eCH-0008).
+                        </xs:documentation>
+                      </xs:annotation>
+                      <xs:simpleType>
+                        <xs:restriction base="xs:int">
+                          <xs:minInclusive value="1"/>
+                          <xs:maxInclusive value="9999"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+                    <xs:element name="com" minOccurs="0">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Fakultativer Kommentar. </xs:documentation>
+                      </xs:annotation>
+                      <xs:simpleType>
+                        <xs:restriction base="xs:token">
+                          <xs:maxLength value="256"/>
+                        </xs:restriction>
+                      </xs:simpleType>
+                    </xs:element>
+
+                    <xs:element name="sum" minOccurs="1" maxOccurs="unbounded">
+                      <xs:annotation>
+                        <xs:documentation xml:lang="de"> Ausbildungsbeiträge </xs:documentation>
+                      </xs:annotation>
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="sumId" type="xs:positiveInteger">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Identifikator des
+                                Ausbildungsbeitrags. Laufnummer 1, 2, 3… </xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element name="sumTotal" type="xs:decimal">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Höhe der Ausbildungsbeiträge. In
+                                Schweizer Franken. </xs:documentation>
+                            </xs:annotation>
+                          </xs:element>
+                          <xs:element name="sumArt">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Form des Ausbildungsbeitrags. 1 =
+                                Stipendium, 2 = Studiendarlehen </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:enumeration value="1"/>
+                                <xs:enumeration value="2"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="term">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Gültigkeit des Ausbildungsbeitrags.
+                                Anzahl Semester, für die ein Ausbildungsbeitrag gewährt wurde.
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:int">
+                                <xs:minInclusive value="1"/>
+                                <xs:maxInclusive value="9"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                          <xs:element name="com" minOccurs="0">
+                            <xs:annotation>
+                              <xs:documentation xml:lang="de"> Fakultativer Kommentar.
+                              </xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                              <xs:restriction base="xs:token">
+                                <xs:maxLength value="256"/>
+                              </xs:restriction>
+                            </xs:simpleType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

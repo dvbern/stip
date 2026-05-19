@@ -202,6 +202,10 @@ LocalDate:
   format: date
   type: string
   example: '2022-03-10'
+LocalDateTime:
+  format: date-time
+  type: string
+  example: '2022-03-10T12:00:00'
 SteuerdatenTyp:
   enum:
     - FAMILIE
@@ -317,28 +321,28 @@ Gesuchsjahr:
 UUID:
   format: uuid
   type: string
-Zahlungsverbindung:
-  title: Root Type for Zahlungsverbindung
-  type: object
-  allOf:
-    - type: object
-    - $ref: '#/ZahlungsverbindungUpdate'
-ZahlungsverbindungUpdate:
+ZahlungsverbindungSlim:
   title: Root Type for Zahlungsverbindung
   required:
     - adresse
-    - iban
   type: object
   properties:
     vorname:
       type: string
-    adresse:
-      $ref: '#/Adresse'
-    iban:
-      type: string
     nachname:
       type: string
     institution:
+      type: string
+    adresse:
+      $ref: '#/Adresse'
+Zahlungsverbindung:
+  allOf:
+    - $ref: '#/ZahlungsverbindungSlim'
+  required:
+    - iban
+  type: object
+  properties:
+    iban:
       type: string
 Gesuch:
   required:
@@ -382,6 +386,8 @@ Gesuch:
     einreichedatum:
       format: date
       type: string
+    hadDelegierungs:
+      type: boolean
     delegierung:
       $ref: '#/DelegierungSlim'
     nachfristDokumente:
@@ -403,6 +409,7 @@ GesuchStateInfo:
     - canChangeGesuchsperiode
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
+    - canSBInitAenderung
   type: object
   properties:
     gesuchStatus:
@@ -416,6 +423,8 @@ GesuchStateInfo:
     canTriggerManuellPruefen:
       type: boolean
     canBearbeitungAbschliessen:
+      type: boolean
+    canSBInitAenderung:
       type: boolean
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
@@ -444,11 +453,20 @@ PersoenlicheAngaben:
       $ref: '#/Sprache'
     adresse:
       $ref: '#/Adresse'
+DelegierungStatus:
+  enum:
+    - EINGEREICHT
+    - AKZEPTIERT
+    - ABGELEHNT
+    - BEENDET
 DelegierungSlim:
+  required:
+    - status
+    - sozialdienst
   type: object
   properties:
-    delegierungAngenommen:
-      type: boolean
+    status:
+      $ref: '#/DelegierungStatus'
     sozialdienst:
       $ref: '#/SozialdienstSlim'
 GesuchWithChanges:
@@ -621,6 +639,8 @@ Ausbildung:
       $ref: '#/Ausbildungsgang'
     editable:
       type: boolean
+    earliestActiveGesuchPeriodeStart:
+      $ref: '#/LocalDate'
   allOf:
     - $ref: '#/AusbildungBase'
 GesuchsperiodeSelectError:
@@ -895,6 +915,7 @@ SozialdienstSlim:
     - id
     - name
     - aktiv
+    - zahlungsverbindung
   properties:
     id:
       $ref: '#/UUID'
@@ -902,6 +923,8 @@ SozialdienstSlim:
       type: string
     aktiv:
       type: boolean
+    zahlungsverbindung:
+      $ref: '#/ZahlungsverbindungSlim'
 GesuchTrancheTyp:
   enum:
     - AENDERUNG
@@ -987,6 +1010,7 @@ StipDecision:
     - AUSBILDUNG_IM_LEBENSLAUF
     - PIA_AELTER_35_JAHRE
     - KEIN_WOHNSITZ_KANTON_BE
+    - KEIN_WOHNSITZ_SCHWEIZ
     - SCHULJAHR_9_SEKSTUFE_1
     - AUSBILDUNG_PBI1
     - ART_32_BBV
@@ -1029,6 +1053,8 @@ FreiwilligDarlehen:
       $ref: '#/DarlehenStatus'
     gewaehren:
       type: boolean
+    negativeVerfuegung:
+      $ref: '#/Dokument'
     betrag:
       type: integer
       minimum: 0

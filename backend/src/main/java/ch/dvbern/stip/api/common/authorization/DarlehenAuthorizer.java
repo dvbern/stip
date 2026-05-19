@@ -88,7 +88,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canDarlehenAblehenenAkzeptieren(UUID darlehenId) {
+    public void canDarlehenAblehnenAkzeptieren(UUID darlehenId) {
         final var benutzer = benutzerService.getCurrentBenutzer();
 
         if (!isFreigabestelle(benutzer)) {
@@ -193,7 +193,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
 
         if (
             !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
-                entry.getFall(),
+                entry.getGesuch().getAusbildung().getFall(),
                 benutzer,
                 sozialdienstService
             ) && !isSbOrFreigabestelleOrJurist(benutzer)

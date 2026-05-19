@@ -100,7 +100,7 @@ export class GesuchAppFeatureCockpitComponent {
   availableSozialdiensteSig = computed(() => {
     const sozialdienste = this.sozialdienstStore.availableSozialdienste()?.data;
     const delegierterSozialdienst =
-      this.dashboardStore.dashboardViewSig()?.delegierung?.sozialdienst;
+      this.dashboardStore.dashboardViewSig()?.currentDelegierung?.sozialdienst;
 
     return sozialdienste?.filter(
       (sozialdienst) =>
@@ -143,7 +143,7 @@ export class GesuchAppFeatureCockpitComponent {
 
   compareById = compareById;
 
-  createAusbildung(fallId: string) {
+  createAusbildung(fallId: string, minAusbildungEnd: string | undefined) {
     const nutzungsbedingungenAkzeptiert =
       this.benutzerSig()?.nutzungsbedingungenAkzeptiert;
     const benutzerId = this.benutzerSig()?.id;
@@ -164,7 +164,11 @@ export class GesuchAppFeatureCockpitComponent {
           }
         });
     } else {
-      SharedDialogCreateAusbildungComponent.open(this.dialog, fallId)
+      SharedDialogCreateAusbildungComponent.open(
+        this.dialog,
+        fallId,
+        minAusbildungEnd,
+      )
         .afterClosed()
         .subscribe(() => {
           this.dashboardStore.loadDashboard$();

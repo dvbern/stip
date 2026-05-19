@@ -39,6 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_RELATED_GESUCH_ID,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_STATUS,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_GEWAEHREN,
+  FreiwilligDarlehenDtoSpec.JSON_PROPERTY_NEGATIVE_VERFUEGUNG,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_BETRAG,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_KOMMENTAR,
   FreiwilligDarlehenDtoSpec.JSON_PROPERTY_BETRAG_GEWUENSCHT,
@@ -66,6 +67,9 @@ public class FreiwilligDarlehenDtoSpec {
 
   public static final String JSON_PROPERTY_GEWAEHREN = "gewaehren";
   private Boolean gewaehren;
+
+  public static final String JSON_PROPERTY_NEGATIVE_VERFUEGUNG = "negativeVerfuegung";
+  private DokumentDtoSpec negativeVerfuegung;
 
   public static final String JSON_PROPERTY_BETRAG = "betrag";
   private Integer betrag;
@@ -224,6 +228,32 @@ public class FreiwilligDarlehenDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setGewaehren(Boolean gewaehren) {
     this.gewaehren = gewaehren;
+  }
+
+
+  public FreiwilligDarlehenDtoSpec negativeVerfuegung(DokumentDtoSpec negativeVerfuegung) {
+    
+    this.negativeVerfuegung = negativeVerfuegung;
+    return this;
+  }
+
+   /**
+   * Get negativeVerfuegung
+   * @return negativeVerfuegung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_NEGATIVE_VERFUEGUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DokumentDtoSpec getNegativeVerfuegung() {
+    return negativeVerfuegung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_NEGATIVE_VERFUEGUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setNegativeVerfuegung(DokumentDtoSpec negativeVerfuegung) {
+    this.negativeVerfuegung = negativeVerfuegung;
   }
 
 
@@ -486,6 +516,7 @@ public class FreiwilligDarlehenDtoSpec {
         Objects.equals(this.relatedGesuchId, freiwilligDarlehen.relatedGesuchId) &&
         Objects.equals(this.status, freiwilligDarlehen.status) &&
         Objects.equals(this.gewaehren, freiwilligDarlehen.gewaehren) &&
+        Objects.equals(this.negativeVerfuegung, freiwilligDarlehen.negativeVerfuegung) &&
         Objects.equals(this.betrag, freiwilligDarlehen.betrag) &&
         Objects.equals(this.kommentar, freiwilligDarlehen.kommentar) &&
         Objects.equals(this.betragGewuenscht, freiwilligDarlehen.betragGewuenscht) &&
@@ -499,7 +530,7 @@ public class FreiwilligDarlehenDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
+    return Objects.hash(id, fallId, relatedGesuchId, status, gewaehren, negativeVerfuegung, betrag, kommentar, betragGewuenscht, schulden, anzahlBetreibungen, gruende, isDelegiert, timestampErstellt, verfuegung);
   }
 
   @Override
@@ -511,6 +542,7 @@ public class FreiwilligDarlehenDtoSpec {
     sb.append("    relatedGesuchId: ").append(toIndentedString(relatedGesuchId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    gewaehren: ").append(toIndentedString(gewaehren)).append("\n");
+    sb.append("    negativeVerfuegung: ").append(toIndentedString(negativeVerfuegung)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("    betragGewuenscht: ").append(toIndentedString(betragGewuenscht)).append("\n");

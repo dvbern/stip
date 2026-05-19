@@ -5,30 +5,31 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
+import { map, startWith } from 'rxjs';
 
-import { FehlgeschlageneZahlungenStore } from '@dv/sachbearbeitung-app/data-access/fehlgeschlagene-zahlungen';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import {
+  NullableDashFilterQueryParams,
+  getDefaultQueryForRole,
+} from '@dv/shared/util/dashboard';
 import { NavItem } from '@dv/shared/util/navigation';
 
-// Anträge, Darlehen-Dashboard (until rework), Massendruck, Administration, Fehlgeschlagene Zahlungen
-const baseNavItems: NavItem[] = [
+const baseNavItems: (NavItem & {
+  queryParams?: NullableDashFilterQueryParams;
+})[] = [
   {
     type: 'link',
     id: 'dashboard',
     label: { key: 'sachbearbeitung-app.header.antraege' },
     icon: 'dashboard',
-    route: ['/dashboard'],
-  },
-  {
-    type: 'link',
-    id: 'darlehen-dashboard',
-    label: { key: 'sachbearbeitung-app.header.darlehen' },
-    icon: 'payments',
-    route: ['/darlehen-dashboard'],
+    route: ['/dashboard', 'antraege'],
+    testId: 'dashboard-nav-item',
   },
   {
     type: 'link',
@@ -43,7 +44,7 @@ const baseNavItems: NavItem[] = [
     label: { key: 'sachbearbeitung-app.header.administration' },
     icon: 'settings',
     route: ['/administration'],
-    rolesAllowed: ['V0_Sachbearbeiter-Admin'],
+    rolesAllowed: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
   },
 ];
 
@@ -60,14 +61,14 @@ const baseNavItems: NavItem[] = [
       <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
       </dv-shared-pattern-mobile-sidenav>
     </mat-sidenav>
-    <mat-sidenav-content class="d-flex flex-column">
+    <mat-sidenav-content class="tw:flex tw:flex-col">
       <dv-shared-pattern-global-header
         [staticNavItemsSig]="navItemsSig()"
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
-      <main class="page-body tw:flex tw:flex-col">
+      <main class="tw:dv-page-body tw:flex tw:flex-col">
         <router-outlet></router-outlet>
       </main>
     </mat-sidenav-content>
@@ -76,42 +77,54 @@ const baseNavItems: NavItem[] = [
 })
 export class SachbearbeitungAppPatternMainLayoutComponent {
   private permissionStore = inject(PermissionStore);
+  private router = inject(Router);
 
   @HostBinding('class')
   hostClass = 'tw:flex tw:flex-col';
 
-  fehlgeschlageneZahlungenStore = inject(FehlgeschlageneZahlungenStore);
+  routeUrlSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.router.routerState.snapshot.url),
+      startWith(this.router.routerState.snapshot.url),
+    ),
+  );
 
   navItemsSig = computed(() => {
     const rolesMap = this.permissionStore.rolesMapSig();
 
+    const defaultFilter = getDefaultQueryForRole(rolesMap);
+
     const navItems: NavItem[] = baseNavItems;
 
-    if (this.fehlgeschlageneZahlungenStore.hasFehlgeschalgeneZahlungenSig()) {
-      navItems.push({
-        type: 'link',
-        id: 'fehlgeschlagene-zahlungen',
-        label: { key: 'sachbearbeitung-app.header.fehlgeschlageneZahlungen' },
-        icon: 'error_outline',
-        route: ['/fehlgeschlagene-zahlungen'],
+    const filtered: NavItem[] = navItems
+      .filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
+
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      })
+      .map((item) => {
+        if (item.type === 'link' && item.route) {
+          const isActive = this.routeUrlSig()?.includes(item.route[0] ?? '');
+          return { ...item, active: isActive };
+        }
+
+        if (item.id === 'dashboard') {
+          return {
+            ...item,
+            route: ['/dashboard', 'antraege'],
+            queryParams: {
+              filterTab: defaultFilter.filterTab,
+              scope: defaultFilter.zugewiesen,
+              bearbeitbar: defaultFilter.bearbeitbar,
+            },
+          };
+        }
+
+        return item;
       });
-    }
-
-    const filtered: NavItem[] = navItems.filter((item) => {
-      if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-        return true;
-      }
-
-      return item.rolesAllowed.some((role) => rolesMap[role]);
-    });
 
     return filtered;
   });
-
-  constructor() {
-    this.fehlgeschlageneZahlungenStore.getFehlgeschlageneZahlungen$({
-      page: 1,
-      pageSize: 10,
-    });
-  }
 }

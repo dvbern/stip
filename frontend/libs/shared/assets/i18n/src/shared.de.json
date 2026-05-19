@@ -26,7 +26,6 @@
   "shared.ui.loading.text": "Inhalte laden...",
   "shared.ui.saving.text": "Wird gespeichert...",
   "shared.ui.open-datepicker": "Datum auswählen",
-  "shared.comming-soon": "Diese Funktion ist noch in Entwicklung",
   "shared.language.DEUTSCH": "Deutsch",
   "shared.language.FRANZOESISCH": "Französisch",
   "shared.genericError.validation": "Es wurde versucht, ungültige Werte abzuspeichern.",
@@ -224,7 +223,7 @@
   "shared.unauthorized.text": "Sie haben keine Berechtigung um diese Seite zu sehen.",
 
   "shared.user.consent.dialog.title": "Nutzungsbestimmungen kiBon-Stip",
-  "shared.user.consent.dialog.text": "<h3>Nutzungsbestimmungen für die Bearbeitung und Einreichung von Gesuchen für Ausbildungsbeiträge</h3><p>Als gesuchstellende Person müssen Sie die folgenden Nutzungsbestimmungen akzeptieren, um ein Gesuch für Ausbildungsbeiträge online bearbeiten und einreichen zu können.</p><h4>Umgang mit persönlichem Passwort:</h4><ul><li>Das persönliche Passwort ist geheim zu halten und vor missbräuchlicher Verwendung zu schützen.</li><li>Das persönliche Passwort darf nicht an andere Personen weitergereicht werden.</li></ul><h4>Korrekte und vollständige Angaben und Dokumente</h4><ul><li>Sie bestätigen, dass Sie das Gesuch wahrheitsgetreu und vollständig ausfüllen.</li><li>Sie bestätigen, dass die hochgeladenen Dokumente unverändert sind und den Tatsachen entsprechen.</li><li>Die AAB behält sich das Recht vor, ein Nutzerkonto zu sperren oder zu löschen, wenn bewusst falsche oder unwahre Angaben gemacht werden.</li><li>Der Nutzer trägt die Verantwortung für alle hochgeladenen oder übermittelten Daten.</li><li>Nach Abschluss des Gesuchverfahrens werden die personenbezogenen Daten gemäss den gesetzlichen Aufbewahrungsfristen gespeichert und anschliessend gelöscht.</li><li>Die Verarbeitung personenbezogener Daten erfolgt im Rahmen der geltenden Datenschutzgesetzgebung.</li></ul><h4>Freigabe des Gesuchs</h4><ul><li>Das online ausgefüllte Gesuch gilt mit der Freigabe als eingereicht.</li><li>Änderungen können Sie jederzeit in der Applikation (online) erfassen und melden.</li></ul><h4>Fristenwahrung</h4><ul><li>Ein online ausgefülltes Gesuch ist fristgerecht eingereicht, wenn der Eingabetermin nach Art. 36 der Verordnung vom 5. April 2006 über die Ausbildungsbeiträge (ABV; BSG 438.312) eingehalten ist. Das Verfahren richtet sich nach den Bestimmungen des Gesetzes vom 23. Mai 1989 über die Verwaltungsrechtspflege (VRPG; BSG 155.21).</li></ul><h4>Meldepflicht</h4><ul><li>Wenn Ihr Gesuch bewilligt wird und Sie Ausbildungsbeiträge erhalten, müssen Sie danach jede Änderung gegenüber den Angaben im Gesuch unaufgefordert und unverzüglich in der Applikation erfassen und melden. Bei Verletzung dieser Meldepflicht können die Ausbildungsbeiträge ganz oder teilweise zurückgefordert werden.</li></ul><h4>Support / Unterstützung</h4><ul><li>Sie willigen ein, dass das bearbeitete Gesuch von den Mitarbeitenden der Abteilung Ausbildungsbeiträge (AAB) eingesehen werden darf, wenn Sie Unterstützung beim Ausfüllen des Gesuchs benötigen.</li></ul>",
+  "shared.user.consent.dialog.text": "<h3 class=\"tw:text-2xl tw:font-semibold tw:mb-2\">Nutzungsbestimmungen für die Bearbeitung und Einreichung von Gesuchen für Ausbildungsbeiträge</h3><p class=\"tw:mb-4\">Als gesuchstellende Person müssen Sie die folgenden Nutzungsbestimmungen akzeptieren, um ein Gesuch für Ausbildungsbeiträge online bearbeiten und einreichen zu können.</p><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Umgang mit persönlichem Passwort:</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Das persönliche Passwort ist geheim zu halten und vor missbräuchlicher Verwendung zu schützen.</li><li>Das persönliche Passwort darf nicht an andere Personen weitergereicht werden.</li></ul><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Korrekte und vollständige Angaben und Dokumente</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Sie bestätigen, dass Sie das Gesuch wahrheitsgetreu und vollständig ausfüllen.</li><li>Sie bestätigen, dass die hochgeladenen Dokumente unverändert sind und den Tatsachen entsprechen.</li><li>Die AAB behält sich das Recht vor, ein Nutzerkonto zu sperren oder zu löschen, wenn bewusst falsche oder unwahre Angaben gemacht werden.</li><li>Der Nutzer trägt die Verantwortung für alle hochgeladenen oder übermittelten Daten.</li><li>Nach Abschluss des Gesuchverfahrens werden die personenbezogenen Daten gemäss den gesetzlichen Aufbewahrungsfristen gespeichert und anschliessend gelöscht.</li><li>Die Verarbeitung personenbezogener Daten erfolgt im Rahmen der geltenden Datenschutzgesetzgebung.</li></ul><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Freigabe des Gesuchs</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Das online ausgefüllte Gesuch gilt mit der Freigabe als eingereicht.</li><li>Änderungen können Sie jederzeit in der Applikation (online) erfassen und melden.</li></ul><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Fristenwahrung</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Ein online ausgefülltes Gesuch ist fristgerecht eingereicht, wenn der Eingabetermin nach Art. 36 der Verordnung vom 5. April 2006 über die Ausbildungsbeiträge (ABV; BSG 438.312) eingehalten ist. Das Verfahren richtet sich nach den Bestimmungen des Gesetzes vom 23. Mai 1989 über die Verwaltungsrechtspflege (VRPG; BSG 155.21).</li></ul><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Meldepflicht</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Wenn Ihr Gesuch bewilligt wird und Sie Ausbildungsbeiträge erhalten, müssen Sie danach jede Änderung gegenüber den Angaben im Gesuch unaufgefordert und unverzüglich in der Applikation erfassen und melden. Bei Verletzung dieser Meldepflicht können die Ausbildungsbeiträge ganz oder teilweise zurückgefordert werden.</li></ul><h4 class=\"tw:text-xl tw:font-semibold tw:mb-2\">Support / Unterstützung</h4><ul class=\"tw:pl-8 tw:mb-4\"><li>Sie willigen ein, dass das bearbeitete Gesuch von den Mitarbeitenden der Abteilung Ausbildungsbeiträge (AAB) eingesehen werden darf, wenn Sie Unterstützung beim Ausfüllen des Gesuchs benötigen.</li></ul>",
   "shared.user.consent.dialog.accept": "Zustimmen",
 
   "shared.dashboard.ausbildung.delete": "Ausbildung löschen",
@@ -345,9 +344,7 @@
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_BEARBEITUNG_GS": "Zurückgewiesen",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.EINGEGEBEN.to.IN_FREIGABE": "Freigegeben",
 
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.EINGEGEBEN": "Eingereicht",
-  "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.AKZEPTIERT": "Akzeptiert",
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
 
@@ -359,7 +356,7 @@
   "shared.gesuch.status.tranche.ABGELEHNT": "Abgelehnt",
   "shared.gesuch.status.tranche.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
-  "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
+  "sachbearbeitung-app.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuelle Änderung",
   "sachbearbeitung-app.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "sachbearbeitung-app.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "sachbearbeitung-app.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",
@@ -543,8 +540,8 @@
   "shared.form.person.zivilstand.label": "Zivilstand",
   "shared.form.person.zivilstand.ledig.info": "Sofern Sie sich seit 5 Jahre oder länger in einer Beziehung befinden, wählen Sie bitte \"Konkubinat\" aus.",
   "shared.form.person.zivilstand.konkubinat.info": "Konkubinat bedeutet: Unverheiratete Paare, die zusammenleben, entweder seit mindestens 5 Jahren oder mit einem gemeinsamen Kind im selben Haushalt. Sie werden wie verheiratete Auszubildende behandelt.",
-  "shared.form.person.guardianship.label": "Es besteht eine umfassende Beistandschaft",
-  "shared.form.person.guardianship.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
+  "shared.form.person.vormundschaft.label": "Es besteht eine umfassende Beistandschaft",
+  "shared.form.person.vormundschaft.info": "Wenn Sie von einer Beiständin oder einem Beistand vertreten werden, markieren Sie bitte die Checkbox.\n\nErklärung: Bei einer umfassenden Beistandschaft übernimmt die Beiständin oder der Beistand alle Angelegenheiten der Personensorge, Vermögenssorge und des Rechtsverkehrs. Die betroffene Person ist in diesem Fall nicht mehr handlungsfähig.",
   "shared.form.person.vermoegenVorjahr.label": "Vermögen per 31.12. des Vorjahrs",
   "shared.form.person.sozialhilfebeitraege.label": "Werden Sozialhilfebeiträge ausbezahlt?",
   "shared.form.person.sozialhilfebeitraege.infoTitle": "Werden Sozialhilfebeiträge ausbezahlt?",
@@ -1000,6 +997,7 @@
   "shared.form.darlehen.darlehenGewaehren.label": "Darlehen gewähren",
   "shared.form.darlehen.darlehenGewaehren.true": "Ja",
   "shared.form.darlehen.darlehenGewaehren.false": "Nein",
+  "shared.form.darlehen.negativDarlehenVerfuegung.label": "Negative Darlehensverfügung",
   "shared.form.darlehen.betragDarlehen.label": "Betrag Darlehen",
   "shared.form.darlehen.kommentar.label": "Kommentar",
   "shared.form.darlehen.betragGewuenscht.label": "Gewünschter Darlehensbetrag",
@@ -1040,6 +1038,7 @@
   "shared.form.darlehen.abschliessen.dialog.message": "Möchten Sie das Darlehen abschliessen? Nach der Abschließung sind keine Änderungen mehr möglich.",
   "shared.form.darlehen.abschliessen.dialog.confirm": "Darlehen abschliessen",
   "shared.form.darlehen.abschliessen.success": "Das Darlehen wurde erfolgreich abgeschlossen.",
+  "shared.form.darlehen.abschliessen.failure": "Beim abschliessen des Darlehens ist ein Fehler aufgetreten. Bitte versuchen sie es erneut.",
   "shared.form.darlehen.zurueckweisen": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.title": "Darlehen zurückweisen",
   "shared.form.darlehen.zurueckweisen.dialog.message": "Möchten Sie das Darlehen zurückweisen?",
@@ -1048,6 +1047,19 @@
   "shared.form.darlehen.zurueckweisen.success": "Das Darlehen wurde erfolgreich zurückgewiesen.",
   "shared.form.darlehen.zurueckweisen.failure": "Beim zurückweisen des Darlehens ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "shared.form.darlehen.error.missingDocuments": "Es müssen noch Dokumente hochgeladen werden, bevor das Darlehen beantragt werden kann.",
+
+  "shared.delegierungen.title": "Delegation",
+  "shared.form.delegierung.list.label": "Bisherige Delegationen",
+  "shared.form.delegierung.start.label": "Startdatum der Delegation",
+  "shared.form.delegierung.end.label": "Enddatum der Delegation",
+  "shared.form.delegierung.range.ongoing": "seit {{startDate}}",
+  "shared.form.delegierung.range.startAndEnd": "von {{startDate}} bis {{endDate}}",
+  "shared.form.delegierung.name.label": "Name des Sozialdienstes",
+  "shared.form.delegierung.status.label": "Status",
+  "shared.form.delegierung.telefonnummer.label": "Telefonnummer",
+  "shared.form.delegierung.email.label": "Mail-Adresse",
+  "shared.form.delegierung.vorname.label": "Vorname",
+  "shared.form.delegierung.nachname.label": "Nachname",
 
   "shared.form.gesuchsjahr.bezeichnungDe.label": "Bezeichnung(DE)",
   "shared.form.gesuchsjahr.bezeichnungFr.label": "Bezeichnung(FR)",
@@ -1062,6 +1074,8 @@
   "shared.form.abschluss.submitted": "Gesuch wurde freigegeben. Sie haben nur noch lesend Zugriff auf das Gesuch.",
   "shared.form.abschluss.abschliessen": "Freigeben",
   "shared.form.abschluss.fehlendeDokumenteEinreichen": "Die Dokumente dem Sachbearbeiter übermitteln",
+  "shared.form.abschluss.aenderungNichtEinreichbar": "Momentan können sie keine Änderung eingeben. Kontaktieren sie den zuständigen Sachbearbeiter",
+
   "shared.form.tranche-abschluss.notReady": "Es fehlen noch Angaben. Bitte füllen Sie alle Pflichtfelder aus.",
 
   "shared.protokoll.title": "Gesuchsverlauf",
@@ -1111,6 +1125,11 @@
   "shared.ausbildungskategorie.BRUECKENANGEBOT": "Brückenangebot",
   "shared.ausbildungskategorie.HOEHERE_FACHPRUEFUNG": "Höhere Fachprüfung",
   "shared.ausbildungskategorie.BERUFSPRUEFUNG": "Berufsprüfung",
+
+  "shared.delegierung.status.EINGEREICHT": "Eingereicht",
+  "shared.delegierung.status.AKZEPTIERT": "Akzeptiert",
+  "shared.delegierung.status.ABGELEHNT": "Abgelehnt",
+  "shared.delegierung.status.BEENDET": "Beendet",
 
   "shared.kanton.AG": "Aargau",
   "shared.kanton.AI": "Appenzell Ausserrhoden",

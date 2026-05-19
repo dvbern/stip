@@ -3,6 +3,7 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
+import { DemoDataAppTranslationKey } from '@dv/demo-data-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelError } from '@dv/shared/model/error';
 import {
@@ -10,7 +11,7 @@ import {
   DemoDataList,
   DemoDataService,
   DemoDataSlim,
-  DemoDataTestBerechnungResult,
+  DemoDataTestBerechnungResultat,
   ValidationMessage,
 } from '@dv/shared/model/gesuch';
 import {
@@ -28,15 +29,15 @@ import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transform
 type DemoDataState = {
   demoData: CachedRemoteData<DemoDataList>;
   lastDemoDataRun: RemoteData<ApplyDemoDataResponse>;
-  demoDataTestBerechnungResults: CachedRemoteData<
-    DemoDataTestBerechnungResult[]
+  demoDataTestBerechnungResultats: CachedRemoteData<
+    DemoDataTestBerechnungResultat[]
   >;
 };
 
 const initialState: DemoDataState = {
   demoData: initial(),
   lastDemoDataRun: initial(),
-  demoDataTestBerechnungResults: initial(),
+  demoDataTestBerechnungResultats: initial(),
 };
 
 type DemoDataError = SharedModelError & {
@@ -70,17 +71,30 @@ export class DemoDataStore extends signalStore(
     ),
   );
 
-  demoDataTestBerechnungResultsSig = computed(() => {
-    const testResults = this.demoDataTestBerechnungResults().data ?? [];
+  demoDataTestBerechnungResultatsSig = computed(() => {
+    const testResults = this.demoDataTestBerechnungResultats().data ?? [];
 
     return testResults.reduce(
       (acc, result) => ({ ...acc, [result.demoDataId]: result }),
-      {} as Record<string, DemoDataTestBerechnungResult>,
+      {} as Record<string, DemoDataTestBerechnungResultat>,
     );
   });
 
-  demoDataViewSig = computed(() => {
-    return this.demoData.data();
+  lastDemoDataRunViewSig = computed(() => {
+    const lastDemoDataRun = this.lastDemoDataRun().data;
+    if (!lastDemoDataRun) {
+      return null;
+    }
+
+    const { valid, ist, soll } = lastDemoDataRun.berechnungResultat;
+
+    return {
+      gesuchStatus: lastDemoDataRun.gesuchStatus,
+      allValid: Object.values(valid ?? {}).every(Boolean),
+      valid,
+      soll,
+      ist,
+    };
   });
 
   demoDataErrorViewSig = computed<DemoDataError | undefined>(() => {
@@ -156,9 +170,12 @@ export class DemoDataStore extends signalStore(
             (demoData) => patchState(this, { lastDemoDataRun: demoData }),
             {
               onSuccess: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'demo-data-app.overview.apply-demo-data.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey:
+                      'demo-data-app.overview.apply-demo-data.success',
+                  },
+                );
               },
             },
           ),
@@ -177,6 +194,8 @@ export class DemoDataStore extends signalStore(
       tap(() => {
         patchState(this, (state) => ({
           demoData: cachedPending(state.demoData),
+          lastDemoDataRun: initial(),
+          demoDataTestBerechnungResultats: initial(),
         }));
       }),
       switchMap(
@@ -196,9 +215,12 @@ export class DemoDataStore extends signalStore(
                 {
                   onSuccess: () => {
                     onSuccess();
-                    this.globalNotificationStore.createSuccessNotification({
-                      messageKey: 'demo-data-app.overview.file-upload.success',
-                    });
+                    this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                      {
+                        messageKey:
+                          'demo-data-app.overview.file-upload.success',
+                      },
+                    );
                   },
                 },
               ),
@@ -211,8 +233,8 @@ export class DemoDataStore extends signalStore(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
-          demoDataTestBerechnungResults: cachedPending(
-            state.demoDataTestBerechnungResults,
+          demoDataTestBerechnungResultats: cachedPending(
+            state.demoDataTestBerechnungResultats,
           ),
         }));
       }),
@@ -221,13 +243,15 @@ export class DemoDataStore extends signalStore(
           handleApiResponse(
             (testResult) =>
               patchState(this, () => ({
-                demoDataTestBerechnungResults: testResult,
+                demoDataTestBerechnungResultats: testResult,
               })),
             {
               onSuccess: () => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey: 'demo-data-app.overview.file-upload.success',
-                });
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey: 'demo-data-app.overview.file-upload.success',
+                  },
+                );
               },
             },
           ),

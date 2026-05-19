@@ -4,6 +4,7 @@ import { trancheRoutes } from '@dv/shared/model/gesuch';
 import {
   AUSBILDUNG,
   AUSZAHLUNG,
+  DELEGIERUNGEN,
   DOKUMENTE,
   EINNAHMEN_KOSTEN,
   EINNAHMEN_KOSTEN_PARTNER,
@@ -28,6 +29,17 @@ export const baseGesuchFormRoutes: Routes = [
     loadChildren: () =>
       import('@dv/shared/feature/gesuch-form-tranche').then(
         (m) => m.sharedFeatureGesuchFormTrancheRoutes,
+      ),
+  },
+  {
+    path: DELEGIERUNGEN.route,
+    resolve: {
+      step: () => DELEGIERUNGEN,
+    },
+    title: DELEGIERUNGEN.translationKey,
+    loadChildren: () =>
+      import('@dv/shared/feature/gesuch-form-delegierungen').then(
+        (m) => m.sharedFeatureGesuchFormDelegierungenRoutes,
       ),
   },
   {

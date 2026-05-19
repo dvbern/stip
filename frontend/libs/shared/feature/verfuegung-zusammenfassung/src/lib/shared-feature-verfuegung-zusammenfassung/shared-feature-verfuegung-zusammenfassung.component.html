@@ -1,226 +1,227 @@
-@let zusammenfassung = berechnungStore.berechnungZusammenfassungViewSig();
+@let zusammenfassung = zusammenfassungViewSig();
+@let accepted = (zusammenfassung.berechnungDarlehen ?? 0) > 0 || zusammenfassung.berechnungStipendium > 0;
+
 @if (berechnungStore.berechnung() | rdIsPendingWithoutCache) {
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
-  <ng-container *transloco="let t">
+  <ng-container *transloco="let t; prefix: 'sachbearbeitung-app.verfuegung.zusammenfassung'">
     <!-- resultat -->
-    <mat-card class="rounded-4 mb-4">
-      <mat-card-header>
-        <mat-card-title>
-          <h2 class="d-flex align-items-center mb-0 gap-2">
-            <dv-shared-ui-icon-chip>
-              <i class="material-symbols-rounded text-info">equal</i>
-            </dv-shared-ui-icon-chip>
-            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.title') }}
-          </h2>
-        </mat-card-title>
-      </mat-card-header>
+    <h2 class="tw:mb-6 tw:font-bold tw:text-3xl">
+      {{ t('resultat.title') }}
+    </h2>
 
-      <div class="border-bottom mt-4 border-1"></div>
+    <div
+      [ngClass]="{ accept: accepted, reject: !accepted }"
+      class="tw:min-h-24 tw:flex tw:gap-2 tw:justify-between tw:p-4 tw:items-center tw:rounded-xl tw:mb-10 tw:bg-gray-100"
+    >
+      <div
+        class="tw:font-semibold tw:text-2xl tw:font-bold tw:flex tw:items-center tw:gap-2 tw:ml-3"
+        data-testid="zusammenfassung-resultat"
+      >
+        <span class="material-symbols-rounded tw:text-4xl!">{{ accepted ? 'check_circle' : 'cancel' }}</span>
+        <span>
+          {{ accepted ? t('resultat.angenommen') : t('resultat.abgelehnt') }}
+        </span>
+      </div>
+    </div>
 
-      <mat-card-content class="tw:!flex tw:items-center tw:gap-5 p-5">
-        @if ((zusammenfassung.berechnungDarlehen ?? 0) > 0 || zusammenfassung.berechnungStipendium > 0) {
-          <div class="accept rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
-            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.angenommen') }}
-          </div>
-        } @else {
-          <div class="reject rounded-4 fs-3 fw-bold tw:flex-1 p-4" data-testid="zusammenfassung-resultat">
-            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.resultat.abgelehnt') }}
-          </div>
-        }
-        @if (gesuchIdSig(); as id) {
-          <button
-            type="button"
-            class="btn btn-outline-primary fs-7 tw:!p-4 tw:text-sm"
-            [dvDownloadButton]="{ type: 'berechnungsblatt', id }"
-          >
-            <span class="material-symbols-rounded tw:align-middle">download</span>
-          </button>
-        }
-      </mat-card-content>
-    </mat-card>
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('total') }}</h3>
 
-    <!-- zusammenfassung -->
-    <mat-card class="rounded-4 mb-4">
-      <mat-card-header>
-        <mat-card-title>
-          <h3 class="fs-3 mb-0">
-            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.title') }}
-          </h3>
-        </mat-card-title>
-      </mat-card-header>
+    <mat-card class="tw:mb-10">
+      <mat-card-content>
+        @let hasKuerzungenNachEinreichefrist = !!zusammenfassung.totalNachKuerzungNachEinreichefrist;
+        @let hasKuerzungenUnterbruch = !!zusammenfassung.totalNachKuerzungUnterbruch;
+        @let hasDarlehen = !!zusammenfassung.berechnungDarlehen;
 
-      <div class="border-bottom mt-4 mb-4 border-1"></div>
-
-      <mat-card-content class="d-flex flex-column gap-4">
-        @for (berechnungen of zusammenfassung.berechnungsresultate; track $index; let berechnungsIndex = $index) {
-          @for (teilBerechnung of berechnungen; track $index) {
-            <div>
-              <div class="d-flex fs-4 tw:gap-1 tw:items-baseline h4">
-                <div>
-                  {{
-                    t('sachbearbeitung-app.verfuegung.zusammenfassung.item.title', {
-                      index: berechnungsIndex + 1,
-                      type: teilBerechnung.type,
-                    })
-                  }}
-                </div>
-
-                <a
-                  class="text-decoration-none tw:font-normal text-info tw:text-base"
-                  [routerLink]="['../berechnung', berechnungsIndex + 1]"
-                >
-                  <div class="d-flex align-items-center">
-                    <span class="text-decoration-underline">{{
-                      t('sachbearbeitung-app.verfuegung.zusammenfassung.item.link')
-                    }}</span>
-                    <i class="material-symbols-rounded fs-5 text-decoration-none">open_in_new</i>
-                  </div>
-                </a>
+        <ng-template #kuerzungUndInfoTemplate>
+          <div class="tw:flex tw:flex-col tw:text-dv-muted tw:mt-2">
+            <div class="tw:flex tw:justify-between tw:text-sm">
+              <div>
+                {{ t('totalVorKuerzungUndTeilung') }}
               </div>
-              <div class="d-flex justify-content-between fs-5">
-                <div>{{ t('sachbearbeitung-app.verfuegung.zusammenfassung.item.stipendium') }}</div>
-                <div>
-                  {{ teilBerechnung.total | formatChf: false }}
-                </div>
+              <div>
+                {{ zusammenfassung.berechnungVorKuerzungUndTeilung | formatChf }}
               </div>
             </div>
+
+            @if (hasKuerzungenNachEinreichefrist) {
+              <div class="tw:flex tw:justify-between tw:items-center tw:text-sm">
+                <div class="tw:flex tw:items-center">
+                  {{ t('totalNachKuerzungNachEinreichefrist') }}
+
+                  <button
+                    type="button"
+                    (click)="einreichefristInfoDialog.toggle()"
+                    class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
+                    [attr.aria-label]="t('toggle-info-messages')"
+                  >
+                    <span class="material-symbols-rounded tw:text-xl!"> info </span>
+                  </button>
+                  <div
+                    dvSharedUiInfoDialog
+                    [forceDialogPosition]="true"
+                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title'"
+                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info'"
+                    [dialogMessageParams]="{
+                      anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
+                      betrag:
+                        zusammenfassung.berechnungVorKuerzungUndTeilung -
+                          (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChf,
+                    }"
+                    #einreichefristInfoDialog="dvSharedUiInfoDialog"
+                    class="tw:hidden"
+                  ></div>
+                </div>
+                <div>
+                  {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
+                </div>
+              </div>
+            }
+            @if (hasKuerzungenUnterbruch) {
+              <div class="tw:flex tw:justify-between tw:text-sm">
+                <div class="tw:flex tw:items-center">
+                  {{ t('totalNachKuerzungUnterbruch') }}
+
+                  <button
+                    type="button"
+                    (click)="unterbruchInfoDialog.toggle()"
+                    class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
+                    [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+                  >
+                    <span class="material-symbols-rounded tw:text-xl!"> info </span>
+                  </button>
+                  <div
+                    dvSharedUiInfoDialog
+                    [forceDialogPosition]="true"
+                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
+                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
+                    [dialogMessageParams]="{
+                      anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
+                      betrag:
+                        (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) -
+                          (zusammenfassung.totalNachKuerzungUnterbruch ?? 0) | formatChf,
+                    }"
+                    #unterbruchInfoDialog="dvSharedUiInfoDialog"
+                    class="tw:hidden"
+                  ></div>
+                </div>
+                <div>
+                  {{ zusammenfassung.totalNachKuerzungUnterbruch | formatChf }}
+                </div>
+              </div>
+            }
+          </div>
+        </ng-template>
+
+        @if (hasDarlehen) {
+          <div class="tw:flex tw:justify-between tw:font-bold">
+            <div>
+              {{ t('berechnungVorTeilungDarlehen') }}
+            </div>
+            <div>
+              {{ zusammenfassung.berechnungVorTeilungDarlehen | formatChf }}
+            </div>
+          </div>
+
+          @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
+            <ng-container *ngTemplateOutlet="kuerzungUndInfoTemplate"></ng-container>
           }
-        }
-      </mat-card-content>
 
-      <div class="border-bottom mt-4 border-1"></div>
-
-      <mat-card-footer class="px-3 py-4">
-        @let hasKuerzungenNachEinreichefrist =
-          zusammenfassung.totalNachKuerzungNachEinreichefrist ||
-          zusammenfassung.totalNachKuerzungNachEinreichefrist === 0;
-        @let hasKuerzungenUnterbruch =
-          zusammenfassung.totalNachKuerzungUnterbruch || zusammenfassung.totalNachKuerzungUnterbruch === 0;
-        @let hasDarlehen = zusammenfassung.berechnungDarlehen || zusammenfassung.berechnungDarlehen === 0;
-
-        @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
-          <div class="d-flex justify-content-between fs-5 mb-3">
+          <div class="tw:border-t tw:border-gray-500 tw:my-4"></div>
+          <div class="tw:flex tw:justify-between tw:font-bold tw:mb-4">
             <div>
-              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalVorKuerzungUndTeilung') }}
+              {{ t('totalStipendium') }}
             </div>
             <div>
-              {{ zusammenfassung.berechnungVorKuerzungUndTeilung | formatChf }}
+              {{ zusammenfassung.berechnungStipendium | formatChf }}
             </div>
           </div>
-        }
-        @if (hasKuerzungenNachEinreichefrist) {
-          <div class="tw:flex tw:justify-between fs-5 mb-3">
-            <div class="tw:flex tw:items-center">
-              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungNachEinreichefrist') }}
 
+          <div class="tw:border-t tw:border-gray-300 tw:my-4"></div>
+          <div class="tw:flex tw:justify-between tw:font-bold tw:mb-4">
+            <div class="tw:flex tw:items-center tw:gap-1">
+              <div>
+                {{ t('totalDarlehen') }}
+              </div>
               <button
                 type="button"
-                (click)="einreichefristInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md text-info"
-                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
+                (click)="eigenverdienstInfoDialog.toggle()"
+                class="tw:dv-button-icon tw:h-[unset] tw:text-dv-blue"
+                [attr.aria-label]="t('toggle-info-messages')"
               >
-                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
+                <span class="material-symbols-rounded tw:text-xl!"> info </span>
               </button>
               <div
                 dvSharedUiInfoDialog
                 [forceDialogPosition]="true"
-                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title'"
-                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info'"
+                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
                 [dialogMessageParams]="{
-                  anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
-                  betrag:
-                    (zusammenfassung.berechnungVorKuerzungUndTeilung ?? 0) -
-                      (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChf,
+                  einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
                 }"
-                #einreichefristInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
+                #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
+                class="tw:hidden"
               ></div>
-            </div>
-            <div>
-              {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
-            </div>
-          </div>
-        }
-        @if (hasKuerzungenUnterbruch) {
-          <div class="tw:flex tw:justify-between fs-5 mb-3">
-            <div class="tw:flex tw:items-center">
-              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalNachKuerzungUnterbruch') }}
-
-              <button
-                type="button"
-                (click)="unterbruchInfoDialog.toggle()"
-                class="dv-icon-button dv-icon-button-md text-info"
-                [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
-              >
-                <span class="material-symbols-rounded tw:text-2xl!"> info </span>
-              </button>
-              <div
-                dvSharedUiInfoDialog
-                [forceDialogPosition]="true"
-                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
-                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
-                [dialogMessageParams]="{
-                  anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
-                  betrag:
-                    (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) -
-                      (zusammenfassung.totalNachKuerzungUnterbruch ?? 0) | formatChf,
-                }"
-                #unterbruchInfoDialog="dvSharedUiInfoDialog"
-                class="d-none"
-              ></div>
-            </div>
-            <div>
-              {{ zusammenfassung.totalNachKuerzungUnterbruch | formatChf }}
-            </div>
-          </div>
-        }
-        @if (hasDarlehen) {
-          <div class="tw:flex tw:items-center fs-5 tw:mb-2 tw:mt-8">
-            <div>
-              {{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.informationStudierende') }}
-            </div>
-
-            <button
-              type="button"
-              (click)="eigenverdienstInfoDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info"
-              [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
-            >
-              <span class="material-symbols-rounded tw:text-2xl!"> info </span>
-            </button>
-            <div
-              dvSharedUiInfoDialog
-              [forceDialogPosition]="true"
-              [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
-              [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
-              [dialogMessageParams]="{
-                einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
-              }"
-              #eigenverdienstInfoDialog="dvSharedUiInfoDialog"
-              class="d-none"
-            ></div>
-          </div>
-        }
-        <div class="d-flex justify-content-between fs-4 h4">
-          <div>
-            {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalStipendium') }}
-          </div>
-          <div>
-            {{ zusammenfassung.berechnungStipendium | formatChf }}
-          </div>
-        </div>
-        @if (hasDarlehen) {
-          <div class="tw:flex tw:justify-between fs-4 h4 mt-3">
-            <div>
-              {{ t('sachbearbeitung-app.verfuegung.zusammenfassung.totalDarlehen') }}
             </div>
             <div>
               {{ zusammenfassung.berechnungDarlehen | formatChf }}
             </div>
           </div>
+        } @else {
+          <div class="tw:flex tw:justify-between tw:font-bold">
+            <div>
+              {{ t('totalStipendium') }}
+            </div>
+            <div>
+              {{ zusammenfassung.berechnungStipendium | formatChf }}
+            </div>
+          </div>
+
+          @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
+            <ng-container *ngTemplateOutlet="kuerzungUndInfoTemplate"></ng-container>
+          }
         }
-      </mat-card-footer>
+      </mat-card-content>
+    </mat-card>
+
+    <h3 class="tw:mb-4 tw:font-bold tw:text-2xl">{{ t('berechnungen') }}</h3>
+
+    <mat-card class="tw:mb-10">
+      <mat-card-content>
+        @for (berechnungen of zusammenfassung.berechnungsresultateGroup; track $index) {
+          @for (teilBerechnung of berechnungen.berechnungen; track $index; let berechnungsIndex = $index) {
+            <div class="tw:flex tw:justify-between tw:font-semibold tw:mb-6">
+              <div class="tw:flex tw:gap-2 tw:font-bold">
+                <div>
+                  {{
+                    t('item.title', {
+                      index: berechnungsIndex + 1,
+                      startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
+                      endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
+                    })
+                  }}
+                </div>
+
+                <a
+                  class="tw:font-light tw:text-dv-blue"
+                  [routerLink]="['../../', berechnungen.trancheId, 'berechnung', berechnungsIndex + 1]"
+                >
+                  <div class="tw:flex">
+                    {{ t('item.link') }}
+                    <i class="material-symbols-rounded tw:ml-1 tw:text-lg/snug!">arrow_right_alt</i>
+                  </div>
+                </a>
+              </div>
+              <div>
+                {{ teilBerechnung.total | formatChf: false }}
+              </div>
+            </div>
+          }
+          @if (!$last) {
+            <div class="tw:border-t tw:border-gray-300 tw:my-6"></div>
+          }
+        }
+      </mat-card-content>
     </mat-card>
   </ng-container>
 }

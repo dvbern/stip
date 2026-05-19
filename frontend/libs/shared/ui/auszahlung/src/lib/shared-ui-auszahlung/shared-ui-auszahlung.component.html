@@ -56,10 +56,10 @@
         <button
           type="button"
           (click)="beguenstigteInfoDialog.toggle()"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
         >
-          <span class="material-symbols-rounded"> info </span>
+          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
         </button>
       </div>
 
@@ -119,10 +119,10 @@
       <button
         type="button"
         (click)="ibanDialog.toggle()"
-        class="dv-icon-button dv-icon-button-md text-info mt-2"
+        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
-        <span class="material-symbols-rounded"> info </span>
+        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
       <div
         dvSharedUiInfoDialog
@@ -133,15 +133,21 @@
     }
 
     <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons class="tw:md:col-span-2 tw:lg:col-span-3">
+    <dv-shared-ui-step-form-buttons>
       @if (!isGesuchFormStepSig()) {
-        <button type="button" class="btn btn-outline" (click)="backTriggered.emit()" data-testid="button-next">
+        <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-next">
           {{ 'shared.form.back' | transloco }}
         </button>
       }
       @if (view.readonly) {
         @if (isGesuchFormStepSig()) {
-          <button type="button" class="btn btn-primary" (click)="continueTriggered.emit()" data-testid="button-next">
+          <button
+            type="button"
+            class="tw:dv-button-main-primary"
+            (click)="continueTriggered.emit()"
+            data-testid="button-next"
+            *dvIfGesuchsteller
+          >
             {{ 'shared.form.gonext' | transloco }}
           </button>
         }

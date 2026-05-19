@@ -48,6 +48,29 @@ class GesuchsperiodenServiceTest {
     }
 
     @Test
+    void noActivePeriodeForFutureSeasonShouldReturnError() {
+        var ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(LocalDate.now().plusYears(2));
+
+        final var februar = LocalDate.of(LocalDate.now().getYear() + 2, 2, 1);
+        ausbildung.setAusbildungBegin(februar);
+
+        final var herbstPeriode = new Gesuchsperiode();
+        herbstPeriode.setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
+        herbstPeriode.setGesuchsperiodeStart(LocalDate.of(februar.getYear() - 1, 7, 1));
+        herbstPeriode.setGesuchsperiodeStopp(LocalDate.of(februar.getYear(), 6, 30));
+        herbstPeriode.setAufschaltterminStart(LocalDate.of(februar.getYear() - 1, 4, 1));
+
+        when(gesuchsperiodeRepository.findAllStartAndStopIntersect(any()))
+            .thenReturn(List.of(herbstPeriode));
+
+        final var result = gesuchsperiodenService.getGesuchsperiodeForAusbildung(ausbildung);
+
+        assertThat(result.getLeft(), is(nullValue()));
+        assertThat(result.getRight(), is(not(nullValue())));
+    }
+
+    @Test
     void noActiveGesuchsperiodeTest() {
         // arrange
         var ausbildung = new Ausbildung();

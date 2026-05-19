@@ -5,7 +5,7 @@ import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { sharedUtilValidatorRange } from '@dv/shared/util/validator-range';
 
 export const prepareSteuerjahrValidation = (
-  steuerjahrControl: FormControl<number | null>,
+  steuerjahrControl: FormControl<string | undefined>,
   viewSig: Signal<{ gesuch: SharedModelGesuch | null }>,
 ) => {
   const steuerjahrPeriodeSig = computed(() => {

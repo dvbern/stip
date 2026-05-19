@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.LocalDate;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -34,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   AusbildungDtoSpec.JSON_PROPERTY_STATUS,
   AusbildungDtoSpec.JSON_PROPERTY_AUSBILDUNGSGANG,
   AusbildungDtoSpec.JSON_PROPERTY_EDITABLE,
+  AusbildungDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START,
   AusbildungDtoSpec.JSON_PROPERTY_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FALL_ID,
   AusbildungDtoSpec.JSON_PROPERTY_FACHRICHTUNG_BERUFSBEZEICHNUNG,
@@ -60,6 +62,9 @@ public class AusbildungDtoSpec {
 
   public static final String JSON_PROPERTY_EDITABLE = "editable";
   private Boolean editable;
+
+  public static final String JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START = "earliestActiveGesuchPeriodeStart";
+  private LocalDate earliestActiveGesuchPeriodeStart;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -181,6 +186,32 @@ public class AusbildungDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setEditable(Boolean editable) {
     this.editable = editable;
+  }
+
+
+  public AusbildungDtoSpec earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+    return this;
+  }
+
+   /**
+   * Get earliestActiveGesuchPeriodeStart
+   * @return earliestActiveGesuchPeriodeStart
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getEarliestActiveGesuchPeriodeStart() {
+    return earliestActiveGesuchPeriodeStart;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setEarliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+    this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
   }
 
 
@@ -559,6 +590,7 @@ public class AusbildungDtoSpec {
     return Objects.equals(this.status, ausbildung.status) &&
         Objects.equals(this.ausbildungsgang, ausbildung.ausbildungsgang) &&
         Objects.equals(this.editable, ausbildung.editable) &&
+        Objects.equals(this.earliestActiveGesuchPeriodeStart, ausbildung.earliestActiveGesuchPeriodeStart) &&
         Objects.equals(this.id, ausbildung.id) &&
         Objects.equals(this.fallId, ausbildung.fallId) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, ausbildung.fachrichtungBerufsbezeichnung) &&
@@ -577,7 +609,7 @@ public class AusbildungDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(status, ausbildungsgang, editable, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
+    return Objects.hash(status, ausbildungsgang, editable, earliestActiveGesuchPeriodeStart, id, fallId, fachrichtungBerufsbezeichnung, ausbildungNichtGefunden, ausbildungBegin, ausbildungEnd, besuchtBMS, pensum, alternativeAusbildungsstaette, alternativeAusbildungsgang, ausbildungsortPLZ, ausbildungsort, isAusbildungAusland, landId);
   }
 
   @Override
@@ -587,6 +619,7 @@ public class AusbildungDtoSpec {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    ausbildungsgang: ").append(toIndentedString(ausbildungsgang)).append("\n");
     sb.append("    editable: ").append(toIndentedString(editable)).append("\n");
+    sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");

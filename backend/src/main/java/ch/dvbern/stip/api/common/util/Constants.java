@@ -35,7 +35,6 @@ public final class Constants {
     public static final int CH_STEUERN_EINKOMMEN_LIMIT = 20000;
 
     public static final String DVB_MAILBUCKET_MAIL = "stip@mailbucket.dvbern.ch";
-    public static final String VERANLAGUNGSSTATUS_DEFAULT_VALUE = "Manuell";
 
     private Constants() {
         throw new IllegalStateException("Constants class");

@@ -9,13 +9,13 @@
       (gotReenabledSig)="gotReenabled$.next({})"
       data-testid="form-person-form"
       novalidate
-      class="mt-4"
+      class="testing-library-fix tw:mt-6"
       (ngSubmit)="handleSave()"
     >
       <!-- AHV Sozialversicherungsnummer -->
-      <div class="row g-4">
-        <div class="d-flex col-md-6 col-xl-4 col-12">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+        <div class="tw:flex tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
             <input
               type="text"
@@ -42,28 +42,28 @@
           <button
             type="button"
             (click)="ahvInfoDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
           >
-            <span class="material-symbols-rounded"> info </span>
+            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
           </button>
         </div>
-        <div class="d-none d-xl-block col-xl-4"></div>
+        <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.person.sozialversicherungsnummer.infoTitle'"
           [dialogMessageKey]="'shared.form.person.sozialversicherungsnummer.info'"
           #ahvInfoDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
-      <h3 class="mb-4 pt-5">
+      <h3 class="tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
         {{ 'shared.form.shared.section.personal-details' | transloco }}
       </h3>
 
-      <div class="row g-4">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Anrede -->
-        <mat-form-field dvSharedUiFormField class="col-md-6 col-xl-4 col-12">
+        <mat-form-field dvSharedUiFormField class="tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
           <mat-label>{{ 'shared.form.person.salutation.label' | transloco }}</mat-label>
           <mat-select
             [formControl]="form.controls.anrede"
@@ -85,9 +85,9 @@
         </mat-form-field>
       </div>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Name -->
-        <mat-form-field dvSharedUiFormField class="col-md-6 col-xl-4 col-12">
+        <mat-form-field dvSharedUiFormField class="tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
           <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
           <input
             type="text"
@@ -102,7 +102,7 @@
           </mat-error>
         </mat-form-field>
         <!-- Vorname -->
-        <mat-form-field dvSharedUiFormField class="col-md-6 col-xl-4 col-12">
+        <mat-form-field dvSharedUiFormField class="tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
           <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
           <input
             type="text"
@@ -119,18 +119,18 @@
       </div>
 
       <!-- Adresse -->
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <dv-shared-ui-form-address
-          class="col-xl-8 col-12"
+          class="tw:xl:col-span-8 tw:col-span-12"
           [group]="form.controls.adresse"
           [changes]="view.formChanges.adresse"
           [languageSig]="languageSig()"
         />
       </div>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Wohnsitz -->
-        <div class="col-md-6 col-xl-4 d-flex align-items-center col-12 flex-grow-1 gap-1">
+        <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:items-center tw:col-span-12 tw:grow tw:gap-1">
           <div>
             <mat-checkbox
               [formControl]="form.controls.identischerZivilrechtlicherWohnsitz"
@@ -148,36 +148,38 @@
           <button
             type="button"
             (click)="identischerWohnsitzDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info"
+            class="tw:dv-button-icon tw:text-dv-blue"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
           >
-            <span class="material-symbols-rounded"> info </span>
+            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
           </button>
         </div>
-        <div class="d-none d-xl-block col-xl-4"></div>
+        <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.person.identischerWohnsitz.label'"
           [dialogMessageKey]="'shared.form.person.identischerWohnsitz.info'"
           #identischerWohnsitzDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
       <!-- alternative civil residence -->
       @if (!form.value.identischerZivilrechtlicherWohnsitz) {
-        <div class="row g-4 mt-1">
-          <div class="col-xl-8 col-12">
-            <mat-label class="mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | transloco }}</mat-label>
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+          <div class="tw:xl:col-span-8 tw:col-span-12">
+            <mat-label class="tw:mb-2">{{
+              'shared.form.shared.alternative-civil-residence.title' | transloco
+            }}</mat-label>
             @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
             <div
-              class="row g-4 mt-1"
+              class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1"
               dvPlzOrtAutocomplete
               [autocompleteSig]="plzAutocomplete"
               [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
               (plzLookupValuesSig)="plzValues = $event"
             >
               <!-- PLZ -->
-              <mat-form-field dvSharedUiFormField class="col-md-4 col-xl-3 col-5 mt-3">
+              <mat-form-field dvSharedUiFormField class="tw:md:col-span-4 tw:xl:col-span-3 tw:col-span-5 tw:mt-4">
                 <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
                 <input
                   type="text"
@@ -201,7 +203,7 @@
               </mat-form-field>
 
               <!-- Ort -->
-              <mat-form-field dvSharedUiFormField class="col-md-8 col-xl-9 col-7 mt-3">
+              <mat-form-field dvSharedUiFormField class="tw:md:col-span-8 tw:xl:col-span-9 tw:col-span-7 tw:mt-4">
                 <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
                 <input
                   type="text"
@@ -220,14 +222,14 @@
         </div>
       }
       <!-- Weitere Angaben -->
-      <h3 class="mb-4 pt-5">
+      <h3 class="tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
         {{ 'shared.form.person.section.additional-information' | transloco }}
       </h3>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:pt-6">
         <!-- E-MAIL -->
-        <div class="d-flex align-content-center col-md-6 col-xl-4 col-12">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:flex tw:content-center tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.person.email.label' | transloco }}</mat-label>
             <input
               matInput
@@ -247,16 +249,16 @@
           <button
             type="button"
             (click)="emailDialog.toggle()"
-            class="dv-icon-button dv-icon-button-md text-info mt-2"
+            class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
             [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
           >
-            <span class="material-symbols-rounded"> info </span>
+            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
           </button>
         </div>
 
         <!-- TEL -->
-        <div class="d-flex align-content-center col-md-6 col-xl-4 col-12">
-          <mat-form-field dvSharedUiFormField class="w-100">
+        <div class="tw:flex tw:content-center tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
             <mat-label>{{ 'shared.form.shared.phone.label' | transloco }}</mat-label>
             <input
               type="text"
@@ -279,14 +281,14 @@
           [dialogTitleKey]="'shared.form.person.email.label'"
           [dialogMessageKey]="'shared.form.person.email.info'"
           #emailDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- GEBURTSDATUM -->
-        <div class="d-flex align-content-center col-md-6 col-xl-4 col-12 gap-2">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:flex tw:content-center tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12 tw:gap-2">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
             <input
@@ -318,8 +320,8 @@
         </div>
 
         <!-- ZIVILSTAND -->
-        <div class="d-flex align-content-center col-md-6 col-xl-4 col-12 gap-2">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:flex tw:content-center tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12 tw:gap-2">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.person.zivilstand.label' | transloco }}</mat-label>
             <mat-select
               [formControl]="form.controls.zivilstand"
@@ -349,19 +351,19 @@
 
         <!-- Info Konkubinat -->
         @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
-          <div class="col-md-12 col-xl-4 col-12">
+          <div class="tw:md:col-span-12 tw:xl:col-span-4 tw:col-span-12">
             <dv-shared-ui-info-container>
-              <div class="d-flex gap-3">
-                <span class="material-symbols-rounded text-info"> info </span>
+              <div class="tw:flex tw:gap-3">
+                <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
                 <span>{{ 'shared.form.person.zivilstand.ledig.info' | transloco }}</span>
               </div>
             </dv-shared-ui-info-container>
           </div>
         } @else if (form.get('zivilstand')?.value === Zivilstand.KONKUBINAT) {
-          <div class="col-md-12 col-xl-4 col-12">
+          <div class="tw:md:col-span-12 tw:xl:col-span-4 tw:col-span-12">
             <dv-shared-ui-info-container>
-              <div class="d-flex align-content-center gap-3">
-                <span class="material-symbols-rounded text-info">info</span>
+              <div class="tw:flex tw:content-center tw:gap-3">
+                <span class="material-symbols-rounded tw:text-dv-blue">info</span>
                 <span>{{ 'shared.form.person.zivilstand.konkubinat.info' | transloco }}</span>
               </div>
             </dv-shared-ui-info-container>
@@ -369,9 +371,9 @@
         }
       </div>
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- NATIONALITAET -->
-        <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
+        <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:col-span-12 tw:gap-2">
           <dv-shared-ui-select-search
             [formControl]="form.controls.nationalitaetId"
             [testIdSig]="'form-person-nationalitaet'"
@@ -386,8 +388,8 @@
 
         <!-- NIEDERLASSUNGSSTATUS ODER HEIMATORT -->
         @if (!hiddenFieldsSetSig().has(form.controls.niederlassungsstatus)) {
-          <div class="d-flex col-md-6 col-xl-4 col-12">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+          <div class="tw:flex tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ 'shared.form.person.niederlassungsstatus.label' | transloco }}</mat-label>
 
               <mat-select
@@ -417,11 +419,11 @@
 
             <button
               type="button"
-              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
               (click)="niederLassungInfoDialog.toggle()"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
             >
-              <span class="material-symbols-rounded"> info </span>
+              <span class="material-symbols-rounded tw:text-3xl!"> info </span>
             </button>
 
             <!-- Auslaenderausweis -->
@@ -429,7 +431,7 @@
               <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
-          <div class="col-md-12 col-xl-4 col-12">
+          <div class="tw:md:col-span-12 tw:xl:col-span-4 tw:col-span-12">
             <div
               dvSharedUiInfoDialog
               [dialogTitleKey]="'shared.form.person.niederlassungsstatus.infoTitle'"
@@ -439,8 +441,8 @@
 
             @if (showNiederlassungsstatusNichtBerechtigtWarningSig()) {
               <dv-shared-ui-info-container [type]="'warning'">
-                <div class="d-flex gap-3">
-                  <span class="material-symbols-rounded text-warning">warning</span>
+                <div class="tw:flex tw:gap-3">
+                  <span class="material-symbols-rounded tw:text-dv-yellow">warning</span>
                   <span>{{ 'shared.form.person.niederlassungstatus.info' | transloco }}</span>
                 </div>
               </dv-shared-ui-info-container>
@@ -450,7 +452,7 @@
 
         @if (!hiddenFieldsSetSig().has(form.controls.heimatortPlzOrt)) {
           <div
-            class="col-md-6 col-xl-4 d-flex align-content-center col-12 gap-2"
+            class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:content-center tw:col-span-12 tw:gap-2"
             dvPlzOrtAutocomplete
             [autocompleteSig]="plzAutocomplete"
             [plzFormSig]="form.controls.heimatortPlzOrt"
@@ -502,10 +504,10 @@
             <button
               type="button"
               (click)="heimatortDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info mt-2"
+              class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
             >
-              <span class="material-symbols-rounded"> info </span>
+              <span class="material-symbols-rounded tw:text-3xl!"> info </span>
             </button>
           </div>
           <div
@@ -513,26 +515,26 @@
             [dialogTitleKey]="'shared.form.person.heimatort.infoTitle'"
             [dialogMessageKey]="'shared.form.person.heimatort.info'"
             #heimatortDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-4"
+            class="tw:hidden tw:xl:block tw:xl:col-span-4"
           ></div>
         }
       </div>
 
       <!-- FLUECHTLINGSSTATUS -->
       @if (!hiddenFieldsSetSig().has(form.controls.fluechtlingsstatus)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <div class="col-md-6 col-xl-4 tw:flex-col tw:gap-2 col-12">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+          <div class="tw:hidden-lg tw:md:col-span-6 tw:xl:col-span-4"></div>
+          <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex-col tw:gap-2 tw:col-span-12">
             <mat-radio-group
-              class="col-md-6 col-xl-4 tw:w-full col-12"
+              class="tw:md:col-span-6 tw:xl:col-span-4 tw:w-full tw:col-span-12"
               [formControl]="form.controls.fluechtlingsstatus"
               data-testid="form-person-fluechtlingsstatus"
               dvSharedUiFormField
             >
-              <div class="d-flex col-12">
+              <div class="tw:flex tw:col-span-12">
                 <mat-label>{{ 'shared.form.person.fluechtlingsstatus.label' | transloco }}</mat-label>
               </div>
-              <div class="d-flex justify-content-between flex-column col-12 gap-2">
+              <div class="tw:flex tw:justify-between tw:flex-col tw:col-span-12 tw:gap-2">
                 @for (value of [true, false]; track $index) {
                   <mat-radio-button [value]="value">{{
                     'shared.form.person.fluechtlingsstatus.' + value | transloco
@@ -559,9 +561,12 @@
 
       <!-- ZUSTAENDIGER_KANTON -->
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <mat-form-field dvSharedUiFormField class="col-md-6 col-xl-4 tw:flex tw:flex-col tw:gap-2 col-12">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+          <div class="tw:hidden-lg tw:md:col-span-6 tw:xl:col-span-4"></div>
+          <mat-form-field
+            dvSharedUiFormField
+            class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:flex-col tw:gap-2 tw:col-span-12"
+          >
             <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | transloco }}</mat-label>
             <mat-select
               [formControl]="form.controls.zustaendigerKanton"
@@ -591,9 +596,9 @@
 
       <!-- EINREISEDATUM -->
       @if (!hiddenFieldsSetSig().has(form.controls.einreisedatum)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <mat-form-field dvSharedUiFormField class="col-md-6 col-xl-4 col-12">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+          <div class="tw:hidden-lg tw:md:col-span-6 tw:xl:col-span-4"></div>
+          <mat-form-field dvSharedUiFormField class="tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
             <mat-label>{{ 'shared.form.person.einreisedatum.label' | transloco }}</mat-label>
             <input
               type="text"
@@ -611,10 +616,10 @@
           </mat-form-field>
 
           @if (showEinreiseDatumWarningSig()) {
-            <div class="col-md-12 col-xl-4 col-12">
+            <div class="tw:md:col-span-12 tw:xl:col-span-4 tw:col-span-12">
               <dv-shared-ui-info-container [type]="'warning'">
-                <div class="d-flex gap-3">
-                  <span class="material-symbols-rounded text-warning">warning</span>
+                <div class="tw:flex tw:gap-3">
+                  <span class="material-symbols-rounded tw:text-dv-yellow">warning</span>
                   <span>{{ 'shared.form.person.einreisedatum.info' | transloco }}</span>
                 </div>
               </dv-shared-ui-info-container>
@@ -623,10 +628,10 @@
         </div>
       }
 
-      <div class="row g-4 mt-1">
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Wohnsitz -->
-        <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-          <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:col-span-12 tw:gap-2">
+          <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.shared.wohnsitz.label' | transloco }}</mat-label>
             <mat-select
               [formControl]="form.controls.wohnsitz"
@@ -652,47 +657,46 @@
         </div>
 
         <!-- VORMUNDSCHAFT -->
-
-        @if (nationalitaetBfsCodeSig() === bfsCodeSchweiz) {
-          <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-            <div>
-              <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
-                'shared.form.person.guardianship.label' | transloco
-              }}</mat-checkbox>
-              @if (vormundschaftDocumentOptionsSig(); as options) {
-                <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
-              }
-              <dv-shared-ui-form-zuvor-hint
-                [changes]="
-                  view.formChanges.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-                "
-              ></dv-shared-ui-form-zuvor-hint>
-            </div>
-            <button
-              type="button"
-              (click)="vormundSchaftInfoDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info mt-2"
-              [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-            >
-              <span class="material-symbols-rounded"> info </span>
-            </button>
+        <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:col-span-12 tw:gap-2">
+          <div>
+            <mat-checkbox [formControl]="form.controls.vormundschaft" data-testid="form-person-vormundschaft">{{
+              'shared.form.person.vormundschaft.label' | transloco
+            }}</mat-checkbox>
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="
+                view.formChanges.vormundschaft | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+              "
+            ></dv-shared-ui-form-zuvor-hint>
           </div>
-          <div
-            dvSharedUiInfoDialog
-            [dialogTitleKey]="'shared.form.person.guardianship.label'"
-            [dialogMessageKey]="'shared.form.person.guardianship.info'"
-            #vormundSchaftInfoDialog="dvSharedUiInfoDialog"
-            class="d-none d-xl-block col-xl-4"
-          ></div>
-        }
+          <button
+            type="button"
+            (click)="vormundSchaftInfoDialog.toggle()"
+            class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+            [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+          >
+            <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+          </button>
+          @if (vormundschaftDocumentOptionsSig(); as options) {
+            <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
+          }
+        </div>
+      </div>
+      <div class="tw:md:col-span-12 tw:xl:col-span-4 tw:col-span-12">
+        <div
+          dvSharedUiInfoDialog
+          [dialogTitleKey]="'shared.form.person.vormundschaft.label'"
+          [dialogMessageKey]="'shared.form.person.vormundschaft.info'"
+          #vormundSchaftInfoDialog="dvSharedUiInfoDialog"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
+        ></div>
       </div>
 
       <!-- ZUSTAENDIGE KESB -->
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigeKESB)) {
-        <div class="row g-4 mt-1">
-          <div class="d-none-lg col-md-6 col-xl-4"></div>
-          <div class="col-md-6 col-xl-4 d-flex col-12 gap-2">
-            <mat-form-field dvSharedUiFormField class="flex-grow-1">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+          <div class="tw:hidden-lg tw:md:col-span-6 tw:xl:col-span-4"></div>
+          <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:col-span-12 tw:gap-2">
+            <mat-form-field dvSharedUiFormField class="tw:grow">
               <mat-label>{{ 'shared.form.person.zustaendigeKESB.label' | transloco }}</mat-label>
               <mat-select
                 [formControl]="form.controls.zustaendigeKESB"
@@ -722,8 +726,8 @@
 
       <!-- WOHNSITZ AUFTEILUNG -->
       @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
-        <div class="row g-4 my-2">
-          <div class="col-md-6 col-xl-4 col-12">
+        <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6 tw:mb-2">
+          <div class="tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
             <dv-shared-ui-wohnsitz-splitter
               [updateValidity]="updateValidity$ | async"
               [controls]="form.controls"
@@ -736,28 +740,28 @@
         </div>
       }
 
-      <div class="row g-4 mt-1">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
         <!-- Sozialhilfebeitraege -->
 
         <mat-radio-group
-          class="col-md-6 col-xl-4 col-12"
+          class="testing-library-fix tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12"
           [formControl]="form.controls.sozialhilfebeitraege"
           data-testid="form-person-sozialhilfeBeitraege"
           dvSharedUiFormField
         >
-          <div class="d-flex align-items-center col-12 gap-2">
+          <div class="tw:flex tw:items-center tw:col-span-12 tw:gap-2">
             <label>{{ 'shared.form.person.sozialhilfebeitraege.label' | transloco }}</label>
             <button
               type="button"
               (click)="sozialhilfebeitraegeDialog.toggle()"
-              class="dv-icon-button dv-icon-button-md text-info"
+              class="tw:dv-button-icon tw:text-dv-blue"
               [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
             >
-              <span class="material-symbols-rounded"> info </span>
+              <span class="material-symbols-rounded tw:text-3xl!"> info </span>
             </button>
           </div>
-          <div class="d-flex justify-content-between col-12 gap-2">
-            <div class="d-flex flex-column">
+          <div class="testing-library-fix tw:flex tw:justify-between tw:col-span-12 tw:gap-2">
+            <div class="testing-library-fix tw:flex tw:flex-col">
               <mat-radio-button data-testid="yes" [value]="true">{{
                 'shared.form.radio.yes' | transloco
               }}</mat-radio-button>
@@ -772,10 +776,7 @@
             </div>
 
             @if (sozialhilfebeitraegeDocumentOptionsSig(); as options) {
-              <dv-shared-pattern-document-upload
-                class="align-self-center ms-auto flex-shrink-1"
-                [optionsSig]="options"
-              ></dv-shared-pattern-document-upload>
+              <dv-shared-pattern-document-upload [optionsSig]="options"></dv-shared-pattern-document-upload>
             }
           </div>
           <div class="group-errors">
@@ -784,21 +785,21 @@
             </mat-error>
           </div>
         </mat-radio-group>
-        <div class="d-none d-xl-block col-xl-4"></div>
+        <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
         <div
           dvSharedUiInfoDialog
           [dialogTitleKey]="'shared.form.person.sozialhilfebeitraege.infoTitle'"
           [dialogMessageKey]="'shared.form.person.sozialhilfebeitraege.info'"
           #sozialhilfebeitraegeDialog="dvSharedUiInfoDialog"
-          class="d-none d-xl-block col-xl-4"
+          class="tw:hidden tw:xl:block tw:xl:col-span-4"
         ></div>
       </div>
 
-      <div class="row g-4 mt-1">
-        <div class="col-md-6 col-xl-4 col-12">
+      <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+        <div class="testing-library-fix tw:md:col-span-6 tw:xl:col-span-4 tw:col-span-12">
           <!-- KorrespondenzSprache -->
           <mat-radio-group
-            class="d-flex flex-column"
+            class="testing-library-fix tw:flex tw:flex-col"
             [formControl]="form.controls.korrespondenzSprache"
             data-testid="form-person-korrespondenzSprache"
             dvSharedUiFormField
@@ -826,7 +827,7 @@
       </div>
 
       @if (appSettings.hasFormFeature('digitaleKommunikation')) {
-        <div class="row g-4 mt-1">
+        <div class="tw:grid tw:grid-cols-1 tw:gap-6 tw:mt-6">
           <!-- digitale Kommunikation -->
           <mat-checkbox
             disabled="true"
@@ -840,11 +841,11 @@
       <!-- Buttons -->
       <dv-shared-ui-step-form-buttons>
         @if (!view.readonly) {
-          <button type="submit" class="btn btn-primary" data-testid="button-save-continue">
+          <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
             {{ 'shared.form.save-and-continue' | transloco }}
           </button>
         } @else {
-          <button type="button" class="btn btn-primary" (click)="handleContinue()" data-testid="button-next">
+          <button type="button" class="tw:dv-button-main-primary" (click)="handleContinue()" data-testid="button-next">
             {{ 'shared.form.gonext' | transloco }}
           </button>
         }

@@ -4,6 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { startOfDay } from 'date-fns';
 import { merge, pipe, switchMap, tap } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import {
   Gesuchsjahr,
@@ -244,10 +245,12 @@ export class GesuchsperiodeStore extends signalStore(
             },
             {
               onSuccess: (gesuchsperiode) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.gesuchsperiode.saveSuccess',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.admin.gesuchsperiode.saveSuccess',
+                  },
+                );
                 onAfterSave?.(gesuchsperiode);
               },
             },
@@ -367,10 +370,12 @@ export class GesuchsperiodeStore extends signalStore(
             },
             {
               onSuccess: (gesuchsjahr) => {
-                this.globalNotificationStore.createSuccessNotification({
-                  messageKey:
-                    'sachbearbeitung-app.admin.gesuchsjahr.saveSuccess',
-                });
+                this.globalNotificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                  {
+                    messageKey:
+                      'sachbearbeitung-app.admin.gesuchsjahr.saveSuccess',
+                  },
+                );
                 onAfterSave?.(gesuchsjahr);
               },
             },
@@ -427,7 +432,7 @@ const isEditable = <T extends { gueltigkeitStatus: GueltigkeitStatusFrontend }>(
 ) => value.gueltigkeitStatus === 'ENTWURF';
 
 const statusColorMap: Record<GueltigkeitStatusFrontend, StatusColor> = {
-  ENTWURF: 'caution',
+  ENTWURF: 'warn',
   ARCHIVIERT: 'primary',
   PUBLIZIERT: 'success',
   PUBLIZIERT_INAKTIV: 'success',

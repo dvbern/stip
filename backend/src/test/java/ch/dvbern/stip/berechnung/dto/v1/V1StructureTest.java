@@ -193,8 +193,8 @@ class V1StructureTest {
                 "grundbedarf": 17940,
                 "wohnkosten": 13536,
                 "medizinischeGrundversorgungs": [
-                  { "vorname": "a", "value": 1400 },
-                  { "vorname": "a", "value": 1400 }
+                  { "vorname": "a", "value": 4600 },
+                  { "vorname": "a", "value": 4600 }
                 ],
                 "fahrkostenPartner": 523,
                 "verpflegungskostenPartner": 5,
@@ -251,6 +251,7 @@ class V1StructureTest {
             gesuch,
             gesuch.getNewestGesuchTranche().orElseThrow(NotFoundException::new),
             ElternTyp.VATER,
+            true,
             BerechnungTestUtil.getPersonenImHaushaltService()
         );
         final var mapper = new ObjectMapper().registerModule(new JavaTimeModule());

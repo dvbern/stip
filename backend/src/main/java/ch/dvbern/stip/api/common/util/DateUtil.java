@@ -28,7 +28,6 @@ import java.util.List;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import jakarta.ws.rs.NotFoundException;
 import lombok.experimental.UtilityClass;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
@@ -37,6 +36,7 @@ import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 @UtilityClass
 public class DateUtil {
     public final ZoneId ZUERICH_ZONE = ZoneId.of("Europe/Zurich");
+    public final int VERSPAETET_EINGEREICHT_STICHTAG = 15;
 
     /**
      * Clamps the given {@param date} to be no less than {@param min} and no more that {@param max},
@@ -167,18 +167,14 @@ public class DateUtil {
     }
 
     public int getStipendiumDurationRoundDown(final Gesuch gesuch) {
-        final var lastTranche = gesuch.getTranchenTranchen()
-            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
-            .orElseThrow(NotFoundException::new);
-
         final var roundedEingereicht = roundToStartOrEnd(
             gesuch.getEinreichedatum(),
-            14,
+            VERSPAETET_EINGEREICHT_STICHTAG,
             true,
             false
         );
 
-        return getMonthsBetween(roundedEingereicht, lastTranche.getGueltigkeit().getGueltigBis());
+        return getMonthsBetween(roundedEingereicht, gesuch.getGesuchGueltigkeitBis());
     }
 
     public boolean wasEingereichtAfterDueDate(final Gesuch gesuch) {

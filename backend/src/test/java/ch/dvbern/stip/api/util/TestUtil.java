@@ -169,7 +169,7 @@ public class TestUtil {
         }
     }
 
-    public static void deleteGesucheOfSb(final GesuchApiSpec gesuchApiSpec) {
+    public static void deleteGesucheOfGs(final GesuchApiSpec gesuchApiSpec) {
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -743,6 +743,7 @@ public class TestUtil {
         final var baseGesuch = getGesuchForBerechnung(trancheUuid);
         baseGesuch.getGesuchsperiode().setEinreichefristReduziert(LocalDate.now().plusMonths(1));
         baseGesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        baseGesuch.setEinreichedatum(LocalDate.now());
         return baseGesuch;
     }
 
@@ -767,13 +768,14 @@ public class TestUtil {
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
         final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
+        final var baseRange = DateRange.getFruehlingOrHerbst(LocalDate.now());
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
                     new Ausbildungsgang()
                 )
-                .setAusbildungBegin(LocalDate.now().minusYears(1))
-                .setAusbildungEnd(LocalDate.now().plusYears(5))
+                .setAusbildungBegin(baseRange.getGueltigAb().minusYears(1))
+                .setAusbildungEnd(baseRange.getGueltigAb().plusYears(5))
         );
         baseGesuch.getAusbildung()
             .getAusbildungsgang()

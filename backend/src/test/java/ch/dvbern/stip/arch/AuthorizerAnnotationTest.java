@@ -52,8 +52,10 @@ class AuthorizerAnnotationTest {
             "ch.dvbern.stip.api.massendruck.resource.MassendruckJobResourceImpl.downloadMassendruckDocument",
             "ch.dvbern.stip.api.datenschutzbrief.resource.DatenschutzbriefRessourceImpl.getDatenschutzbrief",
             "ch.dvbern.stip.api.darlehen.resource.DarlehenResourceImpl.downloadDarlehenDokument",
+            "ch.dvbern.stip.api.darlehen.resource.DarlehenResourceImpl.downloadDarlehenNegativVerfuegung",
             "ch.dvbern.stip.api.demo.resource.DemoDataResourceImpl.getDemoDataDokument",
-            "ch.dvbern.stip.api.ausbildung.resource.AusbildungResourceImpl.downloadAusbildungUnterbruchAntragDokument"
+            "ch.dvbern.stip.api.ausbildung.resource.AusbildungResourceImpl.downloadAusbildungUnterbruchAntragDokument",
+            "ch.dvbern.stip.api.statistik.resource.StatistikResourceImpl.getStatistikDownload"
         )
     );
 

@@ -33,13 +33,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   BerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_STIPENDIEN,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_EINREICHEFRIST,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL_NACH_KUERZUNG_UNTERBRUCH,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_STIPENDIUM,
   BerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNG_DARLEHEN,
-  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE,
+  BerechnungsresultatDtoSpec.JSON_PROPERTY_MONATE_MIT_DARLEHEN
 })
 @JsonTypeName("Berechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -49,6 +53,12 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_BERECHNUNG_VOR_KUERZUNG_UND_TEILUNG = "berechnungVorKuerzungUndTeilung";
   private Integer berechnungVorKuerzungUndTeilung;
+
+  public static final String JSON_PROPERTY_UNGEKUERZT_STIPENDIEN = "ungekuerztStipendien";
+  private Integer ungekuerztStipendien;
+
+  public static final String JSON_PROPERTY_UNGEKUERZT_DARLEHEN = "ungekuerztDarlehen";
+  private Integer ungekuerztDarlehen;
 
   public static final String JSON_PROPERTY_TOTAL_NACH_KUERZUNG_NACH_EINREICHEFRIST = "totalNachKuerzungNachEinreichefrist";
   private Integer totalNachKuerzungNachEinreichefrist;
@@ -62,6 +72,9 @@ public class BerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_ANZAHL_MONATE_UNTERBRUCH = "anzahlMonateUnterbruch";
   private Integer anzahlMonateUnterbruch;
 
+  public static final String JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN = "berechnungVorTeilungDarlehen";
+  private Integer berechnungVorTeilungDarlehen;
+
   public static final String JSON_PROPERTY_BERECHNUNG_STIPENDIUM = "berechnungStipendium";
   private Integer berechnungStipendium;
 
@@ -70,6 +83,9 @@ public class BerechnungsresultatDtoSpec {
 
   public static final String JSON_PROPERTY_TRANCHEN_BERECHNUNGSRESULTATE = "tranchenBerechnungsresultate";
   private List<TranchenBerechnungsresultatDtoSpec> tranchenBerechnungsresultate;
+
+  public static final String JSON_PROPERTY_MONATE_MIT_DARLEHEN = "monateMitDarlehen";
+  private Integer monateMitDarlehen;
 
   public BerechnungsresultatDtoSpec() {
   }
@@ -123,6 +139,58 @@ public class BerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setBerechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
     this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
+  }
+
+
+  public BerechnungsresultatDtoSpec ungekuerztStipendien(Integer ungekuerztStipendien) {
+    
+    this.ungekuerztStipendien = ungekuerztStipendien;
+    return this;
+  }
+
+   /**
+   * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
+   * @return ungekuerztStipendien
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUngekuerztStipendien() {
+    return ungekuerztStipendien;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_STIPENDIEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUngekuerztStipendien(Integer ungekuerztStipendien) {
+    this.ungekuerztStipendien = ungekuerztStipendien;
+  }
+
+
+  public BerechnungsresultatDtoSpec ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+    
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
+    return this;
+  }
+
+   /**
+   * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
+   * @return ungekuerztDarlehen
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Integer getUngekuerztDarlehen() {
+    return ungekuerztDarlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUngekuerztDarlehen(Integer ungekuerztDarlehen) {
+    this.ungekuerztDarlehen = ungekuerztDarlehen;
   }
 
 
@@ -230,6 +298,32 @@ public class BerechnungsresultatDtoSpec {
   }
 
 
+  public BerechnungsresultatDtoSpec berechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+    
+    this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
+    return this;
+  }
+
+   /**
+   * berechneter stipendienbetrag vor der Teilung in darlehen und stipendium
+   * @return berechnungVorTeilungDarlehen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getBerechnungVorTeilungDarlehen() {
+    return berechnungVorTeilungDarlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_BERECHNUNG_VOR_TEILUNG_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setBerechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+    this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
+  }
+
+
   public BerechnungsresultatDtoSpec berechnungStipendium(Integer berechnungStipendium) {
     
     this.berechnungStipendium = berechnungStipendium;
@@ -315,6 +409,32 @@ public class BerechnungsresultatDtoSpec {
     this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
   }
 
+
+  public BerechnungsresultatDtoSpec monateMitDarlehen(Integer monateMitDarlehen) {
+    
+    this.monateMitDarlehen = monateMitDarlehen;
+    return this;
+  }
+
+   /**
+   * Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung uberschreitet
+   * @return monateMitDarlehen
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_MONATE_MIT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getMonateMitDarlehen() {
+    return monateMitDarlehen;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MONATE_MIT_DARLEHEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setMonateMitDarlehen(Integer monateMitDarlehen) {
+    this.monateMitDarlehen = monateMitDarlehen;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -326,18 +446,22 @@ public class BerechnungsresultatDtoSpec {
     BerechnungsresultatDtoSpec berechnungsresultat = (BerechnungsresultatDtoSpec) o;
     return Objects.equals(this.year, berechnungsresultat.year) &&
         Objects.equals(this.berechnungVorKuerzungUndTeilung, berechnungsresultat.berechnungVorKuerzungUndTeilung) &&
+        Objects.equals(this.ungekuerztStipendien, berechnungsresultat.ungekuerztStipendien) &&
+        Objects.equals(this.ungekuerztDarlehen, berechnungsresultat.ungekuerztDarlehen) &&
         Objects.equals(this.totalNachKuerzungNachEinreichefrist, berechnungsresultat.totalNachKuerzungNachEinreichefrist) &&
         Objects.equals(this.anzahlMonateEinreichefrist, berechnungsresultat.anzahlMonateEinreichefrist) &&
         Objects.equals(this.totalNachKuerzungUnterbruch, berechnungsresultat.totalNachKuerzungUnterbruch) &&
         Objects.equals(this.anzahlMonateUnterbruch, berechnungsresultat.anzahlMonateUnterbruch) &&
+        Objects.equals(this.berechnungVorTeilungDarlehen, berechnungsresultat.berechnungVorTeilungDarlehen) &&
         Objects.equals(this.berechnungStipendium, berechnungsresultat.berechnungStipendium) &&
         Objects.equals(this.berechnungDarlehen, berechnungsresultat.berechnungDarlehen) &&
-        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate);
+        Objects.equals(this.tranchenBerechnungsresultate, berechnungsresultat.tranchenBerechnungsresultate) &&
+        Objects.equals(this.monateMitDarlehen, berechnungsresultat.monateMitDarlehen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(year, berechnungVorKuerzungUndTeilung, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate);
+    return Objects.hash(year, berechnungVorKuerzungUndTeilung, ungekuerztStipendien, ungekuerztDarlehen, totalNachKuerzungNachEinreichefrist, anzahlMonateEinreichefrist, totalNachKuerzungUnterbruch, anzahlMonateUnterbruch, berechnungVorTeilungDarlehen, berechnungStipendium, berechnungDarlehen, tranchenBerechnungsresultate, monateMitDarlehen);
   }
 
   @Override
@@ -346,13 +470,17 @@ public class BerechnungsresultatDtoSpec {
     sb.append("class BerechnungsresultatDtoSpec {\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
     sb.append("    berechnungVorKuerzungUndTeilung: ").append(toIndentedString(berechnungVorKuerzungUndTeilung)).append("\n");
+    sb.append("    ungekuerztStipendien: ").append(toIndentedString(ungekuerztStipendien)).append("\n");
+    sb.append("    ungekuerztDarlehen: ").append(toIndentedString(ungekuerztDarlehen)).append("\n");
     sb.append("    totalNachKuerzungNachEinreichefrist: ").append(toIndentedString(totalNachKuerzungNachEinreichefrist)).append("\n");
     sb.append("    anzahlMonateEinreichefrist: ").append(toIndentedString(anzahlMonateEinreichefrist)).append("\n");
     sb.append("    totalNachKuerzungUnterbruch: ").append(toIndentedString(totalNachKuerzungUnterbruch)).append("\n");
     sb.append("    anzahlMonateUnterbruch: ").append(toIndentedString(anzahlMonateUnterbruch)).append("\n");
+    sb.append("    berechnungVorTeilungDarlehen: ").append(toIndentedString(berechnungVorTeilungDarlehen)).append("\n");
     sb.append("    berechnungStipendium: ").append(toIndentedString(berechnungStipendium)).append("\n");
     sb.append("    berechnungDarlehen: ").append(toIndentedString(berechnungDarlehen)).append("\n");
     sb.append("    tranchenBerechnungsresultate: ").append(toIndentedString(tranchenBerechnungsresultate)).append("\n");
+    sb.append("    monateMitDarlehen: ").append(toIndentedString(monateMitDarlehen)).append("\n");
     sb.append("}");
     return sb.toString();
   }

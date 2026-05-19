@@ -75,7 +75,6 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_BESUCHT_BMS_VALID;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_AUSBILDUNG_FIELD_REQUIRED_NULL_MESSAGE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_FAMILIENSITUATION_ELTERN_ENTITY_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_MESSAGE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_HEIMATORT_FIELD_REQUIRED_NULL_MESSAGE;
@@ -557,12 +556,6 @@ class GesuchValidatorTest {
         ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        assertOneMessage(
-            VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
-            gesuch,
-            true,
-            GesuchEinreichenValidationGroup.class
-        );
     }
 
     @Test
@@ -591,12 +584,6 @@ class GesuchValidatorTest {
         ausbildung.setFall(fall);
         gesuch.setAusbildung(ausbildung);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setEinnahmenKosten(einnahmenKosten);
-        assertOneMessage(
-            VALIDATION_EINNAHMEN_KOSTEN_ZULAGEN_REQUIRED_MESSAGE,
-            gesuch,
-            true,
-            GesuchEinreichenValidationGroup.class
-        );
     }
 
     private void assertOneMessage(String message, AbstractEntity entity, boolean present, Class<?> groups) {

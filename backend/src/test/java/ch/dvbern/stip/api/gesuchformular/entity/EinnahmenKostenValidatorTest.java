@@ -76,19 +76,6 @@ class EinnahmenKostenValidatorTest {
     }
 
     @Test
-    void testEinnahmenKostenZulagenRequiredConstraintValidator() {
-        EinnahmenKostenZulagenRequiredConstraintValidator einnahmenKostenZulagenRequiredConstraintValidator =
-            new EinnahmenKostenZulagenRequiredConstraintValidator();
-        einnahmenKostenZulagenRequiredConstraintValidator.einnahmenKostenType = EinnahmenKostenType.GESUCHSTELLER;
-        GesuchFormular gesuchFormular = prepareGesuchFormularMitEinnahmenKosten();
-        assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isFalse();
-        gesuchFormular.getEinnahmenKosten().setZulagen(1);
-        assertThat(einnahmenKostenZulagenRequiredConstraintValidator.isValid(gesuchFormular, null))
-            .isTrue();
-    }
-
-    @Test
     void testAusbildungskostenStufeRequiredConstraintValidator() {
         AusbildungskostenStufeRequiredConstraintValidator ausbildungskostenStufeRequiredConstraintValidator =
             new AusbildungskostenStufeRequiredConstraintValidator();

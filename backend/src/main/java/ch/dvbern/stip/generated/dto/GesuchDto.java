@@ -37,6 +37,7 @@ public class GesuchDto  implements Serializable {
   private @Valid Boolean verfuegt;
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
+  private @Valid Boolean hadDelegierungs;
   private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
 
@@ -288,6 +289,24 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
+  public GesuchDto hadDelegierungs(Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+    return this;
+  }
+
+  
+  @JsonProperty("hadDelegierungs")
+  public Boolean getHadDelegierungs() {
+    return hadDelegierungs;
+  }
+
+  @JsonProperty("hadDelegierungs")
+  public void setHadDelegierungs(Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+  }
+
+  /**
+   **/
   public GesuchDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
@@ -345,13 +364,14 @@ public class GesuchDto  implements Serializable {
         Objects.equals(this.verfuegt, gesuch.verfuegt) &&
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
+        Objects.equals(this.hadDelegierungs, gesuch.hadDelegierungs) &&
         Objects.equals(this.delegierung, gesuch.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, delegierung, nachfristDokumente);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente);
   }
 
   @Override
@@ -372,6 +392,7 @@ public class GesuchDto  implements Serializable {
     sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
+    sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("}");

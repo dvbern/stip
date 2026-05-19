@@ -108,7 +108,8 @@ class DokumentAuthorizerTest {
         sozialdienst.setId(UUID.randomUUID());
         delegierung.setSozialdienst(sozialdienst);
         delegierung.setDelegierterMitarbeiter(new SozialdienstBenutzer());
-        fall.setDelegierung(delegierung);
+        delegierung.akzeptieren();
+        fall.setCurrentDelegierung(delegierung);
     }
 
     private void setupSozialdienstMitarbeiter() {

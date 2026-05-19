@@ -8,9 +8,14 @@ import {
   DarlehenService,
   DarlehenServiceCreateDarlehenBuchhaltungSaldokorrekturRequestParams,
   DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams,
+  DatenschutzbriefOverview,
+  DatenschutzbriefService,
+  DatenschutzbriefTyp,
+  Dokument,
   Verfuegung,
   VerfuegungService,
 } from '@dv/shared/model/gesuch';
+import { Extends, isDefined } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   cachedPending,
@@ -20,20 +25,25 @@ import {
   isPending,
 } from '@dv/shared/util/remote-data';
 
-// Todo: Dummy types until the contract is updated Task unkown
-export interface DatenschutzbriefDokument {
-  id: string;
-  datum: string;
-  kategorie: string;
-  sachbearbeiter: string;
-  person: string;
-  massendruckJobId?: string;
-}
+type DatenschutzbriefView = Omit<
+  DatenschutzbriefOverview,
+  'dokument' | 'massendruckJobId'
+> &
+  (
+    | {
+        typ: Extends<DatenschutzbriefTyp, 'MANUELL'>;
+        dokument: Dokument;
+      }
+    | {
+        typ: Extends<DatenschutzbriefTyp, 'MASSENDRUCK'>;
+        massendruckJobId: string;
+      }
+  );
 
 type InfosAdminState = {
   verfuegungen: CachedRemoteData<Verfuegung[]>;
   darlehenBuchhaltung: CachedRemoteData<DarlehenBuchhaltungOverview>;
-  datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefDokument[]>;
+  datenschutzbriefeDokumente: CachedRemoteData<DatenschutzbriefOverview[]>;
 };
 
 const initialState: InfosAdminState = {
@@ -49,6 +59,7 @@ export class InfosGesuchsdokumenteStore extends signalStore(
 ) {
   private verfuegungService = inject(VerfuegungService);
   private darlehenService = inject(DarlehenService);
+  private datenschutzbriefService = inject(DatenschutzbriefService);
 
   verfuegungenViewSig = computed(() => {
     return {
@@ -66,7 +77,9 @@ export class InfosGesuchsdokumenteStore extends signalStore(
 
   datenschutzbriefeDokumenteViewSig = computed(() => {
     return {
-      datenschutzbriefe: fromCachedDataSig(this.datenschutzbriefeDokumente),
+      datenschutzbriefe: fromCachedDataSig(this.datenschutzbriefeDokumente)
+        ?.map(toDatenschutzView)
+        .filter(isDefined),
       loading: isPending(this.datenschutzbriefeDokumente()),
     };
   });
@@ -134,22 +147,33 @@ export class InfosGesuchsdokumenteStore extends signalStore(
           ),
         }));
       }),
-      tap(() => {
-        // Todo KSTIP-2697: Dummy data - will be replaced with actual API call
-        const dummyData: DatenschutzbriefDokument[] = [
-          {
-            id: '1',
-            datum: new Date().toISOString(),
-            kategorie: 'Standard',
-            sachbearbeiter: 'Max Mustermann',
-            person: 'Anna Schmidt',
-            massendruckJobId: 'job-123',
-          },
-        ];
-        patchState(this, {
-          datenschutzbriefeDokumente: { data: dummyData, type: 'success' },
-        });
-      }),
+      switchMap((req) =>
+        this.datenschutzbriefService.getAllDatenschutzbriefs$(req).pipe(
+          handleApiResponse((datenschutzbriefeDokumente) => {
+            patchState(this, { datenschutzbriefeDokumente });
+          }),
+        ),
+      ),
     ),
   );
 }
+
+const toDatenschutzView = (
+  datenschutzbrief: DatenschutzbriefOverview,
+): DatenschutzbriefView | null => {
+  if (datenschutzbrief.massendruckJobId) {
+    return {
+      ...datenschutzbrief,
+      typ: 'MASSENDRUCK',
+      massendruckJobId: datenschutzbrief.massendruckJobId,
+    };
+  }
+  if (datenschutzbrief.dokument) {
+    return {
+      ...datenschutzbrief,
+      typ: 'MANUELL',
+      dokument: datenschutzbrief.dokument,
+    };
+  }
+  return null;
+};

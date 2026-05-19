@@ -9,10 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ZahlungsverbindungSlim } from './zahlungsverbindungSlim';
 
 export interface SozialdienstSlim { 
     id: string;
     name: string;
     aktiv: boolean;
+    zahlungsverbindung: ZahlungsverbindungSlim;
 }
 

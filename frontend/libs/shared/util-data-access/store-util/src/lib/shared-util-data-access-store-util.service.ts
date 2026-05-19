@@ -1,6 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, exhaustMap, filter, map, take } from 'rxjs';
+import {
+  Observable,
+  exhaustMap,
+  filter,
+  from,
+  lastValueFrom,
+  map,
+  take,
+} from 'rxjs';
 
 import {
   SharedDataAccessBenutzerApiEvents,
@@ -18,26 +26,32 @@ import {
 export class StoreUtilService {
   private store = inject(Store);
 
-  waitForBenutzerData$<T>() {
+  loadAndGetBenutzerData() {
     this.store.dispatch(
       SharedDataAccessBenutzerApiEvents.loadCurrentBenutzer(),
     );
+    return lastValueFrom(
+      this.store.select(selectCurrentBenutzerRd).pipe(
+        filter(isNotPending),
+        take(1),
+        map((benutzerRd) => {
+          if (isInitial(benutzerRd)) {
+            throw new Error('Benutzer initialization has not started yet');
+          }
+          if (isFailure(benutzerRd)) {
+            throw benutzerRd.error;
+          }
+          return benutzerRd;
+        }),
+      ),
+    );
+  }
+
+  waitForBenutzerData$<T>() {
     return (source: Observable<T>) =>
       source.pipe(
         exhaustMap((value) =>
-          this.store.select(selectCurrentBenutzerRd).pipe(
-            filter(isNotPending),
-            take(1),
-            map((benutzerRd) => {
-              if (isInitial(benutzerRd)) {
-                throw new Error('Benutzer initialization has not started yet');
-              }
-              if (isFailure(benutzerRd)) {
-                throw benutzerRd.error;
-              }
-              return value;
-            }),
-          ),
+          from(this.loadAndGetBenutzerData()).pipe(map(() => value)),
         ),
       );
   }

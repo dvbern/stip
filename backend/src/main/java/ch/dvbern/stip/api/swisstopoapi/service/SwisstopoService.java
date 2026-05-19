@@ -1,0 +1,182 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+package ch.dvbern.stip.api.swisstopoapi.service;
+
+import java.util.Collections;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import ch.dvbern.stip.api.adresse.entity.Adresse;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.service.StatisticsdataService;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoAddrFetchJobData;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElement;
+import ch.dvbern.stip.api.swisstopoapi.entity.SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes;
+import ch.dvbern.stip.api.swisstopoapi.scheduledtask.SwisstopoAddrFetchScheduledJob;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import jakarta.annotation.Nullable;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
+import jakarta.ws.rs.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.jose4j.json.internal.json_simple.JSONObject;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+
+@Slf4j
+@RequiredArgsConstructor
+@Singleton
+public class SwisstopoService {
+    private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
+    private static final String ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR = "adr_number ilike '%s'";
+    private static final String SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX = "SwisstopoAddrFetchScheduledJob-";
+
+    private final StatisticsdataService statisticsdataService;
+    private final TenantService tenantService;
+    private final Scheduler scheduler;
+
+    @Inject
+    @RestClient
+    SwisstopoApiRestService swisstopoApiRestService;
+
+    public void createFetchGemeindeDataOfGesuchScheduledTask(final Gesuch gesuch) {
+        final GesuchTranche trancheToUse = gesuch.getLatestGesuchTranche();
+        final Adresse adresse = trancheToUse.getGesuchFormular().getPersonInAusbildung().getAdresse();
+
+        final var jobData = new SwisstopoAddrFetchJobData(
+            gesuch.getId(),
+            adresse,
+            tenantService.getCurrentTenantIdentifier()
+        );
+
+        final JobDetail jobDetail = JobBuilder.newJob(SwisstopoAddrFetchScheduledJob.class)
+            .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + gesuch.getId().toString())
+            .usingJobData(jobData.toMap())
+            .build();
+        final Trigger trigger = TriggerBuilder.newTrigger()
+            .withIdentity(SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX + "trigger-" + gesuch.getId().toString())
+            .startNow()
+            .build();
+        try {
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (SchedulerException e) {
+            LOG.error("Could not schedule {}", SWISSTOPO_ADDR_FETCH_SCHEDULED_JOB_PREFIX, e);
+        }
+    }
+
+    public void getGemeindeDataOfGesuch(
+        final UUID gesuchId,
+        final String strasse,
+        final String hausnummer,
+        final String plz,
+        final String ort
+    ) {
+        // Schnittstellen informationen:
+        // https://www.swisstopo.admin.ch/dam/de/sd-web/fb0eJ1WiRYrq/Geb%C3%A4udeadressen%20Technical%20Documentation.pdf
+        final var buildingNoSearchPartJson = new JSONObject();
+        buildingNoSearchPartJson.put(
+            ADDR_NO_SEARCH_LAYER_DEF_KEY,
+            String.format(ADDR_NO_SEARCH_LAYER_DEF_SEARCH_STR, hausnummer)
+        );
+        try {
+            final var result =
+                swisstopoApiRestService.findAllMatchingBuildings(
+                    strasse,
+                    buildingNoSearchPartJson.toString()
+                );
+            final var swisstopoApiFindAddrResponseElementAttribute = result.getResults()
+                .stream()
+                .map(SwisstopoApiFindAddrResponseElement::getAttributes)
+                .filter(
+                    // Format von zip_label ist "${PLZ} ${OrtsName}"
+                    swisstopoApiFindAddrResponseElementAttributes -> swisstopoApiFindAddrResponseElementAttributes
+                        .getZip_label()
+                        .contains(plz)
+                    || swisstopoApiFindAddrResponseElementAttributes.getZip_label().contains(ort)
+                )
+                .findFirst()
+                .orElseThrow(
+                    () -> new NotFoundException(
+                        String.format(
+                            "Could not find Building in Swisstopo data with properties, Street: %s, No: %s",
+                            strasse,
+                            hausnummer
+                        )
+                    )
+                );
+            setGemeindeDataOfGesuch(gesuchId, swisstopoApiFindAddrResponseElementAttribute);
+        } catch (Exception e) {
+
+            final var gemeindeDataByPlz = getGemeindeDataByPlz(plz);
+            if (gemeindeDataByPlz != null) {
+                setGemeindeDataOfGesuch(gesuchId, gemeindeDataByPlz);
+            } else {
+                LOG.warn(
+                    "Could not perform Building lookup in Swisstopo data with properties, Street: {}, No: {}",
+                    strasse,
+                    hausnummer
+                );
+            }
+        }
+    }
+
+    @Nullable
+    public SwisstopoApiFindAddrResponseElementAttributes getGemeindeDataByPlz(final String plz) {
+        final var result =
+            swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(plz);
+
+        var counted = result.getResults()
+            .stream()
+            .map(SwisstopoApiFindAddrResponseElement::getAttributes)
+            .collect(
+                Collectors.groupingBy(
+                    Function.identity(),
+                    Collectors.counting()
+                )
+            );
+        var max = Collections.max(counted.values());
+        for (var entry : counted.entrySet()) {
+            if (entry.getValue().equals(max)) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
+    @Transactional(TxType.REQUIRES_NEW)
+    public void setGemeindeDataOfGesuch(
+        final UUID gesuchId,
+        final SwisstopoApiFindAddrResponseElementAttributes swisstopoApiFindAddrResponseElementAttribute
+    ) {
+        statisticsdataService.setOrCreateGemeindeStatisticsDataOfGesuch(
+            gesuchId,
+            swisstopoApiFindAddrResponseElementAttribute.getCom_fosnr(),
+            swisstopoApiFindAddrResponseElementAttribute.getCom_name()
+        );
+    }
+}

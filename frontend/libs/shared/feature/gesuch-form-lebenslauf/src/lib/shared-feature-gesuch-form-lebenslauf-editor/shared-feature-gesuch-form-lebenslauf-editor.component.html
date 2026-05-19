@@ -4,13 +4,13 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-lebenslauf-form"
   novalidate
-  class="mt-4"
+  class="testing-library-fix tw:mt-6"
   (ngSubmit)="handleSave()"
 >
   @if (itemSig().type === 'AUSBILDUNG') {
-    <div class="row g-4 my-2">
+    <div class="testing-library-fix tw:grid tw:grid-cols-12 tw:gap-6 tw:pt-6">
       <!-- Abschluss -->
-      <div class="col-12 col-md-6 col-xl-4">
+      <div class="testing-library-fix tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
         <dv-shared-ui-select-search
           [formControl]="form.controls.abschlussId"
           [labelKeySig]="'shared.form.lebenslauf.item.subtype.abschluss'"
@@ -30,7 +30,7 @@
 
       <!-- zusatzfrage (falls nötig) -->
       @if (selectedAbschlussSig()?.zusatzfrage; as zusatzfrage) {
-        <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
           <mat-label>{{ `shared.form.lebenslauf.item.name.zusatzfrage.${zusatzfrage}` | transloco }}</mat-label>
           <input
             matInput
@@ -46,10 +46,10 @@
       }
     </div>
   } @else if (itemSig().type === 'TAETIGKEIT') {
-    <div class="row g-4 my-2">
+    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
       <mat-form-field
         dvSharedUiFormField
-        class="col-12 col-md-6 col-xl-4"
+        class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
         data-testid="lebenslauf-editor-taetigkeitsart"
       >
         <mat-label>{{ 'shared.form.lebenslauf.item.subtype.taetigkeitsart' | transloco }}</mat-label>
@@ -67,8 +67,8 @@
       </mat-form-field>
 
       <!-- Tätigkeits Beschreibung -->
-      <div class="d-flex col-12 col-md-6 col-xl-4">
-        <mat-form-field dvSharedUiFormField class="flex-grow-1">
+      <div class="tw:flex tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+        <mat-form-field dvSharedUiFormField class="tw:grow">
           <mat-label>{{ 'shared.form.lebenslauf.item.name.taetigkeit' | transloco }}</mat-label>
           <input
             matInput
@@ -83,11 +83,11 @@
         </mat-form-field>
         <button
           type="button"
-          class="dv-icon-button dv-icon-button-md text-info mt-2"
+          class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
           (click)="taetigkeitsInfoDialog.toggle()"
           [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
         >
-          <span class="material-symbols-rounded"> info </span>
+          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
         </button>
       </div>
       <div
@@ -95,14 +95,14 @@
         [dialogTitleKey]="'shared.form.lebenslauf.taetigkeit.infoTitle'"
         [dialogMessageKey]="'shared.form.lebenslauf.taetigkeit.info'"
         #taetigkeitsInfoDialog="dvSharedUiInfoDialog"
-        class="col-12 col-md-6 col-xl-4"
+        class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
       ></div>
     </div>
   }
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- START -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.lebenslauf.item.start.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
 
       <input
@@ -135,7 +135,7 @@
     </mat-form-field>
 
     <!-- ENDE -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.lebenslauf.item.end.' + itemSig().type!.toLowerCase() | transloco }}</mat-label>
 
       <input
@@ -168,9 +168,9 @@
     </mat-form-field>
   </div>
 
-  <div class="row g-4 my-2">
+  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
     <!-- Wohnsitz -->
-    <mat-form-field dvSharedUiFormField class="col-12 col-md-6 col-xl-4">
+    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
       <mat-label>{{ 'shared.form.lebenslauf.item.wohnsitz' | transloco }}</mat-label>
       <mat-select
         [formControl]="form.controls.wohnsitz"
@@ -189,17 +189,17 @@
     </mat-form-field>
     <!-- Ausbildung abgeschlossen -->
     @if (itemSig().type === 'AUSBILDUNG') {
-      <div class="col-12 col-md-6">
+      <div class="tw:col-span-12 tw:md:col-span-6">
         <mat-radio-group
           class="tw:w-full"
           [formControl]="form.controls.ausbildungAbgeschlossen"
           data-testid="lebenslauf-editor-ausbildung-abgeschlossen"
           dvSharedUiFormField
         >
-          <div class="d-flex col-12">
+          <div class="tw:flex tw:col-span-12">
             <mat-label>{{ 'shared.form.lebenslauf.item.ausbildungAbgeschlossen' | transloco }}</mat-label>
           </div>
-          <div class="d-flex justify-content-between flex-column col-12 gap-2">
+          <div class="tw:flex tw:justify-between tw:flex-col tw:col-span-12 tw:gap-2">
             @for (value of [true, false]; track $index) {
               <mat-radio-button [value]="value">{{
                 'shared.ui.' + (value ? 'yes' : 'no') | transloco
@@ -222,21 +222,21 @@
     @if (itemSig().id && !viewSig().readonly) {
       <button
         type="button"
-        class="btn btn-outline-primary d-flex align-items-center justify-content-center"
+        class="tw:dv-button-outline tw:flex tw:items-center tw:justify-center"
         data-testid="lebenslauf-editor-delete"
         (click)="handleDelete()"
         [title]="'shared.form.lebenslaufitem.delete' | transloco"
       >
-        <i class="material-symbols-rounded me-2">delete</i>
+        <i class="material-symbols-rounded tw:mr-2">delete</i>
         {{ 'shared.form.delete' | transloco }}
       </button>
     }
 
-    <button type="button" class="btn btn-outline-primary" (click)="handleCancel()" data-testid="button-cancel">
+    <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>
     @if (!viewSig().readonly) {
-      <button type="submit" class="btn btn-primary" data-testid="button-save">
+      <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save">
         {{ 'shared.form.save-and-back' | transloco }}
       </button>
     }

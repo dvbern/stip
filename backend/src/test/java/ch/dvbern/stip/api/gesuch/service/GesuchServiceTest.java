@@ -62,6 +62,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.EinnahmenKostenUpdateDtoSpe
 import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuch.repo.StatisticsdataRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
@@ -123,7 +124,6 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
-import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_STEUERDATEN_VERANLAGUNGSSTATUS_INVALID_MESSAGE;
 import static ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator.createGesuch;
 import static ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator.initGesuchTranche;
@@ -225,6 +225,9 @@ class GesuchServiceTest {
 
     @InjectMock
     StatusprotokollService statusprotokollService;
+
+    @InjectMock
+    StatisticsdataRepository statisticsdataRepository;
 
     static final String TENANT_ID = "bern";
 
@@ -1125,7 +1128,7 @@ class GesuchServiceTest {
                 .getGesuchFormular()
                 .getEinnahmenKosten()
                 .getVeranlagungsStatus(),
-            Matchers.is(VERANLAGUNGSSTATUS_DEFAULT_VALUE)
+            Matchers.nullValue()
         );
     }
 
@@ -1475,6 +1478,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setAusbildungsgang(null);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
         Mockito.doNothing().when(mailService).sendStandardNotificationEmail(any(), any(), any(), any());
@@ -1512,6 +1516,7 @@ class GesuchServiceTest {
         Gesuch gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_SB);
         gesuch.getAusbildung().setFall(fall);
 
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         Mockito.doNothing().when(notificationRepository).persistAndFlush(any(Notification.class));
@@ -1548,6 +1553,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
@@ -1583,6 +1589,7 @@ class GesuchServiceTest {
         gesuch.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuch.getGesuchTranchen().get(0)));
@@ -1623,6 +1630,7 @@ class GesuchServiceTest {
         gesuch.getAusbildung().setFall(fall);
         gesuch.setEinreichedatum(LocalDate.now());
 
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuch.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
@@ -1702,6 +1710,7 @@ class GesuchServiceTest {
         gesuchInBearbeitungSB.setEinreichedatum(LocalDate.now());
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchTrancheRepository.requireById(any())).thenReturn(gesuchInBearbeitungSB.getGesuchTranchen().get(0));
         when(gesuchTrancheRepository.findByIdOptional(any()))
             .thenReturn(Optional.of(gesuchInBearbeitungSB.getGesuchTranchen().get(0)));
@@ -1793,6 +1802,7 @@ class GesuchServiceTest {
             .getLatestGesuchTranche();
 
         when(gesuchRepository.requireById(any())).thenReturn(gesuchInBearbeitungSpy);
+        when(fallRepository.requireById(any())).thenReturn(fall);
         when(gesuchHistoryRepository.getStatusHistory(any())).thenReturn(
             List.of(
                 GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.IN_BEARBEITUNG_GS),

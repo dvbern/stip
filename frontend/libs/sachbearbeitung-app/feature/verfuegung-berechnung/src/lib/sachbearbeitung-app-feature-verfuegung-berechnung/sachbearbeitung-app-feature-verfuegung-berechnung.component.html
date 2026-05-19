@@ -1,45 +1,44 @@
-<p class="fs-4">{{ 'sachbearbeitung-app.verfuegung.berechnung.details' | transloco }}</p>
-@if (berechnungStore.berechnungsViewSig().loading) {
-  <dv-shared-ui-loading></dv-shared-ui-loading>
-} @else {
-  @if (berechnungenRawSig(); as berechnung) {
-    <div class="row">
-      <div class="col-12">
-        <dv-berechnungs-card
-          [berechnungSig]="berechnung.persoenlich"
+<ng-container *transloco="let t">
+  <h1 class="tw:mb-6! tw:font-bold! tw:text-3xl!">{{ t('sachbearbeitung-app.verfuegung.berechnung.details') }}</h1>
+
+  <mat-slide-toggle #hideZeroToggle [checked]="true" class="tw:mb-6" [hideIcon]="true">{{
+    t('sachbearbeitung-app.verfuegung.berechnung.hideZeroValues')
+  }}</mat-slide-toggle>
+
+  @if (berechnungStore.berechnungsViewSig().loading) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    @if (berechnungenRawSig(); as berechnung) {
+      <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich" [stammdatenSig]="berechnung.berechnungsStammdaten">
+        <dv-persoenliche-einnahmen
+          [hideZeroSig]="hideZeroToggle.checked"
+          [budgetSig]="berechnung.persoenlich"
           [stammdatenSig]="berechnung.berechnungsStammdaten"
-        >
-          <dv-persoenliche-einnahmen
-            class="d-flex flex-column gap-3 ps-4"
-            [budgetSig]="berechnung.persoenlich"
-            [stammdatenSig]="berechnung.berechnungsStammdaten"
-          ></dv-persoenliche-einnahmen>
-          <dv-persoenliche-kosten
-            class="d-flex flex-column gap-3 ps-4"
-            [budgetSig]="berechnung.persoenlich"
-          ></dv-persoenliche-kosten>
-        </dv-berechnungs-card>
-      </div>
-    </div>
-    <div class="tw:flex tw:flex-col tw:gap-6 row mt-4 mb-4">
-      @for (familienbudget of berechnung.familien; track $index) {
-        <div class="col-12">
+        ></dv-persoenliche-einnahmen>
+        <dv-persoenliche-kosten
+          [hideZeroSig]="hideZeroToggle.checked"
+          [budgetSig]="berechnung.persoenlich"
+        ></dv-persoenliche-kosten>
+      </dv-berechnungs-card>
+
+      <div class="tw:flex tw:flex-col tw:gap-6 tw:my-3">
+        @for (familienbudget of berechnung.familien; track $index) {
           <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">
             <dv-familien-einnahmen
-              class="d-flex flex-column gap-3 ps-4"
+              [hideZeroSig]="hideZeroToggle.checked"
               [budgetSig]="familienbudget"
               [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-einnahmen>
             <dv-familien-kosten
-              class="d-flex flex-column gap-3 ps-4"
+              [hideZeroSig]="hideZeroToggle.checked"
               [budgetSig]="familienbudget"
               [stammdatenSig]="berechnung.berechnungsStammdaten"
             ></dv-familien-kosten>
           </dv-berechnungs-card>
-        </div>
-      }
-    </div>
-  } @else {
-    <p class="fs-5 text-muted">{{ 'sachbearbeitung-app.verfuegung.berechnung.no-data' | transloco }}</p>
+        }
+      </div>
+    } @else {
+      <p class="tw:text-lg tw:text-dv-muted">{{ t('sachbearbeitung-app.verfuegung.berechnung.no-data') }}</p>
+    }
   }
-}
+</ng-container>

@@ -20,14 +20,14 @@ import { DemoDataStore } from '@dv/demo-data-app/data-access/demo-data';
 import { DemoDataAppUiAdvTranslocoDirective } from '@dv/demo-data-app/ui/adv-transloco-directive';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { DemoDataTestBerechnungResult } from '@dv/shared/model/gesuch';
+import { DemoDataTestBerechnungResultat } from '@dv/shared/model/gesuch';
 import { type } from '@dv/shared/model/type-util';
+import { TOOLTIP_DELAY } from '@dv/shared/model/ui-constants';
 import { SharedPatternBasicLayoutComponent } from '@dv/shared/pattern/basic-layout';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFileUploadComponent } from '@dv/shared/ui/file-upload';
 import { FilesizePipe } from '@dv/shared/ui/filesize-pipe';
-import { SharedUiFormatChfNullablePipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -38,6 +38,7 @@ import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip
 import { localStorageValue } from '@dv/shared/util/local-storage-helper';
 
 import { BerechnungComparisonDialogComponent } from '../components/comparison/berechnung-comparison-dialog.component';
+import { SollIstComponent } from '../components/comparison/soll-ist.component';
 
 @Component({
   selector: 'dv-demo-data-app-feature-demo-data-overview',
@@ -56,9 +57,9 @@ import { BerechnungComparisonDialogComponent } from '../components/comparison/be
     SharedUiMaxLengthDirective,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
-    SharedUiFormatChfNullablePipe,
     SharedUiTruncateTooltipDirective,
     DemoDataAppUiAdvTranslocoDirective,
+    SollIstComponent,
   ],
   templateUrl: './demo-data-app-feature-demo-data-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,13 +67,14 @@ import { BerechnungComparisonDialogComponent } from '../components/comparison/be
 export class DemoDataAppFeatureDemoDataOverviewComponent {
   private dialog = inject(MatDialog);
   private globalNotificationStore = inject(GlobalNotificationStore);
-  previousBerechnungsResult = localStorageValue<DemoDataTestBerechnungResult[]>(
-    'DEMO_DATA_PREVIOUS_BERECHNUNG_RESULT',
-  );
+  previousBerechnungsResult = localStorageValue<
+    DemoDataTestBerechnungResultat[]
+  >('DEMO_DATA_PREVIOUS_BERECHNUNG_RESULT');
   demoDataStore = inject(DemoDataStore);
   fallStore = inject(FallStore);
   filterText = new FormControl<string | null>(null);
   selectedFileSig = signal<File | null>(null);
+  tooltipDelay = TOOLTIP_DELAY;
 
   validateBerechnungSig = input<boolean>(false, {
     // eslint-disable-next-line @angular-eslint/no-input-rename
@@ -80,18 +82,24 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
   });
 
   private filterTextChangedSig = toSignal(this.filterText.valueChanges);
-
-  sollIst = ['Soll', 'Ist'] as const;
   demoDatasSig = computed(() => {
     const filterText = this.filterTextChangedSig()?.toLowerCase();
     const testResultsMap =
-      this.demoDataStore.demoDataTestBerechnungResultsSig();
+      this.demoDataStore.demoDataTestBerechnungResultatsSig();
     const list = this.demoDataStore
       .cachedDemoDataListViewSig()
-      .data?.demoDatas.map((demoData) => ({
-        ...demoData,
-        testResult: testResultsMap[demoData.id],
-      }));
+      .data?.demoDatas.map((demoData) => {
+        const result = testResultsMap[demoData.id];
+        return {
+          ...demoData,
+          testResult: result
+            ? {
+                allValid: Object.values(result.valid ?? {}).every(Boolean),
+                ...result,
+              }
+            : null,
+        };
+      });
 
     if (filterText) {
       return list?.filter(
@@ -163,27 +171,32 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
     this.demoDataStore.testAllDemoDataBerechnung$();
   }
 
-  saveResult(results: DemoDataTestBerechnungResult[]) {
+  saveResult(results: DemoDataTestBerechnungResultat[]) {
     this.previousBerechnungsResult.set(results);
-    this.globalNotificationStore.createSuccessNotification({
-      messageKey:
-        'demo-data-app.overview.apply-demo-data.berechnung-save.success',
-    });
+    this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+      {
+        messageKey:
+          'demo-data-app.overview.apply-demo-data.berechnung-save.success',
+      },
+    );
   }
 
-  compareResults<T extends DemoDataTestBerechnungResult>(
+  compareResults<T extends DemoDataTestBerechnungResultat>(
     previous: T[],
     current: T[],
   ) {
-    const changes = diff(previous, current, {
+    const changesRaw = diff(previous, current, {
       keysToSkip: ['demoDataId'],
-      treatTypeChangeAsReplace: true,
-    })
+      embeddedObjKeys: { '.': 'testFall' },
+      treatTypeChangeAsReplace: false,
+    });
+
+    const changes = changesRaw
       .flatMap((c) => c.changes ?? [])
       .map((c) => ({
         ...c,
         berechnung: c?.key
-          ? type<DemoDataTestBerechnungResult>(
+          ? type<DemoDataTestBerechnungResultat>(
               previous[+c.key] ?? current[+c.key],
             )
           : null,

@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   InputSignal,
-  OnInit,
   QueryList,
   Signal,
   ViewChildren,
@@ -12,7 +12,7 @@ import {
   effect,
   inject,
   input,
-  signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -42,27 +42,26 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { MassendruckStore } from '@dv/sachbearbeitung-app/data-access/massendruck';
 import { selectVersion } from '@dv/shared/data-access/config';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { BenutzerRole } from '@dv/shared/model/benutzer';
 import {
-  GesuchFilter,
+  DarlehenStatus,
+  FreiwilligDarlehenDashboard,
   GesuchServiceGetGesucheSbRequestParams,
-  GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
-  SbDashboardGesuch,
+  SbFreiwilligDarlehenDashboardColumn,
   SbGesucheDashboardColumn,
   SortOrder,
 } from '@dv/shared/model/gesuch';
 import { SortAndPageInputs } from '@dv/shared/model/table';
-import { AppendFromTo, isDefined } from '@dv/shared/model/type-util';
+import { isDefined } from '@dv/shared/model/type-util';
 import {
   DEFAULT_PAGE_SIZE,
   INPUT_DELAY,
   PAGE_SIZES,
 } from '@dv/shared/model/ui-constants';
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
-import { SharedUiFilterMenuButtonComponent } from '@dv/shared/ui/filter-menu-button';
 import {
   SharedUiFocusableListDirective,
   SharedUiFocusableListItemDirective,
@@ -76,11 +75,27 @@ import {
 } from '@dv/shared/ui/table-helper';
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
+import {
+  BearbeitbarParam,
+  DashboardFormFields,
+  DashboardFormSimpleFields,
+  DashboardFormStartEndFields,
+  DashboardQuery,
+  DashboardTableEntryFields,
+  FilterTabParam,
+  ScopeParam,
+  gesucheStatusByTyp,
+  getControlVisibility,
+  getDefaultQueryForRole,
+  getQueryFromParams,
+  isDarlehenQuery,
+  isGesuchQuery,
+} from '@dv/shared/util/dashboard';
 import { provideDvDateAdapter } from '@dv/shared/util/date-adapter';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
+import { isPending } from '@dv/shared/util/remote-data';
 import {
   getSortAndPageInputs,
-  inverseSortMap,
   limitPageToNumberOfEntriesEffect,
   makeEmptyStringPropertiesNull,
   paginateList,
@@ -93,53 +108,6 @@ import {
   parseDate,
   toBackendLocalDate,
 } from '@dv/shared/util/validator-date';
-
-const DEFAULT_FILTER = {
-  jurist: 'ALLE_JURISTISCHE_ABKLAERUNG',
-  other: 'MEINE_BEARBEITBAR',
-} satisfies Record<string, GesuchFilter>;
-
-const statusByTyp = {
-  TRANCHE: Object.values(Gesuchstatus).filter(
-    (key: Gesuchstatus) => key !== 'IN_BEARBEITUNG_GS',
-  ),
-  AENDERUNG: Object.values(GesuchTrancheStatus).filter(
-    (key: GesuchTrancheStatus) => key !== 'IN_BEARBEITUNG_GS',
-  ),
-} satisfies Record<GesuchTrancheTyp, unknown>;
-
-type DashboardFormStatus = Gesuchstatus | GesuchTrancheStatus;
-
-type DashboardEntry = Omit<
-  SbDashboardGesuch,
-  'id' | 'gesuchTrancheId' | 'gesuchStatus' | 'trancheStatus'
-> & { status: DashboardFormStatus };
-type DashboardEntryFields = keyof DashboardEntry;
-
-/**
- * Special date fields which are treated as start-end fields only during filtering
- */
-type StartEndFields = keyof Pick<DashboardEntry, 'letzteAktivitaet'>;
-type DashboardFormSimpleFields = Exclude<DashboardEntryFields, StartEndFields>;
-type DashboardFormStartEndFields = AppendFromTo<StartEndFields>;
-type DashboardFormFields =
-  | DashboardFormSimpleFields
-  | DashboardFormStartEndFields;
-
-type QuickFilterGroup =
-  | 'GESUCHE'
-  | 'BEARBEITBAR'
-  | 'JURIST'
-  | 'DRUCKBAR_VERFUEGUNGEN'
-  | 'DRUCKBAR_DATENSCHUTZBRIEFE';
-
-type AvailableFilters = {
-  group: QuickFilterGroup;
-  filters: {
-    typ: GesuchFilter;
-    roles: BenutzerRole[];
-  }[];
-}[];
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-cockpit',
@@ -170,7 +138,6 @@ type AvailableFilters = {
     TypeSafeMatRowDefDirective,
     SharedUiIconChipComponent,
     SharedUiClearButtonComponent,
-    SharedUiFilterMenuButtonComponent,
     TranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-cockpit.component.html',
@@ -180,20 +147,26 @@ type AvailableFilters = {
 })
 export class SachbearbeitungAppFeatureCockpitComponent
   implements
-    OnInit,
     Record<DashboardFormFields, InputSignal<string | undefined>>,
-    SortAndPageInputs<SbGesucheDashboardColumn>
+    SortAndPageInputs<
+      SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn
+    >
 {
+  @HostBinding('class') klass = 'tw:p-6 tw:bg-white tw:dv-pass-height';
+
   private store = inject(Store);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private permissionStore = inject(PermissionStore);
   private formBuilder = inject(NonNullableFormBuilder);
   massendruckStore = inject(MassendruckStore);
+  gesuchStore = inject(GesuchStore);
+  darlehenStore = inject(DarlehenStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
-  show = input<GesuchFilter | undefined>(undefined);
+  filterTab = input<FilterTabParam | undefined>(undefined);
+  zugewiesen = input<ScopeParam | undefined>(undefined);
+  bearbeitbar = input<BearbeitbarParam | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
-  typ = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
   piaVorname = input<string | undefined>(undefined);
   piaGeburtsdatum = input<string | undefined>(undefined);
@@ -201,8 +174,21 @@ export class SachbearbeitungAppFeatureCockpitComponent
   bearbeiter = input<string | undefined>(undefined);
   letzteAktivitaetFrom = input<string | undefined>(undefined);
   letzteAktivitaetTo = input<string | undefined>(undefined);
-  sortColumn = input<SbGesucheDashboardColumn | undefined>(undefined);
+  sortColumn = input<
+    SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn | undefined
+  >(undefined);
   sortOrder = input<SortOrder | undefined>(undefined);
+  sortDirection = computed(() => {
+    const order = this.sortOrder();
+    switch (order) {
+      case 'ASCENDING':
+        return 'asc';
+      case 'DESCENDING':
+        return 'desc';
+      default:
+        return 'desc';
+    }
+  });
   page = input(<number | undefined>undefined, {
     transform: restrictNumberParam({ min: 0, max: 999 }),
   });
@@ -215,18 +201,13 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   @ViewChildren(SharedUiFocusableListItemDirective)
   items?: QueryList<SharedUiFocusableListItemDirective>;
-  displayedColumns = Object.keys(SbGesucheDashboardColumn);
+  displayedGesucheColumns = (
+    Object.keys(SbGesucheDashboardColumn) as SbGesucheDashboardColumn[]
+  ).filter((key) => key !== 'TYP');
+  displayedDarlehenColumns = Object.keys(SbFreiwilligDarlehenDashboardColumn);
 
-  refreshQuickfilterSig = signal<unknown>(null);
-
-  private defaultFilterSig = computed(() => {
-    const rolesMap = this.permissionStore.rolesMapSig();
-
-    return rolesMap.V0_Jurist ? DEFAULT_FILTER.jurist : DEFAULT_FILTER.other;
-  });
   filterForm = this.formBuilder.group({
     fallNummer: [<string | undefined>undefined],
-    typ: [<GesuchTrancheTyp | undefined>undefined],
     piaNachname: [<string | undefined>undefined],
     piaVorname: [<string | undefined>undefined],
     piaGeburtsdatum: [<Date | undefined>undefined],
@@ -239,95 +220,82 @@ export class SachbearbeitungAppFeatureCockpitComponent
     letzteAktivitaetTo: [<Date | undefined>undefined],
   } satisfies Record<DashboardFormStartEndFields, unknown>);
 
-  quickFilterForm = this.formBuilder.group({
-    query: [<GesuchFilter | undefined>undefined],
+  togglesGroup = this.formBuilder.group({
+    zugewiesen: [<boolean | undefined>undefined],
+    bearbeitbar: [<boolean | undefined>undefined],
   });
 
   pageSizes = PAGE_SIZES;
   defaultPageSize = DEFAULT_PAGE_SIZE;
   availableTypes = Object.values(GesuchTrancheTyp);
   versionSig = this.store.selectSignal(selectVersion);
-  showViewSig = computed<GesuchFilter>(() => {
-    const show = this.show();
-    return show ?? this.defaultFilterSig();
+
+  defaultFilter = getDefaultQueryForRole(this.permissionStore.rolesMapSig());
+
+  filterInputsSig = computed(() => {
+    return {
+      fallNummer: this.fallNummer(),
+      piaNachname: this.piaNachname(),
+      piaVorname: this.piaVorname(),
+      piaGeburtsdatum: this.piaGeburtsdatum(),
+      status: parseStatus(this.status()),
+      bearbeiter: this.bearbeiter(),
+    };
   });
+
+  startEndFilterInputsSig = computed(() => {
+    return {
+      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
+      letzteAktivitaetTo: this.letzteAktivitaetTo(),
+    };
+  });
+
+  queryFromInputsSig = computed<{
+    query: DashboardQuery;
+    zugewiesenConfig: { show: boolean; value: boolean };
+    bearbeitbarConfig: { show: boolean; value: boolean };
+  }>(() => {
+    const zugewiesen = this.zugewiesen() ?? this.defaultFilter.zugewiesen;
+    const bearbeitbar = this.bearbeitbar() ?? this.defaultFilter.bearbeitbar;
+    const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
+
+    const query = getQueryFromParams(zugewiesen, bearbeitbar, filterTab);
+
+    const { zugewiesenConfig, bearbeitbarConfig } = getControlVisibility(
+      zugewiesen,
+      bearbeitbar,
+      filterTab,
+    );
+
+    return {
+      query,
+      zugewiesenConfig,
+      bearbeitbarConfig,
+    };
+  });
+
+  isDarlehenModeSig = computed(() => this.filterTab() === 'DARLEHEN');
+  typSig = computed((): GesuchTrancheTyp => {
+    const filterTab = this.filterTab();
+    return filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE';
+  });
+
+  showZugewiesenToggleSig = computed(() => {
+    const { zugewiesenConfig } = this.queryFromInputsSig();
+
+    return zugewiesenConfig.show;
+  });
+
+  showBearbeitbarToggleSig = computed(() => {
+    const { bearbeitbarConfig } = this.queryFromInputsSig();
+
+    return bearbeitbarConfig.show;
+  });
+
   sortList = sortList(this.router, this.route);
   paginateList = paginateList(this.router, this.route);
   sortSig = viewChild.required(MatSort);
   paginatorSig = viewChild.required(MatPaginator);
-  gesuchStore = inject(GesuchStore);
-
-  private readonly quickFilterConfig: {
-    filter: GesuchFilter;
-    roles: BenutzerRole[];
-    group: QuickFilterGroup;
-  }[] = [
-    {
-      filter: 'MEINE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'ALLE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'MEINE_PENDENTE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'ALLE_PENDENTE_GESUCHE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'GESUCHE',
-    },
-    {
-      filter: 'MEINE_BEARBEITBAR',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'BEARBEITBAR',
-    },
-    {
-      filter: 'ALLE_BEARBEITBAR',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'BEARBEITBAR',
-    },
-    {
-      filter: 'MEINE_DRUCKBAR_VERFUEGUNGEN',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_VERFUEGUNGEN',
-    },
-    {
-      filter: 'ALLE_DRUCKBAR_VERFUEGUNGEN',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_VERFUEGUNGEN',
-    },
-    {
-      filter: 'MEINE_DRUCKBAR_DATENSCHUTZBRIEFE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
-    },
-    {
-      filter: 'ALLE_DRUCKBAR_DATENSCHUTZBRIEFE',
-      roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],
-      group: 'DRUCKBAR_DATENSCHUTZBRIEFE',
-    },
-    {
-      filter: 'ALLE_JURISTISCHE_ABKLAERUNG',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-    {
-      filter: 'ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-    {
-      filter: 'ALLE_GESUCHE',
-      roles: ['V0_Jurist'],
-      group: 'JURIST',
-    },
-  ];
 
   // Signals and computed values for form changes and filtering
   private letzteAktivitaetFromChangedSig = toSignal(
@@ -336,38 +304,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
   private letzteAktivitaetToChangedSig = toSignal(
     this.filterStartEndForm.controls.letzteAktivitaetTo.valueChanges,
   );
-
-  availableQuickFiltersSig = computed<AvailableFilters>(() => {
-    const activeRoles = this.permissionStore.rolesMapSig();
-
-    const filters = this.quickFilterConfig
-      .filter(({ roles }) => roles.some((r) => activeRoles?.[r]))
-      .map(({ filter, roles, group }) => ({
-        typ: filter,
-        roles,
-        group,
-      }));
-
-    return filters.reduce((groups, { typ, roles, group }) => {
-      const existingGroup = groups.find((g) => g.group === group);
-      if (existingGroup) {
-        existingGroup.filters.push({ typ, roles });
-      } else {
-        groups.push({ group, filters: [{ typ, roles }] });
-      }
-
-      return groups;
-    }, [] as AvailableFilters);
-  });
-
-  handleQuickFilterClick(filter: GesuchFilter) {
-    if (filter === this.quickFilterForm.controls.query.value) {
-      // Refresh the quick filter even if the same filter is selected again
-      this.refreshQuickfilterSig.set({});
-    } else {
-      this.quickFilterForm.controls.query.setValue(filter);
-    }
-  }
 
   letzteAktivitaetRangeSig = computed(() => {
     const start = this.letzteAktivitaetFromChangedSig();
@@ -389,22 +325,22 @@ export class SachbearbeitungAppFeatureCockpitComponent
       : format(start, 'dd.MM.yyyy');
   });
 
-  typChangedSig = toSignal(this.filterForm.controls.typ.valueChanges);
   statusValuesSig = computed(() => {
-    const typ = this.typChangedSig();
+    const typ = this.typSig();
     if (!typ) {
       return null;
     }
 
     return {
       typ: typ === 'AENDERUNG' ? 'tranche' : 'contract',
-      status: statusByTyp[typ],
+      status: gesucheStatusByTyp[typ],
     };
   });
 
+  darlehenStatusValues = Object.values(DarlehenStatus);
+
   filterFormChangedSig = partiallyDebounceFormValueChangesSig(this.filterForm, [
     'status',
-    'typ',
   ]);
   filterStartEndFormChangedSig = toSignal(
     this.filterStartEndForm.valueChanges.pipe(
@@ -430,7 +366,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
           id: entry.id,
           trancheId: entry.gesuchTrancheId,
           fallNummer: entry.fallNummer,
-          typ: entry.typ,
           piaNachname: entry.piaNachname,
           piaVorname: entry.piaVorname,
           piaGeburtsdatum: entry.piaGeburtsdatum,
@@ -438,7 +373,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
           translationKey,
           bearbeiter: entry.bearbeiter,
           letzteAktivitaet: entry.letzteAktivitaet,
-        } satisfies Record<DashboardEntryFields, unknown> & {
+        } satisfies Record<DashboardTableEntryFields, unknown> & {
           id: string;
           trancheId: string;
           translationKey: string;
@@ -448,27 +383,58 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     return dataSource;
   });
-  totalEntriesSig = computed(() => {
+
+  darlehenDataSourceSig = computed(() => {
+    const darlehen = this.darlehenStore
+      ?.dashboardViewSig()
+      ?.darlehen?.entries?.map((entry) => {
+        const status = entry.status;
+        const translationKey = `sachbearbeitung-app.darlehen.status.${status}`;
+        return {
+          ...entry,
+          translationKey,
+        } satisfies FreiwilligDarlehenDashboard & {
+          translationKey: string;
+        };
+      });
+    const dataSource = new MatTableDataSource(darlehen);
+    return dataSource;
+  });
+
+  gesucheTotalEntriesSig = computed(() => {
     return this.gesuchStore.cockpitViewSig()?.gesuche?.totalEntries;
   });
 
+  darlehenTotalEntriesSig = computed(() => {
+    return this.darlehenStore.dashboardViewSig()?.darlehen?.totalEntries;
+  });
+
+  totalEntriesSig = computed(() => {
+    if (this.isDarlehenModeSig()) {
+      return this.darlehenTotalEntriesSig();
+    }
+    return this.gesucheTotalEntriesSig();
+  });
+
+  loadingSig = computed(() => {
+    if (this.isDarlehenModeSig()) {
+      return this.darlehenStore.dashboardViewSig().loading;
+    }
+    return this.gesuchStore.cockpitViewSig().loading;
+  });
+
   canCreateMassendruckSig: Signal<boolean> = computed(() => {
-    const quickFilter = this.show();
-    const isQuickfilterDruck = quickFilter?.includes('DRUCKBAR');
+    const filterTab = this.filterTab();
+    const isLoading = isPending(this.gesuchStore.gesuche());
     this.filterFormChangedSig();
 
-    if (!isQuickfilterDruck) {
+    if (!canDrucken(filterTab)) {
       return false;
     }
 
-    const hasEntries = (this.totalEntriesSig() ?? 0) > 0;
+    const hasEntries = !isLoading && (this.gesucheTotalEntriesSig() ?? 0) > 0;
     const hasFilters = Object.entries(this.filterForm.getRawValue())
-      .filter(
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([key, _]) => {
-          return key !== 'typ';
-        },
-      )
+      .filter(([key]) => key !== 'typ')
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       .some(([_, value]) => value);
 
@@ -476,8 +442,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
   });
 
   createMassendruckJobForQueryType$() {
+    const query = this.queryFromInputsSig().query;
+    if (this.isDarlehenModeSig() || !isGesuchQuery(query)) {
+      const message =
+        'Invalid query type for Massendruck. Massendruck is only available for Gesuche with DRUCKBAR filter tab.';
+      console.error(message);
+      throw new Error(message);
+    }
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: this.showViewSig() },
+      req: { getGesucheSBQueryType: query },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -491,6 +464,44 @@ export class SachbearbeitungAppFeatureCockpitComponent
       this.router,
       this.route,
     );
+
+    // effect to set form values on tab change and init of component
+    effect(() => {
+      this.filterTab();
+
+      const { zugewiesenConfig, bearbeitbarConfig } = untracked(
+        this.queryFromInputsSig,
+      );
+      const filter = untracked(this.filterInputsSig);
+      const startEndFilter = untracked(this.startEndFilterInputsSig);
+
+      this.togglesGroup.controls.zugewiesen.setValue(zugewiesenConfig.value, {
+        emitEvent: false,
+      });
+      this.togglesGroup.controls.bearbeitbar.setValue(bearbeitbarConfig.value, {
+        emitEvent: false,
+      });
+
+      this.filterForm.patchValue(
+        {
+          ...filter,
+          piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
+        },
+        { emitEvent: false },
+      );
+      this.filterStartEndForm.patchValue(
+        {
+          ...startEndFilter,
+          letzteAktivitaetFrom: parseDate(
+            startEndFilter.letzteAktivitaetFrom ?? '',
+          ),
+          letzteAktivitaetTo: parseDate(
+            startEndFilter.letzteAktivitaetTo ?? '',
+          ),
+        },
+        { emitEvent: false },
+      );
+    });
 
     // Handle normal filter form control changes
     effect(() => {
@@ -511,7 +522,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
     });
 
-    // Handle start-end filter form control changes seperately
+    // Handle start-end filter form control changes separately
     effect(() => {
       this.filterStartEndFormChangedSig();
       const formValue = this.filterStartEndForm.getRawValue();
@@ -534,105 +545,105 @@ export class SachbearbeitungAppFeatureCockpitComponent
       });
     });
 
-    // Handle the quick filter form control changes (show / getGesucheSBQueryType)
-    const quickFilterChanged = toSignal(
-      this.quickFilterForm.controls.query.valueChanges,
+    const zugewiesenChangedSig = toSignal(
+      this.togglesGroup.controls.zugewiesen.valueChanges,
     );
-    effect(() => {
-      const query = quickFilterChanged();
+    const bearbeitbarChangedSig = toSignal(
+      this.togglesGroup.controls.bearbeitbar.valueChanges,
+    );
 
-      if (!query) {
+    // zugewiesen changed
+    effect(() => {
+      const zugewiesenChanged = zugewiesenChangedSig();
+
+      if (!isDefined(zugewiesenChanged)) {
         return;
       }
+
+      const zugewiesen = zugewiesenChanged === true ? 'MEINE' : 'ALLE';
+
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParams: {
-          show: query,
+          zugewiesen,
         },
         queryParamsHandling: 'merge',
-        replaceUrl: true,
       });
     });
 
-    // When the route param inputs change, load the gesuche
+    // bearbeitbar changed
     effect(() => {
-      this.refreshQuickfilterSig();
-      const { query, filter, startEndFilter } = this.getInputs();
+      const bearbeitbarChanged = bearbeitbarChangedSig();
+
+      if (!isDefined(bearbeitbarChanged)) {
+        return;
+      }
+
+      const bearbeitbar = bearbeitbarChanged === true ? 'TRUE' : 'FALSE';
+
+      this.router.navigate(['.'], {
+        relativeTo: this.route,
+        queryParams: {
+          bearbeitbar,
+        },
+        queryParamsHandling: 'merge',
+      });
+    });
+
+    // Load Gesuche effect
+    effect(() => {
+      const query = this.queryFromInputsSig().query;
+      const filter = this.filterInputsSig();
+      const filterTab = this.filterTab();
+      const startEndFilter = this.startEndFilterInputsSig();
+
+      if (untracked(this.isDarlehenModeSig) || !isGesuchQuery(query)) {
+        return;
+      }
 
       this.gesuchStore.loadGesuche$({
         getGesucheSBQueryType: query,
+        typ: filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE',
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
       });
     });
-  }
 
-  private getInputs() {
-    const query = this.showViewSig();
-    const filter = {
-      fallNummer: this.fallNummer(),
-      typ: parseTyp(this.typ()) ?? 'TRANCHE',
-      piaNachname: this.piaNachname(),
-      piaVorname: this.piaVorname(),
-      piaGeburtsdatum: this.piaGeburtsdatum(),
-      status: parseStatus(this.status()),
-      bearbeiter: this.bearbeiter(),
-    };
-    const startEndFilter = {
-      letzteAktivitaetFrom: this.letzteAktivitaetFrom(),
-      letzteAktivitaetTo: this.letzteAktivitaetTo(),
-    };
+    // Load Darlehen effect
+    effect(() => {
+      const query = this.queryFromInputsSig().query;
+      const filter = this.filterInputsSig();
+      const startEndFilter = this.startEndFilterInputsSig();
 
-    return {
-      query,
-      filter,
-      startEndFilter,
-    };
+      if (!untracked(this.isDarlehenModeSig) || !isDarlehenQuery(query)) {
+        return;
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { status: _status, ...darlehenFilter } = filter;
+
+      const { sortColumn, ...restSortAndPage } = getSortAndPageInputs(this);
+
+      if (sortColumn && !isDarlehenDashboardColumn(sortColumn)) {
+        return;
+      }
+
+      this.darlehenStore.getDarlehenDashboardSb$({
+        getFreiwilligDarlehenSbQueryType: query,
+        ...darlehenFilter,
+        status: parseDarlehenStatus(this.status()),
+        ...startEndFilter,
+        sortColumn: sortColumn,
+        ...restSortAndPage,
+      });
+    });
   }
 
   resetStatus() {
     this.filterForm.controls.status.reset();
   }
-
-  ngOnInit() {
-    const { query, filter, startEndFilter } = this.getInputs();
-    const sortOrder = this.sortOrder();
-    const sortColumn = this.sortColumn();
-
-    this.filterForm.reset({
-      ...filter,
-      piaGeburtsdatum: parseDate(filter.piaGeburtsdatum ?? ''),
-    });
-    this.filterStartEndForm.reset({
-      ...startEndFilter,
-      letzteAktivitaetFrom: parseDate(
-        startEndFilter.letzteAktivitaetFrom ?? '',
-      ),
-      letzteAktivitaetTo: parseDate(startEndFilter.letzteAktivitaetTo ?? ''),
-    });
-    this.quickFilterForm.reset({ query });
-
-    if (sortColumn && sortOrder) {
-      this.sortSig().sort({
-        id: sortColumn,
-        start: inverseSortMap[sortOrder],
-        disableClear: false,
-      });
-    }
-
-    // Enable validation from the beginning
-    this.filterForm.markAllAsTouched();
-  }
 }
-
-const parseTyp = (typ: string | undefined): GesuchTrancheTyp | undefined => {
-  if (typ && Object.keys(GesuchTrancheTyp).includes(typ)) {
-    return typ as GesuchTrancheTyp;
-  }
-
-  return undefined;
-};
 
 const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
   if (!status || !Object.keys(Gesuchstatus).includes(status)) {
@@ -641,8 +652,33 @@ const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
   return status as Gesuchstatus;
 };
 
+const parseDarlehenStatus = (
+  status: string | undefined,
+): DarlehenStatus | undefined => {
+  if (!status || !Object.keys(DarlehenStatus).includes(status)) {
+    return undefined;
+  }
+  return status as DarlehenStatus;
+};
+
+const isDarlehenDashboardColumn = (
+  column: SbGesucheDashboardColumn | SbFreiwilligDarlehenDashboardColumn,
+): column is SbFreiwilligDarlehenDashboardColumn => {
+  return column !== 'TYP';
+};
+
 const createQuery = <T extends Partial<GesuchServiceGetGesucheSbRequestParams>>(
   value: T,
 ) => {
   return value;
+};
+
+const canDrucken = (filterTab: FilterTabParam | undefined) => {
+  switch (filterTab) {
+    case 'DRUCKBAR_DATENSCHUTZBRIEFE':
+    case 'DRUCKBAR_VERFUEGUNGEN':
+      return true;
+    default:
+      return false;
+  }
 };

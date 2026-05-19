@@ -2,53 +2,53 @@
 @use 'sass:map';
 @use '@angular/cdk' as cdk;
 @use '@angular/material' as mat;
-@use './material-colors.scss' as dvColors;
+@use './material-dv-theme' as dvTheme;
 
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$gesuch-app-primary: mat.m2-define-palette(mat.$m2-blue-grey-palette);
-$gesuch-app-accent: mat.m2-define-palette(
-  mat.$m2-blue-palette,
-  A200,
-  A100,
-  A400
-);
+@include cdk.a11y-visually-hidden();
+:root {
+  @include mat.dialog-overrides(
+    (
+      container-shape: var(--mat-sys-corner-small),
+    )
+  );
+}
 
-// The warn palette is optional (defaults to yellow).
-$gesuch-app-success: mat.m2-define-palette(dvColors.$md-dv-success);
-$gesuch-app-caution: mat.m2-define-palette(dvColors.$md-dv-caution);
-$gesuch-app-warn: mat.m2-define-palette(dvColors.$md-dv-warn);
-$gesuch-app-info: mat.m2-define-palette(dvColors.$md-dv-info);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$gesuch-app-theme: map.deep-merge(
-  mat.m2-define-light-theme(
+html {
+  color-scheme: light;
+  @include mat.theme(
     (
       color: (
-        primary: $gesuch-app-primary,
-        accent: $gesuch-app-accent,
-        warn: $gesuch-app-warn,
+        primary: dvTheme.$primary-palette,
+        tertiary: dvTheme.$tertiary-palette,
       ),
+      typography: Open Sans,
+      density: 0,
     )
-  ),
-  (
-    success: $gesuch-app-success,
-    info: $gesuch-app-info,
-    color: (
-      success: $gesuch-app-success,
-      info: $gesuch-app-info,
-      caution: $gesuch-app-caution,
-    ),
-  )
-);
+  );
+  @include mat.system-classes();
 
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($gesuch-app-theme);
-@include cdk.a11y-visually-hidden();
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      background-color: white;
+    }
+    --mat-form-field-outlined-label-text-populated-size: 0.9rem;
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+      .mdc-notched-outline--upgraded
+      .mdc-floating-label--float-above {
+      --mat-mdc-form-field-label-transform: translateY(
+          calc(
+            calc(11px + var(--mat-form-field-container-height, 56px) / 2) * -1
+          )
+        )
+        scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
+    }
+  }
+
+  .mat-mdc-form-field-hint-wrapper,
+  .mat-mdc-form-field-error-wrapper {
+    padding: 0;
+  }
+}
 
 // Snackbar overlay settings for container size
 // modify the parent container of the snackbar to center it
@@ -70,6 +70,8 @@ $gesuch-app-theme: map.deep-merge(
     align-items: flex-start;
   }
 }
+
+// Limit select drowdown content size
 .cdk-overlay-connected-position-bounding-box
   .cdk-overlay-pane
   .mat-mdc-select-panel {
@@ -77,128 +79,34 @@ $gesuch-app-theme: map.deep-merge(
   min-width: 254px;
 }
 
-.mdc-text-field:not(.mdc-text-field--disabled):not(.mdc-text-field--invalid)
-  .mdc-floating-label {
-  color: $black;
-}
-.mdc-text-field.mdc-text-field--disabled {
-  .mdc-floating-label,
-  .mdc-text-field__input::placeholder {
-    color: rgba(0, 0, 0, 0.67);
-  }
-  .mdc-notched-outline > * {
-    border-color: rgba(0, 0, 0, 0.15);
-  }
-}
-.mat-mdc-form-field.mat-mdc-form-field-label-always-float {
-  align-self: flex-start;
-  --mat-mdc-form-field-floating-label-scale: 1;
-  --mat-form-field-outlined-outline-color: rgba(0, 0, 0, 0.09);
-  .mat-mdc-form-field-hint {
-    font-size: 0.75rem;
-  }
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-    .mdc-notched-outline--upgraded
-    .mdc-floating-label--float-above {
-    font-size: 0.875rem;
-    --mat-mdc-form-field-label-transform: translateY(-38.75px)
-      scale(var(--mat-mdc-form-field-floating-label-scale, 0.75));
-  }
-
-  .mdc-text-field--outlined {
-    background-color: $input-bg;
-  }
-  .mat-mdc-form-field-hint-wrapper,
-  .mat-mdc-form-field-error-wrapper {
-    padding: 0;
-  }
-}
-// Used for readonly mat-form-fields, see dvSharedUiFormReadonly
-form.readonly,
-form .readonly {
-  --mat-form-field-outlined-disabled-input-text-color: #{$darkgray};
-  --mat-select-disabled-trigger-text-color: #{$darkgray};
-  .mat-mdc-radio-button {
-    --mat-radio-disabled-label-color: #{$darkgray};
-  }
-}
-.mat-mdc-table .mat-mdc-header-row {
-  --mat-table-header-container-height: 20px;
-}
-.mat-mdc-table {
-  .mat-mdc-header-cell {
-    padding-top: var(--dv-table-header-spacing, 20px);
-    padding-bottom: var(--dv-table-header-spacing, 20px);
-  }
-  .combined-header-row {
-    .mat-mdc-header-cell {
-      border-bottom: 0;
-      padding-top: var(--dv-table-header-spacing, 20px);
-      padding-bottom: 0px;
-    }
-    .mat-mdc-header-row + .mat-mdc-header-row .mat-mdc-header-cell {
-      padding-bottom: var(--dv-table-header-spacing, 20px);
-      padding-top: 0;
-    }
-  }
-}
 .mat-mdc-paginator-page-size-label {
   align-self: center;
 }
+
 .clearable-select .mat-mdc-select:not(.mat-mdc-select-empty) {
   .mat-mdc-select-arrow-wrapper {
     display: none;
   }
 }
-.mdc-radio .mdc-label {
-  width: 100%;
-}
-.mat-mdc-radio-group.ng-invalid.ng-touched .mat-mdc-radio-button {
-  --mat-radio-unselected-icon-color: #{mat.m2-get-color-from-palette(
-      $gesuch-app-warn
-    )};
-  --mat-radio-unselected-focus-icon-color: #{mat.m2-get-color-from-palette(
-      $gesuch-app-warn
-    )};
-}
-.mat-mdc-checkbox.ng-invalid.ng-touched {
-  --mat-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
-      $gesuch-app-warn
-    )};
-}
 .mat-mdc-form-field-error:not(:first-child) {
   display: none;
-}
-
-.family-form,
-.steuererklaerung-bern-radio-group,
-.will-darlehen-radio-group {
-  .mat-mdc-form-field-error {
-    display: block;
-    color: var(--mat-form-field-error-text-color, var(--mat-app-error));
-  }
 }
 
 .dense-control {
   @include mat.form-field-density(-2);
 }
 
-fieldset {
-  &.ng-touched.ng-invalid {
-    --mat-checkbox-unselected-icon-color: #{mat.m2-get-color-from-palette(
-        $gesuch-app-warn
-      )};
-  }
-  .mat-mdc-checkbox {
-    .mdc-form-field {
-      align-items: flex-start;
-    }
-    .mdc-checkbox {
-      margin: -7px 0;
-    }
-  }
+.group-errors .mat-mdc-form-field-error {
+  font-size: var(--mat-sys-body-small-size);
 }
 
+.mat-mdc-form-field.mat-mdc-form-field-label-always-float {
+  align-self: flex-start;
+  --mat-mdc-form-field-floating-label-scale: 1;
+  --mat-form-field-outlined-outline-color: rgba(0, 0, 0, 0.09);
+}
+
+// Table highlight on hover and show pointer if clickable
 .cdk-row.active,
 table tr.mat-mdc-row {
   &.active,
@@ -211,8 +119,8 @@ table tr.mat-mdc-row {
 }
 
 .mat-mdc-progress-bar {
-  --mat-progress-bar-active-indicator-height: 2px;
-  --mat-progress-bar-track-height: 2px;
+  --mat-progress-bar-active-indicator-height: 0.125rem;
+  --mat-progress-bar-track-height: 0.125rem;
 }
 
 .mat-mdc-snack-bar-container {
@@ -220,152 +128,119 @@ table tr.mat-mdc-row {
   --mat-snackbar-supporting-text-color: #fff;
 }
 
-$dv-custom-colors: (
-  success: $gesuch-app-success,
-  caution: $gesuch-app-caution,
-  info: $gesuch-app-info,
-);
+$dv-all-colors: info, danger, success, warn, primary;
 
-.mat-mdc-chip,
-.cdk-overlay-container {
-  @each $name, $color in $dv-custom-colors {
-    &.mat-#{$name}:not([disabled]),
-    & .mat-#{$name}:not([disabled]) {
-      $base-color: mat.m2-get-color-from-palette($color, 500);
-      $contrast-color: mat.m2-get-color-from-palette($color, 500-contrast);
-      background-color: $base-color;
-      color: $contrast-color;
-      --mat-snack-bar-container-color: #{$base-color};
-      --mat-chip-label-text-color: #{$contrast-color};
-      --mat-snackbar-container-color: #{$base-color};
-    }
-    &.mat-#{$name}[disabled],
-    & .mat-#{$name}[disabled] {
-      $contrast-color: mat.m2-get-color-from-palette($color, 100-contrast);
-      $background-color: mat.m2-get-color-from-palette($color, 100);
-      color: $contrast-color;
-      --mat-snack-bar-container-color: #{$background-color};
-      --mat-chip-disabled-label-text-color: #{$contrast-color};
-    }
+@each $name in $dv-all-colors {
+  .mat-#{$name} {
+    --mat-chip-elevated-selected-container-color: var(
+      --tw-color-dv-main-#{$name}
+    );
+    --mat-chip-elevated-container-color: var(--tw-color-dv-main-#{$name});
+    --mat-snack-bar-container-color: var(--tw-color-dv-main-#{$name});
+    --mat-progress-bar-active-indicator-color: var(--tw-color-dv-main-#{$name});
+    --mat-progress-bar-track-color: var(--tw-color-dv-main-#{$name}-subtle);
   }
 }
-
-$dv-all-colors: (
-  primary: $gesuch-app-primary,
-  accent: $gesuch-app-accent,
-  warn: $gesuch-app-warn,
-  success: $gesuch-app-success,
-  caution: $gesuch-app-caution,
-  info: $gesuch-app-info,
-);
-
-.cdk-overlay-container {
-  @each $name, $color in $dv-all-colors {
-    .mat-#{$name} {
-      $base-color: mat.m2-get-color-from-palette($color, 500);
-      $mild-color: mat.m2-get-color-from-palette($color, 100);
-      --mat-snack-bar-container-color: #{$base-color};
-      --mat-progress-bar-active-indicator-color: #{$base-color};
-      --mat-progress-bar-track-color: #{$mild-color};
-    }
-  }
-  .header-menu-panel {
-    padding: 5px 12px;
-    max-width: 450px;
-  }
-}
-
-.mat-mdc-card-content .mat-accordion.full-width {
-  display: block;
-  margin: 0 -16px;
-}
-.mat-accordion.large .mat-expansion-panel-header,
-.mat-expansion-panel.large .mat-expansion-panel-header {
-  height: auto;
-}
-
-.mat-mdc-form-field-hint.mat-caution {
-  color: mat.m2-get-color-from-palette($gesuch-app-caution, 500);
+.cdk-overlay-container .header-menu-panel {
+  padding: 5px 12px;
+  max-width: 450px;
 }
 
 .mat-mdc-list-item {
   --mat-list-list-item-focus-state-layer-color: transparent;
+  &.mdc-list-item--with-trailing-radio .mdc-list-item__end {
+    margin-left: 4px;
+  }
 }
 
 .info-dialog-columnar {
   &.cdk-overlay-pane.mat-mdc-dialog-panel {
     min-width: unset;
   }
-  .mat-mdc-dialog-container {
-    --mat-dialog-container-elevation: none;
-  }
-  .mat-mdc-dialog-surface {
-    box-shadow: none;
-  }
 }
+
 .dv-dialog-formular {
   --mat-dialog-container-min-width: 900px;
 }
 
-.mat-mdc-tab-links {
-  gap: 0;
-
-  .mat-mdc-tab-link:not(.active) {
-    background: white;
+.mat-mdc-tab-nav-bar {
+  &.nav-style-tabs {
+    .mat-mdc-tab-links {
+      gap: 0 24px;
+    }
   }
-  .mat-mdc-tab-link {
-    -webkit-font-smoothing: initial;
-  }
-}
 
-.mat-mdc-tab-nav-bar.nav-style-tabs {
-  .mat-mdc-tab-links {
-    gap: 0 24px;
-  }
-}
-
-.mat-mdc-tab-link {
-  margin-bottom: 6px;
-}
-.mat-mdc-tab-link.form-tabs {
-  margin-bottom: 0;
-}
-
-.btn.active {
-  --mat-tab-active-focus-label-text-color: white;
-  --mat-tab-active-focus-indicator-color: transparent;
-
-  &:not(:hover) {
-    --mat-menu-item-label-text-color: white;
-    --mat-tab-active-label-text-color: white;
-    --mat-tab-active-indicator-color: transparent;
-  }
-  &:hover {
-    --mat-tab-active-hover-label-text-color: white;
-    --mat-tab-active-hover-indicator-color: transparent;
+  .mdc-tab--active .mdc-tab__text-label {
+    transition-delay: 0s;
+    transition-duration: var(
+      --tw-duration,
+      var(--tw-default-transition-duration)
+    );
   }
 }
 
-form:not(.readonly) .mat-mdc-form-field-required-marker {
-  color: var(--dv-red);
+.mat-mdc-form-field-required-marker {
+  color: var(--tw-color-dv-main-danger);
+}
+
+.mat-accordion.dv-large .mat-expansion-panel-header,
+.mat-expansion-panel.dv-large .mat-expansion-panel-header {
+  height: auto;
+}
+
+.mat-expansion-panel.dv-large {
+  .mat-content-hide-toggle {
+    margin: 0;
+  }
+  .mat-expansion-panel-header {
+    padding: 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem 1rem 1rem;
+  }
 }
 
 dv-sachbearbeitung-app-feature-verfuegung {
   .mat-mdc-card {
-    border-width: 1px !important;
-    border-color: var(--dv-gray-300) !important;
-    border-style: solid !important;
-    box-shadow: none !important;
+    background-color: var(--tw-color-gray-100);
+    border-width: 1px;
+    border-color: var(--tw-color-gray-100);
+    border-style: solid;
+    border-radius: var(--dv-border-radius);
+    box-shadow: none;
+    padding-block: 1rem;
   }
 }
 
 dv-sachbearbeitung-app-feature-gesuch-layout {
   .tw\:dv-table {
     box-shadow: none;
-    border: 1px solid var(--dv-gray-300);
+    border: 1px solid var(--tw-color-gray-300);
   }
   .mat-mdc-tab-link.btn-nav {
     box-shadow: none;
-    border: 1px solid var(--dv-gray-300);
+    border: 1px solid var(--tw-color-gray-300);
+  }
+}
+
+.mat-mdc-slide-toggle {
+  --mat-slide-toggle-selected-track-color: var(--tw-color-dv-red);
+  --mat-slide-toggle-selected-focus-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-selected-pressed-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-selected-hover-track-color: var(--tw-color-dv-red-hover);
+  --mat-slide-toggle-unselected-track-color: var(--tw-color-dv-gray-light);
+  --mat-slide-toggle-unselected-focus-track-color: var(
+    --tw-color-dv-gray-light
+  );
+  --mat-slide-toggle-unselected-pressed-track-color: var(--tw-color-dv-gray);
+  --mat-slide-toggle-unselected-hover-track-color: var(--tw-color-dv-gray);
+  --mat-slide-toggle-unselected-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-focus-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-pressed-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-unselected-hover-handle-color: var(--tw-color-white);
+  --mat-slide-toggle-label-text-size: 1rem;
+
+  .mdc-switch {
+    margin: 0 0.5rem 0 0;
   }
 }

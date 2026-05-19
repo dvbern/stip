@@ -18,6 +18,9 @@
 package ch.dvbern.stip.api.delegieren.service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
@@ -34,6 +37,7 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
+import ch.dvbern.stip.generated.dto.DelegierungDto;
 import ch.dvbern.stip.generated.dto.PaginatedSozDashboardDto;
 import ch.dvbern.stip.generated.dto.SozDashboardColumnDto;
 import jakarta.enterprise.context.RequestScoped;
@@ -64,7 +68,7 @@ public class DelegierenService {
         }
 
         final var fall = fallRepository.requireById(fallId);
-        if (fall.getDelegierung() != null) {
+        if (Objects.nonNull(fall.getCurrentDelegierung())) {
             throw new BadRequestException();
         }
 
@@ -74,9 +78,11 @@ public class DelegierenService {
         }
 
         final var newDelegierung = new Delegierung()
-            .setDelegierterFall(fall)
+            .setFall(fall)
             .setSozialdienst(sozialdienst)
             .setPersoenlicheAngaben(persoenlicheAngabenMapper.toEntity(dto));
+        fall.setCurrentDelegierung(newDelegierung);
+        fall.getHistoricalDelegierungs().add(newDelegierung);
 
         delegierungRepository.persist(newDelegierung);
     }
@@ -90,6 +96,7 @@ public class DelegierenService {
         delegierung.setDelegierterMitarbeiter(mitarbeiter);
         if (mitarbeiterCurrent == null) {
             notificationService.createDelegierungAngenommenNotificationAndSendStdMail(delegierung);
+            delegierung.akzeptieren();
         }
     }
 
@@ -98,16 +105,14 @@ public class DelegierenService {
         final var delegierung = delegierungRepository.requireById(delegierungId);
         notificationService.createDelegierungAbgelehntNotificationAndSendStdMail(delegierung);
 
-        delegierung.getDelegierterFall().setDelegierung(null);
-        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
-        delegierungRepository.delete(delegierung);
+        delegierung.ablehnen();
     }
 
     @Transactional
     public void delegierungAufloesen(final UUID delegierungId) {
         final var delegierung = delegierungRepository.requireById(delegierungId);
 
-        final var auszahlung = delegierung.getDelegierterFall().getAuszahlung();
+        final var auszahlung = delegierung.getFall().getAuszahlung();
         notificationService.createDelegierungAufgeloestNotificationAndSendStdMail(delegierung);
 
         if (auszahlung != null && auszahlung.isAuszahlungAnSozialdienst()) {
@@ -117,10 +122,7 @@ public class DelegierenService {
             auszahlung.setZahlungsverbindung(zahlungsverbindung);
             auszahlung.setAuszahlungAnSozialdienst(false);
         }
-
-        delegierung.getDelegierterFall().setDelegierung(null);
-        delegierung.getSozialdienst().getDelegierungen().remove(delegierung);
-        delegierungRepository.delete(delegierung);
+        delegierung.aufloesen();
     }
 
     public PaginatedSozDashboardDto getDelegierungSoz(
@@ -132,7 +134,7 @@ public class DelegierenService {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        Boolean delegierungAngenommen,
+        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -150,7 +152,7 @@ public class DelegierenService {
             vorname,
             geburtsdatum,
             wohnort,
-            delegierungAngenommen,
+            status,
             sortColumn,
             sortOrder
         );
@@ -166,7 +168,7 @@ public class DelegierenService {
         String vorname,
         LocalDate geburtsdatum,
         String wohnort,
-        Boolean delegierungAngenommen,
+        String status,
         SozDashboardColumnDto sortColumn,
         SortOrder sortOrder
     ) {
@@ -199,8 +201,8 @@ public class DelegierenService {
             sozDashboardQueryBuilder.wohnort(baseQuery, wohnort);
         }
 
-        if (delegierungAngenommen != null) {
-            sozDashboardQueryBuilder.delegierungAngenommen(baseQuery, delegierungAngenommen);
+        if (status != null) {
+            sozDashboardQueryBuilder.delegierungStatus(baseQuery, status);
         }
 
         // Creating the count query must happen before ordering,
@@ -215,7 +217,7 @@ public class DelegierenService {
 
         sozDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
         final var results = baseQuery.stream()
-            .map(delegierung -> delegierungMapper.toFallWithDto(delegierung.getDelegierterFall()))
+            .map(delegierung -> delegierungMapper.toEntryDto(delegierung))
             .toList();
 
         return new PaginatedSozDashboardDto(
@@ -224,5 +226,15 @@ public class DelegierenService {
             Math.toIntExact(countQuery.fetchFirst()),
             results
         );
+    }
+
+    public List<DelegierungDto> getAllDelegierungsForGesuch(UUID gesuchId) {
+        final var fall = fallRepository.findFallForGesuch(gesuchId);
+
+        return fall.getHistoricalDelegierungs()
+            .stream()
+            .sorted(Comparator.comparing(Delegierung::getTimestampErstellt).reversed())
+            .map(delegierungMapper::toDto)
+            .toList();
     }
 }

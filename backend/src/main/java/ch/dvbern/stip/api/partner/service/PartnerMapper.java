@@ -18,20 +18,37 @@
 package ch.dvbern.stip.api.partner.service;
 
 import ch.dvbern.stip.api.adresse.service.AdresseMapper;
+import ch.dvbern.stip.api.common.service.EntityUpdateMapper;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.generated.dto.PartnerDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class, uses = AdresseMapper.class)
-public interface PartnerMapper {
-    Partner toEntity(PartnerDto partnerDto);
+public abstract class PartnerMapper extends EntityUpdateMapper<PartnerUpdateDto, Partner> {
+    public abstract Partner toEntity(PartnerDto partnerDto);
 
-    PartnerDto toDto(Partner partner);
+    public abstract PartnerDto toDto(Partner partner);
 
-    Partner partialUpdate(PartnerUpdateDto partnerUpdateDto, @MappingTarget Partner partner);
+    public abstract Partner partialUpdate(PartnerUpdateDto partnerUpdateDto, @MappingTarget Partner partner);
 
-    PartnerUpdateDto toUpdateDto(Partner partner);
+    public abstract PartnerUpdateDto toUpdateDto(Partner partner);
+
+    @Override
+    @BeforeMapping
+    protected void resetDependentDataBeforeUpdate(
+        final PartnerUpdateDto newFormular,
+        final @MappingTarget Partner targetFormular
+    ) {
+        resetFieldIf(
+            () -> Boolean.FALSE.equals(newFormular.getInAusbildung()),
+            "Reset Pensum because is in Ausbildung is false",
+            () -> {
+                newFormular.setAusbildungspensum(null);
+            }
+        );
+    }
 }

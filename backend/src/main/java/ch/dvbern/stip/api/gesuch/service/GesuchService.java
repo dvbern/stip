@@ -49,6 +49,7 @@ import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
@@ -142,7 +143,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
-import static ch.dvbern.stip.api.common.util.Constants.VERANLAGUNGSSTATUS_DEFAULT_VALUE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE;
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
@@ -194,6 +194,8 @@ public class GesuchService {
     private final DatenschutzbriefService datenschutzbriefService;
     private final VerfuegungHistoryService verfuegungHistoryService;
     private final AusbildungUnterbruchAntragService ausbildungUnterbruchAntragService;
+    private final StatisticsdataService statisticsdataService;
+    private final DarlehenService darlehenService;
 
     public Gesuch getGesuchById(final UUID gesuchId) {
         return gesuchRepository.requireById(gesuchId);
@@ -247,8 +249,6 @@ public class GesuchService {
         final var gesuchsjahr = trancheToUpdate.getGesuch().getGesuchsperiode().getGesuchsjahr();
         Integer steuerjahrToSet = GesuchsjahrUtil.getDefaultSteuerjahr(gesuchsjahr);
 
-        String veranlagungsStatusToSet = VERANLAGUNGSSTATUS_DEFAULT_VALUE;
-
         if (einnahmenKostenToUpdate != null) {
             final Integer steuerjahrDtoValue = einnahmenKostenUpdateDto.getSteuerjahr();
             final Integer steuerjahrExistingValue = einnahmenKostenToUpdate.getSteuerjahr();
@@ -262,15 +262,15 @@ public class GesuchService {
 
             final String veranlagungsStatusDtoValue = einnahmenKostenUpdateDto.getVeranlagungsStatus();
             final String veranlagungsStatusExistingValue = einnahmenKostenToUpdate.getVeranlagungsStatus();
-            veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
+            final String veranlagungsStatusToSet = ValidateUpdateLegalityUtil.getAndValidateLegalityValue(
                 benutzerRollenIdentifiers,
                 veranlagungsStatusDtoValue,
                 veranlagungsStatusExistingValue,
-                VERANLAGUNGSSTATUS_DEFAULT_VALUE
+                null
             );
+            einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
         }
         einnahmenKostenUpdateDto.setSteuerjahr(steuerjahrToSet);
-        einnahmenKostenUpdateDto.setVeranlagungsStatus(veranlagungsStatusToSet);
     }
 
     @Transactional
@@ -520,12 +520,14 @@ public class GesuchService {
     public void deleteGesuch(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
-        gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
+        final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
         buchhaltungService.deleteBuchhaltungsForGesuch(gesuchId);
         gesuchNotizService.deleteAllByGesuchId(gesuchId);
         statusprotokollService.deleteAllByGesuchId(gesuchId);
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
+        statisticsdataService.deleteForGesuch(gesuchId);
+        darlehenService.deleteForGesuch(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();
@@ -533,6 +535,7 @@ public class GesuchService {
         if (ausbildung.getGesuchs().isEmpty()) {
             ausbildungRepository.delete(ausbildung);
         }
+        gesuchDokumentService.executeDeleteDokumentsFromS3(objectIds);
     }
 
     @Transactional
@@ -1231,9 +1234,11 @@ public class GesuchService {
 
         final var tranche = gesuch.getGesuchTranchen().getFirst();
         final var oldGueltigkeit = tranche.getGueltigkeit();
+        final var newGueltigkeitAb =
+            oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear());
         final var newGueltigkeit = new DateRange(
-            oldGueltigkeit.getGueltigAb().withYear(gesuchsperiode.getGesuchsperiodeStart().getYear()),
-            oldGueltigkeit.getGueltigBis().withYear(gesuchsperiode.getGesuchsperiodeStopp().getYear())
+            newGueltigkeitAb,
+            newGueltigkeitAb.plusYears(1).minusDays(1)
         );
 
         tranche.setGueltigkeit(newGueltigkeit);

@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -90,9 +91,11 @@ public class DarlehenDashboardQueryBuilder {
     }
 
     public void bearbeiter(final JPAQuery<FreiwilligDarlehen> query, final String bearbeiter) {
+        query.join(QZuordnung.zuordnung)
+            .on(freiwilligDarlehen.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
         query.where(
-            freiwilligDarlehen.fall.sachbearbeiterZuordnung.sachbearbeiter.nachname.eq(bearbeiter)
-                .or(freiwilligDarlehen.fall.sachbearbeiterZuordnung.sachbearbeiter.vorname.eq(bearbeiter))
+            QZuordnung.zuordnung.sachbearbeiter.nachname.containsIgnoreCase(bearbeiter)
+                .or(QZuordnung.zuordnung.sachbearbeiter.vorname.containsIgnoreCase(bearbeiter))
         );
     }
 

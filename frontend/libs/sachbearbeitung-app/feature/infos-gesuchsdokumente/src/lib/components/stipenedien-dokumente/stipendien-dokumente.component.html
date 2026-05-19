@@ -34,7 +34,7 @@
           @if (dokument?.versendeteVerfuegung) {
             <button
               type="button"
-              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              class="tw:dv-button tw:!flex tw:max-w-full tw:!p-0"
               [dvDownloadButton]="{
                 type: 'verfuegung',
                 id: dokument.versendeteVerfuegung?.id ?? '',
@@ -43,9 +43,7 @@
               <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument.versendeteVerfuegung?.filename">{{
                 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.versendeteVerfuegung' | transloco
               }}</span>
-              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                >download</span
-              >
+              <span class="material-symbols-rounded tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>
@@ -62,7 +60,7 @@
           @if (dokument?.verfuegungsbrief) {
             <button
               type="button"
-              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              class="tw:dv-button tw:!flex tw:max-w-full tw:!p-0"
               [dvDownloadButton]="{
                 type: 'verfuegung',
                 id: dokument.verfuegungsbrief?.id ?? '',
@@ -71,9 +69,7 @@
               <span class="tw:truncate tw:!text-sm/none" [matTooltip]="dokument?.verfuegungsbrief?.filename">{{
                 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.verfuegungsbrief' | transloco
               }}</span>
-              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                >download</span
-              >
+              <span class="material-symbols-rounded tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>
@@ -92,7 +88,7 @@
               @for (blatt of dokument?.berechnungsblaetter; track $index) {
                 <button
                   type="button"
-                  class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+                  class="tw:dv-button tw:!flex tw:max-w-full tw:!p-0"
                   [dvDownloadButton]="{
                     type: 'verfuegung',
                     id: blatt.id,
@@ -102,9 +98,7 @@
                     'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.berechnungsblaetter.' + blatt.typ
                       | transloco
                   }}</span>
-                  <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
-                    >download</span
-                  >
+                  <span class="material-symbols-rounded tw:!ml-1 tw:align-middle tw:!text-lg/none">download</span>
                 </button>
               }
             </div>
@@ -123,7 +117,7 @@
           @if (dokument?.gesetzlichesDarlehen) {
             <button
               type="button"
-              class="btn btn-link tw:!flex tw:max-w-full tw:!p-0"
+              class="tw:dv-button tw:!flex tw:max-w-full tw:!p-0"
               [attr.aria-label]="dokument.gesetzlichesDarlehen.filename"
               [dvDownloadButton]="{
                 type: 'darlehensverfuegung',
@@ -133,7 +127,7 @@
               <span class="tw:truncate tw:!text-sm/none" [title]="dokument.gesetzlichesDarlehen.filename">
                 {{ 'sachbearbeitung-app.infos.gesuchsdokumente.stipendien.table.gesetzlichesDarlehen' | transloco }}
               </span>
-              <span class="material-symbols-rounded tw:-mt-0.5 tw:!ml-1 tw:align-middle tw:!text-lg/none"
+              <span class="material-symbols-rounded  tw:!ml-1 tw:align-middle tw:!text-lg/none"
                 >download</span
               >
             </button>

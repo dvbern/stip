@@ -25,8 +25,12 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
+import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
+import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
+import ch.dvbern.stip.api.common.validation.ValidationsConstant;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.fall.service.FallService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
@@ -63,6 +67,8 @@ public class AusbildungService {
         }
         final var ausbildung = ausbildungMapper.toNewEntity(ausbildungUpdateDto);
         ausbildung.setFall(fallRepository.requireById(ausbildung.getFall().getId()));
+
+        assertAusbildungEndDateIsValid(ausbildung);
 
         // Manual check here is necessary, because otherwise the Ausbildung would be persisted
         // but creation of a Gesuch would fail. But because none of that throws an exception,
@@ -108,8 +114,22 @@ public class AusbildungService {
     @Transactional
     public AusbildungDto patchAusbildung(final UUID ausbildungId, final AusbildungUpdateDto ausbildungUpdateDto) {
         var ausbildung = ausbildungRepository.requireById(ausbildungId);
+        assert ausbildung.getGesuchs().size() <= 1;
+
+        final var gesuch = ausbildung.getGesuchs().get(0);
+
+        // reset lebenslaufitems of each gesuchtranche if ausbildungBegin has changed
+        if (
+            !ausbildung.getAusbildungBegin()
+                .equals(DateMapperImpl.monthYearToBeginOfMonth(ausbildungUpdateDto.getAusbildungBegin()))
+        ) {
+            gesuch.getGesuchTranchen()
+                .forEach(gesuchTranche -> gesuchTranche.getGesuchFormular().getLebenslaufItems().clear());
+        }
         final var oldAusbildungsGang = ausbildung.getAusbildungsgang();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
+
+        assertAusbildungEndDateIsValid(ausbildung);
 
         if (ausbildungUpdateDto.getAusbildungsgangId() != null) {
             if (!ausbildung.getAusbildungsgang().isAktiv()) {
@@ -127,7 +147,6 @@ public class AusbildungService {
             throw new ValidationsException("Die Entität ist nicht valid", violations);
         }
 
-        final var gesuch = ausbildung.getGesuchs().get(0);
         final var potential = gesuchsperiodeService.getGesuchsperiodeForAusbildung(
             ausbildung
         );
@@ -154,4 +173,25 @@ public class AusbildungService {
 
         return ausbildungMapper.toDto(ausbildung);
     }
+
+    public void assertAusbildungEndDateIsValid(Ausbildung ausbildung) {
+        if (ausbildung == null || ausbildung.getAusbildungEnd() == null) {
+            return;
+        }
+
+        final var earliestActiveOpt = gesuchsperiodeService.findEarliestActiveNow();
+        final var isValid =
+            earliestActiveOpt.map(localDate -> !ausbildung.getAusbildungEnd().isBefore(localDate)).orElse(true);
+
+        if (!isValid) {
+            throw new CustomValidationsException(
+                "Ausbildung end date must be after valid gesuchperiode start date",
+                new CustomConstraintViolation(
+                    ValidationsConstant.VALIDATION_AUSBILDUNG_END_AFTER_VALID_GESUCH_PERIODE_START,
+                    "ausbildung"
+                )
+            );
+        }
+    }
+
 }

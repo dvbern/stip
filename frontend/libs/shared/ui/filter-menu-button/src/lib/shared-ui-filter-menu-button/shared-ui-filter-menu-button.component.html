@@ -23,8 +23,8 @@
     <i class="material-symbols-rounded">expand_more</i>
   </button>
 
-  <mat-menu #gesuchMenu="matMenu" xPosition="before" class="header-menu-panel mt-2 rounded">
-    <div class="d-flex flex-column gap-2">
+  <mat-menu #gesuchMenu="matMenu" xPosition="before" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+    <div class="tw:flex tw:flex-col tw:gap-2">
       @for (filter of filters(); track $index) {
         <button
           mat-menu-item

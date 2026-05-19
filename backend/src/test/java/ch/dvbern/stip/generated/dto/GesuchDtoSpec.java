@@ -45,6 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchDtoSpec.JSON_PROPERTY_BEARBEITER,
   GesuchDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH,
   GesuchDtoSpec.JSON_PROPERTY_EINREICHEDATUM,
+  GesuchDtoSpec.JSON_PROPERTY_HAD_DELEGIERUNGS,
   GesuchDtoSpec.JSON_PROPERTY_DELEGIERUNG,
   GesuchDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
   GesuchDtoSpec.JSON_PROPERTY_VERFUEGT
@@ -87,6 +88,9 @@ public class GesuchDtoSpec {
 
   public static final String JSON_PROPERTY_EINREICHEDATUM = "einreichedatum";
   private LocalDate einreichedatum;
+
+  public static final String JSON_PROPERTY_HAD_DELEGIERUNGS = "hadDelegierungs";
+  private Boolean hadDelegierungs;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
   private DelegierungSlimDtoSpec delegierung;
@@ -412,6 +416,32 @@ public class GesuchDtoSpec {
   }
 
 
+  public GesuchDtoSpec hadDelegierungs(Boolean hadDelegierungs) {
+    
+    this.hadDelegierungs = hadDelegierungs;
+    return this;
+  }
+
+   /**
+   * Get hadDelegierungs
+   * @return hadDelegierungs
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HAD_DELEGIERUNGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getHadDelegierungs() {
+    return hadDelegierungs;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAD_DELEGIERUNGS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHadDelegierungs(Boolean hadDelegierungs) {
+    this.hadDelegierungs = hadDelegierungs;
+  }
+
+
   public GesuchDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
     
     this.delegierung = delegierung;
@@ -510,6 +540,7 @@ public class GesuchDtoSpec {
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
         Objects.equals(this.gesuchTrancheToWorkWith, gesuch.gesuchTrancheToWorkWith) &&
         Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
+        Objects.equals(this.hadDelegierungs, gesuch.hadDelegierungs) &&
         Objects.equals(this.delegierung, gesuch.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente) &&
         Objects.equals(this.verfuegt, gesuch.verfuegt);
@@ -517,7 +548,7 @@ public class GesuchDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -536,6 +567,7 @@ public class GesuchDtoSpec {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
+    sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");

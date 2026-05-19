@@ -62,7 +62,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Slf4j
 @RequestScoped
-@UnlessBuildProfile("test")
+@UnlessBuildProfile(anyOf = { "test", "dev", "prod" })
 @RequiredArgsConstructor
 public class SapEndpointService {
     private final BusinessPartnerCreateMapper businessPartnerCreateMapper;

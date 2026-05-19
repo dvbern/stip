@@ -12,6 +12,7 @@
 import { DemoAuszahlung } from './demoAuszahlung';
 import { DemoSteuerdaten } from './demoSteuerdaten';
 import { DemoEinnahmenKosten } from './demoEinnahmenKosten';
+import { DemoDataTestBerechnungValues } from './demoDataTestBerechnungValues';
 import { DemoFamiliensituation } from './demoFamiliensituation';
 import { DemoLebenslauf } from './demoLebenslauf';
 import { DemoPartner } from './demoPartner';
@@ -19,7 +20,6 @@ import { DemoSteuererklaerung } from './demoSteuererklaerung';
 import { DemoKind } from './demoKind';
 import { DemoDarlehen } from './demoDarlehen';
 import { DemoElternteil } from './demoElternteil';
-import { DemoDataStipendienanspruch } from './demoDataStipendienanspruch';
 import { DemoPersonInAusbildung } from './demoPersonInAusbildung';
 import { DemoGeschwister } from './demoGeschwister';
 import { DemoAusbildung } from './demoAusbildung';
@@ -39,6 +39,6 @@ export interface DemoData {
     geschwister: Array<DemoGeschwister>;
     auszahlung: DemoAuszahlung;
     darlehen: DemoDarlehen;
-    stipendienanspruch?: DemoDataStipendienanspruch;
+    berechnungValues?: DemoDataTestBerechnungValues;
 }
 

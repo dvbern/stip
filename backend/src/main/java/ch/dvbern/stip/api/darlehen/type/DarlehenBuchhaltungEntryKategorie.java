@@ -17,8 +17,12 @@
 
 package ch.dvbern.stip.api.darlehen.type;
 
+import java.util.Set;
+
 public enum DarlehenBuchhaltungEntryKategorie {
     FREIWILLIG,
     GESETZLICH,
-    MANUELLE_KORREKTUR
+    MANUELLE_KORREKTUR;
+
+    public static final Set<DarlehenBuchhaltungEntryKategorie> DARLEHEN = Set.of(FREIWILLIG, GESETZLICH);
 }

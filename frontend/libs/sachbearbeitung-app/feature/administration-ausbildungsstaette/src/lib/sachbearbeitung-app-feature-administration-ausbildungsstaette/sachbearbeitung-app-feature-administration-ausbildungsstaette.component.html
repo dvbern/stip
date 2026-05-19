@@ -1,6 +1,12 @@
 <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tw:mt-6 nav-style-tabs" [disablePagination]="true">
   @for (tab of tabsSig(); track tab.name) {
-    <a mat-tab-link [routerLink]="[tab.name]" [active]="tab.active" class="btn btn-nav" [class.active]="tab.active">
+    <a
+      mat-tab-link
+      [routerLink]="[tab.name]"
+      [active]="tab.active"
+      class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border!"
+      [class.active]="tab.active"
+    >
       {{ 'sachbearbeitung-app.feature.administration.ausbildungsstaette.tabs.' + tab.name | transloco }}
     </a>
   }

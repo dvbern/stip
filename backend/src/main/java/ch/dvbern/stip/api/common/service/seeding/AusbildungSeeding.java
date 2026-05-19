@@ -117,6 +117,10 @@ public class AusbildungSeeding extends Seeder {
                         .setBildungskategorie(Bildungskategorie.valueOf(rowMap.get("bildungskategorie")))
                         .setBildungsrichtung(Bildungsrichtung.valueOf(rowMap.get("bildungsrichtung")))
                         .setBfsKategorie(Integer.valueOf(rowMap.get("bfsKategorie")))
+                        .setBfsStudienStufe(
+                            rowMap.get("bfsStudienStufe").isEmpty() ? null
+                                : Integer.valueOf(rowMap.get("bfsStudienStufe"))
+                        )
                         .setBerufsbefaehigenderAbschluss(
                             Boolean.parseBoolean(rowMap.get("berufsbefaehigenderAbschluss"))
                         )

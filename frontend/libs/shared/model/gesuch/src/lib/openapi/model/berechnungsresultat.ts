@@ -21,6 +21,14 @@ export interface Berechnungsresultat {
      */
     berechnungVorKuerzungUndTeilung: number;
     /**
+     * Die Summe der berechneten Stpendiumansprüche für das Gesuch vor Kürzungen abzüglich des Darlehens (wird nur für Vergleiche und debugging verwendet)
+     */
+    ungekuerztStipendien?: number;
+    /**
+     * Die Summe des berechneten Darlehens für das Gesuch vor Kürzungen (wird nur für Vergleiche und debugging verwendet)
+     */
+    ungekuerztDarlehen?: number;
+    /**
      * Die Summe nach der Kürzung der verspäteten Eingabe
      */
     totalNachKuerzungNachEinreichefrist?: number;
@@ -37,6 +45,10 @@ export interface Berechnungsresultat {
      */
     anzahlMonateUnterbruch?: number;
     /**
+     * berechneter stipendienbetrag vor der Teilung in darlehen und stipendium
+     */
+    berechnungVorTeilungDarlehen: number;
+    /**
      * Berechneter Stpendiumsanspruch für das Gesuch
      */
     berechnungStipendium: number;
@@ -48,5 +60,9 @@ export interface Berechnungsresultat {
      * Resultate der Berechnung für die Tranchen des Gesuchs
      */
     tranchenBerechnungsresultate: Array<TranchenBerechnungsresultat>;
+    /**
+     * Die anzahl monate die das Gesuch 36 Monate in Tertiaerausbildung uberschreitet
+     */
+    monateMitDarlehen: number;
 }
 

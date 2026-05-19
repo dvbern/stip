@@ -5,7 +5,6 @@ import {
   computed,
   effect,
   inject,
-  signal,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -28,6 +27,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, map } from 'rxjs';
 
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { SachbearbeitungAppDialogEuEftaLaenderEditComponent } from '@dv/sachbearbeitung-app/dialog/eu-efta-laender-edit';
 import { LandStore } from '@dv/shared/data-access/land';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -50,17 +50,16 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
     MatSelectModule,
     MatFormFieldModule,
     MatInputModule,
-    SharedUiMaxLengthDirective,
-    MatInputModule,
     MatCheckboxModule,
-    SharedUiClearButtonComponent,
     MatButtonModule,
     MatSortModule,
     MatTooltipModule,
     MatTableModule,
     MatIconModule,
-    TypeSafeMatCellDefDirective,
     MatPaginator,
+    SharedUiMaxLengthDirective,
+    SharedUiClearButtonComponent,
+    TypeSafeMatCellDefDirective,
   ],
   providers: [
     provideMaterialDefaultOptions({
@@ -78,8 +77,6 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
   private destroyRef = inject(DestroyRef);
   private notificationStore = inject(GlobalNotificationStore);
   paginatorSig = viewChild(MatPaginator);
-
-  filterChangedSig = signal<string | null>(null);
 
   laenderStore = inject(LandStore);
   countryFilter = new FormControl<string | null>(null);
@@ -126,7 +123,6 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
     const datasource = new MatTableDataSource(allCountries);
 
     this.configureDatasource(datasource);
-    this.applyFilterToDataSource(datasource);
 
     return datasource;
   });
@@ -169,20 +165,24 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
             land,
             landId: land.id,
             onSuccess: () => {
-              this.notificationStore.createSuccessNotification({
-                messageKey:
-                  'sachbearbeitung-app.admin.euEftaLaender.edit.success',
-              });
+              this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                {
+                  messageKey:
+                    'sachbearbeitung-app.admin.euEftaLaender.edit.success',
+                },
+              );
             },
           });
         } else {
           this.laenderStore.createLand$({
             land,
             onSuccess: () => {
-              this.notificationStore.createSuccessNotification({
-                messageKey:
-                  'sachbearbeitung-app.admin.euEftaLaender.create.success',
-              });
+              this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                {
+                  messageKey:
+                    'sachbearbeitung-app.admin.euEftaLaender.create.success',
+                },
+              );
             },
           });
         }
@@ -261,12 +261,5 @@ export class SachbearbeitungAppFeatureAdministrationEuEftaLaenderComponent {
       return true;
     }
     return dataValue === filterValue;
-  }
-
-  private applyFilterToDataSource(datasource: MatTableDataSource<Land>): void {
-    const filter = this.filterChangedSig();
-    if (filter) {
-      datasource.filter = filter.trim().toLowerCase();
-    }
   }
 }

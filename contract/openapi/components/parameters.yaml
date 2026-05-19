@@ -19,6 +19,13 @@ fallId:
   description: Die ID vom Fall
   schema:
     $ref: './common.yaml#/UUID'
+darlehenId:
+  name: darlehenId
+  in: path
+  required: true
+  description: Die ID vom Darlehen
+  schema:
+    $ref: './common.yaml#/UUID'
 fallNummer:
   in: query
   name: fallNummer

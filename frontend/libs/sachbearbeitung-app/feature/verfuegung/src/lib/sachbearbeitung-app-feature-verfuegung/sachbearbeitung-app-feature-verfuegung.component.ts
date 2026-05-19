@@ -16,6 +16,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { format } from 'date-fns/format';
 
 import {
   VERFUEGUNG_OPTIONS,
@@ -100,36 +101,37 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
 
   berechnungenSig = computed(() => {
     const gesuchId = this.gesuchIdSig();
-    const trancheId = this.trancheIdSig();
     const trancheTyp = this.trancheTypSig();
-    const berechnungenOptions: VerfuegungOption[] = [];
 
     const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
-    berechnung.berechnungsresultate.forEach((berechnungen, berechnungIndex) => {
-      berechnungen.forEach((berechnung) => {
-        berechnungenOptions.push(
-          createBerechnungOption(berechnungIndex, berechnung.type),
-        );
-      });
-    });
 
-    return berechnungenOptions.map((option) => ({
-      ...option,
-      active: this.route.isActive(option.route, {
-        paths: 'subset',
-        queryParams: 'subset',
-        fragment: 'ignored',
-        matrixParams: 'ignored',
-      }),
-      fullRoute: [
-        '/gesuch',
-        'verfuegung',
-        gesuchId,
-        trancheTyp,
+    return Object.entries(berechnung.berechnungsresultate).map(
+      ([trancheId, berechnungen]) => ({
         trancheId,
-        ...option.route.split('/'),
-      ],
-    }));
+        options: berechnungen.map((b, index) => {
+          const startDate = format(b.gueltigAb, 'dd.MM.yyyy');
+          const endDate = format(b.gueltigBis, 'dd.MM.yyyy');
+          const option = createBerechnungOption(index, startDate, endDate);
+          return {
+            ...option,
+            active: this.route.isActive(option.route, {
+              paths: 'subset',
+              queryParams: 'subset',
+              fragment: 'ignored',
+              matrixParams: 'ignored',
+            }),
+            fullRoute: [
+              '/gesuch',
+              'verfuegung',
+              gesuchId,
+              trancheTyp,
+              trancheId,
+              ...option.route.split('/'),
+            ],
+          };
+        }),
+      }),
+    );
   });
 
   ngAfterViewInit(): void {

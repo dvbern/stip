@@ -19,16 +19,19 @@ package ch.dvbern.stip.api.dokument.service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectsResponse;
 import software.amazon.awssdk.services.s3.model.ObjectIdentifier;
 
 @ApplicationScoped
+@Slf4j
 @UnlessBuildProfile("test")
 public class DokumentDeleteService {
     public void executeDeleteDokumentFromS3(
@@ -44,10 +47,20 @@ public class DokumentDeleteService {
         final String bucketName,
         final List<String> objectIds
     ) {
-        Uni.createFrom()
-            .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
-            .await()
-            .indefinitely();
+        try {
+            Uni.createFrom()
+                .item(deleteDokumentsFromS3Blocking(s3, bucketName, objectIds))
+                .onFailure()
+                .invoke(
+                    throwable -> LOG
+                        .error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), throwable)
+                )
+                .await()
+                .indefinitely()
+                .get();
+        } catch (InterruptedException | ExecutionException e) {
+            LOG.error(String.format("Failed to deleteDokumentsFromS3Blocking: %s", objectIds), e);
+        }
     }
 
     private CompletableFuture<DeleteObjectsResponse> deleteDokumentsFromS3Blocking(

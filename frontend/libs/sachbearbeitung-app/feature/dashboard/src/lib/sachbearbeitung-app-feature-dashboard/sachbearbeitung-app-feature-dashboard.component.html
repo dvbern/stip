@@ -1,0 +1,26 @@
+<ng-container *dvTranslocoSb="let t">
+  <!-- <mat-slide-toggle class=""> Slide me! </mat-slide-toggle> -->
+  <nav class="tw:mt-6" mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true">
+    @for (tab of tabsSig(); track tab.key) {
+      <a
+        mat-tab-link
+        class="tw:dv-nav-button tw:rounded-b-none tw:border! tw:flex-none! tw:border-gray-300! tw:bg-white! tw:border-b-0!"
+        [routerLink]="tab.route"
+        [queryParams]="tab.queryParams"
+        [queryParamsHandling]="tab.queryParamsHandling"
+        [ngClass]="tab.class"
+        [active]="tab.active"
+        [class.active]="tab.active"
+      >
+        {{ t(`sachbearbeitung-app.dashboard.tabs.${tab.key}`) }}
+      </a>
+    }
+  </nav>
+
+  <mat-tab-nav-panel
+    class="tw:dv-pass-height-shrink tw:shadow-lg tw:border tw:border-gray-300 tw:mb-6 tw:rounded-b-xl"
+    #tabPanel
+  >
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
+</ng-container>

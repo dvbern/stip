@@ -1,11 +1,14 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   input,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
@@ -13,24 +16,23 @@ import { Store } from '@ngrx/store';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
-import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
 
 @Component({
+  selector: 'dv-shared-feature-verfuegung-zusammenfassung',
   imports: [
+    CommonModule,
     MatCardModule,
     TranslocoDirective,
     RouterLink,
-    SharedUiIconChipComponent,
     SharedUiFormatChfPipe,
     SharedUiRdIsPendingWithoutCachePipe,
-    SharedUiDownloadButtonDirective,
     SharedUiLoadingComponent,
     SharedUiInfoDialogDirective,
+    MatTooltipModule,
   ],
   templateUrl: './shared-feature-verfuegung-zusammenfassung.component.html',
   styleUrl: './shared-feature-verfuegung-zusammenfassung.component.scss',
@@ -45,6 +47,25 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
   // todo-review: @scph wir haben noch eine vermischung von namen berechnungId und verfuegungId in den routes
   // eslint-disable-next-line @angular-eslint/no-input-rename
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
+
+  zusammenfassungViewSig = computed(() => {
+    const zusammenfassung =
+      this.berechnungStore.berechnungZusammenfassungViewSig();
+
+    const berechnungGroup = Object.entries(
+      zusammenfassung.berechnungsresultate,
+    ).map(([trancheId, berechnungen]) => {
+      return {
+        trancheId,
+        berechnungen,
+      };
+    });
+
+    return {
+      ...zusammenfassung,
+      berechnungsresultateGroup: berechnungGroup,
+    };
+  });
 
   constructor() {
     effect(() => {
