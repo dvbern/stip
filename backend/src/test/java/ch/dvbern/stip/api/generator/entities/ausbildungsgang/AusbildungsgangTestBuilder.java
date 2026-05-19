@@ -71,6 +71,7 @@ public final class AusbildungsgangTestBuilder extends AbstractTestBuilder<Ausbil
             .bildungskategorie(Bildungskategorie.TERTIAERSTUFE_A)
             .bildungsrichtung(Bildungsrichtung.HOCHSCHULE)
             .bfsKategorie(9)
+            .bfsStudienStufe(3)
             .berufsbefaehigenderAbschluss(true)
             .ferien(FerienTyp.SCHULE)
             .askForBerufsmaturitaet(false)
