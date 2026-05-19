@@ -34,9 +34,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @BurAndCTNummerTypAlphaNumericConstraint
 @OnlyNummerTypOfOhneNummerCanBeNullableConstraint
@@ -45,6 +49,9 @@ import org.hibernate.envers.Audited;
 @Table(name = "ausbildungsstaette", indexes = @Index(name = "IX_ausbildungsstaette_mandant", columnList = "mandant"))
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ausbildungsstaette extends AbstractMandantEntity {
     @NotNull
     @Size(max = Constants.DB_DEFAULT_STRING_MEDIUM_LENGTH)
