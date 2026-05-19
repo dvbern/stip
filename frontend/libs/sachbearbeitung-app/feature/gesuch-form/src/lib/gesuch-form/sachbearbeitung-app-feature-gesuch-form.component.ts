@@ -146,6 +146,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const stepsFlow = this.stepsViewSig().stepsFlow;
     return this.stepManager.getStepProgress(stepsFlow, currentStep);
   });
+
   currentStepSig = computed(() => {
     const currentStep = this.stepSig();
     const steps = this.stepsSig();

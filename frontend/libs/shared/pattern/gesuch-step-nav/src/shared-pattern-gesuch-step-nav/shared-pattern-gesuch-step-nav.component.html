@@ -16,14 +16,16 @@
     }
     <div class="tw:relative tw:flex tw:mr-4 align-middle">
       <i class="material-symbols-rounded">{{ step.iconSymbolName }}</i>
-      <i
-        class="validator-indicator material-symbols-rounded tw:absolute"
-        [class.tw:text-dv-yellow]="step.status === 'WARNING'"
-        [class.tw:text-dv-green]="step.status === 'VALID'"
-        [class.tw:text-dv-red]="step.status === 'INVALID'"
-      >
-        {{ step.statusIconSymbolName }}
-      </i>
+      @if (step.status) {
+        <i
+          class="validator-indicator material-symbols-rounded tw:absolute"
+          [class.tw:text-dv-yellow]="step.status === 'WARNING'"
+          [class.tw:text-dv-green]="step.status === 'VALID'"
+          [class.tw:text-dv-red]="step.status === 'INVALID'"
+        >
+          {{ step.statusIconSymbolName }}
+        </i>
+      }
     </div>
     <span class="tw:text-start">
       {{ step.translationKey | transloco }}

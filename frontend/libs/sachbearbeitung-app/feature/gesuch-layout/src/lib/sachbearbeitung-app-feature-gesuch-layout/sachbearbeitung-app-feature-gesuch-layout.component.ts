@@ -183,7 +183,6 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const isIntitial = this.isInitialRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
-    // todo-review: @scph oder lieber mit trancheSetting und ngrx store?
     const trancheTyp = isIntitial
       ? 'initial'
       : isAenderung

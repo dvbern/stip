@@ -3,7 +3,7 @@ import { Route } from '@angular/router';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 
 export const sachbearbeitungAppFeatureGesuchLayoutRoutes: Route[] = [
-  // todo-review: rename to berechnung?
+  // todo: rename to berechnung => im UX Sammeltask erledigen
   {
     path: 'verfuegung',
     title: 'sachbearbeitung-app.verfuegung.title',

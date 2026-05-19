@@ -42,7 +42,14 @@
             <div class="tw:flex tw:flex-col tw:gap-2">
               @for (tranche of tranchenSig(); track $index) {
                 <a
-                  [routerLink]="['/', 'gesuch', gesuchIdSig(), initialRoute ? 'initial' : 'tranche', tranche.id]"
+                  [routerLink]="[
+                    '/',
+                    'gesuch',
+                    stepSig()?.route,
+                    gesuchIdSig(),
+                    initialRoute ? 'initial' : 'tranche',
+                    tranche.id,
+                  ]"
                   [queryParams]="{ revision: tranche.revision }"
                   [queryParamsHandling]="'merge'"
                   class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
