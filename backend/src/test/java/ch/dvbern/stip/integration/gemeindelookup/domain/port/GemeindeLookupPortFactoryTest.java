@@ -15,16 +15,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.steuerdaten.domain.port;
-
-import java.util.Optional;
+package ch.dvbern.stip.integration.gemeindelookup.domain.port;
 
 import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.api.config.type.TenantPortConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.integration.steuerdaten.adapter.dummy.service.DummySteuerdatenAdapter;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.qualifier.SteuerdatenAdapterQualifier;
+import ch.dvbern.stip.integration.gemeindelookup.adapter.dummy.DummyGemeindeLookupAdapter;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifier;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
@@ -36,32 +34,32 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.notNullValue;
 
-@QuarkusComponentTest({ SteuerdatenAdapterQualifier.class, DummySteuerdatenAdapter.class })
-class SteuerdatenPortFactoryTest {
+@QuarkusComponentTest({ GemeindeLookupQualifier.class, DummyGemeindeLookupAdapter.class })
+public class GemeindeLookupPortFactoryTest {
 
     @Inject
-    SteuerdatenPortFactory steuerdatenPortFactory;
+    GemeindeLookupPortFactory gemeindeLookupPortFactory;
 
     @InjectMock
     TenantService tenantService;
 
     @BeforeEach
-    void setUp() {
+    void setup() {
         final var portConfig = Mockito.mock(TenantPortConfig.class);
-        final var steuerdatenPortConfig = Mockito.mock(TenantPortConfig.Steuerdaten.class);
+        final var gemeindeLookupPortConfig = Mockito.mock(TenantPortConfig.GemeindeLookup.class);
         final var tenantConfig = Mockito.mock(TenantConfig.class);
 
-        Mockito.when(steuerdatenPortConfig.adapterType()).thenReturn(Optional.of(SteuerdatenAdapterType.DUMMY));
-        Mockito.when(portConfig.steuerdaten()).thenReturn(steuerdatenPortConfig);
+        Mockito.when(gemeindeLookupPortConfig.adapterType()).thenReturn(GemeindeLookupAdapterType.DUMMY);
+        Mockito.when(portConfig.gemeindeLookup()).thenReturn(gemeindeLookupPortConfig);
         Mockito.when(tenantConfig.port()).thenReturn(portConfig);
         Mockito.when(tenantService.getConfigForCurrentTenant()).thenReturn(tenantConfig);
     }
 
     @Test
     void getSteuerdatenPort_returnsPortForConfiguredAdapterType() {
-        final var result = steuerdatenPortFactory.getSteuerdatenPort();
+        final var port = gemeindeLookupPortFactory.getGemeindeLookupPort();
 
-        assertThat(result, notNullValue());
-        assertThat(result, instanceOf(DummySteuerdatenAdapter.class));
+        assertThat(port, notNullValue());
+        assertThat(port, instanceOf(DummyGemeindeLookupAdapter.class));
     }
 }

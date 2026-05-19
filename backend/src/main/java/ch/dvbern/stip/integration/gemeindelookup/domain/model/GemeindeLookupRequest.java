@@ -33,11 +33,11 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
 ) {
 
     private static final String GESUCH_ID_KEY = "gesuchId";
-    private static final String HAUSNUMMER_KEY = "hausnummer";
+    private static final String TENANT_IDENTIFIER_KEY = "tenantIdentifier";
     private static final String STRASSE_KEY = "strasse";
+    private static final String HAUSNUMMER_KEY = "hausnummer";
     private static final String PLZ_KEY = "plz";
     private static final String ORT_KEY = "ort";
-    private static final String TENANT_IDENTIFIER_KEY = "tenantIdentifier";
 
     public GemeindeLookupRequest(final JobDataMap map) {
         this(
@@ -53,13 +53,13 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
     private static UUID parseGesuchId(final JobDataMap map) {
         if (
             !(map.containsKey(GESUCH_ID_KEY)
-            && map.containsKey(HAUSNUMMER_KEY)
+            && map.containsKey(TENANT_IDENTIFIER_KEY))
             && map.containsKey(STRASSE_KEY)
+            && map.containsKey(HAUSNUMMER_KEY)
             && map.containsKey(PLZ_KEY)
             && map.containsKey(ORT_KEY)
-            && map.containsKey(TENANT_IDENTIFIER_KEY))
         ) {
-            throw new BadRequestException("SwisstopoAddrFetchJobData: missing some required keys in the map");
+            throw new BadRequestException("GemeindeLookupRequest: missing some required keys in the map");
         }
 
         return UUID.fromString((String) map.get(GESUCH_ID_KEY));
@@ -69,8 +69,8 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
         if (
             Objects.isNull(gesuchId)
             || Objects.isNull(tenantIdentifier)
-            || Objects.isNull(hausnummer)
             || Objects.isNull(strasse)
+            || Objects.isNull(hausnummer)
             || Objects.isNull(plz)
             || Objects.isNull(ort)
         ) {
@@ -79,8 +79,8 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
 
         final Map<String, Object> ret = new HashMap<>();
         ret.put(GESUCH_ID_KEY, this.gesuchId.toString());
-        ret.put(HAUSNUMMER_KEY, this.hausnummer);
         ret.put(STRASSE_KEY, this.strasse);
+        ret.put(HAUSNUMMER_KEY, this.hausnummer);
         ret.put(PLZ_KEY, this.plz);
         ret.put(ORT_KEY, this.ort);
         ret.put(TENANT_IDENTIFIER_KEY, this.tenantIdentifier.getIdentifier());

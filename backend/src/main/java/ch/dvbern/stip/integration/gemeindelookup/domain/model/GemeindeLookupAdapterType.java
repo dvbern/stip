@@ -18,5 +18,6 @@
 package ch.dvbern.stip.integration.gemeindelookup.domain.model;
 
 public enum GemeindeLookupAdapterType {
+    DUMMY,
     SWISSTOPO
 }

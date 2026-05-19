@@ -34,7 +34,7 @@ import lombok.RequiredArgsConstructor;
 public class GemeindeLookupPortFactory {
     @Any
     @Inject
-    Instance<GemeindeLookupPort> swisstopoPorts;
+    Instance<GemeindeLookupPort> gemeindeLookupPorts;
 
     private final TenantService tenantService;
     private final StipConfig config;
@@ -42,6 +42,6 @@ public class GemeindeLookupPortFactory {
     public GemeindeLookupPort getGemeindeLookupPort() {
         final var adapterType =
             config.tenant().get(tenantService.getCurrentTenantIdentifier()).port().gemeindeLookup().adapterType();
-        return swisstopoPorts.select(new GemeindeLookupQualifierLiteral(adapterType)).get();
+        return gemeindeLookupPorts.select(new GemeindeLookupQualifierLiteral(adapterType)).get();
     }
 }
