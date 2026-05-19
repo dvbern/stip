@@ -184,12 +184,4 @@ export class SharedPatternGesuchStepNavComponent {
       }
     });
   }
-
-  openGroup(group: StepGroup): void {
-    this.openedGroupsSig.update((rec) => ({ ...rec, [group]: true }));
-  }
-
-  closeGroup(group: StepGroup): void {
-    this.openedGroupsSig.update((rec) => ({ ...rec, [group]: false }));
-  }
 }
