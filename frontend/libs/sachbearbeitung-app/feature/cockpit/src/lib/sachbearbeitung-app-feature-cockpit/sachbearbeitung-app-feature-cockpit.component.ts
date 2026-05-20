@@ -274,16 +274,15 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
   isDarlehenModeSig = computed(() => this.filterTab() === 'DARLEHEN');
   isStatusFilterableSig = computed(() => {
-    const filterTab = this.filterTab();
-    return (
-      !isDefined(filterTab) ||
-      !(
-        [
-          'DRUCKBAR_DATENSCHUTZBRIEFE',
-          'DRUCKBAR_VERFUEGUNGEN',
-        ] as DashboardQuery[]
-      ).includes(filterTab)
-    );
+    const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
+    return !(
+      [
+        'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
+        'JURISTISCHE_ABKLAERUNG',
+        'DRUCKBAR_DATENSCHUTZBRIEFE',
+        'DRUCKBAR_VERFUEGUNGEN',
+      ] as DashboardQuery[]
+    ).includes(filterTab);
   });
   typSig = computed((): GesuchTrancheTyp => {
     const filterTab = this.filterTab();

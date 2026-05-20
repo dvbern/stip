@@ -9,7 +9,7 @@
         }
       </h1>
 
-      <div class="tw:flex tw:gap-12" [formGroup]="togglesGroup">
+      <div class="tw:flex tw:gap-12 tw:min-h-8" [formGroup]="togglesGroup">
         @if (showZugewiesenToggleSig()) {
           <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.zugewiesen">{{
             t('sachbearbeitung-app.cockpit.toggle.meine')
