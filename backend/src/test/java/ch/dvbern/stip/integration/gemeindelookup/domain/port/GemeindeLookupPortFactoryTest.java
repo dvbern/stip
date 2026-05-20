@@ -44,7 +44,7 @@ public class GemeindeLookupPortFactoryTest {
     TenantService tenantService;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         final var portConfig = Mockito.mock(TenantPortConfig.class);
         final var gemeindeLookupPortConfig = Mockito.mock(TenantPortConfig.GemeindeLookup.class);
         final var tenantConfig = Mockito.mock(TenantConfig.class);
