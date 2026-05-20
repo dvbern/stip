@@ -316,7 +316,18 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
                         Q_GESUCH.remainderPaymentExecuted.not()
                     )
             )
-            .stream()
-            .toList();
+            .fetch();
+    }
+
+    public Stream<Gesuch> getAllWartenAufUnterschriftenblattByGesuchsperiodeId(final UUID gesuchsperiodeId) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_GESUCH)
+            .where(
+                Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiodeId)
+                    .and(
+                        Q_GESUCH.gesuchStatus.eq(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
+                    )
+            )
+            .stream();
     }
 }

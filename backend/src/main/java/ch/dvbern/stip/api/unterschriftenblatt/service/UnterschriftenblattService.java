@@ -26,7 +26,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -35,10 +34,9 @@ import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
-import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
-import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenTabBerechnungsService;
 import ch.dvbern.stip.api.unterschriftenblatt.entity.Unterschriftenblatt;
 import ch.dvbern.stip.api.unterschriftenblatt.repo.UnterschriftenblattRepository;
@@ -62,9 +60,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @RequiredArgsConstructor
 public class UnterschriftenblattService {
     public static final String UNTERSCHRIFTENBLATT_DOKUMENT_PATH = "unterschriftenblatt/";
-    public static final int DAYS_TO_WAIT_FOR_UNTERSCHRIFTENBLATT = 7;
 
     private final GesuchRepository gesuchRepository;
+    private final GesuchsperiodenService gesuchsperiodenService;
     private final UnterschriftenblattRepository unterschriftenblattRepository;
     private final DokumentRepository dokumentRepository;
     private final Antivirus antivirus;
@@ -73,7 +71,6 @@ public class UnterschriftenblattService {
     private final SteuerdatenTabBerechnungsService steuerdatenTabBerechnungsService;
     private final UnterschriftenblattMapper unterschriftenblattMapper;
     private final GesuchStatusService gesuchStatusService;
-    private final GesuchHistoryRepository gesuchHistoryRepository;
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentDeleteService dokumentDeleteService;
@@ -153,18 +150,19 @@ public class UnterschriftenblattService {
 
     @Transactional
     public void checkForUnterschriftenblaetterOnAllGesuche() {
-        final var gesuche = gesuchRepository.getAllWartenAufUnterschriftenblatt();
+        final var gesuchsperioden = gesuchsperiodenService.getAllGesuchsperioden();
 
-        // This is the list of historic Gesuche, select the actual ones
-        final var changedSevenDaysAgo = new HashSet<>(
-            gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(
-                gesuche.stream().map(AbstractEntity::getId).toList(),
-                Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-                LocalDateTime.now().minusDays(DAYS_TO_WAIT_FOR_UNTERSCHRIFTENBLATT)
-            ).map(AbstractEntity::getId).toList()
-        );
+        final var toUpdate = gesuchsperioden
+            .flatMap(
+                gesuchsperiode -> gesuchRepository
+                    .getAllWartenAufUnterschriftenblattByGesuchsperiodeId(gesuchsperiode.getId())
+                    .filter(
+                        gesuch -> gesuch.getGesuchStatusAenderungDatum()
+                            .isBefore(LocalDateTime.now().minusDays(gesuchsperiode.getFristUploadUnterschriftenblatt()))
+                    )
+            )
+            .toList();
 
-        final var toUpdate = gesuche.stream().filter(gesuch -> changedSevenDaysAgo.contains(gesuch.getId())).toList();
         if (!toUpdate.isEmpty()) {
             gesuchStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,

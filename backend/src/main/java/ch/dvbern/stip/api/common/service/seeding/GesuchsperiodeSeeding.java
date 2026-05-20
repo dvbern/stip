@@ -208,6 +208,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
             .setFristNachreichenDokumente(getFristNachreichenDokumente(jahr.getTechnischesJahr(), season))
+            .setFristUploadUnterschriftenblatt(1)
             .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(stichtagVolljaehrigkeitMedizinischeGrundversorgung);
     }
 

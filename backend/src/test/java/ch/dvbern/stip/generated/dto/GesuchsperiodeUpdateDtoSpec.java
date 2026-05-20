@@ -80,6 +80,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_MONAT,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_ZWEITER_AUSZAHLUNGSTERMIN_TAG,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE,
+  GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT,
   GesuchsperiodeUpdateDtoSpec.JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG
 })
 @JsonTypeName("GesuchsperiodeUpdate")
@@ -237,6 +238,9 @@ public class GesuchsperiodeUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_FRIST_NACHREICHEN_DOKUMENTE = "fristNachreichenDokumente";
   private Integer fristNachreichenDokumente;
+
+  public static final String JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT = "fristUploadUnterschriftenblatt";
+  private Integer fristUploadUnterschriftenblatt;
 
   public static final String JSON_PROPERTY_STICHTAG_VOLLJAEHRIGKEIT_MEDIZINISCHE_GRUNDVERSORGUNG = "stichtagVolljaehrigkeitMedizinischeGrundversorgung";
   private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
@@ -1570,6 +1574,32 @@ public class GesuchsperiodeUpdateDtoSpec {
   }
 
 
+  public GesuchsperiodeUpdateDtoSpec fristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+    
+    this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
+    return this;
+  }
+
+   /**
+   * Get fristUploadUnterschriftenblatt
+   * @return fristUploadUnterschriftenblatt
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getFristUploadUnterschriftenblatt() {
+    return fristUploadUnterschriftenblatt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FRIST_UPLOAD_UNTERSCHRIFTENBLATT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+    this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
+  }
+
+
   public GesuchsperiodeUpdateDtoSpec stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
     
     this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
@@ -1655,12 +1685,13 @@ public class GesuchsperiodeUpdateDtoSpec {
         Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeUpdate.zweiterAuszahlungsterminMonat) &&
         Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeUpdate.zweiterAuszahlungsterminTag) &&
         Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeUpdate.fristNachreichenDokumente) &&
+        Objects.equals(this.fristUploadUnterschriftenblatt, gesuchsperiodeUpdate.fristUploadUnterschriftenblatt) &&
         Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeUpdate.stichtagVolljaehrigkeitMedizinischeGrundversorgung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, einreichfrist, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, fristUploadUnterschriftenblatt, stichtagVolljaehrigkeitMedizinischeGrundversorgung);
   }
 
   @Override
@@ -1718,6 +1749,7 @@ public class GesuchsperiodeUpdateDtoSpec {
     sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
     sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
+    sb.append("    fristUploadUnterschriftenblatt: ").append(toIndentedString(fristUploadUnterschriftenblatt)).append("\n");
     sb.append("    stichtagVolljaehrigkeitMedizinischeGrundversorgung: ").append(toIndentedString(stichtagVolljaehrigkeitMedizinischeGrundversorgung)).append("\n");
     sb.append("}");
     return sb.toString();

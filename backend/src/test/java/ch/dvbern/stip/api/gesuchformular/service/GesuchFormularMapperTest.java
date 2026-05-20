@@ -668,11 +668,11 @@ class GesuchFormularMapperTest {
         final var s3 = Mockito.mock(S3AsyncClient.class);
         final var unterschriftenblattService = new UnterschriftenblattService(
             null,
+            null,
             unterschriftenblattRepositoryMock,
             null,
             null,
             Mockito.mock(ConfigService.class), s3,
-            null,
             null,
             null,
             null,

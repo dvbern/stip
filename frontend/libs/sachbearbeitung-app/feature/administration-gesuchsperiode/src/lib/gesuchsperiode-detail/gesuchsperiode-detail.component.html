@@ -220,6 +220,25 @@
             {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
+        <!-- Frist Upload Unterschriftenblätter -->
+        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
+          <mat-label>{{
+            t('sachbearbeitung-app.admin.gesuchsperiode.fristUploadUnterschriftenblatt.label')
+          }}</mat-label>
+          <input
+            formControlName="fristUploadUnterschriftenblatt"
+            data-testid="form-gesuchsperiode-frist-upload-unterschriftenböatt"
+            matInput
+            type="text"
+            [maskito]="maskitoNumber"
+          />
+          <mat-error *dvSharedUiFormMessageError="'required'">
+            {{ t('shared.form.error.required') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <!-- Stichtag Volljaehrigkeit Medizinische-Grundversorgung -->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
           <mat-label>{{
@@ -245,9 +264,6 @@
             {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
-      </div>
-
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <!-- Zweiter Auszahlungstermin Monat-->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
           <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminMonat.label') }}</mat-label>
@@ -267,7 +283,9 @@
             {{ t('shared.form.error.max', { max: maxZweiterAuszahlungsterminMonat }) }}
           </mat-error>
         </mat-form-field>
+      </div>
 
+      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
         <!-- Tag der Auszahlung für zweiten Auszahlungstermin-->
         <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
           <mat-label>{{ t('sachbearbeitung-app.admin.gesuchsperiode.zweiterAuszahlungsterminTag.label') }}</mat-label>

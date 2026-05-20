@@ -91,6 +91,7 @@ public final class GesuchsperiodeTestBuilder extends AbstractTestBuilder<Gesuchs
             .zweiterAuszahlungsterminMonat(6)
             .zweiterAuszahlungsterminTag(1)
             .fristNachreichenDokumente(30)
+            .fristUploadUnterschriftenblatt(1)
             .stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(referenceDate.getYear(), 12, 31))
             .build();
 
@@ -157,6 +158,7 @@ public final class GesuchsperiodeTestBuilder extends AbstractTestBuilder<Gesuchs
             .zweiterAuszahlungsterminMonat(6)
             .zweiterAuszahlungsterminTag(1)
             .fristNachreichenDokumente(30)
+            .fristUploadUnterschriftenblatt(1)
             .stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(referenceDate.getYear(), 12, 31))
             .build();
 
