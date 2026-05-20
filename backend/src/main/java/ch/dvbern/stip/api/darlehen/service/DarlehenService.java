@@ -460,7 +460,9 @@ public class DarlehenService {
         }
 
         darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.distinct()
+        final var results = baseQuery
+            // Fetch is used to prevent using `distinct`
+            .fetch()
             .stream()
             .map(freiwilligDarlehenMapper::toDashboardDto)
             .toList();
