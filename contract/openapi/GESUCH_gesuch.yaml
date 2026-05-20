@@ -1455,10 +1455,15 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - manuell
         - canAenderungEinreichen
       properties:
         offen:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
+        manuell:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
         akzeptiert:
           type: array
           items:

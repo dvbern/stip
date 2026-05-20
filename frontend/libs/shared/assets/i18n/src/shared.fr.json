@@ -70,6 +70,7 @@
   "shared.header.darlehen.complete-states.rejected": "Prêts rejetés",
   "shared.header.darlehen.complete-states.accepted": "Prêts acceptés",
   "shared.header.aenderungen.completed": "Modifications acceptées",
+  "shared.header.aenderungen.manuell": "Modifications manuelles",
   "shared.header.aenderungen.rejected": "Modifications rejetées",
   "shared.header.initialTranche.item": "Demande initiale du {{ date }}",
   "shared.header.initialTranche.multiple": "Tranche initiale {{ index }} du {{ date }}",

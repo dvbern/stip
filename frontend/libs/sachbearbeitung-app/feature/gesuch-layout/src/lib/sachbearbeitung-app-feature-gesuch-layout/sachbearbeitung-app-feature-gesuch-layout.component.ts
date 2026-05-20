@@ -241,11 +241,13 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const aenderungen = this.headerViewSig().aenderungs;
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
 
     const allAenderungen = [
       ...(offeneAenderung ? [offeneAenderung] : []),
       ...(akzeptierteAenderungen ?? []),
+      ...(manuelleAenderungen ?? []),
       ...(abgelehnteAenderungen ?? []),
     ];
 

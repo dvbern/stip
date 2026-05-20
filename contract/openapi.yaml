@@ -10016,10 +10016,15 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - manuell
         - canAenderungEinreichen
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        manuell:
+          type: array
+          items:
+            $ref: '#/components/schemas/GesuchTrancheSlim'
         akzeptiert:
           type: array
           items:

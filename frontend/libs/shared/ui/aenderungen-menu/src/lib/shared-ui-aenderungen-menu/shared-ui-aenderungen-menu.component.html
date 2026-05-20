@@ -1,14 +1,14 @@
 <ng-container *transloco="let t">
   @let gesuchId = gesuchIdSig();
   @let trancheId = trancheIdSig();
-  @let anederungen = aenderungenSig();
+  @let aenderungen = aenderungenSig();
 
   <button
     type="button"
     class="tw:dv-btn-tranche"
     data-testid="sb-gesuch-header-aenderungen-nav-menu"
     [class.tw:dv-historized]="isAenderungRouteSig()"
-    [disabled]="!anederungen"
+    [disabled]="!aenderungen"
     [matMenuTriggerFor]="aenderungenMenu"
   >
     @if (currentAenderungSig(); as currentAenderung) {
@@ -27,7 +27,7 @@
   </button>
   <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
     <div class="tw:flex tw:flex-col tw:gap-2">
-      @if (anederungen?.offen; as offeneAenderung) {
+      @if (aenderungen?.offen; as offeneAenderung) {
         <a
           [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
@@ -48,13 +48,13 @@
           </span>
         </a>
       }
-      @if (anederungen?.akzeptiert?.length) {
+      @if (aenderungen?.akzeptiert?.length) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.completed') }}
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
-        @for (aenderung of anederungen?.akzeptiert; track $index) {
+        @for (aenderung of aenderungen?.akzeptiert; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
@@ -77,13 +77,42 @@
           </a>
         }
       }
-      @if (anederungen?.abgelehnt?.length) {
+      @if (aenderungen?.manuell?.length) {
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+          {{ t('shared.header.aenderungen.manuell') }}
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+        </div>
+        @for (aenderung of aenderungen?.manuell; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [queryParams]="{ revision: aenderung.revision }"
+            [queryParamsHandling]="'merge'"
+            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === aenderung.id"
+          >
+            <span>
+              {{
+                t('shared.header.aenderungen.item', {
+                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
+                  index: $index + 1,
+                })
+              }}
+              -
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+      @if (aenderungen?.abgelehnt?.length) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
           {{ t('shared.header.aenderungen.rejected') }}
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
-        @for (aenderung of anederungen?.abgelehnt; track $index) {
+        @for (aenderung of aenderungen?.abgelehnt; track $index) {
           <a
             [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
