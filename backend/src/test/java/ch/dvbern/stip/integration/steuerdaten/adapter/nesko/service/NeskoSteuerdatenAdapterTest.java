@@ -56,7 +56,6 @@ import static org.mockito.Mockito.when;
 class NeskoSteuerdatenAdapterTest {
 
     private static final String DEFAULT_SVN = "756.1234.5678.97";
-    private static final long DEFAULT_SVN_NUMERIC = 756_1234_5678_97L;
     private static final int DEFAULT_STEUERJAHR = 2023;
     private static final SteuerdatenTyp DEFAULT_STEUERDATEN_TYP = SteuerdatenTyp.FAMILIE;
     private static final String DEFAULT_FALL_NR = "F-001";
@@ -79,14 +78,14 @@ class NeskoSteuerdatenAdapterTest {
     @InjectMock
     GetSteuerdatenResponse getSteuerdatenResponseMock;
 
+    @InjectMock
     private StipendienAuskunftPort portMock;
+
+    @InjectMock
     private TenantAdapterConfig.SteuerdatenAdapter adapterConfigMock;
 
     @BeforeEach
     void setUp() {
-        portMock = mock(StipendienAuskunftPort.class);
-        adapterConfigMock = mock(TenantAdapterConfig.SteuerdatenAdapter.class);
-
         final var adapterConfig = mock(TenantAdapterConfig.class);
         when(adapterConfig.steuerdaten()).thenReturn(Map.of(SteuerdatenAdapterType.NESKO, adapterConfigMock));
 
@@ -147,7 +146,7 @@ class NeskoSteuerdatenAdapterTest {
             ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdaten.class
         );
         verify(portMock).getSteuerdaten(captor.capture());
-        assertThat(captor.getValue().getSozialversicherungsnummer(), is(DEFAULT_SVN_NUMERIC));
+        assertThat(captor.getValue().getSozialversicherungsnummer(), is(Long.valueOf(DEFAULT_SVN.replace(".", ""))));
         assertThat(captor.getValue().getSteuerjahr(), is(DEFAULT_STEUERJAHR));
     }
 
