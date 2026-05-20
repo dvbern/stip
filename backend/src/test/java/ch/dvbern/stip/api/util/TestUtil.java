@@ -59,7 +59,7 @@ import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AdresseSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
-import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -169,7 +169,7 @@ public class TestUtil {
         }
     }
 
-    public static void deleteGesucheOfSb(final GesuchApiSpec gesuchApiSpec) {
+    public static void deleteGesucheOfGs(final GesuchApiSpec gesuchApiSpec) {
         final var gesuche = gesuchApiSpec.getGesucheGs()
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

@@ -91,6 +91,7 @@ module.exports = [
                 'type:feature',
                 'type:data-access',
                 'type:pattern',
+                'type:util-data-access',
                 'type:model',
                 'type:global',
               ],

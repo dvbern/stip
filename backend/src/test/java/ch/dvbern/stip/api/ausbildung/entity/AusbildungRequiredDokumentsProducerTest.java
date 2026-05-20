@@ -18,15 +18,13 @@
 package ch.dvbern.stip.api.ausbildung.entity;
 
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.util.RequiredDocsUtil;
-import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-@QuarkusTest
 class AusbildungRequiredDokumentsProducerTest {
     private AusbildungRequiredDokumentsProducer producer;
     private GesuchFormular formular;

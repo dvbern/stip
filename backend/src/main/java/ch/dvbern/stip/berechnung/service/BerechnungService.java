@@ -244,7 +244,7 @@ public class BerechnungService {
             gesuchStartDate.atStartOfDay().toLocalDate()
         );
 
-        final var monateTertiaerStufeBisGesuchEnde = monateTertiaerstufeLebenslauf + 12;
+        final var monateTertiaerStufeBisGesuchEnde = monateTertiaerstufeBisGesuchStart + 12;
 
         if (monateTertiaerStufeBisGesuchEnde < BerechnungUtil.monthLimitAusbildungTertiaerstufe) {
             return 0;

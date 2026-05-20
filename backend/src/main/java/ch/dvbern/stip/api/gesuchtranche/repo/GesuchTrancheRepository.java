@@ -40,14 +40,6 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
 
     private static final QGesuchTranche gesuchTranche = QGesuchTranche.gesuchTranche;
 
-    public List<GesuchTranche> findForGesuch(final UUID gesuchId) {
-        return new JPAQueryFactory(em)
-            .selectFrom(gesuchTranche)
-            .where(gesuchTranche.gesuch.id.eq(gesuchId))
-            .orderBy(gesuchTranche.gueltigkeit.gueltigAb.asc())
-            .fetch();
-    }
-
     public GesuchTranche requireAenderungById(final UUID aenderungId) {
         final var found = new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)

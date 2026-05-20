@@ -71,7 +71,7 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.AUSBILDUNGSBEITRAEGE_LINK
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_SMALL;
+import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_TINY;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -425,8 +425,8 @@ public class VerfuegungPdfService {
 
         final float[] columnWidths = { 50, 50 };
         final Table calculationTable = PdfUtils.createTable(columnWidths, leftMargin);
-        calculationTable.setMarginTop(SPACING_MEDIUM);
-        calculationTable.setMarginBottom(SPACING_MEDIUM);
+        calculationTable.setMarginTop(SPACING_TINY);
+        calculationTable.setMarginBottom(SPACING_TINY);
         calculationTable.setPaddingRight(SPACING_MEDIUM);
 
         final var actualDuration = DateUtil.wasEingereichtAfterDueDate(verfuegung.getGesuch())
@@ -444,7 +444,7 @@ public class VerfuegungPdfService {
                     "X_MONATE",
                     actualDuration
                 )
-            ).setPadding(1)
+            ).setPaddings(0, 0, 1, 0)
         );
 
         final int anspruch = Objects.requireNonNullElse(relevantBuchhaltung.getStipendium(), 0);
@@ -456,7 +456,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(anspruch)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(0, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -466,7 +466,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.ausbezahlt")
-            ).setPadding(1)
+            ).setPaddings(1, 0, 1, 0)
         );
 
         final int ausbezahlt = isRueckforderung ? 0 : anspruch - relevantBuchhaltung.getSaldo();
@@ -478,7 +478,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(ausbezahlt)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         calculationTable.addCell(
@@ -488,7 +488,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.rueckforderungen")
-            ).setPadding(1)
+            ).setPaddings(1, 0, 1, 0)
         );
 
         final int rueckforderungen =
@@ -501,7 +501,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(rueckforderungen)
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         int total = relevantBuchhaltung.getSaldo();
@@ -524,7 +524,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 totalLabel
-            ).setPadding(1)
+            ).setPaddings(1, 0, 0, 0)
         );
 
         calculationTable.addCell(
@@ -534,7 +534,7 @@ public class VerfuegungPdfService {
                 1,
                 1,
                 PdfUtils.formatNumber(Math.abs(total))
-            ).setPadding(1).setTextAlignment(TextAlignment.RIGHT)
+            ).setPaddings(1, 0, 0, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
         document.add(calculationTable);
@@ -685,7 +685,8 @@ public class VerfuegungPdfService {
             decision = decision.replace("{WOHNSITZKANTON}", wohnsitzKantonName);
         }
 
-        document.add(PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin, decision));
+        PdfUtils.createParagraphsForEachDoubleNewline(pdfFont, FONT_SIZE_BIG, leftMargin, decision)
+            .forEach(document::add);
 
         document.add(
             PdfUtils.createParagraph(pdfFont, FONT_SIZE_BIG, leftMargin)
@@ -700,7 +701,7 @@ public class VerfuegungPdfService {
                 FONT_SIZE_BIG,
                 leftMargin,
                 translator.translate("stip.pdf.verfuegung.glueckWunsch")
-            ).setPaddingTop(SPACING_SMALL)
+            )
         );
     }
 

@@ -411,7 +411,7 @@ class GesuchNotizResourceImplTest {
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
         assertEquals(abklaerungNotizDto.getAntwort(), antwort.getAntwort());
 
-        // Gesuchstatus should be set to BEREIT_FUER_BEARBEITUNG after the answer
+        // Gesuchstatus should be set to DATENSCHUTZBRIEF_DRUCKBEREIT after the answer
         final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -419,7 +419,7 @@ class GesuchNotizResourceImplTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG));
+        assertThat(gesuchWithChanges.getGesuchStatus(), is(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT));
     }
 
     // get all notizen as SB

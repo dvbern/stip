@@ -15,11 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.entities.service;
+package ch.dvbern.stip.api.generator.depricated.entities.service;
 
 import ch.dvbern.stip.api.auszahlung.entity.Auszahlung;
 
 // todo: remove
+@Deprecated
 public final class AuszahlungGenerator {
     public static Auszahlung initAuszahlung() {
         Auszahlung auszahlung = new Auszahlung();

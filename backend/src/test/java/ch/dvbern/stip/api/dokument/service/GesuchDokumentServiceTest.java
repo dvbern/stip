@@ -60,7 +60,7 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import static ch.dvbern.stip.api.generator.entities.GesuchGenerator.initGesuchTranche;
+import static ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator.initGesuchTranche;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;

@@ -6,6 +6,7 @@
   "sourceRoot": "apps/sozialdienst-app/src",
   "tags": ["type:app", "scope:sozialdienst-app"],
   "implicitDependencies": [
+    "libs/sozialdienst-app/assets/i18n",
     "libs/shared/assets/i18n",
     "libs/shared/assets/images",
     "libs/shared/styles/theme",
@@ -61,8 +62,8 @@
           }
         ],
         "styles": [
-          "apps/sozialdienst-app/src/styles.scss",
-          "libs/shared/styles/theme/src/tailwind.css"
+          "libs/shared/styles/theme/src/tailwind.css",
+          "apps/sozialdienst-app/src/styles.scss"
         ],
         "scripts": [],
         "stylePreprocessorOptions": {

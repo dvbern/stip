@@ -1,11 +1,10 @@
 import { Component, HostBinding, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppPatternMainLayoutComponent } from '@dv/sachbearbeitung-app/pattern/main-layout';
-import { SharedDataAccessBenutzerApiEvents } from '@dv/shared/data-access/benutzer';
 import { AblehnungGrundStore } from '@dv/shared/global/ablehnung-grund';
 import { GlobalNotificationsComponent } from '@dv/shared/pattern/global-notification';
+import { StoreUtilService } from '@dv/shared/util-data-access/store-util';
 
 @Component({
   imports: [
@@ -19,11 +18,12 @@ export class AppComponent {
   @HostBinding('class') klass = 'app-container shadow';
 
   constructor() {
-    const store = inject(Store);
-    const router = inject(Router);
     const globalGrundStore = inject(AblehnungGrundStore);
-    store.dispatch(SharedDataAccessBenutzerApiEvents.loadCurrentBenutzer());
-    router.initialNavigation();
-    globalGrundStore.loadAblehnungsGruende$();
+    const router = inject(Router);
+    const storeUtilService = inject(StoreUtilService);
+    storeUtilService.loadAndGetBenutzerData().then(() => {
+      router.initialNavigation();
+      globalGrundStore.loadAblehnungsGruende$();
+    });
   }
 }
