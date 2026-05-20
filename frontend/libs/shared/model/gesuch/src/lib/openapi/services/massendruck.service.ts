@@ -38,6 +38,7 @@ import { Configuration }                                     from '../configurat
 
 export interface MassendruckServiceCreateMassendruckJobForQueryTypeRequestParams {
     getGesucheSBQueryType: GetGesucheSBQueryType;
+    zugewiesen?: boolean;
 }
 
 export interface MassendruckServiceDeleteMassendruckJobRequestParams {
@@ -149,10 +150,15 @@ export class MassendruckService {
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
         }
+        const zugewiesen = requestParameters.zugewiesen;
         let path = `/api/v1/massendruck/${this.configuration.encodeParam({name: "getGesucheSBQueryType", value: getGesucheSBQueryType, in: "path", style: "simple", explode: false, dataType: "GetGesucheSBQueryType", dataFormat: undefined})}/create`;
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          queryParams.append('zugewiesen', zugewiesen.toString());
+        }
         const queryParamsString = queryParams.toString();
         if (queryParamsString) {
             return `${path}?${queryParamsString}`;
@@ -173,6 +179,13 @@ export class MassendruckService {
         const getGesucheSBQueryType = requestParameters.getGesucheSBQueryType;
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling createMassendruckJobForQueryType$.');
+        }
+        const zugewiesen = requestParameters.zugewiesen;
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>zugewiesen, 'zugewiesen');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -224,6 +237,7 @@ export class MassendruckService {
         return this.httpClient.request<MassendruckJob>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

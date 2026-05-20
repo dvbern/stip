@@ -195,6 +195,8 @@ export interface GesuchServiceGetGesuchSBRequestParams {
 
 export interface GesuchServiceGetGesucheSbRequestParams {
     getGesucheSBQueryType: GetGesucheSBQueryType;
+    bearbeitbar?: boolean;
+    zugewiesen?: boolean;
     fallNummer?: string;
     piaNachname?: string;
     piaVorname?: string;
@@ -3348,6 +3350,8 @@ export class GesuchService {
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling getGesucheSb$.');
         }
+        const bearbeitbar = requestParameters.bearbeitbar;
+        const zugewiesen = requestParameters.zugewiesen;
         const fallNummer = requestParameters.fallNummer;
         const piaNachname = requestParameters.piaNachname;
         const piaVorname = requestParameters.piaVorname;
@@ -3374,6 +3378,14 @@ export class GesuchService {
 
         // Query Params
         let queryParams = new URLSearchParams();
+
+        if (bearbeitbar !== undefined && bearbeitbar !== null) {
+          queryParams.append('bearbeitbar', bearbeitbar.toString());
+        }
+
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          queryParams.append('zugewiesen', zugewiesen.toString());
+        }
 
         if (fallNummer !== undefined && fallNummer !== null) {
           queryParams.append('fallNummer', fallNummer.toString());
@@ -3447,6 +3459,8 @@ export class GesuchService {
         if (getGesucheSBQueryType === null || getGesucheSBQueryType === undefined) {
             throw new Error('Required parameter getGesucheSBQueryType was null or undefined when calling getGesucheSb$.');
         }
+        const bearbeitbar = requestParameters.bearbeitbar;
+        const zugewiesen = requestParameters.zugewiesen;
         const fallNummer = requestParameters.fallNummer;
         const piaNachname = requestParameters.piaNachname;
         const piaVorname = requestParameters.piaVorname;
@@ -3471,6 +3485,14 @@ export class GesuchService {
         const sortOrder = requestParameters.sortOrder;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (bearbeitbar !== undefined && bearbeitbar !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>bearbeitbar, 'bearbeitbar');
+        }
+        if (zugewiesen !== undefined && zugewiesen !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>zugewiesen, 'zugewiesen');
+        }
         if (fallNummer !== undefined && fallNummer !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
             <any>fallNummer, 'fallNummer');

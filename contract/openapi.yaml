@@ -183,13 +183,10 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}:
+  /darlehen/dashboard:
     parameters:
-      - name: getFreiwilligDarlehenSbQueryType
-        schema:
-          $ref: '#/components/schemas/GetFreiwilligDarlehenSbQueryType'
-        in: path
-        required: true
+      - $ref: '#/components/parameters/bearbeitbar'
+      - $ref: '#/components/parameters/zugewiesen'
       - $ref: '#/components/parameters/fallNummer'
       - $ref: '#/components/parameters/piaNachname'
       - $ref: '#/components/parameters/piaVorname'
@@ -1783,6 +1780,7 @@ paths:
           $ref: '#/components/schemas/GetGesucheSBQueryType'
         in: path
         required: true
+      - $ref: '#/components/parameters/zugewiesen'
     post:
       tags:
         - Massendruck
@@ -4456,6 +4454,8 @@ paths:
             $ref: '#/components/schemas/GetGesucheSBQueryType'
           in: path
           required: true
+        - $ref: '#/components/parameters/bearbeitbar'
+        - $ref: '#/components/parameters/zugewiesen'
         - $ref: '#/components/parameters/fallNummer'
         - $ref: '#/components/parameters/piaNachname'
         - $ref: '#/components/parameters/piaVorname'
@@ -7183,12 +7183,6 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-    GetFreiwilligDarlehenSbQueryType:
-      enum:
-        - ALLE_DARLEHEN
-        - MEINE_DARLEHEN
-        - ALLE_BEARBEITBAR
-        - MEINE_BEARBEITBAR
     PaginatedSbFreiwilligDarlehenDashboard:
       allOf:
         - $ref: '#/components/schemas/PaginatedResult'
@@ -8819,18 +8813,10 @@ components:
           $ref: '#/components/schemas/ElternTyp'
     GetGesucheSBQueryType:
       enum:
-        - ALLE_GESUCHE
-        - MEINE_GESUCHE
-        - ALLE_PENDENTE_GESUCHE
-        - MEINE_PENDENTE_GESUCHE
-        - ALLE_BEARBEITBAR
-        - MEINE_BEARBEITBAR
-        - ALLE_JURISTISCHE_ABKLAERUNG
-        - ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        - ALLE_DRUCKBAR_VERFUEGUNGEN
-        - MEINE_DRUCKBAR_VERFUEGUNGEN
-        - ALLE_DRUCKBAR_DATENSCHUTZBRIEFE
-        - MEINE_DRUCKBAR_DATENSCHUTZBRIEFE
+        - ALLE
+        - PENDENTE
+        - DRUCKBAR_VERFUEGUNGEN
+        - DRUCKBAR_DATENSCHUTZBRIEFE
       type: string
     VerfuegungDokumentTyp:
       enum:
@@ -12084,6 +12070,16 @@ components:
         text/plain: {}
       description: Die angeforderte Ressource existiert nicht
   parameters:
+    bearbeitbar:
+      in: query
+      name: bearbeitbar
+      schema:
+        type: boolean
+    zugewiesen:
+      in: query
+      name: zugewiesen
+      schema:
+        type: boolean
     fallNummer:
       in: query
       name: fallNummer

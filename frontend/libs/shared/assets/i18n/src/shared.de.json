@@ -349,7 +349,7 @@
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
 
   "shared.gesuch.status.unterbruchAnfrage": "Anfrage Ausbildungsunterbruch",
-  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuelle Änderung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",

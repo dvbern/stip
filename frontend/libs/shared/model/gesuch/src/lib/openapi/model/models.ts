@@ -175,7 +175,6 @@ export * from './gesuchsperiodeWithDatenAllOf';
 export * from './gesuchstatus';
 export * from './getDelegierungSozQueryTypeAdmin';
 export * from './getDelegierungSozQueryTypeMitarbeiter';
-export * from './getFreiwilligDarlehenSbQueryType';
 export * from './getGesucheSBQueryType';
 export * from './getMassendruckJobQueryType';
 export * from './gueltigkeitStatus';

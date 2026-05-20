@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
-import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
@@ -90,9 +89,10 @@ public class DarlehenResourceImpl implements DarlehenResource {
     @Override
     @RolesAllowed(FREIWILLIG_DARLEHEN_READ)
     public PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(
-        GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
         Integer page,
         Integer pageSize,
+        Boolean bearbeitbar,
+        Boolean zugewiesen,
         String fallNummer,
         String piaNachname,
         String piaVorname,
@@ -106,7 +106,8 @@ public class DarlehenResourceImpl implements DarlehenResource {
     ) {
         darlehenAuthorizer.canGetDarlehenSb();
         return darlehenService.getFreiwilligDarlehenDashboardSb(
-            getFreiwilligDarlehenSbQueryType,
+            bearbeitbar,
+            zugewiesen,
             page,
             pageSize,
             fallNummer,

@@ -342,9 +342,11 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public PaginatedSbGesucheDashboardDto getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
-        GesuchTrancheTyp typ,
+        GesuchTrancheTyp trancheTyp,
         Integer page,
         Integer pageSize,
+        Boolean bearbeitbar,
+        Boolean zugewiesen,
         String fallNummer,
         String piaNachname,
         String piaVorname,
@@ -357,8 +359,11 @@ public class GesuchResourceImpl implements GesuchResource {
         SortOrder sortOrder
     ) {
         gesuchAuthorizer.sbCanGetGesuche();
-        return gesuchService.findGesucheSB(
+        return gesuchService.getDashboardSB(
+            trancheTyp,
             getGesucheSBQueryType,
+            bearbeitbar,
+            zugewiesen,
             fallNummer,
             piaNachname,
             piaVorname,
@@ -367,7 +372,6 @@ public class GesuchResourceImpl implements GesuchResource {
             bearbeiter,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
-            typ,
             page,
             pageSize,
             sortColumn,

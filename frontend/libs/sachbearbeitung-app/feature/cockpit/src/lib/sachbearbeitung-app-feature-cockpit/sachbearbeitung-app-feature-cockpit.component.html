@@ -1,12 +1,27 @@
 <ng-container *transloco="let t">
-  <div class="tw:flex tw:justify-between tw:mb-4">
-    <h1 class="tw:text-2xl tw:font-semibold" data-testid="cockpit-title">
-      @if (isDarlehenModeSig()) {
-        {{ t('sachbearbeitung-app.darlehen.title') }}
-      } @else {
-        {{ t('sachbearbeitung-app.cockpit.gesuche') }}
-      }
-    </h1>
+  <div class="tw:flex tw:justify-between tw:items-start">
+    <div class="tw:flex tw:flex-col tw:gap-4">
+      <h1 class="tw:text-2xl tw:font-semibold" data-testid="cockpit-title">
+        @if (isDarlehenModeSig()) {
+          {{ t('sachbearbeitung-app.darlehen.title') }}
+        } @else {
+          {{ t('sachbearbeitung-app.cockpit.gesuche') }}
+        }
+      </h1>
+
+      <div class="tw:flex tw:gap-12" [formGroup]="togglesGroup">
+        @if (showZugewiesenToggleSig()) {
+          <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.zugewiesen">{{
+            t('sachbearbeitung-app.cockpit.toggle.meine')
+          }}</mat-slide-toggle>
+        }
+        @if (showBearbeitbarToggleSig()) {
+          <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.bearbeitbar">{{
+            t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
+          }}</mat-slide-toggle>
+        }
+      </div>
+    </div>
 
     <!-- button verfuegungen oder datenschutzbriefe genereiern -->
     @if (canCreateMassendruckSig()) {
@@ -28,19 +43,6 @@
           }}</span>
         }
       </button>
-    }
-  </div>
-
-  <div class="tw:flex tw:gap-12" [formGroup]="togglesGroup">
-    @if (showZugewiesenToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.zugewiesen">{{
-        t('sachbearbeitung-app.cockpit.toggle.meine')
-      }}</mat-slide-toggle>
-    }
-    @if (showBearbeitbarToggleSig()) {
-      <mat-slide-toggle [hideIcon]="true" [formControl]="togglesGroup.controls.bearbeitbar">{{
-        t('sachbearbeitung-app.cockpit.toggle.bearbeitbar')
-      }}</mat-slide-toggle>
     }
   </div>
 
@@ -228,25 +230,32 @@
             </ng-container>
 
             <ng-container matColumnDef="STATUS">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header class="filtered tw:w-52 tw:whitespace-nowrap">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                mat-sort-header
+                class="filtered tw:w-52 tw:whitespace-nowrap tw:align-top"
+              >
                 {{ t('sachbearbeitung-app.cockpit.table.status') }}
-                <mat-form-field class="tw:w-full" (click)="$event.stopPropagation()">
-                  <mat-select
-                    [aria-label]="t('sachbearbeitung-app.cockpit.table.status')"
-                    formControlName="status"
-                    [placeholder]="t('sachbearbeitung-app.cockpit.no-status-filter')"
-                    panelClass="table-select"
-                  >
-                    <mat-option [value]="null">
-                      {{ t('sachbearbeitung-app.cockpit.no-status-filter') }}
-                    </mat-option>
-                    @for (status of statusValuesSig()?.status; track status) {
-                      <mat-option [value]="status">
-                        {{ t('sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status) }}
+                @if (isStatusFilterableSig()) {
+                  <mat-form-field class="tw:w-full" (click)="$event.stopPropagation()">
+                    <mat-select
+                      [aria-label]="t('sachbearbeitung-app.cockpit.table.status')"
+                      formControlName="status"
+                      [placeholder]="t('sachbearbeitung-app.cockpit.no-status-filter')"
+                      panelClass="table-select"
+                    >
+                      <mat-option [value]="null">
+                        {{ t('sachbearbeitung-app.cockpit.no-status-filter') }}
                       </mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
+                      @for (status of statusValuesSig()?.status; track status) {
+                        <mat-option [value]="status">
+                          {{ t('sachbearbeitung-app.gesuch.status.' + statusValuesSig()?.typ + '.' + status) }}
+                        </mat-option>
+                      }
+                    </mat-select>
+                  </mat-form-field>
+                }
               </th>
               <td
                 mat-cell
@@ -404,10 +413,11 @@
 
   <!-- Darlehen Table -->
   @if (isDarlehenModeSig()) {
-    <div class="tw:dv-table tw:shadow-none">
-      <form class="tw:relative tw:overflow-auto" [formGroup]="filterForm">
-        <div [class.tw:opacity-50]="darlehenStore.dashboardViewSig().loading">
+    <div class="tw:dv-table tw:shadow-none tw:mt-0">
+      <form class="tw:relative tw:flex tw:flex-col tw:max-h-full" [formGroup]="filterForm">
+        <div [class.tw:opacity-50]="darlehenStore.dashboardViewSig().loading" class="tw:overflow-auto tw:shrink">
           <table
+            class="tw:dv-full-width-table"
             [dvSharedUiFocusableList]="items"
             [dataSource]="darlehenDataSourceSig()"
             data-testid="darlehen-table"
@@ -739,16 +749,16 @@
               </td>
             </tr>
           </table>
-
-          <mat-paginator
-            showFirstLastButtons
-            [pageSizeOptions]="pageSizes"
-            [pageSize]="pageSize() ?? defaultPageSize"
-            [pageIndex]="page() ?? 0"
-            [length]="darlehenStore.dashboardViewSig().darlehen?.totalEntries"
-            (page)="paginateList($event)"
-          ></mat-paginator>
         </div>
+
+        <mat-paginator
+          showFirstLastButtons
+          [pageSizeOptions]="pageSizes"
+          [pageSize]="pageSize() ?? defaultPageSize"
+          [pageIndex]="page() ?? 0"
+          [length]="darlehenStore.dashboardViewSig().darlehen?.totalEntries"
+          (page)="paginateList($event)"
+        ></mat-paginator>
         @if (darlehenStore.dashboardViewSig().loading) {
           <dv-shared-ui-loading
             class="tw:absolute tw:-translate-x-1/2 tw:top-1/2 tw:left-1/2"

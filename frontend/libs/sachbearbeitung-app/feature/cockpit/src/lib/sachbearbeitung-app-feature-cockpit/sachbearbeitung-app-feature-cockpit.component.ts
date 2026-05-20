@@ -48,6 +48,7 @@ import {
   DarlehenStatus,
   FreiwilligDarlehenDashboard,
   GesuchServiceGetGesucheSbRequestParams,
+  GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
   SbFreiwilligDarlehenDashboardColumn,
@@ -76,18 +77,17 @@ import {
 import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import {
-  BearbeitbarParam,
+  BooleanParam,
   DashboardFormFields,
   DashboardFormSimpleFields,
   DashboardFormStartEndFields,
   DashboardQuery,
   DashboardTableEntryFields,
   FilterTabParam,
-  ScopeParam,
   gesucheStatusByTyp,
   getControlVisibility,
   getDefaultQueryForRole,
-  getQueryFromParams,
+  getGesucheSBQueryType,
   isDarlehenQuery,
   isGesuchQuery,
 } from '@dv/shared/util/dashboard';
@@ -164,8 +164,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
   darlehenStore = inject(DarlehenStore);
   // Due to lack of space, the following inputs are not suffixed with 'Sig'
   filterTab = input<FilterTabParam | undefined>(undefined);
-  zugewiesen = input<ScopeParam | undefined>(undefined);
-  bearbeitbar = input<BearbeitbarParam | undefined>(undefined);
+  zugewiesen = input<BooleanParam | undefined>(undefined);
+  bearbeitbar = input<BooleanParam | undefined>(undefined);
   fallNummer = input<string | undefined>(undefined);
   piaNachname = input<string | undefined>(undefined);
   piaVorname = input<string | undefined>(undefined);
@@ -211,7 +211,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
     piaNachname: [<string | undefined>undefined],
     piaVorname: [<string | undefined>undefined],
     piaGeburtsdatum: [<Date | undefined>undefined],
-    status: [<Gesuchstatus | undefined>undefined],
+    status: [<Gesuchstatus | GesuchTrancheStatus | undefined>undefined],
     bearbeiter: [<string | undefined>undefined],
   } satisfies Record<DashboardFormSimpleFields, unknown>);
 
@@ -259,8 +259,6 @@ export class SachbearbeitungAppFeatureCockpitComponent
     const bearbeitbar = this.bearbeitbar() ?? this.defaultFilter.bearbeitbar;
     const filterTab = this.filterTab() ?? this.defaultFilter.filterTab;
 
-    const query = getQueryFromParams(zugewiesen, bearbeitbar, filterTab);
-
     const { zugewiesenConfig, bearbeitbarConfig } = getControlVisibility(
       zugewiesen,
       bearbeitbar,
@@ -268,13 +266,25 @@ export class SachbearbeitungAppFeatureCockpitComponent
     );
 
     return {
-      query,
+      query: filterTab,
       zugewiesenConfig,
       bearbeitbarConfig,
     };
   });
 
   isDarlehenModeSig = computed(() => this.filterTab() === 'DARLEHEN');
+  isStatusFilterableSig = computed(() => {
+    const filterTab = this.filterTab();
+    return (
+      !isDefined(filterTab) ||
+      !(
+        [
+          'DRUCKBAR_DATENSCHUTZBRIEFE',
+          'DRUCKBAR_VERFUEGUNGEN',
+        ] as DashboardQuery[]
+      ).includes(filterTab)
+    );
+  });
   typSig = computed((): GesuchTrancheTyp => {
     const filterTab = this.filterTab();
     return filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE';
@@ -450,7 +460,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
       throw new Error(message);
     }
     this.massendruckStore.createMassendruckJobForQueryType$({
-      req: { getGesucheSBQueryType: query },
+      req: { getGesucheSBQueryType: getGesucheSBQueryType(query) },
       onSuccess: () => {
         this.router.navigate(['/massendruck']);
       },
@@ -560,7 +570,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         return;
       }
 
-      const zugewiesen = zugewiesenChanged === true ? 'MEINE' : 'ALLE';
+      const zugewiesen = zugewiesenChanged === true ? 'TRUE' : 'FALSE';
 
       this.router.navigate(['.'], {
         relativeTo: this.route,
@@ -592,7 +602,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // Load Gesuche effect
     effect(() => {
-      const query = this.queryFromInputsSig().query;
+      const { query, bearbeitbarConfig, zugewiesenConfig } =
+        this.queryFromInputsSig();
       const filter = this.filterInputsSig();
       const filterTab = this.filterTab();
       const startEndFilter = this.startEndFilterInputsSig();
@@ -602,8 +613,10 @@ export class SachbearbeitungAppFeatureCockpitComponent
       }
 
       this.gesuchStore.loadGesuche$({
-        getGesucheSBQueryType: query,
+        getGesucheSBQueryType: getGesucheSBQueryType(query),
         typ: filterTab === 'AENDERUNGEN' ? 'AENDERUNG' : 'TRANCHE',
+        bearbeitbar: bearbeitbarConfig.value,
+        zugewiesen: zugewiesenConfig.value,
         ...filter,
         ...startEndFilter,
         ...getSortAndPageInputs(this),
@@ -612,7 +625,8 @@ export class SachbearbeitungAppFeatureCockpitComponent
 
     // Load Darlehen effect
     effect(() => {
-      const query = this.queryFromInputsSig().query;
+      const { query, bearbeitbarConfig, zugewiesenConfig } =
+        this.queryFromInputsSig();
       const filter = this.filterInputsSig();
       const startEndFilter = this.startEndFilterInputsSig();
 
@@ -630,8 +644,9 @@ export class SachbearbeitungAppFeatureCockpitComponent
       }
 
       this.darlehenStore.getDarlehenDashboardSb$({
-        getFreiwilligDarlehenSbQueryType: query,
         ...darlehenFilter,
+        bearbeitbar: bearbeitbarConfig.value,
+        zugewiesen: zugewiesenConfig.value,
         status: parseDarlehenStatus(this.status()),
         ...startEndFilter,
         sortColumn: sortColumn,
@@ -645,11 +660,17 @@ export class SachbearbeitungAppFeatureCockpitComponent
   }
 }
 
-const parseStatus = (status: string | undefined): Gesuchstatus | undefined => {
-  if (!status || !Object.keys(Gesuchstatus).includes(status)) {
+const parseStatus = (
+  status: string | undefined,
+): Gesuchstatus | GesuchTrancheStatus | undefined => {
+  if (
+    !status ||
+    (!Object.keys(Gesuchstatus).includes(status) &&
+      !Object.keys(GesuchTrancheStatus).includes(status))
+  ) {
     return undefined;
   }
-  return status as Gesuchstatus;
+  return status as Gesuchstatus | GesuchTrancheStatus;
 };
 
 const parseDarlehenStatus = (

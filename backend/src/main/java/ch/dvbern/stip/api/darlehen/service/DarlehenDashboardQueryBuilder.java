@@ -19,13 +19,14 @@ package ch.dvbern.stip.api.darlehen.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.type.RoleFeature;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.QFreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.repo.FreiwilligDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
-import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
@@ -45,19 +46,33 @@ public class DarlehenDashboardQueryBuilder {
     private final FreiwilligDarlehenRepository freiwilligDarlehenRepository;
     private final BenutzerService benutzerService;
 
-    public JPAQuery<FreiwilligDarlehen> baseQuery(final GetFreiwilligDarlehenSbQueryType queryType) {
-        final var benutzerId = benutzerService.getCurrentBenutzer().getId();
-
-        final var query = switch (queryType) {
-            case ALLE_DARLEHEN -> freiwilligDarlehenRepository.getAlleQuery();
-            case MEINE_DARLEHEN -> freiwilligDarlehenRepository.getMeineQuery(benutzerId);
-            case ALLE_BEARBEITBAR -> freiwilligDarlehenRepository.getAlleBearbeitbarQuery();
-            case MEINE_BEARBEITBAR -> freiwilligDarlehenRepository.getMeineBearbeitbarQuery(benutzerId);
-        };
+    public JPAQuery<FreiwilligDarlehen> baseQuery() {
+        final var query = freiwilligDarlehenRepository.getAlleQuery();
 
         query
             .join(tranche)
             .on(tranche.gesuch.id.eq(freiwilligDarlehen.relatedGesuch.id));
+
+        return query;
+    }
+
+    public JPAQuery<FreiwilligDarlehen> onlyBearbeitbar(JPAQuery<FreiwilligDarlehen> query) {
+        return query.where(
+            freiwilligDarlehen.status.in(
+                benutzerService.getSetByUserRole(
+                    RoleFeature.forSachbearbeiter(DarlehenStatus.EINGEGEBEN),
+                    RoleFeature.forFreigabe(DarlehenStatus.IN_FREIGABE)
+                )
+            )
+        );
+    }
+
+    public JPAQuery<FreiwilligDarlehen> onlyMeine(final JPAQuery<FreiwilligDarlehen> query, final UUID benutzerId) {
+        final var zuordnung = QZuordnung.zuordnung;
+
+        query.join(zuordnung)
+            .on(freiwilligDarlehen.fall.sachbearbeiterZuordnung.id.eq(zuordnung.id))
+            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
 
         return query;
     }

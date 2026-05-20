@@ -875,15 +875,15 @@
   "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 décision} other {# décisions}} à imprimer",
 
   "sachbearbeitung-app.dashboard.title": "Dashboard",
+  "sachbearbeitung-app.dashboard.tabs.ALLE": "Demandes",
   "sachbearbeitung-app.dashboard.tabs.ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Investigations par le service juridique",
   "sachbearbeitung-app.dashboard.tabs.AENDERUNGEN": "Modifications",
   "sachbearbeitung-app.dashboard.tabs.DARLEHEN": "Prêts",
   "sachbearbeitung-app.dashboard.tabs.DRUCKBAR_DATENSCHUTZBRIEFE": "Lettres de protection des données imprimables",
   "sachbearbeitung-app.dashboard.tabs.DRUCKBAR_VERFUEGUNGEN": "Décisions imprimables",
   "sachbearbeitung-app.dashboard.tabs.FEHLGESCHLAGENE_ZAHLUNGEN": "Paiements",
-  "sachbearbeitung-app.dashboard.tabs.GESUCHE": "Demandes",
   "sachbearbeitung-app.dashboard.tabs.JURISTISCHE_ABKLAERUNG": "Clarifications juridiques",
-  "sachbearbeitung-app.dashboard.tabs.PENDENTE_GESUCHE": "Marquées",
+  "sachbearbeitung-app.dashboard.tabs.PENDENTE": "Marquées",
 
   "sachbearbeitung-app.gesuch-form.title": "Demande",
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Charger les données de Nesko",

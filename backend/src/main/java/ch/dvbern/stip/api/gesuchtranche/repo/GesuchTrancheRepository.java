@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -39,6 +40,11 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
     private final EntityManager em;
 
     private static final QGesuchTranche gesuchTranche = QGesuchTranche.gesuchTranche;
+
+    public JPAQuery<GesuchTranche> getFindAlleAenderungsQuery() {
+        return new JPAQueryFactory(em).selectFrom(gesuchTranche)
+            .where(gesuchTranche.typ.eq(GesuchTrancheTyp.AENDERUNG));
+    }
 
     public GesuchTranche requireAenderungById(final UUID aenderungId) {
         final var found = new JPAQueryFactory(em)

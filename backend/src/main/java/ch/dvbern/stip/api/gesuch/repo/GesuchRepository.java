@@ -19,13 +19,10 @@ package ch.dvbern.stip.api.gesuch.repo;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.benutzer.type.RoleFeature;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -35,11 +32,8 @@ import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.QGesuchsperiode;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.notiz.entity.QGesuchNotiz;
 import ch.dvbern.stip.api.personinausbildung.entity.QPersonInAusbildung;
-import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -54,7 +48,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
     private final EntityManager entityManager;
     private final QGesuch Q_GESUCH = QGesuch.gesuch;
     private final QGesuchTranche Q_TRANCHE = QGesuchTranche.gesuchTranche;
-    private final BenutzerService benutzerService;
 
     public Stream<Gesuch> findForGs(final UUID gesuchstellerId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
@@ -72,60 +65,6 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
         return new JPAQueryFactory(entityManager).selectFrom(Q_GESUCH);
     }
 
-    public JPAQuery<Gesuch> getFindMeineQuery(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAlleQuery());
-    }
-
-    public JPAQuery<Gesuch> getFindMeineBearbeitbarQuery(final UUID benutzerId, final GesuchTrancheTyp trancheTyp) {
-        return addMeineFilter(benutzerId, getFindAlleBearbeitbarQuery(trancheTyp));
-    }
-
-    public JPAQuery<Gesuch> getFindAlleBearbeitbarQuery(final GesuchTrancheTyp trancheTyp) {
-        final var query = getFindAlleQuery();
-        return switch (trancheTyp) {
-            case TRANCHE -> addStatusFilter(
-                query,
-                benutzerService.getSetByUserRole(
-                    RoleFeature.forFreigabe(Gesuchstatus.IN_FREIGABE),
-                    RoleFeature.forSachbearbeiter(
-                        Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
-                        Gesuchstatus.IN_BEARBEITUNG_SB,
-                        Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
-                        Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
-                        Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
-                        Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
-                        Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
-                        Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
-                        Gesuchstatus.VERFUEGUNG_VERSENDET,
-                        Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
-                        Gesuchstatus.VERFUEGUNG_VERSANDBEREIT
-                    )
-                )
-            );
-            case AENDERUNG -> addStatusFilter(
-                query,
-                GesuchTrancheStatus.UEBERPRUEFEN,
-                GesuchTrancheStatus.FEHLENDE_DOKUMENTE
-            );
-        };
-    }
-
-    public JPAQuery<Gesuch> getFindAlleJurBearbeitungQuery() {
-        final var query = getFindAlleQuery();
-        return addStatusFilter(
-            query,
-            Gesuchstatus.JURISTISCHE_ABKLAERUNG
-        );
-    }
-
-    public JPAQuery<Gesuch> getFindAlleAbklaerungDurchRechstabteilungQuery() {
-        final var query = getFindAlleQuery();
-        return addStatusFilter(
-            query,
-            Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
-        );
-    }
-
     public JPAQuery<Gesuch> getFindAllePendenteQuery() {
         final var gesuch = QGesuch.gesuch;
         final var gesuchNotiz = QGesuchNotiz.gesuchNotiz;
@@ -136,60 +75,11 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .where(gesuchNotiz.pendenzAbgeschlossen.not());
     }
 
-    public JPAQuery<Gesuch> getFindAlleMeinePendenteQuery(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getFindAllePendenteQuery());
-    }
-
-    public JPAQuery<Gesuch> getAlleWithDruckbareVerfuegung() {
-        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
-    }
-
-    public JPAQuery<Gesuch> getAlleMeineWithDruckbareVerfuegung(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getAlleWithDruckbareVerfuegung());
-    }
-
-    public JPAQuery<Gesuch> getAlleWithDruckbarerDatenschutzbrief() {
-        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
-    }
-
-    public JPAQuery<Gesuch> getAlleMeineWithDruckbarerDatenschutzbrief(final UUID benutzerId) {
-        return addMeineFilter(benutzerId, getAlleWithDruckbarerDatenschutzbrief());
-    }
-
-    private JPAQuery<Gesuch> addStatusFilter(
-        final JPAQuery<Gesuch> query,
-        final Set<Gesuchstatus> toInclude
-    ) {
-        query.where(Q_GESUCH.gesuchStatus.in(toInclude));
-        return query;
-    }
-
-    private JPAQuery<Gesuch> addStatusFilter(
+    public JPAQuery<Gesuch> addStatusFilter(
         final JPAQuery<Gesuch> query,
         final Gesuchstatus... toInclude
     ) {
         query.where(Q_GESUCH.gesuchStatus.in(toInclude));
-        return query;
-    }
-
-    private JPAQuery<Gesuch> addStatusFilter(
-        final JPAQuery<Gesuch> query,
-        final GesuchTrancheStatus... toInclude
-    ) {
-        query.where(Q_TRANCHE.status.in(toInclude));
-        return query;
-    }
-
-    private JPAQuery<Gesuch> addMeineFilter(final UUID benutzerId, final JPAQuery<Gesuch> query) {
-        final var ausbildung = QAusbildung.ausbildung;
-        final var zuordnung = QZuordnung.zuordnung;
-
-        query.join(ausbildung)
-            .on(Q_GESUCH.ausbildung.id.eq(ausbildung.id))
-            .join(zuordnung)
-            .on(ausbildung.fall.id.eq(zuordnung.fall.id))
-            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
-
         return query;
     }
 
