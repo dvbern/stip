@@ -8840,6 +8840,7 @@ components:
         - BERECHNUNGSBLATT_FAMILIE
         - VERSENDETE_VERFUEGUNG
         - VERFUEGUNGSBRIEF
+        - MANUELLE_NEGATIVE_VERFUEGUNG
     VerfuegungDokument:
       type: object
       required:
