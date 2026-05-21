@@ -133,6 +133,12 @@
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
     @let canExport = !!exportValuesSig();
+    @let showGesuchActions = isGesuchRouteSig();
+    @let showAenderungActions = !!isAenderungRouteSig();
+    @let aenderungActions = aenderungActionsSig();
+    @let hasAenderungMenuActions =
+      showAenderungActions && aenderungActions.isVisible && aenderungActions.gesuchId && aenderungActions.trancheId;
+    @let hasGesuchMenuActions = showGesuchActions && (availableTrancheInteraction || statusUebergaenge.isNotEmpty);
     <!-- Aktion Button -->
     @if (isActionRouteSig()) {
       <div>
@@ -142,9 +148,7 @@
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
           [disabled]="
-            !(statusUebergaenge.isNotEmpty || availableTrancheInteraction || canExport) ||
-            isLoadingSig() ||
-            isExportingSig()
+            !(hasAenderungMenuActions || hasGesuchMenuActions || canExport) || isLoadingSig() || isExportingSig()
           "
           #aktionTrigger="matMenuTrigger"
           [matMenuTriggerFor]="aktionMenu"
@@ -159,6 +163,103 @@
           class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
         >
           <div class="tw:flex tw:flex-col tw:gap-2">
+            @if (hasAenderungMenuActions) {
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-reject"
+                [disabled]="isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="changeAenderungState(aenderungActions.trancheId!, 'ABGELEHNT', aenderungActions.gesuchId!)"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">close</i>
+                  <span>{{ t('shared.form.aenderung.action.reject') }}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-accept"
+                [disabled]="aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="changeAenderungState(aenderungActions.trancheId!, 'AKZEPTIERT', aenderungActions.gesuchId!)"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">check_circle</i>
+                  <span>{{ t('shared.form.aenderung.action.accept') }}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-manually-change"
+                [disabled]="aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="
+                  changeAenderungState(aenderungActions.trancheId!, 'MANUELLE_AENDERUNG', aenderungActions.gesuchId!)
+                "
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">edit</i>
+                  <span>{{ t('shared.form.aenderung.action.manuallyChange') }}</span>
+                </div>
+              </button>
+            }
+
+            @if (hasGesuchMenuActions) {
+              @switch (availableTrancheInteraction) {
+                @case ('CREATE_TRANCHE') {
+                  <!-- Tranche erstellen -->
+                  <button
+                    type="button"
+                    class="fw-normal tw:px-2"
+                    data-testid="aktion-tranche-erstellen"
+                    mat-menu-item
+                    (click)="createTranche()"
+                  >
+                    <div class="tw:flex tw:items-center tw:gap-2">
+                      <i class="material-symbols-rounded">add_circle</i>
+                      <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
+                    </div>
+                  </button>
+                }
+              }
+
+              @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+                <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+              }
+
+              @for (uebergang of statusUebergaenge.list; track $index) {
+                @if (uebergang.name) {
+                  <button
+                    type="button"
+                    class="tw:pr-auto tw:px-2"
+                    [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                    [disabled]="uebergang.disabledReason || !trancheId"
+                    [matTooltip]="
+                      uebergang.disabledReason
+                        ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                        : null
+                    "
+                    mat-menu-item
+                    (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
+                  >
+                    <div class="tw:flex tw:items-center tw:gap-2">
+                      <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                      <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
+                    </div>
+                  </button>
+                }
+              }
+            }
+
+            @if (canExport && (hasAenderungMenuActions || hasGesuchMenuActions)) {
+              <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+            }
+
             @if (canExport) {
               <button
                 type="button"
@@ -173,55 +274,6 @@
                   <span>{{ t('shared.form.tranche.export') }}</span>
                 </div>
               </button>
-            }
-
-            @if (canExport && (availableTrancheInteraction || statusUebergaenge.isNotEmpty)) {
-              <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
-            }
-
-            @switch (availableTrancheInteraction) {
-              @case ('CREATE_TRANCHE') {
-                <!-- Tranche erstellen -->
-                <button
-                  type="button"
-                  class="fw-normal tw:px-2"
-                  data-testid="aktion-tranche-erstellen"
-                  mat-menu-item
-                  (click)="createTranche()"
-                >
-                  <div class="tw:flex tw:items-center tw:gap-2">
-                    <i class="material-symbols-rounded">add_circle</i>
-                    <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
-                  </div>
-                </button>
-              }
-            }
-
-            @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
-              <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
-            }
-
-            @for (uebergang of statusUebergaenge.list; track $index) {
-              @if (uebergang.name) {
-                <button
-                  type="button"
-                  class="tw:pr-auto tw:px-2"
-                  [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
-                  [disabled]="uebergang.disabledReason || !trancheId"
-                  [matTooltip]="
-                    uebergang.disabledReason
-                      ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
-                      : null
-                  "
-                  mat-menu-item
-                  (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
-                >
-                  <div class="tw:flex tw:items-center tw:gap-2">
-                    <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-                    <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
-                  </div>
-                </button>
-              }
             }
           </div>
         </mat-menu>

@@ -27,7 +27,7 @@ import {
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { format } from 'date-fns';
-import { filter, map, startWith } from 'rxjs';
+import { filter, firstValueFrom, map, startWith } from 'rxjs';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
@@ -40,10 +40,15 @@ import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  SharedDataAccessGesuchEvents,
   selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
+import {
+  AenderungChangeState,
+  GesuchAenderungStore,
+} from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -117,6 +122,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   private injector = inject(Injector);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private gesuchStore = inject(GesuchStore);
+  private gesuchAenderungStore = inject(GesuchAenderungStore);
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
@@ -309,10 +315,37 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       isPending(this.gesuchStore.lastStatusChange())
     );
   });
+  isAenderungUpdatingSig = computed(() => {
+    return (
+      this.isLoadingSig() ||
+      isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
+    );
+  });
   isExportingSig = signal(false);
   private gesuchCacheSig = this.store.selectSignal(
     selectSharedDataAccessGesuchCache,
   );
+  aenderungActionsSig = computed(() => {
+    const gesuchId = this.gesuchIdSig();
+    const tranche = this.gesuchCacheSig().gesuch?.gesuchTrancheToWorkWith;
+    const hasValidationErrors =
+      !!this.einreichenStore.einreichenValidationResult().data?.validationErrors
+        ?.length;
+
+    const isVisible =
+      !!gesuchId &&
+      !!tranche &&
+      tranche.typ === 'AENDERUNG' &&
+      tranche.status === 'UEBERPRUEFEN';
+
+    return {
+      isVisible,
+      gesuchId,
+      trancheId: tranche?.id,
+      hasValidationErrors,
+    };
+  });
+
   exportValuesSig = computed<ExportView | undefined>(() => {
     const { gesuch, isEditingAenderung } = this.gesuchCacheSig();
     const tranche = gesuch?.gesuchTrancheToWorkWith;
@@ -624,6 +657,48 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     }
 
     this.isExportingSig.set(false);
+  }
+
+  async changeAenderungState(
+    aenderungId: string,
+    target: AenderungChangeState,
+    gesuchId: string,
+  ) {
+    let comment = undefined;
+    if (target === 'ABGELEHNT') {
+      comment = (
+        await firstValueFrom(
+          SharedUiKommentarDialogComponent.open(this.dialog, {
+            titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
+            messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
+            labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',
+            placeholderKey: 'shared.nothing',
+            confirmKey: 'shared.form.send',
+          }).afterClosed(),
+        )
+      )?.kommentar;
+
+      if (!comment) {
+        return;
+      }
+    }
+
+    this.gesuchAenderungStore.changeAenderungState$({
+      aenderungId,
+      target,
+      comment: comment ?? '',
+      gesuchId,
+      onSuccess: (trancheId) => {
+        const routesMap = {
+          AKZEPTIERT: ['gesuch', gesuchId, 'tranche', trancheId],
+          ABGELEHNT: ['/'],
+          MANUELLE_AENDERUNG: ['gesuch', gesuchId],
+        } satisfies Record<AenderungChangeState, unknown>;
+
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        this.router.navigate(routesMap[target]);
+      },
+    });
   }
 }
 
