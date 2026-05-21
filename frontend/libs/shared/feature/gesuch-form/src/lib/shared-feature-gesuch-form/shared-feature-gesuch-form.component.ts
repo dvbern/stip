@@ -12,7 +12,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter, map } from 'rxjs';
@@ -24,7 +24,6 @@ import {
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
-import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
@@ -62,9 +61,9 @@ export class SharedFeatureGesuchFormComponent
 
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
-  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private navigationStore = inject(NavigationStore);
+  private route = inject(ActivatedRoute);
 
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
