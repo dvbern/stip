@@ -1,5 +1,3 @@
-// noinspection PointlessBooleanExpressionJS
-
 import {
   animate,
   state,
@@ -486,6 +484,16 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
     );
   }
 
+  getCurrentStepNumber(): number {
+    return (
+      this.getVisibleSteps().indexOf(this.currentFamiliensituationFormStep) + 1
+    );
+  }
+
+  getTotalSteps(): number {
+    return this.getVisibleSteps().length;
+  }
+
   goPreviousStep(): void {
     const familiensituation =
       this.buildSharedModelAdresseFromForm().familiensituation;
@@ -590,5 +598,28 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
     }
 
     return key;
+  }
+
+  private getVisibleSteps(): FamiliensituationFormStep[] {
+    const familiensituation =
+      this.buildSharedModelAdresseFromForm().familiensituation;
+    if (familiensituation === undefined) {
+      return [FamiliensituationFormSteps.ELTERN_VERHEIRATET_ZUSAMMEN];
+    }
+
+    return Object.values(FamiliensituationFormSteps).reduce(
+      (steps: FamiliensituationFormStep[], step) => {
+        if (steps.length === 0) {
+          return [step];
+        }
+        const lastStep = steps[steps.length - 1];
+        const next = lastStep.getNext(familiensituation);
+        if (next === lastStep) {
+          return steps;
+        }
+        return [...steps, next];
+      },
+      [],
+    );
   }
 }

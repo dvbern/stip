@@ -16,6 +16,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 export class SharedUiStepperNavigationComponent {
   @Input() nextStepVisible = false;
   @Input() prevStepVisible = false;
+  @Input() currentStep: number | null = null;
+  @Input() totalSteps: number | null = null;
 
   @Output() nextStep = new EventEmitter<void>();
   @Output() prevStep = new EventEmitter<void>();

@@ -22,6 +22,8 @@
           class="tw:xl:w-1/2"
           [nextStepVisible]="hasNextStep()"
           [prevStepVisible]="hasPreviousStep()"
+          [currentStep]="getCurrentStepNumber()"
+          [totalSteps]="getTotalSteps()"
           (nextStep)="goNextStep()"
           (prevStep)="goPreviousStep()"
         ></dv-shared-ui-stepper-navigation>
