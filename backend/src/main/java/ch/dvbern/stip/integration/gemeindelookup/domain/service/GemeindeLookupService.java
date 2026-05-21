@@ -17,9 +17,7 @@
 
 package ch.dvbern.stip.integration.gemeindelookup.domain.service;
 
-import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,16 +46,9 @@ public class GemeindeLookupService {
 
     @Transactional
     public void createFetchGemeindeDataScheduledJob(final Gesuch gesuch) {
-        final GesuchTranche trancheToUse = gesuch.getLatestGesuchTranche();
-        final Adresse adresse = trancheToUse.getGesuchFormular().getPersonInAusbildung().getAdresse();
-
         final var jobData = new GemeindeLookupRequest(
-            gesuch.getId(),
-            tenantService.getCurrentTenantIdentifier(),
-            adresse.getStrasse(),
-            adresse.getHausnummer(),
-            adresse.getPlz(),
-            adresse.getOrt()
+            gesuch,
+            tenantService.getCurrentTenantIdentifier()
         );
 
         final JobDetail jobDetail = JobBuilder.newJob(GemeindeLookupScheduledJob.class)

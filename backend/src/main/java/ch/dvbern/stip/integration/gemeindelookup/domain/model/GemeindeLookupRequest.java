@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.ws.rs.BadRequestException;
 import lombok.Builder;
 import org.quartz.JobDataMap;
@@ -38,6 +40,17 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
     private static final String HAUSNUMMER_KEY = "hausnummer";
     private static final String PLZ_KEY = "plz";
     private static final String ORT_KEY = "ort";
+
+    public GemeindeLookupRequest(final Gesuch gesuch, final TenantIdentifier tenantIdentifier) {
+        this(
+            gesuch.getId(), tenantIdentifier, getAdresse(gesuch).getStrasse(), getAdresse(gesuch).getHausnummer(),
+            getAdresse(gesuch).getPlz(), getAdresse(gesuch).getOrt()
+        );
+    }
+
+    private static Adresse getAdresse(final Gesuch gesuch) {
+        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getAdresse();
+    }
 
     public GemeindeLookupRequest(final JobDataMap map) {
         this(
