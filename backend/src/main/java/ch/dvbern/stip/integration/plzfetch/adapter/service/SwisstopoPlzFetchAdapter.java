@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.plz.service;
+package ch.dvbern.stip.integration.plzfetch.adapter.service;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -24,68 +24,74 @@ import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
-import ch.dvbern.stip.api.plz.entity.Plz;
-import ch.dvbern.stip.api.plz.repo.PlzRepository;
 import ch.dvbern.stip.api.scheduledtask.entity.Scheduledtask;
 import ch.dvbern.stip.api.scheduledtask.repo.ScheduledtaskRepository;
 import ch.dvbern.stip.api.scheduledtask.type.ScheduledtaskType;
+import ch.dvbern.stip.integration.plzfetch.adapter.type.SwisstopoPlzDiscoveryResponse;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
+import ch.dvbern.stip.integration.plzfetch.domain.port.PlzFetchPort;
+import ch.dvbern.stip.integration.plzfetch.domain.qualifier.PlzFetchQualifier;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.opencsv.CSVParserBuilder;
-import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.opencsv.CSVReaderHeaderAwareBuilder;
 import com.opencsv.exceptions.CsvException;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Slf4j
-@RequiredArgsConstructor
-@ApplicationScoped
-public class PlzDataFetchService {
-    private final PlzRepository plzRepository;
+@RequestScoped
+@PlzFetchQualifier(PlzFetchAdapterType.SWISSTOPO)
+public class SwisstopoPlzFetchAdapter implements PlzFetchPort {
+
+    private final SwisstopoPlzDiscoveryService plzDiscoveryService;
     private final ScheduledtaskRepository scheduledtaskRepository;
     private final StipConfig config;
 
-    @Inject
-    @RestClient
-    GeoCollectionService geoCollectionService;
+    public SwisstopoPlzFetchAdapter(
+    @RestClient SwisstopoPlzDiscoveryService plzDiscoveryService, ScheduledtaskRepository scheduledtaskRepository,
+    StipConfig config
+    ) {
+        this.plzDiscoveryService = plzDiscoveryService;
+        this.scheduledtaskRepository = scheduledtaskRepository;
+        this.config = config;
+    }
 
-    public void fetchData() throws IOException, CsvException {
-        final GeoCollectionItem geoCollection = geoCollectionService.get();
+    @Override
+    public Optional<Set<PlzFetchData>> fetchData() throws IOException, CsvException {
+        Optional<Set<PlzFetchData>> result = Optional.empty();
 
-        if (geoCollection == null) {
-            return;
+        final SwisstopoPlzDiscoveryResponse plzDiscovery = plzDiscoveryService.get();
+
+        if (plzDiscovery == null) {
+            LOG.error("SwisstopoPlzDiscoveryService returned null, cannot fetch PLZ data");
+            return Optional.empty();
         }
 
-        final JsonNode geoCollectionAssetJSON = geoCollection
-            .getFeatures()
-            .get(0)
-            .getAssets();
+        final var plzDiscoveryJson = plzDiscovery.features().get(0).assets();
 
-        if (isNewDataAvailable(geoCollectionAssetJSON)) {
-            final JsonNode uriNode = geoCollectionAssetJSON
-                .findValue(config.plzData().featureKey())
-                .findValue("href");
+        if (isNewDataAvailable(plzDiscoveryJson)) {
+            final var uriNode = plzDiscoveryJson.findValue(config.plzData().featureKey()).findValue("href");
+
             if (uriNode != null) {
-                loadNewData(URI.create(uriNode.asText()));
+                result = loadNewData(URI.create(uriNode.asText()));
             }
         }
-        reportScheduledTaskExecution(geoCollectionAssetJSON);
+
+        reportScheduledTaskExecution(plzDiscoveryJson);
+
+        return result;
     }
 
     @Transactional
@@ -98,7 +104,7 @@ public class PlzDataFetchService {
     }
 
     @Transactional
-    public boolean isNewDataAvailable(final JsonNode currentGeoCollectionAssetJSON) {
+    public boolean isNewDataAvailable(final JsonNode plzDiscoveryJson) {
         final Optional<Scheduledtask> latestScheduledTask = scheduledtaskRepository
             .findLatestWithType(ScheduledtaskType.PLZ_DATA_FETCH.name());
 
@@ -110,7 +116,7 @@ public class PlzDataFetchService {
                 .findValue(config.plzData().hashKey())
                 .asText();
 
-            final String currentHash = currentGeoCollectionAssetJSON
+            final String currentHash = plzDiscoveryJson
                 .findValue(config.plzData().hashKey())
                 .asText();
             if (lastHash.equals(currentHash)) {
@@ -120,57 +126,58 @@ public class PlzDataFetchService {
         return newDataAvailable;
     }
 
-    private void loadNewData(final URI uri) throws IOException, CsvException {
+    private Optional<Set<PlzFetchData>> loadNewData(final URI uri) throws IOException, CsvException {
         final String csvFileData = loadCsvFileData(uri);
         if (csvFileData == null) {
             LOG.error("Failed to load PLZ CSV");
-            return;
+            return Optional.empty();
         }
 
-        final Set<List<String>> plzHashSet = new HashSet<>();
+        final var csvParser = new CSVParserBuilder()
+            .withSeparator(';')
+            .withIgnoreLeadingWhiteSpace(true)
+            .build();
+
         try (
-            final CSVReader csvReader = new CSVReaderBuilder(new StringReader(csvFileData))
-                .withSkipLines(1)
-                .withCSVParser(
-                    new CSVParserBuilder()
-                        .withSeparator(';')
-                        .build()
-                )
-                .build()
+            final var reader =
+                new CSVReaderHeaderAwareBuilder(new StringReader(csvFileData))
+                    .withCSVParser(csvParser)
+                    .build()
         ) {
-            csvReader.readAll()
-                .forEach(
-                    plzLine -> plzHashSet.add(Arrays.asList(plzLine[0], plzLine[1], plzLine[6]))
-                );
-        }
-
-        final List<Plz> plzList = new ArrayList<>(plzHashSet.size());
-        plzHashSet.forEach(
-            plzLineElement -> plzList.add(
-                new Plz()
-                    .setOrt(plzLineElement.get(0))
-                    .setPlz(plzLineElement.get(1))
-                    .setKantonskuerzel(plzLineElement.get(2))
-            )
-        );
-
-        plzList.stream().filter(plz -> plz.getPlz().equals("3005")).forEach(plz -> {
-            if (!plz.getOrt().equals("Bern") || !plz.getKantonskuerzel().equalsIgnoreCase("be")) {
-                throw new IllegalStateException(
-                    "Importing of PLZ data failed to find known '3005 Bern BE', check CSV manually if the format changed"
-                );
+            Set<PlzFetchData> plzList = new HashSet<>();
+            Map<String, String> rowMap;
+            while ((rowMap = reader.readMap()) != null) {
+                final var plzFetchData = PlzFetchData.builder()
+                    .plz(rowMap.get("PLZ4"))
+                    .ort(rowMap.get("\uFEFFOrtschaftsname"))
+                    .kantonskuerzel(rowMap.get("Kantonskürzel"))
+                    .build();
+                plzList.add(plzFetchData);
             }
-        });
 
-        storePlzData(plzList);
+            final var exception = new IllegalStateException(
+                "Importing of PLZ data failed to find known '3005 Bern BE', check CSV manually if the format changed"
+            );
+
+            final var bernPlz = plzList.stream()
+                .filter(plz -> plz.plz().equals("3005"))
+                .findFirst()
+                .orElseThrow(() -> exception);
+
+            if (!bernPlz.ort().equals("Bern") || !bernPlz.kantonskuerzel().equalsIgnoreCase("be")) {
+                throw exception;
+            }
+
+            return Optional.of(plzList);
+        }
     }
 
     private String loadCsvFileData(final URI uri) throws IOException {
         final var downloadService = RestClientBuilder.newBuilder()
             .baseUri(uri)
-            .build(GeoCollectionDowloadService.class);
+            .build(SwisstopoPlzDownloadService.class);
 
-        final var file = downloadService.getGeoCollectionDowload();
+        final var file = downloadService.getPlzDownload();
 
         // Buffer the input, so we can reset it, since we have to read it twice
         // https://bugs.java.com/bugdatabase/view_bug.do?bug_id=4079029
@@ -220,12 +227,5 @@ public class PlzDataFetchService {
         }
 
         return -1;
-    }
-
-    @Transactional
-    public void storePlzData(final List<Plz> plzList) {
-        plzRepository.deleteAll();
-        plzRepository.persist(plzList.stream());
-        plzRepository.flush();
     }
 }

@@ -15,17 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.plz.service;
+package ch.dvbern.stip.integration.plzfetch.adapter.type;
 
-import ch.dvbern.stip.api.plz.entity.GeoCollectionItem;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
+import java.util.List;
 
-@Path("/items")
-@RegisterRestClient(configKey = "geo-collection-api")
-public interface GeoCollectionService {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
 
-    @GET
-    GeoCollectionItem get();
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record SwisstopoPlzDiscoveryResponse(
+List<Feature> features
+) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Feature(
+    JsonNode assets
+    ) {
+    }
 }

@@ -15,25 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.integration.plzfetch.domain.qualifier;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Getter
-@RequiredArgsConstructor
-public enum TenantIdentifier {
-    BERN("bern", "be"),
-    DV("dv", "");
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
+import jakarta.inject.Qualifier;
 
-    private final String identifier;
-    private final String kuerzel;
-
-    public static TenantIdentifier of(final String identifier) {
-        return switch (identifier) {
-            case "bern" -> BERN;
-            case "dv" -> DV;
-            default -> throw new IllegalArgumentException("Invalid tenant identifier: " + identifier);
-        };
-    }
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+public @interface PlzFetchQualifier {
+    PlzFetchAdapterType value();
 }

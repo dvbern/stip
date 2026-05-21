@@ -15,25 +15,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.integration.plzfetch.domain.service;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Set;
 
-@Getter
-@RequiredArgsConstructor
-public enum TenantIdentifier {
-    BERN("bern", "be"),
-    DV("dv", "");
+import ch.dvbern.stip.api.plz.entity.Plz;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
+import lombok.experimental.UtilityClass;
 
-    private final String identifier;
-    private final String kuerzel;
-
-    public static TenantIdentifier of(final String identifier) {
-        return switch (identifier) {
-            case "bern" -> BERN;
-            case "dv" -> DV;
-            default -> throw new IllegalArgumentException("Invalid tenant identifier: " + identifier);
-        };
+@UtilityClass
+public class PlzFetchDataMapper {
+    public List<Plz> toPlzList(Set<PlzFetchData> plzFetchDataList) {
+        return plzFetchDataList.stream().map(plzFetchData -> {
+            Plz plz = new Plz();
+            plz.setPlz(plzFetchData.plz());
+            plz.setKantonskuerzel(plzFetchData.kantonskuerzel());
+            plz.setOrt(plzFetchData.ort());
+            return plz;
+        }).toList();
     }
 }

@@ -15,15 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.plz.service;
+package ch.dvbern.stip.integration.plzfetch.domain.model;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import lombok.Builder;
 
-@Path("")
-public interface GeoCollectionDowloadService {
-
-    @Path("")
-    @GET
-    byte[] getGeoCollectionDowload();
+@Builder
+public record PlzFetchData(String plz, String ort, String kantonskuerzel) {
 }

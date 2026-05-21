@@ -15,25 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.integration.plzfetch.domain.port;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.util.Optional;
+import java.util.Set;
 
-@Getter
-@RequiredArgsConstructor
-public enum TenantIdentifier {
-    BERN("bern", "be"),
-    DV("dv", "");
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
+import com.opencsv.exceptions.CsvException;
 
-    private final String identifier;
-    private final String kuerzel;
-
-    public static TenantIdentifier of(final String identifier) {
-        return switch (identifier) {
-            case "bern" -> BERN;
-            case "dv" -> DV;
-            default -> throw new IllegalArgumentException("Invalid tenant identifier: " + identifier);
-        };
-    }
+public interface PlzFetchPort {
+    Optional<Set<PlzFetchData>> fetchData() throws IOException, CsvException;
 }

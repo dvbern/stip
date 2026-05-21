@@ -15,25 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.type;
+package ch.dvbern.stip.integration.plzfetch.adapter.service;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import ch.dvbern.stip.integration.plzfetch.adapter.type.SwisstopoPlzDiscoveryResponse;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Getter
-@RequiredArgsConstructor
-public enum TenantIdentifier {
-    BERN("bern", "be"),
-    DV("dv", "");
-
-    private final String identifier;
-    private final String kuerzel;
-
-    public static TenantIdentifier of(final String identifier) {
-        return switch (identifier) {
-            case "bern" -> BERN;
-            case "dv" -> DV;
-            default -> throw new IllegalArgumentException("Invalid tenant identifier: " + identifier);
-        };
-    }
+@Path("/items")
+@RegisterRestClient(configKey = "swisstopo-plz-api")
+public interface SwisstopoPlzDiscoveryService {
+    @GET
+    SwisstopoPlzDiscoveryResponse get();
 }

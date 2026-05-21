@@ -15,22 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.plz.entity;
+package ch.dvbern.stip.integration.plzfetch.domain.model;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonNode;
-import lombok.Getter;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@Getter
-public class GeoCollectionItem {
-    List<GeoCollectionItemFeature> features;
-
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @Getter
-    public static class GeoCollectionItemFeature {
-        JsonNode assets;
-    }
+public enum PlzFetchAdapterType {
+    SWISSTOPO
 }
