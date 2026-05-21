@@ -96,7 +96,7 @@ public class StatistikUtil {
                 .ort(address.getOrt())
                 .build();
 
-            return gemeindeLookupPortFactory.getGemeindeLookupPort()
+            return gemeindeLookupPortFactory.getGemeindeLookupAdapter()
                 .findGemeindeData(gemeindeLookupRequest)
                 .map(GemeindeData::bfsNummer)
                 .orElse(null);

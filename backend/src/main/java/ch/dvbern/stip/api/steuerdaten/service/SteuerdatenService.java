@@ -116,7 +116,7 @@ public class SteuerdatenService {
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
-        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenPort()
+        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenAdapter()
             .getSteuerdaten(
                 ssvn,
                 steuerjahr,

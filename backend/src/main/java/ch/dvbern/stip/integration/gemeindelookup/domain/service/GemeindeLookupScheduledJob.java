@@ -43,7 +43,7 @@ public class GemeindeLookupScheduledJob implements Job {
             request.tenantIdentifier().getIdentifier(),
             () -> {
                 final var gemeindeData =
-                    gemeindeLookupPortFactory.getGemeindeLookupPort().findGemeindeData(request).orElseThrow();
+                    gemeindeLookupPortFactory.getGemeindeLookupAdapter().findGemeindeData(request).orElseThrow();
                 statisticsdataService.setOrCreateGemeindeStatisticsDataOfGesuch(
                     request.gesuchId(),
                     gemeindeData.bfsNummer(),

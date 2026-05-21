@@ -57,7 +57,7 @@ public class GemeindeLookupPortFactoryTest {
 
     @Test
     void getSteuerdatenPort_returnsPortForConfiguredAdapterType() {
-        final var port = gemeindeLookupPortFactory.getGemeindeLookupPort();
+        final var port = gemeindeLookupPortFactory.getGemeindeLookupAdapter();
 
         assertThat(port, notNullValue());
         assertThat(port, instanceOf(DummyGemeindeLookupAdapter.class));

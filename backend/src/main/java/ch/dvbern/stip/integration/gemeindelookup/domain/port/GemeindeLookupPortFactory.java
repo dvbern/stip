@@ -37,7 +37,7 @@ public class GemeindeLookupPortFactory {
 
     private final TenantService tenantService;
 
-    public GemeindeLookupPort getGemeindeLookupPort() {
+    public GemeindeLookupPort getGemeindeLookupAdapter() {
         final var adapterType = tenantService.getConfigForCurrentTenant().port().gemeindeLookup().adapterType();
         return gemeindeLookupPorts.select(new GemeindeLookupQualifierLiteral(adapterType)).get();
     }

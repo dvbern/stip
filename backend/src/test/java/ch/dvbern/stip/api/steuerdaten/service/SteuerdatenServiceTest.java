@@ -207,7 +207,7 @@ class SteuerdatenServiceTest {
         final var outputDto = new SteuerdatenDto();
 
         final var port = mock(SteuerdatenPort.class);
-        when(steuerdatenPortFactory.getSteuerdatenPort()).thenReturn(port);
+        when(steuerdatenPortFactory.getSteuerdatenAdapter()).thenReturn(port);
         when(port.getSteuerdaten(any(), any(Integer.class), any(), any(), any())).thenReturn(portData);
         when(steuerdatenMapper.partialUpdate(eq(portData), any())).thenReturn(updatedSteuerdaten);
 
@@ -302,7 +302,7 @@ class SteuerdatenServiceTest {
         updatedSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
 
         final var port = mock(SteuerdatenPort.class);
-        when(steuerdatenPortFactory.getSteuerdatenPort()).thenReturn(port);
+        when(steuerdatenPortFactory.getSteuerdatenAdapter()).thenReturn(port);
         when(port.getSteuerdaten(any(), any(Integer.class), any(), any(), any())).thenReturn(portData);
         // partialUpdate called with the EXISTING steuerdaten object
         when(steuerdatenMapper.partialUpdate(portData, existingSteuerdaten)).thenReturn(updatedSteuerdaten);

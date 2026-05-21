@@ -58,8 +58,8 @@ class SteuerdatenPortFactoryTest {
     }
 
     @Test
-    void getSteuerdatenPort_returnsPortForConfiguredAdapterType() {
-        final var result = steuerdatenPortFactory.getSteuerdatenPort();
+    void getSteuerdatenPort_returnsAdapterForConfiguredAdapterType() {
+        final var result = steuerdatenPortFactory.getSteuerdatenAdapter();
 
         assertThat(result, notNullValue());
         assertThat(result, instanceOf(DummySteuerdatenAdapter.class));

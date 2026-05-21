@@ -37,7 +37,7 @@ public class SteuerdatenPortFactory {
     Instance<SteuerdatenPort> steuerdatenPorts;
     private final TenantService tenantService;
 
-    public SteuerdatenPort getSteuerdatenPort() {
+    public SteuerdatenPort getSteuerdatenAdapter() {
         final var adapterType =
             tenantService.getConfigForCurrentTenant().port().steuerdaten().adapterType().orElseThrow();
 
