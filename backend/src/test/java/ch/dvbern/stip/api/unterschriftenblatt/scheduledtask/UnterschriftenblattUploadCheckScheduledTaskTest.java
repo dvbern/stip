@@ -38,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -65,16 +64,14 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
     void setUp() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT);
         gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now().minusDays(2));
-        when(gesuchRepository.getAllWartenAufUnterschriftenblatt())
-            .thenReturn(Stream.of(gesuch));
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 
         var gesuchsjahr = new Gesuchsjahr();
         gesuchsjahr.setTechnischesJahr(2025);
         var gesuchperiode = GesuchTestSeeding.getGesuchsperiode(gesuchsjahr);
         gesuch.setGesuchsperiode(gesuchperiode);
 
-        when(gesuchsperiodenService.getAllGesuchsperioden()).thenReturn(Stream.of(gesuchperiode));
+        when(gesuchRepository.getAllWartenAufUnterschriftenblatt())
+            .thenReturn(Stream.of(gesuch));
     }
 
     @Test

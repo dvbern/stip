@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType;
@@ -73,11 +72,7 @@ public class GesuchsperiodenService {
     }
 
     public List<GesuchsperiodeDto> getAllGesuchsperiodenAsDtos() {
-        return getAllGesuchsperioden().map(gesuchsperiodeMapper::toDto).toList();
-    }
-
-    public Stream<Gesuchsperiode> getAllGesuchsperioden() {
-        return gesuchsperiodeRepository.findAll().stream();
+        return gesuchsperiodeRepository.streamAll().map(gesuchsperiodeMapper::toDto).toList();
     }
 
     public Optional<GesuchsperiodeWithDatenDto> getGesuchsperiode(final UUID id) {
