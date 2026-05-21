@@ -4,6 +4,7 @@
   @let firstTrancheId = firstCurrentTrancheIdSig();
   @let versionen = versionenSig();
   @let initial = initialSig();
+  @let formularTab = formularTabSig();
 
   @if (versionen.length || initial?.tranchen?.length) {
     <button
@@ -34,7 +35,8 @@
         <a
           class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-versionen-default"
-          [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+          [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
+          [queryParams]="{ formularTab }"
           mat-menu-item
           [class.active]="
             trancheId === firstTrancheId && isGesuchRouteSig() && !currentVersionSig() && !isInitialRouteSig()
@@ -45,8 +47,12 @@
         <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
         @for (version of versionen; track version.berechnungId) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'tranche', version.tranchen[0].id]"
-            [queryParams]="{ berechnungId: version.berechnungId, revision: version.tranchen[0].revision }"
+            [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', version.tranchen[0].id]"
+            [queryParams]="{
+              berechnungId: version.berechnungId,
+              revision: version.tranchen[0].revision,
+              formularTab,
+            }"
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-item"
             mat-menu-item
@@ -66,10 +72,11 @@
         }
         @if (initial) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'initial', initial.tranchen?.[0]?.id]"
+            [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'initial', initial.tranchen[0].id]"
             [queryParams]="{
               berechnungId: initial.berechnungId,
-              revision: initial.tranchen?.[0]?.revision,
+              revision: initial.tranchen[0].revision,
+              formularTab,
             }"
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-initial-item"
@@ -82,12 +89,13 @@
       </div>
     </mat-menu>
   } @else {
-    <!-- fallback button that -->
+    <!-- fallback button -->
     <a
       type="button"
       class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-default"
-      [routerLink]="['/gesuch/info', gesuchId, 'tranche', firstTrancheId]"
+      [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
+      [queryParams]="{ formularTab }"
       [class.active]="isGesuchRouteSig()"
     >
       <span>{{ t('shared.header.versionen') }}</span>

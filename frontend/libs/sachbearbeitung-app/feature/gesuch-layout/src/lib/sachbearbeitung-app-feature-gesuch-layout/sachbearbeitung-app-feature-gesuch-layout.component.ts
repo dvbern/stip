@@ -47,6 +47,7 @@ import {
   InBearbeitungSbReason,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import {
@@ -119,6 +120,12 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     ),
   );
 
+  formularTabSig = toSignal(
+    this.route.queryParamMap.pipe(
+      map((params) => params.get('formularTab') ?? undefined),
+    ),
+  );
+
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
       map(() => this.router.routerState.snapshot.url),
@@ -180,6 +187,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
+    const formularTab = this.formularTabSig();
     const isIntitial = this.isInitialRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
@@ -193,17 +201,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       return [];
     }
 
+    const tab = decodeURI(formularTab ?? '') || TRANCHE.route;
+    const tabSegments = tab.split('/').filter(Boolean);
+
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
-      route: ['/gesuch', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId },
+      route: ['/gesuch', ...tabSegments, gesuchId, trancheTyp, trancheId],
+      queryParams: { berechnungId, formularTab },
       key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId },
+      queryParams: { berechnungId, formularTab },
       key: 'verfuegung',
     };
 

@@ -35,7 +35,7 @@ import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchHeader } from '@dv/shared/model/gesuch';
-import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
 import { noGesuchActiveRoutes } from '@dv/shared/model/ui-constants';
@@ -145,6 +145,16 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;
     return this.stepManager.getStepProgress(stepsFlow, currentStep);
+  });
+
+  stepRouteSegmentsSig = computed(() => {
+    const currentStep = this.stepSig();
+
+    const routeSegments = currentStep?.route.split('/').filter(Boolean) ?? [
+      TRANCHE.route,
+    ];
+
+    return routeSegments;
   });
 
   currentStepSig = computed(() => {

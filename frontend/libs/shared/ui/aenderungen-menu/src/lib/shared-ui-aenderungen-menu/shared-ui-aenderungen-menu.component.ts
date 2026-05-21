@@ -21,6 +21,7 @@ import { GesuchAenderungs } from '@dv/shared/model/gesuch';
 export class SharedUiAenderungenMenuComponent {
   gesuchIdSig = input.required<string | undefined>();
   trancheIdSig = input.required<string | undefined>();
+  stepRouteSegmentsSig = input.required<string[]>();
   revisionSig = input.required<number | undefined>();
   aenderungenSig = input.required<GesuchAenderungs | undefined>();
   isAenderungRouteSig = input.required<boolean | undefined>();

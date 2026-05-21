@@ -13,7 +13,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { Router, RouterLink, isActive } from '@angular/router';
+import { Params, Router, RouterLink, isActive } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
@@ -32,6 +32,7 @@ type StepView = {
   hasChanges: boolean | undefined;
   name: string;
   routerLink: (string | null)[] | null;
+  queryParams: Params;
   active: () => boolean;
   group?: StepGroup;
   statusIconSymbolName?: string;
@@ -116,6 +117,7 @@ export class SharedPatternGesuchStepNavComponent {
             ...trancheSetting.routesSuffix,
           ]
         : null,
+      queryParams: { formularTab: step.route },
       active: isActive(`gesuch/${step.route}`, this.route, {
         paths: 'subset',
         queryParams: 'ignored',
