@@ -4,10 +4,13 @@ import {
   Component,
   DestroyRef,
   HostBinding,
+  Injector,
   Signal,
   computed,
   effect,
   inject,
+  runInInjectionContext,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,12 +26,16 @@ import {
 } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
+import { format } from 'date-fns';
 import { filter, map, startWith } from 'rxjs';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
-import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import {
+  SharedTranslationKey,
+  translatableShared,
+} from '@dv/shared/assets/i18n';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -39,6 +46,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -74,6 +82,7 @@ import {
 } from '@dv/shared/util/gesuch';
 import { TabNavItem } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
+import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-layout',
@@ -105,6 +114,8 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private injector = inject(Injector);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   private gesuchStore = inject(GesuchStore);
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
@@ -267,7 +278,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const byType = darlehen.reduce(
       (acc, darlehen) => {
-        const statusKey = darlehenStatusMapping[darlehen.status!];
+        if (!darlehen.status) {
+          return acc;
+        }
+
+        const statusKey = darlehenStatusMapping[darlehen.status];
 
         if (!acc[statusKey]) {
           acc[statusKey] = [];
@@ -293,6 +308,32 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       isPending(this.gesuchHeaderStore.header()) ||
       isPending(this.gesuchStore.lastStatusChange())
     );
+  });
+  isExportingSig = signal(false);
+  private gesuchCacheSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchCache,
+  );
+  exportValuesSig = computed<ExportView | undefined>(() => {
+    const { gesuch, isEditingAenderung } = this.gesuchCacheSig();
+    const tranche = gesuch?.gesuchTrancheToWorkWith;
+    const periode = gesuch?.gesuchsperiode;
+
+    if (!gesuch || !tranche || !periode || !isDefined(isEditingAenderung)) {
+      return undefined;
+    }
+
+    return {
+      gesuch,
+      tranche,
+      isEditingAenderung,
+      sachbearbeiter: gesuch.bearbeiter,
+      periode: {
+        bezeichnungDe: periode.bezeichnungDe,
+        bezeichnungFr: periode.bezeichnungFr,
+        year: format(Date.parse(periode.gesuchsperiodeStart), 'yy'),
+        einreichefrist: periode.einreichefristNormal,
+      },
+    };
   });
 
   constructor() {
@@ -558,6 +599,31 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
+  }
+
+  async exportTranche() {
+    const exportValues = this.exportValuesSig();
+    if (!exportValues) {
+      return;
+    }
+
+    this.isExportingSig.set(true);
+
+    try {
+      const module = await import('@dv/shared/util-data-access/export-tranche');
+      const exportTrancheService = runInInjectionContext(this.injector, () =>
+        inject(module.SharedExportTrancheService),
+      );
+
+      await exportTrancheService.exportTranche(exportValues);
+    } catch {
+      this.globalNotificationStore.createNotification({
+        type: 'ERROR',
+        messageKey: translatableShared('shared.form.tranche.export.error'),
+      });
+    }
+
+    this.isExportingSig.set(false);
   }
 }
 

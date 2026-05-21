@@ -2,12 +2,9 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  Injector,
   computed,
   effect,
   inject,
-  runInInjectionContext,
-  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -40,7 +37,6 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
-import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -60,7 +56,6 @@ import {
   formatBackendLocalDate,
   parseBackendLocalDateAndPrint,
 } from '@dv/shared/util/validator-date';
-import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
 import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuch-form-tranche.selector';
 
@@ -89,8 +84,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private dialog = inject(MatDialog);
   private translate = inject(TranslocoService);
   private formBuilder = inject(NonNullableFormBuilder);
-  private injector = inject(Injector);
-  private globalNotificationStore = inject(GlobalNotificationStore);
   private defaultCommentSig = translateSignal(
     translatableShared('shared.form.tranche.bemerkung.initialgesuch'),
   );
@@ -112,7 +105,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
       loading || isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
     );
   });
-  isExportingSig = signal(false);
 
   form = this.formBuilder.group({
     status: [''],
@@ -126,17 +118,6 @@ export class SharedFeatureGesuchFormTrancheComponent {
     bis: [''],
     bemerkung: [''],
     einreichedatum: [''],
-  });
-
-  exportValuesSig = computed<ExportView | undefined>(() => {
-    const { gesuch, tranche, isEditingAenderung, sachbearbeiter, periode } =
-      this.viewSig();
-
-    if (!tranche || !gesuch || !periode || !isDefined(isEditingAenderung)) {
-      return undefined;
-    }
-
-    return { gesuch, tranche, sachbearbeiter, isEditingAenderung, periode };
   });
 
   currentGesuchSig = computed(
@@ -335,28 +316,5 @@ export class SharedFeatureGesuchFormTrancheComponent {
         this.router.navigate(routesMap[target]);
       },
     });
-  }
-
-  async exportTranche(exportValues: ExportView) {
-    if (!exportValues) {
-      return;
-    }
-    this.isExportingSig.set(true);
-
-    try {
-      const module = await import('@dv/shared/util-data-access/export-tranche');
-      const exportTrancheService = runInInjectionContext(this.injector, () =>
-        inject(module.SharedExportTrancheService),
-      );
-
-      await exportTrancheService.exportTranche(exportValues);
-    } catch {
-      this.globalNotificationStore.createNotification({
-        type: 'ERROR',
-        messageKey: translatableShared('shared.form.tranche.export.error'),
-      });
-    }
-
-    this.isExportingSig.set(false);
   }
 }

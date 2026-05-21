@@ -132,6 +132,7 @@
 
     @let statusUebergaenge = statusUebergaengeOptionsSig();
     @let availableTrancheInteraction = availableTrancheInteractionSig();
+    @let canExport = !!exportValuesSig();
     <!-- Aktion Button -->
     @if (isActionRouteSig()) {
       <div>
@@ -140,7 +141,11 @@
           class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
-          [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
+          [disabled]="
+            !(statusUebergaenge.isNotEmpty || availableTrancheInteraction || canExport) ||
+            isLoadingSig() ||
+            isExportingSig()
+          "
           #aktionTrigger="matMenuTrigger"
           [matMenuTriggerFor]="aktionMenu"
         >
@@ -154,6 +159,26 @@
           class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
         >
           <div class="tw:flex tw:flex-col tw:gap-2">
+            @if (canExport) {
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aktion-export-tranche"
+                [disabled]="isExportingSig()"
+                mat-menu-item
+                (click)="exportTranche()"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">download</i>
+                  <span>{{ t('shared.form.tranche.export') }}</span>
+                </div>
+              </button>
+            }
+
+            @if (canExport && (availableTrancheInteraction || statusUebergaenge.isNotEmpty)) {
+              <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+            }
+
             @switch (availableTrancheInteraction) {
               @case ('CREATE_TRANCHE') {
                 <!-- Tranche erstellen -->
