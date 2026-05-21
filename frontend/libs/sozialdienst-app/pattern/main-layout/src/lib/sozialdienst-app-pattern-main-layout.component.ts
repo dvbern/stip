@@ -6,9 +6,11 @@ import {
   effect,
   inject,
 } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -16,6 +18,7 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
@@ -64,6 +67,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
@@ -85,6 +89,12 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private darlehenIdSig = createParamsIdSig(
     'darlehenId',
     this.allRouteParamsSig,
+  );
+
+  private formularTabSig = toSignal(
+    this.route.queryParamMap.pipe(
+      map((params) => params.get('formularTab') ?? undefined),
+    ),
   );
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
@@ -119,6 +129,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+      const formularTab = this.formularTabSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
@@ -153,9 +164,13 @@ export class SozialdienstAppPatternMainLayoutComponent {
         );
       }
 
+      const tab = decodeURI(formularTab ?? '') || TRANCHE.route;
+      const tabSegments = tab.split('/').filter(Boolean);
+
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        tabSegments,
         this.trancheIdSig(),
         'sozialdienst-app',
       );

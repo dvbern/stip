@@ -42,6 +42,7 @@ export const createParamsIdSig = (
 export function buildGesuchNavItems(
   gesuchId: string | undefined,
   tranchen: Pick<GesuchTrancheSlim, 'id' | 'gueltigAb'>[],
+  tabRouteSegments: string[],
   trancheId: string | undefined,
   baseKey = 'shared',
 ): NavItem[] {
@@ -64,7 +65,14 @@ export function buildGesuchNavItems(
               date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
             },
           },
-          route: ['/gesuch', gesuchId, 'tranche', tranche.id],
+          route: [
+            '/gesuch',
+            ...tabRouteSegments,
+            gesuchId,
+            'tranche',
+            tranche.id,
+          ],
+          queryParams: { formularTab: tabRouteSegments.join('/') },
           active: trancheId === tranche.id,
         })),
       },
@@ -78,7 +86,14 @@ export function buildGesuchNavItems(
         id: 'gesuch',
         label: { key: `${baseKey}.header.gesuch` },
         icon: 'description',
-        route: ['/gesuch', gesuchId, 'tranche', tranchen[0].id],
+        route: [
+          '/gesuch',
+          ...tabRouteSegments,
+          gesuchId,
+          'tranche',
+          tranchen[0].id,
+        ],
+        queryParams: { formularTab: tabRouteSegments.join('/') },
         active: !!gesuchId,
       },
     ];
