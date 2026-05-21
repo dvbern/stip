@@ -268,8 +268,8 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
             .orElseThrow(NotFoundException::new);
     }
 
-    public List<Gesuch> getAllWartenAufUnterschriftenblatt() {
-        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT).stream().toList();
+    public Stream<Gesuch> getAllWartenAufUnterschriftenblatt() {
+        return addStatusFilter(getFindAlleQuery(), Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT).stream();
     }
 
     public List<Gesuch> getAllFehlendeDokumente() {
@@ -317,17 +317,5 @@ public class GesuchRepository implements BaseRepository<Gesuch> {
                     )
             )
             .fetch();
-    }
-
-    public Stream<Gesuch> getAllWartenAufUnterschriftenblattByGesuchsperiodeId(final UUID gesuchsperiodeId) {
-        return new JPAQueryFactory(entityManager)
-            .selectFrom(Q_GESUCH)
-            .where(
-                Q_GESUCH.gesuchsperiode.id.eq(gesuchsperiodeId)
-                    .and(
-                        Q_GESUCH.gesuchStatus.eq(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT)
-                    )
-            )
-            .stream();
     }
 }

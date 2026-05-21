@@ -65,7 +65,7 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
     void setUp() {
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT);
         gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now().minusDays(2));
-        when(gesuchRepository.getAllWartenAufUnterschriftenblattByGesuchsperiodeId(any()))
+        when(gesuchRepository.getAllWartenAufUnterschriftenblatt())
             .thenReturn(Stream.of(gesuch));
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
 

@@ -150,17 +150,12 @@ public class UnterschriftenblattService {
 
     @Transactional
     public void checkForUnterschriftenblaetterOnAllGesuche() {
-        final var gesuchsperioden = gesuchsperiodenService.getAllGesuchsperioden();
+        final var gesuchs = gesuchRepository.getAllWartenAufUnterschriftenblatt();
 
-        final var toUpdate = gesuchsperioden
-            .flatMap(
-                gesuchsperiode -> gesuchRepository
-                    .getAllWartenAufUnterschriftenblattByGesuchsperiodeId(gesuchsperiode.getId())
-                    .filter(
-                        gesuch -> gesuch.getGesuchStatusAenderungDatum()
-                            .isBefore(LocalDateTime.now().minusDays(gesuchsperiode.getFristUploadUnterschriftenblatt()))
-                    )
-            )
+        final var toUpdate = gesuchs.filter(
+            gesuch -> gesuch.getGesuchStatusAenderungDatum()
+                .isBefore(LocalDateTime.now().minusDays(gesuch.getGesuchsperiode().getFristUploadUnterschriftenblatt()))
+        )
             .toList();
 
         if (!toUpdate.isEmpty()) {

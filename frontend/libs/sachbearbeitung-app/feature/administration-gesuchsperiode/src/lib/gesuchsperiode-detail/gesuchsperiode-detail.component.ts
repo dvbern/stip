@@ -289,6 +289,7 @@ export class GesuchsperiodeDetailComponent {
               'einreichefristNormal',
               'einreichefristReduziert',
               'fristNachreichenDokumente',
+              'fristUploadUnterschriftenblatt',
               'stichtagVolljaehrigkeitMedizinischeGrundversorgung',
               'zweiterAuszahlungsterminMonat',
               'zweiterAuszahlungsterminTag',
