@@ -5,16 +5,7 @@
   <dv-shared-pattern-gesuch-info-bar>
     <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
-      <a
-        class="tw:dv-nav-button fw-normal tw:flex tw:items-center align-self-center"
-        [routerLink]="['/']"
-        data-testid="header-nav-backlink"
-      >
-        <i class="material-symbols-rounded tw:text-2xl tw:mr-2">arrow_left_alt</i>
-        <span>{{ t('shared.header.backToDashboard') }}</span>
-      </a>
       @if (gesuchInfoDataSig(); as infoData) {
-        <span>|</span>
         <div class="tw:ml-4">
           <span>{{ infoData.fallNummer }} / </span>
           <span>{{ infoData.gesuchNummer }} / </span>
