@@ -118,6 +118,10 @@ export class GesuchsperiodeDetailComponent {
     einreichefristNormal: [<string | null>null, [Validators.required]],
     einreichefristReduziert: [<string | null>null, [Validators.required]],
     fristNachreichenDokumente: [<number | null>null, [Validators.required]],
+    fristUploadUnterschriftenblatt: [
+      <number | null>null,
+      [Validators.required],
+    ],
     stichtagVolljaehrigkeitMedizinischeGrundversorgung: [
       <string | null>null,
       [Validators.required],
@@ -285,6 +289,7 @@ export class GesuchsperiodeDetailComponent {
               'einreichefristNormal',
               'einreichefristReduziert',
               'fristNachreichenDokumente',
+              'fristUploadUnterschriftenblatt',
               'stichtagVolljaehrigkeitMedizinischeGrundversorgung',
               'zweiterAuszahlungsterminMonat',
               'zweiterAuszahlungsterminTag',

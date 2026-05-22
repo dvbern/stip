@@ -33,10 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UnterschriftenblattUploadCheckScheduledTask {
     private final UnterschriftenblattService unterschriftenblattService;
 
-    @Transactional
-    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
-    @RunForTenant(MandantIdentifier.BERN)
-    public void run() {
+    private void run() {
         try {
             LOG.info("Checking Unterschriftenblaetter for Bern");
             unterschriftenblattService.checkForUnterschriftenblaetterOnAllGesuche();
@@ -44,5 +41,19 @@ public class UnterschriftenblattUploadCheckScheduledTask {
         } catch (Throwable e) {
             LOG.error(e.toString(), e);
         }
+    }
+
+    @Transactional
+    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @RunForTenant(MandantIdentifier.BERN)
+    public void runForBern() {
+        run();
+    }
+
+    @Transactional
+    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @RunForTenant(MandantIdentifier.DV)
+    public void runForDv() {
+        run();
     }
 }
