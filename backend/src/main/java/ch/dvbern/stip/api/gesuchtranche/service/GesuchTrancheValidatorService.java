@@ -72,6 +72,7 @@ public class GesuchTrancheValidatorService {
             List.of(
                 GesuchEinreichenValidationGroup.class,
                 GesuchNachInBearbeitungSBValidationGroup.class,
+                GesuchNachInFreigabeValidationGroup.class,
                 GesuchDokumentsAcceptedValidationGroup.class
             )
         );
