@@ -3,12 +3,13 @@
   type="button"
   [attr.aria-label]="'shared.dokumente.upload' | transloco"
   [attr.data-testid]="'button-document-upload-' + optionsSig().dokument.dokumentTyp"
+  [disabled]="isDisabledSig()"
   (click)="openDialog()"
 >
   <span class="material-symbols-rounded">{{ iconSig() }}</span>
 </button>
 @if (mainDocumentSig(); as dokument) {
-  <div class="tw:text-xl tw:absolute indicator tw:rounded-full tw:bg-white tw:pointer-events-none shadow">
+  <div class="tw:text-xl tw:absolute indicator tw:rounded-full tw:bg-white tw:pointer-events-none">
     <dv-shared-ui-icon-chip
       class="tw:text-lg!"
       [class.spin]="dokument.state === 'uploading'"

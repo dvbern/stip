@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.entities;
+package ch.dvbern.stip.api.generator.depricated.entities;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -42,8 +42,8 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.FamiliensituationUpdateDtoS
 import ch.dvbern.stip.api.generator.api.model.gesuch.LebenslaufItemUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PartnerUpdateDtoSpecModel;
 import ch.dvbern.stip.api.generator.api.model.gesuch.PersonInAusbildungUpdateDtoSpecModel;
-import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapper;
-import ch.dvbern.stip.api.generator.entities.service.GesuchUpdateDtoMapperImpl;
+import ch.dvbern.stip.api.generator.depricated.entities.service.GesuchUpdateDtoMapper;
+import ch.dvbern.stip.api.generator.depricated.entities.service.GesuchUpdateDtoMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -68,6 +68,7 @@ import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 
+@Deprecated
 public final class GesuchGenerator {
     private GesuchGenerator() {}
 

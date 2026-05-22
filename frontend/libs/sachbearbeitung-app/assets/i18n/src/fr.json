@@ -389,6 +389,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Il doit y avoir une année de formation publiée liée.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "L'année de formation liée n'est pas encore publiée.",
   "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Délai de remise des documents",
+  "sachbearbeitung-app.admin.gesuchsperiode.fristUploadUnterschriftenblatt.label": "Délai de remise des feuilles de signatures",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label": "Date limite de majorité",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info": "Pour les soins médicaux de base",
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Service social",
@@ -819,7 +820,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag": "Déficit",
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag.info": "Revenus moins coûts",
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Divisé par le nombre de personnes dans le ménage (répartition par tête)",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Budget valable",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Part non couverte du coût de la vie",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Transféré comme coût dans le budget personnel - uniquement si vivant chez les parents",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Montant total du budget",
 

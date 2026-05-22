@@ -389,6 +389,7 @@
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.noGesuchsjahr": "Es muss ein publiziertes Ausbildungsjahr vorhanden verknüpft sein.",
   "sachbearbeitung-app.admin.gesuchsperiode.publishBlockedReason.gesuchsjahrEntwurf": "Das verknüpfte Ausbildungsjahr ist noch nicht publiziert.",
   "sachbearbeitung-app.admin.gesuchsperiode.fristNachreichenDokumente.label": "Nachreichefrist für Dokumente",
+  "sachbearbeitung-app.admin.gesuchsperiode.fristUploadUnterschriftenblatt.label": "Nachreichefrist für Unterschriftenblätter",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.label": "Stichtag Volljährigkeit",
   "sachbearbeitung-app.admin.gesuchsperiode.stichtag-volljaehrigkeit-medizinische-grundversorgung.info": "Für die medizinische Grundversorgung",
   "sachbearbeitung-app.admin.sozialdienst.route.overview": "Sozialdienste",
@@ -819,7 +820,7 @@
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag": "Fehlbetrag",
   "sachbearbeitung-app.verfuegung.berechnung.familien.fehlbetrag.info": "Einnahmen minus Kosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.proKopfTeilung": "Geteilt durch die Anzahl Personen im Haushalt (Pro-Kopf-Teilung)",
-  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Total Anspruch",
+  "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten": "Ungedeckter Anteil Lebenshaltungskosten",
   "sachbearbeitung-app.verfuegung.berechnung.familien.ungedeckterAnteilLebenshaltungskosten.info": "Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend",
   "sachbearbeitung-app.verfuegung.berechnung.familien.total": "Totaler Betrag des Budgets",
 

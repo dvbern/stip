@@ -71,11 +71,8 @@ public class GesuchsperiodenService {
         return gesuchsperiodeMapper.toDatenDto(gesuchsperiode);
     }
 
-    public List<GesuchsperiodeDto> getAllGesuchsperioden() {
-        return this.gesuchsperiodeRepository.findAll()
-            .stream()
-            .map(gesuchsperiodeMapper::toDto)
-            .toList();
+    public List<GesuchsperiodeDto> getAllGesuchsperiodenAsDtos() {
+        return gesuchsperiodeRepository.streamAll().map(gesuchsperiodeMapper::toDto).toList();
     }
 
     public Optional<GesuchsperiodeWithDatenDto> getGesuchsperiode(final UUID id) {

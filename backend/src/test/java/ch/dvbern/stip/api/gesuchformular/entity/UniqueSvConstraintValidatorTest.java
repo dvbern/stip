@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;

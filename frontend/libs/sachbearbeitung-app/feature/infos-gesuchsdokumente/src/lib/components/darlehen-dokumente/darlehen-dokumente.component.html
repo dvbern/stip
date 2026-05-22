@@ -66,16 +66,16 @@
           @if (dokument.verfuegung) {
             <button
               type="button"
-              class="tw:dv-button tw:flex! tw:max-w-full tw:p-0!"
+              class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
               [dvDownloadButton]="{
                 type: 'darlehen',
                 id: dokument.verfuegung.id,
               }"
             >
-              <span class="tw:truncate tw:text-sm/none!" [matTooltip]="dokument.verfuegung.filename">{{
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
                 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.table.darlehensverfuegung' | transloco
               }}</span>
-              <span class="material-symbols-rounded tw:mt-0.5 tw:ml-1! tw:align-middle tw:text-lg/none!">download</span>
+              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg!">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>

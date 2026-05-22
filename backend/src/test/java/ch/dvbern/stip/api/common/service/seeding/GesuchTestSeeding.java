@@ -127,6 +127,7 @@ public class GesuchTestSeeding extends Seeder {
             .setZweiterAuszahlungsterminMonat(6)
             .setZweiterAuszahlungsterminTag(1)
             .setFristNachreichenDokumente(30)
+            .setFristUploadUnterschriftenblatt(1)
             .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(
                 LocalDate.of(gesuchsjahr.getTechnischesJahr(), 12, 31)
             );

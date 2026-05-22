@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.entities.service;
+package ch.dvbern.stip.api.generator.depricated.entities.service;
 
 import java.util.UUID;
 
@@ -25,6 +25,7 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Deprecated
 public class DokumentGenerator {
     @Inject
     GenerateDemoDataService generateDemoDataService;

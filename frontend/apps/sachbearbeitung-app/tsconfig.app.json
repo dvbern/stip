@@ -5,7 +5,6 @@
     "types": ["@angular/localize"],
     "moduleResolution": "bundler"
   },
-  "files": ["src/main.ts"],
-  "include": ["src/**/*.d.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["vite.config.mts", "src/**/*.test.ts", "src/**/*.spec.ts"]
 }

@@ -22,7 +22,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import io.quarkus.test.common.QuarkusTestResource;

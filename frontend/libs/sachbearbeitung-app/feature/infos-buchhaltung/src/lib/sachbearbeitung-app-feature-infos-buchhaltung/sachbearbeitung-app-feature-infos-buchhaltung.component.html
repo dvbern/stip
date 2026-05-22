@@ -30,7 +30,7 @@
         </caption>
 
         <ng-container matColumnDef="datum">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:whitespace-nowrap">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:whitespace-nowrap">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.datum' | transloco }}
           </th>
           <td mat-cell *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource" class="tw:whitespace-nowrap">
@@ -98,20 +98,20 @@
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:!text-right tw:font-bold"
+            class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
           >
             {{ buchhaltung.entry.saldo | formatChf }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="comment">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-80">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.comment' | transloco }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap"
+            class="tw:max-w-32 tw:whitespace-nowrap"
             [dvTruncateTooltip]="buchhaltung.entry.comment"
           >
             {{ buchhaltung.entry.comment }}
