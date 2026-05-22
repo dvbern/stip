@@ -72,6 +72,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid Integer zweiterAuszahlungsterminMonat;
   private @Valid Integer zweiterAuszahlungsterminTag;
   private @Valid Integer fristNachreichenDokumente;
+  private @Valid Integer fristUploadUnterschriftenblatt;
   private @Valid LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
   private @Valid UUID id;
   private @Valid GueltigkeitStatusDto gueltigkeitStatus;
@@ -1033,6 +1034,25 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   }
 
   /**
+   **/
+  public GesuchsperiodeWithDatenDto fristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+    this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
+    return this;
+  }
+
+  
+  @JsonProperty("fristUploadUnterschriftenblatt")
+  @NotNull
+  public Integer getFristUploadUnterschriftenblatt() {
+    return fristUploadUnterschriftenblatt;
+  }
+
+  @JsonProperty("fristUploadUnterschriftenblatt")
+  public void setFristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+    this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
+  }
+
+  /**
    * dd.MM.yyyy
    **/
   public GesuchsperiodeWithDatenDto stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
@@ -1168,6 +1188,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
         Objects.equals(this.zweiterAuszahlungsterminMonat, gesuchsperiodeWithDaten.zweiterAuszahlungsterminMonat) &&
         Objects.equals(this.zweiterAuszahlungsterminTag, gesuchsperiodeWithDaten.zweiterAuszahlungsterminTag) &&
         Objects.equals(this.fristNachreichenDokumente, gesuchsperiodeWithDaten.fristNachreichenDokumente) &&
+        Objects.equals(this.fristUploadUnterschriftenblatt, gesuchsperiodeWithDaten.fristUploadUnterschriftenblatt) &&
         Objects.equals(this.stichtagVolljaehrigkeitMedizinischeGrundversorgung, gesuchsperiodeWithDaten.stichtagVolljaehrigkeitMedizinischeGrundversorgung) &&
         Objects.equals(this.id, gesuchsperiodeWithDaten.id) &&
         Objects.equals(this.gueltigkeitStatus, gesuchsperiodeWithDaten.gueltigkeitStatus) &&
@@ -1176,7 +1197,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, stichtagVolljaehrigkeitMedizinischeGrundversorgung, id, gueltigkeitStatus, einreichfrist);
+    return Objects.hash(bezeichnungDe, bezeichnungFr, fiskaljahr, gesuchsjahrId, gesuchsperiodeStart, gesuchsperiodeStopp, aufschaltterminStart, einreichefristNormal, einreichefristReduziert, ausbKostenSekII, ausbKostenTertiaer, freibetragVermoegen, freibetragErwerbseinkommen, einkommensfreibetrag, elternbeteiligungssatz, vermogenSatzAngerechnet, integrationszulage, limiteEkFreibetragIntegrationszulage, stipLimiteMinimalstipendium, person1, personen2, personen3, personen4, personen5, personen6, personen7, proWeiterePerson, kinder0017, jugendlicheErwachsene1824, erwachsene2599, wohnkostenFam1pers, wohnkostenFam2pers, wohnkostenFam3pers, wohnkostenFam4pers, wohnkostenFam5pluspers, wohnkostenPersoenlich1pers, wohnkostenPersoenlich2pers, wohnkostenPersoenlich3pers, wohnkostenPersoenlich4pers, wohnkostenPersoenlich5pluspers, preisProMahlzeit, maxSaeule3a, anzahlWochenLehre, anzahlWochenSchule, vermoegensanteilInProzent, reduzierungDesGrundbedarfs, limiteAlterAntragsstellerHalbierungElternbeitrag, zweiterAuszahlungsterminMonat, zweiterAuszahlungsterminTag, fristNachreichenDokumente, fristUploadUnterschriftenblatt, stichtagVolljaehrigkeitMedizinischeGrundversorgung, id, gueltigkeitStatus, einreichfrist);
   }
 
   @Override
@@ -1234,6 +1255,7 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
     sb.append("    zweiterAuszahlungsterminMonat: ").append(toIndentedString(zweiterAuszahlungsterminMonat)).append("\n");
     sb.append("    zweiterAuszahlungsterminTag: ").append(toIndentedString(zweiterAuszahlungsterminTag)).append("\n");
     sb.append("    fristNachreichenDokumente: ").append(toIndentedString(fristNachreichenDokumente)).append("\n");
+    sb.append("    fristUploadUnterschriftenblatt: ").append(toIndentedString(fristUploadUnterschriftenblatt)).append("\n");
     sb.append("    stichtagVolljaehrigkeitMedizinischeGrundversorgung: ").append(toIndentedString(stichtagVolljaehrigkeitMedizinischeGrundversorgung)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    gueltigkeitStatus: ").append(toIndentedString(gueltigkeitStatus)).append("\n");
