@@ -67,7 +67,10 @@ public class DarlehenDashboardQueryBuilder {
         );
     }
 
-    public JPAQuery<FreiwilligDarlehen> onlyMeine(final JPAQuery<FreiwilligDarlehen> query, final UUID benutzerId) {
+    public JPAQuery<FreiwilligDarlehen> onlyCurrentBenutzer(
+        final JPAQuery<FreiwilligDarlehen> query,
+        final UUID benutzerId
+    ) {
         final var zuordnung = QZuordnung.zuordnung;
 
         query.join(zuordnung)

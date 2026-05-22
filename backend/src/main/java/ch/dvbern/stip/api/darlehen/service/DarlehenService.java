@@ -420,7 +420,7 @@ public class DarlehenService {
         }
 
         if (Boolean.TRUE.equals(zugewiesen)) {
-            darlehenDashboardQueryBuilder.onlyMeine(baseQuery, benutzerService.getCurrentBenutzer().getId());
+            darlehenDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, benutzerService.getCurrentBenutzer().getId());
         }
 
         if (fallNummer != null) {

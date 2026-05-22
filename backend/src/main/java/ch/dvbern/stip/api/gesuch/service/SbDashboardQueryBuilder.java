@@ -24,6 +24,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.type.RoleFeature;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
@@ -132,7 +133,7 @@ public class SbDashboardQueryBuilder {
         );
     }
 
-    public void onlyMeine(final JPAQuery<?> query, final UUID benutzerId) {
+    public void onlyCurrentBenutzer(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
         final var ausbildung = QAusbildung.ausbildung;
         final var zuordnung = QZuordnung.zuordnung;
 
@@ -143,23 +144,23 @@ public class SbDashboardQueryBuilder {
             .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
     }
 
-    public void fallNummer(final JPAQuery<?> query, final String fallNummer) {
+    public void fallNummer(final JPAQuery<? extends AbstractEntity> query, final String fallNummer) {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.where(ausbildung.fall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
-    public void piaNachname(final JPAQuery<?> query, final String nachname) {
+    public void piaNachname(final JPAQuery<? extends AbstractEntity> query, final String nachname) {
         joinFormular(query);
         query.where(formular.personInAusbildung.nachname.containsIgnoreCase(nachname));
     }
 
-    public void piaVorname(final JPAQuery<?> query, final String vorname) {
+    public void piaVorname(final JPAQuery<? extends AbstractEntity> query, final String vorname) {
         joinFormular(query);
         query.where(formular.personInAusbildung.vorname.containsIgnoreCase(vorname));
     }
 
-    void joinFormular(final JPAQuery<?> query) {
+    private void joinFormular(final JPAQuery<? extends AbstractEntity> query) {
         // This join is required, because QueryDSL doesn't init the path to PiA
         query
             .join(formular)
@@ -170,11 +171,11 @@ public class SbDashboardQueryBuilder {
             );
     }
 
-    void joinGesuch(final JPAQuery<?> query) {
+    private void joinGesuch(final JPAQuery<? extends AbstractEntity> query) {
         query.join(gesuch).on(tranche.gesuch.id.eq(gesuch.id));
     }
 
-    public void piaGeburtsdatum(final JPAQuery<?> query, final LocalDate geburtsdatum) {
+    public void piaGeburtsdatum(final JPAQuery<? extends AbstractEntity> query, final LocalDate geburtsdatum) {
         joinFormular(query);
         query.where(formular.personInAusbildung.geburtsdatum.eq(geburtsdatum));
     }
@@ -187,7 +188,7 @@ public class SbDashboardQueryBuilder {
         query.where(tranche.status.eq(GesuchTrancheStatus.valueOf(status)));
     }
 
-    public void bearbeiter(final JPAQuery<?> query, final String bearbeiter) {
+    public void bearbeiter(final JPAQuery<? extends AbstractEntity> query, final String bearbeiter) {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.join(QZuordnung.zuordnung).on(ausbildung.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
@@ -198,7 +199,7 @@ public class SbDashboardQueryBuilder {
     }
 
     public void letzteAktivitaet(
-        final JPAQuery<?> query,
+        final JPAQuery<? extends AbstractEntity> query,
         final LocalDate from,
         final LocalDate to
     ) {
@@ -206,7 +207,7 @@ public class SbDashboardQueryBuilder {
     }
 
     public void orderBy(
-        final JPAQuery<?> query,
+        final JPAQuery<? extends AbstractEntity> query,
         final SbGesucheDashboardColumn column,
         final SortOrder sortOrder
     ) {
@@ -243,15 +244,15 @@ public class SbDashboardQueryBuilder {
         query.orderBy(orderSpecifier);
     }
 
-    public void defaultOrder(final JPAQuery<?> query) {
+    public void defaultOrder(final JPAQuery<? extends AbstractEntity> query) {
         query.orderBy(tranche.gesuch.timestampMutiert.desc());
     }
 
-    public JPAQuery<Long> getCountQuery(final JPAQuery<?> query) {
+    public JPAQuery<Long> getCountQuery(final JPAQuery<? extends AbstractEntity> query) {
         return query.clone().select(tranche.count());
     }
 
-    public void paginate(final JPAQuery<?> query, final int page, final int pageSize) {
+    public void paginate(final JPAQuery<? extends AbstractEntity> query, final int page, final int pageSize) {
         query.offset((long) pageSize * page).limit(pageSize);
     }
 }

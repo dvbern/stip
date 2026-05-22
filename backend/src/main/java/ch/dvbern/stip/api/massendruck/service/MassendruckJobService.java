@@ -142,7 +142,7 @@ public class MassendruckJobService {
         final var gesucheQuery = sbDashboardQueryBuilder.baseGesuchQuery(getGesucheSBQueryType);
 
         if (Boolean.TRUE.equals(zugewiesen)) {
-            sbDashboardQueryBuilder.onlyMeine(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
+            sbDashboardQueryBuilder.onlyCurrentBenutzer(gesucheQuery, benutzerService.getCurrentBenutzer().getId());
         }
 
         final var gesuche = gesucheQuery.stream().toList();

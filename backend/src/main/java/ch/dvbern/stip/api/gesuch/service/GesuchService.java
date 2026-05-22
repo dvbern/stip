@@ -427,7 +427,7 @@ public class GesuchService {
     }
 
     private int configureQuery(
-        JPAQuery<?> baseQuery,
+        JPAQuery<? extends AbstractEntity> baseQuery,
         final Boolean zugewiesen,
         final String fallNummer,
         final String piaNachname,
@@ -441,10 +441,10 @@ public class GesuchService {
         final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        final var meId = benutzerService.getCurrentBenutzer().getId();
+        final var currentBenutzerId = benutzerService.getCurrentBenutzer().getId();
 
         if (Boolean.TRUE.equals(zugewiesen)) {
-            sbDashboardQueryBuilder.onlyMeine(baseQuery, meId);
+            sbDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, currentBenutzerId);
         }
 
         if (fallNummer != null) {
