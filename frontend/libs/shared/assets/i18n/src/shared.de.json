@@ -651,6 +651,8 @@
   "shared.familiensituation.title": "Familiensituation",
   "shared.form.familiensituation.mutter": "Mutter",
   "shared.form.familiensituation.vater": "Vater",
+  "shared.form.familiensituation.mutter.unbekannt-verstorben.label": "Ist die Mutter unbekannt oder verstorben?",
+  "shared.form.familiensituation.vater.unbekannt-verstorben.label": "Ist der Vater unbekannt oder verstorben?",
   "shared.form.familiensituation.gemeinsam": "Gemeinsam",
   "shared.form.familiensituation.hiddenEltern": "Anpassungen sind nicht möglich, da mindestens ein Elternteil versteckt ist.",
   "shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label": "Sind die leiblichen Eltern verheiratet oder wohnen zusammen?",

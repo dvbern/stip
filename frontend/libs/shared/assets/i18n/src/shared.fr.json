@@ -651,6 +651,8 @@
   "shared.familiensituation.title": "Situation familiale",
   "shared.form.familiensituation.mutter": "Mère",
   "shared.form.familiensituation.vater": "Père",
+  "shared.form.familiensituation.mutter.unbekannt-verstorben.label": "La mère est-elle inconnue ou décédée?",
+  "shared.form.familiensituation.vater.unbekannt-verstorben.label": "Le père est-il inconnu ou décédé?",
   "shared.form.familiensituation.gemeinsam": "Ensemble",
   "shared.form.familiensituation.hiddenEltern": "Les modifications ne sont pas possibles car au moins un parent est masqué.",
   "shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label": "Les parents biologiques sont-ils mariés ou vivent-ils ensemble?",

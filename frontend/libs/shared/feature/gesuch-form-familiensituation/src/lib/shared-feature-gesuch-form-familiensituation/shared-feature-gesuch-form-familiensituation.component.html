@@ -32,7 +32,7 @@
       <!-- elternVerheiratetZusammen -->
       <div class="questions-wrapper">
         <div
-          class="tw:grid tw:grid-cols-2 tw:mt-8"
+          class="tw:grid tw:grid-cols-2 tw:my-6"
           (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
           (@inOutPaneAnimation.done)="duringAnimation = 'show'"
           [@inOutPaneAnimation]="readonly ? 'in' : (stateSig()['ELTERN_VERHEIRATET_ZUSAMMEN'] ?? 'hidden')"
@@ -44,7 +44,7 @@
             dvSharedUiFormField
             class="tw:flex tw:flex-col"
           >
-            <label>{{
+            <label class="tw:font-bold">{{
               'shared.form.familiensituation.leibliche-eltern-verheiratet-konkubinat.label' | transloco
             }}</label>
 
@@ -75,7 +75,7 @@
           "
           [@.disabled]="readonly"
         >
-          <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+          <div class="tw:grid tw:grid-cols-2 tw:my-6">
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
@@ -83,7 +83,9 @@
               dvSharedUiFormField
             >
               <div class="tw:flex tw:items-center">
-                <label>{{ 'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | transloco }}</label>
+                <label class="tw:font-bold">{{
+                  'shared.form.familiensituation.gerichtliche-alimentenregelung.label' | transloco
+                }}</label>
                 <button
                   type="button"
                   (click)="gerichtlicheAlimentenregelungDialog.toggle()"
@@ -124,7 +126,7 @@
             ></div>
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.werZahltAlimente)) {
-            <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6">
               <mat-form-field dvSharedUiFormField class="tw:col-span-2 tw:xl:col-span-1">
                 <mat-label>{{ 'shared.form.familiensituation.wer-zahlt-alimente.label' | transloco }}</mat-label>
                 <mat-select
@@ -152,6 +154,7 @@
               </mat-form-field>
             </div>
           }
+          <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
           @if (
             !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
           ) {
@@ -175,14 +178,16 @@
           "
           [@.disabled]="readonly"
         >
-          <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+          <div class="tw:grid tw:grid-cols-2 tw:my-6">
             <mat-radio-group
               formControlName="elternteilUnbekanntVerstorben"
               data-testid="form-family-elternteilUnbekanntVerstorben"
               dvSharedUiFormField
               class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
             >
-              <label>{{ 'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | transloco }}</label>
+              <label class="tw:font-bold">{{
+                'shared.form.familiensituation.elternteil-verstorben-unbekannt.label' | transloco
+              }}</label>
               <mat-radio-button data-testid="yes" [value]="true">{{
                 'shared.form.radio.yes' | transloco
               }}</mat-radio-button>
@@ -199,7 +204,8 @@
             </mat-radio-group>
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntVerstorben)) {
-            <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+            <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
+            <div class="tw:grid tw:grid-cols-2 tw:my-6">
               <mat-radio-group
                 formControlName="mutterUnbekanntVerstorben"
                 data-testid="form-family-mutterUnbekanntVerstorben"
@@ -207,7 +213,7 @@
                 class="tw:col-span-2 tw:xl:col-span-1 tw:flex tw:flex-col"
               >
                 <div class="tw:flex tw:items-center tw:grow">
-                  <span class="tw:mr-2">{{
+                  <span class="tw:mr-2 tw:font-bold">{{
                     'shared.form.familiensituation.elternteil-verstorben.label' | transloco
                   }}</span>
                   <button
@@ -220,7 +226,9 @@
                   </button>
                 </div>
 
-                <label>{{ 'shared.form.familiensituation.mutter' | transloco }}</label>
+                <label class="tw:font-bold">{{
+                  'shared.form.familiensituation.mutter.unbekannt-verstorben.label' | transloco
+                }}</label>
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   [value]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
@@ -262,14 +270,16 @@
             </div>
           }
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntGrund)) {
-            <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6">
               <mat-radio-group
                 formControlName="mutterUnbekanntGrund"
                 data-testid="form-family-mutterUnbekanntGrund"
                 dvSharedUiFormField
                 class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
               >
-                <label>{{ 'shared.form.familiensituation.mutter-unbekannt-reason.label' | transloco }}</label>
+                <label class="tw:font-bold">{{
+                  'shared.form.familiensituation.mutter-unbekannt-reason.label' | transloco
+                }}</label>
                 <div class="tw:flex tw:gap-2 tw:flex-wrap tw:justify-between">
                   <div class="tw:flex tw:flex-col">
                     <mat-radio-button
@@ -324,14 +334,17 @@
             <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
           }
           @if (!hiddenFieldsSetSig().has(form.controls.vaterUnbekanntVerstorben)) {
-            <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+            <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
+            <div class="tw:grid tw:grid-cols-2 tw:my-6">
               <mat-radio-group
                 formControlName="vaterUnbekanntVerstorben"
                 data-testid="form-family-vaterUnbekanntVerstorben"
                 dvSharedUiFormField
                 class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
               >
-                <label>{{ 'shared.form.familiensituation.vater' | transloco }}</label>
+                <label class="tw:font-bold">{{
+                  'shared.form.familiensituation.vater.unbekannt-verstorben.label' | transloco
+                }}</label>
 
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
@@ -367,14 +380,14 @@
             </div>
           }
           @if (!hiddenFieldsSetSig().has(this.form.controls.vaterUnbekanntGrund)) {
-            <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6">
               <mat-radio-group
                 formControlName="vaterUnbekanntGrund"
                 data-testid="form-family-vaterUnbekanntGrund"
                 dvSharedUiFormField
                 class="tw:col-span-2 tw:xl:col-span-1 tw:flex tw:flex-col"
               >
-                <label class="tw:mr-2">{{
+                <label class="tw:font-bold">{{
                   'shared.form.familiensituation.vater-unbekannt-reason.label' | transloco
                 }}</label>
                 <div class="tw:flex tw:gap-2 tw:flex-wrap tw:items-center tw:justify-between">
@@ -450,6 +463,7 @@
           @if (!hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet)) {
             <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
           }
+          <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
           @if (!hiddenFieldsSetSig().has(form.controls.vaterWiederverheiratet)) {
             <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
           }
@@ -469,14 +483,16 @@
       }
     </dv-shared-ui-step-form-buttons>
     <ng-template #mutterWiederverheiratet>
-      <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+      <div class="tw:grid tw:grid-cols-2 tw:my-6">
         <mat-radio-group
           formControlName="mutterWiederverheiratet"
           data-testid="form-family-mutterWiederverheiratet"
           dvSharedUiFormField
           class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
         >
-          <label>{{ 'shared.form.familiensituation.mutter-wiederverheiratet.label' | transloco }}</label>
+          <label class="tw:font-bold">{{
+            'shared.form.familiensituation.mutter-wiederverheiratet.label' | transloco
+          }}</label>
 
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | transloco
@@ -494,14 +510,16 @@
     </ng-template>
 
     <ng-template #vaterWiederverheiratet>
-      <div class="tw:grid tw:grid-cols-2 tw:mt-8">
+      <div class="tw:grid tw:grid-cols-2 tw:my-6">
         <mat-radio-group
           formControlName="vaterWiederverheiratet"
           data-testid="form-family-vaterWiederverheiratet"
           dvSharedUiFormField
           class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
         >
-          <label>{{ 'shared.form.familiensituation.vater-wiederverheiratet.label' | transloco }}</label>
+          <label class="tw:font-bold">{{
+            'shared.form.familiensituation.vater-wiederverheiratet.label' | transloco
+          }}</label>
 
           <mat-radio-button data-testid="yes" [value]="true">{{
             'shared.form.radio.yes' | transloco
