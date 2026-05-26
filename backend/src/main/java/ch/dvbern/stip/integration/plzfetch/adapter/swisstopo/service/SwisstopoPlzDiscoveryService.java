@@ -15,20 +15,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.adapter.type;
+package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.service;
 
-import java.util.List;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.JsonNode;
+import ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.type.SwisstopoPlzDiscoveryResponse;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public record SwisstopoPlzDiscoveryResponse(
-List<Feature> features
-) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public record Feature(
-    JsonNode assets
-    ) {
-    }
+@Path("/items")
+@RegisterRestClient(configKey = "swisstopo-plz-api")
+public interface SwisstopoPlzDiscoveryService {
+    @GET
+    SwisstopoPlzDiscoveryResponse get();
 }

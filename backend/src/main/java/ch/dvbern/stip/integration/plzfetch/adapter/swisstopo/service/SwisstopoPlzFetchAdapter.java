@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.adapter.service;
+package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.service;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.scheduledtask.entity.Scheduledtask;
 import ch.dvbern.stip.api.scheduledtask.repo.ScheduledtaskRepository;
 import ch.dvbern.stip.api.scheduledtask.type.ScheduledtaskType;
-import ch.dvbern.stip.integration.plzfetch.adapter.type.SwisstopoPlzDiscoveryResponse;
+import ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.type.SwisstopoPlzDiscoveryResponse;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
 import ch.dvbern.stip.integration.plzfetch.domain.port.PlzFetchPort;

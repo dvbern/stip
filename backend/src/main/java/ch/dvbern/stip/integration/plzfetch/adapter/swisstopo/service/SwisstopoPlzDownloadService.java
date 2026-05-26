@@ -15,16 +15,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.adapter.service;
+package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.service;
 
-import ch.dvbern.stip.integration.plzfetch.adapter.type.SwisstopoPlzDiscoveryResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
-@Path("/items")
-@RegisterRestClient(configKey = "swisstopo-plz-api")
-public interface SwisstopoPlzDiscoveryService {
+@Path("")
+public interface SwisstopoPlzDownloadService {
     @GET
-    SwisstopoPlzDiscoveryResponse get();
+    byte[] getPlzDownload();
 }

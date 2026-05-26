@@ -15,13 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.adapter.service;
+package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.type;
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import java.util.List;
 
-@Path("")
-public interface SwisstopoPlzDownloadService {
-    @GET
-    byte[] getPlzDownload();
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.JsonNode;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record SwisstopoPlzDiscoveryResponse(
+List<Feature> features
+) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public record Feature(
+    JsonNode assets
+    ) {
+    }
 }
