@@ -660,9 +660,12 @@ public class GesuchService {
     @Transactional
     public void gesuchStatusToBereitFuerBearbeitung(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        var changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
-        if (gesuch.wasInBereitFuerBearbeitung() || haveAllDatenschutzbriefeBeenSent(gesuch)) {
-            changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
+        if (
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG &&
+            !gesuch.wasInBereitFuerBearbeitung() && !haveAllDatenschutzbriefeBeenSent(gesuch)
+        ) {
+            changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
         gesuch.wasInBereitFuerBearbeitung(true);
