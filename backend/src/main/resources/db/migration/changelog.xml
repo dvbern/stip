@@ -7,63 +7,67 @@
   <include file="db/migration/baseline.xml" />
   <include file="db/migration/quartz.init.xml" />
 
-  <!-- <editor-fold desc="v0.58" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.58" defaultstate="collapsed"> -->
   <include file="/db/migration/0.58/0.58.0-KSTIP-2696.xml" />
   <include file="/db/migration/0.58/0.58.0-KSTIP-2697.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.59" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.59" defaultstate="collapsed"> -->
   <include file="/db/migration/0.59/0.59.0-KSTIP-2942.xml" />
   <include file="/db/migration/0.59/0.59.0-KSTIP-2977.xml" />
   <include file="/db/migration/0.59/0.59.0-KSTIP-2907.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.60" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.60" defaultstate="collapsed"> -->
   <include file="/db/migration/0.60/0.60.0-KSTIP-2919.xml" />
   <include file="/db/migration/0.60/0.60.0-KSTIP-2922.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.61" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.61" defaultstate="collapsed"> -->
   <include file="/db/migration/0.61/0.61.0-KSTIP-2939.xml" />
   <include file="/db/migration/0.61/0.61.0-KSTIP-2584.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.62" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.62" defaultstate="collapsed"> -->
   <include file="/db/migration/0.62/0.62.0-KSTIP-3105.xml" />
   <include file="/db/migration/0.62/0.62.0-KSTIP-2115.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.63" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.63" defaultstate="collapsed"> -->
   <include file="/db/migration/0.63/0.63.0-KSTIP-2646.xml" />
   <include file="/db/migration/0.63/0.63.0-KSTIP-2819.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.63" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.63" defaultstate="collapsed"> -->
   <include file="/db/migration/0.63/0.63.0-KSTIP-2856.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.64" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.64" defaultstate="collapsed"> -->
   <include file="/db/migration/0.64/0.64.0-KSTIP-3117.xml" />
   <include file="/db/migration/0.64/0.64.0-KSTIP-3209.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.65" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.65" defaultstate="collapsed"> -->
   <include file="/db/migration/0.65/0.65.0-KSTIP-2750.xml" />
   <include file="/db/migration/0.65/0.65.0-KSTIP-2921.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.66" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.66" defaultstate="collapsed"> -->
   <include file="/db/migration/0.66/0.66.0-KSTIP-3292.xml" />
   <include file="/db/migration/0.66/0.66.0-KSTIP-3065.xml" />
   <include file="/db/migration/0.66/0.66.0-KSTIP-2108.xml" />
   <include file="/db/migration/0.66/0.66.0-KSTIP-3147.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
   
-  <!-- <editor-fold desc="v0.67" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.67" defaultstate="collapsed"> -->
   <include file="/db/migration/0.67/0.67.0-KSTIP-2582.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
 
-  <!-- <editor-fold desc="v0.69" defaultstate="collapsed" -->
+  <!-- <editor-fold desc="v0.69" defaultstate="collapsed"> -->
   <include file="/db/migration/0.69/0.69.0-KSTIP-3495.xml" />
-  <!--  </editor-fold> -->
+  <!-- </editor-fold> -->
+
+  <!-- <editor-fold desc="v0.70" defaultstate="collapsed"> -->
+  <include file="/db/migration/0.70/0.70.0-KSTIP-3567.xml" />
+  <!-- </editor-fold> -->
 </databaseChangeLog>

@@ -67,6 +67,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.hibernate.annotations.JoinFormula;
 import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
@@ -204,6 +205,13 @@ public class Gesuch extends AbstractMandantEntity {
      */
     @Column(name = "verfuegt", nullable = false)
     private boolean verfuegt = false;
+
+    /**
+     * Gesuch was BEREIT_FUER_BEARBEITUNG at least once in the past
+     */
+    @Column(name = "was_in_bereit_fuer_bearbeitung", nullable = false)
+    @Accessors(fluent = true)
+    private boolean wasInBereitFuerBearbeitung = false;
 
     @OrderBy("timestampErstellt DESC")
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
