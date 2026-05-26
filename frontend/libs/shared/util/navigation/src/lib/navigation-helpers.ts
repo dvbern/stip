@@ -88,7 +88,7 @@ export const createStepFallbackRouteEffect = (config: {
 
     router.navigate(fallbackRoute, {
       queryParamsHandling: 'merge',
-      queryParams: { formularTab: TRANCHE.route },
+      queryParams: { originStep: TRANCHE.route },
       replaceUrl: true,
     });
   });
@@ -127,7 +127,7 @@ export function buildGesuchNavItems(
             'tranche',
             tranche.id,
           ],
-          queryParams: { formularTab: tabRouteSegments.join('/') },
+          queryParams: { originStep: tabRouteSegments.join('/') },
           active: trancheId === tranche.id,
         })),
       },
@@ -148,7 +148,7 @@ export function buildGesuchNavItems(
           'tranche',
           tranchen[0].id,
         ],
-        queryParams: { formularTab: tabRouteSegments.join('/') },
+        queryParams: { originStep: tabRouteSegments.join('/') },
         active: !!gesuchId,
       },
     ];
@@ -225,4 +225,15 @@ export function buildDarlehenMenu(config: {
       : darlehenMenuItems,
     active: isDarlehenRoute,
   };
+}
+
+export function getQueryParamValueSig(
+  router: ActivatedRoute,
+  paramName: string,
+) {
+  return toSignal(
+    router.queryParamMap.pipe(
+      map((params) => params.get(paramName) ?? undefined),
+    ),
+  );
 }

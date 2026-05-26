@@ -5,10 +5,8 @@ import {
   effect,
   inject,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { map } from 'rxjs';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
@@ -25,6 +23,7 @@ import {
   createAllRouteParamsSig,
   createParamsIdSig,
   gesuchBaseMenuItems,
+  getQueryParamValueSig,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -78,11 +77,7 @@ export class GesuchAppPatternMainLayoutComponent {
     this.allRouteParamsSig,
   );
 
-  private formularTabSig = toSignal(
-    this.route.queryParamMap.pipe(
-      map((params) => params.get('formularTab') ?? undefined),
-    ),
-  );
+  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
@@ -106,14 +101,14 @@ export class GesuchAppPatternMainLayoutComponent {
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
-      const formularTab = this.formularTabSig();
+      const originStep = this.originStepSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
         return;
       }
 
-      const tab = decodeURI(formularTab ?? '') || TRANCHE.route;
+      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
       const tabSegments = tab.split('/').filter(Boolean);
 
       const gesuchNav = buildGesuchNavItems(

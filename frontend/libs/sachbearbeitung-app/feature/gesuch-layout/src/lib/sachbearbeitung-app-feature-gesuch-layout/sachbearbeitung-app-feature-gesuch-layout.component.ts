@@ -85,7 +85,7 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { TabNavItem } from '@dv/shared/util/navigation';
+import { TabNavItem, getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
 import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
@@ -131,17 +131,9 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  private queryParamValueSig(paramName: string) {
-    return toSignal(
-      this.route.queryParamMap.pipe(
-        map((params) => params.get(paramName) ?? undefined),
-      ),
-    );
-  }
+  berechnungIdSig = getQueryParamValueSig(this.route, 'berechnungId');
 
-  berechnungIdSig = this.queryParamValueSig('berechnungId');
-
-  formularTabSig = this.queryParamValueSig('formularTab');
+  originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -202,7 +194,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
-    const formularTab = this.formularTabSig();
+    const originStep = this.originStepSig();
     const isIntitial = this.isInitialRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
@@ -216,20 +208,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       return [];
     }
 
-    const tab = decodeURI(formularTab ?? '') || TRANCHE.route;
+    const tab = decodeURI(originStep ?? '') || TRANCHE.route;
     const tabSegments = tab.split('/').filter(Boolean);
 
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', ...tabSegments, gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId, formularTab },
+      queryParams: { berechnungId, originStep },
       key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId, formularTab },
+      queryParams: { berechnungId, originStep },
       key: 'verfuegung',
     };
 

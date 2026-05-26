@@ -117,7 +117,7 @@ export class SharedPatternGesuchStepNavComponent {
             ...trancheSetting.routesSuffix,
           ]
         : null,
-      queryParams: { formularTab: step.route },
+      queryParams: { originStep: step.route },
       active: isActive(`gesuch/${step.route}`, this.route, {
         paths: 'subset',
         queryParams: 'ignored',

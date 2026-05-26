@@ -4,7 +4,7 @@
   @let firstTrancheId = firstCurrentTrancheIdSig();
   @let versionen = versionenSig();
   @let initial = initialSig();
-  @let formularTab = formularTabSig();
+  @let originStep = originStepSig();
 
   @if (versionen.length || initial?.tranchen?.length) {
     <button
@@ -36,7 +36,7 @@
           class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-versionen-default"
           [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
-          [queryParams]="{ formularTab }"
+          [queryParams]="{ originStep }"
           mat-menu-item
           [class.active]="
             trancheId === firstTrancheId && isGesuchRouteSig() && !currentVersionSig() && !isInitialRouteSig()
@@ -51,7 +51,7 @@
             [queryParams]="{
               berechnungId: version.berechnungId,
               revision: version.tranchen[0].revision,
-              formularTab,
+              originStep,
             }"
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-item"
@@ -76,7 +76,7 @@
             [queryParams]="{
               berechnungId: initial.berechnungId,
               revision: initial.tranchen[0].revision,
-              formularTab,
+              originStep,
             }"
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="versionen-nav-menu-initial-item"
@@ -95,7 +95,7 @@
       class="tw:dv-nav-button-outline tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-default"
       [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
-      [queryParams]="{ formularTab }"
+      [queryParams]="{ originStep }"
       [class.active]="isGesuchRouteSig()"
     >
       <span>{{ t('shared.header.versionen') }}</span>

@@ -27,7 +27,7 @@ export class SharedUiVersionenMenuComponent {
   isGesuchRouteSig = input<boolean | undefined>();
   trancheIdSig = input.required<string | undefined>();
   berechnungIdSig = input.required<string | undefined>();
-  formularTabSig = input<string | undefined>();
+  originStepSig = input<string | undefined>();
   currentTranchenSig = input.required<GesuchTrancheSlim[] | undefined>();
 
   firstCurrentTrancheIdSig = computed(() => {
@@ -38,9 +38,9 @@ export class SharedUiVersionenMenuComponent {
   });
 
   tabRouteSegmentsSig = computed(() => {
-    const formularTab = this.formularTabSig();
+    const originStep = this.originStepSig();
 
-    const tab = decodeURI(formularTab ?? '') || TRANCHE.route;
+    const tab = decodeURI(originStep ?? '') || TRANCHE.route;
 
     return tab.split('/').filter(Boolean);
   });
