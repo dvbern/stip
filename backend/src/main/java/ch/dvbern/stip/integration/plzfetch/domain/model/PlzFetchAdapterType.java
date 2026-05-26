@@ -18,5 +18,6 @@
 package ch.dvbern.stip.integration.plzfetch.domain.model;
 
 public enum PlzFetchAdapterType {
+    DUMMY,
     SWISSTOPO
 }
