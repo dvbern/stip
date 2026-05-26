@@ -19,10 +19,12 @@ import { filter, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
+  selectTrancheTyp,
 } from '@dv/shared/data-access/gesuch';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -36,6 +38,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { createStepFallbackRouteEffect } from '@dv/shared/util/navigation';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-form',
@@ -68,7 +71,9 @@ export class SharedFeatureGesuchFormComponent
   router = inject(Router);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
+  gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  trancheTypSig = this.store.selectSignal(selectTrancheTyp);
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
 
@@ -114,6 +119,16 @@ export class SharedFeatureGesuchFormComponent
   }
 
   constructor() {
+    createStepFallbackRouteEffect({
+      router: this.router,
+      stepSig: this.stepSig,
+      currentStepSig: this.currentStepSig,
+      loadingSig: computed(() => this.viewSig().loading),
+      gesuchIdSig: this.gesuchIdSig,
+      trancheIdSig: this.trancheIdSig,
+      trancheTypSig: this.trancheTypSig,
+    });
+
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {

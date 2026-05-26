@@ -30,6 +30,7 @@ import {
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
+  selectTrancheTyp,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
@@ -47,6 +48,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
+import { createStepFallbackRouteEffect } from '@dv/shared/util/navigation';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
@@ -98,6 +100,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  trancheTypSig = this.store.selectSignal(selectTrancheTyp);
 
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
@@ -201,6 +204,16 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   }
 
   constructor() {
+    createStepFallbackRouteEffect({
+      router: this.router,
+      stepSig: this.stepSig,
+      currentStepSig: this.currentStepSig,
+      loadingSig: computed(() => this.viewSig().loading),
+      gesuchIdSig: this.gesuchIdSig,
+      trancheIdSig: this.gesuchTrancheIdSig,
+      trancheTypSig: this.trancheTypSig,
+    });
+
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {

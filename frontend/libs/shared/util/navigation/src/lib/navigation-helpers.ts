@@ -1,10 +1,15 @@
-import { Signal, computed } from '@angular/core';
+import { Signal, computed, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
-import { FreiwilligDarlehen, GesuchTrancheSlim } from '@dv/shared/model/gesuch';
+import {
+  FreiwilligDarlehen,
+  GesuchTrancheSlim,
+  GesuchUrlType,
+} from '@dv/shared/model/gesuch';
+import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import {
   darlehenCompletedStates,
   darlehenStatusMapping,
@@ -38,6 +43,56 @@ export const createParamsIdSig = (
     const params = allRouteParamsSig();
     return params ? params[idKey] : undefined;
   });
+
+export const createStepFallbackRouteEffect = (config: {
+  router: Router;
+  stepSig: Signal<GesuchFormStep | undefined>;
+  currentStepSig: Signal<unknown>;
+  loadingSig: Signal<boolean>;
+  gesuchIdSig: Signal<string | undefined>;
+  trancheIdSig: Signal<string | undefined>;
+  trancheTypSig: Signal<GesuchUrlType | undefined>;
+}) => {
+  const {
+    router,
+    stepSig,
+    currentStepSig,
+    loadingSig,
+    gesuchIdSig,
+    trancheIdSig,
+    trancheTypSig,
+  } = config;
+
+  return effect(() => {
+    const step = stepSig();
+    const hasCurrentStep = !!currentStepSig();
+    const loading = loadingSig();
+    const gesuchId = gesuchIdSig();
+    const trancheId = trancheIdSig();
+    const trancheTyp = trancheTypSig();
+
+    if (
+      !step ||
+      step.route === TRANCHE.route ||
+      hasCurrentStep ||
+      loading ||
+      !gesuchId
+    ) {
+      return;
+    }
+
+    const fallbackRoute = ['gesuch', TRANCHE.route, gesuchId];
+    if (trancheTyp && trancheId) {
+      fallbackRoute.push(trancheTyp.toLowerCase(), trancheId);
+    }
+
+    router.navigate(fallbackRoute, {
+      queryParamsHandling: 'merge',
+      queryParams: { formularTab: TRANCHE.route },
+      replaceUrl: true,
+    });
+  });
+};
 
 export function buildGesuchNavItems(
   gesuchId: string | undefined,
