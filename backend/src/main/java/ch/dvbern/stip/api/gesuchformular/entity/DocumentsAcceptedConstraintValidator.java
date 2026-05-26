@@ -18,16 +18,28 @@
 package ch.dvbern.stip.api.gesuchformular.entity;
 
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
+import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 
 public class DocumentsAcceptedConstraintValidator
     implements ConstraintValidator<DocumentsAcceptedConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        return formular.getTranche()
+        final var areAllAccepted = formular.getTranche()
             .getGesuchDokuments()
             .stream()
             .allMatch(gesuchDokument -> gesuchDokument.getStatus() == GesuchDokumentStatus.AKZEPTIERT);
+
+        if (!areAllAccepted) {
+            return GesuchValidatorUtil.addProperty(
+                context,
+                VALIDATION_DOCUMENTS_REQUIRED_MESSAGE,
+                "dokuments"
+            );
+        }
+        return true;
     }
 }
