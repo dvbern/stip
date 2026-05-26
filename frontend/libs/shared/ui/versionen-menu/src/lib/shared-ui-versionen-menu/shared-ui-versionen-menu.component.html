@@ -9,7 +9,7 @@
   @if (versionen.length || initial?.tranchen?.length) {
     <button
       type="button"
-      class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
+      class="tw:dv-nav-button-outline tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-menu"
       [matMenuTriggerFor]="versionenMenu"
       [class.active]="isGesuchRouteSig()"
@@ -92,7 +92,7 @@
     <!-- fallback button -->
     <a
       type="button"
-      class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
+      class="tw:dv-nav-button-outline tw:flex tw:items-center tw:px-2"
       data-testid="sb-gesuch-header-versionen-default"
       [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', firstTrancheId]"
       [queryParams]="{ formularTab }"

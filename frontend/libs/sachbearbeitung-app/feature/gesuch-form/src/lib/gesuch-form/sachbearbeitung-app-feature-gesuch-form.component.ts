@@ -38,7 +38,7 @@ import { GesuchHeader } from '@dv/shared/model/gesuch';
 import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
-import { noGesuchActiveRoutes } from '@dv/shared/model/ui-constants';
+import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -121,7 +121,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
 
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
+    return !notGesuchRoute.some((route) => url?.includes(`/${route}/`));
   });
 
   stepsSig = computed(() => {

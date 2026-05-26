@@ -7,7 +7,6 @@ export type InfosOptions = {
   badge?: {
     type: 'warning' | 'error' | 'info';
     titleKey: string;
-    icon: string;
   };
 };
 

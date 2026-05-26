@@ -16,16 +16,15 @@
             </span>
             @if (option.badge) {
               <span
-                class="tw:-left-1.5 tw:absolute tw:flex tw:items-center tw:justify-center tw:font-dv-icon rounded-full tw:text-2xl tw:w-3 tw:h-3 tw:bg-white tw:font-bold tw:leading-none"
+                class="tw:-left-2.5 tw:absolute tw:flex tw:items-center tw:justify-center tw:rounded-full tw:leading-none tw:w-5 tw:h-5"
                 [ngClass]="{
-                  'tw:text-dv-warning': option.badge.type === 'warning',
-                  'tw:text-dv-red': option.badge.type === 'error',
-                  'tw:text-dv-blue': option.badge.type === 'info',
+                  'tw:bg-dv-warning': option.badge.type === 'warning',
+                  'tw:bg-dv-red': option.badge.type === 'error',
+                  'tw:bg-dv-blue': option.badge.type === 'info',
                 }"
                 [matTooltip]="t(option.badge.titleKey)"
-                [attr.aria-label]="t(option.badge.titleKey)"
-                >{{ option.badge.icon }}</span
               >
+              </span>
             }
           </a>
         }

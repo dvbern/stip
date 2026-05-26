@@ -164,13 +164,12 @@ export class SharedPatternGesuchStepNavComponent {
   });
 
   private mergeGroupStatus(
-    current: StepState | undefined,
-    next: StepState | undefined,
+    groupStatus: StepState | undefined,
+    stepStatus: StepState | undefined,
   ): StepState | undefined {
-    if (current === 'INVALID' || next === 'INVALID') return 'INVALID';
-    if (current === 'WARNING' || next === 'WARNING') return 'WARNING';
-    if (current === 'VALID' || next === 'VALID') return 'VALID';
-    return undefined;
+    return (['INVALID', 'WARNING', 'VALID'] satisfies StepState[]).find(
+      (status) => [groupStatus, stepStatus].includes(status),
+    );
   }
 
   constructor() {

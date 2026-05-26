@@ -3,27 +3,28 @@
   @let trancheId = gesuchTrancheIdSig();
   @let currentTranche = currentTrancheSig();
   @let initialRoute = isInitialRouteSig();
+  @let trancheCount = tranchenSig()?.length ?? 0;
 
   <!-- side menu -->
   <div
-    class="tw:hidden tw:lg:flex tw:border-r tw:border-dv-border tw:bg-white tw:flex-col tw:overflow-hidden tw:max-w-[350px]"
+    class="tw:hidden tw:lg:flex tw:border-r tw:border-dv-border tw:bg-white tw:flex-col tw:overflow-hidden tw:max-w-87.5"
   >
     <!-- Gesuch -->
-    @if (tranchenSig()?.length || isAenderungRouteSig()) {
+    @if (trancheCount > 0 || isAenderungRouteSig()) {
       <div class="tw:w-full tw:p-6">
         @if (currentTranche && isGesuchRouteSig()) {
           <div class="tw:relative">
             <label class="tw:text-sm tw:text-dv-gray tw:absolute tw:-top-2.5 tw:ml-4 tw:bg-white tw:px-1 tw:rounded-md">
-              {{ t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: tranchenSig()?.length }) }}
+              {{ t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: trancheCount }) }}
             </label>
             <button
               type="button"
               class="tw:dv-btn-tranche"
               data-testid="sb-gesuch-header-tranche-nav-menu"
-              [disabled]="(tranchenSig()?.length ?? 0) <= 1"
+              [disabled]="trancheCount <= 1"
               [matMenuTriggerFor]="tranchenMenu"
               [attr.aria-label]="
-                t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: tranchenSig()?.length })
+                t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: trancheCount })
               "
             >
               <span
@@ -32,7 +33,7 @@
                 {{ currentTranche.gueltigAb | date: 'MM.yyyy' }} -
                 {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
               </span>
-              @if ((tranchenSig()?.length ?? 0) > 1) {
+              @if (trancheCount > 1) {
                 <i class="material-symbols-rounded tw:ml-2">expand_more</i>
               }
             </button>
@@ -62,7 +63,6 @@
                     -
                     {{ tranche.gueltigBis | date: 'MM.yyyy' }}
                   </span>
-                  <span>{{ stepSig()?.route }}</span>
                 </a>
               }
             </div>

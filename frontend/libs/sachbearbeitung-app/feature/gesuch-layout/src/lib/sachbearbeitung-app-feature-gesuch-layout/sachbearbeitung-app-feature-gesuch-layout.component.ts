@@ -73,8 +73,8 @@ import {
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
 import {
-  noActionRoutes,
-  noGesuchActiveRoutes,
+  hideAktionenRoutes,
+  notGesuchRoute,
 } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
@@ -131,17 +131,17 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  berechnungIdSig = toSignal(
-    this.route.queryParamMap.pipe(
-      map((params) => params.get('berechnungId') ?? undefined),
-    ),
-  );
+  private queryParamValueSig(paramName: string) {
+    return toSignal(
+      this.route.queryParamMap.pipe(
+        map((params) => params.get(paramName) ?? undefined),
+      ),
+    );
+  }
 
-  formularTabSig = toSignal(
-    this.route.queryParamMap.pipe(
-      map((params) => params.get('formularTab') ?? undefined),
-    ),
-  );
+  berechnungIdSig = this.queryParamValueSig('berechnungId');
+
+  formularTabSig = this.queryParamValueSig('formularTab');
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -149,17 +149,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       startWith(this.router.routerState.snapshot.url),
     ),
   );
-
   isActionRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noActionRoutes.some(
+    return !hideAktionenRoutes.some(
       (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
     );
   });
-
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
+    return !notGesuchRoute.some((route) => url?.includes(`/${route}/`));
   });
   isInfosRouteSig = computed(() => {
     const url = this.routeUrlSig();
@@ -406,7 +404,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
-      return {};
+      return {
+        list: [],
+        isNotEmpty: false,
+      };
     }
 
     const { permissions } = getGesuchPermissions(
@@ -445,6 +446,40 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return {
       list,
       isNotEmpty: !!list?.length,
+    };
+  });
+
+  actionMenuOptionsSig = computed(() => {
+    const statusUebergaenge = this.statusUebergaengeOptionsSig();
+    const availableTrancheInteraction = this.availableTrancheInteractionSig();
+    const canExport = !!this.exportValuesSig();
+    const showGesuchActions = this.isGesuchRouteSig();
+    const showAenderungActions = !!this.isAenderungRouteSig();
+    const aenderungActions = this.aenderungActionsSig();
+
+    const hasAenderungMenuActions =
+      showAenderungActions &&
+      aenderungActions.isVisible &&
+      !!aenderungActions.gesuchId &&
+      !!aenderungActions.trancheId;
+    const hasGesuchMenuActions =
+      showGesuchActions &&
+      (availableTrancheInteraction || statusUebergaenge.isNotEmpty);
+    const hasWorkflowActions = hasAenderungMenuActions || hasGesuchMenuActions;
+    const isActionMenuDisabled =
+      (!hasWorkflowActions && !canExport) ||
+      this.isLoadingSig() ||
+      this.isExportingSig();
+
+    return {
+      statusUebergaenge,
+      availableTrancheInteraction,
+      canExport,
+      aenderungActions,
+      hasAenderungMenuActions,
+      hasGesuchMenuActions,
+      hasWorkflowActions,
+      isActionMenuDisabled,
     };
   });
 

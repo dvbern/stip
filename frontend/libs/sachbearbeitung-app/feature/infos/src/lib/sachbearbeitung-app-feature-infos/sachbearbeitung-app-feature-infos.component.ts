@@ -72,7 +72,6 @@ export class SachbearbeitungAppFeatureInfosComponent
           badge: {
             type: 'warning',
             titleKey: 'sachbearbeitung-app.infos.beschwerde.haengig.title',
-            icon: 'info',
           },
         };
       }

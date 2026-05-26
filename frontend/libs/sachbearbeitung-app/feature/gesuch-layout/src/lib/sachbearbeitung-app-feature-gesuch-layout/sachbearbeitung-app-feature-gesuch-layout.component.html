@@ -77,19 +77,19 @@
       <div class="tw:relative tw:inline-flex">
         <a
           [routerLink]="['/gesuch', 'infos', gesuchId]"
-          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2 tw:relative"
           data-testid="sb-gesuch-header-infos-nav-link"
           [class.active]="isInfosRouteSig()"
         >
           <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+          @if (isBeschwerdeHaengigSig()) {
+            <span
+              class="tw:absolute tw:font-dv-icon tw:-top-3 tw:-right-3 tw:flex tw:items-center tw:justify-center tw:text-xl tw:h-4 tw:w-4 tw:rounded-full tw:text-white tw:bg-dv-warning tw:p-3.25"
+              [matTooltip]="t('sachbearbeitung-app.infos.beschwerde.haengig.title')"
+              >priority_high</span
+            >
+          }
         </a>
-        @if (isBeschwerdeHaengigSig()) {
-          <span
-            class="tw:absolute tw:font-dv-icon tw:-top-1 tw:-right-1 tw:flex tw:items-center tw:justify-center tw:text-2xl tw:h-4 tw:w-4 tw:rounded-full tw:bg-white tw:text-dv-warning"
-            [matTooltip]="t('sachbearbeitung-app.infos.beschwerde.haengig.title')"
-            >info</span
-          >
-        }
       </div>
     </div>
   </dv-shared-pattern-gesuch-info-bar>
@@ -121,15 +121,8 @@
       }
     </nav>
 
-    @let statusUebergaenge = statusUebergaengeOptionsSig();
-    @let availableTrancheInteraction = availableTrancheInteractionSig();
-    @let canExport = !!exportValuesSig();
-    @let showGesuchActions = isGesuchRouteSig();
-    @let showAenderungActions = !!isAenderungRouteSig();
-    @let aenderungActions = aenderungActionsSig();
-    @let hasAenderungMenuActions =
-      showAenderungActions && aenderungActions.isVisible && aenderungActions.gesuchId && aenderungActions.trancheId;
-    @let hasGesuchMenuActions = showGesuchActions && (availableTrancheInteraction || statusUebergaenge.isNotEmpty);
+    @let a = actionMenuOptionsSig();
+
     <!-- Aktion Button -->
     @if (isActionRouteSig()) {
       <div>
@@ -138,9 +131,7 @@
           class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
-          [disabled]="
-            !(hasAenderungMenuActions || hasGesuchMenuActions || canExport) || isLoadingSig() || isExportingSig()
-          "
+          [disabled]="a.isActionMenuDisabled"
           #aktionTrigger="matMenuTrigger"
           [matMenuTriggerFor]="aktionMenu"
         >
@@ -154,14 +145,14 @@
           class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
         >
           <div class="tw:flex tw:flex-col tw:gap-2">
-            @if (hasAenderungMenuActions) {
+            @if (a.hasAenderungMenuActions) {
               <button
                 type="button"
                 class="fw-normal tw:px-2"
                 data-testid="aenderung-reject"
                 [disabled]="isAenderungUpdatingSig()"
                 mat-menu-item
-                (click)="changeAenderungState(aenderungActions.trancheId!, 'ABGELEHNT', aenderungActions.gesuchId!)"
+                (click)="changeAenderungState(a.aenderungActions.trancheId!, 'ABGELEHNT', a.aenderungActions.gesuchId!)"
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
                   <i class="material-symbols-rounded">close</i>
@@ -173,9 +164,11 @@
                 type="button"
                 class="fw-normal tw:px-2"
                 data-testid="aenderung-accept"
-                [disabled]="aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                [disabled]="a.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
                 mat-menu-item
-                (click)="changeAenderungState(aenderungActions.trancheId!, 'AKZEPTIERT', aenderungActions.gesuchId!)"
+                (click)="
+                  changeAenderungState(a.aenderungActions.trancheId!, 'AKZEPTIERT', a.aenderungActions.gesuchId!)
+                "
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
                   <i class="material-symbols-rounded">check_circle</i>
@@ -187,10 +180,14 @@
                 type="button"
                 class="fw-normal tw:px-2"
                 data-testid="aenderung-manually-change"
-                [disabled]="aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                [disabled]="a.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
                 mat-menu-item
                 (click)="
-                  changeAenderungState(aenderungActions.trancheId!, 'MANUELLE_AENDERUNG', aenderungActions.gesuchId!)
+                  changeAenderungState(
+                    a.aenderungActions.trancheId!,
+                    'MANUELLE_AENDERUNG',
+                    a.aenderungActions.gesuchId!
+                  )
                 "
               >
                 <div class="tw:flex tw:items-center tw:gap-2">
@@ -200,8 +197,8 @@
               </button>
             }
 
-            @if (hasGesuchMenuActions) {
-              @switch (availableTrancheInteraction) {
+            @if (a.hasGesuchMenuActions) {
+              @switch (a.availableTrancheInteraction) {
                 @case ('CREATE_TRANCHE') {
                   <!-- Tranche erstellen -->
                   <button
@@ -219,11 +216,11 @@
                 }
               }
 
-              @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+              @if (a.statusUebergaenge.isNotEmpty && a.availableTrancheInteraction) {
                 <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
               }
 
-              @for (uebergang of statusUebergaenge.list; track $index) {
+              @for (uebergang of a.statusUebergaenge.list; track $index) {
                 @if (uebergang.name) {
                   <button
                     type="button"
@@ -247,11 +244,11 @@
               }
             }
 
-            @if (canExport && (hasAenderungMenuActions || hasGesuchMenuActions)) {
+            @if (a.canExport && a.hasWorkflowActions) {
               <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
             }
 
-            @if (canExport) {
+            @if (a.canExport) {
               <button
                 type="button"
                 class="fw-normal tw:px-2"

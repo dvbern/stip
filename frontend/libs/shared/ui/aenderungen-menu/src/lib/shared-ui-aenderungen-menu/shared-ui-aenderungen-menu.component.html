@@ -16,7 +16,7 @@
     >
       @if (currentAenderungSig(); as currentAenderung) {
         <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
-          {{ t('shared.header.aenderungen.complete-states.' + currentAenderung.completeState.toLowerCase()) }},
+          {{ t('shared.header.aenderungen.complete-states.' + (currentAenderung.completeState | lowercase)) }},
           {{ currentAenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
           {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
         </span>

@@ -22,8 +22,6 @@
           class="tw:xl:w-1/2"
           [nextStepVisible]="hasNextStep()"
           [prevStepVisible]="hasPreviousStep()"
-          [currentStep]="getCurrentStepNumber()"
-          [totalSteps]="getTotalSteps()"
           (nextStep)="goNextStep()"
           (prevStep)="goPreviousStep()"
         ></dv-shared-ui-stepper-navigation>
@@ -153,8 +151,8 @@
                 </mat-error>
               </mat-form-field>
             </div>
+            <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
           }
-          <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
           @if (
             !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
           ) {
@@ -213,9 +211,9 @@
                 class="tw:col-span-2 tw:xl:col-span-1 tw:flex tw:flex-col"
               >
                 <div class="tw:flex tw:items-center tw:grow">
-                  <span class="tw:mr-2 tw:font-bold">{{
-                    'shared.form.familiensituation.elternteil-verstorben.label' | transloco
-                  }}</span>
+                  <label class="tw:font-bold">{{
+                    'shared.form.familiensituation.mutter.unbekannt-verstorben.label' | transloco
+                  }}</label>
                   <button
                     type="button"
                     (click)="elternteilVerstorbenUnbekanntDialog.toggle()"
@@ -226,9 +224,6 @@
                   </button>
                 </div>
 
-                <label class="tw:font-bold">{{
-                  'shared.form.familiensituation.mutter.unbekannt-verstorben.label' | transloco
-                }}</label>
                 <mat-radio-button
                   [attr.data-testid]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"
                   [value]="ELTERN_ABWESENHEITS_GRUND.VERSTORBEN"

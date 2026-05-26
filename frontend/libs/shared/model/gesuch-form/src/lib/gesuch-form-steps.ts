@@ -19,7 +19,7 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
-// Steps not grouped
+// Ungrouped steps
 export const TRANCHE = {
   route: 'info',
   translationKey: 'shared.tranche.title',
@@ -115,7 +115,7 @@ export const GESCHWISTER = {
   group: 'FAMILIENANGABEN',
 } satisfies GesuchFormStep;
 
-//  Steps not grouped
+// Ungrouped steps
 export const AUSZAHLUNG = {
   route: 'auszahlungen',
   translationKey: 'shared.auszahlung.title',
@@ -157,7 +157,7 @@ const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
   VATER: 'man',
 };
 
-// Dynamic  in Group "Familienangaben"
+// Dynamic steps in group "Familienangaben"
 // for GS and SB
 export const ELTERN_STEUERERKLAERUNG_ROUTE = 'eltern-steuererklaerung';
 const createElternSteuererklaerungStep = (
