@@ -20,19 +20,13 @@ package ch.dvbern.stip.integration.plzfetch.domain.service;
 import java.util.List;
 import java.util.Set;
 
+import org.mapstruct.Mapper;
+
+import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class PlzFetchDataMapper {
-    public List<Plz> toPlzList(Set<PlzFetchData> plzFetchDataList) {
-        return plzFetchDataList.stream().map(plzFetchData -> {
-            Plz plz = new Plz();
-            plz.setPlz(plzFetchData.plz());
-            plz.setKantonskuerzel(plzFetchData.kantonskuerzel());
-            plz.setOrt(plzFetchData.ort());
-            return plz;
-        }).toList();
-    }
+@Mapper(config = MappingConfig.class)
+public interface PlzFetchDataMapper {
+    public List<Plz> toPlzList(Set<PlzFetchData> plzFetchDataList);
 }

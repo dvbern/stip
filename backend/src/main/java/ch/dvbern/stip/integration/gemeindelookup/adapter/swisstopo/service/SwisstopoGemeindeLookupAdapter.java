@@ -28,8 +28,8 @@ import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdap
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPort;
 import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifier;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
-import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
@@ -37,7 +37,7 @@ import org.jose4j.json.internal.json_simple.JSONObject;
 
 @Slf4j
 @RequiredArgsConstructor
-@Singleton
+@RequestScoped
 @GemeindeLookupQualifier(GemeindeLookupAdapterType.SWISSTOPO)
 public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
@@ -47,6 +47,7 @@ public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     @RestClient
     SwisstopoApiRestService swisstopoApiRestService;
 
+    private final SwisstopoGeimeindeDataMapper swisstopoGeimeindeDataMapper;
     @Override
     public Optional<GemeindeData> findGemeindeData(final GemeindeLookupRequest request) {
         try {
@@ -84,7 +85,7 @@ public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
                 || attributes.zipLabel().contains(request.ort())
             )
             .findFirst()
-            .map(SwisstopoGeimeindeDataMapper::toGemeindeData);
+            .map(swisstopoGeimeindeDataMapper::toGemeindeData);
     }
 
     private Optional<GemeindeData> findGemeindeDataByPlz(final String plz) {
@@ -104,7 +105,7 @@ public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
         return counted.entrySet()
             .stream()
             .filter(entry -> entry.getValue().equals(max))
-            .map(entry -> SwisstopoGeimeindeDataMapper.toGemeindeData(entry.getKey()))
+            .map(entry -> swisstopoGeimeindeDataMapper.toGemeindeData(entry.getKey()))
             .findFirst();
     }
 }

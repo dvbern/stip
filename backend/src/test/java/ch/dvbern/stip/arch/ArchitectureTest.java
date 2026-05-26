@@ -66,7 +66,7 @@ class ArchitectureTest {
             .whereLayer("Repository")
             .mayOnlyBeAccessedByLayers("Service", "Authorization");
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     @Test
@@ -77,7 +77,7 @@ class ArchitectureTest {
             .beFreeOfCycles()
             .ignoreDependency(resideInAPackage("..ausbildung.."), DescribedPredicate.alwaysTrue())
             .because("Cycles between feature decrease maintainability. Introduce a new shared feature");
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     @Test
@@ -93,7 +93,7 @@ class ArchitectureTest {
             .should()
             .notDependOnEachOther()
             .because("Use a service to access repos outside of the feature package");
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     @Test
@@ -103,6 +103,6 @@ class ArchitectureTest {
             .should()
             .notBeAnnotatedWith(Transactional.class);
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 }

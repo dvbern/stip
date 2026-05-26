@@ -48,10 +48,6 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
         );
     }
 
-    private static Adresse getAdresse(final Gesuch gesuch) {
-        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getAdresse();
-    }
-
     public GemeindeLookupRequest(final JobDataMap map) {
         this(
             parseGesuchId(map),
@@ -61,21 +57,6 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
             (String) map.get(PLZ_KEY),
             (String) map.get(ORT_KEY)
         );
-    }
-
-    private static UUID parseGesuchId(final JobDataMap map) {
-        if (
-            !(map.containsKey(GESUCH_ID_KEY)
-            && map.containsKey(TENANT_IDENTIFIER_KEY))
-            && map.containsKey(STRASSE_KEY)
-            && map.containsKey(HAUSNUMMER_KEY)
-            && map.containsKey(PLZ_KEY)
-            && map.containsKey(ORT_KEY)
-        ) {
-            throw new BadRequestException("GemeindeLookupRequest: missing some required keys in the map");
-        }
-
-        return UUID.fromString((String) map.get(GESUCH_ID_KEY));
     }
 
     public JobDataMap toMap() {
@@ -98,5 +79,24 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
         ret.put(ORT_KEY, this.ort);
         ret.put(TENANT_IDENTIFIER_KEY, this.tenantIdentifier.getIdentifier());
         return new JobDataMap(ret);
+    }
+
+    private static Adresse getAdresse(final Gesuch gesuch) {
+        return gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung().getAdresse();
+    }
+
+    private static UUID parseGesuchId(final JobDataMap map) {
+        if (
+            !(map.containsKey(GESUCH_ID_KEY)
+            && map.containsKey(TENANT_IDENTIFIER_KEY))
+            && map.containsKey(STRASSE_KEY)
+            && map.containsKey(HAUSNUMMER_KEY)
+            && map.containsKey(PLZ_KEY)
+            && map.containsKey(ORT_KEY)
+        ) {
+            throw new BadRequestException("GemeindeLookupRequest: missing some required keys in the map");
+        }
+
+        return UUID.fromString((String) map.get(GESUCH_ID_KEY));
     }
 }

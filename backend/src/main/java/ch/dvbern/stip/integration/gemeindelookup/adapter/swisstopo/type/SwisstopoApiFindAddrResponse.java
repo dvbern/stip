@@ -36,9 +36,9 @@ List<SwisstopoApiFindAddrResponseElement> results
     public record SwisstopoApiFindAddrResponseElementAttributes(
     @JsonProperty("zip_label") String zipLabel,
 
-    @JsonProperty("com_fosnr") Integer comFosnr,
+    @JsonProperty("com_fosnr") Integer bfsNummer,
 
-    @JsonProperty("com_name") String comName
+    @JsonProperty("com_name") String name
     ) {
     }
 }

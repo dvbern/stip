@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.integration.plzfetch.domain.port;
 
-import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.integration.plzfetch.domain.qualifier.PlzFetchQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
@@ -35,10 +35,10 @@ public class PlzFetchPortFactory {
     @Inject
     Instance<PlzFetchPort> plzFetchPorts;
 
-    private final TenantService tenantService;
+    private final StipConfig stipConfig;
 
     public PlzFetchPort getPlzFetchAdapter() {
-        final var adapterType = tenantService.getConfigForCurrentTenant().port().plzFetch().adapterType();
-        return plzFetchPorts.select(PlzFetchPort.class, new PlzFetchQualifierLiteral(adapterType)).get();
+        final var adapterType = stipConfig.globalPorts().plzFetch().adapterType();
+        return plzFetchPorts.select(new PlzFetchQualifierLiteral(adapterType)).get();
     }
 }

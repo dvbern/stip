@@ -21,6 +21,8 @@ import java.util.Map;
 import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
+import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import io.quarkus.runtime.annotations.StaticInitSafe;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
@@ -55,6 +57,8 @@ public interface StipConfig {
     Map<String, SchedulerConfig> scheduler();
 
     PlzData plzData();
+
+    GlobalPorts globalPorts();
 
     Map<TenantIdentifier, TenantConfig> tenant();
 
@@ -110,5 +114,22 @@ public interface StipConfig {
 
         @WithDefault("checksum:multihash")
         String hashKey();
+    }
+
+    interface GlobalPorts {
+
+        GemeindeLookup gemeindeLookup();
+
+        PlzFetch plzFetch();
+
+        interface GemeindeLookup {
+            @WithDefault("swisstopo")
+            GemeindeLookupAdapterType adapterType();
+        }
+
+        interface PlzFetch {
+            @WithDefault("swisstopo")
+            PlzFetchAdapterType adapterType();
+        }
     }
 }

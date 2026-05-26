@@ -39,6 +39,6 @@ class RunForTenantAnnotationTest {
             .should()
             .beAnnotatedWith(Scheduled.class);
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 }

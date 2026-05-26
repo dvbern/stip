@@ -23,11 +23,10 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum TenantIdentifier {
-    BERN("bern", "be"),
-    DV("dv", "");
+    BERN("bern"),
+    DV("dv");
 
     private final String identifier;
-    private final String kuerzel;
 
     public static TenantIdentifier of(final String identifier) {
         return switch (identifier) {

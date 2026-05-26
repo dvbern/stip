@@ -17,18 +17,15 @@
 
 package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
+import org.mapstruct.Mapper;
+
+import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
-import lombok.experimental.UtilityClass;
 
-@UtilityClass
-public class SwisstopoGeimeindeDataMapper {
+@Mapper(config = MappingConfig.class)
+public interface SwisstopoGeimeindeDataMapper {
     public GemeindeData toGemeindeData(
         final SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes attributes
-    ) {
-        return GemeindeData.builder()
-            .bfsNummer(attributes.comFosnr())
-            .name(attributes.comName())
-            .build();
-    }
+    );
 }

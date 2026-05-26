@@ -135,7 +135,6 @@ public class SwisstopoPlzFetchAdapter implements PlzFetchPort {
 
         final var csvParser = new CSVParserBuilder()
             .withSeparator(';')
-            .withIgnoreLeadingWhiteSpace(true)
             .build();
 
         try (

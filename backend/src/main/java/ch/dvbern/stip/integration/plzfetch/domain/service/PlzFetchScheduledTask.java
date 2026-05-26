@@ -41,11 +41,12 @@ import org.quartz.TriggerBuilder;
 @Slf4j
 @Singleton
 @RequiredArgsConstructor
-public class PlzFetchScheduledJob implements Job {
+public class PlzFetchScheduledTask implements Job {
     private final PlzFetchPortFactory plzFetchPortFactory;
     private final PlzService plzService;
     private final StipConfig config;
     private final Scheduler scheduler;
+    private final PlzFetchDataMapper plzFetchDataMapper;
 
     private final String PLZ_SCHEDULER_CONFIG_KEY = "plz-data";
     private final String PLZ_FETCH_JOB_PREFIX = "PlzFetchScheduledJob";
@@ -61,7 +62,7 @@ public class PlzFetchScheduledJob implements Job {
                     LOG.info("Fetching PLZ data");
                     final var plzFetchData = plzFetchPort.fetchData();
                     plzFetchData.ifPresent(fetchData -> {
-                        final var plzList = PlzFetchDataMapper.toPlzList(fetchData);
+                        final var plzList = plzFetchDataMapper.toPlzList(fetchData);
                         plzService.overwriteAll(plzList);
                     });
                     LOG.info("PLZ data fetched and checked/saved successfully");
@@ -73,7 +74,7 @@ public class PlzFetchScheduledJob implements Job {
     }
 
     void onStart(@Observes StartupEvent startupEvent) {
-        final var jobDetail = JobBuilder.newJob(PlzFetchScheduledJob.class)
+        final var jobDetail = JobBuilder.newJob(PlzFetchScheduledTask.class)
             .withIdentity(PLZ_FETCH_JOB_PREFIX + LocalDate.now())
             .build();
 

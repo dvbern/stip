@@ -18,11 +18,16 @@
 package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
+import jakarta.inject.Inject;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SwisstopoGeimeindeDataMapperTest {
+
+    @Inject
+    SwisstopoGeimeindeDataMapper swisstopoGeimeindeDataMapper;
 
     @Test
     void toGemeindeDataShouldMapBfsNummerAndName() {
@@ -32,7 +37,7 @@ public class SwisstopoGeimeindeDataMapperTest {
             "Bern"
         );
 
-        final var result = SwisstopoGeimeindeDataMapper.toGemeindeData(attributes);
+        final var result = swisstopoGeimeindeDataMapper.toGemeindeData(attributes);
 
         assertEquals(351, result.bfsNummer());
         assertEquals("Bern", result.name());

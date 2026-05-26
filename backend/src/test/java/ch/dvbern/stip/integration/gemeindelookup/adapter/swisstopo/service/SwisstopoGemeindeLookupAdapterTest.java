@@ -66,7 +66,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     SwisstopoApiRestService swisstopoApiRestService;
 
     @Test
-    void findGemeindeData_addressMatchByPlz_returnsGemeindeData() {
+    void findGemeindeData_matchByAddress_returnsGemeindeData() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(
                 response(
@@ -84,7 +84,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressMatchByOrt_returnsGemeindeData() {
+    void findGemeindeData_matchByOrt_returnsGemeindeData() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(
                 response(
@@ -105,7 +105,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressLookupUsesStreetAndHausnummerLayerDef() {
+    void findGemeindeData_lookupUsesStreetAndHausnummerLayerDef() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response(attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME)));
 
@@ -121,7 +121,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressLookupHasNoMatchingZipOrOrt_fallsBackToPlzLookup() {
+    void findGemeindeData_lookupHasNoMatchingZipOrOrt_fallsBackToPlzLookup() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response(attributes("8000 Zürich", 261, "Zürich")));
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
@@ -136,7 +136,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressLookupReturnsEmptyResults_fallsBackToPlzLookup() {
+    void findGemeindeData_lookupReturnsEmptyResults_fallsBackToPlzLookup() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response());
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
@@ -151,7 +151,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressLookupThrowsException_fallsBackToPlzLookup() {
+    void findGemeindeData_lookupThrowsException_fallsBackToPlzLookup() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenThrow(new RuntimeException("Swisstopo address lookup failed"));
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
@@ -166,7 +166,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_plzLookupTakesMostFrequentGemeinde() {
+    void findGemeindeData_lookupTakesMostFrequentGemeinde() {
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
             .thenReturn(
                 response(
@@ -184,7 +184,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_addressLookupReturnsEmpty_returnEmptyOptional() {
+    void findGemeindeData_lookupReturnsEmpty_returnEmptyOptional() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response());
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
@@ -197,7 +197,7 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_plzLookupResultMapsNullFields() {
+    void findGemeindeData_lookupResultMapsNullFields() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response());
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))

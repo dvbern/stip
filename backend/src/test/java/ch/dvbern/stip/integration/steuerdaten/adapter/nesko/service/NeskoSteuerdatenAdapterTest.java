@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.EffSatzType;
+import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdaten;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.SteuerdatenType;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
@@ -143,7 +144,7 @@ class NeskoSteuerdatenAdapterTest {
         neskoSteuerdatenAdapter.getSteuerdaten(DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR);
 
         final var captor = org.mockito.ArgumentCaptor.forClass(
-            ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdaten.class
+            GetSteuerdaten.class
         );
         verify(portMock).getSteuerdaten(captor.capture());
         assertThat(captor.getValue().getSozialversicherungsnummer(), is(Long.valueOf(DEFAULT_SVN.replace(".", ""))));

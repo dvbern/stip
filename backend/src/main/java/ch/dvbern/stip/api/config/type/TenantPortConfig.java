@@ -19,17 +19,11 @@ package ch.dvbern.stip.api.config.type;
 
 import java.util.Optional;
 
-import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
 public interface TenantPortConfig {
     Steuerdaten steuerdaten();
-
-    GemeindeLookup gemeindeLookup();
-
-    PlzFetch plzFetch();
 
     interface Port {
         @WithDefault("false")
@@ -38,15 +32,5 @@ public interface TenantPortConfig {
 
     interface Steuerdaten extends Port {
         Optional<SteuerdatenAdapterType> adapterType();
-    }
-
-    interface GemeindeLookup {
-        @WithDefault("swisstopo")
-        GemeindeLookupAdapterType adapterType();
-    }
-
-    interface PlzFetch {
-        @WithDefault("swisstopo")
-        PlzFetchAdapterType adapterType();
     }
 }
