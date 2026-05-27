@@ -67,7 +67,6 @@ import {
   maskitoNumber,
   maskitoPercent,
   maskitoYear,
-  toFormatedNumber,
 } from '@dv/shared/util/maskito-util';
 import {
   getDateDifference,
@@ -127,8 +126,8 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
   private elementRef = inject(ElementRef);
-  private config = inject(SharedModelCompileTimeConfig);
   private einreichenStore = inject(EinreichenStore);
+  config = inject(SharedModelCompileTimeConfig);
   einkommenTyp = input(undefined, {
     transform: (v: string | undefined): EinkommenTyp | undefined => {
       if (v && v in EinkommenTyp) {
@@ -178,7 +177,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         /* See `vermoegenValidator` bellow */
       ],
     ],
-    steuern: [<string | null>null, []],
+    steuern: [<string | undefined>undefined, []],
     veranlagungsStatus: [<string | null>null, [Validators.required]],
     steuerjahr: [
       <string | undefined>undefined,
@@ -414,7 +413,6 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
-    this.form.controls.steuern.disable();
     effect(() => {
       this.gotReenabledSig();
       const { hasData, hatKinder, warErwachsenSteuerJahr } =
@@ -480,6 +478,10 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.config.isGesuchApp,
       );
       this.setDisabledStateAndHide(
+        this.form.controls.steuern,
+        this.config.isGesuchApp,
+      );
+      this.setDisabledStateAndHide(
         this.form.controls.ausbildungskosten,
         isEKPartner,
       );
@@ -538,7 +540,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
           veranlagungsStatus: einnahmenKosten.veranlagungsStatus,
           wgAnzahlPersonen: einnahmenKosten.wgAnzahlPersonen?.toString(),
           steuerjahr: einnahmenKosten.steuerjahr?.toString(),
-          steuern: toFormatedNumber(einnahmenKosten.steuern ?? 0),
+          steuern: einnahmenKosten.steuern?.toString(),
         });
       }
     });
@@ -636,7 +638,7 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         formValues.betreuungskostenKinder,
       ),
       vermoegen: fromFormatedNumber(formValues.vermoegen),
-      steuern: undefined,
+      steuern: fromFormatedNumber(formValues.steuern),
       steuerjahr: fromFormatedNumber(formValues.steuerjahr),
       veranlagungsStatus: formValues.veranlagungsStatus,
     };
