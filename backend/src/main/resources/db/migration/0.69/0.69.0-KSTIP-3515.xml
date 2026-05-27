@@ -1,0 +1,1296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1779803717543-555">
+    <addColumn tableName="abschluss">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-556">
+    <addColumn tableName="abschluss_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-557">
+    <addColumn tableName="adresse">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-558">
+    <addColumn tableName="adresse_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-559">
+    <addColumn tableName="ausbildung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-560">
+    <addColumn tableName="ausbildung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-561">
+    <addColumn tableName="ausbildung_unterbruch_antrag">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-562">
+    <addColumn tableName="ausbildung_unterbruch_antrag_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-563">
+    <addColumn tableName="ausbildungsgang">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-564">
+    <addColumn tableName="ausbildungsgang_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-565">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-566">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-567">
+    <addColumn tableName="auszahlung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-568">
+    <addColumn tableName="auszahlung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-569">
+    <addColumn tableName="benutzer">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-570">
+    <addColumn tableName="benutzer_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-571">
+    <addColumn tableName="benutzereinstellungen">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-572">
+    <addColumn tableName="benutzereinstellungen_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-573">
+    <addColumn tableName="beschwerde_entscheid">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-574">
+    <addColumn tableName="beschwerde_entscheid_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-575">
+    <addColumn tableName="beschwerde_verlauf_entry">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-576">
+    <addColumn tableName="beschwerde_verlauf_entry_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-577">
+    <addColumn tableName="buchhaltung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-578">
+    <addColumn tableName="buchhaltung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-579">
+    <addColumn tableName="custom_dokument_typ">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-580">
+    <addColumn tableName="custom_dokument_typ_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-581">
+    <addColumn tableName="darlehen_buchhaltung_entry">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-582">
+    <addColumn tableName="darlehen_buchhaltung_entry_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-583">
+    <addColumn tableName="datenschutzbrief">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-584">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-585">
+    <addColumn tableName="datenschutzbrief_massendruck">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-586">
+    <addColumn tableName="datenschutzbrief_massendruck_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-587">
+    <addColumn tableName="delegierung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-588">
+    <addColumn tableName="delegierung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-589">
+    <addColumn tableName="demo_data">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-590">
+    <addColumn tableName="demo_data_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-591">
+    <addColumn tableName="demo_data_import">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-592">
+    <addColumn tableName="demo_data_import_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-593">
+    <addColumn tableName="dokument">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-594">
+    <addColumn tableName="dokument_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-595">
+    <addColumn tableName="einnahmen_kosten">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-596">
+    <addColumn tableName="einnahmen_kosten_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-597">
+    <addColumn tableName="eltern">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-598">
+    <addColumn tableName="eltern_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-599">
+    <addColumn tableName="fall">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-600">
+    <addColumn tableName="fall_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-601">
+    <addColumn tableName="familiensituation">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-602">
+    <addColumn tableName="familiensituation_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-603">
+    <addColumn tableName="freiwillig_darlehen">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-604">
+    <addColumn tableName="freiwillig_darlehen_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-605">
+    <addColumn tableName="freiwillig_darlehen_dokument">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-606">
+    <addColumn tableName="freiwillig_darlehen_dokument_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-607">
+    <addColumn tableName="geschwister">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-608">
+    <addColumn tableName="geschwister_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-609">
+    <addColumn tableName="gesetzlich_darlehen">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-610">
+    <addColumn tableName="gesetzlich_darlehen_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-611">
+    <addColumn tableName="gesuch">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-612">
+    <addColumn tableName="gesuch_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-613">
+    <addColumn tableName="gesuch_dokument">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-614">
+    <addColumn tableName="gesuch_dokument_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-615">
+    <addColumn tableName="gesuch_dokument_kommentar">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-616">
+    <addColumn tableName="gesuch_dokument_kommentar_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-617">
+    <addColumn tableName="gesuch_formular">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-618">
+    <addColumn tableName="gesuch_formular_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-619">
+    <addColumn tableName="gesuch_notizen">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-620">
+    <addColumn tableName="gesuch_notizen_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-621">
+    <addColumn tableName="gesuch_tranche">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-622">
+    <addColumn tableName="gesuch_tranche_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-623">
+    <addColumn tableName="gesuchsjahr">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-624">
+    <addColumn tableName="gesuchsjahr_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-625">
+    <addColumn tableName="gesuchsperiode">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-626">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-627">
+    <addColumn tableName="kind">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-628">
+    <addColumn tableName="kind_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-629">
+    <addColumn tableName="land">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-630">
+    <addColumn tableName="land_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-631">
+    <addColumn tableName="lebenslauf_item">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-632">
+    <addColumn tableName="lebenslauf_item_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-633">
+    <addColumn tableName="massendruck_job">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-634">
+    <addColumn tableName="massendruck_job_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-635">
+    <addColumn tableName="nesko_access">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-636">
+    <addColumn tableName="notification">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-637">
+    <addColumn tableName="notification_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-638">
+    <addColumn tableName="partner">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-639">
+    <addColumn tableName="partner_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-640">
+    <addColumn tableName="person_in_ausbildung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-641">
+    <addColumn tableName="person_in_ausbildung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-642">
+    <addColumn tableName="plz">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-643">
+    <addColumn tableName="plz_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-644">
+    <addColumn tableName="rolle">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-645">
+    <addColumn tableName="rolle_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-646">
+    <addColumn tableName="sachbearbeiter">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-647">
+    <addColumn tableName="sachbearbeiter_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-648">
+    <addColumn tableName="sachbearbeiter_gesuch_dokument">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-649">
+    <addColumn tableName="sachbearbeiter_gesuch_dokument_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-650">
+    <addColumn tableName="sachbearbeiter_zuordnung_stammdaten">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-651">
+    <addColumn tableName="sachbearbeiter_zuordnung_stammdaten_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-652">
+    <addColumn tableName="sapdelivery">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-653">
+    <addColumn tableName="sapdelivery_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-654">
+    <addColumn tableName="scheduledtask">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-655">
+    <addColumn tableName="scheduledtask_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-656">
+    <addColumn tableName="sozialdienst">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-657">
+    <addColumn tableName="sozialdienst_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-658">
+    <addColumn tableName="sozialdienstbenutzer">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-659">
+    <addColumn tableName="sozialdienstbenutzer_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-660">
+    <addColumn tableName="statisticsdata">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-661">
+    <addColumn tableName="statisticsdata_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-662">
+    <addColumn tableName="statistik">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-663">
+    <addColumn tableName="statistik_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-664">
+    <addColumn tableName="statusprotokoll">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-665">
+    <addColumn tableName="statusprotokoll_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-666">
+    <addColumn tableName="steuerdaten">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-667">
+    <addColumn tableName="steuerdaten_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-668">
+    <addColumn tableName="steuererklaerung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-669">
+    <addColumn tableName="steuererklaerung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-670">
+    <addColumn tableName="stip_decision_text">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-671">
+    <addColumn tableName="stip_decision_text_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-672">
+    <addColumn tableName="unterschriftenblatt">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-673">
+    <addColumn tableName="unterschriftenblatt_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-674">
+    <addColumn tableName="verfuegung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-675">
+    <addColumn tableName="verfuegung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-676">
+    <addColumn tableName="verfuegung_dokument">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-677">
+    <addColumn tableName="verfuegung_dokument_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-678">
+    <addColumn tableName="verfuegung_massendruck">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-679">
+    <addColumn tableName="verfuegung_massendruck_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-680">
+    <addColumn tableName="zahlungsverbindung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-681">
+    <addColumn tableName="zahlungsverbindung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-682">
+    <addColumn tableName="zuordnung">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-683">
+    <addColumn tableName="zuordnung_aud">
+      <column name="user_erstellt_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-684">
+    <addColumn tableName="abschluss">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-685">
+    <addColumn tableName="abschluss_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-686">
+    <addColumn tableName="adresse">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-687">
+    <addColumn tableName="adresse_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-688">
+    <addColumn tableName="ausbildung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-689">
+    <addColumn tableName="ausbildung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-690">
+    <addColumn tableName="ausbildung_unterbruch_antrag">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-691">
+    <addColumn tableName="ausbildung_unterbruch_antrag_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-692">
+    <addColumn tableName="ausbildungsgang">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-693">
+    <addColumn tableName="ausbildungsgang_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-694">
+    <addColumn tableName="ausbildungsstaette">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-695">
+    <addColumn tableName="ausbildungsstaette_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-696">
+    <addColumn tableName="auszahlung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-697">
+    <addColumn tableName="auszahlung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-698">
+    <addColumn tableName="benutzer">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-699">
+    <addColumn tableName="benutzer_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-700">
+    <addColumn tableName="benutzereinstellungen">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-701">
+    <addColumn tableName="benutzereinstellungen_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-702">
+    <addColumn tableName="beschwerde_entscheid">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-703">
+    <addColumn tableName="beschwerde_entscheid_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-704">
+    <addColumn tableName="beschwerde_verlauf_entry">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-705">
+    <addColumn tableName="beschwerde_verlauf_entry_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-706">
+    <addColumn tableName="buchhaltung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-707">
+    <addColumn tableName="buchhaltung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-708">
+    <addColumn tableName="custom_dokument_typ">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-709">
+    <addColumn tableName="custom_dokument_typ_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-710">
+    <addColumn tableName="darlehen_buchhaltung_entry">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-711">
+    <addColumn tableName="darlehen_buchhaltung_entry_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-712">
+    <addColumn tableName="datenschutzbrief">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-713">
+    <addColumn tableName="datenschutzbrief_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-714">
+    <addColumn tableName="datenschutzbrief_massendruck">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-715">
+    <addColumn tableName="datenschutzbrief_massendruck_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-716">
+    <addColumn tableName="delegierung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-717">
+    <addColumn tableName="delegierung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-718">
+    <addColumn tableName="demo_data">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-719">
+    <addColumn tableName="demo_data_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-720">
+    <addColumn tableName="demo_data_import">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-721">
+    <addColumn tableName="demo_data_import_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-722">
+    <addColumn tableName="dokument">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-723">
+    <addColumn tableName="dokument_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-724">
+    <addColumn tableName="einnahmen_kosten">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-725">
+    <addColumn tableName="einnahmen_kosten_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-726">
+    <addColumn tableName="eltern">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-727">
+    <addColumn tableName="eltern_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-728">
+    <addColumn tableName="fall">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-729">
+    <addColumn tableName="fall_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-730">
+    <addColumn tableName="familiensituation">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-731">
+    <addColumn tableName="familiensituation_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-732">
+    <addColumn tableName="freiwillig_darlehen">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-733">
+    <addColumn tableName="freiwillig_darlehen_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-734">
+    <addColumn tableName="freiwillig_darlehen_dokument">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-735">
+    <addColumn tableName="freiwillig_darlehen_dokument_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-736">
+    <addColumn tableName="geschwister">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-737">
+    <addColumn tableName="geschwister_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-738">
+    <addColumn tableName="gesetzlich_darlehen">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-739">
+    <addColumn tableName="gesetzlich_darlehen_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-740">
+    <addColumn tableName="gesuch">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-741">
+    <addColumn tableName="gesuch_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-742">
+    <addColumn tableName="gesuch_dokument">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-743">
+    <addColumn tableName="gesuch_dokument_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-744">
+    <addColumn tableName="gesuch_dokument_kommentar">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-745">
+    <addColumn tableName="gesuch_dokument_kommentar_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-746">
+    <addColumn tableName="gesuch_formular">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-747">
+    <addColumn tableName="gesuch_formular_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-748">
+    <addColumn tableName="gesuch_notizen">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-749">
+    <addColumn tableName="gesuch_notizen_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-750">
+    <addColumn tableName="gesuch_tranche">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-751">
+    <addColumn tableName="gesuch_tranche_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-752">
+    <addColumn tableName="gesuchsjahr">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-753">
+    <addColumn tableName="gesuchsjahr_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-754">
+    <addColumn tableName="gesuchsperiode">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-755">
+    <addColumn tableName="gesuchsperiode_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-756">
+    <addColumn tableName="kind">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-757">
+    <addColumn tableName="kind_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-758">
+    <addColumn tableName="land">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-759">
+    <addColumn tableName="land_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-760">
+    <addColumn tableName="lebenslauf_item">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-761">
+    <addColumn tableName="lebenslauf_item_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-762">
+    <addColumn tableName="massendruck_job">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-763">
+    <addColumn tableName="massendruck_job_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-764">
+    <addColumn tableName="nesko_access">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-765">
+    <addColumn tableName="notification">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-766">
+    <addColumn tableName="notification_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-767">
+    <addColumn tableName="partner">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-768">
+    <addColumn tableName="partner_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-769">
+    <addColumn tableName="person_in_ausbildung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-770">
+    <addColumn tableName="person_in_ausbildung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-771">
+    <addColumn tableName="plz">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-772">
+    <addColumn tableName="plz_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-773">
+    <addColumn tableName="rolle">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-774">
+    <addColumn tableName="rolle_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-775">
+    <addColumn tableName="sachbearbeiter">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-776">
+    <addColumn tableName="sachbearbeiter_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-777">
+    <addColumn tableName="sachbearbeiter_gesuch_dokument">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-778">
+    <addColumn tableName="sachbearbeiter_gesuch_dokument_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-779">
+    <addColumn tableName="sachbearbeiter_zuordnung_stammdaten">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-780">
+    <addColumn tableName="sachbearbeiter_zuordnung_stammdaten_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-781">
+    <addColumn tableName="sapdelivery">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-782">
+    <addColumn tableName="sapdelivery_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-783">
+    <addColumn tableName="scheduledtask">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-784">
+    <addColumn tableName="scheduledtask_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-785">
+    <addColumn tableName="sozialdienst">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-786">
+    <addColumn tableName="sozialdienst_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-787">
+    <addColumn tableName="sozialdienstbenutzer">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-788">
+    <addColumn tableName="sozialdienstbenutzer_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-789">
+    <addColumn tableName="statisticsdata">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-790">
+    <addColumn tableName="statisticsdata_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-791">
+    <addColumn tableName="statistik">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-792">
+    <addColumn tableName="statistik_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-793">
+    <addColumn tableName="statusprotokoll">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-794">
+    <addColumn tableName="statusprotokoll_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-795">
+    <addColumn tableName="steuerdaten">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-796">
+    <addColumn tableName="steuerdaten_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-797">
+    <addColumn tableName="steuererklaerung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-798">
+    <addColumn tableName="steuererklaerung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-799">
+    <addColumn tableName="stip_decision_text">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-800">
+    <addColumn tableName="stip_decision_text_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-801">
+    <addColumn tableName="unterschriftenblatt">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-802">
+    <addColumn tableName="unterschriftenblatt_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-803">
+    <addColumn tableName="verfuegung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-804">
+    <addColumn tableName="verfuegung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-805">
+    <addColumn tableName="verfuegung_dokument">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-806">
+    <addColumn tableName="verfuegung_dokument_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-807">
+    <addColumn tableName="verfuegung_massendruck">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-808">
+    <addColumn tableName="verfuegung_massendruck_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-809">
+    <addColumn tableName="zahlungsverbindung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-810">
+    <addColumn tableName="zahlungsverbindung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-811">
+    <addColumn tableName="zuordnung">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1779803717543-812">
+    <addColumn tableName="zuordnung_aud">
+      <column name="user_mutiert_id" type="UUID"/>
+    </addColumn>
+  </changeSet>
+</databaseChangeLog>

@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.common.authorization.DokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.SachbearbeiterGesuchDokumentAuthorizer;
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -80,6 +81,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@PopulateCurrentBenutzerContext
 public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
     private final ConfigService configService;

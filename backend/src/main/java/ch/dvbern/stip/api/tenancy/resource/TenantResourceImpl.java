@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.tenancy.resource;
 
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.TenantResource;
@@ -28,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class TenantResourceImpl implements TenantResource {
 
     private final TenantService tenantService;

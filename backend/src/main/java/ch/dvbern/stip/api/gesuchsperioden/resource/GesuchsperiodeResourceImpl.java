@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchsperiodeAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.generated.api.GesuchsperiodeResource;
@@ -42,6 +43,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class GesuchsperiodeResourceImpl implements GesuchsperiodeResource {
     private final GesuchsperiodeAuthorizer gesuchsperiodeAuthorizer;
     private final GesuchsperiodenService gesuchsperiodenService;

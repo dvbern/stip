@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.StatistikAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.statistik.service.StatistikService;
 import ch.dvbern.stip.generated.api.StatistikResource;
@@ -40,6 +41,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
+@PopulateCurrentBenutzerContext
 public class StatistikResourceImpl implements StatistikResource {
     private final StatistikAuthorizer statistikAuthorizer;
     private final StatistikService statistikService;

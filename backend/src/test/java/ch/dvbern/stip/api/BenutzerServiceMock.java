@@ -20,6 +20,7 @@ package ch.dvbern.stip.api;
 import java.util.HashSet;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.CurrentBenutzerContext;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterRepository;
 import ch.dvbern.stip.api.benutzer.repo.SachbearbeiterZuordnungStammdatenRepository;
@@ -43,9 +44,11 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 public class BenutzerServiceMock extends BenutzerService {
     private final JsonWebToken jsonWebToken;
     private static final HashSet<String> SEEN_BENUTZERS = new HashSet<>();
+    private CurrentBenutzerContext currentBenutzerContext;
 
     public BenutzerServiceMock() {
         super(
+            null,
             null,
             null,
             null,
@@ -74,6 +77,7 @@ public class BenutzerServiceMock extends BenutzerService {
     SozialdienstBenutzerRepository sozialdienstBenutzerRepository,
     NotificationRepository notificationRepository,
     RolleService rolleService,
+    CurrentBenutzerContext currentBenutzerContext,
     SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository,
     SecurityIdentity identity,
     ZuordnungRepository zuordnungRepository
@@ -88,12 +92,14 @@ public class BenutzerServiceMock extends BenutzerService {
             sozialdienstBenutzerRepository,
             notificationRepository,
             rolleService,
+            currentBenutzerContext,
             sachbearbeiterZuordnungStammdatenRepository,
             identity,
             zuordnungRepository
         );
 
         this.jsonWebToken = jsonWebToken;
+        this.currentBenutzerContext = currentBenutzerContext;
     }
 
     @Override
