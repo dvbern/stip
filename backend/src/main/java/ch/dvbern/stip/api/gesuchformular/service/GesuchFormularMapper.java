@@ -33,7 +33,6 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
-import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternDiffUtil;
@@ -114,36 +113,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
 
         dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
-    }
-
-    @AfterMapping
-    public void setCalculatedPropertiesOnDto(
-        GesuchFormular gesuchFormular,
-        @MappingTarget GesuchFormularDto gesuchFormularDto
-    ) {
-        if (gesuchFormularDto.getEinnahmenKosten() != null) {
-            final var ek = gesuchFormularDto.getEinnahmenKosten();
-            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
-
-            // PiA Steuern
-            final var isQuellenbesteuert =
-                EinnahmenKostenMappingUtil.isQuellenBesteuert(gesuchFormular.getPersonInAusbildung());
-            final var steuern =
-                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKosten(), isQuellenbesteuert);
-            ek.setSteuern(steuern);
-        }
-
-        if (
-            Objects.nonNull(gesuchFormularDto.getPartner()) &&
-            Objects.nonNull(gesuchFormularDto.getEinnahmenKostenPartner())
-        ) {
-            final var ekPartner = gesuchFormularDto.getEinnahmenKostenPartner();
-            ekPartner.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegenForPatner(gesuchFormular));
-
-            final var steuern =
-                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(), false);
-            ekPartner.setSteuern(steuern);
-        }
     }
 
     /**

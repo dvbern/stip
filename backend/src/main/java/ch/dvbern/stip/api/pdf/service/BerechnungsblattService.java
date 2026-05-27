@@ -815,23 +815,14 @@ public class BerechnungsblattService {
         persoenlichesBudgetTableKosten
             .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getKosten().getBetreuungskostenKinder()));
 
-        var kantonsGemeindesteuernCell = new Cell();
-        kantonsGemeindesteuernCell
-            .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.kantonsGemeindesteuern", tl));
-        kantonsGemeindesteuernCell
+        var steuernCell = new Cell();
+        steuernCell
+            .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.steuern", tl));
+        steuernCell
             .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurElternWohnend.info", tl));
-        persoenlichesBudgetTableKosten.addCell(kantonsGemeindesteuernCell);
+        persoenlichesBudgetTableKosten.addCell(steuernCell);
         persoenlichesBudgetTableKosten
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getKosten().getKantonsGemeindesteuern()));
-
-        var bundessteuernCell = new Cell();
-        bundessteuernCell
-            .add(getDefaultParagraphTranslated("stip.berechnung.persoenlich.kosten.bundessteuern", tl));
-        bundessteuernCell
-            .add(getDefaultParagraphTranslatedSmall("stip.berechnung.persoenlich.kosten.nurElternWohnend.info", tl));
-        persoenlichesBudgetTableKosten.addCell(bundessteuernCell);
-        persoenlichesBudgetTableKosten
-            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getKosten().getBundessteuern()));
+            .addCell(getDefaultParagraphNumber(persoenlichesBudgetresultat.getKosten().getSteuern()));
 
         var anteilLebenshaltungskostenCell = new Cell();
         anteilLebenshaltungskostenCell

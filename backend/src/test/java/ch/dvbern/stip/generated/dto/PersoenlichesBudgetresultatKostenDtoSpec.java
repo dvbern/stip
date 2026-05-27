@@ -44,8 +44,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_FAHRKOSTEN_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_VERPFLEGUNG_PARTNER,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER,
-  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_KANTONS_GEMEINDESTEUERN,
-  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_BUNDESSTEUERN,
+  PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_STEUERN,
   PersoenlichesBudgetresultatKostenDtoSpec.JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN
 })
 @JsonTypeName("PersoenlichesBudgetresultatKosten")
@@ -90,11 +89,8 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   public static final String JSON_PROPERTY_BETREUUNGSKOSTEN_KINDER = "betreuungskostenKinder";
   private Integer betreuungskostenKinder;
 
-  public static final String JSON_PROPERTY_KANTONS_GEMEINDESTEUERN = "kantonsGemeindesteuern";
-  private Integer kantonsGemeindesteuern;
-
-  public static final String JSON_PROPERTY_BUNDESSTEUERN = "bundessteuern";
-  private Integer bundessteuern;
+  public static final String JSON_PROPERTY_STEUERN = "steuern";
+  private Integer steuern;
 
   public static final String JSON_PROPERTY_ANTEIL_LEBENSHALTUNGSKOSTEN = "anteilLebenshaltungskosten";
   private Integer anteilLebenshaltungskosten;
@@ -448,55 +444,29 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
   }
 
 
-  public PersoenlichesBudgetresultatKostenDtoSpec kantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
+  public PersoenlichesBudgetresultatKostenDtoSpec steuern(Integer steuern) {
     
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
+    this.steuern = steuern;
     return this;
   }
 
    /**
-   * Get kantonsGemeindesteuern
-   * @return kantonsGemeindesteuern
+   * Get steuern
+   * @return steuern
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_KANTONS_GEMEINDESTEUERN)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Integer getKantonsGemeindesteuern() {
-    return kantonsGemeindesteuern;
+  public Integer getSteuern() {
+    return steuern;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_KANTONS_GEMEINDESTEUERN)
+  @JsonProperty(JSON_PROPERTY_STEUERN)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setKantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
-  }
-
-
-  public PersoenlichesBudgetresultatKostenDtoSpec bundessteuern(Integer bundessteuern) {
-    
-    this.bundessteuern = bundessteuern;
-    return this;
-  }
-
-   /**
-   * Get bundessteuern
-   * @return bundessteuern
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_BUNDESSTEUERN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public Integer getBundessteuern() {
-    return bundessteuern;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_BUNDESSTEUERN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setBundessteuern(Integer bundessteuern) {
-    this.bundessteuern = bundessteuern;
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
 
@@ -547,14 +517,13 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
-        Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
-        Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
+        Objects.equals(this.steuern, persoenlichesBudgetresultatKosten.steuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, fahrkostenPartner, verpflegungPartner, betreuungskostenKinder, steuern, anteilLebenshaltungskosten);
   }
 
   @Override
@@ -574,8 +543,7 @@ public class PersoenlichesBudgetresultatKostenDtoSpec {
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
-    sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
-    sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("}");
     return sb.toString();
