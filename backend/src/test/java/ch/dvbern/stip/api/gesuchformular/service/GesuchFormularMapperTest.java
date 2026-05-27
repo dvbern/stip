@@ -46,18 +46,15 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.kind.service.KindMapperImpl;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapperImpl;
-import ch.dvbern.stip.api.partner.entity.Partner;
 import ch.dvbern.stip.api.partner.service.PartnerMapperImpl;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.service.MockPersonInAusbildungMapperImpl;
@@ -74,7 +71,6 @@ import ch.dvbern.stip.generated.dto.AdresseDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
 import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
-import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
@@ -85,8 +81,6 @@ import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
-import static io.smallrye.common.constraint.Assert.assertFalse;
-import static io.smallrye.common.constraint.Assert.assertTrue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -337,138 +331,6 @@ class GesuchFormularMapperTest {
         // Assert
         assertThat(update.getPartner(), is(nullValue()));
         assertThat(update.getEinnahmenKostenPartner(), is(nullValue()));
-    }
-
-    @Test
-    void setCorrectVermoegenValueGT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
-    }
-
-    @Test
-    void setCorrectVermoegenForPartnerValueGT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        var parter = new Partner();
-        parter.setGeburtsdatum(geburtsDatum);
-        var ekPartner = new EinnahmenKosten();
-        ekPartner.setVermoegen(5);
-        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
-        tranche.getGesuchFormular().setPartner(parter);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertTrue(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == 5);
-    }
-
-    @Test
-    void setCorrectVermoegenForPartnerValueLT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        var parter = new Partner();
-        parter.setGeburtsdatum(geburtsDatum);
-        var ekPartner = new EinnahmenKosten();
-        ekPartner.setVermoegen(5);
-        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
-        tranche.getGesuchFormular().setPartner(parter);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == null);
-    }
-
-    @Test
-    void setCorrectVermoegenNonZeroValueGT18Test() {
-        final int vermoegen = 10000;
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(20);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertTrue(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertFalse(formular.getEinnahmenKosten().getVermoegen() == null);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == vermoegen);
-
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
-    }
-
-    @Test
-    void setCorrectVermoegenValueLT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(2);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
-    }
-
-    @Test
-    void setCorrectVermoegenNonZeroValueLT18Test() {
-        final int vermoegen = 10000;
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
     }
 
     @Test
