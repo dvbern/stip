@@ -61,6 +61,7 @@ public class StatistikApiSpec {
     public List<Oper> getAllOperations() {
         return Arrays.asList(
                 createStatistikJob(),
+                getAllStatistikYears(),
                 getAllStatistiks(),
                 getStatistikDownload(),
                 getStatistikDownloadToken()
@@ -69,6 +70,10 @@ public class StatistikApiSpec {
 
     public CreateStatistikJobOper createStatistikJob() {
         return new CreateStatistikJobOper(createReqSpec());
+    }
+
+    public GetAllStatistikYearsOper getAllStatistikYears() {
+        return new GetAllStatistikYearsOper(createReqSpec());
     }
 
     public GetAllStatistiksOper getAllStatistiks() {
@@ -151,6 +156,67 @@ public class StatistikApiSpec {
          * @return operation
          */
         public CreateStatistikJobOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * All available years
+     * 
+     *
+     * return List&lt;Integer&gt;
+     */
+    public static class GetAllStatistikYearsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/statistik/years";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAllStatistikYearsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /statistik/years
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /statistik/years
+         * @param handler handler
+         * @return List&lt;Integer&gt;
+         */
+        public List<Integer> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<Integer>> type = new TypeRef<List<Integer>>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAllStatistikYearsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAllStatistikYearsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

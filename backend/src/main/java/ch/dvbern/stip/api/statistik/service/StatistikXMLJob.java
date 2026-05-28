@@ -22,12 +22,14 @@ import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 @Singleton
 @RequiredArgsConstructor
+@DisallowConcurrentExecution
 public class StatistikXMLJob implements Job {
     private final StatistikXMLService statistikXMLService;
 
