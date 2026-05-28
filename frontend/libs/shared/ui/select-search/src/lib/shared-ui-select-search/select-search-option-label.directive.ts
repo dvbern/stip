@@ -18,7 +18,8 @@ export class SharedUiSearchOptionLabelDirective<T extends LookupType> {
 
   static ngTemplateContextGuard<T extends LookupType>(
     dir: SharedUiSearchOptionLabelDirective<T>,
-    ctx: any,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    ctx: unknown,
   ): ctx is SelectTemplateContext<T> {
     // As before the guard body is not used at runtime, and included only to avoid
     // TypeScript errors.

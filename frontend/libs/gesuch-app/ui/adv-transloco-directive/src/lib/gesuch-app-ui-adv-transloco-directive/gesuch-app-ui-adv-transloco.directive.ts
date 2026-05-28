@@ -21,6 +21,7 @@ interface ViewContext {
 export class GesuchAppUiAdvTranslocoDirective extends TranslocoDirective {
   static override ngTemplateContextGuard(
     _dir: GesuchAppUiAdvTranslocoDirective,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ctx: unknown,
   ): ctx is ViewContext {
     return true;
