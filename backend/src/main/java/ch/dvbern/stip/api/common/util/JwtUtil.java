@@ -19,11 +19,9 @@ package ch.dvbern.stip.api.common.util;
 
 import jakarta.enterprise.inject.Instance;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-@Slf4j
 @UtilityClass
 public class JwtUtil {
     public static String SYSTEM_USR = "System";
