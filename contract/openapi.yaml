@@ -11908,6 +11908,7 @@ components:
         - zweiterAuszahlungsterminMonat
         - zweiterAuszahlungsterminTag
         - fristNachreichenDokumente
+        - fristUploadUnterschriftenblatt
         - stichtagVolljaehrigkeitMedizinischeGrundversorgung
       properties:
         bezeichnungDe:
@@ -12021,6 +12022,8 @@ components:
         zweiterAuszahlungsterminTag:
           type: integer
         fristNachreichenDokumente:
+          type: integer
+        fristUploadUnterschriftenblatt:
           type: integer
         stichtagVolljaehrigkeitMedizinischeGrundversorgung:
           format: date

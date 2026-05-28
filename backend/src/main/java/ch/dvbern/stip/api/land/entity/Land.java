@@ -28,9 +28,13 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO2CODE_LENGTH;
 import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_ISO3CODE_LENGTH;
@@ -47,6 +51,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Audited
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Land extends AbstractMandantEntity {
     @NotNull
     @Column(name = "is_eu_efta", nullable = false)

@@ -46,8 +46,8 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapperImpl;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
-import ch.dvbern.stip.api.generator.entities.GesuchGenerator;
-import ch.dvbern.stip.api.generator.entities.service.LandGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
+import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
@@ -668,11 +668,11 @@ class GesuchFormularMapperTest {
         final var s3 = Mockito.mock(S3AsyncClient.class);
         final var unterschriftenblattService = new UnterschriftenblattService(
             null,
+            null,
             unterschriftenblattRepositoryMock,
             null,
             null,
             Mockito.mock(ConfigService.class), s3,
-            null,
             null,
             null,
             null,

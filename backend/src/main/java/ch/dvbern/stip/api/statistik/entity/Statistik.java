@@ -55,6 +55,7 @@ public class Statistik extends AbstractMandantEntity {
 
     @NotNull
     @Column(name = "valid", nullable = false)
+    @Builder.Default
     private boolean valid = true;
 
     @NotNull

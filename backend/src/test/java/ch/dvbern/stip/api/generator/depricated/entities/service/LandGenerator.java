@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.generator.entities.service;
+package ch.dvbern.stip.api.generator.depricated.entities.service;
 
 import java.util.UUID;
 
@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import lombok.experimental.UtilityClass;
 
+@Deprecated
 @UtilityClass
 public class LandGenerator {
     public Land initSwitzerland() {

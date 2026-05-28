@@ -17,44 +17,27 @@
 
 package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
-import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
-import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
-import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
-import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.service.seeding.GesuchTestSeeding;
-import ch.dvbern.stip.api.fall.entity.Fall;
+import ch.dvbern.stip.api.common.statemachines.gesuch.handlers.VerfuegungDruckbereitHandler;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchTestUtil;
-import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
-import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -67,86 +50,34 @@ class UnterschriftenblattUploadCheckScheduledTaskTest {
     GesuchRepository gesuchRepository;
 
     @InjectMock
-    GesuchHistoryRepository gesuchHistoryRepository;
-
-    @InjectMock
-    BuchhaltungRepository buchhaltungRepository;
-
-    @InjectMock
-    BerechnungService berechnungService;
+    GesuchsperiodenService gesuchsperiodenService;
 
     @InjectMock
     StatusprotokollService statusprotokollService;
+
+    @InjectMock
+    VerfuegungDruckbereitHandler verfuegungDruckbereitHandler;
 
     Gesuch gesuch;
 
     @BeforeEach
     void setUp() {
-        // arrange
-        Mockito.doNothing().when(buchhaltungRepository).persistAndFlush(any());
-
-        var berechnungsresultatDto = new BerechnungsresultatDto();
-        berechnungsresultatDto.setBerechnungStipendium(0);
-        berechnungsresultatDto.setYear(2025);
-        var tranchenBerechnungsblattDto = new TranchenBerechnungsresultatDto();
-        tranchenBerechnungsblattDto.setTotal(0);
-        berechnungsresultatDto.setTranchenBerechnungsresultate(List.of(tranchenBerechnungsblattDto));
-
-        when(berechnungService.getBerechnungsresultatFromGesuch(any(), anyInt(), anyInt()))
-            .thenCallRealMethod();
-
         gesuch = GesuchTestUtil.setupValidGesuchInState(Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT);
-        var verfuegung = new Verfuegung();
-        verfuegung.setGesuch(gesuch);
-        gesuch.setEinreichedatum(LocalDate.now());
-        gesuch.setVerfuegungs(List.of(verfuegung));
-        when(gesuchRepository.getAllWartenAufUnterschriftenblatt()).thenReturn(List.of(gesuch));
-        when(gesuchRepository.requireById(any())).thenReturn(gesuch);
+        gesuch.setGesuchStatusAenderungDatum(LocalDateTime.now().minusDays(2));
 
         var gesuchsjahr = new Gesuchsjahr();
         gesuchsjahr.setTechnischesJahr(2025);
         var gesuchperiode = GesuchTestSeeding.getGesuchsperiode(gesuchsjahr);
         gesuch.setGesuchsperiode(gesuchperiode);
 
-        var ausbildung = new Ausbildung();
-        var abschluss = new Abschluss();
-        abschluss.setBezeichnungDe("test");
-        abschluss.setBezeichnungFr("test");
-        abschluss.setAusbildungskategorie(Ausbildungskategorie.BERUFS_UND_HOEHERE_FACHSCHULE);
-        abschluss.setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II);
-        var ausbildungsgang = new Ausbildungsgang();
-        ausbildungsgang.setAbschluss(abschluss);
-        ausbildung.setAusbildungsgang(ausbildungsgang);
-
-        var ausbildungsstaette = new Ausbildungsstaette();
-        ausbildungsstaette.setNameDe("test");
-        ausbildungsstaette.setNameFr("test");
-        ausbildungsgang.setAusbildungsstaette(ausbildungsstaette);
-
-        var fall = new Fall();
-        ausbildung.setFall(fall);
-        gesuch.setAusbildung(ausbildung);
-
-        var zuordnung = new Zuordnung();
-        zuordnung.setFall(fall);
-        var sachbearbeiter = new Sachbearbeiter();
-        sachbearbeiter.setNachname("Muster");
-        sachbearbeiter.setVorname("Max");
-        sachbearbeiter.setEmail("test");
-        sachbearbeiter.setTelefonnummer("031");
-        sachbearbeiter.setFunktionDe("test");
-        sachbearbeiter.setFunktionFr("test");
-        zuordnung.setSachbearbeiter(sachbearbeiter);
-        fall.setSachbearbeiterZuordnung(zuordnung);
-
-        when(gesuchHistoryRepository.getWhereStatusChangeHappenedBefore(any(), any(), any()))
+        when(gesuchRepository.getAllWartenAufUnterschriftenblatt())
             .thenReturn(Stream.of(gesuch));
     }
 
     @Test
     void automaticChangeOfGesuchStatusToDruckbereit_shouldWork() {
         // act & assert
-        assertDoesNotThrow(() -> scheduledTask.run());
+        assertDoesNotThrow(() -> scheduledTask.runForBern());
         // todo KSTIP-2663 move call of addBerechnungsblattToDocument to another state transtition
         /*
          * try {
