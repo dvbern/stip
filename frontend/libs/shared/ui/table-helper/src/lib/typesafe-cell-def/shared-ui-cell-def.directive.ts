@@ -28,6 +28,7 @@ export class TypeSafeMatCellDefDirective<T> extends MatCellDef {
 
   static ngTemplateContextGuard<T>(
     _: TypeSafeMatCellDefDirective<T>,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ctx: unknown,
   ): ctx is { $implicit: T; index: number } {
     return true;
