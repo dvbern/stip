@@ -52,6 +52,8 @@ import ch.dvbern.stip.api.geschwister.service.GeschwisterMapperImpl;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.entity.Kind;
@@ -138,6 +140,7 @@ class GesuchFormularMapperTest {
     @Test
     void resetEinnahmenKostenRemovesWohnkostenTest() {
         final var targetPia = new PersonInAusbildung();
+        targetPia.setGeburtsdatum(LocalDate.now().minusYears(16));
         targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
         final var target = initTarget()
             .setPersonInAusbildung(targetPia)
@@ -145,6 +148,7 @@ class GesuchFormularMapperTest {
 
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));;
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setWohnkosten(1);
@@ -203,6 +207,7 @@ class GesuchFormularMapperTest {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setAuswaertigeMittagessenProWoche(1);
@@ -262,6 +267,7 @@ class GesuchFormularMapperTest {
 
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
+        updatePia.setGeburtsdatum(LocalDate.now().minusYears(16));
 
         final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
         updateEinnahmenKosten.setWgWohnend(true);
@@ -383,30 +389,6 @@ class GesuchFormularMapperTest {
     }
 
     @Test
-    void setCorrectVermoegenForPartnerValueLT18Test() {
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        var parter = new Partner();
-        parter.setGeburtsdatum(geburtsDatum);
-        var ekPartner = new EinnahmenKosten();
-        ekPartner.setVermoegen(5);
-        tranche.getGesuchFormular().setEinnahmenKostenPartner(ekPartner);
-        tranche.getGesuchFormular().setPartner(parter);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasPartnerOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKostenPartner().getVermoegen() == null);
-    }
-
-    @Test
     void setCorrectVermoegenNonZeroValueGT18Test() {
         final int vermoegen = 10000;
         // neues gesuch
@@ -440,28 +422,6 @@ class GesuchFormularMapperTest {
                 .setTranche(tranche)
         );
         tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        GesuchFormularMapper gesuchFormularMapper = createMapper();
-        GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
-        assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
-        GesuchFormular formular = gesuchFormularMapper.toEntity(gesuchFormularDto);
-        assertTrue(formular.getEinnahmenKosten().getVermoegen() == null);
-
-        assertTrue(tranche.getGesuch().getGesuchsperiode().getGesuchsjahr().getTechnischesJahr() != null);
-    }
-
-    @Test
-    void setCorrectVermoegenNonZeroValueLT18Test() {
-        final int vermoegen = 10000;
-        // neues gesuch
-        Gesuch gesuch = GesuchGenerator.initGesuch();
-        GesuchTranche tranche = gesuch.getGesuchTranchen().get(0);
-        LocalDate geburtsDatum = LocalDate.now().minusYears(16);
-        tranche.setGesuchFormular(
-            addChPersonInAusbildung(new GesuchFormular()).setEinnahmenKosten(new EinnahmenKosten())
-                .setTranche(tranche)
-        );
-        tranche.getGesuchFormular().getPersonInAusbildung().setGeburtsdatum(geburtsDatum);
-        tranche.getGesuchFormular().getEinnahmenKosten().setVermoegen(vermoegen);
         GesuchFormularMapper gesuchFormularMapper = createMapper();
         GesuchFormularDto gesuchFormularDto = gesuchFormularMapper.toDto(tranche.getGesuchFormular());
         assertFalse(GesuchFormularCalculationUtil.wasGSOlderThan18(tranche.getGesuchFormular()));
@@ -719,7 +679,17 @@ class GesuchFormularMapperTest {
     }
 
     private GesuchFormular initTarget() {
-        return new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        var formular = new GesuchFormular().setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        var gesuchperiode =
+            new Gesuchsperiode().setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(LocalDate.now().getYear() - 1));
+        var tranche = new GesuchTranche().setGesuch(new Gesuch().setGesuchsperiode(gesuchperiode));
+
+        final var targetPia = new PersonInAusbildung();
+        targetPia.setGeburtsdatum(LocalDate.now().minusYears(16));
+        targetPia.setWohnsitz(Wohnsitz.EIGENER_HAUSHALT);
+        formular.setPersonInAusbildung(targetPia);
+        formular.setTranche(tranche);
+        return formular;
     }
 
     private GesuchFormular addChPersonInAusbildung(final GesuchFormular gesuchFormular) {

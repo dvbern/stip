@@ -32,7 +32,6 @@ import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.einnahmen_kosten.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -110,25 +109,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
 
         dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
-    }
-
-    @AfterMapping
-    public void setCalculatedPropertiesOnDto(
-        GesuchFormular gesuchFormular,
-        @MappingTarget GesuchFormularDto gesuchFormularDto
-    ) {
-        if (gesuchFormularDto.getEinnahmenKosten() != null) {
-            final var ek = gesuchFormularDto.getEinnahmenKosten();
-            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
-        }
-
-        if (
-            Objects.nonNull(gesuchFormularDto.getPartner()) &&
-            Objects.nonNull(gesuchFormularDto.getEinnahmenKostenPartner())
-        ) {
-            final var ekPartner = gesuchFormularDto.getEinnahmenKostenPartner();
-            ekPartner.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegenForPatner(gesuchFormular));
-        }
     }
 
     /**
@@ -297,7 +277,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> (newFormular.getEinnahmenKosten() != null &&
             !GesuchFormularCalculationUtil
-                .isPersonInAusbildungVolljaehrig(newFormular)),
+                .wasGSOlderThan18(newFormular, targetFormular.getTranche().getGesuch().getGesuchsperiode())),
             "Reset Vermoegen if Person in Ausbildung is < 18 years old",
             () -> {
                 newFormular.getEinnahmenKosten().setVermoegen(null);
@@ -308,7 +288,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> (newFormular.getPartner() != null &&
             newFormular.getEinnahmenKostenPartner() != null &&
             !GesuchFormularCalculationUtil
-                .isDateOfBirthGreaterThanOrEquals18(newFormular.getPartner().getGeburtsdatum())),
+                .wasPartnerOlderThan18(newFormular, targetFormular.getTranche().getGesuch().getGesuchsperiode())),
             "Reset Vermoegen if Partner is < 18 years old",
             () -> {
                 newFormular.getEinnahmenKostenPartner().setVermoegen(null);
