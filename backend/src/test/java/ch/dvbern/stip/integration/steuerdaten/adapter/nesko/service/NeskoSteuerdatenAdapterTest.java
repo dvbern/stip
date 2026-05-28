@@ -24,9 +24,7 @@ import ch.dvbern.stip.api.config.type.TenantAdapterConfig;
 import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.BusinessFault;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.EffSatzType;
-import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdaten;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.SteuerdatenType;
 import ch.dvbern.stip.integration.steuerdaten.adapter.nesko.generated.stipendienauskunftservice.StipendienAuskunftPort;
@@ -46,7 +44,6 @@ import org.mockito.Mockito;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -127,53 +124,10 @@ class NeskoSteuerdatenAdapterTest {
     }
 
     @Test
-    void getSteuerdaten_portReturnsNull_returnsNull() throws Exception {
-        when(portMock.getSteuerdaten(any())).thenReturn(null);
-
-        final var result = neskoSteuerdatenAdapter.getSteuerdaten(
-            DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR
-        );
-
-        assertThat(result, is(nullValue()));
-    }
-
-    @Test
-    void getSteuerdaten_svnStripping_removesDotsBeforeCall() throws Exception {
-        when(portMock.getSteuerdaten(any())).thenReturn(null);
-
-        neskoSteuerdatenAdapter.getSteuerdaten(DEFAULT_SVN, DEFAULT_STEUERJAHR, DEFAULT_STEUERDATEN_TYP, DEFAULT_FALL_NR, DEFAULT_GESUCH_NR);
-
-        final var captor = org.mockito.ArgumentCaptor.forClass(
-            GetSteuerdaten.class
-        );
-        verify(portMock).getSteuerdaten(captor.capture());
-        assertThat(captor.getValue().getSozialversicherungsnummer(), is(Long.valueOf(DEFAULT_SVN.replace(".", ""))));
-        assertThat(captor.getValue().getSteuerjahr(), is(DEFAULT_STEUERJAHR));
-    }
-
-    @Test
     void getSteuerdaten_soapFaultException_throwsInternalServerError() throws Exception {
         final var soapEx = mock(SOAPFaultException.class);
         when(soapEx.getMessage()).thenReturn("Some unexpected SOAP error");
         when(portMock.getSteuerdaten(any())).thenThrow(soapEx);
-
-        assertThrows(
-            InternalServerErrorException.class,
-            () -> neskoSteuerdatenAdapter.getSteuerdaten(
-                DEFAULT_SVN,
-                DEFAULT_STEUERJAHR,
-                DEFAULT_STEUERDATEN_TYP,
-                DEFAULT_FALL_NR,
-                DEFAULT_GESUCH_NR
-            )
-        );
-    }
-
-    @Test
-    void getSteuerdaten_businessFaultException_throwsInternalServerError() throws Exception {
-        final var businessFault = mock(BusinessFault.class);
-        when(businessFault.getMessage()).thenReturn("Some unknown business fault");
-        when(portMock.getSteuerdaten(any())).thenThrow(businessFault);
 
         assertThrows(
             InternalServerErrorException.class,

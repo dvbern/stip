@@ -20,7 +20,7 @@ package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.service;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -47,8 +47,10 @@ import com.opencsv.exceptions.CsvException;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.input.BOMInputStream;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import software.amazon.awssdk.utils.StringInputStream;
 
 @Slf4j
 @RequestScoped
@@ -139,7 +141,12 @@ public class SwisstopoPlzFetchAdapter implements PlzFetchPort {
 
         try (
             final var reader =
-                new CSVReaderHeaderAwareBuilder(new StringReader(csvFileData))
+                new CSVReaderHeaderAwareBuilder(
+                    new InputStreamReader(
+                        BOMInputStream.builder().setInputStream(new StringInputStream(csvFileData)).get(),
+                        StandardCharsets.UTF_8
+                    )
+                )
                     .withCSVParser(csvParser)
                     .build()
         ) {
@@ -148,7 +155,7 @@ public class SwisstopoPlzFetchAdapter implements PlzFetchPort {
             while ((rowMap = reader.readMap()) != null) {
                 final var plzFetchData = PlzFetchData.builder()
                     .plz(rowMap.get("PLZ4"))
-                    .ort(rowMap.get("\uFEFFOrtschaftsname"))
+                    .ort(rowMap.get("Ortschaftsname"))
                     .kantonskuerzel(rowMap.get("Kantonskürzel"))
                     .build();
                 plzList.add(plzFetchData);

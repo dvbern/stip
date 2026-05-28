@@ -50,6 +50,7 @@ UUID gesuchId, TenantIdentifier tenantIdentifier, String strasse, String hausnum
 
     public GemeindeLookupRequest(final JobDataMap map) {
         this(
+            // moved validation logic into @parseGesuchId unless we upgrade to java 23+
             parseGesuchId(map),
             TenantIdentifier.of((String) map.get(TENANT_IDENTIFIER_KEY)),
             (String) map.get(HAUSNUMMER_KEY),

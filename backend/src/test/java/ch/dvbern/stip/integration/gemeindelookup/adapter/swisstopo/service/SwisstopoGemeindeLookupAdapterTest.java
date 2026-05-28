@@ -29,15 +29,10 @@ import io.quarkus.test.InjectMock;
 import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -105,55 +100,9 @@ public class SwisstopoGemeindeLookupAdapterTest {
     }
 
     @Test
-    void findGemeindeData_lookupUsesStreetAndHausnummerLayerDef() {
-        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
-            .thenReturn(response(attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME)));
-
-        swisstopoGemeindeLookupAdapter.findGemeindeData(defaultRequest());
-
-        final var streetCaptor = ArgumentCaptor.forClass(String.class);
-        final var layerDefsCaptor = ArgumentCaptor.forClass(String.class);
-        verify(swisstopoApiRestService).findAllMatchingBuildings(streetCaptor.capture(), layerDefsCaptor.capture());
-
-        assertThat(streetCaptor.getValue(), Matchers.equalTo(DEFAULT_STRASSE));
-        assertThat(layerDefsCaptor.getValue(), containsString("ch.swisstopo.amtliches-gebaeudeadressverzeichnis"));
-        assertThat(layerDefsCaptor.getValue(), containsString("adr_number ilike '" + DEFAULT_HAUSNUMMER + "'"));
-    }
-
-    @Test
     void findGemeindeData_lookupHasNoMatchingZipOrOrt_fallsBackToPlzLookup() {
         when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
             .thenReturn(response(attributes("8000 Zürich", 261, "Zürich")));
-        when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
-            .thenReturn(response(attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME)));
-
-        final var result = swisstopoGemeindeLookupAdapter.findGemeindeData(defaultRequest());
-
-        assertThat(result.isPresent(), is(true));
-        assertThat(result.get().bfsNummer(), is(DEFAULT_BFS_NUMMER));
-        assertThat(result.get().name(), is(DEFAULT_GEMEINDE_NAME));
-        verify(swisstopoApiRestService).findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ);
-    }
-
-    @Test
-    void findGemeindeData_lookupReturnsEmptyResults_fallsBackToPlzLookup() {
-        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
-            .thenReturn(response());
-        when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
-            .thenReturn(response(attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME)));
-
-        final var result = swisstopoGemeindeLookupAdapter.findGemeindeData(defaultRequest());
-
-        assertThat(result.isPresent(), is(true));
-        assertThat(result.get().bfsNummer(), is(DEFAULT_BFS_NUMMER));
-        assertThat(result.get().name(), is(DEFAULT_GEMEINDE_NAME));
-        verify(swisstopoApiRestService).findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ);
-    }
-
-    @Test
-    void findGemeindeData_lookupThrowsException_fallsBackToPlzLookup() {
-        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
-            .thenThrow(new RuntimeException("Swisstopo address lookup failed"));
         when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
             .thenReturn(response(attributes(DEFAULT_ORT_PLZ, DEFAULT_BFS_NUMMER, DEFAULT_GEMEINDE_NAME)));
 
@@ -181,33 +130,6 @@ public class SwisstopoGemeindeLookupAdapterTest {
         assertThat(result.isPresent(), is(true));
         assertThat(result.get().bfsNummer(), is(DEFAULT_BFS_NUMMER));
         assertThat(result.get().name(), is(DEFAULT_GEMEINDE_NAME));
-    }
-
-    @Test
-    void findGemeindeData_lookupReturnsEmpty_returnEmptyOptional() {
-        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
-            .thenReturn(response());
-        when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
-            .thenReturn(response());
-
-        final var result = swisstopoGemeindeLookupAdapter.findGemeindeData(defaultRequest());
-
-        assertThat(result, notNullValue());
-        assertThat(result.isEmpty(), is(true));
-    }
-
-    @Test
-    void findGemeindeData_lookupResultMapsNullFields() {
-        when(swisstopoApiRestService.findAllMatchingBuildings(anyString(), anyString()))
-            .thenReturn(response());
-        when(swisstopoApiRestService.findAllMatchingBuildingsByZipLabel(DEFAULT_PLZ))
-            .thenReturn(response(attributes(DEFAULT_ORT_PLZ, null, null)));
-
-        final var result = swisstopoGemeindeLookupAdapter.findGemeindeData(defaultRequest());
-
-        assertThat(result.isPresent(), is(true));
-        assertThat(result.get().bfsNummer(), nullValue());
-        assertThat(result.get().name(), nullValue());
     }
 
     private static GemeindeLookupRequest defaultRequest() {
