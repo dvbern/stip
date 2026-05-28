@@ -136,9 +136,14 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
       : format(von, 'dd.MM.yyyy');
   });
 
+  yearsSig = computed(() => {
+    return this.bfsStatistikStore.availableYears().data ?? [];
+  });
+
   bfsStatistikDataSourceSig = computed(() => {
-    const allCountries = this.bfsStatistikStore.bfsStatistikListViewSig() ?? [];
-    const datasource = new MatTableDataSource(allCountries);
+    const allStatistiks =
+      this.bfsStatistikStore.bfsStatistikListViewSig() ?? [];
+    const datasource = new MatTableDataSource(allStatistiks);
     const paginator = this.paginatorSig();
     const sort = this.sortSig();
 
@@ -155,8 +160,11 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
     return datasource;
   });
 
-  createStatistik() {
-    SachbearbeitungAppDialogCreateBfsStatistikComponent.open(this.dialog)
+  createStatistik(availableYears: number[]) {
+    SachbearbeitungAppDialogCreateBfsStatistikComponent.open(
+      this.dialog,
+      availableYears,
+    )
       .afterClosed()
       .subscribe((year) => {
         if (year) {
@@ -172,6 +180,7 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
 
   constructor() {
     this.bfsStatistikStore.loadAllBfsStatistik$();
+    this.bfsStatistikStore.loadAllBfsStatistikYears$();
 
     effect(() => {
       const filter = this.filterChangedSig();

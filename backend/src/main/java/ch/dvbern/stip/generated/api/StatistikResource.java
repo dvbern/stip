@@ -28,6 +28,11 @@ public interface StatistikResource {
     void createStatistikJob(@QueryParam("year") @NotNull   Integer year);
 
     @GET
+    @Path("/years")
+    @Produces({ "application/json", "text/plain" })
+    List<Integer> getAllStatistikYears();
+
+    @GET
     @Produces({ "application/json", "text/plain" })
     List<StatistikDto> getAllStatistiks();
 
