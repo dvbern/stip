@@ -18,11 +18,13 @@
 package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
+import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@QuarkusComponentTest(SwisstopoGeimeindeDataMapperImpl.class)
 public class SwisstopoGeimeindeDataMapperTest {
 
     @Inject

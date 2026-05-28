@@ -30,14 +30,17 @@ import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPort;
 import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifier;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.jose4j.json.internal.json_simple.JSONObject;
 
 @Slf4j
-@RequiredArgsConstructor
 @RequestScoped
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 @GemeindeLookupQualifier(GemeindeLookupAdapterType.SWISSTOPO)
 public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     private static final String ADDR_NO_SEARCH_LAYER_DEF_KEY = "ch.swisstopo.amtliches-gebaeudeadressverzeichnis";
