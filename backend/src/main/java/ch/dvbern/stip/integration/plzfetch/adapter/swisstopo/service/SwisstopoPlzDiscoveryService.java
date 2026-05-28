@@ -17,11 +17,10 @@
 
 package ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.service;
 
+import ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.type.SwisstopoPlzDiscoveryResponse;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
-
-import ch.dvbern.stip.integration.plzfetch.adapter.swisstopo.type.SwisstopoPlzDiscoveryResponse;
 
 @Path("/items")
 @RegisterRestClient(configKey = "swisstopo-plz-api")

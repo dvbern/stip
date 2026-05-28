@@ -1,25 +1,38 @@
+/*
+ * Copyright (C) 2023 DV Bern AG, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package ch.dvbern.stip.arch;
 
-import ch.dvbern.stip.arch.util.ArchTestUtil;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.parallel.Execution;
-import org.junit.jupiter.api.parallel.ExecutionMode;
-
+import java.util.Optional;
 import java.util.regex.Pattern;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
-
-
-import java.util.Optional;
-
+import ch.dvbern.stip.arch.util.ArchTestUtil;
 import com.tngtech.archunit.core.domain.Dependency;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.slices;
 
 @Execution(ExecutionMode.CONCURRENT)
 class IntegrationArchitectureTest {
@@ -45,7 +58,9 @@ class IntegrationArchitectureTest {
             .should()
             .dependOnClassesThat()
             .resideInAPackage(ADAPTER)
-            .because("integration domain packages define the integration API/core and must not access adapter implementations");
+            .because(
+                "integration domain packages define the integration API/core and must not access adapter implementations"
+            );
 
         rule.check(ArchTestUtil.INTEGRATION_CLASSES);
     }
@@ -71,7 +86,9 @@ class IntegrationArchitectureTest {
             .should()
             .dependOnClassesThat()
             .resideInAPackage(ADAPTER)
-            .because("outside packages should use integration domain ports, factories or services instead of adapter implementations");
+            .because(
+                "outside packages should use integration domain ports, factories or services instead of adapter implementations"
+            );
 
         rule.check(ArchTestUtil.INTEGRATION_CLASSES);
     }
@@ -93,7 +110,9 @@ class IntegrationArchitectureTest {
             .that()
             .resideInAPackage(ADAPTER)
             .should(onlyDependOnOwnIntegrationModuleDomain())
-            .because("an adapter implements its own module's domain ports and should not couple to another integration module's domain");
+            .because(
+                "an adapter implements its own module's domain ports and should not couple to another integration module's domain"
+            );
 
         rule.check(ArchTestUtil.INTEGRATION_CLASSES);
     }
@@ -117,15 +136,17 @@ class IntegrationArchitectureTest {
                     JavaClass target = dependency.getTargetClass();
 
                     if (isIntegrationDomain(target) && NotSameIntegrationModule(item, target)) {
-                        events.add(SimpleConditionEvent.violated(
-                            dependency,
-                            "%s depends on domain class %s from another integration module via %s"
-                                .formatted(
-                                    item.getName(),
-                                    target.getName(),
-                                    dependency.getDescription()
-                                )
-                        ));
+                        events.add(
+                            SimpleConditionEvent.violated(
+                                dependency,
+                                "%s depends on domain class %s from another integration module via %s"
+                                    .formatted(
+                                        item.getName(),
+                                        target.getName(),
+                                        dependency.getDescription()
+                                    )
+                            )
+                        );
                     }
                 }
             }
@@ -140,15 +161,17 @@ class IntegrationArchitectureTest {
                     JavaClass origin = dependency.getOriginClass();
 
                     if (!isIntegrationAdapter(origin) || NotSameIntegrationModule(origin, item)) {
-                        events.add(SimpleConditionEvent.violated(
-                            dependency,
-                            "generated class %s is accessed by %s via %s"
-                                .formatted(
-                                    item.getName(),
-                                    origin.getName(),
-                                    dependency.getDescription()
-                                )
-                        ));
+                        events.add(
+                            SimpleConditionEvent.violated(
+                                dependency,
+                                "generated class %s is accessed by %s via %s"
+                                    .formatted(
+                                        item.getName(),
+                                        origin.getName(),
+                                        dependency.getDescription()
+                                    )
+                            )
+                        );
                     }
                 }
             }

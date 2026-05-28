@@ -20,13 +20,12 @@ package ch.dvbern.stip.integration.plzfetch.domain.service;
 import java.util.List;
 import java.util.Set;
 
-import org.mapstruct.Mapper;
-
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.plz.entity.Plz;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchData;
+import org.mapstruct.Mapper;
 
 @Mapper(config = MappingConfig.class)
 public interface PlzFetchDataMapper {
-    public List<Plz> toPlzList(Set<PlzFetchData> plzFetchDataList);
+    List<Plz> toPlzList(Set<PlzFetchData> plzFetchDataList);
 }

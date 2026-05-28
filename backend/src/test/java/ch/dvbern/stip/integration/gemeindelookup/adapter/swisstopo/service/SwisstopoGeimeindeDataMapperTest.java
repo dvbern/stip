@@ -19,7 +19,6 @@ package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
 import jakarta.inject.Inject;
-
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

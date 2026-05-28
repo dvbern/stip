@@ -17,15 +17,14 @@
 
 package ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.service;
 
-import org.mapstruct.Mapper;
-
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
+import org.mapstruct.Mapper;
 
 @Mapper(config = MappingConfig.class)
 public interface SwisstopoGeimeindeDataMapper {
-    public GemeindeData toGemeindeData(
+    GemeindeData toGemeindeData(
         final SwisstopoApiFindAddrResponse.SwisstopoApiFindAddrResponseElementAttributes attributes
     );
 }

@@ -48,6 +48,7 @@ public class SwisstopoGemeindeLookupAdapter implements GemeindeLookupPort {
     SwisstopoApiRestService swisstopoApiRestService;
 
     private final SwisstopoGeimeindeDataMapper swisstopoGeimeindeDataMapper;
+
     @Override
     public Optional<GemeindeData> findGemeindeData(final GemeindeLookupRequest request) {
         try {
