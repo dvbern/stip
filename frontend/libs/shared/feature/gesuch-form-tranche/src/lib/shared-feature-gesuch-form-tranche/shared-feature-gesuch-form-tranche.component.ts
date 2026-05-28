@@ -214,13 +214,14 @@ export class SharedFeatureGesuchFormTrancheComponent {
     const {
       id: gesuchId,
       gesuchTrancheToWorkWith: { id, gueltigAb, gueltigBis, gesuchFormular },
-      gesuchsperiode: { gesuchsperiodeStart },
+      gesuchsperiode: { gesuchsjahr },
     } = gesuch;
 
     const begin = dateFromMonthYearString(
       gesuchFormular?.ausbildung?.ausbildungBegin,
     );
     if (!begin) return;
+    begin.setFullYear(gesuchsjahr.technischesJahr);
 
     const maxDate = endOfMonth(addMonths(new Date(begin), 11));
 
@@ -228,7 +229,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       type: 'updateAenderungVonBis',
       trancheId: id,
       gesuchId,
-      minDate: new Date(gesuchsperiodeStart),
+      minDate: begin,
       maxDate,
       currentGueligAb: new Date(gueltigAb),
       currentGueligBis: new Date(gueltigBis),

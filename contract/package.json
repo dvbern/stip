@@ -1,6 +1,7 @@
 {
   "name": "stip-api",
   "version": "1.0.0",
+  "packageManager": "npm@11.15.0",
   "dependencies": {
     "@redocly/cli": "2.11.1"
   },

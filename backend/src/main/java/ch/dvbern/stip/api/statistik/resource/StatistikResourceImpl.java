@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.StatistikAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.gesuchsjahr.service.GesuchsjahrService;
 import ch.dvbern.stip.api.statistik.service.StatistikService;
 import ch.dvbern.stip.generated.api.StatistikResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
@@ -43,12 +44,20 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 public class StatistikResourceImpl implements StatistikResource {
     private final StatistikAuthorizer statistikAuthorizer;
     private final StatistikService statistikService;
+    private final GesuchsjahrService gesuchsjahrService;
 
     @Override
     @RolesAllowed(SB_GESUCH_UPDATE)
     public void createStatistikJob(Integer year) {
         statistikAuthorizer.canStatistik();
         statistikService.createStatistikJob(year);
+    }
+
+    @Override
+    @RolesAllowed(SB_GESUCH_READ)
+    public List<Integer> getAllStatistikYears() {
+        statistikAuthorizer.canStatistik();
+        return gesuchsjahrService.getGesuchsjahreIntList();
     }
 
     @Override

@@ -82,6 +82,7 @@ export class StipendienDokumenteComponent {
               acc.verfuegungsbrief = doc;
               break;
             case 'VERSENDETE_VERFUEGUNG':
+            case 'MANUELLE_NEGATIVE_VERFUEGUNG':
               acc.versendeteVerfuegung = doc;
               break;
             case 'BERECHNUNGSBLATT_PIA':
