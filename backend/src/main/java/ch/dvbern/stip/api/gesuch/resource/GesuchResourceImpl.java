@@ -151,7 +151,7 @@ public class GesuchResourceImpl implements GesuchResource {
             fileUpload,
             kommentar
         );
-        gesuchService.changeGesuchStatusToVersandbereit(gesuchId);
+        gesuchService.changeGesuchStatusToVerfuegungDruckbereit(gesuchId);
         return gesuchService.getGesuchSB(gesuchId, gesuchTrancheId);
     }
 
