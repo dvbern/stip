@@ -1,7 +1,7 @@
 package ch.dvbern.stip.generated.dto;
 
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
-import ch.dvbern.stip.generated.dto.TenantFeatureDto;
+import ch.dvbern.stip.generated.dto.TenantFeaturesDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -13,9 +13,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/**
- * Client Application Info about a &#x60;Tenant&#x60;
- **/
+
 
 @JsonTypeName("TenantInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -24,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class TenantInfoDto  implements Serializable {
   private @Valid TenantAuthConfigDto clientAuth;
-  private @Valid TenantFeatureDto features;
+  private @Valid TenantFeaturesDto features;
   private @Valid String identifier;
 
   /**
@@ -48,7 +46,7 @@ public class TenantInfoDto  implements Serializable {
 
   /**
    **/
-  public TenantInfoDto features(TenantFeatureDto features) {
+  public TenantInfoDto features(TenantFeaturesDto features) {
     this.features = features;
     return this;
   }
@@ -56,12 +54,12 @@ public class TenantInfoDto  implements Serializable {
   
   @JsonProperty("features")
   @NotNull
-  public TenantFeatureDto getFeatures() {
+  public TenantFeaturesDto getFeatures() {
     return features;
   }
 
   @JsonProperty("features")
-  public void setFeatures(TenantFeatureDto features) {
+  public void setFeatures(TenantFeaturesDto features) {
     this.features = features;
   }
 

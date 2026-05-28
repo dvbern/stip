@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.service.DemoDataService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
@@ -50,7 +50,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
     private final DemoDataService demoDataService;
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtParser;
     private final DokumentDownloadService dokumentDownloadService;
 
@@ -90,7 +90,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM
         );
         return demoDataService.getDokument(dokumentId);
@@ -104,7 +104,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
             dokumentId,
             DokumentDownloadConstants.DEMO_DATA_IMPORT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 

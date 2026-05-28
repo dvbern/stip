@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.common.scheduledtask;
 import java.util.concurrent.atomic.AtomicReference;
 
 import ch.dvbern.stip.api.common.exception.CancelInvocationException;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import jakarta.annotation.Priority;
 import jakarta.interceptor.AroundInvoke;
@@ -29,7 +29,7 @@ import jakarta.interceptor.InvocationContext;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@RunForTenant(MandantIdentifier.BERN)
+@RunForTenant(TenantIdentifier.BERN)
 @Interceptor
 @Priority(Interceptor.Priority.PLATFORM_AFTER + 10)
 public class RunForTenantInterceptor {

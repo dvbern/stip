@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
@@ -116,7 +117,7 @@ public class PrepareUsersTestSeeding extends Seeder {
         }));
     }
 
-    protected List<String> getProfiles() {
-        return List.of("test");
+    protected Set<String> getProfiles() {
+        return Set.of("test");
     }
 }

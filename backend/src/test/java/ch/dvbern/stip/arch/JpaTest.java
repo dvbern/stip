@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
-import static ch.dvbern.stip.arch.util.ArchTestUtil.APP_CLASSES;
+import static ch.dvbern.stip.arch.util.ArchTestUtil.API_CLASSES;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
@@ -83,7 +83,7 @@ class JpaTest {
                 }
             }));
 
-        rule.check(APP_CLASSES);
+        rule.check(API_CLASSES);
     }
 
     @Test
@@ -114,6 +114,6 @@ class JpaTest {
                 }
             }));
 
-        rule.check(APP_CLASSES);
+        rule.check(API_CLASSES);
     }
 }

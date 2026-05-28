@@ -36,8 +36,8 @@ public class StatisticsdataService {
 
     public void setOrCreateGemeindeStatisticsDataOfGesuch(
         final UUID gesuchId,
-        final Integer com_fosnr,
-        final String com_name
+        final Integer gemeindeBfsNr,
+        final String gemeindeName
     ) {
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         Statisticsdata statisticsdata = gesuch.getStatisticsdata();
@@ -47,8 +47,8 @@ public class StatisticsdataService {
                 .setGesuch(gesuch);
         }
         statisticsdata
-            .setGemeindeBfsNr(com_fosnr)
-            .setGemeindeName(com_name);
+            .setGemeindeBfsNr(gemeindeBfsNr)
+            .setGemeindeName(gemeindeName);
         gesuch.setStatisticsdata(statisticsdata);
         statisticsdataRepository.persist(statisticsdata);
     }

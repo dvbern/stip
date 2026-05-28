@@ -34,7 +34,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungMapper;
 import ch.dvbern.stip.api.ausbildung.service.AusbildungMapperImpl;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
 import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
@@ -672,7 +672,7 @@ class GesuchFormularMapperTest {
             unterschriftenblattRepositoryMock,
             null,
             null,
-            Mockito.mock(ConfigService.class), s3,
+            Mockito.mock(StipConfig.class, Mockito.RETURNS_DEEP_STUBS), s3,
             null,
             null,
             null,

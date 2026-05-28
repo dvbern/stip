@@ -30,26 +30,29 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
-import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
-import ch.dvbern.stip.api.nesko.service.NeskoSteuerdatenMapper;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPortFactory;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
 import jakarta.ws.rs.NotFoundException;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
+@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
 public class SteuerdatenService {
     private final Validator validator;
     private final GesuchTrancheRepository trancheRepository;
     private final SteuerdatenMapper steuerdatenMapper;
     private final SteuerdatenRepository steuerdatenRepository;
-    private final NeskoGetSteuerdatenService neskoGetSteuerdatenService;
+    private final SteuerdatenPortFactory steuerdatenPortFactory;
     private final GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
     @Transactional
@@ -80,7 +83,7 @@ public class SteuerdatenService {
     }
 
     @Transactional
-    public List<SteuerdatenDto> updateSteuerdatenFromNesko(
+    public List<SteuerdatenDto> updateSteuerdatenFromPort(
         UUID gesuchTrancheId,
         SteuerdatenTyp steuerdatenTyp,
         int steuerjahr
@@ -113,14 +116,16 @@ public class SteuerdatenService {
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
 
-        var getSteuerdatenResponse = neskoGetSteuerdatenService.getSteuerdatenResponse(
-            ssvn,
-            steuerjahr,
-            gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
-            gesuchtranche.getGesuch().getGesuchNummer()
-        );
+        var steuerdatenPortData = steuerdatenPortFactory.getSteuerdatenAdapter()
+            .getSteuerdaten(
+                ssvn,
+                steuerjahr,
+                steuerdatenTyp,
+                gesuchtranche.getGesuch().getAusbildung().getFall().getFallNummer(),
+                gesuchtranche.getGesuch().getGesuchNummer()
+            );
 
-        steuerdaten = NeskoSteuerdatenMapper.updateFromNeskoSteuerdaten(steuerdaten, getSteuerdatenResponse);
+        steuerdaten = steuerdatenMapper.partialUpdate(steuerdatenPortData, steuerdaten);
         updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 

@@ -39,7 +39,7 @@ import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.util.KantonUtil;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
@@ -60,8 +60,8 @@ import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
 import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.statistik.util.StatistikUtil;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPortFactory;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
 import jakarta.xml.bind.JAXBContext;
@@ -81,11 +81,11 @@ public class StatistikXMLService {
     private final BuchhaltungRepository buchhaltungRepository;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final TenantService tenantService;
-    private final SwisstopoService swisstopoService;
+    private final GemeindeLookupPortFactory gemeindeLookupPortFactory;
     private final PlzService plzService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3AsyncClient;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     public void createAndSave(final int year, final String triggeredBy) {
         final var startTimestamp = LocalDateTime.now();
@@ -113,7 +113,7 @@ public class StatistikXMLService {
             outputStream.toByteArray(),
             fileName,
             s3AsyncClient,
-            configService,
+            config,
             StatistikConstants.STATISTIK_FILE_PATH
         );
 
@@ -189,8 +189,8 @@ public class StatistikXMLService {
             })
             .toList();
 
-        final var mandantIdentifier = tenantService.getCurrentMandantIdentifier();
-        final var bfsCode = StatistikUtil.getBfsCodeFromMandantIdentifier(mandantIdentifier);
+        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
+        final var bfsCode = StatistikUtil.getBfsCodeFromTenantIdentifier(tenantIdentifier);
 
         return TableDto.builder()
             .head(
@@ -240,7 +240,13 @@ public class StatistikXMLService {
             .build();
 
         final var bfsGemeindeCode =
-            Optional.ofNullable(StatistikUtil.getBfsGemeindeNrFromGesuch(gesuchTranche, swisstopoService));
+            Optional.ofNullable(
+                StatistikUtil.getBfsGemeindeNrFromGesuch(
+                    gesuchTranche,
+                    tenantService.getCurrentTenantIdentifier(),
+                    gemeindeLookupPortFactory
+                )
+            );
 
         if (bfsGemeindeCode.isEmpty()) {
             persDto.setCountry(Integer.valueOf(pia.getAdresse().getLand().getLaendercodeBfs()));
@@ -305,8 +311,8 @@ public class StatistikXMLService {
             var instCategory = ausbildungsstaette.getNummerTyp().getBfsIdentification();
 
             if (ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CT_NO)) {
-                final var mandantIdentifier = tenantService.getCurrentMandantIdentifier();
-                final var kanton = KantonUtil.getByMandantIdentifier(mandantIdentifier);
+                final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
+                final var kanton = KantonUtil.getByTenantIdentifier(tenantIdentifier);
                 instCategory = String.format("%s%s", instCategory, kanton.toString());
             }
 

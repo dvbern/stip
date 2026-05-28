@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.type.Kanton;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -68,7 +68,7 @@ public class VerfuegungService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final VerfuegungMapper verfuegungMapper;
     private final Antivirus antivirus;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final S3AsyncClient s3;
     private final VerfuegungDokumentRepository verfuegungDokumentRepository;
     private final DokumentUploadService dokumentUploadService;
@@ -94,7 +94,7 @@ public class VerfuegungService {
         final var response = dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             VERFUEGUNG_DOKUMENT_PATH,
             objectId -> {
@@ -152,7 +152,7 @@ public class VerfuegungService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             verfuegungDokument.getObjectId(),
             verfuegungDokument.getFilepath(),
             verfuegungDokument.getFilename()
@@ -171,7 +171,7 @@ public class VerfuegungService {
             pdfContent.toByteArray(),
             filename,
             s3,
-            configService,
+            config,
             VERFUEGUNG_DOKUMENT_PATH
         );
 

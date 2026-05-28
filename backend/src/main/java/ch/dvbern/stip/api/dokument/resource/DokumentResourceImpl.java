@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.common.authorization.SachbearbeiterGesuchDokumentAutho
 import ch.dvbern.stip.api.common.authorization.UnterschriftenblattAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.CustomDokumentTypService;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentKommentarService;
@@ -82,7 +82,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.UNTERSCHRIFTENBLATT
 @Validated
 public class DokumentResourceImpl implements DokumentResource {
     private final JWTParser jwtParser;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final BenutzerService benutzerService;
 
     private final GesuchDokumentService gesuchDokumentService;
@@ -240,7 +240,7 @@ public class DokumentResourceImpl implements DokumentResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM
         );
         return switch (dokumentArt) {
@@ -260,7 +260,7 @@ public class DokumentResourceImpl implements DokumentResource {
             dokumentId,
             DokumentDownloadConstants.DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 
@@ -355,7 +355,7 @@ public class DokumentResourceImpl implements DokumentResource {
         final var dokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.SACHBEARBEITER_GESUCHDOKUMENT_DOKUMENT_ID_CLAIM
         );
         return sachbearbeiterGesuchDokumentService.getSachbearbeiterGesuchDokumentDokument(dokumentId);
