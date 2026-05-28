@@ -490,8 +490,8 @@
   "shared.form.tranche.aenderung.update-von-bis": "Mettre à jour la période",
   "shared.form.tranche.bemerkung.label": "Commentaire",
   "shared.form.tranche.bemerkung.initialgesuch": "Demande initiale",
-  "shared.form.aenderung.action.accept": "Accepter",
-  "shared.form.aenderung.action.reject": "Rejeter",
+  "shared.form.aenderung.action.accept": "Accepter les modifications",
+  "shared.form.aenderung.action.reject": "Rejeter les modifications",
   "shared.form.aenderung.action.manuallyChange": "Apporter des modifications manuelles",
 
   "shared.form.delegation.email.label": "Email",

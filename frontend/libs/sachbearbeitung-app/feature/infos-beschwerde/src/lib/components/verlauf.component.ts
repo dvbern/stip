@@ -39,6 +39,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     TypeSafeMatCellDefDirective,
     SharedUiDownloadButtonDirective,
   ],
+  selector: 'dv-gesuch-info-verlauf',
   templateUrl: './verlauf.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BeschwerdeStore, paginatorTranslationProvider()],

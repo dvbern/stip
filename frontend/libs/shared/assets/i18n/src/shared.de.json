@@ -490,8 +490,8 @@
   "shared.form.tranche.aenderung.update-von-bis": "Zeitraum aktualisieren",
   "shared.form.tranche.bemerkung.label": "Bemerkung",
   "shared.form.tranche.bemerkung.initialgesuch": "Initialgesuch",
-  "shared.form.aenderung.action.accept": "Annehmen",
-  "shared.form.aenderung.action.reject": "Ablehnen",
+  "shared.form.aenderung.action.accept": "Änderung annehmen",
+  "shared.form.aenderung.action.reject": "Änderung ablehnen",
   "shared.form.aenderung.action.manuallyChange": "Manuelle Änderungen vornehmen",
 
   "shared.form.delegation.email.label": "E-Mail",

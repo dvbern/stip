@@ -21,6 +21,7 @@ import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde'
 import { SachbearbeitungAppDialogBeschwaerdeEntscheidComponent } from '@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { BeschwerdeVerlaufEntry, Gesuchstatus } from '@dv/shared/model/gesuch';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
@@ -34,6 +35,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     MatSortModule,
     MatTooltipModule,
   ],
+  selector: 'dv-gesuch-info-verwaltung',
   templateUrl: './verwaltung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BeschwerdeStore, paginatorTranslationProvider()],
@@ -47,6 +49,7 @@ export class VerwaltungComponent {
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
 
   canCreateEntscheidSig = computed(() => {
     const gesuchStatus =
@@ -112,6 +115,7 @@ export class VerwaltungComponent {
             kommentar: result.kommentar,
             onSucces: () => {
               this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchHeaderStore.loadHeader$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });
@@ -146,6 +150,7 @@ export class VerwaltungComponent {
             },
             onSucces: () => {
               this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+              this.gesuchHeaderStore.loadHeader$({ gesuchId });
               this.beschwerdeStore.loadBeschwerden$({ gesuchId });
             },
           });
