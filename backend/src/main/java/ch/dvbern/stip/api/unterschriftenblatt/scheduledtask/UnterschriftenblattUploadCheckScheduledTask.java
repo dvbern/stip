@@ -44,14 +44,14 @@ public class UnterschriftenblattUploadCheckScheduledTask {
     }
 
     @Transactional
-    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @Scheduled(cron = "{kstip.scheduler.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
     @RunForTenant(TenantIdentifier.BERN)
     public void runForBern() {
         run();
     }
 
     @Transactional
-    @Scheduled(cron = "{kstip.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
+    @Scheduled(cron = "{kstip.scheduler.unterschriftenblatt.cron}", concurrentExecution = ConcurrentExecution.SKIP)
     @RunForTenant(TenantIdentifier.DV)
     public void runForDv() {
         run();

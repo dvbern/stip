@@ -22,7 +22,6 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.integration.gemeindelookup.adapter.swisstopo.type.SwisstopoApiFindAddrResponse;
-import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 import ch.dvbern.stip.integration.gemeindelookup.domain.qualifier.GemeindeLookupQualifier;
@@ -31,7 +30,6 @@ import io.quarkus.test.component.QuarkusComponentTest;
 import jakarta.inject.Inject;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
@@ -40,7 +38,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
