@@ -167,7 +167,6 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
   readonly zustaendigeKESBValues = Object.values(ZustaendigeKESB);
 
   laenderSig = this.landLookupService.getCachedLandLookup();
-  isValidLandEntry = this.landLookupService.isValidLandEntry;
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedFeatureGesuchFormPersonView);
   gotReenabled$ = new Subject<object>();

@@ -97,7 +97,6 @@ export class SharedUiFormAddressComponent implements DoCheck {
     return laenderRd;
   });
 
-  isValidLandEntry = this.landLookupService.isValidLandEntry;
   touchedSig = signal(false);
 
   static buildAddressFormGroup(

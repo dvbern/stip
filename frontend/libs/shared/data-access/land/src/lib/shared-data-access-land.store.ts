@@ -41,15 +41,11 @@ export class LandStore extends signalStore(
           ...land,
           alwaysOnTop: land.iso3code === 'CHE',
           testId: land.deKurzform,
-          invalid: !land.eintragGueltig,
+          disabled: !land.eintragGueltig,
           displayValueDe: land.deKurzform,
           displayValueFr: land.frKurzform,
         })) ?? [],
     );
-  });
-
-  landAdminViewSig = computed(() => {
-    return fromCachedDataSig(this.laender);
   });
 
   loadLaender$ = rxMethod<void>(
