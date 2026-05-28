@@ -78,6 +78,7 @@ export interface GesuchsperiodeWithDaten {
     zweiterAuszahlungsterminMonat: number;
     zweiterAuszahlungsterminTag: number;
     fristNachreichenDokumente: number;
+    fristUploadUnterschriftenblatt: number;
     /**
      * dd.MM.yyyy
      */

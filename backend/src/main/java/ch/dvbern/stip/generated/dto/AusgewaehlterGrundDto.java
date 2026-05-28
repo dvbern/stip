@@ -1,6 +1,5 @@
 package ch.dvbern.stip.generated.dto;
 
-import ch.dvbern.stip.api.common.type.Kanton;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.UUID;
 import java.io.Serializable;
@@ -9,6 +8,10 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
 
 
 @JsonTypeName("AusgewaehlterGrund")
@@ -18,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AusgewaehlterGrundDto  implements Serializable {
   private @Valid UUID decisionId;
-  private @Valid Kanton kanton;
+  private @Valid ch.dvbern.stip.api.common.type.Kanton kanton;
 
   /**
    **/
@@ -27,7 +30,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
     return this;
   }
 
-
+  
   @JsonProperty("decisionId")
   @NotNull
   public UUID getDecisionId() {
@@ -41,19 +44,19 @@ public class AusgewaehlterGrundDto  implements Serializable {
 
   /**
    **/
-  public AusgewaehlterGrundDto kanton(Kanton kanton) {
+  public AusgewaehlterGrundDto kanton(ch.dvbern.stip.api.common.type.Kanton kanton) {
     this.kanton = kanton;
     return this;
   }
 
-
+  
   @JsonProperty("kanton")
-  public Kanton getKanton() {
+  public ch.dvbern.stip.api.common.type.Kanton getKanton() {
     return kanton;
   }
 
   @JsonProperty("kanton")
-  public void setKanton(Kanton kanton) {
+  public void setKanton(ch.dvbern.stip.api.common.type.Kanton kanton) {
     this.kanton = kanton;
   }
 
@@ -80,7 +83,7 @@ public class AusgewaehlterGrundDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class AusgewaehlterGrundDto {\n");
-
+    
     sb.append("    decisionId: ").append(toIndentedString(decisionId)).append("\n");
     sb.append("    kanton: ").append(toIndentedString(kanton)).append("\n");
     sb.append("}");
