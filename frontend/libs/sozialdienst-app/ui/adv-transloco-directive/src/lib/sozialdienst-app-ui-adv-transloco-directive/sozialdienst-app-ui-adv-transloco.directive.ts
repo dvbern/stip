@@ -20,6 +20,7 @@ interface ViewContext {
 export class SozialdienstAppUiAdvTranslocoDirective extends TranslocoDirective {
   static override ngTemplateContextGuard(
     _dir: SozialdienstAppUiAdvTranslocoDirective,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     ctx: unknown,
   ): ctx is ViewContext {
     return true;

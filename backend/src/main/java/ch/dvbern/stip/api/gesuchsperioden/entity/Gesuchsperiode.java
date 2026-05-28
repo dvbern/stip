@@ -232,6 +232,11 @@ public class Gesuchsperiode extends AbstractMandantEntity {
     private Integer fristNachreichenDokumente;
 
     @NotNull
+    @Min(0)
+    @Column(name = "frist_upload_unterschriftenblatt", nullable = false)
+    private Integer fristUploadUnterschriftenblatt;
+
+    @NotNull
     @Column(name = "stichtag_volljaehrigkeit_medizinische_grundversorgung", nullable = false)
     private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
 
