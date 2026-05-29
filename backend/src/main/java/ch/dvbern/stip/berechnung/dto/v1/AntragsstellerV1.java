@@ -28,7 +28,6 @@ import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
-import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -91,7 +90,7 @@ public class AntragsstellerV1 {
     Integer fahrkostenPartner;
     Integer verpflegungskostenPartner;
     int fremdbetreuung;
-    int steuern;
+    Integer steuern;
     Integer steuernPartner;
 
     public static AntragsstellerV1 buildFromDependants(
@@ -226,10 +225,7 @@ public class AntragsstellerV1 {
                 ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie()
             )
         );
-        final var isPiaQuellenbesteuert = EinnahmenKostenMappingUtil.isQuellenBesteuert(personInAusbildung);
-        builder.steuern(
-            EinnahmenKostenMappingUtil.calculateSteuern(einnahmenKosten, isPiaQuellenbesteuert)
-        );
+        builder.steuern(einnahmenKosten.getSteuern());
         builder.fahrkosten(Objects.requireNonNullElse(einnahmenKosten.getFahrkosten(), 0));
         builder.auswaertigeMittagessenProWoche(
             Objects.requireNonNullElse(einnahmenKosten.getAuswaertigeMittagessenProWoche(), 0)
@@ -261,10 +257,7 @@ public class AntragsstellerV1 {
             taggelds.setPartnerValue(partnerName, ekPartner.getTaggelderAHVIV());
             einkommens.setPartnerValue(partnerName, ekPartner.getNettoerwerbseinkommen());
             unterhaltsbeitraeges.setPartnerValue(partnerName, toJahresWert(ekPartner.getUnterhaltsbeitraege()));
-            builder.steuernPartner(
-                // Not required according to https://support.dvbern.ch/browse/ATSTIP-559?focusedId=320460
-                EinnahmenKostenMappingUtil.calculateSteuern(ekPartner, false)
-            );
+            builder.steuernPartner(ekPartner.getSteuern());
             builder.fahrkostenPartner(Objects.requireNonNullElse(ekPartner.getFahrkosten(), 0));
             builder.verpflegungskostenPartner(ekPartner.getVerpflegungskosten());
             rentens.setPartnerValue(partnerName, ekPartner.getRenten());

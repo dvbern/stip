@@ -206,23 +206,13 @@ import { PositionComponent } from '../position/position.component';
       >
       </dv-position>
 
-      <!-- Kantons- und Gemeindesteuern -->
+      <!-- steuern -->
       <dv-position
         class="tw:border-b tw:border-b-gray-300 tw:py-4"
-        [titleSig]="t('kantonsGemeindesteuern')"
+        [titleSig]="t('steuern')"
         [infoSig]="t('steuern.info')"
-        [amountSig]="kosten.kantonsGemeindesteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.kantonsGemeindesteuern"
-      >
-      </dv-position>
-
-      <!-- Bundessteuern -->
-      <dv-position
-        class="tw:border-b tw:border-b-gray-300 tw:py-4"
-        [titleSig]="t('bundessteuern')"
-        [infoSig]="t('steuern.info')"
-        [amountSig]="kosten.bundessteuern | formatChfPositive"
-        *dvHideZero="hideZero; value: kosten.bundessteuern"
+        [amountSig]="kosten.steuern | formatChfPositive"
+        *dvHideZero="hideZero; value: kosten.steuern"
       >
       </dv-position>
 

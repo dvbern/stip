@@ -199,8 +199,8 @@ class V1StructureTest {
                 "fahrkostenPartner": 523,
                 "verpflegungskostenPartner": 5,
                 "fremdbetreuung": 0,
-                "steuern": 0,
-                "steuernPartner": 0
+                "steuern": null,
+                "steuernPartner": null
               }
             }
           }

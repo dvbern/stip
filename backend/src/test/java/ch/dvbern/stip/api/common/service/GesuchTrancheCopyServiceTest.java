@@ -91,10 +91,10 @@ class GesuchTrancheCopyServiceTest {
         tranche.setId(null);
         tranche.setTyp(null);
 
-        var trancheDto = gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+        var trancheDto = gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche);
         var trancheCopy =
             gesuchTrancheCopyService.copyTranche(tranche, tranche.getGueltigkeit(), tranche.getComment());
-        var copyDto = gesuchTrancheMapper.toDtoWithVersteckteEltern(trancheCopy);
+        var copyDto = gesuchTrancheMapper.toDtoWithElevatedPermissions(trancheCopy);
 
         final var objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
 

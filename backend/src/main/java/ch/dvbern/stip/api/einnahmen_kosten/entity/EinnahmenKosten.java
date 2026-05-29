@@ -145,6 +145,11 @@ public class EinnahmenKosten extends AbstractMandantEntity {
     private Integer steuerjahr;
 
     @NullableUnlessGenerated
+    @Column(name = "steuern", nullable = true)
+    @Min(0)
+    private Integer steuern;
+
+    @NullableUnlessGenerated
     @Column(name = "vermoegen")
     @Max(Integer.MAX_VALUE)
     @Min(0)

@@ -36,8 +36,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
   private @Valid Integer medizinischeGrundversorgungTotal;
   private @Valid Integer betreuungskostenKinder;
-  private @Valid Integer kantonsGemeindesteuern;
-  private @Valid Integer bundessteuern;
+  private @Valid Integer steuern;
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
@@ -269,40 +268,21 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   /**
    **/
-  public PersoenlichesBudgetresultatKostenDto kantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
+  public PersoenlichesBudgetresultatKostenDto steuern(Integer steuern) {
+    this.steuern = steuern;
     return this;
   }
 
   
-  @JsonProperty("kantonsGemeindesteuern")
+  @JsonProperty("steuern")
   @NotNull
-  public Integer getKantonsGemeindesteuern() {
-    return kantonsGemeindesteuern;
+  public Integer getSteuern() {
+    return steuern;
   }
 
-  @JsonProperty("kantonsGemeindesteuern")
-  public void setKantonsGemeindesteuern(Integer kantonsGemeindesteuern) {
-    this.kantonsGemeindesteuern = kantonsGemeindesteuern;
-  }
-
-  /**
-   **/
-  public PersoenlichesBudgetresultatKostenDto bundessteuern(Integer bundessteuern) {
-    this.bundessteuern = bundessteuern;
-    return this;
-  }
-
-  
-  @JsonProperty("bundessteuern")
-  @NotNull
-  public Integer getBundessteuern() {
-    return bundessteuern;
-  }
-
-  @JsonProperty("bundessteuern")
-  public void setBundessteuern(Integer bundessteuern) {
-    this.bundessteuern = bundessteuern;
+  @JsonProperty("steuern")
+  public void setSteuern(Integer steuern) {
+    this.steuern = steuern;
   }
 
   /**
@@ -381,8 +361,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
         Objects.equals(this.medizinischeGrundversorgung, persoenlichesBudgetresultatKosten.medizinischeGrundversorgung) &&
         Objects.equals(this.medizinischeGrundversorgungTotal, persoenlichesBudgetresultatKosten.medizinischeGrundversorgungTotal) &&
         Objects.equals(this.betreuungskostenKinder, persoenlichesBudgetresultatKosten.betreuungskostenKinder) &&
-        Objects.equals(this.kantonsGemeindesteuern, persoenlichesBudgetresultatKosten.kantonsGemeindesteuern) &&
-        Objects.equals(this.bundessteuern, persoenlichesBudgetresultatKosten.bundessteuern) &&
+        Objects.equals(this.steuern, persoenlichesBudgetresultatKosten.steuern) &&
         Objects.equals(this.anteilLebenshaltungskosten, persoenlichesBudgetresultatKosten.anteilLebenshaltungskosten) &&
         Objects.equals(this.fahrkostenPartner, persoenlichesBudgetresultatKosten.fahrkostenPartner) &&
         Objects.equals(this.verpflegungPartner, persoenlichesBudgetresultatKosten.verpflegungPartner);
@@ -390,7 +369,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, kantonsGemeindesteuern, bundessteuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
+    return Objects.hash(total, ausbildungskosten, ausbildungskostenTotal, fahrkosten, fahrkostenTotal, verpflegungskosten, grundbedarf, wohnkosten, medizinischeGrundversorgung, medizinischeGrundversorgungTotal, betreuungskostenKinder, steuern, anteilLebenshaltungskosten, fahrkostenPartner, verpflegungPartner);
   }
 
   @Override
@@ -409,8 +388,7 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
     sb.append("    medizinischeGrundversorgung: ").append(toIndentedString(medizinischeGrundversorgung)).append("\n");
     sb.append("    medizinischeGrundversorgungTotal: ").append(toIndentedString(medizinischeGrundversorgungTotal)).append("\n");
     sb.append("    betreuungskostenKinder: ").append(toIndentedString(betreuungskostenKinder)).append("\n");
-    sb.append("    kantonsGemeindesteuern: ").append(toIndentedString(kantonsGemeindesteuern)).append("\n");
-    sb.append("    bundessteuern: ").append(toIndentedString(bundessteuern)).append("\n");
+    sb.append("    steuern: ").append(toIndentedString(steuern)).append("\n");
     sb.append("    anteilLebenshaltungskosten: ").append(toIndentedString(anteilLebenshaltungskosten)).append("\n");
     sb.append("    fahrkostenPartner: ").append(toIndentedString(fahrkostenPartner)).append("\n");
     sb.append("    verpflegungPartner: ").append(toIndentedString(verpflegungPartner)).append("\n");

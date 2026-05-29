@@ -17,8 +17,13 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
+import java.time.LocalDate;
+
 import ch.dvbern.stip.api.generator.depricated.entities.GesuchGenerator;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.partner.entity.Partner;
@@ -38,7 +43,18 @@ class UniqueSvConstraintValidatorTest {
         new UniqueSvNumberConstraintValidator();
 
     GesuchFormular gesuchFormular = new GesuchFormular()
-        .setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE));
+        .setTranche(
+            new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE)
+                .setGesuch(
+                    new Gesuch().setGesuchsperiode(
+                        new Gesuchsperiode().setGesuchsjahr(
+                            new Gesuchsjahr().setTechnischesJahr(
+                                LocalDate.now().minusYears(1).getYear()
+                            )
+                        )
+                    )
+                )
+        );
 
     @Inject
     GesuchFormularMapper gesuchFormularMapper;
