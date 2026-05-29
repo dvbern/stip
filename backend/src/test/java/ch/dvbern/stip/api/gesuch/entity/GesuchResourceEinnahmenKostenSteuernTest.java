@@ -46,6 +46,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -135,7 +136,7 @@ class GesuchResourceEinnahmenKostenSteuernTest {
             .as(GesuchWithChangesDtoSpec.class);
         assertThat(
             gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
-            is(0)
+            is(nullValue())
         );
     }
 

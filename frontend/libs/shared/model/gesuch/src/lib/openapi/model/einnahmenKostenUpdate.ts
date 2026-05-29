@@ -77,7 +77,7 @@ export interface EinnahmenKostenUpdate {
      */
     vermoegen?: number;
     /**
-     * transient and calculated readonly field
+     * only visible by SB
      */
     steuern?: number;
 }

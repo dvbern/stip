@@ -58,9 +58,9 @@ public class GesuchMapperUtil {
         final var gesuchDto = gesuchMapper.toDto(gesuch);
         final GesuchTrancheDto gesuchTrancheToWorkWith;
         if (withVersteckteEltern) {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche);
         } else {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutElevatedPermissions(tranche);
         }
 
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheToWorkWith);
@@ -72,15 +72,15 @@ public class GesuchMapperUtil {
         final GesuchTranche tranche,
         final GesuchTranche changes,
         final boolean isInitial,
-        final boolean withVersteckteEltern
+        final boolean withElevatedPermissions
     ) {
         var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setIsInitial(isInitial);
-        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutEltern(tranche, withVersteckteEltern));
+        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutElevatedPermission(tranche, withElevatedPermissions));
         if (Objects.isNull(changes)) {
             dto.setChanges(List.of());
         } else {
-            dto.setChanges(List.of(mapWithOrWithoutEltern(changes, withVersteckteEltern)));
+            dto.setChanges(List.of(mapWithOrWithoutElevatedPermission(changes, withElevatedPermissions)));
         }
         return dto;
     }
@@ -89,14 +89,14 @@ public class GesuchMapperUtil {
         final Gesuch gesuch,
         final GesuchTranche tranche,
         final GesuchTranche changes,
-        final boolean withVersteckteEltern
+        final boolean withElevatedPermissions
     ) {
         return toWithChangesDto(
             gesuch,
             tranche,
             changes,
             false,
-            withVersteckteEltern
+            withElevatedPermissions
         );
     }
 
@@ -106,16 +106,19 @@ public class GesuchMapperUtil {
         final List<GesuchTranche> changes
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche));
-        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithVersteckteEltern).toList());
+        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche));
+        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithElevatedPermissions).toList());
         return dto;
     }
 
-    private GesuchTrancheDto mapWithOrWithoutEltern(final GesuchTranche tranche, final boolean withVersteckteEltern) {
-        if (withVersteckteEltern) {
-            return gesuchTrancheMapper.toDtoWithVersteckteEltern(tranche);
+    private GesuchTrancheDto mapWithOrWithoutElevatedPermission(
+        final GesuchTranche tranche,
+        final boolean withElevatedPermissions
+    ) {
+        if (withElevatedPermissions) {
+            return gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche);
         } else {
-            return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(tranche);
+            return gesuchTrancheMapper.toDtoWithoutElevatedPermissions(tranche);
         }
     }
 

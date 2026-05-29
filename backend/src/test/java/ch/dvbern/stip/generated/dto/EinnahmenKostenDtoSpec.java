@@ -739,7 +739,7 @@ public class EinnahmenKostenDtoSpec {
   }
 
    /**
-   * transient and calculated readonly field
+   * only visible by SB
    * minimum: 0
    * maximum: 2147483647
    * @return steuern

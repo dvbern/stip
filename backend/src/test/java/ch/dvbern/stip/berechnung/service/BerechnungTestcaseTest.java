@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
+import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -80,6 +81,7 @@ public class BerechnungTestcaseTest {
         final var testcase = BerechnungTestUtil.getTestcase(no);
 
         final var gesuchperiode = gesuchsperiodeMapper.toEntity(testcase.gesuchperiode);
+        gesuchperiode.setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(LocalDate.now().getYear() - 1));
         final var gesuch = new Gesuch();
         gesuch.setGesuchsperiode(gesuchperiode);
         gesuch.setEinreichedatum(LocalDate.now());

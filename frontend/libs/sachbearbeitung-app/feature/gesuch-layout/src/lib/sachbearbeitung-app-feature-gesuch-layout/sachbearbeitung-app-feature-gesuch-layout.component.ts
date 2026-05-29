@@ -237,7 +237,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     this.gesuchIdSig,
   );
 
-  firstAenderungIdSig = computed(() => {
+  firstAenderungSig = computed(() => {
     const aenderungen = this.headerViewSig().aenderungs;
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
@@ -249,7 +249,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       ...(abgelehnteAenderungen ?? []),
     ];
 
-    return allAenderungen.length > 0 ? allAenderungen[0].id : undefined;
+    return allAenderungen.length > 0 ? allAenderungen[0] : undefined;
   });
 
   firstDarlehenIdSig = computed(() => {

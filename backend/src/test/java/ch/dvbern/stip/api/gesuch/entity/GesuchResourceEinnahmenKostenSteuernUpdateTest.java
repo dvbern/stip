@@ -17,31 +17,38 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
-import java.util.UUID;
-
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
+import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.api.AusbildungApiSpec;
+import ch.dvbern.stip.generated.api.AuszahlungApiSpec;
+import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
+import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
+import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -49,95 +56,182 @@ import static org.hamcrest.Matchers.notNullValue;
 @RequiredArgsConstructor
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class GesuchResourceEinnahmenKostenSteuernUpdateTest {
+    private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
+    private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
-    private static UUID trancheId;
-    private static UUID gesuchId;
-    private static GesuchWithChangesDtoSpec gesuch;
-
-    void createGesuch() {
-        final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
-        gesuchId = gesuch.getId();
-        trancheId = gesuch.getGesuchTrancheToWorkWith().getId();
-    }
-
-    void createTranche() {
-        gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchTrancheIdPath(trancheId)
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(GesuchWithChangesDtoSpec.class);
-
-        assertThat(gesuch.getGesuchTrancheToWorkWith(), notNullValue());
-        assertThat(gesuch.getGesuchTrancheToWorkWith().getGueltigAb(), is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigAb()));
-        assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGueltigBis(),
-            is(GUELTIGKEIT_PERIODE_CURRENT.getGueltigBis())
-        );
-    }
+    private GesuchDtoSpec gesuch;
+    private final int STEUERN_VALUE = 2000;
 
     @Test
     @TestAsGesuchsteller
     @Order(1)
-    void testUpdateGesuchEinnahmenKostenSteuern() {
-        createGesuch();
-        createTranche();
-        var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+    void gesuchErstellen() {
+        gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void fillGesuch() {
+        TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
+    void gesuchEinreichen() {
+        gesuchApiSpec.gesuchEinreichenGs()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(10)
+    void setToInBearbeitung() {
+        gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        gesuchApiSpec.changeGesuchStatusToInBearbeitung()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(11)
+    void updateSteuern() {
+        var gesuchUpdateDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
+        var einnahmenKostenUpdateDto = gesuchUpdateDto
+            .getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .setPersonInAusbildung(
-                GesuchTestSpecGenerator.gesuchUpdateDtoSpecPersonInAusbildung()
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getPersonInAusbildung()
-            );
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
+            .getEinnahmenKosten();
+        einnahmenKostenUpdateDto.setSteuern(STEUERN_VALUE);
+        gesuchUpdateDto.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
+        gesuchUpdateDto.getGesuchTrancheToWorkWith()
             .getGesuchFormular()
-            .setPartner(
-                GesuchTestSpecGenerator.gesuchUpdateDtoSpecPartner()
-                    .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getPartner()
-            );
-
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getEinnahmenKosten()
-            .setNettoerwerbseinkommen(20001);
-
-        gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(gesuch.getGesuchTrancheToWorkWith().getId());
-
-        // total income is above 20 000
-
-        gesuchApiSpec.updateGesuchGS()
-            .gesuchIdPath(gesuchId)
-            .body(gesuchUpdateDTO)
+            .setEinnahmenKosten(einnahmenKostenUpdateDto);
+        gesuchApiSpec.updateGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .body(gesuchUpdateDto)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
-        gesuch = gesuchApiSpec.getGesuchGS()
-            .gesuchTrancheIdPath(trancheId)
+    }
+
+    @Test
+    @TestAsSachbearbeiter
+    @Order(20)
+    void testGetGesuchEinnahmenKostenAsSbShouldBeAbleToReadSteuern() {
+        final var gesuchSb = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        Integer value = (int) (20001 * 0.1);
         assertThat(
-            gesuch.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
-            is(value)
+            gesuchSb.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
+            is(STEUERN_VALUE)
         );
+    }
+
+    @TestAsFreigabestelleAndSachbearbeiter
+    @Order(21)
+    @Test
+    void setupGesuchVerfuegen() {
+        TestUtil.uploadUnterschriftenblatt(
+            dokumentApiSpec,
+            gesuch.getId(),
+            UnterschriftenblattDokumentTypDtoSpec.GEMEINSAM,
+            TestUtil.getTestPng()
+        ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
+
+        gesuch = gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+        assertThat(gesuch.getGesuchStatus(), is(GesuchstatusDtoSpec.VERFUEGUNG_DRUCKBEREIT));
+
+        gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+    }
+
+    @Test
+    @Order(22)
+    @TestAsSachbearbeiter
+    void setupGesuchVersenden() {
+        gesuchApiSpec.changeGesuchStatusToVersendet()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+
+        var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+
+        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+            .satisfiesAnyOf(
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.STIPENDIENANSPRUCH),
+                status -> Assertions.assertThat(status).isEqualTo(GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH)
+            );
     }
 
     @Test
     @TestAsGesuchsteller
+    @Order(30)
+    void testGetGesuchEinnahmenKostenAsGsShouldNotBeAbleToReadSteuern() {
+        final var gesuchGs = gesuchApiSpec.getGesuchGS()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(
+            gesuchGs.getGesuchTrancheToWorkWith().getGesuchFormular().getEinnahmenKosten().getSteuern(),
+            is(nullValue())
+        );
+    }
+
+    @Test
+    @TestAsSuperUser
     @Order(99)
     void deleteGesuch() {
-        TestUtil.deleteGesuch(gesuchApiSpec, gesuchId);
+        TestUtil.deleteGesuch(gesuchApiSpec, gesuch.getId());
     }
 }

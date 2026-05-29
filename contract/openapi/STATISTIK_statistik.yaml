@@ -45,7 +45,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Statistik'
-          description: Token returned
+          description: Statistik list
         '400':
           $ref: './components/responses.yaml#/BadRequest'
         '401':
@@ -58,6 +58,32 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getAllStatistiks
       summary: Get All statistiks
+
+  /statistik/years:
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+          description: Available years list
+        '400':
+          $ref: './components/responses.yaml#/BadRequest'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getAllStatistikYears
+      summary: All available years
 
   '/statistik/{statistikId}/token':
     parameters:
