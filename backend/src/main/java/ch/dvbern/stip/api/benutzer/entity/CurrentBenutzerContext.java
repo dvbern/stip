@@ -15,27 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.resource;
+package ch.dvbern.stip.api.benutzer.entity;
 
-import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
-import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.generated.api.ConfigurationResource;
-import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
-import jakarta.annotation.security.PermitAll;
+import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.JwtUtil;
+import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.RequestScoped;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
 @RequestScoped
-@RequiredArgsConstructor
-@Validated
-@PopulateCurrentBenutzerContext
-public class ConfigResourceImpl implements ConfigurationResource {
-    private final ConfigService configService;
+public class CurrentBenutzerContext {
+    @Getter
+    @Nullable
+    private UUID benutzerId;
 
-    @Override
-    @PermitAll
-    public DeploymentConfigDto getDeploymentConfig() {
-        return configService.getDeploymentConfiguration();
+    @Nullable
+    private String benutzerFullName;
+
+    public String getBenutzerFullName() {
+        return Objects.requireNonNullElse(benutzerFullName, JwtUtil.SYSTEM_USR);
+    }
+
+    public void setCurrentBenutzer(@Nullable final UUID benutzerId, @Nullable final String benutzerFullName) {
+        this.benutzerId = benutzerId;
+        this.benutzerFullName = benutzerFullName;
+    }
+
+    public void clear() {
+        benutzerId = null;
+        benutzerFullName = null;
     }
 }

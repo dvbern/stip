@@ -30,6 +30,7 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.common.authorization.AusbildungsstaetteAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.api.AusbildungsstaetteResource;
@@ -58,6 +59,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNGSSTAETTE_
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class AusbildungsstaetteResourceImpl implements AusbildungsstaetteResource {
     private final AusbildungsstaetteAuthorizer ausbildungsstaetteAuthorizer;
     private final AusbildungsstaetteService ausbildungsstaetteService;

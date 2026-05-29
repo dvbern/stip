@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.SteuerdatenAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.steuerdaten.service.SteuerdatenService;
 import ch.dvbern.stip.generated.api.SteuerdatenResource;
@@ -39,6 +40,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@PopulateCurrentBenutzerContext
 public class SteuerdatenResourceImpl implements SteuerdatenResource {
     private final SteuerdatenService steuerdatenService;
     private final SteuerdatenAuthorizer steuerdatenAuthorizer;
