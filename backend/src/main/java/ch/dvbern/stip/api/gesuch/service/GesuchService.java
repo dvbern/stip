@@ -661,11 +661,13 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
-            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG &&
+            !gesuch.wasInBereitFuerBearbeitung() && !haveAllDatenschutzbriefeBeenSent(gesuch)
         ) {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
+        gesuch.wasInBereitFuerBearbeitung(true);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
             changeEvent

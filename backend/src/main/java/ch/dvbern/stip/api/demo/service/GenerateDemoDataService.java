@@ -82,7 +82,6 @@ import ch.dvbern.stip.api.geschwister.entity.GeschwisterBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
-import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.repo.GesuchFormularRepository;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
@@ -140,7 +139,6 @@ public class GenerateDemoDataService {
     private final DemoDataAusbildungsgangRepository demoDataAusbildungsgangRepository;
     private final DemoDataAbschlussRepository demoDataAbschlussRepository;
     private final BenutzerService benutzerService;
-    private final GesuchService gesuchService;
     private final S3AsyncClient s3;
     private final EntityCopyMapper copyMapper;
     private final ConfigService configService;
