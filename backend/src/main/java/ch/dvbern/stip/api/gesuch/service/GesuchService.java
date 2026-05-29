@@ -144,7 +144,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jboss.resteasy.reactive.multipart.FileUpload;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_NACHFRIST_NOT_FUTURE;
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -662,11 +661,13 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
-            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG &&
+            !gesuch.wasInBereitFuerBearbeitung() && !haveAllDatenschutzbriefeBeenSent(gesuch)
         ) {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
+        gesuch.wasInBereitFuerBearbeitung(true);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
             changeEvent
@@ -790,30 +791,6 @@ public class GesuchService {
             GesuchStatusChangeEvent.NEGATIVE_VERFUEGUNG,
             kommentarDto,
             false
-        );
-    }
-
-    @Transactional
-    public void changeGesuchStatusToVersandbereit(final UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        final var latestVerfuegung = getLatestVerfuegungForGesuch(gesuchId);
-
-        if (
-            !latestVerfuegung.getVerfuegungStatus().isNegativ()
-            && !unterschriftenblattService.areRequiredUnterschriftenblaetterUploaded(gesuch)
-        ) {
-            throw new CustomValidationsException(
-                "Required Unterschriftenblaetter are not uploaded",
-                new CustomConstraintViolation(
-                    VALIDATION_UNTERSCHRIFTENBLAETTER_NOT_PRESENT,
-                    "unterschriftenblaetter"
-                )
-            );
-        }
-
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuch,
-            GesuchStatusChangeEvent.VERFUEGUNG_VERSANDBEREIT
         );
     }
 

@@ -40,9 +40,10 @@
       ></dv-shared-ui-versionen-menu>
 
       <!-- Aenderungen Link -->
-      @if (firstAenderungIdSig(); as firstAenderungId) {
+      @if (firstAenderungSig(); as firstAenderung) {
         <a
-          [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderungIdSig()]"
+          [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderung.id]"
+          [queryParams]="{ revision: firstAenderung.revision }"
           class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="isAenderungRouteSig()"

@@ -14,8 +14,10 @@ import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
   SharedDataAccessGesuchEvents,
+  selectRouteTrancheId,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
 } from '@dv/shared/data-access/gesuch';
@@ -70,10 +72,12 @@ export class SharedFeatureGesuchDokumenteComponent {
   private dialog = inject(MatDialog);
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
+  private einreichenStore = inject(EinreichenStore);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   stepViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
   additionalDokumenteViewSig = computed(() => {
     const { allowTypes, gesuchId, permissions, trancheId, readonly } =
       this.gesuchViewSig();
@@ -238,7 +242,11 @@ export class SharedFeatureGesuchDokumenteComponent {
       });
 
     effect(() => {
+      const gesuchTrancheId = this.gesuchTrancheIdSig();
       this.allDocumentsAcceptedChangedSig();
+      if (gesuchTrancheId) {
+        this.einreichenStore.validateSteps$({ gesuchTrancheId });
+      }
       this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
     });
 
