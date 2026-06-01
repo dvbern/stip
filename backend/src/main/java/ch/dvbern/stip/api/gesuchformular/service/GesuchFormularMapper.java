@@ -33,7 +33,6 @@ import ch.dvbern.stip.api.dokument.repo.GesuchDokumentKommentarRepository;
 import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMapper;
-import ch.dvbern.stip.api.einnahmen_kosten.service.EinnahmenKostenMappingUtil;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.eltern.util.ElternDiffUtil;
@@ -46,7 +45,6 @@ import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularCalculationUtil;
 import ch.dvbern.stip.api.gesuchformular.util.GesuchFormularDiffUtil;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.kind.service.KindMapper;
-import ch.dvbern.stip.api.land.service.LandService;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.partner.service.PartnerMapper;
 import ch.dvbern.stip.api.personinausbildung.service.PersonInAusbildungMapper;
@@ -97,9 +95,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
     @Inject
     UnterschriftenblattService unterschriftenblattService;
 
-    @Inject
-    LandService landService;
-
     public abstract GesuchFormular toEntity(GesuchFormularDto gesuchFormularDto);
 
     public abstract GesuchFormularDto toDto(GesuchFormular gesuchFormular);
@@ -114,36 +109,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         }
 
         dto.setSteuerdatenTabs(steuerdatenTabBerechnungsService.calculateTabs(entity.getFamiliensituation()));
-    }
-
-    @AfterMapping
-    public void setCalculatedPropertiesOnDto(
-        GesuchFormular gesuchFormular,
-        @MappingTarget GesuchFormularDto gesuchFormularDto
-    ) {
-        if (gesuchFormularDto.getEinnahmenKosten() != null) {
-            final var ek = gesuchFormularDto.getEinnahmenKosten();
-            ek.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegen(gesuchFormular));
-
-            // PiA Steuern
-            final var isQuellenbesteuert =
-                EinnahmenKostenMappingUtil.isQuellenBesteuert(gesuchFormular.getPersonInAusbildung());
-            final var steuern =
-                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKosten(), isQuellenbesteuert);
-            ek.setSteuern(steuern);
-        }
-
-        if (
-            Objects.nonNull(gesuchFormularDto.getPartner()) &&
-            Objects.nonNull(gesuchFormularDto.getEinnahmenKostenPartner())
-        ) {
-            final var ekPartner = gesuchFormularDto.getEinnahmenKostenPartner();
-            ekPartner.setVermoegen(EinnahmenKostenMappingUtil.calculateVermoegenForPatner(gesuchFormular));
-
-            final var steuern =
-                EinnahmenKostenMappingUtil.calculateSteuern(gesuchFormular.getEinnahmenKostenPartner(), false);
-            ekPartner.setSteuern(steuern);
-        }
     }
 
     /**
@@ -312,7 +277,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
         resetFieldIf(
             () -> (newFormular.getEinnahmenKosten() != null &&
             !GesuchFormularCalculationUtil
-                .isPersonInAusbildungVolljaehrig(newFormular)),
+                .wasGSOlderThan18(newFormular, targetFormular.getTranche().getGesuch().getGesuchsperiode())),
             "Reset Vermoegen if Person in Ausbildung is < 18 years old",
             () -> {
                 newFormular.getEinnahmenKosten().setVermoegen(null);
@@ -323,7 +288,7 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             () -> (newFormular.getPartner() != null &&
             newFormular.getEinnahmenKostenPartner() != null &&
             !GesuchFormularCalculationUtil
-                .isDateOfBirthGreaterThanOrEquals18(newFormular.getPartner().getGeburtsdatum())),
+                .wasPartnerOlderThan18(newFormular, targetFormular.getTranche().getGesuch().getGesuchsperiode())),
             "Reset Vermoegen if Partner is < 18 years old",
             () -> {
                 newFormular.getEinnahmenKostenPartner().setVermoegen(null);

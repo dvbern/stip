@@ -16,10 +16,12 @@ import {
 
 type BfsStatistikState = {
   bfsStatistik: CachedRemoteData<Statistik[]>;
+  availableYears: CachedRemoteData<number[]>;
 };
 
 const initialState: BfsStatistikState = {
   bfsStatistik: initial(),
+  availableYears: initial(),
 };
 
 @Injectable()
@@ -33,6 +35,25 @@ export class BfsStatistikStore extends signalStore(
   bfsStatistikListViewSig = computed(() => {
     return fromCachedDataSig(this.bfsStatistik);
   });
+
+  loadAllBfsStatistikYears$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, (state) => ({
+          availableYears: cachedPending(state.availableYears),
+        }));
+      }),
+      switchMap(() =>
+        this.bfsStatistikService
+          .getAllStatistikYears$()
+          .pipe(
+            handleApiResponse((availableYears) =>
+              patchState(this, { availableYears }),
+            ),
+          ),
+      ),
+    ),
+  );
 
   loadAllBfsStatistik$ = rxMethod<void>(
     pipe(

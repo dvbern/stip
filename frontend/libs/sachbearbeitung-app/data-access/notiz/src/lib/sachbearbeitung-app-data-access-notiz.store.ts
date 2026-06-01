@@ -116,6 +116,7 @@ export class NotizStore extends signalStore(
     gesuchId: string;
     notizId: string;
     juristischeAbklaerungNotizAntwort: { antwort: string };
+    onSuccess: () => void;
   }>(
     pipe(
       tap(() => {
@@ -123,30 +124,32 @@ export class NotizStore extends signalStore(
           notiz: cachedPending(state.notiz),
         }));
       }),
-      switchMap(({ gesuchId, notizId, juristischeAbklaerungNotizAntwort }) =>
-        this.notizService
-          .answerJuristischeAbklaerungNotiz$({
-            notizId,
-            juristischeAbklaerungNotizAntwort,
-          })
-          .pipe(
-            handleApiResponse(
-              (notiz) => {
-                patchState(this, { notiz });
-              },
-              {
-                onSuccess: () => {
-                  this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
-                    {
-                      messageKey:
-                        'sachbearbeitung-app.infos.notiz.bearbeiten.success',
-                    },
-                  );
-                  this.loadNotizen$({ gesuchId });
+      switchMap(
+        ({ gesuchId, notizId, juristischeAbklaerungNotizAntwort, onSuccess }) =>
+          this.notizService
+            .answerJuristischeAbklaerungNotiz$({
+              notizId,
+              juristischeAbklaerungNotizAntwort,
+            })
+            .pipe(
+              handleApiResponse(
+                (notiz) => {
+                  patchState(this, { notiz });
                 },
-              },
+                {
+                  onSuccess: () => {
+                    this.notificationStore.createSuccessNotification<SachbearbeitungAppTranslationKey>(
+                      {
+                        messageKey:
+                          'sachbearbeitung-app.infos.notiz.bearbeiten.success',
+                      },
+                    );
+                    onSuccess();
+                    this.loadNotizen$({ gesuchId });
+                  },
+                },
+              ),
             ),
-          ),
       ),
     ),
   );

@@ -20,20 +20,19 @@ package ch.dvbern.stip.api.common.entity;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.entity.CurrentBenutzerContext;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.common.util.JwtUtil;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 
 @ApplicationScoped
 public class AbstractEntityListener {
     @Inject
-    Instance<JsonWebToken> token;
+    CurrentBenutzerContext currentBenutzerContext;
 
     private final ZoneId zoneId = DateUtil.ZUERICH_ZONE;
 
@@ -43,14 +42,21 @@ public class AbstractEntityListener {
         entity.setTimestampErstellt(now);
         entity.setTimestampMutiert(now);
 
-        final var currentBenutzername = JwtUtil.extractUsernameFromJwt(token);
+        final String currentBenutzername = currentBenutzerContext.getBenutzerFullName();
+        final UUID currentBenutzerUUID = currentBenutzerContext.getBenutzerId();
+
         entity.setUserErstellt(currentBenutzername);
         entity.setUserMutiert(currentBenutzername);
+
+        entity.setUserErstelltId(currentBenutzerUUID);
+        entity.setUserMutiertId(currentBenutzerUUID);
+
     }
 
     @PreUpdate
     public void preUpdate(AbstractEntity entity) {
         entity.setTimestampMutiert(ZonedDateTime.now(zoneId).toLocalDateTime());
-        entity.setUserMutiert(JwtUtil.extractUsernameFromJwt(token));
+        entity.setUserMutiert(currentBenutzerContext.getBenutzerFullName());
+        entity.setUserMutiertId(currentBenutzerContext.getBenutzerId());
     }
 }

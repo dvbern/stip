@@ -15,28 +15,36 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.resource;
+package ch.dvbern.stip.api.benutzer.entity;
 
-import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
-import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.generated.api.TenantResource;
-import ch.dvbern.stip.generated.dto.TenantInfoDto;
-import jakarta.annotation.security.PermitAll;
+import java.util.Objects;
+import java.util.UUID;
+
+import ch.dvbern.stip.api.common.util.JwtUtil;
+import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.RequestScoped;
-import lombok.RequiredArgsConstructor;
+import lombok.Getter;
 
 @RequestScoped
-@RequiredArgsConstructor
-@Validated
-@PopulateCurrentBenutzerContext
-public class TenantResourceImpl implements TenantResource {
+public class CurrentBenutzerContext {
+    @Getter
+    @Nullable
+    private UUID benutzerId;
 
-    private final TenantService tenantService;
+    @Nullable
+    private String benutzerFullName;
 
-    @Override
-    @PermitAll
-    public TenantInfoDto getCurrentTenant() {
-        return tenantService.getCurrentTenant();
+    public String getBenutzerFullName() {
+        return Objects.requireNonNullElse(benutzerFullName, JwtUtil.SYSTEM_USR);
+    }
+
+    public void setCurrentBenutzer(@Nullable final UUID benutzerId, @Nullable final String benutzerFullName) {
+        this.benutzerId = benutzerId;
+        this.benutzerFullName = benutzerFullName;
+    }
+
+    public void clear() {
+        benutzerId = null;
+        benutzerFullName = null;
     }
 }

@@ -49,6 +49,7 @@ public final class EinnahmenKostenTestBuilder extends AbstractTestBuilder<Einnah
             .betreuungskostenKinder(null)
             .veranlagungsStatus(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE)
             .steuerjahr(referenceDate.minusYears(2).getDayOfYear())
+            .steuern(null)
             .vermoegen(null)
             .einnahmenBGSA(null)
             .taggelderAHVIV(null)

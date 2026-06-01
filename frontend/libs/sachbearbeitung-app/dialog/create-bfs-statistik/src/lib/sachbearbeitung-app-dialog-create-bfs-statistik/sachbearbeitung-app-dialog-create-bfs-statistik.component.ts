@@ -5,10 +5,13 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MaskitoDirective } from '@maskito/angular';
+import { MatSelectModule } from '@angular/material/select';
 
 import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import {
@@ -21,10 +24,9 @@ import { maskitoYear } from '@dv/shared/util/maskito-util';
   selector: 'dv-sachbearbeitung-app-dialog-create-bfs-statistik',
   imports: [
     ReactiveFormsModule,
-    MaskitoDirective,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule,
+    MatSelectModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
     SachbearbeitungAppUiAdvTranslocoDirective,
@@ -38,6 +40,7 @@ export class SachbearbeitungAppDialogCreateBfsStatistikComponent {
     inject<
       MatDialogRef<SachbearbeitungAppDialogCreateBfsStatistikComponent, number>
     >(MatDialogRef);
+  data = inject<number[]>(MAT_DIALOG_DATA);
   maskitoYear = maskitoYear({ max: new Date().getFullYear() });
 
   form = new FormGroup({
@@ -46,8 +49,11 @@ export class SachbearbeitungAppDialogCreateBfsStatistikComponent {
 
   static open(
     dialog: MatDialog,
+    availableYears: number[],
   ): MatDialogRef<SachbearbeitungAppDialogCreateBfsStatistikComponent, number> {
-    return dialog.open(SachbearbeitungAppDialogCreateBfsStatistikComponent);
+    return dialog.open(SachbearbeitungAppDialogCreateBfsStatistikComponent, {
+      data: availableYears,
+    });
   }
 
   cancel() {

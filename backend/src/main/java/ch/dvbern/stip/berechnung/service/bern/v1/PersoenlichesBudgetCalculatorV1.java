@@ -128,8 +128,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             );
         }
 
-        final var steuern =
-            antragssteller.getSteuern() + Objects.requireNonNullElse(antragssteller.getSteuernPartner(), 0);
+        final var steuern = InputUtils.sumNullables(antragssteller.getSteuern(), antragssteller.getSteuernPartner());
 
         var fahrkosten = antragssteller.getFahrkosten();
         var fahrkostenTotal = fahrkosten;
@@ -194,9 +193,7 @@ public class PersoenlichesBudgetCalculatorV1 {
             .fahrkostenPartner(fahrkostenPartner)
             .verpflegungPartner(verpflegungPartner)
             .betreuungskostenKinder(fremdbetreuung)
-            .kantonsGemeindesteuern(steuern)
-            .bundessteuern(0) // Momentan kann dieses Feld nicht gesetzt werden, wird wahrscheinlich entfernt werden via
-                              // CR
+            .steuern(steuern)
             .anteilLebenshaltungskosten(anteilLebenshaltungskosten);
     }
 

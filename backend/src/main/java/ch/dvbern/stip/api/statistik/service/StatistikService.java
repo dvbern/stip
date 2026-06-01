@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.reactive.RestMulti;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
+import org.quartz.ObjectAlreadyExistsException;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
 import org.quartz.Trigger;
@@ -62,7 +64,7 @@ public class StatistikService {
 
         final JobDetail jobDetail = JobBuilder.newJob(StatistikXMLJob.class)
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + year + "-" + System.currentTimeMillis(),
+                String.format("%s-%d-%s", StatistikConstants.STATISTIK_JOB_NAME, year, LocalDate.now()),
                 "statistik"
             )
             .usingJobData(
@@ -75,7 +77,7 @@ public class StatistikService {
 
         final Trigger trigger = TriggerBuilder.newTrigger()
             .withIdentity(
-                StatistikConstants.STATISTIK_JOB_PREFIX + "trigger-" + year + "-" + System.currentTimeMillis(),
+                StatistikConstants.STATISTIK_JOB_NAME,
                 "statistik"
             )
             .startNow()
@@ -83,6 +85,8 @@ public class StatistikService {
 
         try {
             scheduler.scheduleJob(jobDetail, trigger);
+        } catch (ObjectAlreadyExistsException e) {
+            LOG.warn("Already existing statistik job exists", e);
         } catch (SchedulerException e) {
             LOG.error("Could not schedule statistik job", e);
         }

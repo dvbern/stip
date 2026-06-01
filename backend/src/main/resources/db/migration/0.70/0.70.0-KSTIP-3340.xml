@@ -3,10 +3,7 @@
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
-  <changeSet author="luca.fondo (generated)" id="1778596451480-547">
-    <dropTable tableName="nesko_access"/>
-  </changeSet>
-   <changeSet author="luca.fondo (generated)" id="1778514120718-547">
+   <changeSet author="jafa (generated)" id="1780305305224-551">
       <createTable tableName="steuerdaten_access">
          <column name="id" type="UUID">
             <constraints nullable="false"
@@ -22,9 +19,11 @@
          <column name="user_erstellt" type="VARCHAR(255)">
             <constraints nullable="false"/>
          </column>
+         <column name="user_erstellt_id" type="UUID"/>
          <column name="user_mutiert" type="VARCHAR(255)">
             <constraints nullable="false"/>
          </column>
+         <column name="user_mutiert_id" type="UUID"/>
          <column name="version" type="BIGINT"/>
          <column name="mandant" type="VARCHAR(255)">
             <constraints nullable="false"/>
@@ -43,10 +42,13 @@
          </column>
       </createTable>
    </changeSet>
-  <changeSet author="luca.fondo (generated)" id="1778514120718-548">
-    <createIndex indexName="IX_steuerdaten_access_mandant"
-                 tableName="steuerdaten_access">
-      <column name="mandant"/>
-    </createIndex>
-  </changeSet>
+   <changeSet author="jafa (generated)" id="1780305305224-552">
+      <createIndex indexName="IX_steuerdaten_access_mandant"
+                   tableName="steuerdaten_access">
+         <column name="mandant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="jafa (generated)" id="1780305305224-553">
+      <dropTable tableName="nesko_access"/>
+   </changeSet>
 </databaseChangeLog>

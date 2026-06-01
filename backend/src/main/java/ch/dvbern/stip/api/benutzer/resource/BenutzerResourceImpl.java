@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterService;
 import ch.dvbern.stip.api.benutzer.service.SachbearbeiterZuordnungStammdatenWorker;
 import ch.dvbern.stip.api.common.authorization.BenutzerAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.api.BenutzerResource;
@@ -49,6 +50,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHSTABENZUWEISUNG
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class BenutzerResourceImpl implements BenutzerResource {
     private final BenutzerAuthorizer benutzerAuthorizer;
     private final BenutzerService benutzerService;

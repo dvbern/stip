@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
 import lombok.experimental.UtilityClass;
 
@@ -31,6 +32,17 @@ public class GesuchFormularCalculationUtil {
         return (int) ChronoUnit.YEARS.between(date1, date2);
     }
 
+    public LocalDate getVorjahrGesuchsjahrAsLocalDate(final Gesuchsperiode gesuchsperiode) {
+        int vorjahrGesuchsjahr = LocalDate.now().getYear() - 1;
+        if (gesuchsperiode != null) {
+            vorjahrGesuchsjahr = gesuchsperiode
+                .getGesuchsjahr()
+                .getTechnischesJahr()
+            - 1;
+        }
+        return LocalDate.of(vorjahrGesuchsjahr, 12, 31);
+    }
+
     public LocalDate getVorjahrGesuchsjahrAsLocalDate(final GesuchFormular gesuchFormular) {
         int vorjahrGesuchsjahr = LocalDate.now().getYear() - 1;
         if (gesuchFormular.getTranche() != null) {
@@ -39,15 +51,7 @@ public class GesuchFormularCalculationUtil {
                 .getGesuch()
                 .getGesuchsperiode();
 
-            if (vorjahrGesuchsperiode != null) {
-                vorjahrGesuchsjahr = gesuchFormular
-                    .getTranche()
-                    .getGesuch()
-                    .getGesuchsperiode()
-                    .getGesuchsjahr()
-                    .getTechnischesJahr()
-                - 1;
-            }
+            return getVorjahrGesuchsjahrAsLocalDate(vorjahrGesuchsperiode);
         }
         return LocalDate.of(vorjahrGesuchsjahr, 12, 31);
     }
@@ -71,6 +75,34 @@ public class GesuchFormularCalculationUtil {
         return calculateNumberOfYearsBetween(
             gesuchFormular.getPartner().getGeburtsdatum(),
             getVorjahrGesuchsjahrAsLocalDate(gesuchFormular)
+        ) >= 18;
+    }
+
+    public boolean wasGSOlderThan18(
+        final GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        Gesuchsperiode gesuchsperiode
+    ) {
+        if (gesuchFormularUpdateDto.getPersonInAusbildung() == null) {
+            return true;
+        }
+
+        return calculateNumberOfYearsBetween(
+            gesuchFormularUpdateDto.getPersonInAusbildung().getGeburtsdatum(),
+            getVorjahrGesuchsjahrAsLocalDate(gesuchsperiode)
+        ) >= 18;
+    }
+
+    public boolean wasPartnerOlderThan18(
+        final GesuchFormularUpdateDto gesuchFormularUpdateDto,
+        Gesuchsperiode gesuchsperiode
+    ) {
+        if (gesuchFormularUpdateDto.getPartner() == null) {
+            return true;
+        }
+
+        return calculateNumberOfYearsBetween(
+            gesuchFormularUpdateDto.getPartner().getGeburtsdatum(),
+            getVorjahrGesuchsjahrAsLocalDate(gesuchsperiode)
         ) >= 18;
     }
 

@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.ausbildung.service.AusbildungUnterbruchAntragService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.AusbildungAuthorizer;
 import ch.dvbern.stip.api.common.authorization.AusbildungUnterbruchAntragAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -58,6 +59,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.AUSBILDUNG_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class AusbildungResourceImpl implements AusbildungResource {
     private final AusbildungService ausbildungService;
     private final AusbildungAuthorizer ausbildungAuthorizer;

@@ -554,92 +554,102 @@
           </div>
         }
 
-        <!-- STEUERRELEVANTE DATEN -->
-        <h2 class="tw:text-2xl tw:font-semibold tw:mt-6">
-          {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
-        </h2>
-        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
-          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-            <!-- VERMOEGEN -->
-            <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
-              <mat-form-field dvSharedUiFormField class="tw:grow">
-                <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
+        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen) || config.isSachbearbeitungApp) {
+          <!-- STEUERRELEVANTE DATEN -->
+          <h2 class="tw:text-2xl tw:font-semibold tw:mt-6">
+            {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
+          </h2>
+          @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
+            <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+              <!-- VERMOEGEN -->
+              <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+                <mat-form-field dvSharedUiFormField class="tw:grow">
+                  <mat-label>{{ t('shared.form.einnahmenkosten.vermoegen.label') }}</mat-label>
+                  <input
+                    [formControl]="form.controls.vermoegen"
+                    data-testid="form-einnahmen-kosten-vermoegen"
+                    matInput
+                    type="text"
+                    [maskito]="maskitoNumber"
+                  />
+                  <mat-hint *dvZuvorHint="formChanges.vermoegen"></mat-hint>
+                  <mat-error *dvSharedUiFormMessageError="'required'">
+                    {{ t('shared.form.error.required') }}
+                  </mat-error>
+                </mat-form-field>
+
+                @if (vermoegenDocumentSig(); as options) {
+                  <dv-shared-pattern-document-upload
+                    class="flex-shrink-1"
+                    [optionsSig]="options"
+                  ></dv-shared-pattern-document-upload>
+                }
+              </div>
+            </div>
+          }
+
+          <!-- STEUERJAHR -->
+          @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
+            <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+              <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+                <mat-label>{{ t('shared.form.einnahmenkosten.steuerjahr.label') }}</mat-label>
                 <input
-                  [formControl]="form.controls.vermoegen"
-                  data-testid="form-einnahmen-kosten-vermoegen"
+                  [formControl]="form.controls.steuerjahr"
+                  data-testid="form-einnahmen-kosten-steuerjahr"
                   matInput
+                  min="1900"
+                  [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
                   type="text"
-                  [maskito]="maskitoNumber"
+                  [maskito]="maskitoYear"
                 />
-                <mat-hint *dvZuvorHint="formChanges.vermoegen"></mat-hint>
+                <mat-hint *dvZuvorHint="formChanges.steuerjahr; disableFormatting: true"></mat-hint>
+                <mat-error *dvSharedUiFormMessageError="'required'">
+                  {{ t('shared.form.error.required') }}
+                </mat-error>
+                <mat-error *dvSharedUiFormMessageError="'range'">
+                  {{ t('shared.form.error.range', { min: 1900, max: steuerjahrValidation.steuerjahrPeriodeSig() }) }}
+                </mat-error>
+              </mat-form-field>
+            </div>
+          }
+
+          <!-- veranlagungsStatus -->
+          @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsStatus)) {
+            <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+              <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+                <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsStatus.label') }}</mat-label>
+                <input
+                  [formControl]="form.controls.veranlagungsStatus"
+                  data-testid="form-einnahmen-kosten-veranlagungsStatus"
+                  matInput
+                  dvMaxLength
+                  type="text"
+                />
+                <mat-hint *dvZuvorHint="formChanges.veranlagungsStatus"></mat-hint>
                 <mat-error *dvSharedUiFormMessageError="'required'">
                   {{ t('shared.form.error.required') }}
                 </mat-error>
               </mat-form-field>
-
-              @if (vermoegenDocumentSig(); as options) {
-                <dv-shared-pattern-document-upload
-                  class="flex-shrink-1"
-                  [optionsSig]="options"
-                ></dv-shared-pattern-document-upload>
-              }
             </div>
-          </div>
-        }
+          }
 
-        <!-- STEUERJAHR -->
-        @if (!hiddenFieldsSetSig().has(form.controls.steuerjahr)) {
-          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
-              <mat-label>{{ t('shared.form.einnahmenkosten.steuerjahr.label') }}</mat-label>
-              <input
-                [formControl]="form.controls.steuerjahr"
-                data-testid="form-einnahmen-kosten-steuerjahr"
-                matInput
-                min="1900"
-                [max]="steuerjahrValidation.steuerjahrPeriodeSig()"
-                type="text"
-                [maskito]="maskitoYear"
-              />
-              <mat-hint *dvZuvorHint="formChanges.steuerjahr; disableFormatting: true"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ t('shared.form.error.required') }}
-              </mat-error>
-              <mat-error *dvSharedUiFormMessageError="'range'">
-                {{ t('shared.form.error.range', { min: 1900, max: steuerjahrValidation.steuerjahrPeriodeSig() }) }}
-              </mat-error>
-            </mat-form-field>
-          </div>
+          <!-- STEUERN -->
+          @if (!hiddenFieldsSetSig().has(form.controls.steuern)) {
+            <div class="tw:grid tw:grid-cols-12 tw:gap-6 readonly tw:mt-6">
+              <mat-form-field class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
+                <mat-label>{{ t('shared.form.einnahmenkosten.steuern.label') }}</mat-label>
+                <input
+                  formControlName="steuern"
+                  data-testid="form-einnahmen-kosten-steuern"
+                  matInput
+                  type="text"
+                  [maskito]="maskitoNumber"
+                />
+                <mat-hint *dvZuvorHint="formChanges.steuern"></mat-hint>
+              </mat-form-field>
+            </div>
+          }
         }
-
-        <!-- veranlagungsStatus -->
-        @if (!hiddenFieldsSetSig().has(form.controls.veranlagungsStatus)) {
-          <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-            <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
-              <mat-label>{{ t('shared.form.einnahmenkosten.veranlagungsStatus.label') }}</mat-label>
-              <input
-                [formControl]="form.controls.veranlagungsStatus"
-                data-testid="form-einnahmen-kosten-veranlagungsStatus"
-                matInput
-                dvMaxLength
-                type="text"
-              />
-              <mat-hint *dvZuvorHint="formChanges.veranlagungsStatus"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ t('shared.form.error.required') }}
-              </mat-error>
-            </mat-form-field>
-          </div>
-        }
-
-        <!-- STEUERN KANTON / GEMEINDE -->
-        <div class="tw:grid tw:grid-cols-12 tw:gap-6 readonly tw:mt-6">
-          <mat-form-field class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-6">
-            <mat-label>{{ t('shared.form.einnahmenkosten.steuern.label') }}</mat-label>
-            <input formControlName="steuern" data-testid="form-einnahmen-kosten-steuern" matInput type="text" />
-            <mat-hint *dvZuvorHint="formChanges.steuern"></mat-hint>
-          </mat-form-field>
-        </div>
 
         <!-- Buttons -->
         <dv-shared-ui-step-form-buttons>

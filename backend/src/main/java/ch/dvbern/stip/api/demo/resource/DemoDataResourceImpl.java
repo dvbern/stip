@@ -22,6 +22,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DemoDataAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
@@ -46,6 +47,7 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
+@PopulateCurrentBenutzerContext
 public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
     private final DemoDataService demoDataService;

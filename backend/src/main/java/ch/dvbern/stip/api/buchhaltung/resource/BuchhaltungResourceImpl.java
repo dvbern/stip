@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungMapper;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.common.authorization.BuchhaltungAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.sap.service.SapService;
 import ch.dvbern.stip.generated.api.BuchhaltungResource;
@@ -39,6 +40,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.BUCHHALTUNG_ENTRY_R
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class BuchhaltungResourceImpl implements BuchhaltungResource {
     private final BuchhaltungAuthorizer buchhaltungAuthorizer;
     private final BuchhaltungService buchhaltungService;

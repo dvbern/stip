@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -46,6 +47,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
+@PopulateCurrentBenutzerContext
 public class DatenschutzbriefRessourceImpl implements DatenschutzbriefResource {
     private final DatenschutzbriefService datenschutzbriefService;
     private final BenutzerService benutzerService;

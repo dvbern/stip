@@ -104,7 +104,7 @@ public class VerfuegungService {
 
                 final var verfuegungsDokument = new VerfuegungDokument();
                 verfuegungsDokument.setVerfuegung(verfuegung);
-                verfuegungsDokument.setTyp(VerfuegungDokumentTyp.VERFUEGUNGSBRIEF);
+                verfuegungsDokument.setTyp(VerfuegungDokumentTyp.MANUELLE_NEGATIVE_VERFUEGUNG);
                 verfuegungsDokument.setObjectId(objectId);
                 verfuegungsDokument.setFilename(fileUpload.fileName());
                 verfuegungsDokument.setFilepath(VERFUEGUNG_DOKUMENT_PATH);
@@ -204,7 +204,7 @@ public class VerfuegungService {
                 .format(FILENAME_PREFIX_BERECHNUNGSBLATT_VATER, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case BERECHNUNGSBLATT_FAMILIE -> String
                 .format(FILENAME_PREFIX_BERECHNUNGSBLATT_FAMILIE, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
-            case VERSENDETE_VERFUEGUNG -> String
+            case VERSENDETE_VERFUEGUNG, MANUELLE_NEGATIVE_VERFUEGUNG -> String
                 .format(FILENAME_PREFIX_VERFUEGUNG, fallNr, formattedDate, FILENAME_EXTENSION_PDF);
             case VERFUEGUNGSBRIEF -> String
                 .format(FILENAME_PREFIX_VERFUEGUNGSBRIEF, fallNr, formattedDate, FILENAME_EXTENSION_PDF);

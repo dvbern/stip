@@ -69,6 +69,8 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
             }
         }
 
-        verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+        if (latestVerfuegung.getDokumente().isEmpty()) {
+            verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+        }
     }
 }

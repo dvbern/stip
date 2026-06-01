@@ -6870,7 +6870,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Statistik'
-          description: Token returned
+          description: Statistik list
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -6883,6 +6883,34 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getAllStatistiks
       summary: Get All statistiks
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /statistik/years:
+    get:
+      tags:
+        - Statistik
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+          description: Available years list
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getAllStatistikYears
+      summary: All available years
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -8850,6 +8878,7 @@ components:
         - BERECHNUNGSBLATT_FAMILIE
         - VERSENDETE_VERFUEGUNG
         - VERFUEGUNGSBRIEF
+        - MANUELLE_NEGATIVE_VERFUEGUNG
     VerfuegungDokument:
       type: object
       required:
@@ -10508,8 +10537,7 @@ components:
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
         - betreuungskostenKinder
-        - kantonsGemeindesteuern
-        - bundessteuern
+        - steuern
         - anteilLebenshaltungskosten
       type: object
       properties:
@@ -10541,9 +10569,7 @@ components:
           type: integer
         betreuungskostenKinder:
           type: integer
-        kantonsGemeindesteuern:
-          type: integer
-        bundessteuern:
+        steuern:
           type: integer
         anteilLebenshaltungskosten:
           type: integer
@@ -11069,7 +11095,7 @@ components:
           minimum: 0
           maximum: 2147483647
         steuern:
-          description: transient and calculated readonly field
+          description: only visible by SB
           type: integer
           minimum: 0
           maximum: 2147483647

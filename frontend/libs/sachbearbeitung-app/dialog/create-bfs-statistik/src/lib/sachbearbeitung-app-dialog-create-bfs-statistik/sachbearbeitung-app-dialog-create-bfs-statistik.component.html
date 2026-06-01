@@ -14,7 +14,11 @@
   <form [formGroup]="form" (ngSubmit)="confirm()" class="tw:mt-5 tw:flex tw:w-full tw:flex-col tw:gap-4">
     <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ t('sachbearbeitung-app.admin.bfs-statistik.createDialog.year') }}</mat-label>
-      <input matInput [formControl]="form.controls.year" [maskito]="maskitoYear" />
+      <mat-select [formControl]="form.controls.year">
+        @for (year of data; track year) {
+          <mat-option [value]="year">{{ year }}</mat-option>
+        }
+      </mat-select>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ t('shared.form.error.required') }}
       </mat-error>
