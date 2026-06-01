@@ -77,7 +77,10 @@ kstip:
       port:
         steuerdaten:
           enabled: false
-
+  seeding:
+    seed-on-profile:
+      - 'prod'
+      - 'dev'
 quarkus:
   #  live-reload:
   #    instrumentation: true
