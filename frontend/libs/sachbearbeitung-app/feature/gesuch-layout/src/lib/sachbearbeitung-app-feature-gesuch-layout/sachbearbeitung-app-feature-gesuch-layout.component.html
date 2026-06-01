@@ -5,20 +5,11 @@
   <dv-shared-pattern-gesuch-info-bar>
     <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
-      <a
-        class="tw:dv-nav-button fw-normal tw:flex tw:items-center align-self-center"
-        [routerLink]="['/']"
-        data-testid="header-nav-backlink"
-      >
-        <i class="material-symbols-rounded tw:text-2xl tw:mr-2">arrow_left_alt</i>
-        <span>{{ t('shared.header.backToDashboard') }}</span>
-      </a>
       @if (gesuchInfoDataSig(); as infoData) {
-        <span>|</span>
-        <div class="tw:font-semibold tw:ml-4">
+        <div class="tw:ml-4">
           <span>{{ infoData.fallNummer }} / </span>
-          <span>{{ infoData.gesuchNummer }} - </span>
-          <span>{{ infoData.name }}, </span>
+          <span>{{ infoData.gesuchNummer }} / </span>
+          <span>{{ infoData.name }} / </span>
           <span>{{ t(`sachbearbeitung-app.gesuch.status.contract.${infoData.status}`) }}</span>
         </div>
       } @else {
@@ -37,6 +28,7 @@
         [trancheIdSig]="trancheIdSig()"
         [currentTranchenSig]="this.headerViewSig().currentTranches"
         [berechnungIdSig]="berechnungIdSig()"
+        [originStepSig]="originStepSig()"
       ></dv-shared-ui-versionen-menu>
 
       <!-- Aenderungen Link -->
@@ -44,7 +36,7 @@
         <a
           [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderung.id]"
           [queryParams]="{ revision: firstAenderung.revision }"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="isAenderungRouteSig()"
         >
@@ -53,7 +45,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           disabled
         >
@@ -65,7 +57,7 @@
       @if (firstDarlehenIdSig(); as firstDarlehenId) {
         <a
           [routerLink]="['/gesuch', 'darlehen', firstDarlehenId, 'gesuch', gesuchId]"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           [class.active]="isDarlehenRouteSig()"
         >
@@ -74,7 +66,7 @@
       } @else {
         <button
           type="button"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="header-nav-darlehen-link"
           disabled
         >
@@ -83,24 +75,23 @@
       }
 
       <!-- infos -->
-      <a
-        [routerLink]="['/gesuch', 'infos', gesuchId]"
-        class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-2"
-        data-testid="sb-gesuch-header-infos-nav-link"
-        [class.active]="isInfosRouteSig()"
-      >
-        <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
-      </a>
-
-      <!-- Beschwerden -->
-      @if (isBeschwerdeHaengigSig()) {
-        <div class="tw:w-full tw:grow"></div>
-        <div class="tw:text-sm">
-          <mat-chip [color]="'info'" highlighted>
-            {{ t('sachbearbeitung-app.infos.beschwerde.haengig.title') }}
-          </mat-chip>
-        </div>
-      }
+      <div class="tw:relative tw:inline-flex">
+        <a
+          [routerLink]="['/gesuch', 'infos', gesuchId]"
+          class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2 tw:relative"
+          data-testid="sb-gesuch-header-infos-nav-link"
+          [class.active]="isInfosRouteSig()"
+        >
+          <span>{{ t('sachbearbeitung-app.header.infos') }}</span>
+          @if (isBeschwerdeHaengigSig()) {
+            <span
+              class="tw:absolute tw:font-dv-icon tw:-top-3 tw:-right-3 tw:flex tw:items-center tw:justify-center tw:text-xl tw:h-4 tw:w-4 tw:rounded-full tw:text-white tw:bg-dv-warning tw:p-3.25"
+              [matTooltip]="t('sachbearbeitung-app.infos.beschwerde.haengig.title')"
+              >priority_high</span
+            >
+          }
+        </a>
+      </div>
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 
@@ -131,9 +122,9 @@
       }
     </nav>
 
-    @let statusUebergaenge = statusUebergaengeOptionsSig();
-    @let availableTrancheInteraction = availableTrancheInteractionSig();
-    <!-- Aktion Button -->
+    @let a = actionMenuOptionsSig();
+
+    <!-- Gesuch Aktionen Menu -->
     @if (isActionRouteSig()) {
       <div>
         <button
@@ -141,7 +132,7 @@
           class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
           data-testid="sb-gesuch-header-aktion-menu"
           [class.active]="aktionTrigger.menuOpen"
-          [disabled]="!(statusUebergaenge.isNotEmpty || availableTrancheInteraction) || isLoadingSig()"
+          [disabled]="a.isActionMenuDisabled"
           #aktionTrigger="matMenuTrigger"
           [matMenuTriggerFor]="aktionMenu"
         >
@@ -155,49 +146,123 @@
           class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
         >
           <div class="tw:flex tw:flex-col tw:gap-2">
-            @switch (availableTrancheInteraction) {
-              @case ('CREATE_TRANCHE') {
-                <!-- Tranche erstellen -->
-                <button
-                  type="button"
-                  class="fw-normal tw:px-2"
-                  data-testid="aktion-tranche-erstellen"
-                  mat-menu-item
-                  (click)="createTranche()"
-                >
-                  <div class="tw:flex tw:items-center tw:gap-2">
-                    <i class="material-symbols-rounded">add_circle</i>
-                    <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
-                  </div>
-                </button>
+            @if (a.hasAenderungMenuActions) {
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-reject"
+                [disabled]="isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="changeAenderungState(a.aenderungActions.trancheId!, 'ABGELEHNT', a.aenderungActions.gesuchId!)"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">close</i>
+                  <span>{{ t('shared.form.aenderung.action.reject') }}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-accept"
+                [disabled]="a.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="
+                  changeAenderungState(a.aenderungActions.trancheId!, 'AKZEPTIERT', a.aenderungActions.gesuchId!)
+                "
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">check_circle</i>
+                  <span>{{ t('shared.form.aenderung.action.accept') }}</span>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aenderung-manually-change"
+                [disabled]="a.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+                mat-menu-item
+                (click)="
+                  changeAenderungState(
+                    a.aenderungActions.trancheId!,
+                    'MANUELLE_AENDERUNG',
+                    a.aenderungActions.gesuchId!
+                  )
+                "
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">edit</i>
+                  <span>{{ t('shared.form.aenderung.action.manuallyChange') }}</span>
+                </div>
+              </button>
+            }
+
+            @if (a.hasGesuchMenuActions) {
+              @switch (a.availableTrancheInteraction) {
+                @case ('CREATE_TRANCHE') {
+                  <!-- Tranche erstellen -->
+                  <button
+                    type="button"
+                    class="fw-normal tw:px-2"
+                    data-testid="aktion-tranche-erstellen"
+                    mat-menu-item
+                    (click)="createTranche()"
+                  >
+                    <div class="tw:flex tw:items-center tw:gap-2">
+                      <i class="material-symbols-rounded">add_circle</i>
+                      <span>{{ t('sachbearbeitung-app.header.tranche.erstellen') }}</span>
+                    </div>
+                  </button>
+                }
+              }
+
+              @if (a.statusUebergaenge.isNotEmpty && a.availableTrancheInteraction) {
+                <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+              }
+
+              @for (uebergang of a.statusUebergaenge.list; track $index) {
+                @if (uebergang.name) {
+                  <button
+                    type="button"
+                    class="tw:pr-auto tw:px-2"
+                    [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                    [disabled]="uebergang.disabledReason || !trancheId"
+                    [matTooltip]="
+                      uebergang.disabledReason
+                        ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                        : null
+                    "
+                    mat-menu-item
+                    (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
+                  >
+                    <div class="tw:flex tw:items-center tw:gap-2">
+                      <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                      <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
+                    </div>
+                  </button>
+                }
               }
             }
 
-            @if (statusUebergaenge.isNotEmpty && availableTrancheInteraction) {
+            @if (a.canExport && a.hasWorkflowActions) {
               <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
             }
 
-            @for (uebergang of statusUebergaenge.list; track $index) {
-              @if (uebergang.name) {
-                <button
-                  type="button"
-                  class="tw:pr-auto tw:px-2"
-                  [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
-                  [disabled]="uebergang.disabledReason || !trancheId"
-                  [matTooltip]="
-                    uebergang.disabledReason
-                      ? t(`sachbearbeitung-app.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
-                      : null
-                  "
-                  mat-menu-item
-                  (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
-                >
-                  <div class="tw:flex tw:items-center tw:gap-2">
-                    <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
-                    <span>{{ t(`sachbearbeitung-app.header.status-uebergang.${uebergang.name}`) }}</span>
-                  </div>
-                </button>
-              }
+            @if (a.canExport) {
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aktion-export-tranche"
+                [disabled]="isExportingSig()"
+                mat-menu-item
+                (click)="exportTranche()"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">download</i>
+                  <span>{{ t('shared.form.tranche.export') }}</span>
+                </div>
+              </button>
             }
           </div>
         </mat-menu>

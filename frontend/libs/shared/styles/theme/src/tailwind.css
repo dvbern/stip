@@ -47,6 +47,8 @@
   --color-dv-main-warn-subtle: var(--tw-color-dv-yellow-subtle);
   --color-dv-main-primary: var(--tw-color-dv-gray-dark);
   --color-dv-main-primary-subtle: var(--tw-color-dv-gray-dark-subtle);
+
+  --font-dv-icon: 'Material Symbols Rounded', sans-serif;
 }
 
 @layer base {
@@ -171,9 +173,12 @@
 }
 
 @utility dv-btn-tranche {
-  @apply tw:flex tw:items-center tw:bg-white tw:px-4 tw:py-[10px] tw:border tw:border-gray-300 tw:rounded-xl! tw:w-full;
+  @apply tw:flex tw:items-center tw:bg-white tw:p-4 tw:border tw:border-gray-300 tw:rounded-md! tw:w-full;
   &:hover {
-    @apply tw:bg-dv-red tw:text-white;
+    @apply tw:cursor-pointer tw:bg-gray-100;
+  }
+  &:disabled {
+    @apply tw:pointer-events-none;
   }
 }
 

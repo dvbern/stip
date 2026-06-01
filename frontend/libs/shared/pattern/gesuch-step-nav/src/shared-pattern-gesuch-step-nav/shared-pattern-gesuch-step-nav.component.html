@@ -1,16 +1,14 @@
-@for (step of stepsViewSig(); track $index; let index = $index) {
-  @if (step.prependLine) {
-    <hr class="tw:mt-6 tw:mb-6 tw:border-t tw:border-dv-border tw:pb-2" />
-  }
-
+<ng-template #navItem dvStepView let-step="step">
   <a
     class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center tw:relative tw:mb-4 tw:w-full"
     [class.active]="step.active()"
     [class.disabled]="step.disabled"
     [class.tw:dv-historized]="isHistorizedSig()"
-    [class.tw:pointer-events-none]="!step.route"
-    [routerLink]="step.route ?? '#'"
-    [queryParamsHandling]="'preserve'"
+    [class.tw:pointer-events-none]="!step.routerLink"
+    [class.tw:mt-4]="step.marginTop"
+    [routerLink]="step.routerLink"
+    [queryParams]="step.queryParams"
+    [queryParamsHandling]="'merge'"
     [attr.data-testid]="'step-nav-' + step.name"
     (click)="navClicked.emit({})"
   >
@@ -26,7 +24,7 @@
           [class.tw:text-dv-green]="step.status === 'VALID'"
           [class.tw:text-dv-red]="step.status === 'INVALID'"
         >
-          {{ statusIconMap[step.status] }}
+          {{ step.statusIconSymbolName }}
         </i>
       }
     </div>
@@ -34,4 +32,43 @@
       {{ step.translationKey | transloco }}
     </span>
   </a>
+</ng-template>
+
+@for (entry of groupedStepsViewSig(); track $index) {
+  @if (entry.type === 'group') {
+    <div class="tw:relative">
+      <mat-expansion-panel
+        #expansionPanel="matExpansionPanel"
+        class="dv-nav-expansion-panel mat-elevation-z0 tw:border-b tw:border-dv-border!"
+        [ngClass]="{ 'tw:border-t tw:border-dv-border': entry.borderTop, 'tw:bg-dv-gray-subtle!': entry.hasActive }"
+        [expanded]="entry.hasActive || openedGroupsSig()[entry.group]"
+      >
+        <mat-expansion-panel-header class="tw:hover:bg-inherit!">
+          <mat-panel-title class="tw:font-semibold tw:text-dv-gray tw:flex tw:items-center tw:gap-2">
+            @if (entry.groupStatus) {
+              <i
+                class="material-symbols-rounded tw:text-xl!"
+                [class.tw:text-dv-yellow]="entry.groupStatus === 'WARNING'"
+                [class.tw:text-dv-green]="entry.groupStatus === 'VALID'"
+                [class.tw:text-dv-red]="entry.groupStatus === 'INVALID'"
+                >{{ statusIconMap[entry.groupStatus] }}</i
+              >
+            }
+            <span>
+              {{ 'shared.form.step.group.' + entry.group | transloco }}
+            </span>
+            <span class="tw:font-normal tw:text-dv-gray-muted">({{ entry.steps.length }})</span>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        @for (step of entry.steps; track step.name) {
+          <ng-container *ngTemplateOutlet="navItem; context: { step }"></ng-container>
+        }
+      </mat-expansion-panel>
+      @if (entry.hasChanges && !expansionPanel.expanded) {
+        <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
+      }
+    </div>
+  } @else {
+    <ng-container *ngTemplateOutlet="navItem; context: { step: entry.step }"></ng-container>
+  }
 }

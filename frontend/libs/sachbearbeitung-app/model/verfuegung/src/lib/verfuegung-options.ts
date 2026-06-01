@@ -17,18 +17,27 @@ export const OPTION_ZUSAMMENFASSUNG: VerfuegungOption = {
 export const BERECHNUNG_ROUTE = 'berechnung';
 export const createBerechnungOption = (
   index: number,
+  totalBerechnungen: number,
   startDate: string,
   endDate: string,
-): VerfuegungOption => ({
-  route: `berechnung/${index + 1}`,
-  translationKey: 'sachbearbeitung-app.verfuegung.option.berechnung',
-  translationOptions: {
-    index: (index + 1).toString(),
-    startDate: startDate,
-    endDate: endDate,
-  },
-  titleTranslationKey: 'sachbearbeitung-app.verfuegung.option.berechnung',
-  iconSymbolName: 'description',
-});
+): VerfuegungOption => {
+  const key =
+    totalBerechnungen > 1
+      ? 'sachbearbeitung-app.verfuegung.option.berechnung.withIndex'
+      : 'sachbearbeitung-app.verfuegung.option.berechnung';
+
+  return {
+    route: `berechnung/${index + 1}`,
+    translationKey: key,
+    translationOptions: {
+      index: (index + 1).toString(),
+      startDate: startDate,
+      endDate: endDate,
+    },
+    titleTranslationKey:
+      'sachbearbeitung-app.verfuegung.option.berechnung.title',
+    iconSymbolName: 'description',
+  };
+};
 
 export const VERFUEGUNG_OPTIONS = [OPTION_ZUSAMMENFASSUNG];

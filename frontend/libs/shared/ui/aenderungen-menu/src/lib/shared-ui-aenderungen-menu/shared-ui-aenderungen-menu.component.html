@@ -3,48 +3,50 @@
   @let trancheId = trancheIdSig();
   @let anederungen = aenderungenSig();
 
-  <button
-    type="button"
-    class="tw:dv-btn-tranche"
-    data-testid="sb-gesuch-header-aenderungen-nav-menu"
-    [class.tw:dv-historized]="isAenderungRouteSig()"
-    [disabled]="!anederungen"
-    [matMenuTriggerFor]="aenderungenMenu"
-  >
-    @if (currentAenderungSig(); as currentAenderung) {
-      <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
-        {{
-          t('shared.header.aenderungen.item', {
-            date: currentAenderung.gueltigAb | date: 'dd.MM.yyyy',
-            index: currentAenderung.index + 1,
-          })
-        }}
-        -
-        {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-      </span>
-    }
-    <i class="material-symbols-rounded tw:ml-2">expand_more</i>
-  </button>
+  <div class="tw:relative">
+    <label class="tw:text-sm tw:text-dv-gray tw:absolute tw:-top-2.5 tw:ml-4 tw:bg-white tw:px-1 tw:rounded-md">
+      {{ t('shared.header.aenderungenMenu', { anzahlAenderungen: aenderungenCountSig() }) }}
+    </label>
+    <button
+      type="button"
+      class="tw:dv-btn-tranche"
+      data-testid="sb-gesuch-header-aenderungen-nav-menu"
+      [class.tw:dv-historized]="isAenderungRouteSig()"
+      [matMenuTriggerFor]="aenderungenMenu"
+    >
+      @if (currentAenderungSig(); as currentAenderung) {
+        <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
+          {{ t('shared.header.aenderungen.complete-states.' + (currentAenderung.completeState | lowercase)) }},
+          {{ currentAenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
+          {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+        </span>
+      }
+      <i class="material-symbols-rounded tw:ml-2">expand_more</i>
+    </button>
+  </div>
   <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
     <div class="tw:flex tw:flex-col tw:gap-2">
       @if (anederungen?.offen; as offeneAenderung) {
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+          {{ t('shared.header.aenderungen.open') }}
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+        </div>
         <a
-          [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', offeneAenderung.id]"
+          [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
           [queryParamsHandling]="'merge'"
           class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
           data-testid="aenderungen-nav-menu-item"
           mat-menu-item
-          [class.active]="trancheId === offeneAenderung.id && revisionSig() === offeneAenderung.revision"
+          [class.active]="trancheId === offeneAenderung.id"
         >
           <span>
-            {{
-              t('shared.header.aenderung.item', {
-                date: offeneAenderung.gueltigAb | date: 'dd.MM.yyyy',
-              })
-            }}
-            -
+            {{ offeneAenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
             {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+          </span>
+          <span class="tw:ml-2 tw:text-dv-gray italic">
+            {{ revisionSig() }}
           </span>
         </a>
       }
@@ -56,7 +58,7 @@
         </div>
         @for (aenderung of anederungen?.akzeptiert; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
             class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
@@ -65,13 +67,7 @@
             [class.active]="trancheId === aenderung.id"
           >
             <span>
-              {{
-                t('shared.header.aenderungen.item', {
-                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
-                  index: $index + 1,
-                })
-              }}
-              -
+              {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
               {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
             </span>
           </a>
@@ -85,7 +81,7 @@
         </div>
         @for (aenderung of anederungen?.abgelehnt; track $index) {
           <a
-            [routerLink]="['/', 'gesuch', gesuchId, 'aenderung', aenderung.id]"
+            [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
             class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
@@ -94,13 +90,7 @@
             [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
           >
             <span>
-              {{
-                t('shared.header.aenderungen.item', {
-                  date: aenderung.gueltigAb | date: 'dd.MM.yyyy',
-                  index: $index + 1,
-                })
-              }}
-              -
+              {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
               {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
             </span>
           </a>
