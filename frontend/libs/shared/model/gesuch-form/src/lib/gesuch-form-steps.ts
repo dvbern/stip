@@ -19,6 +19,7 @@ import {
   StepValidation,
 } from './shared-model-gesuch-form';
 
+// Ungrouped steps
 export const TRANCHE = {
   route: 'info',
   translationKey: 'shared.tranche.title',
@@ -33,13 +34,6 @@ export const DELEGIERUNGEN = {
   iconSymbolName: 'interpreter_mode',
 } satisfies GesuchFormStep;
 
-export const PERSON = {
-  route: 'person',
-  translationKey: 'shared.person.title',
-  titleTranslationKey: 'shared.person.title',
-  iconSymbolName: 'person',
-} satisfies GesuchFormStep;
-
 export const AUSBILDUNG = {
   route: 'ausbildung',
   translationKey: 'shared.ausbildung.title',
@@ -47,39 +41,21 @@ export const AUSBILDUNG = {
   iconSymbolName: 'school',
 } satisfies GesuchFormStep;
 
+// Group "Persönliche Angaben"
+export const PERSON = {
+  route: 'person',
+  translationKey: 'shared.person.title',
+  titleTranslationKey: 'shared.person.title',
+  iconSymbolName: 'person',
+  group: 'PERSOENLICHE_ANGABEN',
+} satisfies GesuchFormStep;
+
 export const LEBENSLAUF = {
   route: 'lebenslauf',
   translationKey: 'shared.lebenslauf.title',
   titleTranslationKey: 'shared.lebenslauf.title',
   iconSymbolName: 'news',
-} satisfies GesuchFormStep;
-
-export const FAMILIENSITUATION = {
-  route: 'familiensituation',
-  translationKey: 'shared.familiensituation.title',
-  titleTranslationKey: 'shared.familiensituation.title',
-  iconSymbolName: 'family_restroom',
-} satisfies GesuchFormStep;
-
-export const ELTERN = {
-  route: 'eltern',
-  translationKey: 'shared.eltern.title',
-  titleTranslationKey: 'shared.eltern.title',
-  iconSymbolName: 'escalator_warning',
-} satisfies GesuchFormStep;
-
-export const GESCHWISTER = {
-  route: 'geschwister',
-  translationKey: 'shared.geschwister.title',
-  titleTranslationKey: 'shared.geschwister.title',
-  iconSymbolName: 'group',
-} satisfies GesuchFormStep;
-
-export const PARTNER = {
-  route: 'partner',
-  translationKey: 'shared.partner.title',
-  titleTranslationKey: 'shared.partner.page.title',
-  iconSymbolName: 'favorite',
+  group: 'PERSOENLICHE_ANGABEN',
 } satisfies GesuchFormStep;
 
 export const KINDER = {
@@ -87,13 +63,15 @@ export const KINDER = {
   translationKey: 'shared.kinder.title',
   titleTranslationKey: 'shared.kinder.title',
   iconSymbolName: 'emoji_people',
+  group: 'PERSOENLICHE_ANGABEN',
 } satisfies GesuchFormStep;
 
-export const AUSZAHLUNG = {
-  route: 'auszahlungen',
-  translationKey: 'shared.auszahlung.title',
-  titleTranslationKey: 'shared.auszahlung.title',
-  iconSymbolName: 'payments',
+export const PARTNER = {
+  route: 'partner',
+  translationKey: 'shared.partner.title',
+  titleTranslationKey: 'shared.partner.page.title',
+  iconSymbolName: 'favorite',
+  group: 'PERSOENLICHE_ANGABEN',
 } satisfies GesuchFormStep;
 
 export const EINNAHMEN_KOSTEN = {
@@ -101,6 +79,7 @@ export const EINNAHMEN_KOSTEN = {
   translationKey: 'shared.einnahmenkosten.title',
   titleTranslationKey: 'shared.einnahmenkosten.page.title',
   iconSymbolName: 'call_missed_outgoing',
+  group: 'PERSOENLICHE_ANGABEN',
 } satisfies GesuchFormStep;
 
 export const EINNAHMEN_KOSTEN_PARTNER = {
@@ -108,6 +87,40 @@ export const EINNAHMEN_KOSTEN_PARTNER = {
   translationKey: 'shared.einnahmenkosten-partner.title',
   titleTranslationKey: 'shared.einnahmenkosten-partner.page.title',
   iconSymbolName: 'credit_card_heart',
+  group: 'PERSOENLICHE_ANGABEN',
+} satisfies GesuchFormStep;
+
+// Group "Familienangaben"
+export const FAMILIENSITUATION = {
+  route: 'familiensituation',
+  translationKey: 'shared.familiensituation.title',
+  titleTranslationKey: 'shared.familiensituation.title',
+  iconSymbolName: 'family_restroom',
+  group: 'FAMILIENANGABEN',
+} satisfies GesuchFormStep;
+
+export const ELTERN = {
+  route: 'eltern',
+  translationKey: 'shared.eltern.title',
+  titleTranslationKey: 'shared.eltern.title',
+  iconSymbolName: 'escalator_warning',
+  group: 'FAMILIENANGABEN',
+} satisfies GesuchFormStep;
+
+export const GESCHWISTER = {
+  route: 'geschwister',
+  translationKey: 'shared.geschwister.title',
+  titleTranslationKey: 'shared.geschwister.title',
+  iconSymbolName: 'group',
+  group: 'FAMILIENANGABEN',
+} satisfies GesuchFormStep;
+
+// Ungrouped steps
+export const AUSZAHLUNG = {
+  route: 'auszahlungen',
+  translationKey: 'shared.auszahlung.title',
+  titleTranslationKey: 'shared.auszahlung.title',
+  iconSymbolName: 'payments',
 } satisfies GesuchFormStep;
 
 export const DOKUMENTE = {
@@ -144,8 +157,7 @@ const steuerTypeIconMap: Record<SteuerdatenTyp, string> = {
   VATER: 'man',
 };
 
-// Dynamic steps
-
+// Dynamic steps in group "Familienangaben"
 // for GS and SB
 export const ELTERN_STEUERERKLAERUNG_ROUTE = 'eltern-steuererklaerung';
 const createElternSteuererklaerungStep = (
@@ -157,6 +169,7 @@ const createElternSteuererklaerungStep = (
     translationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
     titleTranslationKey: `shared.eltern-steuererklaerung.title.${steuerdatenTyp}`,
     iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
+    group: 'FAMILIENANGABEN',
   };
 };
 export const ELTERN_STEUERERKLAERUNG_FAMILIE =
@@ -185,6 +198,7 @@ const createElternSteuerStep = (
     translationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
     titleTranslationKey: `shared.eltern-steuerdaten.title.${steuerdatenTyp}`,
     iconSymbolName: steuerTypeIconMap[steuerdatenTyp],
+    group: 'FAMILIENANGABEN',
   };
 };
 export const ELTERN_STEUERDATEN_FAMILIE = createElternSteuerStep('FAMILIE');

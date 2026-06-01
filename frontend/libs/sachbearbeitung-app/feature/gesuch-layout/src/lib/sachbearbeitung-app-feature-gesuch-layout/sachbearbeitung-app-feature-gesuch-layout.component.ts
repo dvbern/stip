@@ -4,14 +4,17 @@ import {
   Component,
   DestroyRef,
   HostBinding,
+  Injector,
   Signal,
   computed,
   effect,
   inject,
+  runInInjectionContext,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { MatChip } from '@angular/material/chips';
 import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -23,22 +26,32 @@ import {
 } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter, map, startWith } from 'rxjs';
+import { format } from 'date-fns';
+import { filter, firstValueFrom, map, startWith } from 'rxjs';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { GesuchStore } from '@dv/sachbearbeitung-app/data-access/gesuch';
 import { SachbearbeitungAppUiGrundAuswahlDialogComponent } from '@dv/sachbearbeitung-app/ui/grund-auswahl-dialog';
-import { SharedTranslationKey } from '@dv/shared/assets/i18n';
+import {
+  SharedTranslationKey,
+  translatableShared,
+} from '@dv/shared/assets/i18n';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  SharedDataAccessGesuchEvents,
   selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
+import {
+  AenderungChangeState,
+  GesuchAenderungStore,
+} from '@dv/shared/data-access/gesuch-aenderung';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -47,6 +60,7 @@ import {
   InBearbeitungSbReason,
   getTrancheRoute,
 } from '@dv/shared/model/gesuch';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { getGesuchPermissions } from '@dv/shared/model/permission-state';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import {
@@ -59,8 +73,8 @@ import {
   darlehenStatusMapping,
 } from '@dv/shared/model/ui';
 import {
-  noActionRoutes,
-  noGesuchActiveRoutes,
+  hideAktionenRoutes,
+  notGesuchRoute,
 } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
@@ -71,8 +85,9 @@ import {
   StatusUebergaengeOptions,
   StatusUebergang,
 } from '@dv/shared/util/gesuch';
-import { TabNavItem } from '@dv/shared/util/navigation';
+import { TabNavItem, getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
+import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-layout',
@@ -84,10 +99,10 @@ import { isPending } from '@dv/shared/util/remote-data';
     MatMenuModule,
     MatTooltipModule,
     SharedPatternGesuchInfoBarComponent,
-    MatChip,
     SharedPatternGlobalHeaderPartsDirective,
     TranslocoDirective,
     SharedUiVersionenMenuComponent,
+    MatIconModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,7 +119,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
   private dialog = inject(MatDialog);
+  private injector = inject(Injector);
+  private globalNotificationStore = inject(GlobalNotificationStore);
   private gesuchStore = inject(GesuchStore);
+  private gesuchAenderungStore = inject(GesuchAenderungStore);
   private deploymentConfigSig = this.store.selectSignal(
     selectSharedDataAccessConfigsView,
   );
@@ -113,11 +131,9 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
 
-  berechnungIdSig = toSignal(
-    this.route.queryParamMap.pipe(
-      map((params) => params.get('berechnungId') ?? undefined),
-    ),
-  );
+  berechnungIdSig = getQueryParamValueSig(this.route, 'berechnungId');
+
+  originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -125,17 +141,15 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       startWith(this.router.routerState.snapshot.url),
     ),
   );
-
   isActionRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noActionRoutes.some(
+    return !hideAktionenRoutes.some(
       (route) => url?.includes(`/${route}/`) || this.berechnungIdSig(),
     );
   });
-
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
+    return !notGesuchRoute.some((route) => url?.includes(`/${route}/`));
   });
   isInfosRouteSig = computed(() => {
     const url = this.routeUrlSig();
@@ -180,10 +194,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
+    const originStep = this.originStepSig();
     const isIntitial = this.isInitialRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
-    // todo-review: @scph oder lieber mit trancheSetting und ngrx store?
     const trancheTyp = isIntitial
       ? 'initial'
       : isAenderung
@@ -194,17 +208,20 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       return [];
     }
 
+    const tab = decodeURI(originStep ?? '') || TRANCHE.route;
+    const tabSegments = tab.split('/').filter(Boolean);
+
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
-      route: ['/gesuch', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId },
+      route: ['/gesuch', ...tabSegments, gesuchId, trancheTyp, trancheId],
+      queryParams: { berechnungId, originStep },
       key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId },
+      queryParams: { berechnungId, originStep },
       key: 'verfuegung',
     };
 
@@ -257,7 +274,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const byType = darlehen.reduce(
       (acc, darlehen) => {
-        const statusKey = darlehenStatusMapping[darlehen.status!];
+        if (!darlehen.status) {
+          return acc;
+        }
+
+        const statusKey = darlehenStatusMapping[darlehen.status];
 
         if (!acc[statusKey]) {
           acc[statusKey] = [];
@@ -283,6 +304,59 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       isPending(this.gesuchHeaderStore.header()) ||
       isPending(this.gesuchStore.lastStatusChange())
     );
+  });
+  isAenderungUpdatingSig = computed(() => {
+    return (
+      this.isLoadingSig() ||
+      isPending(this.gesuchAenderungStore.cachedGesuchAenderung())
+    );
+  });
+  isExportingSig = signal(false);
+  private gesuchCacheSig = this.store.selectSignal(
+    selectSharedDataAccessGesuchCache,
+  );
+  aenderungActionsSig = computed(() => {
+    const gesuchId = this.gesuchIdSig();
+    const tranche = this.gesuchCacheSig().gesuch?.gesuchTrancheToWorkWith;
+    const hasValidationErrors =
+      !!this.einreichenStore.einreichenValidationResult().data?.validationErrors
+        ?.length;
+
+    const isVisible =
+      !!gesuchId &&
+      !!tranche &&
+      tranche.typ === 'AENDERUNG' &&
+      tranche.status === 'UEBERPRUEFEN';
+
+    return {
+      isVisible,
+      gesuchId,
+      trancheId: tranche?.id,
+      hasValidationErrors,
+    };
+  });
+
+  exportValuesSig = computed<ExportView | undefined>(() => {
+    const { gesuch, isEditingAenderung } = this.gesuchCacheSig();
+    const tranche = gesuch?.gesuchTrancheToWorkWith;
+    const periode = gesuch?.gesuchsperiode;
+
+    if (!gesuch || !tranche || !periode || !isDefined(isEditingAenderung)) {
+      return undefined;
+    }
+
+    return {
+      gesuch,
+      tranche,
+      isEditingAenderung,
+      sachbearbeiter: gesuch.bearbeiter,
+      periode: {
+        bezeichnungDe: periode.bezeichnungDe,
+        bezeichnungFr: periode.bezeichnungFr,
+        year: format(Date.parse(periode.gesuchsperiodeStart), 'yy'),
+        einreichefrist: periode.einreichefristNormal,
+      },
+    };
   });
 
   constructor() {
@@ -322,7 +396,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     } = this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state ?? {};
 
     if (!gesuchStatus) {
-      return {};
+      return {
+        list: [],
+        isNotEmpty: false,
+      };
     }
 
     const { permissions } = getGesuchPermissions(
@@ -361,6 +438,40 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     return {
       list,
       isNotEmpty: !!list?.length,
+    };
+  });
+
+  actionMenuOptionsSig = computed(() => {
+    const statusUebergaenge = this.statusUebergaengeOptionsSig();
+    const availableTrancheInteraction = this.availableTrancheInteractionSig();
+    const canExport = !!this.exportValuesSig();
+    const showGesuchActions = this.isGesuchRouteSig();
+    const showAenderungActions = !!this.isAenderungRouteSig();
+    const aenderungActions = this.aenderungActionsSig();
+
+    const hasAenderungMenuActions =
+      showAenderungActions &&
+      aenderungActions.isVisible &&
+      !!aenderungActions.gesuchId &&
+      !!aenderungActions.trancheId;
+    const hasGesuchMenuActions =
+      showGesuchActions &&
+      (availableTrancheInteraction || statusUebergaenge.isNotEmpty);
+    const hasWorkflowActions = hasAenderungMenuActions || hasGesuchMenuActions;
+    const isActionMenuDisabled =
+      (!hasWorkflowActions && !canExport) ||
+      this.isLoadingSig() ||
+      this.isExportingSig();
+
+    return {
+      statusUebergaenge,
+      availableTrancheInteraction,
+      canExport,
+      aenderungActions,
+      hasAenderungMenuActions,
+      hasGesuchMenuActions,
+      hasWorkflowActions,
+      isActionMenuDisabled,
     };
   });
 
@@ -548,6 +659,73 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       .afterClosed()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
+  }
+
+  async exportTranche() {
+    const exportValues = this.exportValuesSig();
+    if (!exportValues) {
+      return;
+    }
+
+    this.isExportingSig.set(true);
+
+    try {
+      const module = await import('@dv/shared/util-data-access/export-tranche');
+      const exportTrancheService = runInInjectionContext(this.injector, () =>
+        inject(module.SharedExportTrancheService),
+      );
+
+      await exportTrancheService.exportTranche(exportValues);
+    } catch {
+      this.globalNotificationStore.createNotification({
+        type: 'ERROR',
+        messageKey: translatableShared('shared.form.tranche.export.error'),
+      });
+    }
+
+    this.isExportingSig.set(false);
+  }
+
+  async changeAenderungState(
+    aenderungId: string,
+    target: AenderungChangeState,
+    gesuchId: string,
+  ) {
+    let comment = undefined;
+    if (target === 'ABGELEHNT') {
+      comment = (
+        await firstValueFrom(
+          SharedUiKommentarDialogComponent.open(this.dialog, {
+            titleKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.title',
+            messageKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.description',
+            labelKey: 'shared.dialog.gesuch-aenderung.ABGELEHNT.comment.label',
+            placeholderKey: 'shared.nothing',
+            confirmKey: 'shared.form.send',
+          }).afterClosed(),
+        )
+      )?.kommentar;
+
+      if (!comment) {
+        return;
+      }
+    }
+
+    this.gesuchAenderungStore.changeAenderungState$({
+      aenderungId,
+      target,
+      comment: comment ?? '',
+      gesuchId,
+      onSuccess: (trancheId) => {
+        const routesMap = {
+          AKZEPTIERT: ['gesuch', gesuchId, 'tranche', trancheId],
+          ABGELEHNT: ['/'],
+          MANUELLE_AENDERUNG: ['gesuch', gesuchId],
+        } satisfies Record<AenderungChangeState, unknown>;
+
+        this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+        this.router.navigate(routesMap[target]);
+      },
+    });
   }
 }
 

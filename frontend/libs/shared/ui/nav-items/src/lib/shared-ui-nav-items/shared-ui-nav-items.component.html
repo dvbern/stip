@@ -30,6 +30,7 @@
         <a
           [routerLink]="item.route"
           [queryParams]="item.queryParams"
+          [queryParamsHandling]="'merge'"
           class="tw:dv-nav-button tw:flex tw:items-center tw:px-2"
           [attr.data-testid]="item.testId"
           [class.isActive]="item.active"

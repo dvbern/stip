@@ -132,6 +132,11 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
    */
   invalidValueLabelKeySig = input<string>();
   /**
+   * If enabled, disabled options are removed from the dropdown list.
+   * The currently selected disabled option is still shown to keep legacy values visible.
+   */
+  hideDisabledOptionsSig = input<boolean>(false);
+  /**
    * Enables sorting of the values by their display value.
    */
   sortByValueSig = input<boolean>(true);
@@ -204,12 +209,23 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
   filteredValuesSig = computed(() => {
     const valueInput = this.autocompleteSearchValueChangesSig();
     const shouldSort = this.sortByValueSig();
+    const hideDisabledOptions = this.hideDisabledOptionsSig();
+    const selectedValueId =
+      this.autocompleteSelectValueChangesSig()?.id ?? this.latestValueSig();
     const displayValue = this.displayValueWithSig();
 
     let values = this.valuesSig().data;
 
     if (!values) {
       return [];
+    }
+
+    if (hideDisabledOptions) {
+      values = values.filter(
+        (value) =>
+          !value.disabled ||
+          (selectedValueId !== undefined && value.id === selectedValueId),
+      );
     }
 
     if (shouldSort) {
@@ -241,7 +257,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       return undefined;
     }
 
-    const previousValue = values.find((land) => land.id === zuvorHintValue);
+    const previousValue = values.find((value) => value.id === zuvorHintValue);
     if (!previousValue) {
       return undefined;
     }
