@@ -18,6 +18,8 @@
 package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
@@ -61,18 +63,21 @@ public abstract class GesuchTrancheMapper {
     FamiliensituationMapper familiensituationMapper;
 
     @ToDtoDefaultMapping
-    public abstract GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch, @Context GesuchTranche context);
 
-    public GesuchTrancheDto toDtoWithVersteckteEltern(GesuchTranche gesuch) {
-        return toDtoWithVersteckteEltern(gesuch, gesuch);
+    public GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch) {
+        return toDtoWithElevatedPermissions(gesuch, gesuch);
     }
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedByName = "afterMappingWithoutVersteckteEltern")
-    public abstract GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch, @Context GesuchTranche context);
+    @BeanMapping(qualifiedByName = "afterMappingWithoutElevatedPermissionFields")
+    public abstract GesuchTrancheDto toDtoWithoutElevatedPermissions(
+        GesuchTranche gesuchTranche,
+        @Context GesuchTranche context
+    );
 
-    public GesuchTrancheDto toDtoWithoutVersteckteEltern(GesuchTranche gesuch) {
-        return toDtoWithoutVersteckteEltern(gesuch, gesuch);
+    public GesuchTrancheDto toDtoWithoutElevatedPermissions(GesuchTranche gesuchTranche) {
+        return toDtoWithoutElevatedPermissions(gesuchTranche, gesuchTranche);
     }
 
     @ToDtoDefaultMapping
@@ -90,14 +95,14 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "centralMappingWithOverrideIncomingElternteile"
+        qualifiedByName = "centralMappingWithOverrideFieldsThatRequireElevatedPermissions"
     )
-    public abstract GesuchTranche partialUpdateOverrideIncomingVersteckteEltern(
+    public abstract GesuchTranche partialUpdateOverrideFieldsThatRequireElevatedPermissions(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    public abstract GesuchTranche partialUpdateAcceptIncomingVersteckteEltern(
+    public abstract GesuchTranche partialUpdateAcceptFieldsThatRequireElevatedPermissions(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
@@ -105,21 +110,28 @@ public abstract class GesuchTrancheMapper {
     public GesuchTranche partialUpdate(
         final GesuchTrancheUpdateDto gesuchUpdateDto,
         final GesuchTranche gesuch,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean requiresElevatedPermissions
     ) {
-        if (overrideIncomingVersteckteEltern) {
-            return partialUpdateOverrideIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+        if (requiresElevatedPermissions) {
+            return partialUpdateOverrideFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
         } else {
-            return partialUpdateAcceptIncomingVersteckteEltern(gesuchUpdateDto, gesuch);
+            return partialUpdateAcceptFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
         }
     }
 
-    @Named("afterMappingWithoutVersteckteEltern")
+    @Named("afterMappingWithoutElevatedPermissionFields")
     @AfterMapping
-    protected void afterMappingWithoutVersteckteEltern(
+    protected void afterMappingWithoutElevatedPermissionFields(
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
+        Stream.of(
+            gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
+            gesuchTrancheDto.getGesuchFormular().getEinnahmenKostenPartner()
+        )
+            .filter(Objects::nonNull)
+            .forEach(ek -> ek.setSteuern(null));
+
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
         final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
         if (eltern != null) {
@@ -137,13 +149,31 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Named("centralMappingWithOverrideIncomingElternteile")
+    @Named("centralMappingWithOverrideFieldsThatRequireElevatedPermissions")
     @BeforeMapping
-    protected void centralBeforeMappingWithOverrideIncomingElternteile(
+    protected void centralBeforeMappingWithOverrideFieldsThatRequireElevatedPermissions(
         final GesuchTrancheUpdateDto newTranche,
         final @MappingTarget GesuchTranche gesuchTranche
     ) {
+        beforeMappingOverrideSteuern(newTranche, gesuchTranche);
         beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+    }
+
+    protected void beforeMappingOverrideSteuern(
+        final GesuchTrancheUpdateDto newTranche,
+        final @MappingTarget GesuchTranche gesuchTranche
+    ) {
+        final var ekDto = newTranche.getGesuchFormular().getEinnahmenKosten();
+        final var ek = gesuchTranche.getGesuchFormular().getEinnahmenKosten();
+        if (Objects.nonNull(ekDto) && Objects.nonNull(ek)) {
+            ekDto.setSteuern(ek.getSteuern());
+        }
+
+        final var ekPartnerDto = newTranche.getGesuchFormular().getEinnahmenKostenPartner();
+        final var ekPartner = gesuchTranche.getGesuchFormular().getEinnahmenKostenPartner();
+        if (Objects.nonNull(ekPartnerDto) && Objects.nonNull(ekPartner)) {
+            ekPartnerDto.setSteuern(ekPartner.getSteuern());
+        }
     }
 
     protected void beforeMappingOverrideIncomingVersteckteEltern(

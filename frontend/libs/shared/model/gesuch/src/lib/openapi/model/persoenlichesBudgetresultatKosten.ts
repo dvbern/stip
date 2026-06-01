@@ -28,8 +28,7 @@ export interface PersoenlichesBudgetresultatKosten {
     fahrkostenPartner?: number;
     verpflegungPartner?: number;
     betreuungskostenKinder: number;
-    kantonsGemeindesteuern: number;
-    bundessteuern: number;
+    steuern: number;
     anteilLebenshaltungskosten: number;
 }
 

@@ -8,18 +8,22 @@ import {
   HostBinding,
   OnDestroy,
   ViewChild,
+  computed,
   inject,
 } from '@angular/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import {
+  BESCHWERDEN_ROUTE,
   INFOS_OPTIONS,
   INFOS_ROUTE,
   InfosOptions,
 } from '@dv/sachbearbeitung-app/model/infos';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
@@ -35,6 +39,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
     TranslocoDirective,
     SharedUiIconChipComponent,
     PortalModule,
+    MatTooltipModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-infos.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,9 +53,34 @@ export class SachbearbeitungAppFeatureInfosComponent
 
   private navigationStore = inject(NavigationStore);
   private store = inject(Store);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
+
+  isBeschwerdeHaengigSig = computed(() => {
+    const beschwerdeHaengig =
+      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.beschwerdeHaengig;
+    return beschwerdeHaengig;
+  });
 
   option?: InfosOptions;
-  infosOptions = INFOS_OPTIONS;
+  infosOptions = computed(() => {
+    const isBeschwerdeHaengig = this.isBeschwerdeHaengigSig();
+
+    const options = INFOS_OPTIONS.map((option) => {
+      if (option.route === BESCHWERDEN_ROUTE.route && isBeschwerdeHaengig) {
+        return {
+          ...option,
+          badge: {
+            type: 'warning',
+            titleKey: 'sachbearbeitung-app.infos.beschwerde.haengig.title',
+          },
+        };
+      }
+      return option;
+    });
+
+    return options;
+  });
+
   infosRoute = INFOS_ROUTE;
   navClicked$ = new EventEmitter();
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);

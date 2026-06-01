@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchNotizAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.notiz.service.GesuchNotizService;
@@ -41,6 +42,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIZ_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class GesuchNotizResourceImpl implements GesuchNotizResource {
     private final GesuchNotizService service;
     private final GesuchNotizAuthorizer authorizer;

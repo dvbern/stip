@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.benutzer.entity.Benutzer;
+import ch.dvbern.stip.api.benutzer.entity.CurrentBenutzerContext;
 import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.benutzer.entity.SachbearbeiterZuordnungStammdaten;
 import ch.dvbern.stip.api.benutzer.repo.BenutzerRepository;
@@ -49,14 +50,15 @@ import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.security.identity.SecurityIdentity;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.eclipse.microprofile.jwt.Claims;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
-@RequestScoped
+@ApplicationScoped
 @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class BenutzerService {
@@ -71,6 +73,7 @@ public class BenutzerService {
     private final SozialdienstBenutzerRepository sozialdienstBenutzerRepository;
     private final NotificationRepository notificationRepository;
     private final RolleService rolleService;
+    private final CurrentBenutzerContext currentBenutzerContext;
 
     private final SachbearbeiterZuordnungStammdatenRepository sachbearbeiterZuordnungStammdatenRepository;
     private final SecurityIdentity identity;
@@ -88,6 +91,15 @@ public class BenutzerService {
     }
 
     private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
+        final var benutzer = findBenutzerByKeycloakId(keycloakId);
+        if (Objects.isNull(benutzer)) {
+            throw new NotFoundException("Benutzer not Found");
+        }
+        return benutzer;
+    }
+
+    @Nullable
+    private Benutzer findBenutzerByKeycloakId(final String keycloakId) {
         final var benutzerOpt = benutzerRepository.findByKeycloakId(keycloakId);
         if (benutzerOpt.isPresent()) {
             return benutzerOpt.get();
@@ -99,11 +111,7 @@ public class BenutzerService {
         }
 
         final var sachbearbeiterBenutzerOpt = sachbearbeiterRepository.findByKeycloakId(keycloakId);
-        if (sachbearbeiterBenutzerOpt.isPresent()) {
-            return sachbearbeiterBenutzerOpt.get();
-        }
-
-        throw new NotFoundException("Benutzer not found");
+        return sachbearbeiterBenutzerOpt.orElse(null);
     }
 
     @SafeVarargs
@@ -128,6 +136,17 @@ public class BenutzerService {
         }
 
         return getBenutzerByKeycloakId(keycloakId);
+    }
+
+    @Nullable
+    @Transactional
+    public Benutzer getCurrentBenutzerNoThrow() {
+        final var keycloakId = jsonWebToken.getSubject();
+
+        if (keycloakId == null) {
+            return null;
+        }
+        return findBenutzerByKeycloakId(keycloakId);
     }
 
     @Transactional

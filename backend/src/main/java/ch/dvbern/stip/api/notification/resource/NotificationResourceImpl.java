@@ -21,6 +21,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.NotificationAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.NotificationDto;
@@ -35,6 +36,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIFICATION_READ;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@PopulateCurrentBenutzerContext
 public class NotificationResourceImpl implements NotificationResource {
     private final NotificationAuthorizer notificationAuthorizer;
     private final BenutzerService benutzerService;

@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.DarlehenAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.config.service.ConfigService;
@@ -63,6 +64,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class DarlehenResourceImpl implements DarlehenResource {
 
     private final DarlehenService darlehenService;

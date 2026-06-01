@@ -194,11 +194,16 @@
               <div class="tw:flex tw:gap-2 tw:font-bold">
                 <div>
                   {{
-                    t('item.title', {
-                      index: berechnungsIndex + 1,
-                      startDate: teilBerechnung.gueltigAb | date: 'dd.MM.yyyy',
-                      endDate: teilBerechnung.gueltigBis | date: 'dd.MM.yyyy',
-                    })
+                    berechnungen.berechnungen.length > 1
+                      ? t('itemWithIndex.title', {
+                          index: berechnungsIndex + 1,
+                          startDate: teilBerechnung.gueltigAb | date: 'MM.yyyy',
+                          endDate: teilBerechnung.gueltigBis | date: 'MM.yyyy',
+                        })
+                      : t('item.title', {
+                          startDate: teilBerechnung.gueltigAb | date: 'MM.yyyy',
+                          endDate: teilBerechnung.gueltigBis | date: 'MM.yyyy',
+                        })
                   }}
                 </div>
 

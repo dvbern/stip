@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.notification.service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -374,11 +375,11 @@ public class NotificationService {
             .orElseThrow(NotFoundException::new)
             .getGesuchFormular()
             .getPersonInAusbildung();
+        final var validTypes =
+            List.of(VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG, VerfuegungDokumentTyp.MANUELLE_NEGATIVE_VERFUEGUNG);
         final var mostRecentVerfuegungsDokument = verfuegung.getDokumente()
             .stream()
-            .filter(
-                d -> d.getTyp() == VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG
-            )
+            .filter(d -> validTypes.contains(d.getTyp()))
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt));
         final var sprache = pia.getKorrespondenzSprache();
 

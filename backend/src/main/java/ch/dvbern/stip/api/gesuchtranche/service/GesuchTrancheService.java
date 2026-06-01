@@ -388,7 +388,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithoutVersteckteEltern(newTranche);
+        return gesuchTrancheMapper.toDtoWithoutElevatedPermissions(newTranche);
     }
 
     @Transactional
@@ -413,7 +413,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche);
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(newTranche);
     }
 
     @Transactional
@@ -446,7 +446,7 @@ public class GesuchTrancheService {
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(newTranche.orElseThrow(NotFoundException::new));
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(newTranche.orElseThrow(NotFoundException::new));
     }
 
     @Transactional
@@ -545,7 +545,7 @@ public class GesuchTrancheService {
         notificationService
             .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung);
     }
 
     @Transactional
@@ -576,7 +576,7 @@ public class GesuchTrancheService {
         gesuchStatusService
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
-        return gesuchTrancheMapper.toDtoWithVersteckteEltern(aenderung);
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung);
     }
 
     private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {

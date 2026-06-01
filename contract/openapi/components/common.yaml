@@ -33,6 +33,7 @@ VerfuegungDokumentTyp:
     - BERECHNUNGSBLATT_FAMILIE
     - VERSENDETE_VERFUEGUNG
     - VERFUEGUNGSBRIEF
+    - MANUELLE_NEGATIVE_VERFUEGUNG
 CustomDokumentTyp:
   type: object
   required:

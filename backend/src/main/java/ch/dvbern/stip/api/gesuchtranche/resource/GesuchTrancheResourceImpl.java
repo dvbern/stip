@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.GesuchAuthorizer;
 import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheService;
@@ -51,6 +52,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_UPDATE;
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class GesuchTrancheResourceImpl implements GesuchTrancheResource {
     private final GesuchTrancheService gesuchTrancheService;
     private final GesuchService gesuchService;

@@ -21,7 +21,7 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class StatistikConstants {
-    public static final String STATISTIK_JOB_PREFIX = "statistik-xml-job-";
+    public static final String STATISTIK_JOB_NAME = "statistik-xml-job";
     public static final String STATISTIK_JOB_CONTEXT_MAP_YEAR_KEY = "year";
     public static final String STATISTIK_JOB_CONTEXT_MAP_USER_KEY = "user";
     public static final String STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY = "tenant";

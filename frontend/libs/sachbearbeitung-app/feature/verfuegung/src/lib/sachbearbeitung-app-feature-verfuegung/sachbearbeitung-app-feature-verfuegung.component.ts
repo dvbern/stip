@@ -109,9 +109,14 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
       ([trancheId, berechnungen]) => ({
         trancheId,
         options: berechnungen.map((b, index) => {
-          const startDate = format(b.gueltigAb, 'dd.MM.yyyy');
-          const endDate = format(b.gueltigBis, 'dd.MM.yyyy');
-          const option = createBerechnungOption(index, startDate, endDate);
+          const startDate = format(b.gueltigAb, 'MM.yyyy');
+          const endDate = format(b.gueltigBis, 'MM.yyyy');
+          const option = createBerechnungOption(
+            index,
+            berechnungen.length,
+            startDate,
+            endDate,
+          );
           return {
             ...option,
             active: this.route.isActive(option.route, {
