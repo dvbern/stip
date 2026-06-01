@@ -51,7 +51,7 @@ const baseFilterTabs = [
     roles: ['V0_Jurist'],
   },
   {
-    key: 'GESUCHE',
+    key: 'ALLE',
     route: ['gesuche'],
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
@@ -82,7 +82,7 @@ const baseFilterTabs = [
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle', 'V0_Jurist'],
   },
   {
-    key: 'PENDENTE_GESUCHE',
+    key: 'PENDENTE',
     route: ['gesuche'],
     class: 'tw:ml-auto',
     roles: ['V0_Sachbearbeiter', 'V0_Freigabestelle'],

@@ -4,7 +4,6 @@ import {
   GesuchTrancheStatus,
   GesuchTrancheTyp,
   Gesuchstatus,
-  GetFreiwilligDarlehenSbQueryType,
   GetGesucheSBQueryType,
   SbDashboardGesuch,
 } from '@dv/shared/model/gesuch';
@@ -54,60 +53,35 @@ export type DashboardFormFields =
   | DashboardFormSimpleFields
   | DashboardFormStartEndFields;
 
-export type BearbeitbarParam = 'TRUE' | 'FALSE';
-export type ScopeParam = 'ALLE' | 'MEINE';
+export type BooleanParam = 'TRUE' | 'FALSE';
 export type DashboardQuery =
   | keyof typeof GetGesucheSBQueryType
-  | keyof typeof GetFreiwilligDarlehenSbQueryType;
+  | 'AENDERUNGEN'
+  | 'DARLEHEN'
+  | 'FEHLGESCHLAGENE_ZAHLUNGEN'
+  | 'JURISTISCHE_ABKLAERUNG'
+  | 'ABKLAERUNG_DURCH_RECHSTABTEILUNG';
 
 export type FilterConfig = {
-  scope: ScopeParam;
-  bearbeitbar: BearbeitbarParam[];
+  queryTyp?: DashboardQuery;
+  bearbeitbar: BooleanParam[];
   filterTab: FilterTabParam[];
 };
 
-// prettier-ignore
-export const dashboardFilterQueryWithParamsMap: Record<DashboardQuery, FilterConfig> = {
-  ALLE_DARLEHEN                         : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DARLEHEN'] },
-  MEINE_DARLEHEN                        : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DARLEHEN'] },
-  ALLE_BEARBEITBAR                      : { scope: 'ALLE',  bearbeitbar: ['TRUE'],  filterTab: ['GESUCHE', 'DARLEHEN', 'AENDERUNGEN', 'FEHLGESCHLAGENE_ZAHLUNGEN']},
-  MEINE_BEARBEITBAR                     : { scope: 'MEINE', bearbeitbar: ['TRUE'],  filterTab: ['GESUCHE', 'DARLEHEN', 'AENDERUNGEN', 'FEHLGESCHLAGENE_ZAHLUNGEN'] },
-  ALLE_GESUCHE                          : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['GESUCHE', 'AENDERUNGEN', 'FEHLGESCHLAGENE_ZAHLUNGEN'] },
-  MEINE_GESUCHE                         : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['GESUCHE', 'AENDERUNGEN', 'FEHLGESCHLAGENE_ZAHLUNGEN'] },
-  ALLE_PENDENTE_GESUCHE                 : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['PENDENTE_GESUCHE'] },
-  MEINE_PENDENTE_GESUCHE                : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['PENDENTE_GESUCHE'] },
-  ALLE_JURISTISCHE_ABKLAERUNG           : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['JURISTISCHE_ABKLAERUNG'] },
-  ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['ABKLAERUNG_DURCH_RECHSTABTEILUNG'] },
-  ALLE_DRUCKBAR_VERFUEGUNGEN            : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
-  MEINE_DRUCKBAR_VERFUEGUNGEN           : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_VERFUEGUNGEN'] },
-  ALLE_DRUCKBAR_DATENSCHUTZBRIEFE       : { scope: 'ALLE',  bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
-  MEINE_DRUCKBAR_DATENSCHUTZBRIEFE      : { scope: 'MEINE', bearbeitbar: ['FALSE'], filterTab: ['DRUCKBAR_DATENSCHUTZBRIEFE'] },
-};
-
-export const dashboardQueries = Object.keys(
-  dashboardFilterQueryWithParamsMap,
-) as Array<keyof typeof dashboardFilterQueryWithParamsMap>;
-
-export type QueryTypeSuffix<T extends string> =
-  T extends `${ScopeParam}_${infer Suffix}` ? Suffix : never;
-
-export type FilterTabParam =
-  | QueryTypeSuffix<DashboardQuery>
-  | 'AENDERUNGEN'
-  | 'FEHLGESCHLAGENE_ZAHLUNGEN';
+export type FilterTabParam = DashboardQuery;
 
 export type ToggleConfig = { show: boolean; value: boolean };
 
 export type DashFilterQueryParams = {
   filterTab: FilterTabParam;
-  zugewiesen: ScopeParam;
-  bearbeitbar: BearbeitbarParam;
+  zugewiesen: BooleanParam;
+  bearbeitbar: BooleanParam;
 };
 
 export type NullableDashFilterQueryParams = {
   filterTab?: FilterTabParam | null;
-  scope?: ScopeParam | null;
-  bearbeitbar?: BearbeitbarParam | null;
+  zugewiesen?: BooleanParam | null;
+  bearbeitbar?: BooleanParam | null;
 };
 
 export interface DashboardFilterTabItem extends TabNavItem {
@@ -116,11 +90,7 @@ export interface DashboardFilterTabItem extends TabNavItem {
 }
 
 export const isBearbeitbarEnabledTab = (filterTab: FilterTabParam): boolean => {
-  const bearbeitbarTabs: FilterTabParam[] = [
-    'GESUCHE',
-    'AENDERUNGEN',
-    'DARLEHEN',
-  ];
+  const bearbeitbarTabs: FilterTabParam[] = ['ALLE', 'AENDERUNGEN', 'DARLEHEN'];
   return bearbeitbarTabs.includes(filterTab);
 };
 
@@ -135,40 +105,24 @@ export const isAlleOnlyTab = (filterTab: FilterTabParam): boolean => {
   ].includes(filterTab);
 };
 
-export const getQueryFromParams = (
-  scope: ScopeParam,
-  bearbeitbar: BearbeitbarParam,
-  filterTab: FilterTabParam,
-): DashboardQuery => {
-  let bearbeitbarValue = bearbeitbar;
-
-  // force bearbeitbar to FALSE if the filterTab is not bearbeitbar-enabled to avoid invalid query combinations
-  // this does not reset the query param!
-  if (!isBearbeitbarEnabledTab(filterTab)) {
-    bearbeitbarValue = 'FALSE';
+export const getGesucheSBQueryType = (
+  dashboardQuery: DashboardQuery,
+): GetGesucheSBQueryType => {
+  switch (dashboardQuery) {
+    case 'AENDERUNGEN':
+    case 'ABKLAERUNG_DURCH_RECHSTABTEILUNG':
+    case 'JURISTISCHE_ABKLAERUNG':
+    case 'DARLEHEN':
+    case 'FEHLGESCHLAGENE_ZAHLUNGEN':
+      return 'ALLE';
+    default:
+      return dashboardQuery;
   }
-
-  const query = dashboardQueries.find((q) => {
-    const config = dashboardFilterQueryWithParamsMap[q];
-    return (
-      config.filterTab.includes(filterTab) &&
-      config.bearbeitbar.includes(bearbeitbarValue) &&
-      config.scope === scope
-    );
-  });
-
-  if (!query) {
-    throw new Error(
-      `No matching query found for scope=${scope}, filterTab=${filterTab}, bearbeitbar=${bearbeitbar}`,
-    );
-  }
-
-  return query;
 };
 
 export const getControlVisibility = (
-  zugewiesen: ScopeParam,
-  bearbeitbar: BearbeitbarParam,
+  zugewiesen: BooleanParam,
+  bearbeitbar: BooleanParam,
   filterTab: FilterTabParam,
 ): {
   zugewiesenConfig: ToggleConfig;
@@ -179,7 +133,7 @@ export const getControlVisibility = (
   return {
     zugewiesenConfig: {
       show: !isAlleOnlyTab(filterTab),
-      value: zugewiesen === 'MEINE',
+      value: zugewiesen === 'TRUE',
     },
     bearbeitbarConfig: {
       show: isBearbeitbarEnabled,
@@ -201,29 +155,24 @@ export const isDarlehenQuery = (
 };
 
 export const SachbearbeiterDefaultQuery: DashFilterQueryParams = {
-  filterTab: 'GESUCHE',
-  zugewiesen: 'MEINE',
+  filterTab: 'ALLE',
+  zugewiesen: 'TRUE',
   bearbeitbar: 'TRUE',
 };
 
 export const JuristDefautlQuery: DashFilterQueryParams = {
   filterTab: 'JURISTISCHE_ABKLAERUNG',
-  zugewiesen: 'ALLE',
+  zugewiesen: 'FALSE',
   bearbeitbar: 'FALSE',
 };
 
 export const getDefaultQueryForRole = (
   roles: Partial<Record<AvailableBenutzerRole, true>>,
 ): DashFilterQueryParams => {
-  const isSachbearbeiter = roles.V0_Sachbearbeiter;
   const isJurist = roles.V0_Jurist;
 
   if (isJurist) {
     return JuristDefautlQuery;
-  }
-
-  if (isSachbearbeiter) {
-    return SachbearbeiterDefaultQuery;
   }
 
   return SachbearbeiterDefaultQuery;

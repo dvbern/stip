@@ -294,6 +294,8 @@ paths:
             $ref: './components/common.yaml#/GetGesucheSBQueryType'
           in: path
           required: true
+        - $ref: './components/parameters.yaml#/bearbeitbar'
+        - $ref: './components/parameters.yaml#/zugewiesen'
         - $ref: './components/parameters.yaml#/fallNummer'
         - $ref: './components/parameters.yaml#/piaNachname'
         - $ref: './components/parameters.yaml#/piaVorname'
@@ -1453,10 +1455,15 @@ components:
       required:
         - akzeptiert
         - abgelehnt
+        - manuell
         - canAenderungEinreichen
       properties:
         offen:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
+        manuell:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
         akzeptiert:
           type: array
           items:

@@ -126,7 +126,15 @@ public class GesuchTrancheService {
         final var offeneAenderung =
             gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
         final var akzeptierteAenderungs = gesuch.getAenderungs()
-            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT)
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT
+            )
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
+        final var manuelleAenderungs = gesuch.getAenderungs()
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.MANUELLE_AENDERUNG
+            )
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
         final var abgelehnteAenderungs =
@@ -136,6 +144,7 @@ public class GesuchTrancheService {
                 .toList();
         return new GesuchAenderungsDto()
             .offen(offeneAenderung)
+            .manuell(manuelleAenderungs)
             .akzeptiert(akzeptierteAenderungs)
             .abgelehnt(abgelehnteAenderungs)
             .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));

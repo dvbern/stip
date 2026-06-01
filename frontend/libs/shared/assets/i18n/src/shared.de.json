@@ -70,10 +70,12 @@
 
   "shared.header.aenderungenMenu": "{ anzahlAenderungen, plural, one {Änderung} other {Änderungen}}",
   "shared.header.aenderungen.complete-states.open": "Offen",
+  "shared.header.aenderungen.complete-states.manual": "Manuell akzeptiert",
   "shared.header.aenderungen.complete-states.completed": "Akzeptiert",
   "shared.header.aenderungen.complete-states.rejected": "Abgelehnt",
   "shared.header.aenderungen.open": "Offene Änderung",
   "shared.header.aenderungen.completed": "Akzeptierte Änderungen",
+  "shared.header.aenderungen.manuell": "Manuelle Änderungen",
   "shared.header.aenderungen.rejected": "Abgelehnte Änderungen",
 
   "shared.file.upload": "Dateien Durchsuchen",
@@ -352,7 +354,7 @@
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Abgelehnt",
 
   "shared.gesuch.status.unterbruchAnfrage": "Anfrage Ausbildungsunterbruch",
-  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "In Überprüfung",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Manuelle Änderung",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "Bearbeitung durch Gesuchsteller",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "In Überprüfung",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Akzeptiert",

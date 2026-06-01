@@ -47,6 +47,7 @@ export class SharedUiAenderungenMenuComponent {
     const trancheId = this.trancheIdSig();
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
 
     const allAenderungen = [
@@ -56,6 +57,10 @@ export class SharedUiAenderungenMenuComponent {
             completeState: 'open' as const,
           }))
         : []),
+      ...(manuelleAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'manual' as const,
+      })) ?? []),
       ...(akzeptierteAenderungen?.map((a) => ({
         ...a,
         completeState: 'completed' as const,

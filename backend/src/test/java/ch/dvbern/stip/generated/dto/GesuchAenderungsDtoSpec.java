@@ -32,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   GesuchAenderungsDtoSpec.JSON_PROPERTY_OFFEN,
+  GesuchAenderungsDtoSpec.JSON_PROPERTY_MANUELL,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_AKZEPTIERT,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_ABGELEHNT,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN
@@ -41,6 +42,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchAenderungsDtoSpec {
   public static final String JSON_PROPERTY_OFFEN = "offen";
   private GesuchTrancheSlimDtoSpec offen;
+
+  public static final String JSON_PROPERTY_MANUELL = "manuell";
+  private List<GesuchTrancheSlimDtoSpec> manuell;
 
   public static final String JSON_PROPERTY_AKZEPTIERT = "akzeptiert";
   private List<GesuchTrancheSlimDtoSpec> akzeptiert;
@@ -77,6 +81,40 @@ public class GesuchAenderungsDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setOffen(GesuchTrancheSlimDtoSpec offen) {
     this.offen = offen;
+  }
+
+
+  public GesuchAenderungsDtoSpec manuell(List<GesuchTrancheSlimDtoSpec> manuell) {
+    
+    this.manuell = manuell;
+    return this;
+  }
+
+  public GesuchAenderungsDtoSpec addManuellItem(GesuchTrancheSlimDtoSpec manuellItem) {
+    if (this.manuell == null) {
+      this.manuell = new ArrayList<>();
+    }
+    this.manuell.add(manuellItem);
+    return this;
+  }
+
+   /**
+   * Get manuell
+   * @return manuell
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_MANUELL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<GesuchTrancheSlimDtoSpec> getManuell() {
+    return manuell;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MANUELL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setManuell(List<GesuchTrancheSlimDtoSpec> manuell) {
+    this.manuell = manuell;
   }
 
 
@@ -183,6 +221,7 @@ public class GesuchAenderungsDtoSpec {
     }
     GesuchAenderungsDtoSpec gesuchAenderungs = (GesuchAenderungsDtoSpec) o;
     return Objects.equals(this.offen, gesuchAenderungs.offen) &&
+        Objects.equals(this.manuell, gesuchAenderungs.manuell) &&
         Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen);
@@ -190,7 +229,7 @@ public class GesuchAenderungsDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(offen, akzeptiert, abgelehnt, canAenderungEinreichen);
+    return Objects.hash(offen, manuell, akzeptiert, abgelehnt, canAenderungEinreichen);
   }
 
   @Override
@@ -198,6 +237,7 @@ public class GesuchAenderungsDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchAenderungsDtoSpec {\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
+    sb.append("    manuell: ").append(toIndentedString(manuell)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");

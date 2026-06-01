@@ -19,9 +19,12 @@ package ch.dvbern.stip.api.gesuch.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.benutzer.type.RoleFeature;
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.QGesuch;
@@ -31,7 +34,9 @@ import ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.gesuchformular.entity.QGesuchFormular;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.entity.QGesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.zuordnung.entity.QZuordnung;
@@ -50,24 +55,22 @@ public class SbDashboardQueryBuilder {
 
     private final GesuchRepository gesuchRepository;
     private final BenutzerService benutzerService;
+    private final GesuchTrancheRepository gesuchTrancheRepository;
 
-    public JPAQuery<Gesuch> baseQuery(final GetGesucheSBQueryType queryType, final GesuchTrancheTyp trancheType) {
-        final var meId = benutzerService.getCurrentBenutzer().getId();
-
+    public JPAQuery<Gesuch> baseGesuchQuery(final GetGesucheSBQueryType queryType) {
         final var query = switch (queryType) {
-            case ALLE_BEARBEITBAR -> gesuchRepository.getFindAlleBearbeitbarQuery(trancheType);
-            case MEINE_BEARBEITBAR -> gesuchRepository.getFindMeineBearbeitbarQuery(meId, trancheType);
-            case ALLE_PENDENTE_GESUCHE -> gesuchRepository.getFindAllePendenteQuery();
-            case MEINE_PENDENTE_GESUCHE -> gesuchRepository.getFindAlleMeinePendenteQuery(meId);
-            case ALLE_JURISTISCHE_ABKLAERUNG -> gesuchRepository.getFindAlleJurBearbeitungQuery();
-            case ALLE_ABKLAERUNG_DURCH_RECHSTABTEILUNG -> gesuchRepository
-                .getFindAlleAbklaerungDurchRechstabteilungQuery();
-            case MEINE_GESUCHE -> gesuchRepository.getFindMeineQuery(meId);
-            case ALLE_GESUCHE -> gesuchRepository.getFindAlleQuery();
-            case ALLE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleWithDruckbareVerfuegung();
-            case MEINE_DRUCKBAR_VERFUEGUNGEN -> gesuchRepository.getAlleMeineWithDruckbareVerfuegung(meId);
-            case ALLE_DRUCKBAR_DATENSCHUTZBRIEFE -> gesuchRepository.getAlleWithDruckbarerDatenschutzbrief();
-            case MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> gesuchRepository.getAlleMeineWithDruckbarerDatenschutzbrief(meId);
+            case ALLE -> gesuchRepository.getFindAlleQuery();
+            case DRUCKBAR_VERFUEGUNGEN -> {
+                final var baseQuery = gesuchRepository.getFindAlleQuery();
+                gesuchRepository.addStatusFilter(baseQuery, Gesuchstatus.VERFUEGUNG_DRUCKBEREIT);
+                yield baseQuery;
+            }
+            case DRUCKBAR_DATENSCHUTZBRIEFE -> {
+                final var baseQuery = gesuchRepository.getFindAlleQuery();
+                gesuchRepository.addStatusFilter(baseQuery, Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT);
+                yield baseQuery;
+            }
+            case PENDENTE -> gesuchRepository.getFindAllePendenteQuery();
         };
 
         final var trancheSub = new QGesuchTranche("sub2");
@@ -82,18 +85,18 @@ public class SbDashboardQueryBuilder {
                                 .where(trancheSub.gesuch.id.eq(gesuch.id))
                         )
                     )
-                    .or(
-                        trancheSub.gesuch.id.eq(gesuch.id).and(trancheSub.typ.eq(GesuchTrancheTyp.AENDERUNG))
-                    )
+                    .and(trancheSub.typ.eq(GesuchTrancheTyp.TRANCHE))
             );
 
-        if (trancheType == GesuchTrancheTyp.AENDERUNG) {
-            query.where(gesuch.aenderungZuUeberpruefen.id.eq(tranche.id));
-        } else if (trancheType == GesuchTrancheTyp.TRANCHE) {
-            joinSubselect.where(trancheSub.typ.eq(GesuchTrancheTyp.TRANCHE));
-        }
-
         query.join(gesuch.gesuchTranchen, tranche).where(tranche.id.in(joinSubselect));
+
+        joinFormular(query);
+        return query;
+    }
+
+    public JPAQuery<GesuchTranche> baseAenderungQuery() {
+        final var query = gesuchTrancheRepository.getFindAlleAenderungsQuery()
+            .join(tranche.gesuch, gesuch);
 
         joinFormular(query);
         return query.where(
@@ -102,44 +105,90 @@ public class SbDashboardQueryBuilder {
         );
     }
 
-    public void fallNummer(final JPAQuery<Gesuch> query, final String fallNummer) {
+    public void onlyBearbeitbarGesuchs(JPAQuery<Gesuch> query) {
+        gesuchRepository.addStatusFilter(
+            query,
+            benutzerService.getSetByUserRole(
+                RoleFeature.forFreigabe(Gesuchstatus.IN_FREIGABE),
+                RoleFeature.forSachbearbeiter(
+                    Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
+                    Gesuchstatus.IN_BEARBEITUNG_SB,
+                    Gesuchstatus.ANSPRUCH_MANUELL_PRUEFEN,
+                    Gesuchstatus.NICHT_BEITRAGSBERECHTIGT,
+                    Gesuchstatus.WARTEN_AUF_UNTERSCHRIFTENBLATT,
+                    Gesuchstatus.DATENSCHUTZBRIEF_DRUCKBEREIT,
+                    Gesuchstatus.DATENSCHUTZBRIEF_VERSANDBEREIT,
+                    Gesuchstatus.VERFUEGUNG_DRUCKBEREIT,
+                    Gesuchstatus.VERFUEGUNG_VERSENDET,
+                    Gesuchstatus.NICHT_ANSPRUCHSBERECHTIGT,
+                    Gesuchstatus.VERFUEGUNG_VERSANDBEREIT
+                )
+            ).toArray(new Gesuchstatus[0])
+        );
+    }
+
+    public void onlyBearbeitbarAenderungs(JPAQuery<GesuchTranche> query) {
+        query.where(
+            tranche.status.in(GesuchTrancheStatus.UEBERPRUEFEN, GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
+        );
+    }
+
+    public void onlyCurrentBenutzer(final JPAQuery<? extends AbstractEntity> query, final UUID benutzerId) {
+        final var ausbildung = QAusbildung.ausbildung;
+        final var zuordnung = QZuordnung.zuordnung;
+
+        query.join(ausbildung)
+            .on(gesuch.ausbildung.id.eq(ausbildung.id))
+            .join(zuordnung)
+            .on(ausbildung.fall.id.eq(zuordnung.fall.id))
+            .where(zuordnung.sachbearbeiter.id.eq(benutzerId));
+    }
+
+    public void fallNummer(final JPAQuery<? extends AbstractEntity> query, final String fallNummer) {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.where(ausbildung.fall.fallNummer.containsIgnoreCase(fallNummer));
     }
 
-    public void piaNachname(final JPAQuery<Gesuch> query, final String nachname) {
+    public void piaNachname(final JPAQuery<? extends AbstractEntity> query, final String nachname) {
         joinFormular(query);
         query.where(formular.personInAusbildung.nachname.containsIgnoreCase(nachname));
     }
 
-    public void piaVorname(final JPAQuery<Gesuch> query, final String vorname) {
+    public void piaVorname(final JPAQuery<? extends AbstractEntity> query, final String vorname) {
         joinFormular(query);
         query.where(formular.personInAusbildung.vorname.containsIgnoreCase(vorname));
     }
 
-    void joinFormular(final JPAQuery<Gesuch> query) {
+    private void joinFormular(final JPAQuery<? extends AbstractEntity> query) {
         // This join is required, because QueryDSL doesn't init the path to PiA
-        query.join(formular).on(tranche.gesuchFormular.id.eq(formular.id));
+        query
+            .join(formular)
+            .on(tranche.gesuchFormular.id.eq(formular.id))
+            .where(
+                formular.personInAusbildung.vorname.isNotNull()
+                    .and(formular.personInAusbildung.nachname.isNotNull())
+            );
     }
 
-    void joinGesuch(final JPAQuery<Gesuch> query) {
+    private void joinGesuch(final JPAQuery<? extends AbstractEntity> query) {
         query.join(gesuch).on(tranche.gesuch.id.eq(gesuch.id));
     }
 
-    public void piaGeburtsdatum(final JPAQuery<Gesuch> query, final LocalDate geburtsdatum) {
+    public void piaGeburtsdatum(final JPAQuery<? extends AbstractEntity> query, final LocalDate geburtsdatum) {
         joinFormular(query);
         query.where(formular.personInAusbildung.geburtsdatum.eq(geburtsdatum));
     }
 
-    public void status(final JPAQuery<Gesuch> query, final GesuchTrancheTyp typ, final String status) {
-        switch (typ) {
-            case TRANCHE -> query.where(tranche.gesuch.gesuchStatus.eq(Gesuchstatus.valueOf(status)));
-            case AENDERUNG -> query.where(tranche.status.eq(GesuchTrancheStatus.valueOf(status)));
-        }
+    public void gesuchStatus(final JPAQuery<Gesuch> query, final String status) {
+        query.where(tranche.gesuch.gesuchStatus.eq(Gesuchstatus.valueOf(status)));
     }
 
-    public void bearbeiter(final JPAQuery<Gesuch> query, final String bearbeiter) {
+    public void trancheStatus(final JPAQuery<GesuchTranche> query, final String status) {
+        query.where(tranche.status.eq(GesuchTrancheStatus.valueOf(status)));
+    }
+
+    public void bearbeiter(final JPAQuery<? extends AbstractEntity> query, final String bearbeiter) {
         joinGesuch(query);
         query.join(ausbildung).on(gesuch.ausbildung.id.eq(ausbildung.id));
         query.join(QZuordnung.zuordnung).on(ausbildung.fall.sachbearbeiterZuordnung.id.eq(QZuordnung.zuordnung.id));
@@ -150,7 +199,7 @@ public class SbDashboardQueryBuilder {
     }
 
     public void letzteAktivitaet(
-        final JPAQuery<Gesuch> query,
+        final JPAQuery<? extends AbstractEntity> query,
         final LocalDate from,
         final LocalDate to
     ) {
@@ -158,7 +207,7 @@ public class SbDashboardQueryBuilder {
     }
 
     public void orderBy(
-        final JPAQuery<Gesuch> query,
+        final JPAQuery<? extends AbstractEntity> query,
         final SbGesucheDashboardColumn column,
         final SortOrder sortOrder
     ) {
@@ -195,15 +244,15 @@ public class SbDashboardQueryBuilder {
         query.orderBy(orderSpecifier);
     }
 
-    public void defaultOrder(final JPAQuery<Gesuch> query) {
+    public void defaultOrder(final JPAQuery<? extends AbstractEntity> query) {
         query.orderBy(tranche.gesuch.timestampMutiert.desc());
     }
 
-    public JPAQuery<Long> getCountQuery(final JPAQuery<Gesuch> query) {
+    public JPAQuery<Long> getCountQuery(final JPAQuery<? extends AbstractEntity> query) {
         return query.clone().select(tranche.count());
     }
 
-    public void paginate(final JPAQuery<Gesuch> query, final int page, final int pageSize) {
+    public void paginate(final JPAQuery<? extends AbstractEntity> query, final int page, final int pageSize) {
         query.offset((long) pageSize * page).limit(pageSize);
     }
 }
