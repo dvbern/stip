@@ -257,7 +257,7 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
       return undefined;
     }
 
-    const previousValue = values.find((land) => land.id === zuvorHintValue);
+    const previousValue = values.find((value) => value.id === zuvorHintValue);
     if (!previousValue) {
       return undefined;
     }
