@@ -54,14 +54,6 @@ const mockLaender = success(
 // Mock LandLookupService
 const mockLandLookupService = {
   getCachedLandLookup: vitest.fn().mockReturnValue(signal(mockLaender)),
-
-  isValidLandEntry(land: Land | undefined): boolean {
-    if (!land) {
-      return false;
-    }
-
-    return land.eintragGueltig;
-  },
 };
 
 export function provideLandLookupMock() {
