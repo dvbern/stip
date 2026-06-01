@@ -35,7 +35,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     MatSortModule,
     MatTooltipModule,
   ],
-  selector: 'dv-gesuch-info-verwaltung',
   templateUrl: './verwaltung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BeschwerdeStore, paginatorTranslationProvider()],
