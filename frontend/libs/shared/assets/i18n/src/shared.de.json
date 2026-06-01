@@ -955,7 +955,7 @@
   "shared.form.einnahmenkosten.vermoegen.label": "Vermögen",
   "shared.form.einnahmenkosten.veranlagungsStatus.label": "Status der Veranlagung",
   "shared.form.einnahmenkosten.steuerjahr.label": "Steuerjahr",
-  "shared.form.einnahmenkosten.steuern.label": "Steuern Kanton/Gemeinde",
+  "shared.form.einnahmenkosten.steuern.label": "Steuern",
   "shared.form.einnahmenkosten.file.UNTERHALTSBEITRAEGE": "Unterhaltsbeiträge",
   "shared.form.einnahmenkosten.file.UNTERHALTSBEITRAEGE_DESCRIPTION": "Bank- oder Postbeleg über die aktuell bezahlten Unterhaltsbeitraege",
   "shared.form.einnahmenkosten.file.EINNAHMEN_BGSA": "Beleg Einnahmen BGSA",

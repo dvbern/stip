@@ -167,8 +167,8 @@ public class GesuchBereitFuerBearbeitungMissingDatenschutzbriefTest {
     @Test
     @TestAsSachbearbeiter
     @Order(9)
-    void assertGesuchstatusStillGoesToDatenschutzbriefDruckbereit() {
-        assertGesuchStatus(GesuchstatusDtoSpec.DATENSCHUTZBRIEF_DRUCKBEREIT);
+    void assertGesuchstatusGoesToDatenschutzbriefDruckbereit() {
+        assertGesuchStatus(GesuchstatusDtoSpec.BEREIT_FUER_BEARBEITUNG);
     }
 
     @Test

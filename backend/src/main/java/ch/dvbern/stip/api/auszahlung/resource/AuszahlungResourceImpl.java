@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungService;
 import ch.dvbern.stip.api.common.authorization.AuszahlungAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.generated.api.AuszahlungResource;
@@ -33,6 +34,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
+@PopulateCurrentBenutzerContext
 public class AuszahlungResourceImpl implements AuszahlungResource {
     private final AuszahlungAuthorizer auszahlungAuthorizer;
     private final AuszahlungService auszahlungService;

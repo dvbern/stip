@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.SozialdienstAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.sozialdienstbenutzer.service.SozialdienstBenutzerService;
@@ -49,6 +50,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SOZIALDIENST_UPDATE
 @RequestScoped
 @RequiredArgsConstructor
 @Validated
+@PopulateCurrentBenutzerContext
 public class SozialdienstResourceImpl implements SozialdienstResource {
     private final SozialdienstService sozialdienstService;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;

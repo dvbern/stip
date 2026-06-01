@@ -276,7 +276,7 @@ public class GesuchService {
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean requiresElevatedPermissions
     ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         var trancheToUpdate = gesuch
@@ -302,7 +302,7 @@ public class GesuchService {
         updateGesuchTranche(
             gesuchUpdateDto.getGesuchTrancheToWorkWith(),
             trancheToUpdate,
-            overrideIncomingVersteckteEltern
+            requiresElevatedPermissions
         );
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
@@ -317,9 +317,9 @@ public class GesuchService {
     private void updateGesuchTranche(
         final GesuchTrancheUpdateDto trancheUpdate,
         final GesuchTranche trancheToUpdate,
-        final boolean overrideIncomingVersteckteEltern
+        final boolean requiresElevatedPermissions
     ) {
-        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, overrideIncomingVersteckteEltern);
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, requiresElevatedPermissions);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);
@@ -661,11 +661,13 @@ public class GesuchService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         var changeEvent = GesuchStatusChangeEvent.BEREIT_FUER_BEARBEITUNG;
         if (
-            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG && !haveAllDatenschutzbriefeBeenSent(gesuch)
+            gesuch.getGesuchStatus() == Gesuchstatus.JURISTISCHE_ABKLAERUNG &&
+            !gesuch.wasInBereitFuerBearbeitung() && !haveAllDatenschutzbriefeBeenSent(gesuch)
         ) {
             changeEvent = GesuchStatusChangeEvent.DATENSCHUTZBRIEF_DRUCKBEREIT;
         }
 
+        gesuch.wasInBereitFuerBearbeitung(true);
         gesuchStatusService.triggerStateMachineEvent(
             gesuch,
             changeEvent

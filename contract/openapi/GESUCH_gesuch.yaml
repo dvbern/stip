@@ -1908,8 +1908,7 @@ components:
         - medizinischeGrundversorgung
         - medizinischeGrundversorgungTotal
         - betreuungskostenKinder
-        - kantonsGemeindesteuern
-        - bundessteuern
+        - steuern
         - anteilLebenshaltungskosten
       type: object
       properties:
@@ -1941,9 +1940,7 @@ components:
           type: integer
         betreuungskostenKinder:
           type: integer
-        kantonsGemeindesteuern:
-          type: integer
-        bundessteuern:
+        steuern:
           type: integer
         anteilLebenshaltungskosten:
           type: integer

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.plz.resource;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.authorization.PlzAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.generated.api.PlzResource;
@@ -35,6 +36,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.STAMMDATEN_READ;
 @RequiredArgsConstructor
 @Slf4j
 @Validated
+@PopulateCurrentBenutzerContext
 public class PlzResourceImpl implements PlzResource {
     private final PlzAuthorizer plzAuthorizer;
     private final PlzService plzService;

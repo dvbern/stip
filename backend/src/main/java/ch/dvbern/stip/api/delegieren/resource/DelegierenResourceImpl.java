@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.authorization.DelegierenAuthorizer;
+import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.delegieren.service.DelegierenService;
 import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
@@ -47,6 +48,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 @Validated
 @RequestScoped
 @RequiredArgsConstructor
+@PopulateCurrentBenutzerContext
 public class DelegierenResourceImpl implements DelegierenResource {
     private final DelegierenAuthorizer delegierenAuthorizer;
     private final DelegierenService delegierenService;
