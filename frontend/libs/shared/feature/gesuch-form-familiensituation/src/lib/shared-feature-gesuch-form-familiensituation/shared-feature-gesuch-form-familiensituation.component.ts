@@ -1,5 +1,3 @@
-// noinspection PointlessBooleanExpressionJS
-
 import {
   animate,
   state,

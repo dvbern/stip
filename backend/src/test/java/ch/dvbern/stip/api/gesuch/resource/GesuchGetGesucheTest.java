@@ -145,7 +145,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(5)
     void getMeineBearbeitbarenNoneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_BEARBEITBAR);
+        final var found = getBearbeitbareWithZugewiesen(true);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -153,7 +153,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(6)
     void getAlleBearbeitbarenNoneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
+        final var found = getBearbeitbareWithZugewiesen(false);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -173,7 +173,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(8)
     void getMeineBearbeitbarenOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.MEINE_BEARBEITBAR);
+        final var found = getBearbeitbareWithZugewiesen(true);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -181,7 +181,7 @@ class GesuchGetGesucheTest {
     @TestAsSachbearbeiter
     @Order(9)
     void getAlleBearbeitbarenOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_BEARBEITBAR);
+        final var found = getBearbeitbareWithZugewiesen(false);
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
@@ -279,7 +279,7 @@ class GesuchGetGesucheTest {
     @TestAsJurist
     @Order(15)
     void getAlleJurisitischeAbklaerungOneFound() {
-        final var found = getWithQueryType(GetGesucheSBQueryTypeDtoSpec.ALLE_JURISTISCHE_ABKLAERUNG);
+        final var found = getJuristischeAbklaerungList();
         allAreNotInWrongStatus(
             found,
             GesuchstatusDtoSpec.IN_BEARBEITUNG_GS,
@@ -310,12 +310,31 @@ class GesuchGetGesucheTest {
         }
     }
 
-    private List<SbDashboardGesuchDtoSpec> getWithQueryType(final GetGesucheSBQueryTypeDtoSpec queryType) {
+    private GesuchApiSpec.GetGesucheSbOper getBaseQuery(final boolean bearbeitbar, final boolean zugewiesen) {
         return gesuchApiSpec.getGesucheSb()
-            .getGesucheSBQueryTypePath(queryType)
+            .getGesucheSBQueryTypePath(GetGesucheSBQueryTypeDtoSpec.ALLE)
+            .bearbeitbarQuery(bearbeitbar)
+            .zugewiesenQuery(zugewiesen)
             .pageQuery(0)
             .pageSizeQuery(config.pagination().maxAllowedPageSize())
-            .typQuery(GesuchTrancheTypDtoSpec.TRANCHE)
+            .typQuery(GesuchTrancheTypDtoSpec.TRANCHE);
+    }
+
+    private List<SbDashboardGesuchDtoSpec> getBearbeitbareWithZugewiesen(final boolean zugewiesen) {
+        return getBaseQuery(true, zugewiesen)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(PaginatedSbGesucheDashboardDtoSpec.class)
+            .getEntries();
+    }
+
+    private List<SbDashboardGesuchDtoSpec> getJuristischeAbklaerungList() {
+        return getBaseQuery(false, false)
+            .statusQuery(Gesuchstatus.JURISTISCHE_ABKLAERUNG.toString())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

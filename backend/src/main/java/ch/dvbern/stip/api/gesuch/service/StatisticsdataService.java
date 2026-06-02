@@ -58,11 +58,12 @@ public class StatisticsdataService {
     }
 
     public void deleteForGesuch(final UUID gesuchId) {
-        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
-        if (Objects.isNull(gesuch.getStatisticsdata())) {
+        final Statisticsdata statisticsdata = statisticsdataRepository.findByGesuchId(gesuchId);
+        if (Objects.isNull(statisticsdata)) {
             return;
         }
-        statisticsdataRepository.delete(gesuch.getStatisticsdata());
+        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
+        statisticsdataRepository.delete(statisticsdata);
         gesuch.setStatisticsdata(null);
     }
 

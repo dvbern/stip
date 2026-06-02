@@ -43,7 +43,6 @@ import ch.dvbern.stip.api.darlehen.repo.GesetzlichDarlehenRepository;
 import ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.darlehen.type.DarlehenStatus;
-import ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType;
 import ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
@@ -397,7 +396,8 @@ public class DarlehenService {
 
     @Transactional
     public PaginatedSbFreiwilligDarlehenDashboardDto getFreiwilligDarlehenDashboardSb(
-        final GetFreiwilligDarlehenSbQueryType getFreiwilligDarlehenSbQueryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
         final Integer page,
         final Integer pageSize,
         final String fallNummer,
@@ -415,7 +415,15 @@ public class DarlehenService {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
-        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery(getFreiwilligDarlehenSbQueryType);
+        final var baseQuery = darlehenDashboardQueryBuilder.baseQuery();
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            darlehenDashboardQueryBuilder.onlyBearbeitbar(baseQuery);
+        }
+
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            darlehenDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, benutzerService.getCurrentBenutzer().getId());
+        }
 
         if (fallNummer != null) {
             darlehenDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -454,7 +462,9 @@ public class DarlehenService {
         }
 
         darlehenDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.distinct()
+        final var results = baseQuery
+            // Fetch is used to prevent using `distinct`
+            .fetch()
             .stream()
             .map(freiwilligDarlehenMapper::toDashboardDto)
             .toList();

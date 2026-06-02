@@ -7,7 +7,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -16,6 +16,7 @@ import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
@@ -24,6 +25,7 @@ import {
   buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
+  getQueryParamValueSig,
   sozialdienstBaseMenuItems,
 } from '@dv/shared/util/navigation';
 
@@ -64,6 +66,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
@@ -86,6 +89,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
     'darlehenId',
     this.allRouteParamsSig,
   );
+
+  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
@@ -112,13 +117,14 @@ export class SozialdienstAppPatternMainLayoutComponent {
       }
     });
 
-    // naviation items effect
+    // navigation items effect
     effect(() => {
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
+      const originStep = this.originStepSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
@@ -153,9 +159,13 @@ export class SozialdienstAppPatternMainLayoutComponent {
         );
       }
 
+      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
+      const tabSegments = tab.split('/').filter(Boolean);
+
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        tabSegments,
         this.trancheIdSig(),
         'sozialdienst-app',
       );

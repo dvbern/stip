@@ -144,6 +144,7 @@ $dv-all-colors: info, danger, success, warn, primary;
 .cdk-overlay-container .header-menu-panel {
   padding: 5px 12px;
   max-width: 450px;
+  min-width: 250px;
 }
 
 .mat-mdc-list-item {
@@ -197,6 +198,16 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
   .mat-expansion-panel-body {
     padding: 0 1rem 1rem 1rem;
+  }
+}
+
+.mat-expansion-panel.dv-nav-expansion-panel {
+  border-radius: 1px;
+  .mat-expansion-panel-header {
+    padding: 0.5rem 1rem;
+  }
+  .mat-expansion-panel-body {
+    padding: 0 1rem;
   }
 }
 

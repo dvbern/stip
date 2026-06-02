@@ -21,23 +21,54 @@ import { GesuchAenderungs } from '@dv/shared/model/gesuch';
 export class SharedUiAenderungenMenuComponent {
   gesuchIdSig = input.required<string | undefined>();
   trancheIdSig = input.required<string | undefined>();
+  stepRouteSegmentsSig = input.required<string[]>();
   revisionSig = input.required<number | undefined>();
   aenderungenSig = input.required<GesuchAenderungs | undefined>();
   isAenderungRouteSig = input.required<boolean | undefined>();
+
+  aenderungenCountSig = computed(() => {
+    const aenderungen = this.aenderungenSig();
+    if (!aenderungen) {
+      return 0;
+    }
+    const offeneAenderungCount = aenderungen.offen ? 1 : 0;
+    const akzeptierteAenderungenCount = aenderungen.akzeptiert?.length ?? 0;
+    const abgelehnteAenderungenCount = aenderungen.abgelehnt?.length ?? 0;
+
+    return (
+      offeneAenderungCount +
+      akzeptierteAenderungenCount +
+      abgelehnteAenderungenCount
+    );
+  });
 
   currentAenderungSig = computed(() => {
     const aenderungen = this.aenderungenSig();
     const trancheId = this.trancheIdSig();
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
 
     const allAenderungen = [
       ...(offeneAenderung
-        ? [offeneAenderung].map((a, index) => ({ ...a, index }))
+        ? [offeneAenderung].map((a) => ({
+            ...a,
+            completeState: 'open' as const,
+          }))
         : []),
-      ...(akzeptierteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
-      ...(abgelehnteAenderungen?.map((a, index) => ({ ...a, index })) ?? []),
+      ...(manuelleAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'manual' as const,
+      })) ?? []),
+      ...(akzeptierteAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'completed' as const,
+      })) ?? []),
+      ...(abgelehnteAenderungen?.map((a) => ({
+        ...a,
+        completeState: 'rejected' as const,
+      })) ?? []),
     ];
 
     return allAenderungen.find((aenderung) => aenderung.id === trancheId);

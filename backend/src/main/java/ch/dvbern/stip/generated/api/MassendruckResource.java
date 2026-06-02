@@ -31,7 +31,7 @@ public interface MassendruckResource {
     @POST
     @Path("/{getGesucheSBQueryType}/create")
     @Produces({ "application/json", "text/plain" })
-    MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType);
+    MassendruckJobDto createMassendruckJobForQueryType(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("zugewiesen")   Boolean zugewiesen);
 
     @POST
     @Path("/{massendruckId}/delete")

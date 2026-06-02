@@ -690,7 +690,7 @@
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
                     DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
                     DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    GetFreiwilligDarlehenSbQueryType=ch.dvbern.stip.api.darlehen.type.GetFreiwilligDarlehenSbQueryType,
+                    
                     SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,

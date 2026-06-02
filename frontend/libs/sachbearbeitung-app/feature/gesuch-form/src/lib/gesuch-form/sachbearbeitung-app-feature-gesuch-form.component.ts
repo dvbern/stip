@@ -13,6 +13,8 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatMenuModule } from '@angular/material/menu';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
@@ -28,15 +30,16 @@ import {
   selectSharedDataAccessGesuchCacheView,
   selectSharedDataAccessGesuchStepsView,
   selectSharedDataAccessGesuchsView,
+  selectTrancheTyp,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { GesuchHeader } from '@dv/shared/model/gesuch';
-import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
+import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
-import { noGesuchActiveRoutes } from '@dv/shared/model/ui-constants';
+import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
 import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
@@ -45,7 +48,7 @@ import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outle
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import { SharedUtilHeaderService } from '@dv/shared/util/header';
-import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
+import { createStepFallbackRouteEffect } from '@dv/shared/util/navigation';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-gesuch-form',
@@ -60,6 +63,8 @@ import { currentTrancheNumber } from '@dv/shared/util-fn/gesuch-util';
     RouterLink,
     PortalModule,
     SharedUiAenderungenMenuComponent,
+    MatFormFieldModule,
+    FormsModule,
   ],
   templateUrl: './sachbearbeitung-app-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,6 +100,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
   stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  trancheTypSig = this.store.selectSignal(selectTrancheTyp);
 
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
@@ -118,7 +124,7 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
 
   isGesuchRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return !noGesuchActiveRoutes.some((route) => url?.includes(`/${route}/`));
+    return !notGesuchRoute.some((route) => url?.includes(`/${route}/`));
   });
 
   stepsSig = computed(() => {
@@ -137,11 +143,23 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       invalidFormularProps.validations,
     );
   });
+
   currentStepProgressSig = computed(() => {
     const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;
     return this.stepManager.getStepProgress(stepsFlow, currentStep);
   });
+
+  stepRouteSegmentsSig = computed(() => {
+    const currentStep = this.stepSig();
+
+    const routeSegments = currentStep?.route.split('/').filter(Boolean) ?? [
+      TRANCHE.route,
+    ];
+
+    return routeSegments;
+  });
+
   currentStepSig = computed(() => {
     const currentStep = this.stepSig();
     const steps = this.stepsSig();
@@ -176,22 +194,6 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
       : undefined;
   });
 
-  currentTrancheNumberSig = computed(() => {
-    const { trancheSetting } = this.viewSig();
-    const currentTranche = this.currentTrancheSig();
-    const revision = this.revisionSig();
-
-    const { isLoading, ...header } = this.gesuchHeaderStore.viewSig();
-
-    return currentTrancheNumber(
-      trancheSetting,
-      currentTranche,
-      header,
-      revision,
-      isLoading,
-    );
-  });
-
   ngAfterViewInit(): void {
     this.navigationStore.setPortal(this.portalContent);
   }
@@ -202,6 +204,16 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
   }
 
   constructor() {
+    createStepFallbackRouteEffect({
+      router: this.router,
+      stepSig: this.stepSig,
+      currentStepSig: this.currentStepSig,
+      loadingSig: computed(() => this.viewSig().loading),
+      gesuchIdSig: this.gesuchIdSig,
+      trancheIdSig: this.gesuchTrancheIdSig,
+      trancheTypSig: this.trancheTypSig,
+    });
+
     getLatestTrancheIdFromGesuchOnUpdate$(this.viewSig)
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {

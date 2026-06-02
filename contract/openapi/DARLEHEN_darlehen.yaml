@@ -11,13 +11,10 @@ servers:
       port:
         default: '8080'
 paths:
-  /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}:
+  /darlehen/dashboard:
     parameters:
-      - name: getFreiwilligDarlehenSbQueryType
-        schema:
-          $ref: '#/components/schemas/GetFreiwilligDarlehenSbQueryType'
-        in: path
-        required: true
+      - $ref: './components/parameters.yaml#/bearbeitbar'
+      - $ref: './components/parameters.yaml#/zugewiesen'
       - $ref: './components/parameters.yaml#/fallNummer'
       - $ref: './components/parameters.yaml#/piaNachname'
       - $ref: './components/parameters.yaml#/piaVorname'
@@ -644,13 +641,6 @@ components:
         - STATUS
         - BEARBEITER
         - LETZTE_AKTIVITAET
-
-    GetFreiwilligDarlehenSbQueryType:
-      enum:
-        - ALLE_DARLEHEN
-        - MEINE_DARLEHEN
-        - ALLE_BEARBEITBAR
-        - MEINE_BEARBEITBAR
 
     PaginatedSbFreiwilligDarlehenDashboard:
       allOf:

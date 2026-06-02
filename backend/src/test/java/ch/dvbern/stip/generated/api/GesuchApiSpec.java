@@ -2748,6 +2748,8 @@ public class GesuchApiSpec {
      * @see #typQuery  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
+     * @see #bearbeitbarQuery  (optional)
+     * @see #zugewiesenQuery  (optional)
      * @see #fallNummerQuery  (optional)
      * @see #piaNachnameQuery  (optional)
      * @see #piaVornameQuery  (optional)
@@ -2803,6 +2805,28 @@ public class GesuchApiSpec {
          */
         public GetGesucheSbOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
             reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
+            return this;
+        }
+
+        public static final String BEARBEITBAR_QUERY = "bearbeitbar";
+
+        /**
+         * @param bearbeitbar (Boolean)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper bearbeitbarQuery(Object... bearbeitbar) {
+            reqSpec.addQueryParam(BEARBEITBAR_QUERY, bearbeitbar);
+            return this;
+        }
+
+        public static final String ZUGEWIESEN_QUERY = "zugewiesen";
+
+        /**
+         * @param zugewiesen (Boolean)  (optional)
+         * @return operation
+         */
+        public GetGesucheSbOper zugewiesenQuery(Object... zugewiesen) {
+            reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
             return this;
         }
 
