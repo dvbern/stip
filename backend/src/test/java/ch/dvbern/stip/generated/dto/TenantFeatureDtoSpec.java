@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.SteuerdatenAdapterTypeDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -27,40 +28,70 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * TenantFeatureDtoSpec
  */
 @JsonPropertyOrder({
-  TenantFeatureDtoSpec.JSON_PROPERTY_NESKO
+  TenantFeatureDtoSpec.JSON_PROPERTY_ENABLED,
+  TenantFeatureDtoSpec.JSON_PROPERTY_ADAPTER_TYPE
 })
 @JsonTypeName("TenantFeature")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TenantFeatureDtoSpec {
-  public static final String JSON_PROPERTY_NESKO = "nesko";
-  private Boolean nesko;
+  public static final String JSON_PROPERTY_ENABLED = "enabled";
+  private Boolean enabled;
+
+  public static final String JSON_PROPERTY_ADAPTER_TYPE = "adapterType";
+  private SteuerdatenAdapterTypeDtoSpec adapterType;
 
   public TenantFeatureDtoSpec() {
   }
 
-  public TenantFeatureDtoSpec nesko(Boolean nesko) {
+  public TenantFeatureDtoSpec enabled(Boolean enabled) {
     
-    this.nesko = nesko;
+    this.enabled = enabled;
     return this;
   }
 
    /**
-   * Get nesko
-   * @return nesko
+   * Get enabled
+   * @return enabled
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NESKO)
+  @JsonProperty(JSON_PROPERTY_ENABLED)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public Boolean getNesko() {
-    return nesko;
+  public Boolean getEnabled() {
+    return enabled;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_NESKO)
+  @JsonProperty(JSON_PROPERTY_ENABLED)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNesko(Boolean nesko) {
-    this.nesko = nesko;
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
+
+
+  public TenantFeatureDtoSpec adapterType(SteuerdatenAdapterTypeDtoSpec adapterType) {
+    
+    this.adapterType = adapterType;
+    return this;
+  }
+
+   /**
+   * Get adapterType
+   * @return adapterType
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_ADAPTER_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SteuerdatenAdapterTypeDtoSpec getAdapterType() {
+    return adapterType;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ADAPTER_TYPE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAdapterType(SteuerdatenAdapterTypeDtoSpec adapterType) {
+    this.adapterType = adapterType;
   }
 
   @Override
@@ -72,19 +103,21 @@ public class TenantFeatureDtoSpec {
       return false;
     }
     TenantFeatureDtoSpec tenantFeature = (TenantFeatureDtoSpec) o;
-    return Objects.equals(this.nesko, tenantFeature.nesko);
+    return Objects.equals(this.enabled, tenantFeature.enabled) &&
+        Objects.equals(this.adapterType, tenantFeature.adapterType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nesko);
+    return Objects.hash(enabled, adapterType);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantFeatureDtoSpec {\n");
-    sb.append("    nesko: ").append(toIndentedString(nesko)).append("\n");
+    sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
+    sb.append("    adapterType: ").append(toIndentedString(adapterType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

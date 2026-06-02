@@ -55,7 +55,7 @@ class StringAnnotationTest {
             .andShould()
             .beAnnotatedWith(Column.class);
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     @Test
@@ -71,7 +71,7 @@ class StringAnnotationTest {
             .areAnnotatedWith(Column.class)
             .should(new SizeColumnFieldSameLengthCondition());
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     @Test
@@ -87,7 +87,7 @@ class StringAnnotationTest {
             .areAnnotatedWith(Column.class)
             .should(new SizeColumnFieldDefinedLengthCondition());
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
     abstract static class SizeColumnFieldCondition extends ArchCondition<JavaField> {

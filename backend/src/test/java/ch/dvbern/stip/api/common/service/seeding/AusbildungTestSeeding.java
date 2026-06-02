@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.common.service.seeding;
 
-import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.util.TestConstants;
@@ -38,7 +38,7 @@ public class AusbildungTestSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return List.of("test");
+    protected Set<String> getProfiles() {
+        return Set.of("test");
     }
 }

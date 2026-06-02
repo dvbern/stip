@@ -23,7 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import jakarta.enterprise.util.Nonbinding;
 import jakarta.interceptor.InterceptorBinding;
 
@@ -33,5 +33,5 @@ import jakarta.interceptor.InterceptorBinding;
 @Inherited
 public @interface RunForTenant {
     @Nonbinding
-    MandantIdentifier value();
+    TenantIdentifier value();
 }

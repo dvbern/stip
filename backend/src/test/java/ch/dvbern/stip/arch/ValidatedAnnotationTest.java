@@ -37,6 +37,6 @@ class ValidatedAnnotationTest {
             .should()
             .beAnnotatedWith(Validated.class);
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 }

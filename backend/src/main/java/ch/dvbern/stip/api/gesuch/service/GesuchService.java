@@ -48,7 +48,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
@@ -99,6 +99,7 @@ import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
@@ -171,7 +172,8 @@ public class GesuchService {
     private final GesuchNummerService gesuchNummerService;
     private final FallRepository fallRepository;
     private final FallDashboardItemMapper fallDashboardItemMapper;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
@@ -420,7 +422,7 @@ public class GesuchService {
     private void checkPageSizeSB(
         final int pageSize
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
     }
@@ -674,7 +676,7 @@ public class GesuchService {
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
@@ -759,10 +761,12 @@ public class GesuchService {
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
+        final var tenantConfig = tenantService.getConfigForCurrentTenant();
+
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
+            tenantConfig.berechnung().currentMajorVersion(),
+            tenantConfig.berechnung().currentMinorVersion()
         );
 
         if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {

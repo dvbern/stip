@@ -54,7 +54,14 @@ public class PlzService {
         return isInBern(plz);
     }
 
-    public Plz findByPostleitzahl(String postleitzahl) {
+    public Plz findByPostleitzahl(final String postleitzahl) {
         return plzRepository.findByPostleitzahl(postleitzahl);
+    }
+
+    @Transactional
+    public void overwriteAll(final List<Plz> plzList) {
+        plzRepository.deleteAll();
+        plzRepository.persist(plzList.stream());
+        plzRepository.flush();
     }
 }

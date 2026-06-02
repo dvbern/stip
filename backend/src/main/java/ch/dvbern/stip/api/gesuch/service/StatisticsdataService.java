@@ -36,8 +36,8 @@ public class StatisticsdataService {
 
     public void setOrCreateGemeindeStatisticsDataOfGesuch(
         final UUID gesuchId,
-        final Integer com_fosnr,
-        final String com_name
+        final Integer gemeindeBfsNr,
+        final String gemeindeName
     ) {
         final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
         Statisticsdata statisticsdata = gesuch.getStatisticsdata();
@@ -47,8 +47,8 @@ public class StatisticsdataService {
                 .setGesuch(gesuch);
         }
         statisticsdata
-            .setGemeindeBfsNr(com_fosnr)
-            .setGemeindeName(com_name);
+            .setGemeindeBfsNr(gemeindeBfsNr)
+            .setGemeindeName(gemeindeName);
         gesuch.setStatisticsdata(statisticsdata);
         statisticsdataRepository.persist(statisticsdata);
     }
@@ -58,11 +58,12 @@ public class StatisticsdataService {
     }
 
     public void deleteForGesuch(final UUID gesuchId) {
-        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
-        if (Objects.isNull(gesuch.getStatisticsdata())) {
+        final Statisticsdata statisticsdata = statisticsdataRepository.findByGesuchId(gesuchId);
+        if (Objects.isNull(statisticsdata)) {
             return;
         }
-        statisticsdataRepository.delete(gesuch.getStatisticsdata());
+        final Gesuch gesuch = gesuchService.getGesuchById(gesuchId);
+        statisticsdataRepository.delete(statisticsdata);
         gesuch.setStatisticsdata(null);
     }
 

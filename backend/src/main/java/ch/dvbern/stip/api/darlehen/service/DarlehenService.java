@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.pdf.DarlehensVerfuegungPdfService;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehen;
 import ch.dvbern.stip.api.darlehen.entity.FreiwilligDarlehenDokument;
@@ -59,6 +59,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
@@ -98,7 +99,8 @@ public class DarlehenService {
     private final DokumentUploadService dokumentUploadService;
     private final DokumentDeleteService dokumentDeleteService;
     private final S3AsyncClient s3;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
     private final Antivirus antivirus;
     private final DarlehenDokumentRepository darlehenDokumentRepository;
     private final DokumentRepository dokumentRepository;
@@ -169,7 +171,7 @@ public class DarlehenService {
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
-            configService,
+            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -188,7 +190,7 @@ public class DarlehenService {
         );
 
         mailService.sendDarlehenVerfuegungEmail(
-            configService.getDarlehenVerfuegungEmailRecipient(),
+            tenantService.getConfigForCurrentTenant().darlehen().verfuegung().emailRecipient(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             out.toByteArray(),
             gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
@@ -207,7 +209,7 @@ public class DarlehenService {
             out.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
-            configService,
+            config,
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH
         );
 
@@ -218,7 +220,7 @@ public class DarlehenService {
         darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
 
         mailService.sendDarlehenVerfuegungEmail(
-            configService.getDarlehenVerfuegungEmailRecipient(),
+            tenantService.getConfigForCurrentTenant().darlehen().verfuegung().emailRecipient(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             out.toByteArray(),
             darlehen.getRelatedGesuch().getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
@@ -409,7 +411,7 @@ public class DarlehenService {
         final SbFreiwilligDarlehenDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 
@@ -508,7 +510,7 @@ public class DarlehenService {
             dokumentRepository.delete(dokument);
             dokumentDeleteService.executeDeleteDokumentFromS3(
                 s3,
-                configService.getBucketName(),
+                config.s3().bucketName(),
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH + dokument.getObjectId()
             );
         }
@@ -628,7 +630,7 @@ public class DarlehenService {
             dokumentUploadService.validateScanUploadDokument(
                 negativeVerfuegung,
                 s3,
-                configService,
+                config,
                 antivirus,
                 DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
                 objectId -> uploadNegativVerfuegungDokument(darlehen, negativeVerfuegung, objectId),
@@ -650,7 +652,7 @@ public class DarlehenService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_PATH,
             dokument.getFilename()
@@ -672,7 +674,7 @@ public class DarlehenService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             DARLEHEN_DOKUMENT_PATH,
             objectId -> uploadDarlehenDokument(
@@ -763,7 +765,7 @@ public class DarlehenService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             dokument.getFilepath(),
             dokument.getFilename()
@@ -789,7 +791,7 @@ public class DarlehenService {
         dokumentRepository.delete(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             DARLEHEN_DOKUMENT_PATH + dokument.getObjectId()
         );
     }

@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.entity.DatenschutzbriefBuilder;
 import ch.dvbern.stip.api.datenschutzbrief.repo.DatenschutzbriefRepository;
@@ -68,7 +68,7 @@ public class DatenschutzbriefService {
     private final DokumentDownloadService dokumentDownloadService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final ElternRepository elternRepository;
     private final GesuchRepository gesuchRepository;
     private final DatenschutzbriefMapper datenschutzbriefMapper;
@@ -77,7 +77,7 @@ public class DatenschutzbriefService {
         final var dokument = datenschutzbriefRepository.requireById(datenschutzbriefId).getDokument();
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             DATENSCHUTZBRIEF_DOKUMENT_PATH,
             dokument.getFilename()
@@ -132,7 +132,7 @@ public class DatenschutzbriefService {
             pdfContent.toByteArray(),
             filename,
             s3,
-            configService,
+            config,
             DATENSCHUTZBRIEF_DOKUMENT_PATH
         );
 

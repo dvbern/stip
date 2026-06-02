@@ -23,7 +23,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
@@ -85,7 +85,7 @@ class GesuchGetGesucheTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
 
     @Inject
-    ConfigService configService;
+    StipConfig config;
 
     private static GesuchDtoSpec gesuch;
 
@@ -316,7 +316,7 @@ class GesuchGetGesucheTest {
             .bearbeitbarQuery(bearbeitbar)
             .zugewiesenQuery(zugewiesen)
             .pageQuery(0)
-            .pageSizeQuery(configService.getMaxAllowedPageSize())
+            .pageSizeQuery(config.pagination().maxAllowedPageSize())
             .typQuery(GesuchTrancheTypDtoSpec.TRANCHE);
     }
 

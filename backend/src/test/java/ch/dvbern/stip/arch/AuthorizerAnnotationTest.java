@@ -66,7 +66,7 @@ class AuthorizerAnnotationTest {
             .resideInAnyPackage("..resource..")
             .should(new CallAuthorizerMethod());
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
 
         if (!ANONYMOUS_METHODS.isEmpty()) {
             final var msg = String.format(
