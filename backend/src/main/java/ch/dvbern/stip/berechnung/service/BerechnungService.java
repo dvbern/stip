@@ -216,7 +216,7 @@ public class BerechnungService {
         if (monateMitDarlehen == 12) {
             return darlehenFuer12MonateMitDarlehen;
         }
-        return darlehenFuer12MonateMitDarlehen * monateMitDarlehen / 12;
+        return BerechnungUtil.roundGesetzlichesDarlehen(darlehenFuer12MonateMitDarlehen * monateMitDarlehen / 12);
     }
 
     public static int getMonateMitDarlehen(Gesuch gesuch) {
