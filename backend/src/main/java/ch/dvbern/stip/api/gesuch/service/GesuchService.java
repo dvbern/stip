@@ -686,6 +686,7 @@ public class GesuchService {
         ausbildungUnterbruchAntragService.deleteAllByGesuchId(gesuchId);
         statisticsdataService.deleteForGesuch(gesuchId);
         darlehenService.deleteForGesuch(gesuchId);
+        gesuch = gesuchRepository.requireById(gesuchId);
         gesuchRepository.delete(gesuch);
         ausbildung.getGesuchs().remove(gesuch);
         gesuch.getDatenschutzbriefs().clear();

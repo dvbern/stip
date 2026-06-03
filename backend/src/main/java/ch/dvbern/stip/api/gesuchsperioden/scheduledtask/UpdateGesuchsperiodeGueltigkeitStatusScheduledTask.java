@@ -17,38 +17,32 @@
 
 package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.scheduler.Scheduled;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-@RequiredArgsConstructor
 @Singleton
 @Slf4j
 @UnlessBuildProfile("test")
-public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
-    private final GesuchsperiodenService gesuchsperiodenService;
+public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask extends RunForTenantsScheduledTask {
+    private static final String NAME = "UpdateGesuchsperiodeGueltigkeitStatus";
+    private static final String SCHEDULER_CRON_CONFIG_KEY = "gesuch-periode";
 
-    @Transactional
-    @Scheduled(cron = "{kstip.scheduler.gesuch-periode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(TenantIdentifier.BERN)
-    public void runForBern() {
-        run();
+    @Inject
+    GesuchsperiodenService gesuchsperiodenService;
+
+    UpdateGesuchsperiodeGueltigkeitStatusScheduledTask() {
+        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
     }
 
+    @Override
     @Transactional
-    @Scheduled(cron = "{kstip.scheduler.gesuch-periode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(TenantIdentifier.DV)
-    public void runForDV() {
-        run();
-    }
-
-    private void run() {
+    protected void run() {
         try {
             LOG.info("Start checking for any Gesuchperioden to be archived");
             gesuchsperiodenService.setOutdatedGesuchsperiodenToArchiviert();
@@ -57,5 +51,4 @@ public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
             LOG.error(e.getMessage(), e);
         }
     }
-
 }

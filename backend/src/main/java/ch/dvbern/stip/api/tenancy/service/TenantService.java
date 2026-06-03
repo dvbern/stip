@@ -38,13 +38,13 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @UnlessBuildProfile("test")
 public class TenantService {
-    private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
+    private static final ThreadLocal<TenantIdentifier> EXPLICIT_TENANT_ID = new ThreadLocal<>();
 
     private final RoutingContext context;
     private final StipConfig config;
 
-    public static ExplicitTenantIdScope setTenantId(final String tenantId) {
-        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
+    public static ExplicitTenantIdScope setTenantId(final TenantIdentifier tenantIdentifier) {
+        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantIdentifier);
     }
 
     public TenantInfoDto getCurrentTenant() {
@@ -71,7 +71,7 @@ public class TenantService {
 
     public String getCurrentStringIdentifier() {
         if (EXPLICIT_TENANT_ID.get() != null) {
-            return EXPLICIT_TENANT_ID.get();
+            return EXPLICIT_TENANT_ID.get().getIdentifier();
         }
 
         return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);

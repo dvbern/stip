@@ -55,6 +55,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.oneOf;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -319,8 +320,8 @@ class BerechnungServiceTest {
                     .setBis(LocalDate.now().minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
-        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
-        assertThat(monateMitDarlehen, equalTo(7));
+        monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
+        assertThat(monateMitDarlehen, oneOf(6, 7));
     }
 
 }

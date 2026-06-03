@@ -17,50 +17,37 @@
 
 package ch.dvbern.stip.api.sap.scheduledtask;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.sap.service.SapService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.scheduler.Scheduled;
-import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
 @UnlessBuildProfile("test")
-public class SapRetryFailedAuszahlungsBuchhaltungScheduledTask {
-    private final SapService sapService;
+public class SapRetryFailedAuszahlungsBuchhaltungScheduledTask extends RunForTenantsScheduledTask {
+    private static final String NAME = "SapRetryFailedAuszahlungsBuchhaltung";
+    private static final String SCHEDULER_CRON_CONFIG_KEY = "sap-retry-failed-auszahlungs-buchhaltung";
 
-    private void run() {
+    @Inject
+    SapService sapService;
+
+    SapRetryFailedAuszahlungsBuchhaltungScheduledTask() {
+        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
+    }
+
+    @Override
+    @Transactional
+    public void run() {
         try {
             LOG.info("processRetryFailedAuszahlungsBuchhaltung from scheduled task");
             sapService.processRetryFailedAuszahlungsBuchhaltung();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }
-    }
-
-    @Transactional
-    @Scheduled(
-        cron = "{kstip.tenant.bern.scheduler.sap-pending-auszahlung.cron}",
-        concurrentExecution = ConcurrentExecution.SKIP
-    )
-    @RunForTenant(TenantIdentifier.BERN)
-    public void runForBern() {
-        run();
-    }
-
-    @Transactional
-    @Scheduled(
-        cron = "{kstip.tenant.bern.scheduler.sap-pending-auszahlung.cron}",
-        concurrentExecution = ConcurrentExecution.SKIP
-    )
-    @RunForTenant(TenantIdentifier.DV)
-    public void runForDv() {
-        run();
     }
 }

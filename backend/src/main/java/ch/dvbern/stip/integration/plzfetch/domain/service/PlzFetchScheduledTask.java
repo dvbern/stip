@@ -17,85 +17,60 @@
 
 package ch.dvbern.stip.integration.plzfetch.domain.service;
 
-import java.time.LocalDate;
-
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
-import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.plz.service.PlzService;
 import ch.dvbern.stip.integration.plzfetch.domain.port.PlzFetchPortFactory;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
-import lombok.RequiredArgsConstructor;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.CronScheduleBuilder;
-import org.quartz.Job;
-import org.quartz.JobBuilder;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.TriggerBuilder;
 
 @Slf4j
 @Singleton
-@RequiredArgsConstructor
-public class PlzFetchScheduledTask implements Job {
-    private final PlzFetchPortFactory plzFetchPortFactory;
-    private final PlzService plzService;
-    private final StipConfig config;
-    private final Scheduler scheduler;
-    private final PlzFetchDataMapper plzFetchDataMapper;
+public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
+    private static final String NAME = "PlzFetch";
+    private static final String SCHEDULER_CRON_CONFIG_KEY = "plz-data";
+    private static final TenantIdentifier TENANT_IDENTIFIER = TenantIdentifier.BERN;
 
-    private final String PLZ_SCHEDULER_CONFIG_KEY = "plz-data";
-    private final String PLZ_FETCH_JOB_PREFIX = "PlzFetchScheduledJob";
+    @Inject
+    PlzFetchPortFactory plzFetchPortFactory;
+
+    @Inject
+    PlzService plzService;
+
+    @Inject
+    PlzFetchDataMapper plzFetchDataMapper;
+
+    public PlzFetchScheduledTask() {
+        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TENANT_IDENTIFIER);
+    }
 
     @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-        QuarkusTransactionUtil.runForTenantInNewTransaction(
-            TenantIdentifier.BERN.getIdentifier(),
-            () -> {
-                final var plzFetchPort = plzFetchPortFactory.getPlzFetchAdapter();
+    @Transactional
+    public void run() {
+        final var plzFetchPort = plzFetchPortFactory.getPlzFetchAdapter();
 
-                try {
-                    LOG.info("Fetching PLZ data");
-                    final var plzFetchData = plzFetchPort.fetchData();
-                    plzFetchData.ifPresent(fetchData -> {
-                        final var plzList = plzFetchDataMapper.toPlzList(fetchData);
-                        plzService.overwriteAll(plzList);
-                    });
-                    LOG.info("PLZ data fetched and checked/saved successfully");
-                } catch (Throwable e) {
-                    LOG.error("Error fetching PLZ data", e);
-                }
-            }
-        );
+        try {
+            LOG.info("Fetching PLZ data");
+            final var plzFetchData = plzFetchPort.fetchData();
+            plzFetchData.ifPresent(fetchData -> {
+                final var plzList = plzFetchDataMapper.toPlzList(fetchData);
+                plzService.overwriteAll(plzList);
+            });
+            LOG.info("PLZ data fetched and checked/saved successfully");
+        } catch (Throwable e) {
+            LOG.error("Error fetching PLZ data", e);
+        }
     }
 
     void onStart(@Observes StartupEvent startupEvent) {
-        final var jobDetail = JobBuilder.newJob(PlzFetchScheduledTask.class)
-            .withIdentity(PLZ_FETCH_JOB_PREFIX + LocalDate.now())
-            .build();
-
-        final var schedule = CronScheduleBuilder.cronSchedule(config.scheduler().get(PLZ_SCHEDULER_CONFIG_KEY).cron());
-
-        final var trigger = TriggerBuilder.newTrigger()
-            .withIdentity(PLZ_FETCH_JOB_PREFIX + "trigger-" + LocalDate.now())
-            .startNow()
-            .withSchedule(schedule)
-            .build();
-
-        try {
-            execute(null);
-        } catch (JobExecutionException e) {
-            LOG.error("Error executing PlzFetchScheduledJob on startup", e);
-        }
-
-        try {
-            scheduler.scheduleJob(jobDetail, trigger);
-        } catch (SchedulerException e) {
-            LOG.error("Error scheduling PlzFetchScheduledJob", e);
-        }
+        QuarkusTransactionUtil.runForTenantInNewTransaction(
+            TENANT_IDENTIFIER,
+            this::run
+        );
     }
 }
