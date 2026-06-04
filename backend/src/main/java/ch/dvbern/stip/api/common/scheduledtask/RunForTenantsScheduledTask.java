@@ -23,6 +23,7 @@ import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.control.ActivateRequestContext;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -95,6 +96,7 @@ public abstract class RunForTenantsScheduledTask implements Job {
         QuarkusTransactionUtil.runForTenantsInNewTransaction(tenantIdentifiers, this::run);
     }
 
+    @ActivateRequestContext
     protected abstract void run();
 
 }

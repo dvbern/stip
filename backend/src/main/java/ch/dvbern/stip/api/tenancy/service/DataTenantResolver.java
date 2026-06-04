@@ -36,13 +36,8 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 @UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class DataTenantResolver implements TenantResolver {
-    private static final ThreadLocal<TenantIdentifier> EXPLICIT_TENANT_ID = new ThreadLocal<>();
-
     private final Instance<RoutingContext> context;
-
-    public static ExplicitTenantIdScope setTenantId(final TenantIdentifier tenantIdentifier) {
-        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantIdentifier);
-    }
+    private final TenantContext tenantContext;
 
     @Override
     public String getDefaultTenantId() {
@@ -51,11 +46,12 @@ public class DataTenantResolver implements TenantResolver {
 
     @Override
     public String resolveTenantId() {
-        // tenant identifier already set by OIDC tenant resolver
-        if (context.isResolvable() && EXPLICIT_TENANT_ID.get() == null) {
-            String tenantId = context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME);
-            return Objects.requireNonNullElse(tenantId, DEFAULT_TENANT_IDENTIFIER);
+        if (Objects.isNull(tenantContext.getTenantIdentifier())) {
+            String tenantId = Objects
+                .requireNonNullElse(context.get().get(TENANT_IDENTIFIER_CONTEXT_NAME), DEFAULT_TENANT_IDENTIFIER);
+            tenantContext.setTenantIdentifier(TenantIdentifier.of(tenantId));
         }
-        return EXPLICIT_TENANT_ID.get().getIdentifier();
+
+        return tenantContext.getTenantIdentifier().getIdentifier();
     }
 }

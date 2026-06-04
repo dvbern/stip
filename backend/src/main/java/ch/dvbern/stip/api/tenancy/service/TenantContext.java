@@ -17,25 +17,18 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import jakarta.annotation.Nullable;
+import jakarta.enterprise.context.RequestScoped;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-/**
- * Represent a code block that runs for an explicitly defined tenant.
- * Must be used inside a try-with-resource statement to properly work.
- * Primarily designed for the {RunForTenants} interceptor/ {RunForTenantsInterceptor}.
- * FJ: Now used in the {@link RunForTenantsScheduledTask}
- */
-public class ExplicitTenantIdScope implements AutoCloseable {
-    private final ThreadLocal<TenantIdentifier> explicitTenantId;
-
-    public ExplicitTenantIdScope(final ThreadLocal<TenantIdentifier> toSet, final TenantIdentifier value) {
-        explicitTenantId = toSet;
-        explicitTenantId.set(value);
-    }
-
-    @Override
-    public void close() {
-        explicitTenantId.remove();
-    }
+@RequestScoped
+@RequiredArgsConstructor
+public class TenantContext {
+    @Setter
+    @Getter
+    @Nullable
+    private TenantIdentifier tenantIdentifier;
 }

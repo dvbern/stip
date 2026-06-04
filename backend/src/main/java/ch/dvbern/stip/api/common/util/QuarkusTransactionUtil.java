@@ -21,8 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.api.tenancy.service.TenantContext;
 import io.quarkus.arc.Arc;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import lombok.experimental.UtilityClass;
@@ -31,13 +30,11 @@ import lombok.experimental.UtilityClass;
 public class QuarkusTransactionUtil {
     public void runForTenantInNewTransaction(final TenantIdentifier tenantIdentifier, final Runnable runnable) {
         QuarkusTransaction.requiringNew().run(() -> {
-            try (
-                // ignored because it's reset in the finalizer of the returned ExplicitTenantIdScope as such unused
-                final var ignored1 = DataTenantResolver.setTenantId(tenantIdentifier);
-                final var ignored2 = TenantService.setTenantId(tenantIdentifier);
-            ) {
-                Arc.container().requestContext().activate();
+            Arc.container().requestContext().activate();
+            Arc.container().instance(TenantContext.class).get().setTenantIdentifier(tenantIdentifier);
+            try {
                 runnable.run();
+            } finally {
                 Arc.container().requestContext().deactivate();
             }
         });
