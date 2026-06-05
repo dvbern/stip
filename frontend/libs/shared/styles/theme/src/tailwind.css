@@ -142,11 +142,15 @@
 }
 
 @utility dv-form-grid {
-  @apply tw:grid tw:grid-cols-1 tw:gap-6 tw:md:grid-cols-2 tw:lg:grid-cols-3;
+  @apply tw:grid tw:grid-cols-1 tw:xl:grid-cols-3 tw:gap-6;
 }
 
 @utility dv-form-half {
   @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
+}
+
+@utility dv-grid-field {
+  @apply tw:xl:col-span-2;
 }
 
 @utility dv-pass-height-shrink {
