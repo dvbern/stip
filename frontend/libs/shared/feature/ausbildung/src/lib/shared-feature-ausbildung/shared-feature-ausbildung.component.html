@@ -60,11 +60,11 @@
 
     <div
       dvSharedUiInfoDialog
+      class="tw:hidden tw:xl:block tw:xl:col-start-3"
       [dialogTitleKey]="'shared.form.ausbildung.ausbildungsstaette.label'"
       [dialogMessageKey]="'shared.form.ausbildung.ausbildungsstaette.info'"
       [forceDialogPosition]="!!fallId"
       #ausbildungsstaetteInfoDialog="dvSharedUiInfoDialog"
-      class="tw:hidden tw:xl:block tw:xl:col-span-1"
     ></div>
 
     <!-- GANG -->
@@ -106,8 +106,8 @@
       </button>
     </div>
     <div
-      class="tw:hidden tw:xl:block tw:xl:col-span-1"
       dvSharedUiInfoDialog
+      class="tw:hidden tw:xl:block tw:xl:col-start-3"
       [dialogTitleKey]="'shared.form.ausbildung.ausbildungsgang.label'"
       [dialogMessageKey]="'shared.form.ausbildung.ausbildungsgang.info'"
       [forceDialogPosition]="!!fallId"
@@ -140,8 +140,8 @@
         </button>
       </div>
       <div
-        class="tw:hidden tw:xl:block tw:xl:col-span-1"
         dvSharedUiInfoDialog
+        class="tw:hidden tw:xl:block tw:xl:col-start-3"
         [dialogTitleKey]="'shared.form.ausbildung.fachrichtung.label.' + zusatzfrageSig()"
         [dialogMessageKey]="'shared.form.ausbildung.fachrichtung.info'"
         [forceDialogPosition]="!!fallId"

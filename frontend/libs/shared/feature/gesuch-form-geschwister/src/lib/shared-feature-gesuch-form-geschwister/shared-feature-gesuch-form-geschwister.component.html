@@ -12,95 +12,87 @@
   />
 } @else {
   <!-- Infobx -->
-  <div class="tw:grid tw:grid-cols-12">
-    <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-      <dv-shared-ui-info-container>
-        <div class="tw:flex tw:gap-3">
-          <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
-          <span>{{ 'shared.form.geschwister.top.info' | transloco }}</span>
-        </div>
-      </dv-shared-ui-info-container>
+  <dv-shared-ui-info-container class="tw:my-4 tw:block">
+    <div class="tw:flex tw:gap-3">
+      <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
+      <span>{{ 'shared.form.geschwister.top.info' | transloco }}</span>
     </div>
-  </div>
+  </dv-shared-ui-info-container>
 
-  <div class="tw:grid tw:grid-cols-12">
-    <!-- Table -->
-    @if (view.gesuchFormular?.geschwisters; as geschwisters) {
-      <div class="tw:col-span-12 tw:xl:col-span-8">
-        @if (geschwisters.length) {
-          <table class="tw:dv-simple-table" aria-describedby="List von Geschwister">
-            <thead>
-              <tr>
-                <th></th>
-                <th>
-                  {{ 'shared.form.geschwister.name' | transloco }}
-                </th>
-                <th>
-                  {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
-                </th>
-                <th></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (geschwisterRaw of geschwisters; track trackByIndex($index)) {
-                <tr data-testid="geschwister-row">
-                  @if (asGeschwister(geschwisterRaw); as geschwister) {
-                    <td class="tw:relative">
-                      @if (
-                        view.listChanges?.hasChangesByIdentifier?.[geschwister.entryId] ||
-                        view.listChanges?.newEntriesByIdentifier?.[geschwister.entryId]
-                      ) {
-                        <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
-                      }
-                      <i class="material-symbols-rounded align-middle" aria-hidden="true">done</i>
-                    </td>
-                    <td>{{ geschwister.vorname }} {{ geschwister.nachname }}</td>
-                    <td>
-                      {{ parseBackendLocalDateAndPrint(geschwister.geburtsdatum, languageSig()) }}
-                    </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.edit' | transloco"
-                        >
-                          <i class="material-symbols-rounded">edit</i>
-                        </button>
-                      }
-                    </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleDeleteGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.delete' | transloco"
-                        >
-                          <i class="material-symbols-rounded">delete</i>
-                        </button>
-                      } @else {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="'shared.form.geschwister.view' | transloco"
-                        >
-                          <i class="material-symbols-rounded">visibility</i>
-                        </button>
-                      }
-                    </td>
+  <!-- Table -->
+  @if (view.gesuchFormular?.geschwisters; as geschwisters) {
+    @if (geschwisters.length) {
+      <table class="tw:dv-simple-table" aria-describedby="List von Geschwister">
+        <thead>
+          <tr>
+            <th></th>
+            <th>
+              {{ 'shared.form.geschwister.name' | transloco }}
+            </th>
+            <th>
+              {{ 'shared.form.geschwister.geburtsdatum.label' | transloco }}
+            </th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (geschwisterRaw of geschwisters; track trackByIndex($index)) {
+            <tr data-testid="geschwister-row">
+              @if (asGeschwister(geschwisterRaw); as geschwister) {
+                <td class="tw:relative">
+                  @if (
+                    view.listChanges?.hasChangesByIdentifier?.[geschwister.entryId] ||
+                    view.listChanges?.newEntriesByIdentifier?.[geschwister.entryId]
+                  ) {
+                    <dv-shared-ui-change-indicator displaced="left"></dv-shared-ui-change-indicator>
                   }
-                </tr>
+                  <i class="material-symbols-rounded align-middle" aria-hidden="true">done</i>
+                </td>
+                <td>{{ geschwister.vorname }} {{ geschwister.nachname }}</td>
+                <td>
+                  {{ parseBackendLocalDateAndPrint(geschwister.geburtsdatum, languageSig()) }}
+                </td>
+                <td>
+                  @if (!view.readonly) {
+                    <button
+                      type="button"
+                      class="tw:dv-button tw:p-0 lh-1"
+                      (click)="handleSelectGeschwister(geschwister)"
+                      [title]="'shared.form.geschwister.edit' | transloco"
+                    >
+                      <i class="material-symbols-rounded">edit</i>
+                    </button>
+                  }
+                </td>
+                <td>
+                  @if (!view.readonly) {
+                    <button
+                      type="button"
+                      class="tw:dv-button tw:p-0 lh-1"
+                      (click)="handleDeleteGeschwister(geschwister)"
+                      [title]="'shared.form.geschwister.delete' | transloco"
+                    >
+                      <i class="material-symbols-rounded">delete</i>
+                    </button>
+                  } @else {
+                    <button
+                      type="button"
+                      class="tw:dv-button tw:p-0 lh-1"
+                      (click)="handleSelectGeschwister(geschwister)"
+                      [title]="'shared.form.geschwister.view' | transloco"
+                    >
+                      <i class="material-symbols-rounded">visibility</i>
+                    </button>
+                  }
+                </td>
               }
-            </tbody>
-          </table>
-        }
-      </div>
+            </tr>
+          }
+        </tbody>
+      </table>
     }
-  </div>
+  }
 
   <!-- ADD -->
   <div class="tw:flex tw:flex-col flex-md-row">
