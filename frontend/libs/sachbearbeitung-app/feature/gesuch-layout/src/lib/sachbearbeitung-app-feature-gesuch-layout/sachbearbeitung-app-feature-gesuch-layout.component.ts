@@ -364,10 +364,12 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   constructor() {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
+      const gesuchTrancheId = this.trancheIdSig();
       this.gesuchUpdatedSig();
-      if (gesuchId) {
+      if (gesuchId && gesuchTrancheId) {
         this.darlehenStore.getAllDarlehenSb$({ gesuchId });
         this.gesuchHeaderStore.loadHeader$({ gesuchId });
+        this.einreichenStore.validateEinreichen$({ gesuchTrancheId });
       }
     });
   }
