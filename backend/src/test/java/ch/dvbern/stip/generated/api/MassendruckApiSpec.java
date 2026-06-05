@@ -134,6 +134,7 @@ public class MassendruckApiSpec {
      * Create a Massendruck Job for the given query type
      *
      * @see #getGesucheSBQueryTypePath  (required)
+     * @see #zugewiesenQuery  (optional)
      * return MassendruckJobDtoSpec
      */
     public static class CreateMassendruckJobForQueryTypeOper implements Oper {
@@ -179,6 +180,17 @@ public class MassendruckApiSpec {
          */
         public CreateMassendruckJobForQueryTypeOper getGesucheSBQueryTypePath(Object getGesucheSBQueryType) {
             reqSpec.addPathParam(GET_GESUCHE_S_B_QUERY_TYPE_PATH, getGesucheSBQueryType);
+            return this;
+        }
+
+        public static final String ZUGEWIESEN_QUERY = "zugewiesen";
+
+        /**
+         * @param zugewiesen (Boolean)  (optional)
+         * @return operation
+         */
+        public CreateMassendruckJobForQueryTypeOper zugewiesenQuery(Object... zugewiesen) {
+            reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
             return this;
         }
 

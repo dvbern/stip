@@ -878,15 +878,15 @@
   "sachbearbeitung-app.cockpit.button.create-massendruck.VERFUEGUNGEN": "{anzahl, plural, one {1 Verfügung} other {# Verfügungen }} drucken",
 
   "sachbearbeitung-app.dashboard.title": "Dashboard",
+  "sachbearbeitung-app.dashboard.tabs.ALLE": "Gesuche",
   "sachbearbeitung-app.dashboard.tabs.ABKLAERUNG_DURCH_RECHSTABTEILUNG": "Abklärungen durch Rechtsabteilung",
   "sachbearbeitung-app.dashboard.tabs.AENDERUNGEN": "Änderungen",
   "sachbearbeitung-app.dashboard.tabs.DARLEHEN": "Darlehen",
   "sachbearbeitung-app.dashboard.tabs.DRUCKBAR_DATENSCHUTZBRIEFE": "Druckbare Datenschutzbriefe",
   "sachbearbeitung-app.dashboard.tabs.DRUCKBAR_VERFUEGUNGEN": "Druckbare Verfügungen",
   "sachbearbeitung-app.dashboard.tabs.FEHLGESCHLAGENE_ZAHLUNGEN": "Zahlungen",
-  "sachbearbeitung-app.dashboard.tabs.GESUCHE": "Gesuche",
   "sachbearbeitung-app.dashboard.tabs.JURISTISCHE_ABKLAERUNG": "Juristische Abklärungen",
-  "sachbearbeitung-app.dashboard.tabs.PENDENTE_GESUCHE": "Markiert",
+  "sachbearbeitung-app.dashboard.tabs.PENDENTE": "Markiert",
 
   "sachbearbeitung-app.gesuch-form.title": "Gesuch",
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Daten aus Nesko laden",

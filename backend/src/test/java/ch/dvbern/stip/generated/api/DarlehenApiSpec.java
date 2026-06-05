@@ -22,7 +22,6 @@ import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenGsResponseDtoSpec;
 import ch.dvbern.stip.generated.dto.FreiwilligDarlehenUpdateGsDtoSpec;
-import ch.dvbern.stip.generated.dto.GetFreiwilligDarlehenSbQueryTypeDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
 import java.time.LocalDate;
 import ch.dvbern.stip.generated.dto.NullableDarlehenDokumentDtoSpec;
@@ -1751,9 +1750,10 @@ public class DarlehenApiSpec {
      * Returns darlehen filtered by status and sb
      * 
      *
-     * @see #getFreiwilligDarlehenSbQueryTypePath  (required)
      * @see #pageQuery  (required)
      * @see #pageSizeQuery  (required)
+     * @see #bearbeitbarQuery  (optional)
+     * @see #zugewiesenQuery  (optional)
      * @see #fallNummerQuery  (optional)
      * @see #piaNachnameQuery  (optional)
      * @see #piaVornameQuery  (optional)
@@ -1769,7 +1769,7 @@ public class DarlehenApiSpec {
     public static class GetFreiwilligDarlehenDashboardSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}";
+        public static final String REQ_URI = "/darlehen/dashboard";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1781,7 +1781,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * GET /darlehen/dashboard
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1792,7 +1792,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/dashboard/{getFreiwilligDarlehenSbQueryType}
+         * GET /darlehen/dashboard
          * @param handler handler
          * @return PaginatedSbFreiwilligDarlehenDashboardDtoSpec
          */
@@ -1801,14 +1801,25 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH = "getFreiwilligDarlehenSbQueryType";
+        public static final String BEARBEITBAR_QUERY = "bearbeitbar";
 
         /**
-         * @param getFreiwilligDarlehenSbQueryType (GetFreiwilligDarlehenSbQueryTypeDtoSpec)  (required)
+         * @param bearbeitbar (Boolean)  (optional)
          * @return operation
          */
-        public GetFreiwilligDarlehenDashboardSbOper getFreiwilligDarlehenSbQueryTypePath(Object getFreiwilligDarlehenSbQueryType) {
-            reqSpec.addPathParam(GET_FREIWILLIG_DARLEHEN_SB_QUERY_TYPE_PATH, getFreiwilligDarlehenSbQueryType);
+        public GetFreiwilligDarlehenDashboardSbOper bearbeitbarQuery(Object... bearbeitbar) {
+            reqSpec.addQueryParam(BEARBEITBAR_QUERY, bearbeitbar);
+            return this;
+        }
+
+        public static final String ZUGEWIESEN_QUERY = "zugewiesen";
+
+        /**
+         * @param zugewiesen (Boolean)  (optional)
+         * @return operation
+         */
+        public GetFreiwilligDarlehenDashboardSbOper zugewiesenQuery(Object... zugewiesen) {
+            reqSpec.addQueryParam(ZUGEWIESEN_QUERY, zugewiesen);
             return this;
         }
 

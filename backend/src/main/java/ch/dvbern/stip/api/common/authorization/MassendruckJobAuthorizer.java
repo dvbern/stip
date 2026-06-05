@@ -38,7 +38,7 @@ public class MassendruckJobAuthorizer extends BaseAuthorizer {
 
     public void canCreateMassendruckJob(final GetGesucheSBQueryType getGesucheSBQueryType) {
         final var isAllowed = switch (getGesucheSBQueryType) {
-            case ALLE_DRUCKBAR_VERFUEGUNGEN, MEINE_DRUCKBAR_VERFUEGUNGEN, ALLE_DRUCKBAR_DATENSCHUTZBRIEFE, MEINE_DRUCKBAR_DATENSCHUTZBRIEFE -> true;
+            case DRUCKBAR_VERFUEGUNGEN, DRUCKBAR_DATENSCHUTZBRIEFE -> true;
             default -> false;
         };
 

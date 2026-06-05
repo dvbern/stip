@@ -33,7 +33,7 @@ import ch.dvbern.stip.api.common.authorization.GesuchTrancheAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType;
@@ -97,7 +97,7 @@ public class GesuchResourceImpl implements GesuchResource {
     private final GesuchAuthorizer gesuchAuthorizer;
     private final GesuchTrancheAuthorizer gesuchTrancheAuthorizer;
     private final GesuchMapperUtil gesuchMapperUtil;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final BenutzerService benutzerService;
     private final BeschwerdeverlaufService beschwerdeverlaufService;
     private final BeschwerdeVerlaufAuthorizer beschwerdeVerlaufAuthorizer;
@@ -344,9 +344,11 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public PaginatedSbGesucheDashboardDto getGesucheSb(
         GetGesucheSBQueryType getGesucheSBQueryType,
-        GesuchTrancheTyp typ,
+        GesuchTrancheTyp trancheTyp,
         Integer page,
         Integer pageSize,
+        Boolean bearbeitbar,
+        Boolean zugewiesen,
         String fallNummer,
         String piaNachname,
         String piaVorname,
@@ -359,8 +361,11 @@ public class GesuchResourceImpl implements GesuchResource {
         SortOrder sortOrder
     ) {
         gesuchAuthorizer.sbCanGetGesuche();
-        return gesuchService.findGesucheSB(
+        return gesuchService.getDashboardSB(
+            trancheTyp,
             getGesucheSBQueryType,
+            bearbeitbar,
+            zugewiesen,
             fallNummer,
             piaNachname,
             piaVorname,
@@ -369,7 +374,6 @@ public class GesuchResourceImpl implements GesuchResource {
             bearbeiter,
             letzteAktivitaetFrom,
             letzteAktivitaetTo,
-            typ,
             page,
             pageSize,
             sortColumn,
@@ -434,7 +438,7 @@ public class GesuchResourceImpl implements GesuchResource {
             gesuchId,
             DokumentDownloadConstants.GESUCH_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 

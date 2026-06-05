@@ -9,8 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { SteuerdatenAdapterType } from './steuerdatenAdapterType';
 
 export interface TenantFeature { 
-    nesko: boolean;
+    enabled: boolean;
+    adapterType?: SteuerdatenAdapterType;
 }
+
+
 

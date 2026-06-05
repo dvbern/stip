@@ -205,7 +205,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
     }
   }
 
-  updateSteuerdatenFromNesko(gesuchTrancheId: string) {
+  updateSteuerdatenFromPort(gesuchTrancheId: string) {
     const steuerdatenTyp = this.stepSig().type;
 
     SachbearbeitungAppDialogUpdateSteuerdatenComponent.open(this.dialog)
@@ -215,7 +215,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
         if (!result) return;
 
         const { steuerjahr } = result;
-        this.steuerdatenStore.updateSteuerdatenFromNesko$({
+        this.steuerdatenStore.updateSteuerdatenFromPort$({
           gesuchTrancheId,
           steuerdatenTyp,
           steuerjahr,

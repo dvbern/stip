@@ -42,7 +42,7 @@ import ch.dvbern.stip.api.pdf.util.PdfUtils;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
@@ -79,11 +79,11 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_TINY;
 @Slf4j
 public class VerfuegungPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
-    private final TenantConfigService tenantConfigService;
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
     private final BerechnungsblattService berechnungsblattService;
     private final DarlehenService darlehenService;
+    private final TenantService tenantService;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(
         final Verfuegung verfuegung,
@@ -401,7 +401,7 @@ public class VerfuegungPdfService {
                         "DATUM_LETZTE_VERFUEGUNG",
                         DateUtil.formatDate(datumLetzteVerfuegung),
                         "LINK_TO_DASHBOARD",
-                        tenantConfigService.getFrontendURI()
+                        tenantService.getConfigForCurrentTenant().frontendUri()
                     )
                 )
             );

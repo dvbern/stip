@@ -18,7 +18,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { NeskoGetSteuerdatenRequest } from '../model/neskoGetSteuerdatenRequest';
+import { GetSteuerdatenFromPortRequest } from '../model/getSteuerdatenFromPortRequest';
 import { Steuerdaten } from '../model/steuerdaten';
 import { ValidationReport } from '../model/validationReport';
 
@@ -35,9 +35,9 @@ export interface SteuerdatenServiceUpdateSteuerdatenRequestParams {
     steuerdaten: Array<Steuerdaten>;
 }
 
-export interface SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams {
+export interface SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams {
     gesuchTrancheId: string;
-    neskoGetSteuerdatenRequest: NeskoGetSteuerdatenRequest;
+    getSteuerdatenFromPortRequest: GetSteuerdatenFromPortRequest;
 }
 
 
@@ -300,16 +300,16 @@ export class SteuerdatenService {
         );
     }
 
-    public updateSteuerdatenFromNeskoPath = (requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams) => {
+    public updateSteuerdatenFromPortPath = (requestParameters: SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams) => {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromNesko$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromPort$.');
         }
-        const neskoGetSteuerdatenRequest = requestParameters.neskoGetSteuerdatenRequest;
-        if (neskoGetSteuerdatenRequest === null || neskoGetSteuerdatenRequest === undefined) {
-            throw new Error('Required parameter neskoGetSteuerdatenRequest was null or undefined when calling updateSteuerdatenFromNesko$.');
+        const getSteuerdatenFromPortRequest = requestParameters.getSteuerdatenFromPortRequest;
+        if (getSteuerdatenFromPortRequest === null || getSteuerdatenFromPortRequest === undefined) {
+            throw new Error('Required parameter getSteuerdatenFromPortRequest was null or undefined when calling updateSteuerdatenFromPort$.');
         }
-        let path = `/api/v1/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/steuerdaten/port/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -326,17 +326,17 @@ export class SteuerdatenService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Steuerdaten>>;
-     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Steuerdaten>>>;
-     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Steuerdaten>>>;
-     public updateSteuerdatenFromNesko$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromNeskoRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
+     public updateSteuerdatenFromPort$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Array<Steuerdaten>>;
+     public updateSteuerdatenFromPort$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<Steuerdaten>>>;
+     public updateSteuerdatenFromPort$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<Steuerdaten>>>;
+     public updateSteuerdatenFromPort$(requestParameters: SteuerdatenServiceUpdateSteuerdatenFromPortRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
         const gesuchTrancheId = requestParameters.gesuchTrancheId;
         if (gesuchTrancheId === null || gesuchTrancheId === undefined) {
-            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromNesko$.');
+            throw new Error('Required parameter gesuchTrancheId was null or undefined when calling updateSteuerdatenFromPort$.');
         }
-        const neskoGetSteuerdatenRequest = requestParameters.neskoGetSteuerdatenRequest;
-        if (neskoGetSteuerdatenRequest === null || neskoGetSteuerdatenRequest === undefined) {
-            throw new Error('Required parameter neskoGetSteuerdatenRequest was null or undefined when calling updateSteuerdatenFromNesko$.');
+        const getSteuerdatenFromPortRequest = requestParameters.getSteuerdatenFromPortRequest;
+        if (getSteuerdatenFromPortRequest === null || getSteuerdatenFromPortRequest === undefined) {
+            throw new Error('Required parameter getSteuerdatenFromPortRequest was null or undefined when calling updateSteuerdatenFromPort$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -393,11 +393,11 @@ export class SteuerdatenService {
             }
         }
 
-        const localVarPath = `/steuerdaten/nesko/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/steuerdaten/port/${this.configuration.encodeParam({name: "gesuchTrancheId", value: gesuchTrancheId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<Steuerdaten>>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: neskoGetSteuerdatenRequest,
+                body: getSteuerdatenFromPortRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.config.resource;
 
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.generated.api.ConfigurationResource;
 import ch.dvbern.stip.generated.dto.DeploymentConfigDto;
 import jakarta.annotation.security.PermitAll;
@@ -31,11 +31,15 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @PopulateCurrentBenutzerContext
 public class ConfigResourceImpl implements ConfigurationResource {
-    private final ConfigService configService;
+    private final StipConfig config;
 
     @Override
     @PermitAll
     public DeploymentConfigDto getDeploymentConfig() {
-        return configService.getDeploymentConfiguration();
+        return new DeploymentConfigDto(
+            config.version(),
+            config.environment(),
+            config.upload().allowedMimetypes().stream().toList()
+        );
     }
 }

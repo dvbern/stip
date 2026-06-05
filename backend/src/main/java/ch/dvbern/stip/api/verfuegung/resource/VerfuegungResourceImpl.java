@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.common.authorization.VerfuegungAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
 import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
@@ -53,7 +53,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.SB_GESUCH_READ;
 public class VerfuegungResourceImpl implements VerfuegungResource {
 
     private final BenutzerService benutzerService;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final JWTParser jwtParser;
     private final VerfuegungService verfuegungService;
     private final VerfuegungAuthorizer verfuegungAuthorizer;
@@ -67,7 +67,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
         final var verfuegungDokumentId = dokumentDownloadService.getClaimId(
             jwtParser,
             token,
-            configService.getSecret(),
+            config.preSignedRequest().secret(),
             DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM
         );
         return verfuegungService.getVerfuegungDokument(verfuegungDokumentId);
@@ -82,7 +82,7 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
             verfuegungDokumentId,
             DokumentDownloadConstants.VERFUEGUNG_DOKUMENT_ID_CLAIM,
             benutzerService,
-            configService
+            config
         );
     }
 

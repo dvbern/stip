@@ -29,7 +29,7 @@ import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.common.util.GesuchUtil;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.repo.DokumentRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentDeleteService;
@@ -65,7 +65,7 @@ public class AusbildungUnterbruchAntragService {
     private final AusbildungUnterbruchAntragMapper ausbildungUnterbruchAntragMapper;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final Antivirus antivirus;
     private final DokumentRepository dokumentRepository;
     private final DokumentDeleteService dokumentDeleteService;
@@ -152,7 +152,7 @@ public class AusbildungUnterbruchAntragService {
         return dokumentUploadService.validateScanUploadDokument(
             fileUpload,
             s3,
-            configService,
+            config,
             antivirus,
             AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
             objectId -> uploadDokument(
@@ -170,7 +170,7 @@ public class AusbildungUnterbruchAntragService {
             antrag.getDokuments().stream().map(dokument -> getFullPathObjectId(dokument.getObjectId())).toList();
 
         ausbildungUnterbruchAntragRepository.delete(antrag);
-        dokumentDeleteService.executeDeleteDokumentsFromS3(s3, configService.getBucketName(), objectIds);
+        dokumentDeleteService.executeDeleteDokumentsFromS3(s3, config.s3().bucketName(), objectIds);
     }
 
     @Transactional
@@ -180,7 +180,7 @@ public class AusbildungUnterbruchAntragService {
         antrag.getDokuments().remove(dokument);
         dokumentDeleteService.executeDeleteDokumentFromS3(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             getFullPathObjectId(dokument.getObjectId())
         );
     }
@@ -191,7 +191,7 @@ public class AusbildungUnterbruchAntragService {
 
         return dokumentDownloadService.getDokument(
             s3,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             AUSBILDUNG_UNTERBRUCH_ANTRAG_DOKUMENT_PATH,
             dokument.getFilename()

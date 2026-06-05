@@ -26,6 +26,16 @@ darlehenId:
   description: Die ID vom Darlehen
   schema:
     $ref: './common.yaml#/UUID'
+bearbeitbar:
+  in: query
+  name: bearbeitbar
+  schema:
+    type: boolean
+zugewiesen:
+  in: query
+  name: zugewiesen
+  schema:
+    type: boolean
 fallNummer:
   in: query
   name: fallNummer

@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.scheduler.Scheduled;
@@ -35,15 +35,15 @@ public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask {
     private final GesuchsperiodenService gesuchsperiodenService;
 
     @Transactional
-    @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(MandantIdentifier.BERN)
+    @Scheduled(cron = "{kstip.scheduler.gesuch-periode.cron}", timeZone = "Europe/Zurich")
+    @RunForTenant(TenantIdentifier.BERN)
     public void runForBern() {
         run();
     }
 
     @Transactional
-    @Scheduled(cron = "{kstip.gesuchsperiode.cron}", timeZone = "Europe/Zurich")
-    @RunForTenant(MandantIdentifier.DV)
+    @Scheduled(cron = "{kstip.scheduler.gesuch-periode.cron}", timeZone = "Europe/Zurich")
+    @RunForTenant(TenantIdentifier.DV)
     public void runForDV() {
         run();
     }

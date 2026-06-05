@@ -70,10 +70,12 @@
 
   "shared.header.aenderungenMenu": "{ anzahlAenderungen, plural, one {Modification} other {Modifications}}",
   "shared.header.aenderungen.complete-states.open": "Ouverte",
+  "shared.header.aenderungen.complete-states.manual": "Accepté manuellement",
   "shared.header.aenderungen.complete-states.completed": "Acceptée",
   "shared.header.aenderungen.complete-states.rejected": "Rejetée",
   "shared.header.aenderungen.open": "Modification ouverte",
   "shared.header.aenderungen.completed": "Modifications acceptées",
+  "shared.header.aenderungen.manuell": "Modifications manuelles",
   "shared.header.aenderungen.rejected": "Modifications rejetées",
 
   "shared.file.upload": "Parcourir les fichiers",
@@ -352,7 +354,7 @@
   "sachbearbeitung-app.gesuch.status.ausbildungunterbruchantrag.from.EINGEGEBEN.to.ABGELEHNT": "Refusé",
 
   "shared.gesuch.status.unterbruchAnfrage": "Demande d'interruption de formation",
-  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "En cours de vérification",
+  "shared.gesuch.status.tranche.MANUELLE_AENDERUNG": "Modification manuelle",
   "shared.gesuch.status.tranche.IN_BEARBEITUNG_GS": "En traitement par le requérant",
   "shared.gesuch.status.tranche.UEBERPRUEFEN": "En cours de vérification",
   "shared.gesuch.status.tranche.AKZEPTIERT": "Accepté",

@@ -18,7 +18,7 @@
 package ch.dvbern.stip.api.common.service.seeding;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.type.GueltigkeitStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -56,8 +56,8 @@ public class GesuchTestSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return List.of("test");
+    protected Set<String> getProfiles() {
+        return Set.of("test");
     }
 
     private static Gesuchsjahr getGesuchsjahr() {

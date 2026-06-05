@@ -48,7 +48,7 @@ import ch.dvbern.stip.api.common.util.LocaleUtil;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
@@ -99,6 +99,7 @@ import ch.dvbern.stip.api.notiz.type.GesuchNotizTyp;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
@@ -130,6 +131,7 @@ import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import ch.dvbern.stip.stipdecision.service.StipDecisionService;
 import ch.dvbern.stip.stipdecision.type.StipDeciderResult;
+import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.transaction.Transactional.TxType;
@@ -170,7 +172,8 @@ public class GesuchService {
     private final GesuchNummerService gesuchNummerService;
     private final FallRepository fallRepository;
     private final FallDashboardItemMapper fallDashboardItemMapper;
-    private final ConfigService configService;
+    private final StipConfig config;
+    private final TenantService tenantService;
     private final GesuchNotizService gesuchNotizService;
     private final SbDashboardQueryBuilder sbDashboardQueryBuilder;
     private final SbDashboardGesuchMapper sbDashboardGesuchMapper;
@@ -416,28 +419,34 @@ public class GesuchService {
         gesuch.getGesuchTranchen().add(tranche);
     }
 
-    @Transactional
-    public PaginatedSbGesucheDashboardDto findGesucheSB(
-        final GetGesucheSBQueryType queryType,
+    private void checkPageSizeSB(
+        final int pageSize
+    ) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
+            throw new IllegalArgumentException("Page size exceeded max allowed page size");
+        }
+    }
+
+    private int configureQuery(
+        JPAQuery<? extends AbstractEntity> baseQuery,
+        final Boolean zugewiesen,
         final String fallNummer,
         final String piaNachname,
         final String piaVorname,
         final LocalDate piaGeburtsdatum,
-        final String status,
         final String bearbeiter,
         final LocalDate letzteAktivitaetFrom,
         final LocalDate letzteAktivitaetTo,
-        final GesuchTrancheTyp typ,
         final int page,
         final int pageSize,
         final SbGesucheDashboardColumn sortColumn,
         final SortOrder sortOrder
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
-            throw new IllegalArgumentException("Page size exceeded max allowed page size");
-        }
+        final var currentBenutzerId = benutzerService.getCurrentBenutzer().getId();
 
-        final var baseQuery = sbDashboardQueryBuilder.baseQuery(queryType, typ);
+        if (Boolean.TRUE.equals(zugewiesen)) {
+            sbDashboardQueryBuilder.onlyCurrentBenutzer(baseQuery, currentBenutzerId);
+        }
 
         if (fallNummer != null) {
             sbDashboardQueryBuilder.fallNummer(baseQuery, fallNummer);
@@ -453,10 +462,6 @@ public class GesuchService {
 
         if (piaGeburtsdatum != null) {
             sbDashboardQueryBuilder.piaGeburtsdatum(baseQuery, piaGeburtsdatum);
-        }
-
-        if (status != null) {
-            sbDashboardQueryBuilder.status(baseQuery, typ, status);
         }
 
         if (bearbeiter != null) {
@@ -478,15 +483,169 @@ public class GesuchService {
         }
 
         sbDashboardQueryBuilder.paginate(baseQuery, page, pageSize);
-        final var results = baseQuery.stream()
-            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, typ))
+        return Math.toIntExact(countQuery.fetchFirst());
+    }
+
+    @Transactional
+    public PaginatedSbGesucheDashboardDto getDashboardSB(
+        final GesuchTrancheTyp trancheTyp,
+        final GetGesucheSBQueryType queryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        return switch (trancheTyp) {
+            case TRANCHE -> findGesuchsSB(
+                queryType,
+                bearbeitbar,
+                zugewiesen,
+                fallNummer,
+                piaNachname,
+                piaVorname,
+                piaGeburtsdatum,
+                status,
+                bearbeiter,
+                letzteAktivitaetFrom,
+                letzteAktivitaetTo,
+                page,
+                pageSize,
+                sortColumn,
+                sortOrder
+            );
+            case AENDERUNG -> findAendeurngsSB(
+                bearbeitbar,
+                zugewiesen,
+                fallNummer,
+                piaNachname,
+                piaVorname,
+                piaGeburtsdatum,
+                status,
+                bearbeiter,
+                letzteAktivitaetFrom,
+                letzteAktivitaetTo,
+                page,
+                pageSize,
+                sortColumn,
+                sortOrder
+            );
+        };
+    }
+
+    private PaginatedSbGesucheDashboardDto findGesuchsSB(
+        final GetGesucheSBQueryType queryType,
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        checkPageSizeSB(pageSize);
+        final var query = sbDashboardQueryBuilder.baseGesuchQuery(queryType);
+        final var totalEntries = configureQuery(
+            query,
+            zugewiesen,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            sbDashboardQueryBuilder.onlyBearbeitbarGesuchs(query);
+        }
+        if (status != null) {
+            sbDashboardQueryBuilder.gesuchStatus(query, status);
+        }
+
+        final var entries = query.stream()
+            .map(gesuch -> sbDashboardGesuchMapper.toDto(gesuch, gesuch.getLatestGesuchTranche()))
             .toList();
 
         return new PaginatedSbGesucheDashboardDto(
             page,
-            results.size(),
-            Math.toIntExact(countQuery.fetchFirst()),
-            results
+            entries.size(),
+            totalEntries,
+            entries
+        );
+    }
+
+    private PaginatedSbGesucheDashboardDto findAendeurngsSB(
+        final Boolean bearbeitbar,
+        final Boolean zugewiesen,
+        final String fallNummer,
+        final String piaNachname,
+        final String piaVorname,
+        final LocalDate piaGeburtsdatum,
+        final String status,
+        final String bearbeiter,
+        final LocalDate letzteAktivitaetFrom,
+        final LocalDate letzteAktivitaetTo,
+        final int page,
+        final int pageSize,
+        final SbGesucheDashboardColumn sortColumn,
+        final SortOrder sortOrder
+    ) {
+        checkPageSizeSB(pageSize);
+        final var query = sbDashboardQueryBuilder.baseAenderungQuery();
+        final var totalEntries = configureQuery(
+            query,
+            zugewiesen,
+            fallNummer,
+            piaNachname,
+            piaVorname,
+            piaGeburtsdatum,
+            bearbeiter,
+            letzteAktivitaetFrom,
+            letzteAktivitaetTo,
+            page,
+            pageSize,
+            sortColumn,
+            sortOrder
+        );
+
+        if (Boolean.TRUE.equals(bearbeitbar)) {
+            sbDashboardQueryBuilder.onlyBearbeitbarAenderungs(query);
+        }
+        if (status != null) {
+            sbDashboardQueryBuilder.trancheStatus(query, status);
+        }
+
+        final var entries = query.stream()
+            .map(aenderung -> sbDashboardGesuchMapper.toDto(aenderung.getGesuch(), aenderung))
+            .toList();
+
+        return new PaginatedSbGesucheDashboardDto(
+            page,
+            entries.size(),
+            totalEntries,
+            entries
         );
     }
 
@@ -517,7 +676,7 @@ public class GesuchService {
 
     @Transactional
     public void deleteGesuch(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        var gesuch = gesuchRepository.requireById(gesuchId);
         final var ausbildung = gesuch.getAusbildung();
         final var objectIds = gesuchDokumentService.removeAllGesuchDokumentsForGesuch(gesuchId);
         notificationService.deleteNotificationsForFall(ausbildung.getFall().getId());
@@ -602,10 +761,12 @@ public class GesuchService {
     public void bearbeitungAbschliessen(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
+        final var tenantConfig = tenantService.getConfigForCurrentTenant();
+
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
             gesuch,
-            configService.getCurrentDmnMajorVersion(),
-            configService.getCurrentDmnMinorVersion()
+            tenantConfig.berechnung().currentMajorVersion(),
+            tenantConfig.berechnung().currentMinorVersion()
         );
 
         if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {

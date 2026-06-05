@@ -17,64 +17,59 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
-import ch.dvbern.stip.api.common.type.TenantFeature;
-import ch.dvbern.stip.api.config.service.ConfigService;
-import ch.dvbern.stip.api.config.service.TenantSubdomainsProducer.PerTenantSubdomains;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.generated.dto.TenantAuthConfigDto;
 import ch.dvbern.stip.generated.dto.TenantFeatureDto;
+import ch.dvbern.stip.generated.dto.TenantFeaturesDto;
 import ch.dvbern.stip.generated.dto.TenantInfoDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.vertx.ext.web.RoutingContext;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import lombok.RequiredArgsConstructor;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENTIFIER_CONTEXT_NAME;
 
 @ApplicationScoped
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor_ = @Inject)
 @UnlessBuildProfile("test")
 public class TenantService {
     private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
 
     private final RoutingContext context;
-    private final ConfigService configService;
-    private final List<PerTenantSubdomains> perTenantSubdomains;
-
-    @ConfigProperty(name = "keycloak.frontend-url")
-    String keycloakFrontendUrl;
+    private final StipConfig config;
 
     public static ExplicitTenantIdScope setTenantId(final String tenantId) {
         return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
     }
 
     public TenantInfoDto getCurrentTenant() {
-        final String tenantId = context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
+        final var tenantId = getCurrentStringIdentifier();
 
-        final TenantAuthConfigDto tenantAuthConfig = new TenantAuthConfigDto();
-        tenantAuthConfig.setAuthServerUrl(keycloakFrontendUrl);
+        final var tenantConfig = getConfigForCurrentTenant();
+
+        final var tenantAuthConfig = new TenantAuthConfigDto();
+        tenantAuthConfig.setAuthServerUrl(config.oidc().frontendUrl());
         tenantAuthConfig.setRealm(tenantId);
 
+        final var steuerdatenFeature = new TenantFeatureDto();
+        steuerdatenFeature.enabled(tenantConfig.port().steuerdaten().enabled());
+        steuerdatenFeature.setAdapterType(tenantConfig.port().steuerdaten().adapterType().orElse(null));
+
+        final var tenantFeatures = new TenantFeaturesDto();
+        tenantFeatures.setSteuerdaten(steuerdatenFeature);
+
         return new TenantInfoDto()
-            .features(new TenantFeatureDto(getFeatures().nesko()))
+            .features(tenantFeatures)
             .identifier(tenantId)
             .clientAuth(tenantAuthConfig);
     }
 
-    public TenantFeature.Feature getFeatures() {
-        final var features = configService.getTenantFeatures();
-
-        return switch (getCurrentMandantIdentifier()) {
-            case BERN -> features.bern();
-            case DV -> features.dv();
-        };
-    }
-
-    public String getCurrentTenantIdentifier() {
+    public String getCurrentStringIdentifier() {
         if (EXPLICIT_TENANT_ID.get() != null) {
             return EXPLICIT_TENANT_ID.get();
         }
@@ -82,20 +77,26 @@ public class TenantService {
         return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);
     }
 
-    public MandantIdentifier getCurrentMandantIdentifier() {
-        return MandantIdentifier.of(getCurrentTenantIdentifier());
+    public TenantIdentifier getCurrentTenantIdentifier() {
+        return TenantIdentifier.of(getCurrentStringIdentifier());
     }
 
-    public MandantIdentifier resolveTenant(final String subdomain) {
-        for (final var perTenantSubdomain : perTenantSubdomains) {
-            if (perTenantSubdomain.subdomains().stream().anyMatch(subdomainPattern -> {
+    public TenantConfig getConfigForCurrentTenant() {
+        return config.tenant().get(getCurrentTenantIdentifier());
+    }
+
+    public TenantIdentifier resolveTenant(final String subdomain) {
+        for (final var tenant : TenantIdentifier.values()) {
+            final var subdomainPatterns = config.tenant().get(tenant).subdomains();
+            final var matches = subdomainPatterns.stream().anyMatch(subdomainPattern -> {
                 final var pattern = Pattern.compile(subdomainPattern, Pattern.CASE_INSENSITIVE);
                 return pattern.matcher(subdomain).matches();
-            })) {
-                return MandantIdentifier.of(perTenantSubdomain.tenant());
+            });
+            if (matches) {
+                return tenant;
             }
         }
 
-        return MandantIdentifier.of(configService.getDefaultTenant());
+        return TenantIdentifier.of(config.defaultTenant());
     }
 }

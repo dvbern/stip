@@ -18,11 +18,13 @@
 package ch.dvbern.stip.api.generator;
 
 import java.time.LocalDate;
+import java.util.UUID;
 import java.util.function.Consumer;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import lombok.Getter;
 
-public abstract class AbstractTestBuilder<E, Self extends AbstractTestBuilder<E, Self>> {
+public abstract class AbstractTestBuilder<E extends AbstractEntity, Self extends AbstractTestBuilder<E, Self>> {
 
     protected final E entity;
     @Getter
@@ -31,6 +33,12 @@ public abstract class AbstractTestBuilder<E, Self extends AbstractTestBuilder<E,
     protected AbstractTestBuilder(E entity, LocalDate referenceDate) {
         this.entity = entity;
         this.referenceDate = referenceDate;
+
+        this.entity.setId(UUID.randomUUID());
+        this.entity.setTimestampErstellt(referenceDate.atStartOfDay());
+        this.entity.setTimestampMutiert(referenceDate.atStartOfDay());
+        this.entity.setUserErstellt("Test User");
+        this.entity.setUserMutiert("Test User");
     }
 
     @SuppressWarnings("unchecked")

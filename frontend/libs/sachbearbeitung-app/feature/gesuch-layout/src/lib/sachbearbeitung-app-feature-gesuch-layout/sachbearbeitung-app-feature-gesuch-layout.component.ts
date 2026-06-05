@@ -258,11 +258,13 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const aenderungen = this.headerViewSig().aenderungs;
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
+    const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
 
     const allAenderungen = [
       ...(offeneAenderung ? [offeneAenderung] : []),
       ...(akzeptierteAenderungen ?? []),
+      ...(manuelleAenderungen ?? []),
       ...(abgelehnteAenderungen ?? []),
     ];
 
@@ -717,9 +719,9 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       gesuchId,
       onSuccess: (trancheId) => {
         const routesMap = {
-          AKZEPTIERT: ['gesuch', gesuchId, 'tranche', trancheId],
+          AKZEPTIERT: ['gesuch', 'info', gesuchId, 'tranche', trancheId],
           ABGELEHNT: ['/'],
-          MANUELLE_AENDERUNG: ['gesuch', gesuchId],
+          MANUELLE_AENDERUNG: ['gesuch', 'info', gesuchId],
         } satisfies Record<AenderungChangeState, unknown>;
 
         this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());

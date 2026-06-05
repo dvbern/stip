@@ -23,11 +23,47 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class GesuchAenderungsDto  implements Serializable {
+  private @Valid List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
 
+  /**
+   **/
+  public GesuchAenderungsDto manuell(List<GesuchTrancheSlimDto> manuell) {
+    this.manuell = manuell;
+    return this;
+  }
+
+  
+  @JsonProperty("manuell")
+  @NotNull
+  public List<GesuchTrancheSlimDto> getManuell() {
+    return manuell;
+  }
+
+  @JsonProperty("manuell")
+  public void setManuell(List<GesuchTrancheSlimDto> manuell) {
+    this.manuell = manuell;
+  }
+
+  public GesuchAenderungsDto addManuellItem(GesuchTrancheSlimDto manuellItem) {
+    if (this.manuell == null) {
+      this.manuell = new ArrayList<>();
+    }
+
+    this.manuell.add(manuellItem);
+    return this;
+  }
+
+  public GesuchAenderungsDto removeManuellItem(GesuchTrancheSlimDto manuellItem) {
+    if (manuellItem != null && this.manuell != null) {
+      this.manuell.remove(manuellItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public GesuchAenderungsDto akzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
@@ -145,7 +181,8 @@ public class GesuchAenderungsDto  implements Serializable {
       return false;
     }
     GesuchAenderungsDto gesuchAenderungs = (GesuchAenderungsDto) o;
-    return Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
+    return Objects.equals(this.manuell, gesuchAenderungs.manuell) &&
+        Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
         Objects.equals(this.offen, gesuchAenderungs.offen);
@@ -153,7 +190,7 @@ public class GesuchAenderungsDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(akzeptiert, abgelehnt, canAenderungEinreichen, offen);
+    return Objects.hash(manuell, akzeptiert, abgelehnt, canAenderungEinreichen, offen);
   }
 
   @Override
@@ -161,6 +198,7 @@ public class GesuchAenderungsDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class GesuchAenderungsDto {\n");
     
+    sb.append("    manuell: ").append(toIndentedString(manuell)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
