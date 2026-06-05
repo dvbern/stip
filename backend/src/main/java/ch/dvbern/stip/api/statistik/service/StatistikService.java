@@ -94,6 +94,7 @@ public class StatistikService {
 
     public List<StatistikDto> getAllStatistiks() {
         final var statistiks = statistikRepository.findAll();
+        final var test = statistikRepository.getTestList(2026);
         return statistiks.stream()
             .map(statistikMapper::fromEntity)
             .sorted(Comparator.comparing(StatistikDto::getTimestampErstellt).reversed())

@@ -409,6 +409,7 @@
         <configuration>
           <compilerArgs>
             <arg>-parameters</arg>
+            <arg>-Ainclude=*.repo.*,*QueryRepository</arg>
           </compilerArgs>
           <annotationProcessorPaths>
             <path>

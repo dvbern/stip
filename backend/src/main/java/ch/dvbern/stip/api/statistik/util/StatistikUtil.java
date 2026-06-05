@@ -112,7 +112,7 @@ public class StatistikUtil {
 
         return lebenslaufItems.stream()
             .filter(LebenslaufItem::isAusbildung)
-            .anyMatch(LebenslaufItem::isAusbildungAbgeschlossen);
+            .noneMatch(LebenslaufItem::isAusbildungAbgeschlossen);
     }
 
     public static List<StatistikBuchhaltungUnion> combineBuchhaltungs(
