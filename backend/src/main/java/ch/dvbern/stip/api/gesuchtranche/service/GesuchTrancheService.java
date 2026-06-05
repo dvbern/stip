@@ -131,6 +131,12 @@ public class GesuchTrancheService {
             )
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
+        final var fehlendeDokumenteAenderungs = gesuch.getAenderungs()
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+            )
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
         final var manuelleAenderungs = gesuch.getAenderungs()
             .filter(
                 aenderung -> aenderung.getStatus() == GesuchTrancheStatus.MANUELLE_AENDERUNG
@@ -147,6 +153,7 @@ public class GesuchTrancheService {
             .manuell(manuelleAenderungs)
             .akzeptiert(akzeptierteAenderungs)
             .abgelehnt(abgelehnteAenderungs)
+            .fehlendeDokumente(fehlendeDokumenteAenderungs)
             .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
     }
 
