@@ -199,7 +199,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
-        when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any())).thenCallRealMethod();
+        when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any(Gesuch.class))).thenCallRealMethod();
         when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuch.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
