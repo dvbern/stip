@@ -158,10 +158,11 @@ public class GesuchTrancheService {
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(
-        final Gesuch gesuch,
+        final GesuchTranche gesuchTranche,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
         final var benutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchTranche.getGesuch();
         final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
         || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
         dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
@@ -171,11 +172,14 @@ public class GesuchTrancheService {
                 .getGSCanFehlendeDokumenteEinreichen(gesuch, benutzer)
         );
 
-        dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
-            requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
-        );
-
-        return dokumenteToUploadDto;
+        return switch (gesuchTranche.getTyp()) {
+            case TRANCHE -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
+            );
+            case AENDERUNG -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche)
+            );
+        };
     }
 
     @Transactional
@@ -186,7 +190,7 @@ public class GesuchTrancheService {
         final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, requiredRefs, List.of(), customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
     @Transactional
@@ -199,7 +203,7 @@ public class GesuchTrancheService {
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto =
             dokumenteToUploadMapper.toDto(required, requiredRefs, unterschriftenblaetter, customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
     public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {

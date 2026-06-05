@@ -101,8 +101,24 @@ public class GesuchDokumentRepository implements BaseRepository<GesuchDokument> 
             .selectFrom(gesuchDokument)
             .where(
                 gesuchDokument.gesuchTranche.id.in(
-                    gesuch.getGesuchTranchen().stream().map(AbstractEntity::getId).toList()
+                    gesuch.getTranchenTranchen().map(AbstractEntity::getId).toList()
                 ).and(gesuchDokument.status.eq(gesuchDokumentStatus))
+            )
+            .stream();
+    }
+
+    public Stream<GesuchDokument> findAllForGesuchTrancheInStatus(
+        final UUID gesuchTrancheId,
+        final GesuchDokumentStatus gesuchDokumentStatus
+    ) {
+        var queryFactory = new JPAQueryFactory(entityManager);
+        var gesuchDokument = QGesuchDokument.gesuchDokument;
+
+        return queryFactory
+            .selectFrom(gesuchDokument)
+            .where(
+                gesuchDokument.gesuchTranche.id.eq(gesuchTrancheId)
+                    .and(gesuchDokument.status.eq(gesuchDokumentStatus))
             )
             .stream();
     }
