@@ -722,7 +722,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       onSuccess: (trancheId) => {
         const routesMap = {
           AKZEPTIERT: ['gesuch', 'info', gesuchId, 'tranche', trancheId],
-          ABGELEHNT: ['/'],
+          ABGELEHNT: ['gesuch', 'info', gesuchId, 'tranche', trancheId],
           MANUELLE_AENDERUNG: ['gesuch', 'info', gesuchId],
         } satisfies Record<AenderungChangeState, unknown>;
 

@@ -552,7 +552,7 @@ public class GesuchTrancheService {
         notificationService
             .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung);
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung.getGesuch().getLatestGesuchTranche());
     }
 
     @Transactional
