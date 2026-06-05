@@ -96,8 +96,11 @@ html {
   @include mat.form-field-density(-2);
 }
 
-.group-errors .mat-mdc-form-field-error {
-  font-size: var(--mat-sys-body-small-size);
+.group-errors {
+  min-height: 1.2rem;
+  .mat-mdc-form-field-error {
+    font-size: var(--mat-sys-body-small-size);
+  }
 }
 
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float {
