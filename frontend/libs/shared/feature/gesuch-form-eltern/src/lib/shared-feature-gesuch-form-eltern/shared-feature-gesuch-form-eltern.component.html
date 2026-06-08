@@ -27,9 +27,9 @@
 @if (!editedElternteil && !view.loading) {
   <ng-container *dvTranslocoShared="let t">
     <mat-selection-list [formControl]="sichtbareEltern" [disableRipple]="true">
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
+      <div class="tw:dv-form-grid tw:gap-6 tw:mt-6">
         @if (view.expectVater) {
-          <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:relative">
+          <div class="tw:xl:col-span-1 tw:relative">
             <mat-list-option
               [value]="elternTyps.VATER"
               *dvIfSachbearbeiter
@@ -50,7 +50,7 @@
           </div>
         }
         @if (view.expectMutter) {
-          <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:relative">
+          <div class="tw:xl:col-span-1 tw:relative">
             <mat-list-option
               [value]="elternTyps.MUTTER"
               *dvIfSachbearbeiter
@@ -71,7 +71,7 @@
           </div>
         }
         @if (!view.expectVater && !view.expectMutter) {
-          <div class="tw:col-span-12">
+          <div class="tw:xl:col-span-2">
             {{ t('shared.form.eltern.none') }}
           </div>
         }
