@@ -617,6 +617,7 @@ export class SachbearbeitungAppFeatureCockpitComponent
         bearbeitbar: bearbeitbarConfig.value,
         zugewiesen: zugewiesenConfig.value,
         ...filter,
+        ...getStatusFilterByFilterTab(filterTab),
         ...startEndFilter,
         ...getSortAndPageInputs(this),
       });
@@ -700,5 +701,17 @@ const canDrucken = (filterTab: FilterTabParam | undefined) => {
       return true;
     default:
       return false;
+  }
+};
+
+const getStatusFilterByFilterTab = (
+  filterTab: FilterTabParam | undefined,
+): { status?: Gesuchstatus } => {
+  switch (filterTab) {
+    case 'JURISTISCHE_ABKLAERUNG':
+    case 'ABKLAERUNG_DURCH_RECHSTABTEILUNG':
+      return { status: filterTab };
+    default:
+      return {};
   }
 };
