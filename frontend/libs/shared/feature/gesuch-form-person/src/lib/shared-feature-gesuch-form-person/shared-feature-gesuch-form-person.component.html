@@ -9,7 +9,7 @@
       (gotReenabledSig)="gotReenabled$.next({})"
       data-testid="form-person-form"
       novalidate
-      class="testing-library-fix tw:mt-6 tw:dv-form-grid"
+      class="testing-library-fix tw:mt-8 tw:dv-form-grid"
       (ngSubmit)="handleSave()"
     >
       <!-- AHV Sozialversicherungsnummer -->
@@ -55,7 +55,7 @@
         #ahvInfoDialog="dvSharedUiInfoDialog"
       ></div>
 
-      <h3 class="tw:xl:col-span-3 tw:mb-6 tw:pt-12 tw:text-2xl tw:font-semibold">
+      <h3 class="tw:xl:col-span-3 tw:pt-6 tw:text-2xl tw:font-semibold">
         {{ 'shared.form.shared.section.personal-details' | transloco }}
       </h3>
 
@@ -803,7 +803,7 @@
         >
       }
 
-      <!-- Buttons -->
+      <!-- Buttons todo: margin 6 + 6 von gird spacing -->
       <dv-shared-ui-step-form-buttons class="tw:xl:col-span-3">
         @if (!view.readonly) {
           <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">

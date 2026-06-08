@@ -1,84 +1,76 @@
-<div class="tw:mt-6 tw:grid tw:grid-cols-12 tw:gap-6">
-  @if (store.currentGesuchsjahrViewSig()?.isEditable) {
-    @if (idSig(); as id) {
-      <div class="tw:col-span-12 tw:xl:col-span-5 tw:xl:order-1">
-        <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
-          class="tw:col-span-12 tw:md:col-span-3 tw:xl:col-span-3"
-          typeSig="gesuchsjahr"
-          [unsavedChangesSig]="unsavedChangesSig()"
-          (publish)="publish(id)"
-        ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
-      </div>
+<form
+  [formGroup]="form"
+  [dvSharedUiFormReadonly]="store.currentGesuchsjahrViewSig()?.isReadonly"
+  data-testid="form-gesuchsjahr-form"
+  (ngSubmit)="handleSave()"
+  class="tw:dv-form-grid tw:mt-6 tw:px-3"
+>
+  <h2 class="tw:xl:col-span-3 tw:text-2xl tw:font-semibold">
+    {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
+  </h2>
+
+  @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
+    <dv-shared-ui-loading></dv-shared-ui-loading>
+  } @else {
+    <!-- BezeichnungDe -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | transloco }}</mat-label>
+      <input
+        formControlName="bezeichnungDe"
+        data-testid="form-gesuchsjahr-bezeichnungDe"
+        matInput
+        dvMaxLength
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </mat-form-field>
+    <!-- BezeichnungFr -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | transloco }}</mat-label>
+      <input
+        formControlName="bezeichnungFr"
+        data-testid="form-gesuchsjahr-bezeichnungFr"
+        matInput
+        dvMaxLength
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </mat-form-field>
+    <!-- Jahr -->
+    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | transloco }}</mat-label>
+      <input
+        formControlName="technischesJahr"
+        data-testid="form-gesuchsjahr-jahr"
+        [maskito]="masktitoYear"
+        matInput
+        type="text"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    @if (store.currentGesuchsjahrViewSig()?.isEditable ?? true) {
+      <dv-shared-ui-form-save
+        class="tw:xl:col-span-3"
+        [loading]="store.currentGesuchsjahr() | rdIsPending: { ignoreInitial: true }"
+      ></dv-shared-ui-form-save>
     }
   }
-  <form
-    [formGroup]="form"
-    [dvSharedUiFormReadonly]="store.currentGesuchsjahrViewSig()?.isReadonly"
-    data-testid="form-gesuchsjahr-form"
-    (ngSubmit)="handleSave()"
-    class="tw:grid tw:col-span-12 tw:xl:col-span-7 tw:gap-y-6 tw:mt-3 tw:px-3"
-  >
-    <h2 class="tw:mb-6 tw:text-2xl tw:font-semibold">
-      {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
-    </h2>
 
-    @if (store.currentGesuchsjahr() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
-      <dv-shared-ui-loading></dv-shared-ui-loading>
-    } @else {
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6">
-        <!-- BezeichnungDe -->
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | transloco }}</mat-label>
-          <input
-            formControlName="bezeichnungDe"
-            data-testid="form-gesuchsjahr-bezeichnungDe"
-            matInput
-            dvMaxLength
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-        <!-- BezeichnungFr -->
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | transloco }}</mat-label>
-          <input
-            formControlName="bezeichnungFr"
-            data-testid="form-gesuchsjahr-bezeichnungFr"
-            matInput
-            dvMaxLength
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
-        <!-- Jahr -->
-        <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6">
-          <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | transloco }}</mat-label>
-          <input
-            formControlName="technischesJahr"
-            data-testid="form-gesuchsjahr-jahr"
-            [maskito]="masktitoYear"
-            matInput
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      @if (store.currentGesuchsjahrViewSig()?.isEditable ?? true) {
-        <dv-shared-ui-form-save
-          class="tw:mt-6"
-          [loading]="store.currentGesuchsjahr() | rdIsPending: { ignoreInitial: true }"
-        ></dv-shared-ui-form-save>
-      }
+  @if (store.currentGesuchsjahrViewSig()?.isEditable) {
+    @if (idSig(); as id) {
+      <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
+        class="tw:xl:col-start-3 tw:xl:row-start-2"
+        typeSig="gesuchsjahr"
+        [unsavedChangesSig]="unsavedChangesSig()"
+        (publish)="publish(id)"
+      ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
     }
-  </form>
-</div>
+  }
+</form>
