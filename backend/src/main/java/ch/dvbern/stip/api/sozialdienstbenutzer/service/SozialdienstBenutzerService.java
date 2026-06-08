@@ -27,11 +27,11 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.delegieren.service.DelegierenService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.SozialdienstAdminDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstBenutzerDto;
@@ -56,8 +56,8 @@ public class SozialdienstBenutzerService {
     private final SozialdienstBenutzerMapper sozialdienstBenutzerMapper;
     private final MailService mailService;
     private final KeycloakBenutzerService keycloakBenutzerService;
-    private final TenantService tenantService;
     private final Event<SozialdienstBenutzerCreated> createdEvent;
+    private final DelegierenService delegierenService;
 
     public Optional<SozialdienstBenutzer> getCurrentSozialdienstBenutzer() {
         final var keycloakId = jsonWebToken.getSubject();
@@ -186,8 +186,12 @@ public class SozialdienstBenutzerService {
         }
         var sozialdienst = sozialdienstOpt.get();
 
+        delegierenService
+            .reassignAllOfSozialdienstBenutzerTo(sozialdienstBenutzer, sozialdienst.getSozialdienstAdmin());
+
         sozialdienst.getSozialdienstBenutzers().remove(sozialdienstBenutzer);
         sozialdienstBenutzerRepository.delete(sozialdienstBenutzer);
+        sozialdienstBenutzerRepository.flush();
 
         keycloakBenutzerService.deleteKeycloakBenutzer(sozialdienstBenutzer.getKeycloakId());
     }
