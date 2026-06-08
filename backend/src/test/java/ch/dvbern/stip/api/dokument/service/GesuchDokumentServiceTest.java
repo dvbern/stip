@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.common.authorization.CustomGesuchDokumentTypAuthorizer;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.entity.GesuchDokument;
@@ -310,7 +310,7 @@ class GesuchDokumentServiceTest {
         GesuchRepository gesuchRepository,
         GesuchTrancheRepository gesuchTrancheRepository,
         S3AsyncClient s3,
-        ConfigService configService,
+        StipConfig config,
         GesuchDokumentstatusService gesuchDokumentstatusService,
         Antivirus antivirus,
         CustomDokumentTypRepository customDocumentTypRepository,
@@ -330,7 +330,7 @@ class GesuchDokumentServiceTest {
                 gesuchRepository,
                 gesuchTrancheRepository,
                 s3,
-                configService,
+                config,
                 gesuchDokumentstatusService,
                 requiredDokumentService,
                 antivirus,

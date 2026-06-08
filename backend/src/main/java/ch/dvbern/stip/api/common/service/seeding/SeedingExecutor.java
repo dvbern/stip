@@ -19,10 +19,10 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.runtime.Startup;
 import io.quarkus.runtime.configuration.ConfigUtils;
@@ -39,7 +39,7 @@ public class SeedingExecutor {
     private final Instance<Seeder> seeders;
 
     @Startup
-    @RunForTenant(MandantIdentifier.BERN)
+    @RunForTenant(TenantIdentifier.BERN)
     public void seedForBern() {
         LOG.info("SeedingExecutor starting execution for Bern");
         doSeed();
@@ -47,7 +47,7 @@ public class SeedingExecutor {
     }
 
     @Startup
-    @RunForTenant(MandantIdentifier.DV)
+    @RunForTenant(TenantIdentifier.DV)
     public void seedForDv() {
         LOG.info("SeedingExecutor starting execution for DV");
         doSeed();
@@ -64,7 +64,7 @@ public class SeedingExecutor {
         });
     }
 
-    private boolean shouldSeed(final List<String> profilesToSeedOn) {
+    private boolean shouldSeed(final Set<String> profilesToSeedOn) {
         return !Collections.disjoint(ConfigUtils.getProfiles(), profilesToSeedOn);
     }
 }

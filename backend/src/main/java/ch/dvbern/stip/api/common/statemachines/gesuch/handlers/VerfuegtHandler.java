@@ -18,19 +18,19 @@
 package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.swisstopoapi.service.SwisstopoService;
+import ch.dvbern.stip.integration.gemeindelookup.domain.service.GemeindeLookupService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class VerfuegtHandler implements GesuchStatusChangeHandler {
-    private final SwisstopoService swisstopoService;
+    private final GemeindeLookupService gemeindeLookupService;
 
     @Override
     public void handle(Gesuch gesuch) {
         gesuch.setVerfuegt(true);
         gesuch.setInBearbeitungSbReason(null);
-        swisstopoService.createFetchGemeindeDataOfGesuchScheduledTask(gesuch);
+        gemeindeLookupService.createFetchGemeindeDataScheduledJob(gesuch);
     }
 }

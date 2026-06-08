@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
@@ -38,7 +39,7 @@ import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.exception.CancelInvocationException;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import com.opencsv.CSVParserBuilder;
 import com.opencsv.CSVReaderHeaderAwareBuilder;
 import io.quarkus.runtime.configuration.ConfigUtils;
@@ -54,7 +55,7 @@ public class AusbildungSeeding extends Seeder {
     private final AbschlussRepository abschlussRepository;
     private final AusbildungsstaetteRepository ausbildungsstaetteRepository;
     private final AusbildungsgangRepository ausbildungsgangRepository;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     private static final String PATH_TO_CSV_ABSCHLUSS = "/seeding/ausbildung/abschluss.csv";
     private static final String PATH_TO_CSV_AUSBILDUNGSSTAETTE = "/seeding/ausbildung/ausbildungsstaette.csv";
@@ -88,8 +89,8 @@ public class AusbildungSeeding extends Seeder {
     }
 
     @Override
-    protected List<String> getProfiles() {
-        return configService.getSeedOnProfile();
+    protected Set<String> getProfiles() {
+        return config.seeding().seedOnProfile();
     }
 
     @SneakyThrows

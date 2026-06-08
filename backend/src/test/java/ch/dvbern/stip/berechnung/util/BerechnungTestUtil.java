@@ -23,7 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.tenancy.service.MockTenantService;
+import ch.dvbern.stip.api.tenancy.service.TenantServiceMock;
 import ch.dvbern.stip.berechnung.dto.BerechnungRequestBuilder;
 import ch.dvbern.stip.berechnung.dto.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
@@ -104,7 +104,7 @@ public class BerechnungTestUtil {
             requestBuilders,
             berechnungStammdatenMapper,
             calculators,
-            new MockTenantService()
+            new TenantServiceMock()
         );
     }
 

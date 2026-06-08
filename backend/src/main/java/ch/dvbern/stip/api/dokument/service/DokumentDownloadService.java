@@ -27,7 +27,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Supplier;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
 import io.quarkus.security.UnauthorizedException;
@@ -106,17 +106,17 @@ public class DokumentDownloadService {
         final UUID id,
         final String idClaim,
         final BenutzerService benutzerService,
-        final ConfigService configService
+        final StipConfig config
     ) {
         return new FileDownloadTokenDto()
             .token(
                 Jwt.claims()
                     .upn(benutzerService.getCurrentBenutzername())
                     .claim(idClaim, id.toString())
-                    .expiresIn(Duration.ofMinutes(configService.getExpiresInMinutes()))
-                    .issuer(configService.getIssuer())
+                    .expiresIn(Duration.ofMinutes(config.preSignedRequest().expiresInMinutes()))
+                    .issuer(config.preSignedRequest().issuer())
                     .jws()
-                    .signWithSecret(configService.getSecret())
+                    .signWithSecret(config.preSignedRequest().secret())
             );
     }
 

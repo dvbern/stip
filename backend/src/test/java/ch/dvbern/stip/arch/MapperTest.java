@@ -69,7 +69,7 @@ class MapperTest {
                 }
             });
 
-        rule.check(ArchTestUtil.APP_CLASSES);
+        rule.check(ArchTestUtil.API_CLASSES);
     }
 
 }

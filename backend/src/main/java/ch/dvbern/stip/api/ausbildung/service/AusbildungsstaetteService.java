@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteSortColumn;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteCreateDto;
 import ch.dvbern.stip.generated.dto.AusbildungsstaetteDto;
@@ -50,7 +50,7 @@ public class AusbildungsstaetteService {
     private final AusbildungsstaetteQueryBuilder ausbildungsstaetteQueryBuilder;
     private final AusbildungsstaetteMapper ausbildungsstaetteMapper;
     private final AusbildungsgangService ausbildungsgangService;
-    private final ConfigService configService;
+    private final StipConfig config;
 
     private void validateAusbildungsstaetteIsOfValidNumberType(
         final AusbildungsstaetteCreateDto ausbildungsstaetteCreateDto
@@ -121,7 +121,7 @@ public class AusbildungsstaetteService {
         final String nummer,
         final Boolean aktiv
     ) {
-        if (pageSize > configService.getMaxAllowedPageSize()) {
+        if (pageSize > config.pagination().maxAllowedPageSize()) {
             throw new IllegalArgumentException("Page size exceeded max allowed page size");
         }
 

@@ -17,246 +17,508 @@
 
 package ch.dvbern.stip.api.steuerdaten.service;
 
-import java.math.BigDecimal;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
-import ch.dvbern.stip.api.kind.repo.NeskoAccessRepository;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.EffSatzType;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.GetSteuerdatenResponse;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.MannFrauEffSatzType;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.SteuerdatenType;
-import ch.dvbern.stip.api.nesko.generated.stipendienauskunftservice.VeranlagungsStatusType;
-import ch.dvbern.stip.api.nesko.service.NeskoGetSteuerdatenService;
+import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
-import ch.dvbern.stip.api.util.TestConstants;
-import ch.dvbern.stip.api.util.TestUtil;
-import org.junit.jupiter.api.BeforeEach;
+import ch.dvbern.stip.generated.dto.SteuerdatenDto;
+import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenPortData;
+import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPort;
+import ch.dvbern.stip.integration.steuerdaten.domain.port.SteuerdatenPortFactory;
+import io.quarkus.test.InjectMock;
+import io.quarkus.test.component.QuarkusComponentTest;
+import jakarta.inject.Inject;
+import jakarta.validation.Validator;
+import jakarta.ws.rs.NotFoundException;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+@QuarkusComponentTest
 class SteuerdatenServiceTest {
-    private SteuerdatenService steuerdatenService;
-    private GesuchTrancheRepository trancheRepository;
-    private SteuerdatenRepository steuerdatenRepository;
 
-    private NeskoGetSteuerdatenService neskoGetSteuerdatenService;
-    private NeskoAccessRepository neskoAccessRepository;
+    @Inject
+    SteuerdatenService steuerdatenService;
 
-    private GesuchTranche gesuchTranche;
-    private GesuchFormular gesuchFormular;
+    @InjectMock
+    Validator validator;
 
-    GetSteuerdatenResponse getSteuerdatenResponse;
+    @InjectMock
+    GesuchTrancheRepository trancheRepository;
 
-    @BeforeEach
-    void setUp() {
-        getSteuerdatenResponse = new GetSteuerdatenResponse();
-        getSteuerdatenResponse.setSteuerdaten(new SteuerdatenType());
-        var steuerbaresVermoegenKanton = new EffSatzType();
-        steuerbaresVermoegenKanton.setEffektiv(BigDecimal.ZERO);
-        getSteuerdatenResponse.getSteuerdaten().setSteuerbaresVermoegenKanton(steuerbaresVermoegenKanton);
-        getSteuerdatenResponse.getSteuerdaten().setFahrkosten(new MannFrauEffSatzType());
-        getSteuerdatenResponse.getSteuerdaten().setKostenAuswaertigeVerpflegung(new MannFrauEffSatzType());
-        getSteuerdatenResponse.getSteuerdaten().setTotalEinkuenfte(new EffSatzType());
-        getSteuerdatenResponse.getSteuerdaten().getTotalEinkuenfte().setEffektiv(BigDecimal.ZERO);
-        getSteuerdatenResponse.getSteuerdaten().getTotalEinkuenfte().setSatzbestimmend(BigDecimal.ZERO);
-        getSteuerdatenResponse.getSteuerdaten()
-            .setStatusVeranlagung(VeranlagungsStatusType.fromValue(TestConstants.VERANLAGUNGSSTATUS_EXAMPLE_VALUE));
+    @InjectMock
+    SteuerdatenMapper steuerdatenMapper;
 
-        gesuchTranche = new GesuchTranche();
-        gesuchFormular = new GesuchFormular();
-        var eltern1 = new Eltern();
-        eltern1.setElternTyp(ElternTyp.VATER);
-        eltern1.setSozialversicherungsnummer("");
-        var eltern2 = new Eltern();
-        eltern2.setElternTyp(ElternTyp.MUTTER);
-        eltern2.setSozialversicherungsnummer("");
+    @InjectMock
+    SteuerdatenRepository steuerdatenRepository;
 
-        var ausbildung = new Ausbildung();
-        var fall = new Fall();
-        fall.setFallNummer(UUID.randomUUID().toString());
-        ausbildung.setFall(fall);
-        var gesuch = new Gesuch();
-        gesuch.setAusbildung(ausbildung);
-        gesuchTranche.setGesuch(gesuch);
-        gesuch.setGesuchNummer(UUID.randomUUID().toString());
-        gesuchFormular.setTranche(gesuchTranche);
-        gesuchFormular.getTranche().setGesuch(gesuch);
+    @InjectMock
+    SteuerdatenPortFactory steuerdatenPortFactory;
 
-        gesuchFormular.setElterns(Set.of(eltern1, eltern2));
+    @InjectMock
+    GesuchTrancheHistoryService gesuchTrancheHistoryService;
 
-        gesuchFormular.setTranche(gesuchTranche);
-        gesuchTranche.setGesuchFormular(gesuchFormular);
-        gesuch.setGesuchNummer(TestUtil.getFullGesuch().getGesuchNummer());
+    @Test
+    void getSteuerdaten_trancheExists_returnsMappedDtos() {
+        final var trancheId = UUID.randomUUID();
+        final var steuerdaten = new Steuerdaten();
+        final var dto = new SteuerdatenDto();
 
-        trancheRepository = Mockito.mock(GesuchTrancheRepository.class);
-        when(trancheRepository.requireById(any())).thenReturn(gesuchTranche);
+        final var formular = new GesuchFormular();
+        formular.getSteuerdaten().add(steuerdaten);
 
-        steuerdatenRepository = Mockito.mock(SteuerdatenRepository.class);
-        neskoGetSteuerdatenService = Mockito.mock(NeskoGetSteuerdatenService.class);
+        final var tranche = mock(GesuchTranche.class);
+        when(tranche.getGesuchFormular()).thenReturn(formular);
+        when(trancheRepository.findById(trancheId)).thenReturn(tranche);
+        when(steuerdatenMapper.toDto(steuerdaten)).thenReturn(dto);
 
-        neskoAccessRepository = Mockito.mock(NeskoAccessRepository.class);
-        Mockito.doNothing().when(neskoAccessRepository).persistAndFlush(any());
+        final var result = steuerdatenService.getSteuerdaten(trancheId);
 
-        when(neskoGetSteuerdatenService.getSteuerdatenResponse(any(), any(), any(), any()))
-            .thenReturn(getSteuerdatenResponse);
-
-        steuerdatenService = new SteuerdatenService(
-            null,
-            trancheRepository,
-            new SteuerdatenMapperImpl(),
-            steuerdatenRepository,
-            neskoGetSteuerdatenService,
-            null
-        );
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0), is(dto));
+        verify(gesuchTrancheHistoryService, never()).getLatestTranche(any());
     }
 
     @Test
-    void setAllToSelbstaendig_IfOneIsSelbstaendig_Steuerdaten_FAMILIE_Test() {
-        // arrange
-        var actualSteuerdaten = new Steuerdaten();
-        actualSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
-        actualSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(true);
+    void getSteuerdaten_trancheNotFound_fallsBackToHistory() {
+        final var trancheId = UUID.randomUUID();
+        final var steuerdaten = new Steuerdaten();
+        final var dto = new SteuerdatenDto();
 
-        var familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(true);
-        gesuchFormular.setFamiliensituation(familiensituation);
-        var steuerdatenSet = new HashSet<Steuerdaten>();
-        steuerdatenSet.add(actualSteuerdaten);
-        gesuchFormular.setSteuerdaten(steuerdatenSet);
+        final var formular = new GesuchFormular();
+        formular.getSteuerdaten().add(steuerdaten);
 
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
-        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(false);
+        final var historicTranche = mock(GesuchTranche.class);
+        when(historicTranche.getGesuchFormular()).thenReturn(formular);
 
-        // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
+        when(trancheRepository.findById(trancheId)).thenReturn(null);
+        when(gesuchTrancheHistoryService.getLatestTranche(trancheId)).thenReturn(historicTranche);
+        when(steuerdatenMapper.toDto(steuerdaten)).thenReturn(dto);
 
-        // assert
-        assertThat(
-            actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(true)
-        );
+        final var result = steuerdatenService.getSteuerdaten(trancheId);
 
-        actualSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
-        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(true);
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
-        assertThat(
-            actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
-        );
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0), is(dto));
+        verify(gesuchTrancheHistoryService).getLatestTranche(trancheId);
     }
 
     @Test
-    void setAllToNOTSelbstaendig_IfNONE_IsSelbstaendig_Steuerdaten_FAMILIE_Test() {
-        // arrange
-        var actualSteuerdaten = new Steuerdaten();
-        actualSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.FAMILIE);
+    void getSteuerdaten_noSteuerdaten_returnsEmptyList() {
+        final var trancheId = UUID.randomUUID();
+        final var formular = new GesuchFormular();
+        // steuerdaten set is empty by default
 
-        var familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(true);
-        gesuchFormular.setFamiliensituation(familiensituation);
+        final var tranche = mock(GesuchTranche.class);
+        when(tranche.getGesuchFormular()).thenReturn(formular);
+        when(trancheRepository.findById(trancheId)).thenReturn(tranche);
 
-        var steuerdatenSet = new HashSet<Steuerdaten>();
-        steuerdatenSet.add(actualSteuerdaten);
-        gesuchFormular.setSteuerdaten(steuerdatenSet);
+        final var result = steuerdatenService.getSteuerdaten(trancheId);
 
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
-        getSteuerdatenResponse.getSteuerdaten().setMannErwerbstaetigkeitSUS(true);
-
-        // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.FAMILIE, 2021);
-
-        // assert
-        assertThat(
-            actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
-        );
+        assertThat(result, is(empty()));
     }
 
     @Test
-    void setAllToSelbstaendig_IfOneIsSelbstaendig_Steuerdaten_VATER_MUTTER_Test() {
-        // arrange
-        var actualSteuerdaten = new Steuerdaten();
-        actualSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+    void updateSteuerdaten_persistsAndReturnsDtos() {
+        final var trancheId = UUID.randomUUID();
+        final var inputDto = new SteuerdatenDto();
+        final var steuerdaten = new Steuerdaten();
+        final var outputDto = new SteuerdatenDto();
 
-        var otherSteuerdaten = new Steuerdaten();
-        otherSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        otherSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(true);
+        final var formular = mock(GesuchFormular.class);
+        when(formular.getSteuerdaten()).thenReturn(new LinkedHashSet<>());
 
-        var familiensituation = new Familiensituation();
+        final var tranche = mock(GesuchTranche.class);
+        when(tranche.getGesuchFormular()).thenReturn(formular);
+        when(trancheRepository.requireById(trancheId)).thenReturn(tranche);
+        when(steuerdatenMapper.map(List.of(inputDto), formular.getSteuerdaten()))
+            .thenReturn(Set.of(steuerdaten));
+        when(steuerdatenMapper.toDto(steuerdaten)).thenReturn(outputDto);
+
+        final var result = steuerdatenService.updateSteuerdaten(trancheId, List.of(inputDto));
+
+        assertThat(result, hasSize(1));
+        assertThat(result.get(0), is(outputDto));
+        verify(steuerdatenRepository).persistAndFlush(steuerdaten);
+    }
+
+    @Test
+    void updateSteuerdaten_emptyDtoList_returnsEmptyList() {
+        final var trancheId = UUID.randomUUID();
+
+        final var formular = mock(GesuchFormular.class);
+        when(formular.getSteuerdaten()).thenReturn(new LinkedHashSet<>());
+
+        final var tranche = mock(GesuchTranche.class);
+        when(tranche.getGesuchFormular()).thenReturn(formular);
+        when(trancheRepository.requireById(trancheId)).thenReturn(tranche);
+        when(steuerdatenMapper.map(List.of(), formular.getSteuerdaten())).thenReturn(Set.of());
+
+        final var result = steuerdatenService.updateSteuerdaten(trancheId, List.of());
+
+        assertThat(result, is(empty()));
+        verify(steuerdatenRepository, never()).persistAndFlush(any());
+    }
+
+    @Test
+    void updateSteuerdatenFromPort_vaterTyp_usesVaterEltern_createsNewSteuerdatenIfAbsent() {
+        final var trancheId = UUID.randomUUID();
+        final var steuerjahr = 2023;
+        final var ssvn = "756.1234.5678.90";
+
+        final var vaterEltern = new Eltern();
+        vaterEltern.setElternTyp(ElternTyp.VATER);
+        vaterEltern.setSozialversicherungsnummer(ssvn);
+
+        final var familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setMutterWiederverheiratet(true);
         familiensituation.setVaterWiederverheiratet(false);
-        gesuchFormular.setFamiliensituation(familiensituation);
-        var steuerdatenSet = new HashSet<Steuerdaten>();
-        steuerdatenSet.add(actualSteuerdaten);
-        steuerdatenSet.add(otherSteuerdaten);
-        gesuchFormular.setSteuerdaten(steuerdatenSet);
+        familiensituation.setMutterWiederverheiratet(false);
 
-        // mutter is not selbstaendig,
-        // but VATER is, so isArbeitsverhaeltnisSelbstaendig = true for MUTTER
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(false);
+        final var formular = mock(GesuchFormular.class);
+        when(formular.getSteuerdaten()).thenReturn(new LinkedHashSet<>());
+        when(formular.getElterns()).thenReturn(Set.of(vaterEltern));
+        when(formular.getFamiliensituation()).thenReturn(familiensituation);
 
-        // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, 2021);
+        final var portData = mock(SteuerdatenPortData.class);
+        final var updatedSteuerdaten = new Steuerdaten();
+        updatedSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        updatedSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
 
-        // assert
-        assertThat(
-            actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(true)
-        );
+        final var outputDto = new SteuerdatenDto();
+
+        final var port = mock(SteuerdatenPort.class);
+        when(steuerdatenPortFactory.getSteuerdatenAdapter()).thenReturn(port);
+        when(port.getSteuerdaten(any(), any(Integer.class), any(), any(), any())).thenReturn(portData);
+        when(steuerdatenMapper.partialUpdate(eq(portData), any())).thenReturn(updatedSteuerdaten);
+
+        // Second call to requireById (after persist) returns a tranche with the updated steuerdaten
+        final var formularAfterPersist = mock(GesuchFormular.class);
+        when(formularAfterPersist.getSteuerdaten()).thenReturn(Set.of(updatedSteuerdaten));
+
+        final var fall = mock(ch.dvbern.stip.api.fall.entity.Fall.class);
+        when(fall.getFallNummer()).thenReturn("F-001");
+
+        final var ausbildung = mock(ch.dvbern.stip.api.ausbildung.entity.Ausbildung.class);
+        when(ausbildung.getFall()).thenReturn(fall);
+
+        final var gesuch = mock(ch.dvbern.stip.api.gesuch.entity.Gesuch.class);
+        when(gesuch.getAusbildung()).thenReturn(ausbildung);
+        when(gesuch.getGesuchNummer()).thenReturn("G-001");
+
+        final var trancheBefore = mock(GesuchTranche.class);
+        when(trancheBefore.getGesuchFormular()).thenReturn(formular);
+        when(trancheBefore.getGesuch()).thenReturn(gesuch);
+
+        final var trancheAfter = mock(GesuchTranche.class);
+        when(trancheAfter.getGesuchFormular()).thenReturn(formularAfterPersist);
+
+        when(trancheRepository.requireById(trancheId))
+            .thenReturn(trancheBefore)
+            .thenReturn(trancheAfter);
+
+        when(steuerdatenMapper.toDto(updatedSteuerdaten)).thenReturn(outputDto);
+
+        final var result = steuerdatenService.updateSteuerdatenFromPort(trancheId, SteuerdatenTyp.VATER, steuerjahr);
+
+        assertThat(result, hasSize(1));
+        verify(steuerdatenRepository).persistAndFlush(updatedSteuerdaten);
     }
 
     @Test
-    void setAllToNOTSelbstaendig_ifNoneIsSelbstaendig_Steuerdaten_VATER_MUTTER_Test() {
-        // arrange
-        var familiensituation = new Familiensituation();
-        familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setMutterWiederverheiratet(true);
-        familiensituation.setVaterWiederverheiratet(false);
-        gesuchFormular.setFamiliensituation(familiensituation);
+    void updateSteuerdatenFromPort_mutterTyp_noMutterEltern_throwsNotFoundException() {
+        final var trancheId = UUID.randomUUID();
 
-        var currentSteuerdaten = new Steuerdaten();
-        currentSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        currentSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+        // Only Vater in elterns, no Mutter
+        final var vaterEltern = new Eltern();
+        vaterEltern.setElternTyp(ElternTyp.VATER);
+        vaterEltern.setSozialversicherungsnummer("756.1234.5678.90");
 
-        var otherSteuerdaten = new Steuerdaten();
-        otherSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        otherSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+        final var formular = mock(GesuchFormular.class);
+        when(formular.getSteuerdaten()).thenReturn(new LinkedHashSet<>());
+        when(formular.getElterns()).thenReturn(Set.of(vaterEltern));
 
-        var steuerdatenSet = new HashSet<Steuerdaten>();
-        steuerdatenSet.add(currentSteuerdaten);
-        steuerdatenSet.add(otherSteuerdaten);
-        gesuchFormular.setSteuerdaten(steuerdatenSet);
+        final var tranche = mock(GesuchTranche.class);
+        when(tranche.getGesuchFormular()).thenReturn(formular);
+        when(trancheRepository.requireById(trancheId)).thenReturn(tranche);
 
-        // none of the parents is selbstaendig -> isArbeitsverhaeltnisSelbstaendig = false
-        getSteuerdatenResponse.getSteuerdaten().setFrauErwerbstaetigkeitSUS(true);
-
-        // act
-        steuerdatenService.updateSteuerdatenFromNesko(UUID.randomUUID(), SteuerdatenTyp.MUTTER, 2021);
-
-        // assert
-        assertThat(
-            currentSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
-            is(false)
+        assertThrows(
+            NotFoundException.class,
+            () -> steuerdatenService.updateSteuerdatenFromPort(trancheId, SteuerdatenTyp.MUTTER, 2023)
         );
+
+        verify(steuerdatenRepository, never()).persistAndFlush(any());
+    }
+
+    @Test
+    void updateSteuerdatenFromPort_existingSteuerdatenOfSameTyp_updatesExistingEntry() {
+        final var trancheId = UUID.randomUUID();
+        final var steuerjahr = 2023;
+        final var ssvn = "756.9999.8888.77";
+
+        final var mutterEltern = new Eltern();
+        mutterEltern.setElternTyp(ElternTyp.MUTTER);
+        mutterEltern.setSozialversicherungsnummer(ssvn);
+
+        final var existingSteuerdaten = new Steuerdaten();
+        existingSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        existingSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var steuerdatenSet = new LinkedHashSet<Steuerdaten>();
+        steuerdatenSet.add(existingSteuerdaten);
+
+        final var familiensituation = new Familiensituation();
+        familiensituation.setElternVerheiratetZusammen(false);
+        familiensituation.setVaterWiederverheiratet(false);
+        familiensituation.setMutterWiederverheiratet(false);
+
+        final var formular = mock(GesuchFormular.class);
+        when(formular.getSteuerdaten()).thenReturn(steuerdatenSet);
+        when(formular.getElterns()).thenReturn(Set.of(mutterEltern));
+        when(formular.getFamiliensituation()).thenReturn(familiensituation);
+
+        final var portData = mock(SteuerdatenPortData.class);
+        final var updatedSteuerdaten = new Steuerdaten();
+        updatedSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        updatedSteuerdaten.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var port = mock(SteuerdatenPort.class);
+        when(steuerdatenPortFactory.getSteuerdatenAdapter()).thenReturn(port);
+        when(port.getSteuerdaten(any(), any(Integer.class), any(), any(), any())).thenReturn(portData);
+        // partialUpdate called with the EXISTING steuerdaten object
+        when(steuerdatenMapper.partialUpdate(portData, existingSteuerdaten)).thenReturn(updatedSteuerdaten);
+
+        final var formularAfterPersist = mock(GesuchFormular.class);
+        when(formularAfterPersist.getSteuerdaten()).thenReturn(Set.of(updatedSteuerdaten));
+
+        final var fall = mock(ch.dvbern.stip.api.fall.entity.Fall.class);
+        when(fall.getFallNummer()).thenReturn("F-001");
+
+        final var ausbildung = mock(ch.dvbern.stip.api.ausbildung.entity.Ausbildung.class);
+        when(ausbildung.getFall()).thenReturn(fall);
+
+        final var gesuch = mock(ch.dvbern.stip.api.gesuch.entity.Gesuch.class);
+        when(gesuch.getAusbildung()).thenReturn(ausbildung);
+        when(gesuch.getGesuchNummer()).thenReturn("G-001");
+
+        final var trancheBefore = mock(GesuchTranche.class);
+        when(trancheBefore.getGesuchFormular()).thenReturn(formular);
+        when(trancheBefore.getGesuch()).thenReturn(gesuch);
+
+        final var trancheAfter = mock(GesuchTranche.class);
+        when(trancheAfter.getGesuchFormular()).thenReturn(formularAfterPersist);
+
+        when(trancheRepository.requireById(trancheId))
+            .thenReturn(trancheBefore)
+            .thenReturn(trancheAfter);
+
+        final var outputDto = new SteuerdatenDto();
+        when(steuerdatenMapper.toDto(updatedSteuerdaten)).thenReturn(outputDto);
+
+        final var result = steuerdatenService.updateSteuerdatenFromPort(trancheId, SteuerdatenTyp.MUTTER, steuerjahr);
+
+        assertThat(result, hasSize(1));
+        // The existing entry should have been updated (not a new one created)
+        verify(steuerdatenMapper).partialUpdate(portData, existingSteuerdaten);
+        verify(steuerdatenRepository).persistAndFlush(updatedSteuerdaten);
+    }
+
+    private Familiensituation familiensituationWith(
+        Boolean vaterWiederverheiratet,
+        Boolean mutterWiederverheiratet
+    ) {
+        final var fs = new Familiensituation();
+        fs.setElternVerheiratetZusammen(false);
+        fs.setVaterWiederverheiratet(vaterWiederverheiratet);
+        fs.setMutterWiederverheiratet(mutterWiederverheiratet);
+        return fs;
+    }
+
+    @Test
+    void notWiederverheiratet_returnsSelbstaendigFromActualSteuerdaten_whenTrue() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
+
+        final var familiensituation = familiensituationWith(false, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual),
+            familiensituation
+        );
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void notWiederverheiratet_returnsSelbstaendigFromActualSteuerdaten_whenFalse() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var familiensituation = familiensituationWith(false, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual),
+            familiensituation
+        );
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void notWiederverheiratet_nullWiederverheiratetFields_returnsSelbstaendigFromActualSteuerdaten() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
+
+        final var familiensituation = familiensituationWith(null, null);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual),
+            familiensituation
+        );
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void vaterWiederverheiratet_noOtherSelbstaendigInSet_returnsFalse() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var other = new Steuerdaten();
+        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        other.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var familiensituation = familiensituationWith(true, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual, other),
+            familiensituation
+        );
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void vaterWiederverheiratet_anotherSteuerdatenIsSelbstaendig_returnsTrue() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var other = new Steuerdaten();
+        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        other.setIsArbeitsverhaeltnisSelbstaendig(true);
+
+        final var familiensituation = familiensituationWith(true, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual, other),
+            familiensituation
+        );
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void vaterWiederverheiratet_actualIsSelbstaendig_returnsTrue() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
+
+        final var familiensituation = familiensituationWith(true, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual),
+            familiensituation
+        );
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void mutterWiederverheiratet_noSelbstaendigInSet_returnsFalse() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var familiensituation = familiensituationWith(false, true);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual),
+            familiensituation
+        );
+
+        assertThat(result, is(false));
+    }
+
+    @Test
+    void mutterWiederverheiratet_anotherSteuerdatenIsSelbstaendig_returnsTrue() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
+
+        final var other = new Steuerdaten();
+        other.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        other.setIsArbeitsverhaeltnisSelbstaendig(true);
+
+        final var familiensituation = familiensituationWith(false, true);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual, other),
+            familiensituation
+        );
+
+        assertThat(result, is(true));
+    }
+
+    @Test
+    void wiederverheiratet_nullSelbstaendigInSet_treatedAsFalse_returnsFalse() {
+        final var actual = new Steuerdaten();
+        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
+        actual.setIsArbeitsverhaeltnisSelbstaendig(null);
+
+        final var other = new Steuerdaten();
+        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
+        other.setIsArbeitsverhaeltnisSelbstaendig(null);
+
+        final var familiensituation = familiensituationWith(true, false);
+
+        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
+            actual,
+            Set.of(actual, other),
+            familiensituation
+        );
+
+        assertThat(result, is(false));
     }
 }

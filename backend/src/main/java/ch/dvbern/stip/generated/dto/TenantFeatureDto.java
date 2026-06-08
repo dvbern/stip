@@ -19,25 +19,44 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class TenantFeatureDto  implements Serializable {
-  private @Valid Boolean nesko;
+  private @Valid Boolean enabled;
+  private @Valid ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
 
   /**
    **/
-  public TenantFeatureDto nesko(Boolean nesko) {
-    this.nesko = nesko;
+  public TenantFeatureDto enabled(Boolean enabled) {
+    this.enabled = enabled;
     return this;
   }
 
   
-  @JsonProperty("nesko")
+  @JsonProperty("enabled")
   @NotNull
-  public Boolean getNesko() {
-    return nesko;
+  public Boolean getEnabled() {
+    return enabled;
   }
 
-  @JsonProperty("nesko")
-  public void setNesko(Boolean nesko) {
-    this.nesko = nesko;
+  @JsonProperty("enabled")
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  /**
+   **/
+  public TenantFeatureDto adapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+    this.adapterType = adapterType;
+    return this;
+  }
+
+  
+  @JsonProperty("adapterType")
+  public ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType getAdapterType() {
+    return adapterType;
+  }
+
+  @JsonProperty("adapterType")
+  public void setAdapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+    this.adapterType = adapterType;
   }
 
 
@@ -50,12 +69,13 @@ public class TenantFeatureDto  implements Serializable {
       return false;
     }
     TenantFeatureDto tenantFeature = (TenantFeatureDto) o;
-    return Objects.equals(this.nesko, tenantFeature.nesko);
+    return Objects.equals(this.enabled, tenantFeature.enabled) &&
+        Objects.equals(this.adapterType, tenantFeature.adapterType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nesko);
+    return Objects.hash(enabled, adapterType);
   }
 
   @Override
@@ -63,7 +83,8 @@ public class TenantFeatureDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class TenantFeatureDto {\n");
     
-    sb.append("    nesko: ").append(toIndentedString(nesko)).append("\n");
+    sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
+    sb.append("    adapterType: ").append(toIndentedString(adapterType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

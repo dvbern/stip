@@ -21,10 +21,10 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface StipDeciderTenant {
-    MandantIdentifier value();
+    TenantIdentifier value();
 }

@@ -146,11 +146,14 @@ This script will create users if they do not exist and assign the specified role
     `
 
 Example call:
-  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-2')},${c.green('Philipp')},${c.cyan('GS 2')},${c.yellow('philipp.schaerer+gs-2@dvbern.ch')}" -r ${c.bold('V0_Gesuchsteller')}
-  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-1')},${c.green('Philipp')},${c.cyan('GS 1')}"                                 -r ${c.bold('V0_Gesuchsteller')}
-  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-sb-1')},${c.green('Philipp')},${c.cyan('SB 1')}"                                 -r ${c.bold('V0_Sachbearbeiter')}
-  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-frei-1')},${c.green('Philipp')},${c.cyan('Freigabe 1')}"                         -r ${c.bold('V0_Freigabestelle')}
-  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-admin-1')},${c.green('Philipp')},${c.cyan('Admin 1')}"                           -r ${c.bold('V0_Sachbearbeiter-Admin V0_Sachbearbeiter')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-1')},${c.green('Philipp')},${c.cyan('GS 1')}"               -r ${c.bold('V0_DEMO_DATA_APPLY V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-2')},${c.green('Philipp')},${c.cyan('GS 2')}"               -r ${c.bold('V0_DEMO_DATA_APPLY V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-3')},${c.green('Philipp')},${c.cyan('GS 3')}"               -r ${c.bold('V0_DEMO_DATA_APPLY V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-gs-4')},${c.green('Philipp')},${c.cyan('GS 4')}"               -r ${c.bold('V0_DEMO_DATA_APPLY V0_Gesuchsteller')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-sb-1')},${c.green('Philipp')},${c.cyan('SB 1')}"               -r ${c.bold('V0_Sachbearbeiter')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-frei-1')},${c.green('Philipp')},${c.cyan('Freigabe 1')}"       -r ${c.bold('V0_Freigabestelle')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-sb-frei-1')},${c.green('Philipp')},${c.cyan('SB-Freigabe 1')}" -r ${c.bold('V0_Sachbearbeiter V0_Freigabestelle')}
+  ${c.dim(c.blue('$'))} ${c.bold('npm run add-users --')} -e ${c.bold('DEV')} -u "${c.blue('stip-scph-admin-1')},${c.green('Philipp')},${c.cyan('Admin 1')}"         -r ${c.bold('V0_Sachbearbeiter-Admin V0_Sachbearbeiter')}
 
   ${c.dim('# or')}
 

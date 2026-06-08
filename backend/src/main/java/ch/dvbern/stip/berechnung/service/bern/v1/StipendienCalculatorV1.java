@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.common.type.MandantIdentifier;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
@@ -34,7 +34,7 @@ import jakarta.inject.Singleton;
 
 @Singleton
 @CalculatorVersion(major = 1, minor = 0)
-@CalculatorMandant(MandantIdentifier.BERN)
+@CalculatorMandant(TenantIdentifier.BERN)
 public class StipendienCalculatorV1 implements StipendienCalculator {
     @Override
     public BerechnungResult calculateStipendien(final CalculatorRequest model) {

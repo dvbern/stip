@@ -86,7 +86,7 @@ export class SteuerdatenStore extends signalStore(
     ),
   );
 
-  updateSteuerdatenFromNesko$ = rxMethod<{
+  updateSteuerdatenFromPort$ = rxMethod<{
     gesuchTrancheId: string;
     steuerdatenTyp: SteuerdatenTyp;
     steuerjahr: number;
@@ -99,10 +99,10 @@ export class SteuerdatenStore extends signalStore(
       }),
       switchMap(({ gesuchTrancheId, steuerjahr, steuerdatenTyp }) =>
         this.steuerdatenService
-          .updateSteuerdatenFromNesko$(
+          .updateSteuerdatenFromPort$(
             {
               gesuchTrancheId,
-              neskoGetSteuerdatenRequest: {
+              getSteuerdatenFromPortRequest: {
                 steuerjahr,
                 steuerdatenTyp,
               },
@@ -125,7 +125,7 @@ export class SteuerdatenStore extends signalStore(
                 onFailure: (error) => {
                   const parsedError = sharedUtilFnErrorTransformer(error);
 
-                  if (parsedError.type === 'neskoError') {
+                  if (parsedError.type === 'steuerdatenPortError') {
                     this.globalNotificationStore.createNotification({
                       type: 'ERROR_PERMANENT',
                       message: parsedError.message,

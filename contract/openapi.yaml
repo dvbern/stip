@@ -5901,7 +5901,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /steuerdaten/nesko/{gesuchTrancheId}:
+  /steuerdaten/port/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
         schema:
@@ -5913,7 +5913,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NeskoGetSteuerdatenRequest'
+              $ref: '#/components/schemas/GetSteuerdatenFromPortRequest'
         required: true
       tags:
         - Steuerdaten
@@ -5936,7 +5936,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: updateSteuerdatenFromNesko
+      operationId: updateSteuerdatenFromPort
       summary: Updates the Steuerdaten from Nesko
       security:
         - auth-uat-bern: []
@@ -7023,24 +7023,29 @@ components:
         realm: some text
     TenantFeature:
       required:
-        - nesko
+        - enabled
       type: object
       properties:
-        nesko:
+        enabled:
           type: boolean
+        adapterType:
+          $ref: '#/components/schemas/SteuerdatenAdapterType'
+    TenantFeatures:
+      type: object
+      properties:
+        steuerdaten:
+          $ref: '#/components/schemas/TenantFeature'
     TenantInfo:
-      title: Root Type for TenantInfo
-      description: Client Application Info about a `Tenant`
+      type: object
       required:
         - clientAuth
         - features
         - identifier
-      type: object
       properties:
         clientAuth:
           $ref: '#/components/schemas/TenantAuthConfig'
         features:
-          $ref: '#/components/schemas/TenantFeature'
+          $ref: '#/components/schemas/TenantFeatures'
         identifier:
           type: string
     StipDecisionText:
@@ -7078,16 +7083,16 @@ components:
           type: string
         redirectUri:
           type: string
-    NeskoError:
+    SteuerdatenPortError:
       required:
         - type
-        - neskoError
+        - error
         - userMessage
       type: object
       properties:
         type:
           type: string
-        neskoError:
+        error:
           type: string
         userMessage:
           type: string
@@ -7096,6 +7101,11 @@ components:
         - BERN
         - ANDERER_KANTON
       type: string
+    SteuerdatenAdapterType:
+      type: string
+      enum:
+        - DUMMY
+        - NESKO
     UUID:
       format: uuid
       type: string
@@ -11554,7 +11564,7 @@ components:
           $ref: '#/components/schemas/DokumentTyp'
         entryId:
           $ref: '#/components/schemas/UUID'
-    NeskoGetSteuerdatenRequest:
+    GetSteuerdatenFromPortRequest:
       required:
         - steuerdatenTyp
         - steuerjahr

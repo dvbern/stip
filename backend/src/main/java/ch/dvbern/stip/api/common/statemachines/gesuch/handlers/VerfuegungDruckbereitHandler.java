@@ -20,9 +20,9 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import java.util.Optional;
 
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
-import ch.dvbern.stip.api.config.service.ConfigService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.berechnung.service.BerechnungService;
@@ -35,7 +35,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
-    private final ConfigService configService;
+    private final TenantService tenantService;
     private final BerechnungService berechnungService;
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungPdfService verfuegungPdfService;
@@ -45,11 +45,12 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     public void handle(Gesuch gesuch) {
         BerechnungsresultatDto stipendien = null;
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
+        final var tenantConfig = tenantService.getConfigForCurrentTenant();
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
             stipendien = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch,
-                configService.getCurrentDmnMajorVersion(),
-                configService.getCurrentDmnMinorVersion()
+                tenantConfig.berechnung().currentMajorVersion(),
+                tenantConfig.berechnung().currentMinorVersion()
             );
 
             final int berechnungsresultat = stipendien.getBerechnungStipendium();

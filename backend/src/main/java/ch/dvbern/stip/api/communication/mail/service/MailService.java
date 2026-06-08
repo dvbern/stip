@@ -25,11 +25,13 @@ import ch.dvbern.stip.api.benutzer.entity.Sachbearbeiter;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
 import ch.dvbern.stip.api.common.util.FileUtil;
+import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.config.type.TenantConfig;
 import ch.dvbern.stip.api.delegieren.entity.PersoenlicheAngaben;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import io.quarkus.mailer.Mail;
 import io.quarkus.mailer.MailTemplate.MailTemplateInstance;
@@ -47,8 +49,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MailService {
     private final Mailer mailer;
     private final ReactiveMailer reactiveMailer;
-    private final TenantConfigService tenantConfigService;
     private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
+    private final TenantService tenantService;
+    private final StipConfig config;
 
     public void sendStandardNotificationEmailForGesuch(final Gesuch gesuch) {
         final var pia = gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung();
@@ -122,7 +125,10 @@ public class MailService {
     }
 
     public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
-        String redirectURI = tenantConfigService.getWelcomeMailURI(
+        String redirectURI = getWelcomeMailURI(
+            tenantService.getConfigForCurrentTenant(),
+            config,
+            tenantService.getCurrentStringIdentifier(),
             welcomeMailDto.getRedirectUri()
         );
 
@@ -221,6 +227,21 @@ public class MailService {
 
     private void handleFailure(final Throwable failure) {
         LOG.error("Failed to send email", failure);
+    }
+
+    private String getWelcomeMailURI(
+        TenantConfig tenantConfig,
+        StipConfig config,
+        String tenantIdentifier,
+        String redirectUri
+    ) {
+        return String.format(
+            "%s%s%s%s",
+            config.oidc().frontendUrl(),
+            tenantConfig.welcomeMail().kcPath().replace("<TENANT>", tenantIdentifier),
+            tenantConfig.welcomeMail().kcQueryParameter().replace("<REDIRECT_URI>", redirectUri),
+            tenantConfig.welcomeMail().kcScope()
+        );
     }
 
     @CheckedTemplate

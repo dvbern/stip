@@ -28,7 +28,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
-import ch.dvbern.stip.api.tenancy.service.TenantConfigService;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
@@ -47,19 +47,19 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
 
     public VerfuegungPdfServiceMock(
     StipDecisionTextRepository stipDecisionTextRepository,
-    TenantConfigService tenantConfigService,
     BuchhaltungService buchhaltungService,
     VerfuegungService verfuegungService,
     BerechnungsblattService berechnungsblattService,
-    DarlehenService darlehenService
+    DarlehenService darlehenService,
+    TenantService tenantService
     ) {
         super(
             stipDecisionTextRepository,
-            tenantConfigService,
             buchhaltungService,
             verfuegungService,
             berechnungsblattService,
-            darlehenService
+            darlehenService,
+            tenantService
         );
     }
 

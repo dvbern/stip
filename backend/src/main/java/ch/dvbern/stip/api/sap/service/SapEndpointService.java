@@ -75,16 +75,16 @@ public class SapEndpointService {
     private static final long MAX_DELIVERY_ID = 0x1FFFFFFFFFFFFL;
 
     @Getter
-    @ConfigProperty(name = "kstip.sap.system-id")
+    @ConfigProperty(name = "old.sap.system-id")
     BigInteger systemid;
 
-    @ConfigProperty(name = "kstip.sap.auth-header-value")
+    @ConfigProperty(name = "old.sap.auth-header-value")
     String authHeaderValue;
 
-    @ConfigProperty(name = "kstip.sap.connectionTimeout")
+    @ConfigProperty(name = "old.sap.connectionTimeout")
     Integer connectionTimeout;
 
-    @ConfigProperty(name = "kstip.sap.receiveTimeout")
+    @ConfigProperty(name = "old.sap.receiveTimeout")
     Integer receiveTimeout;
 
     private void configureLogHandler(BindingProvider port) {

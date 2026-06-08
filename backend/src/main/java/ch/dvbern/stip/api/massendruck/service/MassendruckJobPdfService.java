@@ -25,7 +25,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
-import ch.dvbern.stip.api.config.service.ConfigService;
+import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -61,7 +61,7 @@ public class MassendruckJobPdfService {
 
     private final MassendruckJobRepository massendruckJobRepository;
     private final S3AsyncClient s3async;
-    private final ConfigService configService;
+    private final StipConfig config;
     private final GesuchStatusService gesuchStatusService;
     private final DokumentDownloadService dokumentDownloadService;
 
@@ -127,7 +127,7 @@ public class MassendruckJobPdfService {
         // Upload the merged PDF to S3
         final var future = s3async.putObject(
             PutObjectRequest.builder()
-                .bucket(configService.getBucketName())
+                .bucket(config.s3().bucketName())
                 .key(MASSENDRUCK_DOKUMENT_PATH + objectId)
                 .contentType("application/pdf")
                 .build(),
@@ -160,7 +160,7 @@ public class MassendruckJobPdfService {
 
         return dokumentDownloadService.getDokument(
             s3async,
-            configService.getBucketName(),
+            config.s3().bucketName(),
             dokument.getObjectId(),
             MASSENDRUCK_DOKUMENT_PATH,
             dokument.getFilename()
@@ -196,7 +196,7 @@ public class MassendruckJobPdfService {
     private PdfDocument getPdf(final String s3Key) {
         final var bytes = s3async.getObject(
             GetObjectRequest.builder()
-                .bucket(configService.getBucketName())
+                .bucket(config.s3().bucketName())
                 .key(s3Key)
                 .build(),
             AsyncResponseTransformer.toBytes()
