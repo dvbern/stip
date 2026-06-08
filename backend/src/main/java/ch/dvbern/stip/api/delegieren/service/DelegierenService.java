@@ -34,7 +34,6 @@ import ch.dvbern.stip.api.gesuch.type.SortOrder;
 import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
-import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.generated.dto.DelegierterMitarbeiterAendernDto;
 import ch.dvbern.stip.generated.dto.DelegierungCreateDto;
@@ -237,13 +236,5 @@ public class DelegierenService {
             .sorted(Comparator.comparing(Delegierung::getTimestampErstellt).reversed())
             .map(delegierungMapper::toDto)
             .toList();
-    }
-
-    public long reassignAllOfSozialdienstBenutzerTo(
-        final SozialdienstBenutzer sozialdienstBenutzerFrom,
-        final SozialdienstBenutzer sozialdienstBenutzerTo
-    ) {
-        return delegierungRepository
-            .reassignAllOfSozialdienstBenutzerTo(sozialdienstBenutzerFrom, sozialdienstBenutzerTo);
     }
 }
