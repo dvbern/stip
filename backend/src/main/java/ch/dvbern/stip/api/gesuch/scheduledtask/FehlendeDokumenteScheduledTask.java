@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuch.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -31,13 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 public class FehlendeDokumenteScheduledTask extends RunForTenantsScheduledTask {
     private static final String NAME = "FehlendeDokumenteScheduledTask";
-    private static final String SCHEDULER_CRON_CONFIG_KEY = "fehlende-dokumente";
 
     @Inject
     GesuchService gesuchService;
 
     FehlendeDokumenteScheduledTask() {
-        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
+        super(NAME, ScheduledTaskCronKey.FEHLENDE_DOKUMENTE, TenantIdentifier.values());
     }
 
     @Override

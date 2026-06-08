@@ -41,7 +41,7 @@ public class DataTenantResolver implements TenantResolver {
 
     @Override
     public String getDefaultTenantId() {
-        return OidcTenantResolver.DEFAULT_TENANT_IDENTIFIER;
+        throw new RuntimeException("No Default Tenant");
     }
 
     @Override

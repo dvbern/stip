@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.gesuchsperioden.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodenService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -31,13 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask extends RunForTenantsScheduledTask {
     private static final String NAME = "UpdateGesuchsperiodeGueltigkeitStatus";
-    private static final String SCHEDULER_CRON_CONFIG_KEY = "gesuch-periode";
 
     @Inject
     GesuchsperiodenService gesuchsperiodenService;
 
     UpdateGesuchsperiodeGueltigkeitStatusScheduledTask() {
-        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
+        super(NAME, ScheduledTaskCronKey.GESUCH_PERIODE, TenantIdentifier.values());
     }
 
     @Override

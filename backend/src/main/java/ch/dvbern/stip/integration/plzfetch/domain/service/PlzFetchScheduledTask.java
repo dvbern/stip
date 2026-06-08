@@ -18,6 +18,7 @@
 package ch.dvbern.stip.integration.plzfetch.domain.service;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import ch.dvbern.stip.api.plz.service.PlzService;
@@ -33,7 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Singleton
 public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
     private static final String NAME = "PlzFetch";
-    private static final String SCHEDULER_CRON_CONFIG_KEY = "plz-data";
     private static final TenantIdentifier TENANT_IDENTIFIER = TenantIdentifier.BERN;
 
     @Inject
@@ -46,7 +46,7 @@ public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
     PlzFetchDataMapper plzFetchDataMapper;
 
     public PlzFetchScheduledTask() {
-        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TENANT_IDENTIFIER);
+        super(NAME, ScheduledTaskCronKey.PLZ_DATA, TENANT_IDENTIFIER);
     }
 
     @Override

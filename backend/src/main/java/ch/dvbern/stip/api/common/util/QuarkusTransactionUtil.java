@@ -41,9 +41,9 @@ public class QuarkusTransactionUtil {
     }
 
     public void runForTenantsInNewTransaction(final List<TenantIdentifier> tenantIdentifiers, final Runnable runnable) {
-        for (final TenantIdentifier tenantIdentifier : tenantIdentifiers) {
-            runForTenantInNewTransaction(tenantIdentifier, runnable);
-        }
+        tenantIdentifiers.forEach(
+            tenantIdentifier -> runForTenantInNewTransaction(tenantIdentifier, runnable)
+        );
     }
 
     public void runForTenantsInNewTransaction(final TenantIdentifier[] tenantIdentifiers, final Runnable runnable) {

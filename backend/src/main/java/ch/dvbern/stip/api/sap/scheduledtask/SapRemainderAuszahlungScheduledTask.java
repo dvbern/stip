@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.sap.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.sap.service.SapService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -31,13 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @UnlessBuildProfile("test")
 public class SapRemainderAuszahlungScheduledTask extends RunForTenantsScheduledTask {
     private static final String NAME = "SapRemainderAuszahlung";
-    private static final String SCHEDULER_CRON_CONFIG_KEY = "sap-remainder-auszahlung";
 
     @Inject
     SapService sapService;
 
     public SapRemainderAuszahlungScheduledTask() {
-        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
+        super(NAME, ScheduledTaskCronKey.SAP_REMAINDER_AUSZAHLUNG, TenantIdentifier.values());
     }
 
     @Override

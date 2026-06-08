@@ -15,23 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.tenancy.service;
+package ch.dvbern.stip.api.common.type;
 
-import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import io.quarkus.hibernate.orm.PersistenceUnitExtension;
-import io.quarkus.test.Mock;
-import jakarta.enterprise.context.ApplicationScoped;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-@Mock
-@ApplicationScoped
-@PersistenceUnitExtension
-public class MockDataTenantResolver extends DataTenantResolver {
-    public MockDataTenantResolver() {
-        super(null, new TenantContext().setTenantIdentifier(TenantIdentifier.BERN));
-    }
+@Getter
+@RequiredArgsConstructor
+public enum ScheduledTaskCronKey {
+    PLZ_DATA("plz-data"),
+    GESUCH_PERIODE("gesuch-periode"),
+    UNTERSCHRIFTENBLATT("unterschriftenblatt"),
+    FEHLENDE_DOKUMENTE("fehlende-dokumente"),
+    SAP_BUSINESS_PARTNER("sap-business-partner"),
+    SAP_PENDING_AUSZAHLUNG("sap-pending-auszahlung"),
+    SAP_REMAINDER_AUSZAHLUNG("sap-remainder-auszahlung"),
+    SAP_RETRY_FAILED_AUSZAHLUNGS_BUCHHALTUNG("sap-retry-failed-auszahlungs-buchhaltung");
 
-    @Override
-    public String resolveTenantId() {
-        return TenantIdentifier.BERN.getIdentifier();
-    }
+    private final String configKey;
 }

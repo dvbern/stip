@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.common.scheduledtask;
 
 import java.util.TimeZone;
 
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
@@ -42,7 +43,7 @@ public abstract class RunForTenantsScheduledTask implements Job {
     private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("Europe/Zurich");
 
     private final String name;
-    private final String schedulerConfigKey;
+    private final ScheduledTaskCronKey schedulerConfigKey;
     private final TenantIdentifier[] tenantIdentifiers;
 
     @Inject
@@ -53,20 +54,12 @@ public abstract class RunForTenantsScheduledTask implements Job {
 
     protected RunForTenantsScheduledTask(
     final String name,
-    final String schedulerConfigKey,
-    final TenantIdentifier[] tenantIdentifiers
+    final ScheduledTaskCronKey schedulerConfigKey,
+    final TenantIdentifier... tenantIdentifiers
     ) {
         this.name = name;
         this.schedulerConfigKey = schedulerConfigKey;
         this.tenantIdentifiers = tenantIdentifiers;
-    }
-
-    protected RunForTenantsScheduledTask(
-    final String name,
-    final String schedulerConfigKey,
-    final TenantIdentifier tenantIdentifier
-    ) {
-        this(name, schedulerConfigKey, new TenantIdentifier[] { tenantIdentifier });
     }
 
     @Transactional

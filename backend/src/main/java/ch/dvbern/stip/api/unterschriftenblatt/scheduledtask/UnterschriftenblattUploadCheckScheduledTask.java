@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.unterschriftenblatt.scheduledtask;
 
 import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -29,13 +30,12 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 public class UnterschriftenblattUploadCheckScheduledTask extends RunForTenantsScheduledTask {
     private static final String NAME = "UnterschriftenblattUploadCheck";
-    private static final String SCHEDULER_CRON_CONFIG_KEY = "unterschriftenblatt";
 
     @Inject
     UnterschriftenblattService unterschriftenblattService;
 
     public UnterschriftenblattUploadCheckScheduledTask() {
-        super(NAME, SCHEDULER_CRON_CONFIG_KEY, TenantIdentifier.values());
+        super(NAME, ScheduledTaskCronKey.UNTERSCHRIFTENBLATT, TenantIdentifier.values());
     }
 
     @Override

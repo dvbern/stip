@@ -17,18 +17,26 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import jakarta.annotation.Nullable;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @RequestScoped
 @RequiredArgsConstructor
 public class TenantContext {
-    @Setter
     @Getter
     @Nullable
     private TenantIdentifier tenantIdentifier;
+
+    public TenantContext setTenantIdentifier(final TenantIdentifier tenantIdentifier) {
+        if (Objects.nonNull(this.tenantIdentifier)) {
+            throw new IllegalStateException("Do never set TenantIdentifier twice");
+        }
+        this.tenantIdentifier = tenantIdentifier;
+        return this;
+    }
 }
