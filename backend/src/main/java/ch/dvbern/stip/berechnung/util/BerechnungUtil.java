@@ -44,7 +44,7 @@ public class BerechnungUtil {
             .intValue();
     }
 
-    public int substractGesezlichesDarlehen(final int total, final int monateMitDarlehen) {
+    public int subtractGesezlichesDarlehen(final int total, final int monateMitDarlehen) {
         if (monateMitDarlehen == 0) {
             return total;
         }
@@ -52,11 +52,14 @@ public class BerechnungUtil {
         final var monateOhneDarlehen = 12 - monateMitDarlehen;
 
         final var stipendiumOfMonateOhneDarlehen = total * monateOhneDarlehen / 12;
-        final var stipendiumOfMonateMitDarlehen = total - stipendiumOfMonateOhneDarlehen;
+        final var stipendiumOfMonateMitDarlehen = BigDecimal.valueOf(total)
+            .multiply(BigDecimal.valueOf(monateMitDarlehen))
+            .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP)
+            .multiply(BigDecimal.valueOf(2))
+            .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
+            .intValue();
 
-        final var darlehenAnteil = calculateGesetzlichesDarlehen(stipendiumOfMonateMitDarlehen);
-
-        return total - darlehenAnteil;
+        return stipendiumOfMonateOhneDarlehen + stipendiumOfMonateMitDarlehen;
     }
 
     public boolean nullableCompare(final Integer value1, final Integer value2, final int defaultValue) {

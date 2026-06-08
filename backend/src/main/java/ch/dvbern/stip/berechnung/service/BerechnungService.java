@@ -141,7 +141,7 @@ public class BerechnungService {
         final var monateMitDarlehen = getMonateMitDarlehen(gesuch);
         final Integer ungekuerztDarlehen = getDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
         final int ungekuerztStipendien =
-            BerechnungUtil.substractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
+            BerechnungUtil.subtractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
 
         final var monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
@@ -187,7 +187,7 @@ public class BerechnungService {
 
         final var berechnungDarlehen = getDarlehen(totalVorTeilungDarlehen, monateMitDarlehen);
         final var berechnungStipendium =
-            BerechnungUtil.substractGesezlichesDarlehen(totalVorTeilungDarlehen, monateMitDarlehen);
+            BerechnungUtil.subtractGesezlichesDarlehen(totalVorTeilungDarlehen, monateMitDarlehen);
 
         return new BerechnungsresultatDto(
             gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
