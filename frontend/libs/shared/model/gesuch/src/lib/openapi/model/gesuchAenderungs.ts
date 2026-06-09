@@ -16,6 +16,7 @@ export interface GesuchAenderungs {
     manuell: Array<GesuchTrancheSlim>;
     akzeptiert: Array<GesuchTrancheSlim>;
     abgelehnt: Array<GesuchTrancheSlim>;
+    fehlendeDokumente: Array<GesuchTrancheSlim>;
     canAenderungEinreichen: boolean;
 }
 

@@ -35,6 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchAenderungsDtoSpec.JSON_PROPERTY_MANUELL,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_AKZEPTIERT,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_ABGELEHNT,
+  GesuchAenderungsDtoSpec.JSON_PROPERTY_FEHLENDE_DOKUMENTE,
   GesuchAenderungsDtoSpec.JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN
 })
 @JsonTypeName("GesuchAenderungs")
@@ -51,6 +52,9 @@ public class GesuchAenderungsDtoSpec {
 
   public static final String JSON_PROPERTY_ABGELEHNT = "abgelehnt";
   private List<GesuchTrancheSlimDtoSpec> abgelehnt;
+
+  public static final String JSON_PROPERTY_FEHLENDE_DOKUMENTE = "fehlendeDokumente";
+  private List<GesuchTrancheSlimDtoSpec> fehlendeDokumente;
 
   public static final String JSON_PROPERTY_CAN_AENDERUNG_EINREICHEN = "canAenderungEinreichen";
   private Boolean canAenderungEinreichen;
@@ -186,6 +190,40 @@ public class GesuchAenderungsDtoSpec {
   }
 
 
+  public GesuchAenderungsDtoSpec fehlendeDokumente(List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
+    
+    this.fehlendeDokumente = fehlendeDokumente;
+    return this;
+  }
+
+  public GesuchAenderungsDtoSpec addFehlendeDokumenteItem(GesuchTrancheSlimDtoSpec fehlendeDokumenteItem) {
+    if (this.fehlendeDokumente == null) {
+      this.fehlendeDokumente = new ArrayList<>();
+    }
+    this.fehlendeDokumente.add(fehlendeDokumenteItem);
+    return this;
+  }
+
+   /**
+   * Get fehlendeDokumente
+   * @return fehlendeDokumente
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_FEHLENDE_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<GesuchTrancheSlimDtoSpec> getFehlendeDokumente() {
+    return fehlendeDokumente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_FEHLENDE_DOKUMENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setFehlendeDokumente(List<GesuchTrancheSlimDtoSpec> fehlendeDokumente) {
+    this.fehlendeDokumente = fehlendeDokumente;
+  }
+
+
   public GesuchAenderungsDtoSpec canAenderungEinreichen(Boolean canAenderungEinreichen) {
     
     this.canAenderungEinreichen = canAenderungEinreichen;
@@ -224,12 +262,13 @@ public class GesuchAenderungsDtoSpec {
         Objects.equals(this.manuell, gesuchAenderungs.manuell) &&
         Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
+        Objects.equals(this.fehlendeDokumente, gesuchAenderungs.fehlendeDokumente) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(offen, manuell, akzeptiert, abgelehnt, canAenderungEinreichen);
+    return Objects.hash(offen, manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen);
   }
 
   @Override
@@ -240,6 +279,7 @@ public class GesuchAenderungsDtoSpec {
     sb.append("    manuell: ").append(toIndentedString(manuell)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
+    sb.append("    fehlendeDokumente: ").append(toIndentedString(fehlendeDokumente)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("}");
     return sb.toString();

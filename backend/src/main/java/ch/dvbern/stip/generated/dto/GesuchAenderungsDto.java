@@ -26,6 +26,7 @@ public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
   private @Valid List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+  private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
 
@@ -136,6 +137,41 @@ public class GesuchAenderungsDto  implements Serializable {
   }
   /**
    **/
+  public GesuchAenderungsDto fehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+    this.fehlendeDokumente = fehlendeDokumente;
+    return this;
+  }
+
+  
+  @JsonProperty("fehlendeDokumente")
+  @NotNull
+  public List<GesuchTrancheSlimDto> getFehlendeDokumente() {
+    return fehlendeDokumente;
+  }
+
+  @JsonProperty("fehlendeDokumente")
+  public void setFehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+    this.fehlendeDokumente = fehlendeDokumente;
+  }
+
+  public GesuchAenderungsDto addFehlendeDokumenteItem(GesuchTrancheSlimDto fehlendeDokumenteItem) {
+    if (this.fehlendeDokumente == null) {
+      this.fehlendeDokumente = new ArrayList<>();
+    }
+
+    this.fehlendeDokumente.add(fehlendeDokumenteItem);
+    return this;
+  }
+
+  public GesuchAenderungsDto removeFehlendeDokumenteItem(GesuchTrancheSlimDto fehlendeDokumenteItem) {
+    if (fehlendeDokumenteItem != null && this.fehlendeDokumente != null) {
+      this.fehlendeDokumente.remove(fehlendeDokumenteItem);
+    }
+
+    return this;
+  }
+  /**
+   **/
   public GesuchAenderungsDto canAenderungEinreichen(Boolean canAenderungEinreichen) {
     this.canAenderungEinreichen = canAenderungEinreichen;
     return this;
@@ -184,13 +220,14 @@ public class GesuchAenderungsDto  implements Serializable {
     return Objects.equals(this.manuell, gesuchAenderungs.manuell) &&
         Objects.equals(this.akzeptiert, gesuchAenderungs.akzeptiert) &&
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
+        Objects.equals(this.fehlendeDokumente, gesuchAenderungs.fehlendeDokumente) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
         Objects.equals(this.offen, gesuchAenderungs.offen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(manuell, akzeptiert, abgelehnt, canAenderungEinreichen, offen);
+    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen);
   }
 
   @Override
@@ -201,6 +238,7 @@ public class GesuchAenderungsDto  implements Serializable {
     sb.append("    manuell: ").append(toIndentedString(manuell)).append("\n");
     sb.append("    akzeptiert: ").append(toIndentedString(akzeptiert)).append("\n");
     sb.append("    abgelehnt: ").append(toIndentedString(abgelehnt)).append("\n");
+    sb.append("    fehlendeDokumente: ").append(toIndentedString(fehlendeDokumente)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
     sb.append("}");

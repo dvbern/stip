@@ -33,8 +33,7 @@ public class FehlendeDokumenteHandler implements GesuchStatusChangeHandler {
     @Override
     public void handle(Gesuch gesuch) {
         gesuchService.setDefaultNachfristDokumente(gesuch);
-        gesuch.getGesuchTranchen()
-            .stream()
+        gesuch.getTranchenTranchen()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.IN_BEARBEITUNG_GS));
         gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuch);
