@@ -407,7 +407,10 @@ public class GenerateDemoDataService {
             .einnahmenBGSA(ekDto.getEinnahmenBGSA())
             .taggelderAHVIV(ekDto.getTaggelderAHVIV())
             .andereEinnahmen(ekDto.getAndereEinnahmen())
-            .arbeitspensumProzent(DemoDataDefaults.EK_ARBEITSPENSUM)
+            .arbeitspensumProzent(
+                Objects.requireNonNullElse(ekDto.getNettoerwerbseinkommen(), 0) > 0 ? DemoDataDefaults.EK_ARBEITSPENSUM
+                    : null
+            )
             .build();
         EinnahmenKosten einnahmenKostenPartner = null;
         if (Objects.nonNull(demoPartnerDto)) {
@@ -445,7 +448,11 @@ public class GenerateDemoDataService {
                 .einnahmenBGSA(ekPartnerDto.getEinnahmenBGSA())
                 .taggelderAHVIV(ekPartnerDto.getTaggelderAHVIV())
                 .andereEinnahmen(ekPartnerDto.getAndereEinnahmen())
-                .arbeitspensumProzent(DemoDataDefaults.EK_ARBEITSPENSUM)
+                .arbeitspensumProzent(
+                    Objects.requireNonNullElse(ekPartnerDto.getNettoerwerbseinkommen(), 0) > 0
+                        ? DemoDataDefaults.EK_ARBEITSPENSUM
+                        : null
+                )
                 .build();
         }
         final var famsitDto = demoDataDto.getFamiliensituation();

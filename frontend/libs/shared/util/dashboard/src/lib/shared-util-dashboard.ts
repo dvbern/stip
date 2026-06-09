@@ -98,8 +98,8 @@ export const isBearbeitbarEnabledTab = (filterTab: FilterTabParam): boolean => {
  *
  * Tabs for Queries that only allow 'ALLE' as scope, such as all JUR Queries
  */
-export const isAlleOnlyTab = (filterTab: FilterTabParam): boolean => {
-  return [
+export const isZugewiesenEnabledTab = (filterTab: FilterTabParam): boolean => {
+  return ![
     'JURISTISCHE_ABKLAERUNG',
     'ABKLAERUNG_DURCH_RECHSTABTEILUNG',
   ].includes(filterTab);
@@ -129,15 +129,16 @@ export const getControlVisibility = (
   bearbeitbarConfig: ToggleConfig;
 } => {
   const isBearbeitbarEnabled = isBearbeitbarEnabledTab(filterTab);
+  const isZugewiesenEnabled = isZugewiesenEnabledTab(filterTab);
 
   return {
     zugewiesenConfig: {
-      show: !isAlleOnlyTab(filterTab),
-      value: zugewiesen === 'TRUE',
+      show: isZugewiesenEnabled,
+      value: isZugewiesenEnabled && zugewiesen === 'TRUE',
     },
     bearbeitbarConfig: {
       show: isBearbeitbarEnabled,
-      value: bearbeitbar === 'TRUE',
+      value: !isBearbeitbarEnabled || bearbeitbar === 'TRUE',
     },
   };
 };
