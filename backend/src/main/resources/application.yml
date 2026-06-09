@@ -6,9 +6,8 @@ old:
     receiveTimeout: 1000
 
 kstip:
-  kstip:
-    oidc:
-      url: ${STIP_OIDC_AUTH_SERVER}
+  oidc:
+    url: ${STIP_OIDC_AUTH_SERVER}
   s3:
     bucket-name: '${bucket.name}'
 
