@@ -31,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UnlessBuildProfile("test")
 public class UpdateGesuchsperiodeGueltigkeitStatusScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "UpdateGesuchsperiodeGueltigkeitStatus";
-
     @Inject
     GesuchsperiodenService gesuchsperiodenService;
 
     UpdateGesuchsperiodeGueltigkeitStatusScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.GESUCH_PERIODE, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.GESUCH_PERIODE, TenantIdentifier.values());
     }
 
     @Override

@@ -31,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class SapBusinessPartnerScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "SapBusinessPartner";
-
     @Inject
     SapService sapService;
 
     SapBusinessPartnerScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.SAP_BUSINESS_PARTNER, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.SAP_BUSINESS_PARTNER, TenantIdentifier.values());
     }
 
     @Override

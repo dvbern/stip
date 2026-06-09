@@ -42,7 +42,6 @@ public abstract class RunForTenantsScheduledTask implements Job {
     private static final String SCHEDULED_TASK_NAME_SUFFIX = "ScheduledTask";
     private static final TimeZone TIME_ZONE = TimeZone.getTimeZone("Europe/Zurich");
 
-    private final String name;
     private final ScheduledTaskCronKey schedulerConfigKey;
     private final TenantIdentifier[] tenantIdentifiers;
 
@@ -53,26 +52,25 @@ public abstract class RunForTenantsScheduledTask implements Job {
     StipConfig config;
 
     protected RunForTenantsScheduledTask(
-    final String name,
     final ScheduledTaskCronKey schedulerConfigKey,
     final TenantIdentifier... tenantIdentifiers
     ) {
-        this.name = name;
         this.schedulerConfigKey = schedulerConfigKey;
         this.tenantIdentifiers = tenantIdentifiers;
     }
 
     @Transactional
     void onStart(@Observes StartupEvent startupEvent) {
+        final var jobName = this.getClass().getName();
         final var jobDetail = JobBuilder.newJob(this.getClass())
-            .withIdentity(name)
+            .withIdentity(jobName)
             .build();
 
         final var schedule =
             CronScheduleBuilder.cronSchedule(config.scheduler().get(schedulerConfigKey).cron()).inTimeZone(TIME_ZONE);
 
         final var trigger = TriggerBuilder.newTrigger()
-            .withIdentity(String.format("%s%s-trigger", SCHEDULED_TASK_NAME_SUFFIX, name))
+            .withIdentity(String.format("%s%s-trigger", SCHEDULED_TASK_NAME_SUFFIX, jobName))
             .startNow()
             .withSchedule(schedule)
             .build();
@@ -80,7 +78,7 @@ public abstract class RunForTenantsScheduledTask implements Job {
         try {
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (SchedulerException e) {
-            LOG.error(String.format("Error scheduling %s%s", SCHEDULED_TASK_NAME_SUFFIX, name), e);
+            LOG.error(String.format("Error scheduling %s%s", SCHEDULED_TASK_NAME_SUFFIX, jobName), e);
         }
     }
 

@@ -31,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class SapRetryFailedAuszahlungsBuchhaltungScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "SapRetryFailedAuszahlungsBuchhaltung";
-
     @Inject
     SapService sapService;
 
     SapRetryFailedAuszahlungsBuchhaltungScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.SAP_RETRY_FAILED_AUSZAHLUNGS_BUCHHALTUNG, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.SAP_RETRY_FAILED_AUSZAHLUNGS_BUCHHALTUNG, TenantIdentifier.values());
     }
 
     @Override

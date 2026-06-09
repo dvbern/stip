@@ -29,13 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @ApplicationScoped
 public class UnterschriftenblattUploadCheckScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "UnterschriftenblattUploadCheck";
-
     @Inject
     UnterschriftenblattService unterschriftenblattService;
 
     public UnterschriftenblattUploadCheckScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.UNTERSCHRIFTENBLATT, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.UNTERSCHRIFTENBLATT, TenantIdentifier.values());
     }
 
     @Override

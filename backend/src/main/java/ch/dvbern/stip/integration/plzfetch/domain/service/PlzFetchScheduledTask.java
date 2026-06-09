@@ -33,7 +33,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Singleton
 public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "PlzFetch";
     private static final TenantIdentifier TENANT_IDENTIFIER = TenantIdentifier.BERN;
 
     @Inject
@@ -46,7 +45,7 @@ public class PlzFetchScheduledTask extends RunForTenantsScheduledTask {
     PlzFetchDataMapper plzFetchDataMapper;
 
     public PlzFetchScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.PLZ_DATA, TENANT_IDENTIFIER);
+        super(ScheduledTaskCronKey.PLZ_DATA, TENANT_IDENTIFIER);
     }
 
     @Override

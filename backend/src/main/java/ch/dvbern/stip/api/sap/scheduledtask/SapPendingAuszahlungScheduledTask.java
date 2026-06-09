@@ -31,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class SapPendingAuszahlungScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "SapPendingAuszahlung";
-
     @Inject
     SapService sapService;
 
     SapPendingAuszahlungScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.SAP_PENDING_AUSZAHLUNG, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.SAP_PENDING_AUSZAHLUNG, TenantIdentifier.values());
     }
 
     @Override

@@ -31,13 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class FehlendeDokumenteScheduledTask extends RunForTenantsScheduledTask {
-    private static final String NAME = "FehlendeDokumenteScheduledTask";
-
     @Inject
     GesuchService gesuchService;
 
     FehlendeDokumenteScheduledTask() {
-        super(NAME, ScheduledTaskCronKey.FEHLENDE_DOKUMENTE, TenantIdentifier.values());
+        super(ScheduledTaskCronKey.FEHLENDE_DOKUMENTE, TenantIdentifier.values());
     }
 
     @Override
