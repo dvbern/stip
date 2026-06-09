@@ -14,10 +14,10 @@
     (formIsUnsaved)="hasUnsavedChanges = $event"
   />
 } @else {
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
+  <div class="tw:dv-form-grid">
     <!-- Table -->
     @if (view.gesuchFormular?.kinds; as kinder) {
-      <div class="tw:col-span-12 tw:xl:col-span-8">
+      <div class="tw:dv-form-item">
         @if (kinder.length) {
           <table class="tw:dv-simple-table">
             <thead>
@@ -91,32 +91,32 @@
         }
       </div>
     }
-  </div>
 
-  <!-- ADD -->
-  <div class="tw:flex tw:flex-col flex-md-row">
+    <!-- ADD -->
     @if (!view.readonly) {
+      <div class="tw:dv-form-item tw:flex tw:flex-col tw:gap-4 flex-md-row">
+        <button
+          type="button"
+          class="tw:dv-button-outline tw:self-start"
+          (click)="handleAddKinder()"
+          data-testid="button-add-kind"
+        >
+          {{ 'shared.form.kinder.add' | transloco }}
+        </button>
+      </div>
+    }
+
+    <!-- Buttons -->
+    <dv-shared-ui-step-form-buttons>
       <button
         type="button"
-        class="tw:dv-button-outline tw:self-start"
-        (click)="handleAddKinder()"
-        data-testid="button-add-kind"
+        class="tw:dv-button-main-primary"
+        (click)="handleContinue()"
+        [disabled]="!view.gesuchId"
+        data-testid="button-continue"
       >
-        {{ 'shared.form.kinder.add' | transloco }}
+        {{ 'shared.form.gonext' | transloco }}
       </button>
-    }
+    </dv-shared-ui-step-form-buttons>
   </div>
-
-  <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
-    <button
-      type="button"
-      class="tw:dv-button-main-primary"
-      (click)="handleContinue()"
-      [disabled]="!view.gesuchId"
-      data-testid="button-continue"
-    >
-      {{ 'shared.form.gonext' | transloco }}
-    </button>
-  </dv-shared-ui-step-form-buttons>
 }

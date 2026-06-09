@@ -34,7 +34,7 @@
 
       <!-- title (desktop) -->
       @if (option) {
-        <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center tw:mt-6">
+        <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start tw:items-center">
           @if (option.type === 'PARENT') {
             <dv-shared-ui-icon-chip class="tw:mr-4">
               <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
@@ -49,10 +49,10 @@
             </a>
           }
 
-          <h2 class="tw:text-3xl tw:font-bold tw:flex" data-testid="step-title">
+          <h1 class="tw:flex" data-testid="step-title">
             {{ t(option.titleTranslationKey) }}
             <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
-          </h2>
+          </h1>
         </div>
       }
 

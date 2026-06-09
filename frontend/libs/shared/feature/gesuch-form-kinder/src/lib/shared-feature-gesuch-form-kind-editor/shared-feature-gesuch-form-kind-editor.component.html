@@ -5,11 +5,11 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-kind-form"
   novalidate
-  class="tw:mt-6 tw:dv-form-grid"
+  class="tw:dv-form-grid"
   (ngSubmit)="handleSave()"
 >
   <!-- Nachname -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
     <input matInput dvMaxLength [formControl]="form.controls.nachname" data-testid="form-kind-nachname" type="text" />
     <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
@@ -19,7 +19,7 @@
   </mat-form-field>
 
   <!-- Vorname -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
     <input matInput dvMaxLength [formControl]="form.controls.vorname" data-testid="form-kind-vorname" type="text" />
     <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
@@ -29,7 +29,7 @@
   </mat-form-field>
 
   <!-- GEBURTSDATUM -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
     <input
@@ -57,7 +57,7 @@
   </mat-form-field>
 
   <!-- Wohnsitz -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.wohnsitzAnteilPia.label' | transloco }}</mat-label>
     <input
       type="text"
@@ -79,7 +79,7 @@
   </mat-form-field>
 
   <!-- Ausbildungssituation -->
-  <div class="tw:dv-grid-field">
+  <div class="tw:dv-form-item">
     <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
     <mat-radio-group
       class="tw:flex tw:flex-col"
@@ -108,7 +108,7 @@
   </div>
 
   <!-- Unterhaltsbeitraege -->
-  <div class="tw:flex tw:gap-4 tw:dv-grid-field">
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
     <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.kinder.unterhaltsbeitraege.label' | transloco }}</mat-label>
       <input
@@ -132,7 +132,7 @@
   </div>
 
   <!-- Kinder- und Ausbildungszulagen -->
-  <div class="tw:flex tw:gap-4 tw:dv-grid-field">
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
     <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.kinder.kinderUndAusbildungszulagen.label' | transloco }}</mat-label>
       <input
@@ -153,7 +153,7 @@
   </div>
 
   <!-- Renten -->
-  <div class="tw:flex tw:gap-4 tw:dv-grid-field">
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
     <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.kinder.renten.label' | transloco }}</mat-label>
       <input
@@ -174,7 +174,7 @@
   </div>
 
   <!-- Ergänzungsleistungen -->
-  <div class="tw:flex tw:gap-4 tw:dv-grid-field">
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
     <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.kinder.ergaenzungsleistungen.label' | transloco }}</mat-label>
       <input
@@ -195,7 +195,7 @@
   </div>
 
   <!-- Andere Einnahmen -->
-  <div class="tw:flex tw:gap-4 tw:dv-grid-field">
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
     <mat-form-field dvSharedUiFormField class="tw:grow">
       <mat-label>{{ 'shared.form.kinder.andereEinnahmen.label' | transloco }}</mat-label>
       <input
@@ -217,7 +217,7 @@
   </div>
 
   <!-- buttons -->
-  <dv-shared-ui-step-form-buttons class="tw:xl:col-span-2">
+  <dv-shared-ui-step-form-buttons>
     <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>

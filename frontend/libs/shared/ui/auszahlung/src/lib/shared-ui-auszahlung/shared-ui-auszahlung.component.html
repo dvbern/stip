@@ -14,7 +14,7 @@
   >
     @if (view.auszahlung.isDelegated) {
       <mat-checkbox
-        class="tw:dv-grid-field"
+        class="tw:dv-form-item"
         [formControl]="form.controls.auszahlungAnSozialdienst"
         data-testid="form-auszahlung-auszahlungAnSozialdienst"
       >
@@ -24,7 +24,7 @@
 
     @if (!form.controls.auszahlungAnSozialdienst.value) {
       <!-- Nachname -->
-      <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
         <input
           matInput
@@ -39,7 +39,7 @@
       </mat-form-field>
 
       <!-- Vorname -->
-      <div class="tw:flex tw:items-center tw:gap-2 tw:dv-grid-field">
+      <div class="tw:flex tw:items-center tw:gap-2 tw:dv-form-item">
         <mat-form-field dvSharedUiFormField class="tw:flex-1">
           <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
           <input
@@ -72,7 +72,7 @@
       ></div>
 
       <!-- institution -->
-      <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ 'shared.form.auszahlung.institution.label' | transloco }}</mat-label>
         <input
           matInput
@@ -94,7 +94,7 @@
       />
 
       <!-- IBAN -->
-      <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:items-center">
+      <div class="tw:dv-form-item tw:flex tw:gap-4 tw:items-center">
         <mat-form-field dvSharedUiFormField class="tw:flex-1">
           <mat-label>{{ 'shared.form.auszahlung.iban.label' | transloco }}</mat-label>
           <span matTextPrefix>CH</span>

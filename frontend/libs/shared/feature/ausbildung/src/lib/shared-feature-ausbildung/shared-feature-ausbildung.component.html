@@ -5,8 +5,14 @@
   <dv-shared-ui-loading></dv-shared-ui-loading>
 } @else {
   @let fallId = dialogDataSig()?.fallId;
+  @let isDialog = !!fallId;
   <form
-    class="testing-library-fix tw:mt-6 tw:pt-4 tw:min-w-106.25 tw:md:min-w-160 tw:dv-form-grid"
+    *dvTranslocoShared="let t"
+    class="testing-library-fix tw:min-w-106.25 tw:md:min-w-160"
+    [ngClass]="{
+      'tw:dv-form-grid': !isDialog,
+      'tw:grid tw:grid-cols-1 tw:gap-6': isDialog,
+    }"
     [formGroup]="form"
     [dvSharedUiFormReadonly]="!isEditableSig()"
     data-testid="form-education-form"
@@ -14,11 +20,11 @@
     (gotReenabledSig)="gotReenabledSig.set({})"
     (ngSubmit)="handleSave()"
   >
-    <h2 class="tw:text-2xl tw:font-semibold tw:mb-2 tw:xl:col-span-3">
-      {{ 'shared.form.ausbildung.place.title' | transloco }}
+    <h2 class="tw:dv-form-title">
+      {{ t('shared.form.ausbildung.place.title') }}
     </h2>
 
-    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-grid-field">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-form-item">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
         <dv-shared-ui-select-search
@@ -28,12 +34,12 @@
           [labelKeySig]="'shared.form.ausbildung.ausbildungsstaette.label'"
           [valuesSig]="ausbildungsstaettenOptionsSig()"
           [languageSig]="languageSig()"
-          [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsstaette.error.invalid' | transloco"
+          [invalidValueLabelKeySig]="t('shared.form.ausbildung.ausbildungsstaette.error.invalid')"
         ></dv-shared-ui-select-search>
       } @else {
         <!-- Alternative STAETTE -->
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.ausbildung.ausbildungsstaette.label' | transloco }}</mat-label>
+          <mat-label>{{ t('shared.form.ausbildung.ausbildungsstaette.label') }}</mat-label>
           <input
             matInput
             dvMaxLength
@@ -52,7 +58,7 @@
         type="button"
         (click)="ausbildungsstaetteInfoDialog.toggle()"
         class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+        [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
       >
         <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
@@ -68,7 +74,7 @@
     ></div>
 
     <!-- GANG -->
-    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-grid-field">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-form-item">
       @if (!form.value['ausbildungNichtGefunden']) {
         <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
@@ -77,12 +83,12 @@
             [labelKeySig]="'shared.form.ausbildung.ausbildungsgang.label'"
             [valuesSig]="ausbildungsgangOptionsSig()"
             [languageSig]="languageSig()"
-            [invalidValueLabelKeySig]="'shared.form.ausbildung.ausbildungsgang.error.invalid' | transloco"
+            [invalidValueLabelKeySig]="t('shared.form.ausbildung.ausbildungsgang.error.invalid')"
           ></dv-shared-ui-select-search>
         </div>
       } @else {
         <mat-form-field dvSharedUiFormField class="tw:w-full">
-          <mat-label>{{ 'shared.form.ausbildung.ausbildungsgang.label' | transloco }}</mat-label>
+          <mat-label>{{ t('shared.form.ausbildung.ausbildungsgang.label') }}</mat-label>
           <!-- alternativer Ausbildungsgang -->
           <input
             type="text"
@@ -92,7 +98,7 @@
             data-testid="form-education-alternativeAusbildungsgang"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
       }
@@ -100,7 +106,7 @@
         type="button"
         (click)="ausbildungsgangInfoDialog.toggle()"
         class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+        [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
       >
         <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
@@ -116,9 +122,9 @@
 
     <!-- FACHRICHTUNG / BERUFSBEZEICHNUNG -->
     @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig(); as zusatzfrage) {
-      <div class="testing-library-fix tw:flex tw:gap-4 tw:dv-grid-field">
+      <div class="testing-library-fix tw:flex tw:gap-4 tw:dv-form-item">
         <mat-form-field class="tw:flex-1" dvSharedUiFormField>
-          <mat-label>{{ 'shared.form.ausbildung.fachrichtung.label.' + zusatzfrage | transloco }}</mat-label>
+          <mat-label>{{ t(`shared.form.ausbildung.fachrichtung.label.${zusatzfrage}`) }}</mat-label>
           <input
             type="text"
             matInput
@@ -127,14 +133,14 @@
             data-testid="form-education-fachrichtung"
           />
           <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
+            {{ t('shared.form.error.required') }}
           </mat-error>
         </mat-form-field>
         <button
           type="button"
           (click)="fachrichtungInfoDialog.toggle()"
           class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+          [attr.aria-label]="t('shared.form-field.toggle-info-messages')"
         >
           <span class="material-symbols-rounded tw:text-3xl!"> info </span>
         </button>
@@ -142,8 +148,8 @@
       <div
         dvSharedUiInfoDialog
         class="tw:hidden tw:xl:block tw:xl:col-start-3"
-        [dialogTitleKey]="'shared.form.ausbildung.fachrichtung.label.' + zusatzfrageSig()"
-        [dialogMessageKey]="'shared.form.ausbildung.fachrichtung.info'"
+        [dialogTitleKey]="t(`shared.form.ausbildung.fachrichtung.label.${zusatzfrage}`)"
+        [dialogMessageKey]="t('shared.form.ausbildung.fachrichtung.info')"
         [forceDialogPosition]="!!fallId"
         #fachrichtungInfoDialog="dvSharedUiInfoDialog"
       ></div>
@@ -151,12 +157,12 @@
 
     <!-- besuchtBMS -->
     @if (showBesuchtBMS()) {
-      <mat-checkbox class="tw:dv-grid-field" formControlName="besuchtBMS" data-testid="form-education-besuchtBMS">{{
-        'shared.form.ausbildung.besuchtBMS.label' | transloco
+      <mat-checkbox class="tw:dv-form-item" formControlName="besuchtBMS" data-testid="form-education-besuchtBMS">{{
+        t('shared.form.ausbildung.besuchtBMS.label')
       }}</mat-checkbox>
     }
 
-    <div class="testing-library-fix tw:dv-grid-field">
+    <div class="testing-library-fix tw:dv-form-item">
       @if (form.controls.isAusbildungAusland.value) {
         <!-- Land -->
         <dv-shared-ui-select-search
@@ -179,7 +185,7 @@
         >
           <!-- PLZ -->
           <mat-form-field dvSharedUiFormField class="tw:basis-32">
-            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
+            <mat-label>{{ t('shared.form.shared.address.zipcode.label') }}</mat-label>
             <input
               type="text"
               matInput
@@ -189,7 +195,7 @@
               data-testid="form-education-ausbildungs-plz"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.requiredShort' | transloco }}
+              {{ t('shared.form.error.requiredShort') }}
             </mat-error>
             <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
               @for (lookup of plzValues; track $index) {
@@ -202,7 +208,7 @@
 
           <!-- Ort -->
           <mat-form-field dvSharedUiFormField class="tw:flex-1">
-            <mat-label>{{ 'shared.form.ausbildung.ausbildungsort.label' | transloco }}</mat-label>
+            <mat-label>{{ t('shared.form.ausbildung.ausbildungsort.label') }}</mat-label>
             <input
               type="text"
               matInput
@@ -211,7 +217,7 @@
               data-testid="form-education-ausbildungs-ort"
             />
             <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
+              {{ t('shared.form.error.required') }}
             </mat-error>
           </mat-form-field>
         </div>
@@ -220,40 +226,40 @@
 
     <!-- isAusbildungAusland -->
     <mat-checkbox
-      class="tw:dv-grid-field"
+      class="tw:dv-form-item"
       formControlName="isAusbildungAusland"
       data-testid="form-education-isAusbildungAusland"
-      >{{ 'shared.form.ausbildung.isAusbildungAusland.label' | transloco }}</mat-checkbox
+      >{{ t('shared.form.ausbildung.isAusbildungAusland.label') }}</mat-checkbox
     >
 
-    <div class="testing-library-fix tw:flex tw:flex-col tw:gap-4 tw:dv-grid-field">
+    <div class="testing-library-fix tw:flex tw:flex-col tw:gap-4 tw:dv-form-item">
       <!-- MANUELL -->
       <mat-checkbox
         formControlName="ausbildungNichtGefunden"
         data-testid="form-education-ausbildungNichtGefunden"
         (change)="handleManuellChangedByUser()"
-        >{{ 'shared.form.ausbildung.manuell.label' | transloco }}</mat-checkbox
+        >{{ t('shared.form.ausbildung.manuell.label') }}</mat-checkbox
       >
       <div class="group-errors">
         @if (form.controls.ausbildungNichtGefunden.errors?.['requiredOff']) {
           <mat-error>
-            {{ 'shared.form.ausbildung.validation.notFound.part1' | transloco }}
+            {{ t('shared.form.ausbildung.validation.notFound.part1') }}
             <a [routerLink]="['/administration/ausbildungsstaette']">{{
-              'shared.form.ausbildung.validation.notFound.link' | transloco
+              t('shared.form.ausbildung.validation.notFound.link')
             }}</a>
-            {{ 'shared.form.ausbildung.validation.notFound.part2' | transloco }}
+            {{ t('shared.form.ausbildung.validation.notFound.part2') }}
           </mat-error>
         }
       </div>
     </div>
 
-    <h3 class="tw:mt-6 tw:mb-2 tw:text-2xl tw:font-semibold tw:xl:col-span-3">
-      {{ 'shared.form.ausbildung.duration.title' | transloco }}
-    </h3>
+    <h2 class="tw:dv-form-title">
+      {{ t('shared.form.ausbildung.duration.title') }}
+    </h2>
 
     <!-- START -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
-      <mat-label>{{ 'shared.form.ausbildung.start.label' | transloco }}</mat-label>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.ausbildung.start.label') }}</mat-label>
 
       <input
         matInput
@@ -266,44 +272,44 @@
       />
 
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
+        {{ t('shared.form.error.dateFormat') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDateFuture' | transloco }}
+        {{ t('shared.form.error.maxDateFuture') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | transloco }}
+        {{ t('shared.form.ausbildung.form.error.monthYearAfterStart') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minDateLebenslauf'">
-        {{ 'shared.form.ausbildung.form.error.lebenslaufConflict' | transloco }}
+        {{ t('shared.form.ausbildung.form.error.lebenslaufConflict') }}
       </mat-error>
 
       <!-- api errors -->
       <mat-error *dvSharedUiFormMessageError="'periodeNotFound'">
-        {{ 'shared.form.ausbildung.form.error.periodeNotFound' | transloco }}
+        {{ t('shared.form.ausbildung.form.error.periodeNotFound') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'inactivePeriod'">
         {{
-          'shared.form.ausbildung.form.error.inactivePeriod'
-            | transloco
-              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
+          t('shared.form.ausbildung.form.error.inactivePeriod', {
+            date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy'),
+          })
         }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'periodeIsDraft'">
         {{
-          'shared.form.ausbildung.form.error.periodeIsDraft'
-            | transloco
-              : { date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy') }
+          t('shared.form.ausbildung.form.error.periodeIsDraft', {
+            date: (ausbildungStore.ausbildungCreateErrorResponseViewSig()?.context | date: 'dd.MM.yyyy'),
+          })
         }}
       </mat-error>
     </mat-form-field>
 
     <!-- ENDE -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
-      <mat-label>{{ 'shared.form.ausbildung.ende.label' | transloco }}</mat-label>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.ausbildung.ende.label') }}</mat-label>
 
       <input
         matInput
@@ -315,57 +321,54 @@
         (blur)="onDateBlur(form.controls.ausbildungEnd)"
       />
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
+        {{ t('shared.form.error.dateFormat') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{
-          'shared.form.ausbildung.form.error.monthYearAfter'
-            | transloco: { date: minAusbildungEndSig() | date: 'MM.yyyy' }
-        }}
+        {{ t('shared.form.ausbildung.form.error.monthYearAfter', { date: minAusbildungEndSig() | date: 'MM.yyyy' }) }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'endDateAfterStart'">
-        {{ 'shared.form.ausbildung.form.error.monthYearAfterStart' | transloco }}
+        {{ t('shared.form.ausbildung.form.error.monthYearAfterStart') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDateFuture' | transloco }}
+        {{ t('shared.form.error.maxDateFuture') }}
       </mat-error>
     </mat-form-field>
 
     <!-- PENSUM -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
-      <mat-label>{{ 'shared.form.ausbildung.pensum.label' | transloco }}</mat-label>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ t('shared.form.ausbildung.pensum.label') }}</mat-label>
 
       <mat-select
         formControlName="pensum"
         data-testid="form-education-pensum"
-        [placeholder]="'shared.form.select.empty' | transloco"
+        [placeholder]="t('shared.form.select.empty')"
       >
         @for (l of ausbildungspensumValues; track $index) {
           <mat-option [value]="l" [attr.data-testid]="l">
-            {{ 'shared.form.ausbildung.pensum.' + l | transloco }}
+            {{ t(`shared.form.ausbildung.pensum.${l}`) }}
           </mat-option>
         }
       </mat-select>
 
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
       </mat-error>
     </mat-form-field>
 
     @if (isEditableSig()) {
-      <div class="tw:xl:col-span-3">
+      <dv-shared-ui-step-form-buttons>
         <button
           type="submit"
           class="tw:dv-button-main-primary"
           data-testid="button-save"
           [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending: { ignoreInitial: true })"
         >
-          {{ 'shared.form.save' | transloco }}
+          {{ t('shared.form.save') }}
         </button>
-      </div>
+      </dv-shared-ui-step-form-buttons>
     }
   </form>
 }

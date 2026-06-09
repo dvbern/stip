@@ -17,12 +17,12 @@
       <form
         [formGroup]="form"
         novalidate
-        class="tw:mt-8 tw:dv-form-grid"
+        class="tw:dv-form-grid"
         data-testid="form-eltern-steuererklaerung-form"
         [dvSharedUiFormReadonly]="view.readonly"
       >
         <!-- steuererklaerungInBern -->
-        <div class="tw:dv-grid-field tw:flex tw:flex-col">
+        <div class="tw:dv-form-item tw:flex tw:flex-col">
           <mat-radio-group
             class=""
             formControlName="steuererklaerungInBern"
@@ -72,7 +72,7 @@
         </div>
 
         <!-- UNTERHALTSBEITRÄGE -->
-        <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+        <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.eltern-steuererklaerung.unterhaltsbeitraege.label' | transloco }}</mat-label>
             <input
@@ -97,7 +97,7 @@
         </div>
 
         <!-- Renten -->
-        <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+        <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.eltern-steuererklaerung.renten.label' | transloco }}</mat-label>
             <input
@@ -123,7 +123,7 @@
         </div>
 
         <!-- Ergaenzungsleistungen -->
-        <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+        <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.eltern-steuererklaerung.ergaenzungsleistungen.label' | transloco }}</mat-label>
             <input
@@ -163,7 +163,7 @@
         ></div>
 
         <!-- Einnahmen BGSA -->
-        <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+        <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.eltern-steuererklaerung.einnahmenBGSA.label' | transloco }}</mat-label>
             <input
@@ -189,7 +189,7 @@
         </div>
 
         <!-- Andere Einnahmen -->
-        <div class="tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+        <div class="tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
           <mat-form-field dvSharedUiFormField class="tw:grow">
             <mat-label>{{ 'shared.form.eltern-steuererklaerung.andereEinnahmen.label' | transloco }}</mat-label>
             <input
@@ -210,7 +210,7 @@
           }
         </div>
 
-        <dv-shared-ui-step-form-buttons class="tw:xl:col-span-3">
+        <dv-shared-ui-step-form-buttons>
           @if (!view.readonly) {
             <button
               type="submit"

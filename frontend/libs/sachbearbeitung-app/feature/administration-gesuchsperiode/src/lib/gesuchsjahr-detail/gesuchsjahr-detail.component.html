@@ -3,9 +3,9 @@
   [dvSharedUiFormReadonly]="store.currentGesuchsjahrViewSig()?.isReadonly"
   data-testid="form-gesuchsjahr-form"
   (ngSubmit)="handleSave()"
-  class="tw:dv-form-grid tw:mt-6 tw:px-3"
+  class="tw:dv-form-grid"
 >
-  <h2 class="tw:xl:col-span-3 tw:text-2xl tw:font-semibold">
+  <h2 class="tw:dv-form-title">
     {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
   </h2>
 
@@ -13,7 +13,7 @@
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     <!-- BezeichnungDe -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungDe.label' | transloco }}</mat-label>
       <input
         formControlName="bezeichnungDe"
@@ -27,7 +27,7 @@
       </mat-error>
     </mat-form-field>
     <!-- BezeichnungFr -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.gesuchsjahr.bezeichnungFr.label' | transloco }}</mat-label>
       <input
         formControlName="bezeichnungFr"
@@ -41,7 +41,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Jahr -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.gesuchsjahr.jahr.label' | transloco }}</mat-label>
       <input
         formControlName="technischesJahr"

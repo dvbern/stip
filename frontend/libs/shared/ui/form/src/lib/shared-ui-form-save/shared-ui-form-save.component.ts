@@ -20,5 +20,5 @@ export class SharedUiFormSaveComponent {
   @Input() disabled = false;
   @Input() prefixIcon = false;
 
-  @HostBinding('class') klass = 'tw:flex';
+  @HostBinding('class') klass = 'tw:flex tw:mt-6 tw:xl:col-span-2';
 }

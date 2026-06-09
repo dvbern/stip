@@ -4,10 +4,10 @@
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-geschwister-form"
   novalidate
-  class="tw:mt-6 tw:dv-form-grid"
+  class="tw:dv-form-grid"
   (ngSubmit)="handleSave()"
 >
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
     <input matInput dvMaxLength formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
     <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
@@ -16,7 +16,7 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
     <input matInput dvMaxLength formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
     <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
@@ -26,7 +26,7 @@
   </mat-form-field>
 
   <!-- GEBURTSDATUM -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
     <input
@@ -54,7 +54,7 @@
   </mat-form-field>
 
   <!-- Wohnsitz -->
-  <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
     <mat-label>{{ 'shared.form.shared.wohnsitz.label' | transloco }}</mat-label>
     <mat-select
       formControlName="wohnsitz"
@@ -77,7 +77,7 @@
 
   <!-- WOHNSITZ AUFTEILUNG -->
   @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
-    <div class="tw:dv-grid-field">
+    <div class="tw:dv-form-item">
       <dv-shared-ui-wohnsitz-splitter
         [updateValidity]="updateValidity$ | async"
         [controls]="form.controls"
@@ -94,7 +94,7 @@
     formControlName="ausbildungssituation"
     data-testid="form-geschwister-ausbildungssituation"
     dvSharedUiFormField
-    class="tw:dv-grid-field"
+    class="tw:dv-form-item"
   >
     <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
     <div class="tw:flex tw:flex-col">
@@ -126,7 +126,7 @@
   </mat-radio-group>
 
   <!-- buttons -->
-  <dv-shared-ui-step-form-buttons class="tw:xl:col-span-3">
+  <dv-shared-ui-step-form-buttons>
     <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
       {{ 'shared.form.cancel-and-back' | transloco }}
     </button>

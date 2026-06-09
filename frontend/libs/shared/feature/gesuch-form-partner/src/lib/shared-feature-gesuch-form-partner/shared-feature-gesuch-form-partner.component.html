@@ -9,7 +9,7 @@
       [dvSharedUiFormReadonly]="view.readonly"
       (gotReenabledSig)="gotReenabled$.next({})"
       novalidate
-      class="testing-library-fix tw:mt-6 tw:dv-form-grid"
+      class="testing-library-fix tw:dv-form-grid"
       data-testid="form-partner-form"
       (ngSubmit)="handleSaveAndContinue()"
     >
@@ -18,7 +18,7 @@
       </h3>
 
       <!-- AHV -->
-      <div class="testing-library-fix tw:dv-grid-field tw:flex tw:gap-4 tw:content-center">
+      <div class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4 tw:content-center">
         <mat-form-field dvSharedUiFormField class="tw:grow">
           <mat-label>{{ t('shared.form.shared.sozialversicherungsnummer.label') }}</mat-label>
           <input
@@ -56,7 +56,7 @@
         #ahvPartnerInfoDialog="dvSharedUiInfoDialog"
         class="tw:hidden tw:xl:block tw:xl:col-start-3"
       ></div>
-      <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ t('shared.form.shared.lastname.label') }}</mat-label>
         <input formControlName="nachname" data-testid="form-partner-nachname" matInput dvMaxLength type="text" />
         <mat-hint *dvZuvorHint="view.formChanges.nachname"></mat-hint>
@@ -65,7 +65,7 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ t('shared.form.shared.firstname.label') }}</mat-label>
         <input formControlName="vorname" data-testid="form-partner-vorname" matInput dvMaxLength type="text" />
         <mat-hint *dvZuvorHint="view.formChanges.vorname"></mat-hint>
@@ -82,7 +82,7 @@
       />
 
       <!-- GEBURTSDATUM -->
-      <mat-form-field dvSharedUiFormField class="tw:dv-grid-field">
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
         <mat-label>{{ t('shared.form.shared.birthday.label') }}</mat-label>
         <input
           matInput
@@ -108,7 +108,7 @@
       </mat-form-field>
 
       <!-- AUSBILDUNG MIT EINKOMMEN ODER ERWERBSTÄTIG -->
-      <div class="testing-library-fix tw:dv-grid-field tw:flex tw:items-center tw:gap-4">
+      <div class="testing-library-fix tw:dv-form-item tw:flex tw:items-center tw:gap-4">
         <mat-checkbox type="checkbox" formControlName="inAusbildung" data-testid="form-partner-inAusbildung">{{
           t('shared.form.partner.inAusbildung.label')
         }}</mat-checkbox>
@@ -119,7 +119,7 @@
 
       <!-- PENSUM -->
       @if (showAusbildungspensumSig()) {
-        <mat-form-field dvSharedUiFormField class="testing-library-fix tw:dv-grid-field">
+        <mat-form-field dvSharedUiFormField class="testing-library-fix tw:dv-form-item">
           <mat-label>{{ t('shared.form.ausbildung.pensum.label') }}</mat-label>
           <mat-select
             formControlName="ausbildungspensum"

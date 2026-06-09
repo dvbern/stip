@@ -67,7 +67,7 @@
 </div>
 
 @let dokumente = dokumentsStore.dokuments();
-<dv-shared-ui-step-form-buttons *dvIfSachbearbeiter>
+<dv-shared-ui-step-form-buttons *dvIfSachbearbeiter class="tw:mt-12">
   <button
     type="button"
     class="tw:dv-button-main-primary"
@@ -79,7 +79,7 @@
   </button>
 </dv-shared-ui-step-form-buttons>
 
-<dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+<dv-shared-ui-step-form-buttons *dvIfGesuchsteller class="tw:mt-12">
   @if (!gesuch.isFehlendeDokumente) {
     <button
       type="button"

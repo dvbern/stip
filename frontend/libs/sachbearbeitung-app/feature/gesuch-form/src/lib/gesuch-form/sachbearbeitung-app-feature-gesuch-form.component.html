@@ -95,7 +95,7 @@
       >
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
-          <h1 class="step-title tw:text-2xl tw:font-semibold">
+          <h1 class="tw:dv-page-title-mobile" data-testid="step-title">
             {{ t(step.translationKey) }}
           </h1>
           @if (step.nextStep?.translationKey; as nextStepKey) {
@@ -113,9 +113,9 @@
           <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
-        <h2 class="tw:text-3xl tw:font-bold" data-testid="step-title">
+        <h1 class="tw:dv-page-title" data-testid="step-title">
           {{ t(step.titleTranslationKey) }}
-        </h2>
+        </h1>
         <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
       </div>
     }

@@ -27,7 +27,7 @@
 @if (!editedElternteil && !view.loading) {
   <ng-container *dvTranslocoShared="let t">
     <mat-selection-list [formControl]="sichtbareEltern" [disableRipple]="true">
-      <div class="tw:dv-form-grid tw:gap-6 tw:mt-6">
+      <div class="tw:dv-form-grid">
         @if (view.expectVater) {
           <div class="tw:xl:col-span-1 tw:relative">
             <mat-list-option
@@ -78,7 +78,7 @@
       </div>
     </mat-selection-list>
 
-    <dv-shared-ui-step-form-buttons>
+    <dv-shared-ui-step-form-buttons class="tw:mt-12">
       <button
         type="button"
         class="tw:dv-button-main-primary"
