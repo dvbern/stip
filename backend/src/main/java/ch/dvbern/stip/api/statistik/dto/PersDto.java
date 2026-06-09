@@ -23,15 +23,16 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Data
-@Builder
+@XmlAccessorType(XmlAccessType.FIELD)
+@Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlAccessorType(XmlAccessType.FIELD)
 public class PersDto {
     @XmlElement(name = "personIdentificationRoot")
     private PersonIdentificationRootDto personIdentificationRoot;
@@ -39,8 +40,8 @@ public class PersDto {
     @XmlElement(name = "nationality")
     private Integer nationality;
 
-    @XmlElement(name = "residencePermitCategory")
-    private String residencePermitCategory;
+    @XmlElement(name = "residencePermitCategoryType")
+    private String residencePermitCategoryType;
 
     @XmlElement(name = "place")
     private Integer place;

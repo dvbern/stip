@@ -15,31 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.statistik.dto;
+package ch.dvbern.stip.api.demo.service;
 
-import java.util.List;
+import jakarta.enterprise.context.ApplicationScoped;
+import lombok.RequiredArgsConstructor;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.jilt.Builder;
-import org.jilt.BuilderStyle;
+@RequiredArgsConstructor
+@ApplicationScoped
+public class GenerateMultipleDemoDataService {
 
-@Data
-@XmlRootElement(name = "table")
-@XmlAccessorType(XmlAccessType.FIELD)
-@Builder(style = BuilderStyle.STAGED)
-@NoArgsConstructor
-@AllArgsConstructor
-public class TableDto {
+    private final GenerateDemoDataService generateDemoDataService;
 
-    @XmlElement(name = "head")
-    private HeadDto head;
-
-    @XmlElement(name = "pers")
-    private List<PersDto> persons;
+    public void generateMultipleGesuche() {
+        // TODO: Generate all Testcases and change them to Verfügt
+        // if possible, also allow more than the number of Testcases
+        // for example 1000x, and test it appropriately
+    }
 }

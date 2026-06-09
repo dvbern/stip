@@ -21,12 +21,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.common.type.Anrede;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
+import ch.dvbern.stip.api.land.entity.Land;
+import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.statistik.entity.Statistik;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -35,16 +38,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class StatistikRepository implements BaseRepository<Statistik> {
 
-    public record TestTable(
+    public record StatistikOfYear(
+    int year,
     UUID gesuchId,
     /* PersDto */
-    String svnNummer,
+    String sozialversicherungsnummer,
     Anrede anrede,
     LocalDate geburtsdatum,
     String nationalitaetBfs,
+    Niederlassungsstatus niederlassungsstatus,
     Integer gemeindeBfsNr,
-    String piaAdresseLandBfs,
+    Adresse piaAdresse,
+    Land piaAdresseLand,
     /* FormDto */
+    UUID ausbildungId,
     boolean isAusbildungAusland,
     String ausbildungLandBfs,
     String ausbildungKanton,
@@ -55,40 +62,48 @@ public class StatistikRepository implements BaseRepository<Statistik> {
     AusbildungsPensum ausbildungspensum,
     boolean isFirstAusbildung,
     /* InstIdentificationRootDto */
+    String ausbildungsstaetteNameDe,
     AusbildungsstaetteNummerTyp ausbildungsstaetteNummerTyp,
+    String ausbildungsstaetteNummer,
     /* SumDto */
-    Object buchhaltungTyp,
-    Object sumId,
+    String buchhaltungTyp,
+    LocalDate ausbildungBegin,
+    LocalDate ausbildungEnd,
+    Long sumId,
     Integer sumTotal
     ) {
     }
 
-    public List<TestTable> getTestList(final int year) {
+    public List<StatistikOfYear> getStatistikValuesFor(final int year) {
         return getEntityManager().createQuery("""
             with buchhaltungUnion as (
-                select gesuch.id as gesuchId, betrag as betrag, 'gesuch' as typ
+                select gesuch.id as gesuchId, betrag as betrag, 'STIPENDIUM' as typ
                 from Buchhaltung buchhaltungGesuch
                 where
                     year(buchhaltungGesuch.timestampErstellt) = :year
                     and buchhaltungGesuch.buchhaltungType in (:auszahlungBuchhaltungTypes)
                     and buchhaltungGesuch is not null
                 union all
-                select gesuch.id as gesuchId, betrag as betrag, 'darlehen' as typ
+                select gesuch.id as gesuchId, betrag as betrag, 'DARLEHEN' as typ
                 from DarlehenBuchhaltungEntry buchhaltungDarlehen
                 where
                     year(buchhaltungDarlehen.timestampErstellt) = :year
                     and buchhaltungDarlehen is not null
             )
             select
+                :year,
                 gesuch.id,
                 /* PersDto */
                 pia.sozialversicherungsnummer,
                 pia.anrede,
                 pia.geburtsdatum,
                 piaNationalitaet.laendercodeBfs,
+                pia.niederlassungsstatus,
                 statisticsdata.gemeindeBfsNr,
-                piaAdresseLand.laendercodeBfs,
+                piaAdresse,
+                piaAdresseLand,
                 /* FormDto */
+                ausbildung.id,
                 ausbildung.isAusbildungAusland,
                 ausbildungLand.laendercodeBfs,
                 ausbildungPlz.kantonskuerzel,
@@ -97,11 +112,15 @@ public class StatistikRepository implements BaseRepository<Statistik> {
                 ausbildung.besuchtBMS,
                 abschluss.bfsStudienStufe,
                 ausbildung.pensum,
-                count(abgeschlosseneAusbildungen) = 0,
+                count(lebenslaufAbschluss) = 0,
                 /* InstIdentificationRootDto */
-                ausbildungsstatte.nummerTyp,
+                ausbildungsstaette.nameDe,
+                ausbildungsstaette.nummerTyp,
+                ausbildungsstaette.nummer,
                 /* SumDto */
                 buchhaltungUnion.typ,
+                ausbildung.ausbildungBegin,
+                ausbildung.ausbildungEnd,
                 row_number() over (order by pia.id),
                 buchhaltungUnion.betrag
             from buchhaltungUnion buchhaltungUnion
@@ -126,14 +145,18 @@ public class StatistikRepository implements BaseRepository<Statistik> {
             join pia.adresse piaAdresse
             join piaAdresse.land piaAdresseLand
             join pia.nationalitaet piaNationalitaet
-            left join gesuchFormular.lebenslaufItems abgeschlosseneAusbildungen on (
-                abgeschlosseneAusbildungen.ausbildungAbgeschlossen
+            left join gesuchFormular.lebenslaufItems lebenslaufItems on (
+                lebenslaufItems.abschluss is not null
+
+            )
+            left join lebenslaufItems.abschluss lebenslaufAbschluss on (
+                lebenslaufAbschluss.berufsbefaehigenderAbschluss = true
             )
             left join gesuch.statisticsdata statisticsdata
             join gesuch.ausbildung ausbildung
             join ausbildung.ausbildungsgang ausbildungsgang
             join ausbildungsgang.abschluss abschluss
-            join ausbildungsgang.ausbildungsstaette ausbildungsstatte
+            join ausbildungsgang.ausbildungsstaette ausbildungsstaette
             left join ausbildung.land ausbildungLand
             left join Plz ausbildungPlz on (ausbildungPlz.plz = ausbildung.ausbildungsortPLZ)
             group by
@@ -153,102 +176,10 @@ public class StatistikRepository implements BaseRepository<Statistik> {
                 ausbildung.id,
                 abschluss.id,
                 ausbildung.id,
-                ausbildungsstatte.id,
+                ausbildungsstaette.id,
                 latestGesuchTranche.gueltigkeit.gueltigBis
             order by latestGesuchTranche.gueltigkeit.gueltigBis
-        """, TestTable.class)
-            .setParameter("year", year)
-            .setParameter("trancheTypTranche", GesuchTrancheTyp.TRANCHE)
-            .setParameter("auszahlungBuchhaltungTypes", BuchhaltungType.AUSZAHLUNGS)
-            .getResultList();
-    }
-
-    public List<TestTable> getTestListCopy(final int year) {
-        return getEntityManager().createQuery("""
-            select
-                gesuch.id,
-                max(gesuchTranche.timestampErstellt),
-                /* PersDto */
-                pia.sozialversicherungsnummer,
-                pia.anrede,
-                pia.geburtsdatum,
-                piaNationalitaet.laendercodeBfs,
-                statisticsdata.gemeindeBfsNr,
-                piaAdresseLand.laendercodeBfs,
-                /* FormDto */
-                ausbildung.isAusbildungAusland,
-                ausbildungLand.laendercodeBfs,
-                ausbildungPlz.kantonskuerzel,
-                /* FormationDto */
-                abschluss.bfsKategorie,
-                ausbildung.besuchtBMS,
-                abschluss.bfsStudienStufe,
-                ausbildung.pensum,
-                count(abgeschlosseneAusbildungen) = 0,
-                /* InstIdentificationRootDto */
-                ausbildungsstatte.nummerTyp,
-                /* SumDto */
-                /* row_number() over (order by pia.id) */
-                buchhaltungGesuch.id,
-                buchhaltungGesuch.betrag,
-                buchhaltungDarlehen.betrag
-            from PersonInAusbildung pia
-            join pia.adresse piaAdresse
-            join piaAdresse.land piaAdresseLand
-            join pia.nationalitaet piaNationalitaet
-            join GesuchFormular gesuchFormular on (gesuchFormular.personInAusbildung = pia)
-            join gesuchFormular.lebenslaufItems abgeschlosseneAusbildungen on (
-                abgeschlosseneAusbildungen.ausbildungAbgeschlossen
-            )
-            /*join GesuchTranche gesuchTranche on (
-                gesuchTranche.gesuchFormular = gesuchFormular
-                    and (
-                        year(gesuchTranche.gueltigkeit.gueltigAb) = :year
-                        or year(gesuchTranche.gueltigkeit.gueltigBis) = :year
-                    )
-            )*/
-            join lateral (
-                select latestTranche
-                from GesuchTranche latestTranche
-                where latestTranche.gesuchFormular = gesuchFormular
-            ) as gesuchTranche
-            join Gesuch gesuch on (gesuchTranche.gesuch = gesuch and gesuchTranche.typ = :trancheTypTranche)
-            left join gesuch.statisticsdata statisticsdata
-            join gesuch.ausbildung ausbildung
-            join ausbildung.ausbildungsgang ausbildungsgang
-            join ausbildungsgang.abschluss abschluss
-            join ausbildungsgang.ausbildungsstaette ausbildungsstatte
-            left join ausbildung.land ausbildungLand
-            left join Plz ausbildungPlz on (ausbildungPlz.plz = ausbildung.ausbildungsortPLZ)
-            left join Buchhaltung buchhaltungGesuch on (
-                buchhaltungGesuch.gesuch = gesuch
-                and year(buchhaltungGesuch.timestampErstellt) = :year
-                and buchhaltungGesuch.buchhaltungType in (:auszahlungBuchhaltungTypes)
-            )
-            left join DarlehenBuchhaltungEntry buchhaltungDarlehen on (
-                buchhaltungDarlehen.gesuch = gesuch
-                and year(buchhaltungDarlehen.timestampErstellt) = :year
-            )
-            where buchhaltungGesuch is not null or buchhaltungDarlehen is not null
-            group by
-                buchhaltungGesuch.id,
-                buchhaltungDarlehen.id,
-                gesuch.id,
-                pia.id,
-                piaAdresse.id,
-                piaNationalitaet.id,
-                statisticsdata.id,
-                piaAdresseLand.id,
-                ausbildung.id,
-                ausbildungLand.id,
-                ausbildungPlz.id,
-                abschluss.id,
-                ausbildung.id,
-                abschluss.id,
-                ausbildung.id,
-                ausbildungsstatte.id
-            order by max(gesuchTranche.gueltigkeit.gueltigBis)
-        """, TestTable.class)
+        """, StatistikOfYear.class)
             .setParameter("year", year)
             .setParameter("trancheTypTranche", GesuchTrancheTyp.TRANCHE)
             .setParameter("auszahlungBuchhaltungTypes", BuchhaltungType.AUSZAHLUNGS)

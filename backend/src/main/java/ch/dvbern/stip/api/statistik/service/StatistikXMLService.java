@@ -24,40 +24,42 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.UUID;
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
-import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp;
-import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
-import ch.dvbern.stip.api.buchhaltung.repo.BuchhaltungRepository;
 import ch.dvbern.stip.api.common.type.Kanton;
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.KantonUtil;
 import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
-import ch.dvbern.stip.api.darlehen.repo.DarlehenBuchhaltungEntryRepository;
 import ch.dvbern.stip.api.dokument.service.DokumentUploadService;
-import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.plz.service.PlzService;
+import ch.dvbern.stip.api.land.type.WellKnownLand;
 import ch.dvbern.stip.api.statistik.dto.FormDto;
-import ch.dvbern.stip.api.statistik.dto.FormationDto;
-import ch.dvbern.stip.api.statistik.dto.HeadDto;
-import ch.dvbern.stip.api.statistik.dto.InstCodeDto;
+import ch.dvbern.stip.api.statistik.dto.FormDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.FormationDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.HeadDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.InstCodeDtoBuilder;
 import ch.dvbern.stip.api.statistik.dto.InstIdentificationRootDto;
-import ch.dvbern.stip.api.statistik.dto.LocalPersonIdDto;
+import ch.dvbern.stip.api.statistik.dto.InstIdentificationRootDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.LocalPersonIdDtoBuilder;
 import ch.dvbern.stip.api.statistik.dto.PersDto;
-import ch.dvbern.stip.api.statistik.dto.PersonIdentificationRootDto;
-import ch.dvbern.stip.api.statistik.dto.SumDto;
+import ch.dvbern.stip.api.statistik.dto.PersDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.PersonIdentificationRootDtoBuilder;
+import ch.dvbern.stip.api.statistik.dto.SumDtoBuilder;
 import ch.dvbern.stip.api.statistik.dto.TableDto;
+import ch.dvbern.stip.api.statistik.dto.TableDtoBuilder;
 import ch.dvbern.stip.api.statistik.entity.Statistik;
+import ch.dvbern.stip.api.statistik.exception.StatistikGemeindeLookupException;
 import ch.dvbern.stip.api.statistik.repo.StatistikRepository;
-import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
+import ch.dvbern.stip.api.statistik.repo.StatistikRepository.StatistikOfYear;
+import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungType;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.statistik.util.StatistikUtil;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -78,11 +80,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class StatistikXMLService {
 
     private final StatistikRepository statistikRepository;
-    private final BuchhaltungRepository buchhaltungRepository;
-    private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
     private final TenantService tenantService;
     private final GemeindeLookupPortFactory gemeindeLookupPortFactory;
-    private final PlzService plzService;
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3AsyncClient;
     private final StipConfig config;
@@ -159,13 +158,54 @@ public class StatistikXMLService {
 
     @Transactional
     public ByteArrayOutputStream generateStatistikXml(int year) {
-        List<Buchhaltung> buchhaltungs = buchhaltungRepository.findByYear(year);
-        List<DarlehenBuchhaltungEntry> darlehenBuchhaltungs = darlehenBuchhaltungEntryRepository.findByYear(year);
 
-        List<StatistikBuchhaltungUnion> statistikBuchhaltungUnions =
-            StatistikUtil.combineBuchhaltungs(buchhaltungs, darlehenBuchhaltungs, year);
+        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
+        final var kanton = KantonUtil.getByTenantIdentifier(tenantIdentifier);
 
-        TableDto tableDto = buildTableDto(statistikBuchhaltungUnions, year);
+        final var personMap = new HashMap<String, PersDto>();
+        final var ausbildungMap = new HashMap<UUID, FormDto>();
+        var ausbildungCounter = 0;
+        for (var value : statistikRepository.getStatistikValuesFor(year)) {
+            if (!personMap.containsKey(value.sozialversicherungsnummer())) {
+                personMap.put(
+                    value.sozialversicherungsnummer(),
+                    createPersonDto(value, tenantIdentifier)
+                );
+            }
+            final var persDto = personMap.get(value.sozialversicherungsnummer());
+
+            if (!ausbildungMap.containsKey(value.ausbildungId())) {
+                ausbildungCounter++;
+                final var formDto = createFormDto(value, ausbildungCounter);
+                ausbildungMap.put(
+                    value.ausbildungId(),
+                    formDto
+                );
+                persDto.getForms().add(formDto);
+            }
+            final var formDto = ausbildungMap.get(value.ausbildungId());
+
+            final var sumDto = SumDtoBuilder.sumDto()
+                .sumId(value.sumId().intValue())
+                .sumTotal(value.sumTotal())
+                .sumArt(StatistikBuchhaltungType.valueOf(value.buchhaltungTyp()).getBfsCode())
+                .term(StatistikUtil.getSemesterCount(value.ausbildungBegin(), value.ausbildungEnd(), year))
+                .com(null)
+                .build();
+            formDto.getSums().add(sumDto);
+        }
+
+        final var tableDto = TableDtoBuilder.tableDto()
+            .head(
+                HeadDtoBuilder.headDto()
+                    .version(year)
+                    .canton(kanton.getBfsCode())
+                    .dataDelivery(kanton.getBfsDelivery())
+                    .deliveryDate(LocalDate.now().toString())
+                    .build()
+            )
+            .persons(personMap.values().stream().toList())
+            .build();
 
         try {
             return generateXml(tableDto);
@@ -175,170 +215,84 @@ public class StatistikXMLService {
         }
     }
 
-    private TableDto buildTableDto(List<StatistikBuchhaltungUnion> buchhaltungs, int year) {
-        AtomicInteger formIdCounter = new AtomicInteger(1);
-        AtomicInteger sumIdCounter = new AtomicInteger(1);
-
-        final var persons = buchhaltungs.stream()
-            .map(buchhaltung -> buchhaltung.getGesuch().getAusbildung().getFall())
-            .distinct()
-            .map(fall -> {
-                final var buchhaltungsForFall =
-                    buchhaltungs.stream().filter(b -> b.getGesuch().getAusbildung().getFall().equals(fall)).toList();
-                return mapToPersDto(fall, buchhaltungsForFall, year, formIdCounter, sumIdCounter);
-            })
-            .toList();
-
-        final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-        final var bfsCode = StatistikUtil.getBfsCodeFromTenantIdentifier(tenantIdentifier);
-
-        return TableDto.builder()
-            .head(
-                HeadDto.builder()
-                    .version(year)
-                    .canton(bfsCode)
-                    .dataDelivery("BE_KT")
-                    .deliveryDate(LocalDate.now().toString())
+    private PersDto createPersonDto(StatistikOfYear value, TenantIdentifier tenantIdentifier) {
+        return PersDtoBuilder.persDto()
+            .personIdentificationRoot(
+                PersonIdentificationRootDtoBuilder.personIdentificationRootDto()
+                    .localPersonId(
+                        LocalPersonIdDtoBuilder.localPersonIdDto()
+                            .personIdCategory(StatistikConstants.STATISTIK_XML_PERSON_ID_CATEGORY)
+                            .personId(value.sozialversicherungsnummer())
+                            .build()
+                    )
+                    .sex(value.anrede().getBfsCode())
+                    .dateOfBirth(value.geburtsdatum().toString())
                     .build()
             )
-            .persons(persons)
-            .build();
-    }
-
-    private PersDto mapToPersDto(
-        Fall fall,
-        List<StatistikBuchhaltungUnion> buchhaltungs,
-        int year,
-        AtomicInteger formIdCounter,
-        AtomicInteger sumIdCounter
-    ) {
-        final var gesuchTranche = StatistikUtil.getLatestGesuchTrancheFromFallByYear(fall, year);
-        final var pia = gesuchTranche.getGesuchFormular().getPersonInAusbildung();
-
-        var personId = LocalPersonIdDto.builder()
-            .personIdCategory(StatistikConstants.STATISTIK_XML_PERSON_ID_CATEGORY)
-            .personId(pia.getSozialversicherungsnummer())
-            .build();
-
-        var personIdentificationRoot = PersonIdentificationRootDto.builder()
-            .localPersonId(personId)
-            .sex(pia.getAnrede().getBfsCode())
-            .dateOfBirth(pia.getGeburtsdatum().toString())
-            .build();
-
-        List<FormDto> forms = buchhaltungs.stream()
-            .map(b -> b.getGesuch().getAusbildung())
-            .distinct()
-            .filter(ausbildung -> ausbildung.getFall().equals(fall))
-            .map(ausbildung -> mapToFormDto(ausbildung, buchhaltungs, year, formIdCounter, sumIdCounter))
-            .toList();
-
-        final var persDto = PersDto.builder()
-            .personIdentificationRoot(personIdentificationRoot)
-            .nationality(Integer.valueOf(pia.getNationalitaet().getLaendercodeBfs()))
-            .forms(forms)
-            .build();
-
-        final var bfsGemeindeCode =
-            Optional.ofNullable(
-                StatistikUtil.getBfsGemeindeNrFromGesuch(
-                    gesuchTranche,
-                    tenantService.getCurrentTenantIdentifier(),
+            .nationality(Integer.valueOf(value.nationalitaetBfs()))
+            .residencePermitCategoryType(
+                Objects.nonNull(value.niederlassungsstatus())
+                    ? String.valueOf(value.niederlassungsstatus().getBfsCode())
+                    : null
+            )
+            .place(
+                value.piaAdresseLand().is(WellKnownLand.CHE) ? StatistikUtil.getGemeindeBfsNummer(
+                    value.gesuchId(),
+                    value.piaAdresse(),
+                    tenantIdentifier,
                     gemeindeLookupPortFactory
                 )
+                    .orElseThrow(StatistikGemeindeLookupException::new)
+                    : null
+            )
+            .placeHist(null)
+            .country(
+                value.piaAdresseLand().is(WellKnownLand.CHE) ? null
+                    : Integer.parseInt(value.piaAdresseLand().getLaendercodeBfs())
+            )
+            .com(null)
+            .forms(new ArrayList<>())
+            .build();
+    }
+
+    private static FormDto createFormDto(StatistikOfYear value, int ausbildungCounter) {
+        return FormDtoBuilder.formDto()
+            .formId(ausbildungCounter)
+            .formation(
+                FormationDtoBuilder.formationDto()
+                    .formLevel(value.bfsKategorie())
+                    .matuProf(StatistikUtil.booleanToBfsCode(value.besuchtBMS()))
+                    .diploma(value.bfsStudienStufe())
+                    .task(value.ausbildungspensum().getBfsCode())
+                    .firstForm(StatistikUtil.booleanToBfsCode(value.isFirstAusbildung()))
+                    .build()
+            )
+            .instIdentificationRoot(
+                createInstIdentificationRoot(value)
+            )
+            .formPlace(
+                value.isAusbildungAusland() ? Integer.parseInt(value.ausbildungLandBfs())
+                    : Kanton.valueOf(value.ausbildungKanton()).getBfsCode()
+            )
+            .com(null)
+            .sums(new ArrayList<>())
+            .build();
+    }
+
+    private static InstIdentificationRootDto createInstIdentificationRoot(StatistikOfYear value) {
+        final var instIdentificationRootDto = InstIdentificationRootDtoBuilder.instIdentificationRootDto()
+            .instName(
+                StatistikUtil.HOCHSCHULSTUFEN_BFS_KATEGORIES.contains(value.bfsKategorie()) ? null
+                    : value.ausbildungsstaetteNameDe()
             );
-
-        if (bfsGemeindeCode.isEmpty()) {
-            persDto.setCountry(Integer.valueOf(pia.getAdresse().getLand().getLaendercodeBfs()));
-        } else {
-            persDto.setPlace(bfsGemeindeCode.get());
-        }
-
-        return persDto;
-    }
-
-    private FormDto mapToFormDto(
-        Ausbildung ausbildung,
-        List<StatistikBuchhaltungUnion> buchhaltungs,
-        int year,
-        AtomicInteger formIdCounter,
-        AtomicInteger sumIdCounter
-    ) {
-        final int ausbildungOrt;
-
-        if (ausbildung.getIsAusbildungAusland()) {
-            ausbildungOrt = Integer.parseInt(ausbildung.getLand().getLaendercodeBfs());
-        } else {
-            final var plz = plzService.findByPostleitzahl(ausbildung.getAusbildungsortPLZ());
-            final var kanton = Kanton.valueOf(plz.getKantonskuerzel());
-            ausbildungOrt = kanton.getBfsCode();
-        }
-
-        final var sums = buchhaltungs.stream()
-            .filter(buchhaltung -> buchhaltung.getGesuch().getAusbildung().equals(ausbildung))
-            .map(buchhaltung -> mapToSumDto(buchhaltung, sumIdCounter))
-            .toList();
-
-        return FormDto.builder()
-            .formId(formIdCounter.getAndIncrement())
-            .formation(mapToFormationDto(ausbildung, year))
-            .instIdentificationRoot(mapToInstIdentificationRootDto(ausbildung))
-            .formPlace(ausbildungOrt)
-            .sums(sums)
-            .build();
-    }
-
-    private FormationDto mapToFormationDto(Ausbildung ausbildung, int year) {
-        final var abschluss = ausbildung.getAusbildungsgang().getAbschluss();
-        final var gesuchTranche = StatistikUtil.getLatestGesuchTrancheFromFallByYear(ausbildung.getFall(), year);
-
-        return FormationDto.builder()
-            .formLevel(abschluss.getBfsKategorie())
-            .matuProf(StatistikUtil.booleanToBfsCode(ausbildung.isBesuchtBMS()))
-            .diploma(abschluss.getBfsStudienStufe())
-            .task(ausbildung.getPensum().getBfsCode())
-            .firstForm(StatistikUtil.booleanToBfsCode(StatistikUtil.isFirstAusbildung(gesuchTranche)))
-            .build();
-    }
-
-    private InstIdentificationRootDto mapToInstIdentificationRootDto(Ausbildung ausbildung) {
-        final var abschluss = ausbildung.getAusbildungsgang().getAbschluss();
-        final var ausbildungsstaette = ausbildung.getAusbildungsgang().getAusbildungsstaette();
-
-        final InstIdentificationRootDto instIdentificationRootDto = new InstIdentificationRootDto();
-
-        if (List.of(8, 9, 10).contains(abschluss.getBfsKategorie())) {
-            var instCategory = ausbildungsstaette.getNummerTyp().getBfsIdentification();
-
-            if (ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.CT_NO)) {
-                final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-                final var kanton = KantonUtil.getByTenantIdentifier(tenantIdentifier);
-                instCategory = String.format("%s%s", instCategory, kanton.toString());
-            }
-
-            if (!ausbildungsstaette.getNummerTyp().equals(AusbildungsstaetteNummerTyp.OHNE_NO)) {
-                final var instCodeDto = InstCodeDto.builder()
-                    .instCategory(instCategory)
-                    .instId(ausbildungsstaette.getNummer())
-                    .build();
-
-                instIdentificationRootDto.setInstCode(instCodeDto);
-            } else {
-                instIdentificationRootDto.setInstName(ausbildungsstaette.getNameDe());
-            }
-        } else {
-            instIdentificationRootDto.setInstName(ausbildungsstaette.getNameDe());
-        }
-
-        return instIdentificationRootDto;
-    }
-
-    private SumDto mapToSumDto(StatistikBuchhaltungUnion buchhaltung, AtomicInteger sumIdCounter) {
-        return SumDto.builder()
-            .sumId(sumIdCounter.incrementAndGet())
-            .sumTotal(buchhaltung.getBetrag())
-            .sumArt(buchhaltung.getType().getBfsCode())
-            .term(buchhaltung.getAnzahlSemester())
+        return instIdentificationRootDto
+            .instCode(
+                value.ausbildungsstaetteNummerTyp() == AusbildungsstaetteNummerTyp.OHNE_NO ? null
+                    : InstCodeDtoBuilder.instCodeDto()
+                        .instCategory(value.ausbildungsstaetteNummerTyp().getBfsIdentification())
+                        .instId(value.ausbildungsstaetteNummer())
+                        .build()
+            )
             .build();
     }
 
