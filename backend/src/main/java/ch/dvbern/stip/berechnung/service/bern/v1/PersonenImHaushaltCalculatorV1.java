@@ -55,6 +55,19 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         return result;
     }
 
+    private int getPiaGeschwisterForElternschaftsteilung(
+        final PersonenImHaushaltInputV1 personenImHaushalt,
+        final Elternschaftsteilung elternschaftsteilung
+    ) {
+        return switch (elternschaftsteilung) {
+            case VATER -> personenImHaushalt.getGeschwisterVaterVollzeit();
+            case MUTTER -> personenImHaushalt.getGeschwisterMutterVollzeit();
+            case null, default -> throw new IllegalStateException(
+                "Do not call getPiaGeschwisterForElternschaftsteilung with GEMEINSAM"
+            );
+        };
+    }
+
     private PersonenImHaushaltResult calculateAndSetPersonenImHaushalt(
         final PersonenImHaushaltInputV1 personenImHaushalt,
         final ElternImHaushalt elternImHaushalt
@@ -73,8 +86,19 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         if (
             // parents are together
             familiensituation.getElternVerheiratetZusammen()
+        ) {
+            noBudgetsRequired = 1;
+            kinderImHaushalt1 =
+                personInAusbildungModifier
+                + personenImHaushalt.getGeschwisterMutterVollzeit()
+                + personenImHaushalt.getGeschwisterVaterVollzeit()
+                + personenImHaushalt.getGeschwisterTeilzeit();
+            personenImHaushalt1 =
+                kinderImHaushalt1
+                + elternImHaushalt.getElternImHaushalt1();
+        } else if (
             // One Parents pays Alimony
-            || (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
+            (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
             && (!Objects.requireNonNullElse(
                 familiensituation.getWerZahltAlimente(),
                 Elternschaftsteilung.GEMEINSAM.name()
@@ -85,11 +109,25 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 .requireNonNullElse(familiensituation.getMutterUnbekanntVerstorben(), false)))
         ) {
             noBudgetsRequired = 1;
-            kinderImHaushalt1 =
-                personInAusbildungModifier
-                + personenImHaushalt.getGeschwisterMutterVollzeit()
-                + personenImHaushalt.getGeschwisterVaterVollzeit()
-                + personenImHaushalt.getGeschwisterTeilzeit();
+            kinderImHaushalt1 = personInAusbildungModifier + personenImHaushalt.getGeschwisterTeilzeit();
+
+            Elternschaftsteilung elternschaftsteilung = null;
+            if (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)) {
+                elternschaftsteilung = Elternschaftsteilung.valueOf(familiensituation.getWerZahltAlimente());
+            } else if (familiensituation.getElternteilUnbekanntVerstorben()) {
+                if (familiensituation.getMutterUnbekanntVerstorben()) {
+                    elternschaftsteilung = Elternschaftsteilung.VATER;
+                } else if (familiensituation.getVaterUnbekanntVerstorben()) {
+                    elternschaftsteilung = Elternschaftsteilung.MUTTER;
+                } else {
+                    throw new IllegalStateException("Should not be possible to reach this if branch");
+                }
+            } else {
+                throw new IllegalStateException("Should not be possible to reach this if branch");
+            }
+
+            kinderImHaushalt1 += getPiaGeschwisterForElternschaftsteilung(personenImHaushalt, elternschaftsteilung);
+
             personenImHaushalt1 =
                 kinderImHaushalt1
                 + elternImHaushalt.getElternImHaushalt1();
