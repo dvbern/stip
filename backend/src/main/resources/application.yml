@@ -6,8 +6,9 @@ old:
     receiveTimeout: 1000
 
 kstip:
-  oidc:
-    url: 'https://dev-auth-stip.apps.mercury.ocp.dvbern.ch/'
+  kstip:
+    oidc:
+      url: ${STIP_OIDC_AUTH_SERVER}
   s3:
     bucket-name: '${bucket.name}'
 
@@ -58,8 +59,6 @@ kstip:
             url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'
             username: '${NESKO_TECHNICAL_USER_NAME}'
             password: '${NESKO_TECHNICAL_USER_PASSWORD}'
-      seeding:
-        sozialdienste: '${KSTIP_BERN_SEEDING_SOZIALDIENSTE}'
 
     dv:
       subdomains:
@@ -80,8 +79,6 @@ kstip:
       port:
         steuerdaten:
           enabled: false
-      seeding:
-        sozialdienste: '${KSTIP_DV_SEEDING_SOZIALDIENSTE}'
   seeding:
     seed-on-profile:
       - 'prod'
@@ -332,9 +329,6 @@ quarkus:
       expires-in-minutes: 10
       secret: '6a5336d35a192000260cbc9b41a1cb39'
 '%prod':
-  kstip:
-    oidc:
-      url: ${STIP_OIDC_AUTH_SERVER}
   quarkus:
     s3:
       endpoint-override: '${STIP_S3_ENDPOINT}'
@@ -342,13 +336,6 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
-    keycloak:
-      admin-client:
-        server-url: ${kstip.oidc.url}
-        grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
-        tls-configuration-name: bern
     quartz:
       clustered: true
       store-type: jdbc-cmt
