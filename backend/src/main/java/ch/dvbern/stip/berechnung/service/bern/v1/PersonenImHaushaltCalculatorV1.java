@@ -81,9 +81,8 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         var personenImHaushalt1 = 0;
         var personenImHaushalt2 = 0;
 
-        // All the most simple cases
-        // Only one budget needed
         if (
+            // Only one budget needed
             // parents are together
             familiensituation.getElternVerheiratetZusammen()
         ) {
@@ -97,6 +96,8 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 kinderImHaushalt1
                 + elternImHaushalt.getElternImHaushalt1();
         } else if (
+            // Only one budget needed
+            //
             // One Parents pays Alimony
             (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
             && (!Objects.requireNonNullElse(
@@ -132,6 +133,7 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 kinderImHaushalt1
                 + elternImHaushalt.getElternImHaushalt1();
         } else if (
+            // No budget needed
             // Alimenteregelung exists and is payed by both parents
             (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
             && (Objects.requireNonNullElse(
