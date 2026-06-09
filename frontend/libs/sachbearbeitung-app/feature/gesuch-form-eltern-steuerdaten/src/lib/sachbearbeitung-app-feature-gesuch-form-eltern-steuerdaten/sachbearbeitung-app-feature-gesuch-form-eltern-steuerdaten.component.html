@@ -6,7 +6,7 @@
 } @else {
   @if (gesuchTrancheId && tenantConfigService.tenantInfoSig()?.features?.steuerdaten?.enabled) {
     <button
-      class="tw:dv-button-main-primary tw:mt-6"
+      class="tw:dv-button-main-primary"
       type="button"
       (click)="updateSteuerdatenFromPort(gesuchTrancheId)"
       [disabled]="!canCheckNeskoSig()"
@@ -25,7 +25,7 @@
     [dvSharedUiFormReadonly]="view.readonly"
     (gotReenabledSig)="gotReenabled$.next({})"
   >
-    <h2 class="tw:xl:col-span-2 tw:text-2xl tw:font-semibold tw:pt-12">
+    <h2 class="tw:dv-form-title">
       {{ 'shared.form.shared.section.einnahmen' | transloco }}
     </h2>
 
@@ -134,7 +134,7 @@
       </mat-error>
     </mat-form-field>
 
-    <h2 class="tw:xl:col-span-2 tw:text-2xl tw:font-semibold tw:pt-12">
+    <h2 class="tw:dv-form-title">
       {{ 'shared.form.shared.section.ausgaben' | transloco }}
     </h2>
 
@@ -261,7 +261,7 @@
       </mat-form-field>
     }
 
-    <dv-shared-ui-step-form-buttons class="tw:xl:col-span-2">
+    <dv-shared-ui-step-form-buttons>
       @if (!view.readonly) {
         <button
           type="submit"

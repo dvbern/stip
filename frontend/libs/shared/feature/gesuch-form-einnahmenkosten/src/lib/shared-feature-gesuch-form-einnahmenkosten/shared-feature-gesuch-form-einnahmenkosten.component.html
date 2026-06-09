@@ -16,7 +16,7 @@
         data-testid="form-einnahmen-kosten-form"
         (ngSubmit)="handleSave()"
       >
-        <h2 class="tw:text-2xl tw:font-semibold tw:mb-6 tw:xl:col-span-3">
+        <h2 class="tw:dv-form-title">
           {{ t('shared.form.einnahmenkosten.einnahmen.title') }}
         </h2>
 
@@ -295,7 +295,7 @@
         </div>
 
         <!-- KOSTEN -->
-        <h2 class="tw:text-2xl tw:font-semibold tw:pt-12 tw:mb-6 tw:xl:col-span-3">
+        <h2 class="tw:dv-form-title">
           {{ t('shared.form.einnahmenkosten.kosten.title') }}
         </h2>
 
@@ -524,7 +524,7 @@
 
         @if (!hiddenFieldsSetSig().has(form.controls.vermoegen) || config.isSachbearbeitungApp) {
           <!-- STEUERRELEVANTE DATEN -->
-          <h2 class="tw:text-2xl tw:font-semibold tw:mt-6 tw:xl:col-span-3">
+          <h2 class="tw:dv-form-title">
             {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}
           </h2>
           @if (!hiddenFieldsSetSig().has(form.controls.vermoegen)) {
