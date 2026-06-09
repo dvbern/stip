@@ -1,5 +1,5 @@
 @let elternteil = elternteilSig();
-<h2 class="tw:dv-form-title">
+<h2 class="tw:dv-form-title tw:mb-6">
   {{ 'shared.form.eltern.' + elternteil.elternTyp + '.title' | transloco }}
 </h2>
 
@@ -39,7 +39,7 @@
     }
   </div>
 
-  <hr class="tw:border-t tw:mb-12 tw:border-dv-gray tw:xl:col-span-2" />
+  <hr class="tw:border-t tw:mb-12 tw:border-gray-300 tw:xl:col-span-2" />
 </div>
 
 <form
@@ -150,7 +150,7 @@
 
   <!-- alternative civil residence -->
   @if (!form.value.identischerZivilrechtlicherWohnsitz) {
-    <label class="tw:xl:col-span-3">{{ 'shared.form.shared.alternative-civil-residence.title' | transloco }}</label>
+    <label class="tw:xl:col-span-2">{{ 'shared.form.shared.alternative-civil-residence.title' | transloco }}</label>
 
     @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
     <div

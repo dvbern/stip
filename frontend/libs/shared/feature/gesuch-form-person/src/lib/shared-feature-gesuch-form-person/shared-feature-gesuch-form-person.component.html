@@ -155,58 +155,56 @@
 
       <!-- alternative civil residence -->
       @if (!form.value.identischerZivilrechtlicherWohnsitz) {
-        <div class="tw:dv-form-item">
-          <mat-label class="tw:mb-2">{{
-            'shared.form.shared.alternative-civil-residence.title' | transloco
-          }}</mat-label>
-          @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
-          <div
-            class="tw:flex tw:flex-col tw:gap-4 tw:mt-1"
-            dvPlzOrtAutocomplete
-            [autocompleteSig]="plzAutocomplete"
-            [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
-            (plzLookupValuesSig)="plzValues = $event"
-          >
-            <!-- PLZ -->
-            <mat-form-field dvSharedUiFormField class="tw:mt-4">
-              <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
-              <input
-                type="text"
-                matInput
-                [dvMaxLength]="'small'"
-                [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
-                [matAutocomplete]="plzAutocomplete"
-                data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | transloco }}
-              </mat-error>
-              <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
-                @for (lookup of plzValues; track $index) {
-                  <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
-                    {{ lookup.plz }} {{ lookup.ort }}
-                  </mat-option>
-                }
-              </mat-autocomplete>
-            </mat-form-field>
+        <mat-label class="tw:xl:col-span-2">{{
+          'shared.form.shared.alternative-civil-residence.title' | transloco
+        }}</mat-label>
+        @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
+        <div
+          class="tw:dv-form-item tw:flex tw:gap-4 tw:items-center"
+          dvPlzOrtAutocomplete
+          [autocompleteSig]="plzAutocomplete"
+          [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
+          (plzLookupValuesSig)="plzValues = $event"
+        >
+          <!-- PLZ -->
+          <mat-form-field dvSharedUiFormField class="tw:w-32">
+            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
+            <input
+              type="text"
+              matInput
+              [dvMaxLength]="'small'"
+              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
+              [matAutocomplete]="plzAutocomplete"
+              data-testid="form-person-identischer-zivilrechlicher-wohnsitz-plz"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+            <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+              @for (lookup of plzValues; track $index) {
+                <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+                  {{ lookup.plz }} {{ lookup.ort }}
+                </mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
 
-            <!-- Ort -->
-            <mat-form-field dvSharedUiFormField class="tw:mt-4">
-              <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
-              <input
-                type="text"
-                matInput
-                dvMaxLength
-                [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
-                data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
-              />
-              <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
-              <mat-error *dvSharedUiFormMessageError="'required'">
-                {{ 'shared.form.error.required' | transloco }}
-              </mat-error>
-            </mat-form-field>
-          </div>
+          <!-- Ort -->
+          <mat-form-field dvSharedUiFormField class="tw:flex-1">
+            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
+            <input
+              type="text"
+              matInput
+              dvMaxLength
+              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
+              data-testid="form-person-identischer-zivilrechlicher-wohnsitz-ort"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
         </div>
       }
 
