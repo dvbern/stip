@@ -9,20 +9,14 @@ gekürzt und nur für ganze Monate ausgerichtet (Art. 36 Abs. 2 ABV). Auf Gesuch
 En vertu du l’article 36, alinéa 1 de l’ordonnance sur l’octroi de subsides de formation (OSF), les de-mandes doivent être remises a) au plus tard le 30 juin lorsque l’année de formation commence au
 premier semestre et b) au plus tard le 31 décembre lorsque l’année de formation commence au second
 semestre. Toute demande déposée avec un retard inférieur ou égal à trois mois entraîne la réduction proportionnelle des subsides de formation, qui ne sont versés que pour des mois entiers (art. 36, al. 2 OSF). Toute demande déposée avec un retard supérieur à trois mois est irrecevable (art. 36, al. 3 OSF)."
-NICHT_BERECHTIGTE_PERSON;Nicht berechtigter Personenkreis;"Das Gesuch ist rechtzeitig bei uns eingetroffen.
+NICHT_BERECHTIGTE_PERSON;Nicht berechtigter Personenkreis;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören.
 
-Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben.
+Die Bedingungen des beitragsberechtigten Personenkreises ersehen Sie aus beiliegendem Auszug.
+(Art. 12 des Gesetzes über die Ausbildungsbeiträge [ABG]).
 
-Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
-(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons %s wenden (https://www.edk.ch/de/themen/stipendien/stipendienstellen)
+";"Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit.
 
-";"Das Gesuch ist rechtzeitig bei uns eingetroffen.
-
-Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne.
-
-Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les critères permettant de détermi-ner le domicile légal en matière de subsides de formation (art. 12 et 13 de la loi sur l’octroi de subsides de formation [LSF]).
-
-Vous pouvez vous adresser au service des bourses d’études du canton de %s (https://www.edk.ch/fr/themes/bourses/services-cantonaux).
+Vous trouverez les conditions relatives aux personnes ayant droit aux cotisations dans l'extrait ci-joint. (art. 12 de la loi sur l’octroi de subsides de formation [LSF]).
 "
 KEIN_WOHNSITZ_KANTON_BE;Kein stipendienrechtlicher Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben. Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden.
 

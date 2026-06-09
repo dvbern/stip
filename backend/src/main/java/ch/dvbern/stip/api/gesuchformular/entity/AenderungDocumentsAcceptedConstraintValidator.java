@@ -25,15 +25,15 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
 
-public class DocumentsAcceptedConstraintValidator
-    implements ConstraintValidator<DocumentsAcceptedConstraint, GesuchFormular> {
+public class AenderungDocumentsAcceptedConstraintValidator
+    implements ConstraintValidator<AenderungDocumentsAcceptedConstraint, GesuchFormular> {
     @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var gesuchTranche = formular.getTranche();
-        if (gesuchTranche.getTyp() != GesuchTrancheTyp.TRANCHE) {
+        final var aenderung = formular.getTranche();
+        if (aenderung.getTyp() != GesuchTrancheTyp.AENDERUNG) {
             return true;
         }
-        final var areAllAccepted = gesuchTranche
+        final var areAllAccepted = aenderung
             .getGesuchDokuments()
             .stream()
             .allMatch(gesuchDokument -> gesuchDokument.getStatus() == GesuchDokumentStatus.AKZEPTIERT);

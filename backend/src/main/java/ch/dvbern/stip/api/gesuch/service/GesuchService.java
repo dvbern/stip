@@ -1087,10 +1087,23 @@ public class GesuchService {
     public GesuchDto gesuchFehlendeDokumenteEinreichen(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
         ValidatorUtil.throwIfEntityNotValid(validator, gesuchTranche);
-        gesuchStatusService.triggerStateMachineEvent(
-            gesuchTranche.getGesuch(),
-            GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
-        );
+
+        switch (gesuchTranche.getTyp()) {
+            case GesuchTrancheTyp.TRANCHE: {
+                gesuchStatusService.triggerStateMachineEvent(
+                    gesuchTranche.getGesuch(),
+                    GesuchStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
+                );
+                break;
+            }
+            case GesuchTrancheTyp.AENDERUNG: {
+                gesuchTrancheStatusService.triggerStateMachineEvent(
+                    gesuchTranche,
+                    GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN
+                );
+                break;
+            }
+        }
         return gesuchMapperUtil.mapWithGesuchOfTranche(gesuchTranche, false);
     }
 

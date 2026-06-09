@@ -1456,6 +1456,7 @@ components:
         - akzeptiert
         - abgelehnt
         - manuell
+        - fehlendeDokumente
         - canAenderungEinreichen
       properties:
         offen:
@@ -1469,6 +1470,10 @@ components:
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
         abgelehnt:
+          type: array
+          items:
+            $ref: './components/common.yaml#/GesuchTrancheSlim'
+        fehlendeDokumente:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'

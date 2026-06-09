@@ -135,7 +135,7 @@
 
     <ng-template #updateAenderungVonBisButton>
       @let gesuch = view.gesuch;
-      @if (gesuch && !view.readonly && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
+      @if (gesuch && !view.readonly && !view.loading && isSbApp && gesuch.gesuchTrancheToWorkWith.typ === 'AENDERUNG') {
         <button
           type="button"
           class="tw:dv-button-outline tw:flex tw:h-[56px] tw:!p-3"

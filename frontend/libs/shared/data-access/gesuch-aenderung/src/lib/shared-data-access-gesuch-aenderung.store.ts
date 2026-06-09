@@ -191,10 +191,17 @@ export class GesuchAenderungStore extends signalStore(
                   }));
                 },
                 {
-                  onSuccess: () => {
+                  onSuccess: (data) => {
                     this.globalNotificationStore.createSuccessNotification({
                       messageKey: 'shared.dialog.gesuch.tranche.create.success',
                     });
+                    this.router.navigate([
+                      'gesuch',
+                      PERSON.route,
+                      gesuchId,
+                      getTrancheRoute('tranche'),
+                      data.id,
+                    ]);
                     onSuccess();
                   },
                   onFailure,

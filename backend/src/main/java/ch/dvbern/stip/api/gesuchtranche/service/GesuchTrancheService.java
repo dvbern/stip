@@ -131,6 +131,12 @@ public class GesuchTrancheService {
             )
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
+        final var fehlendeDokumenteAenderungs = gesuch.getAenderungs()
+            .filter(
+                aenderung -> aenderung.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE
+            )
+            .map(gesuchTrancheMapper::toSlimDto)
+            .toList();
         final var manuelleAenderungs = gesuch.getAenderungs()
             .filter(
                 aenderung -> aenderung.getStatus() == GesuchTrancheStatus.MANUELLE_AENDERUNG
@@ -147,14 +153,16 @@ public class GesuchTrancheService {
             .manuell(manuelleAenderungs)
             .akzeptiert(akzeptierteAenderungs)
             .abgelehnt(abgelehnteAenderungs)
+            .fehlendeDokumente(fehlendeDokumenteAenderungs)
             .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(
-        final Gesuch gesuch,
+        final GesuchTranche gesuchTranche,
         DokumenteToUploadDto dokumenteToUploadDto
     ) {
         final var benutzer = benutzerService.getCurrentBenutzer();
+        final var gesuch = gesuchTranche.getGesuch();
         final var needsUnterschriftenblatt = !gesuch.isVerfuegt()
         || Gesuchstatus.SACHBEARBEITER_CAN_UPLOAD_UNTERSCHRIFTENBLATT.contains(gesuch.getGesuchStatus());
         dokumenteToUploadDto.setSbCanUploadUnterschriftenblatt(needsUnterschriftenblatt);
@@ -164,11 +172,14 @@ public class GesuchTrancheService {
                 .getGSCanFehlendeDokumenteEinreichen(gesuch, benutzer)
         );
 
-        dokumenteToUploadDto.setSbCanFehlendeDokumenteUebermitteln(
-            requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
-        );
-
-        return dokumenteToUploadDto;
+        return switch (gesuchTranche.getTyp()) {
+            case TRANCHE -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)
+            );
+            case AENDERUNG -> dokumenteToUploadDto.sbCanFehlendeDokumenteUebermitteln(
+                requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche)
+            );
+        };
     }
 
     @Transactional
@@ -179,7 +190,7 @@ public class GesuchTrancheService {
         final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, requiredRefs, List.of(), customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
     @Transactional
@@ -192,7 +203,7 @@ public class GesuchTrancheService {
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto =
             dokumenteToUploadMapper.toDto(required, requiredRefs, unterschriftenblaetter, customRequired);
-        return setFlagsOnDokumenteToUploadDto(gesuchTranche.getGesuch(), dokumenteToUploadDto);
+        return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
     public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
@@ -545,7 +556,7 @@ public class GesuchTrancheService {
         notificationService
             .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung);
+        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung.getGesuch().getLatestGesuchTranche());
     }
 
     @Transactional

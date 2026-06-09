@@ -45,10 +45,12 @@ export class SharedUiAenderungenMenuComponent {
   currentAenderungSig = computed(() => {
     const aenderungen = this.aenderungenSig();
     const trancheId = this.trancheIdSig();
+    const revision = this.revisionSig() ?? null;
     const offeneAenderung = aenderungen?.offen;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
     const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
+    const fehlendeDokumente = aenderungen?.fehlendeDokumente;
 
     const allAenderungen = [
       ...(offeneAenderung
@@ -69,8 +71,15 @@ export class SharedUiAenderungenMenuComponent {
         ...a,
         completeState: 'rejected' as const,
       })) ?? []),
+      ...(fehlendeDokumente?.map((a) => ({
+        ...a,
+        completeState: 'fehlendeDokumente' as const,
+      })) ?? []),
     ];
 
-    return allAenderungen.find((aenderung) => aenderung.id === trancheId);
+    return allAenderungen.find(
+      (aenderung) =>
+        aenderung.id === trancheId && aenderung.revision === revision,
+    );
   });
 }
