@@ -19,6 +19,8 @@ package ch.dvbern.stip.berechnung.service.bern.v1;
 
 import java.util.Objects;
 
+import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
@@ -55,34 +57,52 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         return result;
     }
 
+    private int getPiaGeschwisterForElternschaftsteilung(
+        final PersonenImHaushaltInputV1 personenImHaushalt,
+        final ElternTyp elternTyp
+    ) {
+        return switch (elternTyp) {
+            case VATER -> personenImHaushalt.getGeschwisterVaterVollzeit();
+            case MUTTER -> personenImHaushalt.getGeschwisterMutterVollzeit();
+        };
+    }
+
+    private ElternTyp getOneHaushaltElternTypFromFamsit(final FamiliensituationV1 familiensituation) {
+        if (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)) {
+            switch (familiensituation.getWerZahltAlimente()) {
+                case VATER:
+                    return ElternTyp.MUTTER;
+                case MUTTER:
+                    return ElternTyp.VATER;
+            }
+        } else if (familiensituation.getElternteilUnbekanntVerstorben()) {
+            if (familiensituation.getMutterUnbekanntVerstorben()) {
+                return ElternTyp.VATER;
+            }
+            if (familiensituation.getVaterUnbekanntVerstorben()) {
+                return ElternTyp.MUTTER;
+            }
+        }
+        throw new IllegalStateException("Illegal Famsit for getOneHaushaltElternTypFromFamsit");
+    }
+
     private PersonenImHaushaltResult calculateAndSetPersonenImHaushalt(
         final PersonenImHaushaltInputV1 personenImHaushalt,
         final ElternImHaushalt elternImHaushalt
     ) {
         final var familiensituation = personenImHaushalt.getFamiliensituation();
         final var personInAusbildungModifier =
-            calculatePersonInAusbildungModifier(personenImHaushalt.getPersonInAusbildung().getWohnsitz());
+            getPersonInAusbildungModifier(personenImHaushalt.getPersonInAusbildung().getWohnsitz());
         var noBudgetsRequired = 0;
         var kinderImHaushalt1 = 0;
         var kinderImHaushalt2 = 0;
         var personenImHaushalt1 = 0;
         var personenImHaushalt2 = 0;
 
-        // All the most simple cases
-        // Only one budget needed
         if (
+            // Only one budget needed
             // parents are together
             familiensituation.getElternVerheiratetZusammen()
-            // One Parents pays Alimony
-            || (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
-            && (!Objects.requireNonNullElse(
-                familiensituation.getWerZahltAlimente(),
-                Elternschaftsteilung.GEMEINSAM.name()
-            ).equals(Elternschaftsteilung.GEMEINSAM.name())))
-            // One parent is unknown/dead
-            || (Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)
-            && (Objects.requireNonNullElse(familiensituation.getVaterUnbekanntVerstorben(), false) != Objects
-                .requireNonNullElse(familiensituation.getMutterUnbekanntVerstorben(), false)))
         ) {
             noBudgetsRequired = 1;
             kinderImHaushalt1 =
@@ -94,12 +114,37 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 kinderImHaushalt1
                 + elternImHaushalt.getElternImHaushalt1();
         } else if (
+            // Only one budget needed
+            //
+            // One Parents pays Alimony
+            (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
+            && (Objects.requireNonNullElse(
+                familiensituation.getWerZahltAlimente(),
+                Elternschaftsteilung.GEMEINSAM
+            ) != Elternschaftsteilung.GEMEINSAM))
+            // One parent is unknown/dead
+            || (Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)
+            && (Objects.requireNonNullElse(familiensituation.getVaterUnbekanntVerstorben(), false) != Objects
+                .requireNonNullElse(familiensituation.getMutterUnbekanntVerstorben(), false)))
+        ) {
+            noBudgetsRequired = 1;
+            kinderImHaushalt1 = personInAusbildungModifier + personenImHaushalt.getGeschwisterTeilzeit();
+
+            ElternTyp elternTyp = getOneHaushaltElternTypFromFamsit(familiensituation);
+
+            kinderImHaushalt1 += getPiaGeschwisterForElternschaftsteilung(personenImHaushalt, elternTyp);
+
+            personenImHaushalt1 =
+                kinderImHaushalt1
+                + elternImHaushalt.getElternImHaushalt1();
+        } else if (
+            // No budget needed
             // Alimenteregelung exists and is payed by both parents
             (Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
             && (Objects.requireNonNullElse(
                 familiensituation.getWerZahltAlimente(),
-                Elternschaftsteilung.VATER.name()
-            ).equals(Elternschaftsteilung.GEMEINSAM.name())))
+                Elternschaftsteilung.VATER
+            ) == Elternschaftsteilung.GEMEINSAM))
             // Both parents are unknown/dead
             || (Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)
             && (Objects.requireNonNullElse(
@@ -122,7 +167,7 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 Objects.requireNonNullElse(personInAusbildung.getWohnsitzAnteilMutter(), 0);
 
             switch (personenImHaushalt.getElternToPrioritize()) {
-                case "VATER" -> {
+                case VATER -> {
                     kinderImHaushalt1 += personenImHaushalt.getGeschwisterTeilzeit();
                     if (wohnsitzanteilVater > 0) {
                         kinderImHaushalt1 += personInAusbildungModifier;
@@ -130,7 +175,7 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                         kinderImHaushalt2 += personInAusbildungModifier;
                     }
                 }
-                case "MUTTER" -> {
+                case MUTTER -> {
                     kinderImHaushalt2 += personenImHaushalt.getGeschwisterTeilzeit();
                     if (wohnsitzanteilMutter > 0) {
                         kinderImHaushalt2 += personInAusbildungModifier;
@@ -138,9 +183,6 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                         kinderImHaushalt1 += personInAusbildungModifier;
                     }
                 }
-                default -> throw new IllegalStateException(
-                    "Unexpected value: " + personenImHaushalt.getElternToPrioritize()
-                );
             }
             personenImHaushalt1 = kinderImHaushalt1 + elternImHaushalt.getElternImHaushalt1();
             personenImHaushalt2 = kinderImHaushalt2 + elternImHaushalt.getElternImHaushalt2();
@@ -173,10 +215,9 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 }
             } else if (familiensituation.getGerichtlicheAlimentenregelung()) {
                 elternImHaushalt1 = switch (familiensituation.getWerZahltAlimente()) {
-                    case "VATER" -> familiensituation.getMutterWiederverheiratet() ? 2 : 1;
-                    case "MUTTER" -> familiensituation.getVaterWiederverheiratet() ? 2 : 1;
-                    case "GEMEINSAM" -> 0;
-                    default -> throw new IllegalStateException();
+                    case VATER -> familiensituation.getMutterWiederverheiratet() ? 2 : 1;
+                    case MUTTER -> familiensituation.getVaterWiederverheiratet() ? 2 : 1;
+                    case GEMEINSAM -> 0;
                 };
             } else {
                 elternImHaushalt1 = 1;
@@ -192,11 +233,10 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         return new ElternImHaushalt(elternImHaushalt1, elternImHaushalt2);
     }
 
-    private int calculatePersonInAusbildungModifier(final String wohnsitz) {
+    private int getPersonInAusbildungModifier(final Wohnsitz wohnsitz) {
         return switch (wohnsitz) {
-            case "EIGENER_HAUSHALT" -> 0;
-            case "FAMILIE", "MUTTER_VATER" -> 1;
-            default -> throw new IllegalArgumentException("Invalid Wohnsitz passed, was: " + wohnsitz);
+            case EIGENER_HAUSHALT -> 0;
+            case FAMILIE, MUTTER_VATER -> 1;
         };
     }
 }
