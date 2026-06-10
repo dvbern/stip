@@ -126,8 +126,8 @@ class V1StructureTest {
                 "integrationszulageTotal": 2400,
                 "steuernKantonGemeinde": 0,
                 "steuernBund": 0,
-                "fahrkostens": [{ "vorname": "a", "value": 0 }],
-                "verpflegungskostens": [{ "vorname": "a", "value": 0 }],
+                "fahrkostens":[{"vorname":"a","value":0},{"vorname":"Partner Mutter","value":0}],
+                "verpflegungskostens":[{"vorname":"a","value":0},{"vorname":"Partner Mutter","value":0}],
                 "initialized": true
               }
             },
