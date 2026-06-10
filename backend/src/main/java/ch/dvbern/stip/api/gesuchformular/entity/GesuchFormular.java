@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
+import ch.dvbern.stip.api.gesuchformular.validation.AenderungGesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
@@ -254,6 +255,11 @@ import org.jilt.BuilderStyle;
 @DocumentsAcceptedConstraint(
     groups = {
         GesuchDokumentsAcceptedValidationGroup.class
+    }
+)
+@AenderungDocumentsAcceptedConstraint(
+    groups = {
+        AenderungGesuchDokumentsAcceptedValidationGroup.class
     }
 )
 @NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")

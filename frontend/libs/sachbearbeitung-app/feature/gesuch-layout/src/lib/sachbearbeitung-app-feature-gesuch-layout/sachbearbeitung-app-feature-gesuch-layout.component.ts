@@ -364,10 +364,12 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   constructor() {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
+      const gesuchTrancheId = this.trancheIdSig();
       this.gesuchUpdatedSig();
-      if (gesuchId) {
+      if (gesuchId && gesuchTrancheId) {
         this.darlehenStore.getAllDarlehenSb$({ gesuchId });
         this.gesuchHeaderStore.loadHeader$({ gesuchId });
+        this.einreichenStore.validateEinreichen$({ gesuchTrancheId });
       }
     });
   }
@@ -720,7 +722,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       onSuccess: (trancheId) => {
         const routesMap = {
           AKZEPTIERT: ['gesuch', 'info', gesuchId, 'tranche', trancheId],
-          ABGELEHNT: ['/'],
+          ABGELEHNT: ['gesuch', 'info', gesuchId, 'tranche', trancheId],
           MANUELLE_AENDERUNG: ['gesuch', 'info', gesuchId],
         } satisfies Record<AenderungChangeState, unknown>;
 

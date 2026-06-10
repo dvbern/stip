@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.dokument.entity.CustomDokumentTyp;
@@ -379,9 +380,15 @@ public class GesuchDokumentService {
     }
 
     private void removeNachfristDokumenteIfAllAccepted(GesuchDokument gesuchDokument) {
-        final var gesuch = gesuchDokument.getGesuchTranche().getGesuch();
+        final var gesuchTranche = gesuchDokument.getGesuchTranche();
+        final var gesuch = gesuchTranche.getGesuch();
         final var allGesuchDokuments = new ArrayList<GesuchDokument>();
-        gesuch.getGesuchTranchen().stream().map(GesuchTranche::getGesuchDokuments).forEach(allGesuchDokuments::addAll);
+        final var gesuchTranchen = switch (gesuchTranche.getTyp()) {
+            case TRANCHE -> gesuch.getTranchenTranchen();
+            case AENDERUNG -> Stream.of(gesuchTranche);
+        };
+
+        gesuchTranchen.map(GesuchTranche::getGesuchDokuments).forEach(allGesuchDokuments::addAll);
         final var allAccepted = allGesuchDokuments.stream()
             .allMatch(dok -> dok.getStatus().equals(GesuchDokumentStatus.AKZEPTIERT));
         if (!allAccepted) {
@@ -519,16 +526,26 @@ public class GesuchDokumentService {
         }
     }
 
-    public GesuchDokument getGesuchDokumentOfDokument(UUID dokumentId) {
-        return dokumentRepository.requireById(dokumentId).getGesuchDokument();
-    }
-
     @Transactional
     public void setAbgelehnteDokumenteToAusstehendForGesuch(final Gesuch gesuch) {
         // Query for these instead of iterating "in memory" because abgelehnteGesuchDokumente are lazy loaded
         // and this results in only loading the ones we need instead of all
         final var abgelehnteGesuchDokumente = gesuchDokumentRepository
             .getAllForGesuchInStatus(gesuch, GesuchDokumentStatus.ABGELEHNT)
+            .toList();
+
+        for (var gesuchdokument : abgelehnteGesuchDokumente) {
+            gesuchDokumentstatusService
+                .triggerStatusChangeNoComment(gesuchdokument, GesuchDokumentStatusChangeEvent.AUSSTEHEND);
+        }
+    }
+
+    @Transactional
+    public void setAbgelehnteDokumenteToAusstehendForAenderung(final GesuchTranche aenderung) {
+        // Query for these instead of iterating "in memory" because abgelehnteGesuchDokumente are lazy loaded
+        // and this results in only loading the ones we need instead of all
+        final var abgelehnteGesuchDokumente = gesuchDokumentRepository
+            .findAllForGesuchTrancheInStatus(aenderung.getId(), GesuchDokumentStatus.ABGELEHNT)
             .toList();
 
         for (var gesuchdokument : abgelehnteGesuchDokumente) {

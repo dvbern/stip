@@ -78,71 +78,62 @@ public class RequiredDokumentService {
     }
 
     private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
-        return gesuch.getGesuchTranchen().stream().anyMatch(gesuchTranche -> {
-            var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
-            var gesuchDokumenteStillRequired =
-                !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
-            // if any normal or custom GesuchDokument is still required,
-            return (customDokumentsStillRequired || gesuchDokumenteStillRequired);
-        });
+        return gesuch.getGesuchTranchen().stream().anyMatch(this::isAnyDocumentStillRequired);
     }
 
-    public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
+    private boolean isAnyDocumentStillRequired(final GesuchTranche gesuchTranche) {
+        var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
+        var gesuchDokumenteStillRequired =
+            !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
+        // if any normal or custom GesuchDokument is still required,
+        return (customDokumentsStillRequired || gesuchDokumenteStillRequired);
+    }
+
+    public boolean getSBCanFehlendeDokumenteUebermitteln(final GesuchTranche aenderung) {
         if (
-            (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB)
-            && gesuch.getGesuchTranchen()
-                .stream()
-                .filter(gesuchTranche -> gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .noneMatch(gesuchTranche -> gesuchTranche.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
+            aenderung.getTyp() != GesuchTrancheTyp.AENDERUNG
+            || aenderung.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN
         ) {
             return false;
         }
 
-        final var containsAenderungenPendingOnGs =
-            gesuch.getGesuchTranchen()
-                .stream()
-                .filter(tranche -> tranche.getTyp() == GesuchTrancheTyp.AENDERUNG)
-                .anyMatch(
-                    tranche -> GesuchTrancheStatus.GESUCHSTELLER_CAN_MODIFY_DOKUMENT.contains(tranche.getStatus())
-                );
+        final var containsUnprocessedGesuchDokuments =
+            RequiredDokumentUtil.containsAusstehendeDokumenteWithFiles(aenderung);
+        final var containsAbgelehnteGesuchDokumente = RequiredDokumentUtil.containsAbgelehnteDokumente(aenderung);
 
-        if (containsAenderungenPendingOnGs) {
+        final var shouldFehlendeDokumenteUebermitteln =
+            isAnyDocumentStillRequired(aenderung)
+            || containsAbgelehnteGesuchDokumente;
+
+        return shouldFehlendeDokumenteUebermitteln && !containsUnprocessedGesuchDokuments;
+    }
+
+    public boolean getSBCanFehlendeDokumenteUebermitteln(final Gesuch gesuch) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_BEARBEITUNG_SB) {
             return false;
         }
 
-        final var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
-
-        // GesuchDokuments in status AUSSTEHEND with files attached of Tranchen that are Typ Tranche or Typ aenderung in
-        // status Ueberpruefen
+        // GesuchDokuments in status AUSSTEHEND with files attached of Tranchen that are Typ Tranche
         final var containsUnprocessedGesuchDokuments =
-            gesuch.getGesuchTranchen()
-                .stream()
-                .filter(
-                    gesuchTranche -> !(gesuchTranche.getTyp() == GesuchTrancheTyp.AENDERUNG
-                    && gesuchTranche.getStatus() != GesuchTrancheStatus.UEBERPRUEFEN)
-                )
+            gesuch.getTranchenTranchen()
                 .anyMatch(RequiredDokumentUtil::containsAusstehendeDokumenteWithFiles);
 
-        final var containsAbgelehnteGesuchDokumente = gesuch.getGesuchTranchen()
-            .stream()
+        final var containsAbgelehnteGesuchDokumente = gesuch.getTranchenTranchen()
             .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
 
         final var shouldFehlendeDokumenteUebermitteln =
-            isAnyDocumentStillRequired
+            isAnyDocumentStillRequired(gesuch)
             || containsAbgelehnteGesuchDokumente;
 
         return shouldFehlendeDokumenteUebermitteln && !containsUnprocessedGesuchDokuments;
     }
 
     public boolean getSBCanBearbeitungAbschliessen(final Gesuch gesuch) {
-        final var allExistingDocumentsAccepted = gesuch.getGesuchTranchen()
-            .stream()
+        final var allExistingDocumentsAccepted = gesuch.getTranchenTranchen()
             .allMatch(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche);
-        final var noRequiredDokumentsExisting = gesuch.getGesuchTranchen()
-            .stream()
+        final var noRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular()).isEmpty());
-        final var noCustomRequiredDokumentsExisting = gesuch.getGesuchTranchen()
-            .stream()
+        final var noCustomRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
         return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noCustomRequiredDokumentsExisting;
     }

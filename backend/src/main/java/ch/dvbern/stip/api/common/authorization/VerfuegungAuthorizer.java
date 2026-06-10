@@ -41,7 +41,7 @@ public class VerfuegungAuthorizer extends BaseAuthorizer {
         final var verfuegungDokument = verfuegungDokumentRepository.requireById(verfuegungId);
         final var gesuch = verfuegungDokument.getVerfuegung().getGesuch();
         if (
-            isSachbearbeiter(currentBenutzer)
+            isSbOrFreigabestelleOrJurist(currentBenutzer)
             || AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
                 gesuch.getAusbildung().getFall(),
                 currentBenutzer,

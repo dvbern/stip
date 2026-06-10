@@ -229,7 +229,7 @@ public class DarlehenAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetDarlehenBuchhaltungEntrys() {
         final var benutzer = benutzerService.getCurrentBenutzer();
-        if (!isSachbearbeiter(benutzer)) {
+        if (!isSbOrFreigabestelleOrJurist(benutzer)) {
             forbidden();
         }
     }
