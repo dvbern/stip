@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.berechnung.dto.v1;
 
+import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import lombok.Builder;
 import lombok.Data;
@@ -28,13 +29,13 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Value
 public class PersonInAusbildungV1 {
-    String wohnsitz;
+    Wohnsitz wohnsitz;
     Integer wohnsitzAnteilVater;
     Integer wohnsitzAnteilMutter;
 
     public static PersonInAusbildungV1 fromPersonInAusbildung(final PersonInAusbildung personInAusbildung) {
         return new PersonInAusbildungV1Builder()
-            .wohnsitz(personInAusbildung.getWohnsitz().toString())
+            .wohnsitz(personInAusbildung.getWohnsitz())
             .wohnsitzAnteilVater(
                 personInAusbildung.getWohnsitzAnteilVater() != null
                     ? personInAusbildung.getWohnsitzAnteilVater().intValue()

@@ -54,7 +54,7 @@ public class PersonenImHaushaltRequestV1 implements CalculatorRequest {
         PersonInAusbildungV1 personInAusbildung;
 
         @JsonProperty
-        String elternToPrioritize;
+        ElternTyp elternToPrioritize;
 
         @JsonProperty
         int geschwisterTeilzeit;
@@ -108,7 +108,7 @@ public class PersonenImHaushaltRequestV1 implements CalculatorRequest {
             new PersonenImHaushaltInputV1(
                 FamiliensituationV1.fromFamiliensituation(gesuchFormular.getFamiliensituation()),
                 PersonInAusbildungV1.fromPersonInAusbildung(gesuchFormular.getPersonInAusbildung()),
-                elternToPrioritize.toString(),
+                elternToPrioritize,
                 geschwisterTeilzeit,
                 geschwisterVaterVollzeit,
                 geschwisterMutterVollzeit
