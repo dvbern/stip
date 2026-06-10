@@ -107,7 +107,7 @@ type ArrayForms = Extract<GesuchFormularType[ChangeableProperties], unknown[]>;
 /**
  * Keys to skip when calculating the changes between two versions of a form.
  */
-const keysToSkip = ['id'];
+const keysToSkip = ['id', 'adresse.id'];
 
 /**
  * This function checks which previous changes should be displayed in the view.

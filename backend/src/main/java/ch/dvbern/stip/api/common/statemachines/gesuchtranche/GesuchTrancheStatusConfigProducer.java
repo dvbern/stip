@@ -21,9 +21,9 @@ import java.util.EnumMap;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
+import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AenderungFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.AkzeptiertHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteEinreichenHandler;
-import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteHandler;
 import ch.dvbern.stip.api.common.statemachines.gesuchtranche.handlers.GesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
@@ -45,7 +45,7 @@ public class GesuchTrancheStatusConfigProducer {
     private final GesuchTrancheFehlendeDokumenteNichtEingereichtHandler gesuchTrancheFehlendeDokumenteNichtEingereichtHandler;
     private final GesuchTrancheFehlendeDokumenteEinreichenHandler gesuchTrancheFehlendeDokumenteEinreichenHandler;
     private final AkzeptiertHandler akzeptiertHandler;
-    private final GesuchTrancheFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
+    private final AenderungFehlendeDokumenteHandler gesuchTrancheFehlendeDokumenteHandler;
     private final StatusprotokollService statusprotokollService;
 
     public StateMachineConfig<GesuchTrancheStatus, GesuchTrancheStatusChangeEvent> createStateMachineConfig() {

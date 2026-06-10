@@ -142,9 +142,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
             throw new IllegalStateException();
         }
 
-        final var gesuch = gesuchRepository.requireGesuchByTrancheId(gesuchTrancheId);
-
-        if (requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuch)) {
+        if (requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(gesuchTranche)) {
             return;
         }
 
