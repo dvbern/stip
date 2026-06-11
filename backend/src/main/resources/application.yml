@@ -6,6 +6,8 @@ old:
     receiveTimeout: 1000
 
 kstip:
+  oidc:
+    url: ${STIP_OIDC_AUTH_SERVER}
   s3:
     bucket-name: '${bucket.name}'
 
@@ -57,7 +59,6 @@ kstip:
             username: '${NESKO_TECHNICAL_USER_NAME}'
             password: '${NESKO_TECHNICAL_USER_PASSWORD}'
 
-
     dv:
       subdomains:
         - '^dv-.*'
@@ -81,6 +82,7 @@ kstip:
     seed-on-profile:
       - 'prod'
       - 'dev'
+
 quarkus:
   #  live-reload:
   #    instrumentation: true
@@ -172,8 +174,10 @@ quarkus:
     admin-client:
       server-url: ${kstip.oidc.url}
       grant-type: password
-      username: ${KSTIP_KEYCLOAK_ADMIN_USER}
-      password: ${KSTIP_KEYCLOAK_ADMIN_PASSWORD}
+      username: ${STIP_KEYCLOAK_ADMIN_USER}
+      password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
+      client-id: admin-cli
+      realm: master
 
   # Keep in Sync with AppLanguages.java
   locales: de_CH,fr_CH
@@ -257,17 +261,13 @@ quarkus:
       security-scheme: 'oauth2-implicit'
       security-scheme-name: 'auth-dev-bern'
       oauth2-implicit-authorization-url: '${STIP_OIDC_AUTH_SERVER}/realms/bern/protocol/openid-connect/auth'
-    keycloak:
-      admin-client:
-        server-url: ${keycloak.url}
-        grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
-        tls-configuration-name: bern
     quartz:
       clustered: false
     liquibase:
       contexts: dev
+    keycloak:
+      admin-client:
+        tls-configuration-name: bern
   kstip:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
@@ -309,12 +309,6 @@ quarkus:
       devservices:
         enabled: false
         buckets: '${bucket.name}'
-    keycloak:
-      admin-client:
-        server-url: ${kstip.oidc.url}
-        grant-type: password
-        username: 'test'
-        password: 'test'
     quartz:
       clustered: false
     liquibase:
@@ -341,12 +335,6 @@ quarkus:
       clamav:
         host: '${STIP_CLAMAV_HOST}'
         port: '${STIP_CLAMAV_PORT:3310}'
-    keycloak:
-      admin-client:
-        server-url: ${keycloak.url}
-        grant-type: password
-        username: ${STIP_KEYCLOAK_ADMIN_USER}
-        password: ${STIP_KEYCLOAK_ADMIN_PASSWORD}
     quartz:
       clustered: true
       store-type: jdbc-cmt
