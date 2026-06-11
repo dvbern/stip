@@ -92,8 +92,8 @@
       {{ 'shared.cancel' | transloco }}
     </button>
     <dv-shared-ui-form-save
-      data-testid="dialog-confirm"
       class="tw:ml-2"
+      data-testid="dialog-confirm"
       [disabled]="form.invalid || form.pristine"
       [loading]="gesuchAenderungStore.cachedGesuchAenderung() | rdIsPending: { ignoreInitial: true }"
     ></dv-shared-ui-form-save>

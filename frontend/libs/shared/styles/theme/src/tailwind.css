@@ -165,6 +165,10 @@
   @apply tw:xl:col-span-2;
 }
 
+@utility dv-form-action {
+  @apply tw:mt-6 tw:xl:col-span-2;
+}
+
 @utility dv-pass-height-shrink {
   @apply tw:flex tw:flex-col tw:overflow-y-auto;
 }

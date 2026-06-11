@@ -13,14 +13,26 @@
 
   <form
     [formGroup]="form"
+    class="tw:dv-form-grid"
     [dvSharedUiFormReadonly]="store.currentGesuchsperiodeViewSig()?.isReadonly"
     data-testid="form-gesuchsperiode-form"
     (ngSubmit)="handleSave()"
-    class="tw:dv-form-grid"
   >
     @if (store.currentGesuchsperiode() | rdIsPendingWithoutCache: { ignoreInitial: true }) {
       <dv-shared-ui-loading></dv-shared-ui-loading>
     } @else {
+      @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
+        @if (idSig(); as id) {
+          <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
+            class="tw:dv-form-item"
+            typeSig="gesuchsperiode"
+            [blockedReasonSig]="publishBlockedReasonSig()"
+            [unsavedChangesSig]="unsavedChangesSig()"
+            (publish)="publish(id)"
+          ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
+        }
+      }
+
       <h2 class="tw:dv-form-title">
         {{ t('sachbearbeitung-app.admin.gesuchsperiode.metaDaten.title') }}
       </h2>
@@ -915,20 +927,9 @@
 
       @if (store.currentGesuchsperiodeViewSig()?.isEditable ?? true) {
         <dv-shared-ui-form-save
+          class="tw:dv-form-action"
           [loading]="store.currentGesuchsperiode() | rdIsPending: { ignoreInitial: true }"
         ></dv-shared-ui-form-save>
-      }
-    }
-
-    @if (store.currentGesuchsperiodeViewSig()?.isEditable) {
-      @if (idSig(); as id) {
-        <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
-          class="tw:xl:col-start-3 tw:xl:row-start-2"
-          typeSig="gesuchsperiode"
-          [blockedReasonSig]="publishBlockedReasonSig()"
-          [unsavedChangesSig]="unsavedChangesSig()"
-          (publish)="publish(id)"
-        ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
       }
     }
   </form>

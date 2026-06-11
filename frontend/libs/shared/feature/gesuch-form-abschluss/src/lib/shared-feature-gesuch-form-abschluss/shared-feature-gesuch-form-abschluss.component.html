@@ -4,7 +4,7 @@
   @let permissions = gesuchViewSig().permissions;
   @let einreichenView = einreichenStore.einreichenViewSig();
   @if (gesuchViewSig().loading || einreichenView.loading) {
-    <dv-shared-ui-loading data-testid="abschluss-loading"></dv-shared-ui-loading>
+    <dv-shared-ui-loading class="tw:col-span-3" data-testid="abschluss-loading"></dv-shared-ui-loading>
   } @else if (isEditingAenderung && !canAenderungEinreichenSig()) {
     <div class="tw:dv-form-item">
       <dv-shared-ui-info-container [type]="'warning'" data-testid="alert-warning">

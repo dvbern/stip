@@ -5,6 +5,17 @@
   (ngSubmit)="handleSave()"
   class="tw:dv-form-grid"
 >
+  @if (store.currentGesuchsjahrViewSig()?.isEditable) {
+    @if (idSig(); as id) {
+      <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
+        class="tw:dv-form-item"
+        typeSig="gesuchsjahr"
+        [unsavedChangesSig]="unsavedChangesSig()"
+        (publish)="publish(id)"
+      ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
+    }
+  }
+
   <h2 class="tw:dv-form-title">
     {{ 'sachbearbeitung-app.admin.gesuchsperiode.gesuchsjahr.title' | transloco }}
   </h2>
@@ -57,20 +68,9 @@
 
     @if (store.currentGesuchsjahrViewSig()?.isEditable ?? true) {
       <dv-shared-ui-form-save
-        class="tw:xl:col-span-3"
+        class="tw:dv-form-action"
         [loading]="store.currentGesuchsjahr() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>
-    }
-  }
-
-  @if (store.currentGesuchsjahrViewSig()?.isEditable) {
-    @if (idSig(); as id) {
-      <dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish
-        class="tw:xl:col-start-3 tw:xl:row-start-2"
-        typeSig="gesuchsjahr"
-        [unsavedChangesSig]="unsavedChangesSig()"
-        (publish)="publish(id)"
-      ></dv-sachbearbeitung-app-feature-administration-gesuchsperiode-publish>
     }
   }
 </form>

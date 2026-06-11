@@ -455,18 +455,61 @@
 
         @if (!hiddenFieldsSetSig().has(form.controls.wgWohnend)) {
           <!-- WG WOHNEND -->
-          <div class="tw:dv-form-item tw:flex tw:flex-col tw:gap-4">
+          <mat-radio-group
+            class="tw:dv-form-item tw:flex tw:flex-col"
+            [formControl]="form.controls.wgWohnend"
+            data-testid="form-einnahmen-kosten-wgWohnend"
+            dvSharedUiFormField
+          >
+            <mat-label>{{ t('shared.form.einnahmenkosten.wgWohnend.label') }}</mat-label>
+            <mat-radio-button data-testid="yes" [value]="true">{{ t('shared.form.radio.yes') }}</mat-radio-button>
+            <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
+            <dv-shared-ui-form-zuvor-hint
+              [changes]="formChanges.wgWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+            ></dv-shared-ui-form-zuvor-hint>
+            <div class="group-errors">
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+            </div>
+          </mat-radio-group>
+
+          @if (!hiddenFieldsSetSig().has(form.controls.wgAnzahlPersonen)) {
+            <mat-form-field class="tw:dv-form-item" dvSharedUiFormField>
+              <mat-label>{{ t('shared.form.einnahmenkosten.wgAnzahlPersonen.label') }}</mat-label>
+              <input
+                [formControl]="form.controls.wgAnzahlPersonen"
+                data-testid="form-einnahmen-kosten-wgAnzahlPersonen"
+                matInput
+                type="text"
+                [maskito]="maskitoNumber"
+                [min]="MIN_WG_ANZAHL_PERSONEN"
+              />
+              <mat-hint *dvZuvorHint="formChanges.wgAnzahlPersonen"></mat-hint>
+              <mat-error *dvSharedUiFormMessageError="'required'">
+                {{ t('shared.form.error.required') }}
+              </mat-error>
+              <mat-error *dvSharedUiFormMessageError="'min'">
+                {{ t('shared.form.error.min', { min: MIN_WG_ANZAHL_PERSONEN }) }}
+              </mat-error>
+            </mat-form-field>
+          }
+
+          @if (!hiddenFieldsSetSig().has(form.controls.alternativeWohnformWohnend)) {
+            <!-- alternative wohnform wohnend -->
             <mat-radio-group
-              class="tw:flex tw:flex-col"
-              [formControl]="form.controls.wgWohnend"
-              data-testid="form-einnahmen-kosten-wgWohnend"
+              class="tw:dv-form-item tw:flex tw:flex-col"
+              [formControl]="form.controls.alternativeWohnformWohnend"
+              data-testid="form-einnahmen-kosten-alternativeWohnformWohnend"
               dvSharedUiFormField
             >
-              <mat-label>{{ t('shared.form.einnahmenkosten.wgWohnend.label') }}</mat-label>
-              <mat-radio-button data-testid="yes" [value]="true">{{ t('shared.form.radio.yes') }}</mat-radio-button>
+              <mat-label>{{ t('shared.form.einnahmenkosten.alternativeWohnformWohnend.label') }}</mat-label>
+              <mat-radio-button data-testid="yes" [value]="true"> {{ t('shared.form.radio.yes') }}</mat-radio-button>
               <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
               <dv-shared-ui-form-zuvor-hint
-                [changes]="formChanges.wgWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+                [changes]="
+                  formChanges.alternativeWohnformWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async
+                "
               ></dv-shared-ui-form-zuvor-hint>
               <div class="group-errors">
                 <mat-error *dvSharedUiFormMessageError="'required'">
@@ -474,52 +517,7 @@
                 </mat-error>
               </div>
             </mat-radio-group>
-
-            @if (!hiddenFieldsSetSig().has(form.controls.wgAnzahlPersonen)) {
-              <mat-form-field dvSharedUiFormField>
-                <mat-label>{{ t('shared.form.einnahmenkosten.wgAnzahlPersonen.label') }}</mat-label>
-                <input
-                  [formControl]="form.controls.wgAnzahlPersonen"
-                  data-testid="form-einnahmen-kosten-wgAnzahlPersonen"
-                  matInput
-                  type="text"
-                  [maskito]="maskitoNumber"
-                  [min]="MIN_WG_ANZAHL_PERSONEN"
-                />
-                <mat-hint *dvZuvorHint="formChanges.wgAnzahlPersonen"></mat-hint>
-                <mat-error *dvSharedUiFormMessageError="'required'">
-                  {{ t('shared.form.error.required') }}
-                </mat-error>
-                <mat-error *dvSharedUiFormMessageError="'min'">
-                  {{ t('shared.form.error.min', { min: MIN_WG_ANZAHL_PERSONEN }) }}
-                </mat-error>
-              </mat-form-field>
-            }
-
-            @if (!hiddenFieldsSetSig().has(form.controls.alternativeWohnformWohnend)) {
-              <!-- alternative wohnform wohnend -->
-              <mat-radio-group
-                class="tw:flex tw:flex-col"
-                [formControl]="form.controls.alternativeWohnformWohnend"
-                data-testid="form-einnahmen-kosten-alternativeWohnformWohnend"
-                dvSharedUiFormField
-              >
-                <mat-label>{{ t('shared.form.einnahmenkosten.alternativeWohnformWohnend.label') }}</mat-label>
-                <mat-radio-button data-testid="yes" [value]="true"> {{ t('shared.form.radio.yes') }}</mat-radio-button>
-                <mat-radio-button data-testid="no" [value]="false">{{ t('shared.form.radio.no') }}</mat-radio-button>
-                <dv-shared-ui-form-zuvor-hint
-                  [changes]="
-                    formChanges.alternativeWohnformWohnend | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async
-                  "
-                ></dv-shared-ui-form-zuvor-hint>
-                <div class="group-errors">
-                  <mat-error *dvSharedUiFormMessageError="'required'">
-                    {{ t('shared.form.error.required') }}
-                  </mat-error>
-                </div>
-              </mat-radio-group>
-            }
-          </div>
+          }
         }
 
         @if (!hiddenFieldsSetSig().has(form.controls.vermoegen) || config.isSachbearbeitungApp) {

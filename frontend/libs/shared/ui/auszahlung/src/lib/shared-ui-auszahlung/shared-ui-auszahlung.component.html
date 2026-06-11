@@ -155,11 +155,14 @@
           </button>
         }
       } @else {
-        <dv-shared-ui-form-save
-          [disabled]="form.invalid || form.pristine"
-          [loading]="view.isLoading"
-          [labelKey]="'shared.form.save-and-continue'"
-        ></dv-shared-ui-form-save>
+        <button
+          type="submit"
+          class="tw:dv-button-main-primary"
+          [disabled]="form.invalid || form.pristine || view.isLoading"
+          data-testid="button-save-and-next"
+        >
+          {{ 'shared.form.save-and-continue' | transloco }}
+        </button>
       }
     </dv-shared-ui-step-form-buttons>
   </form>

@@ -97,27 +97,30 @@
     class="tw:dv-form-item"
   >
     <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
-    <div class="tw:flex tw:flex-col">
-      @for (a of ausbildungssituationValues; track $index) {
-        <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-          'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
-        }}</mat-radio-button>
+    <div class="tw:flex tw:gap-4 tw:justify-between">
+      <div class="tw:flex tw:flex-col">
+        @for (a of ausbildungssituationValues; track $index) {
+          <mat-radio-button [attr.data-testid]="a" [value]="a">{{
+            'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
+          }}</mat-radio-button>
+        }
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="
+            changes.ausbildungssituation
+              | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
+              | async
+          "
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+
+      @if (ausbildungssituationDocumentSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1 tw:mt-2"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
       }
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="
-          changes.ausbildungssituation
-            | dvTranslateChange: 'shared.form.geschwister.ausbildungssituation.select.$VALUE'
-            | async
-        "
-      ></dv-shared-ui-form-zuvor-hint>
     </div>
 
-    @if (ausbildungssituationDocumentSig(); as options) {
-      <dv-shared-pattern-document-upload
-        class="flex-shrink-1 tw:mt-2"
-        [optionsSig]="options"
-      ></dv-shared-pattern-document-upload>
-    }
     <div class="group-errors">
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}

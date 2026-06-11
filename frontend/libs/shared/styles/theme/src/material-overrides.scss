@@ -96,10 +96,8 @@ html {
   @include mat.form-field-density(-2);
 }
 
-.group-errors {
-  .mat-mdc-form-field-error {
-    font-size: var(--mat-sys-body-small-size);
-  }
+.group-errors .mat-mdc-form-field-error {
+  font-size: var(--mat-sys-body-small-size);
 }
 
 .mat-mdc-form-field.mat-mdc-form-field-label-always-float {
@@ -163,7 +161,7 @@ $dv-all-colors: info, danger, success, warn, primary;
 }
 
 .dv-dialog-formular {
-  --mat-dialog-container-min-width: 900px;
+  --mat-dialog-container-min-width: min(900px, 100%);
 }
 
 .mat-mdc-tab-nav-bar {

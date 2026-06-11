@@ -1,8 +1,8 @@
 <form
   [formGroup]="form"
+  class="tw:dv-form-grid"
   data-testid="form-sozialdienst-form"
   novalidate
-  class="tw:dv-form-grid"
   (ngSubmit)="handleSubmit()"
 >
   @if (store.sozialdienst() | rdIsPending: { ignoreInitial: true }) {
@@ -122,6 +122,7 @@
 
     @if (!form.disabled) {
       <dv-shared-ui-form-save
+        class="tw:dv-form-action"
         [disabled]="form.invalid || form.pristine"
         [loading]="store.sozialdienst() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>
