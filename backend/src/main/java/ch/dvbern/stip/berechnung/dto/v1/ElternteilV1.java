@@ -37,6 +37,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 
@@ -208,6 +209,12 @@ public class ElternteilV1 {
             if (Boolean.TRUE.equals(wiederverheiratet)) {
                 // Wir gehen davon aus, dass der Partner eines Elternteils erwachsen ist
                 medizinischeGrundversorgung += gesuchsperiode.getErwachsene2599();
+
+                final var partnerName = String
+                    .format("Partner %s", StringUtils.capitalize(steuerdaten.getSteuerdatenTyp().name().toLowerCase()));
+
+                verpflegungskostens.setPartnerValue(partnerName, steuerdaten.getVerpflegungPartner());
+                fahrkostens.setPartnerValue(partnerName, steuerdaten.getFahrkostenPartner());
             }
         }
 

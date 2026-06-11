@@ -17,49 +17,35 @@
 
 package ch.dvbern.stip.api.sap.scheduledtask;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.sap.service.SapService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.scheduler.Scheduled;
-import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
 @UnlessBuildProfile("test")
-public class SapPendingAuszahlungScheduledTask {
-    private final SapService sapService;
+public class SapPendingAuszahlungScheduledTask extends RunForTenantsScheduledTask {
+    @Inject
+    SapService sapService;
 
-    private void run() {
+    SapPendingAuszahlungScheduledTask() {
+        super(ScheduledTaskCronKey.SAP_PENDING_AUSZAHLUNG, TenantIdentifier.values());
+    }
+
+    @Override
+    @Transactional
+    protected void run() {
         try {
             LOG.info("processPendingCreateVendorPostingActions from scheduled task");
             sapService.processPendingCreateVendorPostingActions();
         } catch (Exception e) {
             LOG.error(e.toString(), e);
         }
-    }
-
-    @Transactional
-    @Scheduled(
-        cron = "{kstip.tenant.bern.scheduler.sap-pending-auszahlung.cron}",
-        concurrentExecution = ConcurrentExecution.SKIP
-    )
-    @RunForTenant(TenantIdentifier.BERN)
-    public void runForBern() {
-        run();
-    }
-
-    @Transactional
-    @Scheduled(
-        cron = "{kstip.tenant.dv.scheduler.sap-pending-auszahlung.cron}", concurrentExecution = ConcurrentExecution.SKIP
-    )
-    @RunForTenant(TenantIdentifier.DV)
-    public void runForDv() {
-        run();
     }
 }

@@ -165,7 +165,7 @@ public class MassendruckJobService {
     }
 
     public void combineDocument(final UUID massendruckJobId) {
-        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentStringIdentifier());
+        massendruckJobDocumentWorker.combineDocuments(massendruckJobId, tenantService.getCurrentTenantIdentifier());
     }
 
     @Transactional

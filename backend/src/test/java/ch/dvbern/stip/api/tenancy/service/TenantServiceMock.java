@@ -35,8 +35,11 @@ public class TenantServiceMock extends TenantService {
     @Inject
     StipConfig config;
 
+    @Inject
+    TenantContext tenantContext;
+
     public TenantServiceMock() {
-        super(null, null);
+        super(null, null, null);
     }
 
     @Override

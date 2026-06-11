@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.statistik.service;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import jakarta.inject.Singleton;
@@ -44,7 +45,7 @@ public class StatistikXMLJob implements Job {
             context.getMergedJobDataMap().getString(StatistikConstants.STATISTIK_JOB_CONTEXT_MAP_TENANT_KEY);
 
         QuarkusTransactionUtil.runForTenantInNewTransaction(
-            tenant,
+            TenantIdentifier.of(tenant),
             () -> statistikXMLService.createAndSave(year, triggeredBy)
         );
     }

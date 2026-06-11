@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.config.type;
 import java.util.Map;
 import java.util.Set;
 
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupAdapterType;
 import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
@@ -54,7 +55,7 @@ public interface StipConfig {
 
     Seeding seeding();
 
-    Map<String, SchedulerConfig> scheduler();
+    Map<ScheduledTaskCronKey, SchedulerConfig> scheduler();
 
     PlzData plzData();
 
