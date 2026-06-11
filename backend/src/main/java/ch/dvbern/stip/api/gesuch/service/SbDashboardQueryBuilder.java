@@ -110,6 +110,10 @@ public class SbDashboardQueryBuilder {
             query,
             benutzerService.getSetByUserRole(
                 RoleFeature.forFreigabe(Gesuchstatus.IN_FREIGABE),
+                RoleFeature.forJurist(
+                    Gesuchstatus.JURISTISCHE_ABKLAERUNG,
+                    Gesuchstatus.ABKLAERUNG_DURCH_RECHSTABTEILUNG
+                ),
                 RoleFeature.forSachbearbeiter(
                     Gesuchstatus.BEREIT_FUER_BEARBEITUNG,
                     Gesuchstatus.IN_BEARBEITUNG_SB,

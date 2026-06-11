@@ -36,17 +36,14 @@
           [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', offeneAenderung.id]"
           [queryParams]="{ revision: offeneAenderung.revision }"
           [queryParamsHandling]="'merge'"
-          class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+          class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
           data-testid="aenderungen-nav-menu-item"
           mat-menu-item
-          [class.active]="trancheId === offeneAenderung.id"
+          [class.active]="trancheId === offeneAenderung.id && revisionSig() === (offeneAenderung.revision ?? undefined)"
         >
           <span>
             {{ offeneAenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
             {{ offeneAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
-          </span>
-          <span class="tw:ml-2 tw:text-dv-gray italic">
-            {{ revisionSig() }}
           </span>
         </a>
       }
@@ -61,10 +58,10 @@
             [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
-            [class.active]="trancheId === aenderung.id"
+            [class.active]="trancheId === aenderung.id && revisionSig() === (aenderung.revision ?? undefined)"
           >
             <span>
               {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
@@ -84,10 +81,10 @@
             [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
-            [class.active]="trancheId === aenderung.id"
+            [class.active]="trancheId === aenderung.id && revisionSig() === (aenderung.revision ?? undefined)"
           >
             <span>
               {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
@@ -107,10 +104,33 @@
             [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
             [queryParams]="{ revision: aenderung.revision }"
             [queryParamsHandling]="'merge'"
-            class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
             data-testid="aenderungen-nav-menu-item"
             mat-menu-item
-            [class.active]="trancheId === aenderung.id && revisionSig() === aenderung.revision"
+            [class.active]="trancheId === aenderung.id && revisionSig() === (aenderung.revision ?? undefined)"
+          >
+            <span>
+              {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
+              {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
+            </span>
+          </a>
+        }
+      }
+      @if (aenderungen?.fehlendeDokumente?.length) {
+        <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+          {{ t('shared.header.aenderungen.fehlendeDokumente') }}
+          <hr class="tw:grow tw:border-t tw:border-dv-border" />
+        </div>
+        @for (aenderung of aenderungen?.fehlendeDokumente; track $index) {
+          <a
+            [routerLink]="['/', 'gesuch', ...stepRouteSegmentsSig(), gesuchId, 'aenderung', aenderung.id]"
+            [queryParams]="{ revision: aenderung.revision }"
+            [queryParamsHandling]="'merge'"
+            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
+            data-testid="aenderungen-nav-menu-item"
+            mat-menu-item
+            [class.active]="trancheId === aenderung.id && revisionSig() === (aenderung.revision ?? undefined)"
           >
             <span>
               {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -

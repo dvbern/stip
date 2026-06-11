@@ -37,16 +37,24 @@ public class BerechnungUtil {
             .intValue();
     }
 
-    public int substractGesezlichesDarlehen(final int total, final int monateMitDarlehen) {
+    public int roundGesetzlichesDarlehen(final int total) {
+        return BigDecimal.valueOf(total)
+            .divide(BigDecimal.valueOf(100), 0, RoundingMode.UP)
+            .multiply(BigDecimal.valueOf(100))
+            .intValue();
+    }
+
+    public int subtractGesezlichesDarlehen(final int total, final int monateMitDarlehen) {
         if (monateMitDarlehen == 0) {
             return total;
         }
 
-        final int monateOhneDarlehen = 12 - monateMitDarlehen;
+        final var monateOhneDarlehen = 12 - monateMitDarlehen;
 
         final var stipendiumOfMonateOhneDarlehen = total * monateOhneDarlehen / 12;
-
-        final var stipendiumOfMonateMitDarlehen = BigDecimal.valueOf(total * monateMitDarlehen / 12)
+        final var stipendiumOfMonateMitDarlehen = BigDecimal.valueOf(total)
+            .multiply(BigDecimal.valueOf(monateMitDarlehen))
+            .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP)
             .multiply(BigDecimal.valueOf(2))
             .divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP)
             .intValue();

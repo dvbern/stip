@@ -73,10 +73,12 @@
   "shared.header.aenderungen.complete-states.manual": "Manuell akzeptiert",
   "shared.header.aenderungen.complete-states.completed": "Akzeptiert",
   "shared.header.aenderungen.complete-states.rejected": "Abgelehnt",
+  "shared.header.aenderungen.complete-states.fehlendedokumente": "Dokumente",
   "shared.header.aenderungen.open": "Offene Änderung",
   "shared.header.aenderungen.completed": "Akzeptierte Änderungen",
   "shared.header.aenderungen.manuell": "Manuelle Änderungen",
   "shared.header.aenderungen.rejected": "Abgelehnte Änderungen",
+  "shared.header.aenderungen.fehlendeDokumente": "Änderungen mit fehlenden Dokumente",
 
   "shared.file.upload": "Dateien Durchsuchen",
   "shared.file.uploadError": "Fehler beim Hochladen der Datei",

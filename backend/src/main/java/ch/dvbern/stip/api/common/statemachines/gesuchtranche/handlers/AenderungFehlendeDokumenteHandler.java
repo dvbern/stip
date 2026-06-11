@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
-public class GesuchTrancheFehlendeDokumenteHandler implements StateChangeWithCommentHandler<GesuchTranche> {
+public class AenderungFehlendeDokumenteHandler implements StateChangeWithCommentHandler<GesuchTranche> {
     private final GesuchDokumentService gesuchDokumentService;
     private final GesuchService gesuchService;
 
@@ -35,7 +35,7 @@ public class GesuchTrancheFehlendeDokumenteHandler implements StateChangeWithCom
         GesuchTranche gesuchTranche,
         String comment
     ) {
-        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForGesuch(gesuchTranche.getGesuch());
+        gesuchDokumentService.setAbgelehnteDokumenteToAusstehendForAenderung(gesuchTranche);
         gesuchService.setDefaultNachfristDokumente(gesuchTranche.getGesuch());
         gesuchService.sendFehlendeDokumenteNotifications(gesuchTranche.getGesuch());
     }
