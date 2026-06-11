@@ -9,8 +9,8 @@
   <form
     *dvTranslocoShared="let t"
     [ngClass]="{
-      'tw:dv-form-grid': !isDialog,
-      'tw:grid tw:grid-cols-1 tw:gap-6': isDialog,
+      'testing-library-fix tw:dv-form-grid': !isDialog,
+      'testing-library-fix tw:grid tw:grid-cols-1 tw:gap-6': isDialog,
     }"
     [formGroup]="form"
     [dvSharedUiFormReadonly]="!isEditableSig()"
@@ -358,7 +358,7 @@
     </mat-form-field>
 
     @if (isEditableSig()) {
-      <dv-shared-ui-step-form-buttons>
+      <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
         <button
           type="submit"
           class="tw:dv-button-main-primary"

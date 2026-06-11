@@ -136,7 +136,7 @@
     }
 
     <!-- Buttons -->
-    <dv-shared-ui-step-form-buttons>
+    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
       @if (!isGesuchFormStepSig()) {
         <button type="button" class="tw:dv-button-outline" (click)="backTriggered.emit()" data-testid="button-next">
           {{ 'shared.form.back' | transloco }}

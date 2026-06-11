@@ -466,7 +466,7 @@
       </div>
     </div>
     <!-- buttons -->
-    <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
+    <dv-shared-ui-step-form-buttons class="tw:mt-6" [@hideDuringAnimation]="duringAnimation">
       @if (!readonly) {
         <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | transloco }}
