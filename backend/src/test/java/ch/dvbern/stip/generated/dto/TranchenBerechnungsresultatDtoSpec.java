@@ -18,6 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDtoSpec;
+import ch.dvbern.stip.generated.dto.PersonenHaushaltGruppeDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,6 +38,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_TOTAL,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_UNGEKUERZT_TOTAL,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_AB,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GUELTIG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_AB,
@@ -48,13 +50,17 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_PERSOENLICHES_BUDGETRESULTAT,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS
 })
 @JsonTypeName("TranchenBerechnungsresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class TranchenBerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_TOTAL = "total";
   private Integer total;
+
+  public static final String JSON_PROPERTY_UNGEKUERZT_TOTAL = "ungekuerztTotal";
+  private Integer ungekuerztTotal;
 
   public static final String JSON_PROPERTY_GUELTIG_AB = "gueltigAb";
   private LocalDate gueltigAb;
@@ -92,6 +98,9 @@ public class TranchenBerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_FAMILIEN_BUDGETRESULTATE = "familienBudgetresultate";
   private List<FamilienBudgetresultatDtoSpec> familienBudgetresultate;
 
+  public static final String JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS = "personenHaushaltGroups";
+  private List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups;
+
   public TranchenBerechnungsresultatDtoSpec() {
   }
 
@@ -118,6 +127,32 @@ public class TranchenBerechnungsresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setTotal(Integer total) {
     this.total = total;
+  }
+
+
+  public TranchenBerechnungsresultatDtoSpec ungekuerztTotal(Integer ungekuerztTotal) {
+    
+    this.ungekuerztTotal = ungekuerztTotal;
+    return this;
+  }
+
+   /**
+   * Die ungekürzte Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
+   * @return ungekuerztTotal
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getUngekuerztTotal() {
+    return ungekuerztTotal;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNGEKUERZT_TOTAL)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUngekuerztTotal(Integer ungekuerztTotal) {
+    this.ungekuerztTotal = ungekuerztTotal;
   }
 
 
@@ -440,6 +475,40 @@ public class TranchenBerechnungsresultatDtoSpec {
     this.familienBudgetresultate = familienBudgetresultate;
   }
 
+
+  public TranchenBerechnungsresultatDtoSpec personenHaushaltGroups(List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
+    
+    this.personenHaushaltGroups = personenHaushaltGroups;
+    return this;
+  }
+
+  public TranchenBerechnungsresultatDtoSpec addPersonenHaushaltGroupsItem(PersonenHaushaltGruppeDtoSpec personenHaushaltGroupsItem) {
+    if (this.personenHaushaltGroups == null) {
+      this.personenHaushaltGroups = new ArrayList<>();
+    }
+    this.personenHaushaltGroups.add(personenHaushaltGroupsItem);
+    return this;
+  }
+
+   /**
+   * Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen
+   * @return personenHaushaltGroups
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<PersonenHaushaltGruppeDtoSpec> getPersonenHaushaltGroups() {
+    return personenHaushaltGroups;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_PERSONEN_HAUSHALT_GROUPS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setPersonenHaushaltGroups(List<PersonenHaushaltGruppeDtoSpec> personenHaushaltGroups) {
+    this.personenHaushaltGroups = personenHaushaltGroups;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -450,6 +519,7 @@ public class TranchenBerechnungsresultatDtoSpec {
     }
     TranchenBerechnungsresultatDtoSpec tranchenBerechnungsresultat = (TranchenBerechnungsresultatDtoSpec) o;
     return Objects.equals(this.total, tranchenBerechnungsresultat.total) &&
+        Objects.equals(this.ungekuerztTotal, tranchenBerechnungsresultat.ungekuerztTotal) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
@@ -461,12 +531,13 @@ public class TranchenBerechnungsresultatDtoSpec {
         Objects.equals(this.berechnungsanteilKinderPia, tranchenBerechnungsresultat.berechnungsanteilKinderPia) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, tranchenBerechnungsresultat.persoenlichesBudgetresultat) &&
-        Objects.equals(this.familienBudgetresultate, tranchenBerechnungsresultat.familienBudgetresultate);
+        Objects.equals(this.familienBudgetresultate, tranchenBerechnungsresultat.familienBudgetresultate) &&
+        Objects.equals(this.personenHaushaltGroups, tranchenBerechnungsresultat.personenHaushaltGroups);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups);
   }
 
   @Override
@@ -474,6 +545,7 @@ public class TranchenBerechnungsresultatDtoSpec {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDtoSpec {\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
+    sb.append("    ungekuerztTotal: ").append(toIndentedString(ungekuerztTotal)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
@@ -486,6 +558,7 @@ public class TranchenBerechnungsresultatDtoSpec {
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
+    sb.append("    personenHaushaltGroups: ").append(toIndentedString(personenHaushaltGroups)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -10,13 +10,16 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { TranslocoDirective } from '@jsverse/transloco';
+import { MatTabsModule } from '@angular/material/tabs';
 import { Store } from '@ngrx/store';
 
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
-import { TranchenBerechnungsresultat } from '@dv/shared/model/gesuch';
-import { BerechnungView } from '@dv/shared/model/verfuegung';
+import {
+  BerechnungView,
+  TranchenBerechnungsresultatView,
+} from '@dv/shared/model/verfuegung';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 
 import {
@@ -30,6 +33,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-verfuegung-berechnung',
   imports: [
+    MatTabsModule,
     MatCardModule,
     MatSlideToggleModule,
     MatExpansionModule,
@@ -39,7 +43,7 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
     FamilienEinnahmenComponent,
     FamilienKostenComponent,
     SharedUiLoadingComponent,
-    TranslocoDirective,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-feature-verfuegung-berechnung.component.html',
@@ -85,6 +89,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
     }
 
     const view: BerechnungView = {
+      personenHaushaltGroups: r.personenHaushaltGroups,
       persoenlich: {
         ...r.persoenlichesBudgetresultat,
         typ: 'persoenlich',
@@ -130,7 +135,7 @@ export class SachbearbeitungAppFeatureVerfuegungBerechnungComponent {
 }
 
 const getBerechnungByTrancheIdByIndex = (
-  berechnung: Record<string, TranchenBerechnungsresultat[]>,
+  berechnung: Record<string, TranchenBerechnungsresultatView>,
   trancheId: string | null,
   rawIndex: string,
 ) => {
@@ -144,5 +149,5 @@ const getBerechnungByTrancheIdByIndex = (
     return undefined;
   }
 
-  return trancheBerechnungsresultate[+rawIndex - 1];
+  return trancheBerechnungsresultate.berechnungen[+rawIndex - 1];
 };

@@ -19,8 +19,14 @@ package ch.dvbern.stip.berechnung.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+import ch.dvbern.stip.berechnung.type.PersonenHaushalt;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersonenHaushaltGruppeDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -68,5 +74,35 @@ public class BerechnungUtil {
         }
 
         return Objects.equals(value1, value2);
+    }
+
+    public List<PersonenHaushaltGruppeDto> getPersonenHaushaltGroups(
+        final PersoenlichesBudgetresultatDto persoenlichesBudgetresultatDto,
+        final List<FamilienBudgetresultatDto> familienBudgetresultatList
+    ) {
+        final var personenHaushaltGroups = new ArrayList<PersonenHaushaltGruppeDto>();
+
+        personenHaushaltGroups.add(
+            new PersonenHaushaltGruppeDto(
+                PersonenHaushalt.PIA,
+                persoenlichesBudgetresultatDto.getHaushaltNames()
+            )
+        );
+        personenHaushaltGroups.addAll(
+            familienBudgetresultatList.stream()
+                .map(
+                    resultatDto -> new PersonenHaushaltGruppeDto(
+                        switch (resultatDto.getSteuerdatenTyp()) {
+                            case FAMILIE -> PersonenHaushalt.FAMILIE;
+                            case MUTTER -> PersonenHaushalt.MUTTER;
+                            case VATER -> PersonenHaushalt.VATER;
+                        },
+                        resultatDto.getHaushaltNames()
+                    )
+                )
+                .toList()
+        );
+
+        return personenHaushaltGroups;
     }
 }

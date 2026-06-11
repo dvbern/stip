@@ -360,6 +360,7 @@ public class BerechnungService {
                     berechnungsresultatDtoList.add(
                         new TranchenBerechnungsresultatDto(
                             total,
+                            stipendienCalculated.getStipendien(),
                             gesuchTranche.getGueltigkeit().getGueltigAb(),
                             gesuchTranche.getGueltigkeit().getGueltigBis(),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
@@ -375,16 +376,18 @@ public class BerechnungService {
                                 minorVersion
                             ),
                             stipendienCalculated.getPersoenlichesBudgetresultat(),
-                            familienBudgetresultatList
+                            familienBudgetresultatList,
+                            BerechnungUtil.getPersonenHaushaltGroups(
+                                stipendienCalculated.getPersoenlichesBudgetresultat(),
+                                familienBudgetresultatList
+                            )
                         )
                     );
                 } else {
                     // To address differences in the stipendienberechnung based on how many kids are in the households
-                    // and
-                    // how their care is divided between father and mother,
+                    // and how their care is divided between father and mother,
                     // we calculate how many "kidpercentages" each household has and divide this by the total number of
-                    // kids
-                    // in all households.
+                    // kids in all households.
                     // This value can then be multiplied with the respective stipendienberechnung to get a proportianal
                     // stipendienamount.
                     BigDecimal kinderDerElternProzente = BigDecimal.ZERO;
@@ -414,6 +417,7 @@ public class BerechnungService {
                     berechnungsresultatDtoList.add(
                         new TranchenBerechnungsresultatDto(
                             berechnetStipendien,
+                            stipendienCalculated.getStipendien(),
                             gesuchTranche.getGueltigkeit().getGueltigAb(),
                             gesuchTranche.getGueltigkeit().getGueltigBis(),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
@@ -429,7 +433,11 @@ public class BerechnungService {
                                 minorVersion
                             ),
                             stipendienCalculated.getPersoenlichesBudgetresultat(),
-                            familienBudgetresultatList
+                            familienBudgetresultatList,
+                            BerechnungUtil.getPersonenHaushaltGroups(
+                                stipendienCalculated.getPersoenlichesBudgetresultat(),
+                                familienBudgetresultatList
+                            )
                         )
                     );
                 }

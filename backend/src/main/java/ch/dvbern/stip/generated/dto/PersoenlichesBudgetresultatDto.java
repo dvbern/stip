@@ -4,6 +4,9 @@ import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatEinnahmenDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatKostenDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -24,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class PersoenlichesBudgetresultatDto  implements Serializable {
+  private @Valid List<String> haushaltNames = new ArrayList<>();
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String sozialversicherungsnummer;
@@ -42,6 +46,41 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
   private @Valid Integer proKopfTeilung;
   private @Valid Integer totalNachProKopfTeilung;
 
+  /**
+   **/
+  public PersoenlichesBudgetresultatDto haushaltNames(List<String> haushaltNames) {
+    this.haushaltNames = haushaltNames;
+    return this;
+  }
+
+  
+  @JsonProperty("haushaltNames")
+  @NotNull
+  public List<String> getHaushaltNames() {
+    return haushaltNames;
+  }
+
+  @JsonProperty("haushaltNames")
+  public void setHaushaltNames(List<String> haushaltNames) {
+    this.haushaltNames = haushaltNames;
+  }
+
+  public PersoenlichesBudgetresultatDto addHaushaltNamesItem(String haushaltNamesItem) {
+    if (this.haushaltNames == null) {
+      this.haushaltNames = new ArrayList<>();
+    }
+
+    this.haushaltNames.add(haushaltNamesItem);
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDto removeHaushaltNamesItem(String haushaltNamesItem) {
+    if (haushaltNamesItem != null && this.haushaltNames != null) {
+      this.haushaltNames.remove(haushaltNamesItem);
+    }
+
+    return this;
+  }
   /**
    **/
   public PersoenlichesBudgetresultatDto vorname(String vorname) {
@@ -372,7 +411,8 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
       return false;
     }
     PersoenlichesBudgetresultatDto persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDto) o;
-    return Objects.equals(this.vorname, persoenlichesBudgetresultat.vorname) &&
+    return Objects.equals(this.haushaltNames, persoenlichesBudgetresultat.haushaltNames) &&
+        Objects.equals(this.vorname, persoenlichesBudgetresultat.vorname) &&
         Objects.equals(this.nachname, persoenlichesBudgetresultat.nachname) &&
         Objects.equals(this.sozialversicherungsnummer, persoenlichesBudgetresultat.sozialversicherungsnummer) &&
         Objects.equals(this.geburtsdatum, persoenlichesBudgetresultat.geburtsdatum) &&
@@ -393,7 +433,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner, proKopfTeilung, totalNachProKopfTeilung);
+    return Objects.hash(haushaltNames, vorname, nachname, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten, vornamePartner, nachnamePartner, proKopfTeilung, totalNachProKopfTeilung);
   }
 
   @Override
@@ -401,6 +441,7 @@ public class PersoenlichesBudgetresultatDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersoenlichesBudgetresultatDto {\n");
     
+    sb.append("    haushaltNames: ").append(toIndentedString(haushaltNames)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");

@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersonenHaushaltGruppeDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 public class TranchenBerechnungsresultatDto  implements Serializable {
   private @Valid Integer total;
+  private @Valid Integer ungekuerztTotal;
   private @Valid LocalDate gueltigAb;
   private @Valid LocalDate gueltigBis;
   private @Valid String ausbildungAb;
@@ -43,6 +45,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
   private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
+  private @Valid List<PersonenHaushaltGruppeDto> personenHaushaltGroups = new ArrayList<>();
 
   /**
    * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
@@ -62,6 +65,26 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   @JsonProperty("total")
   public void setTotal(Integer total) {
     this.total = total;
+  }
+
+  /**
+   * Die ungekürzte Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
+   **/
+  public TranchenBerechnungsresultatDto ungekuerztTotal(Integer ungekuerztTotal) {
+    this.ungekuerztTotal = ungekuerztTotal;
+    return this;
+  }
+
+  
+  @JsonProperty("ungekuerztTotal")
+  @NotNull
+  public Integer getUngekuerztTotal() {
+    return ungekuerztTotal;
+  }
+
+  @JsonProperty("ungekuerztTotal")
+  public void setUngekuerztTotal(Integer ungekuerztTotal) {
+    this.ungekuerztTotal = ungekuerztTotal;
   }
 
   /**
@@ -312,6 +335,42 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
 
     return this;
   }
+  /**
+   * Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen
+   **/
+  public TranchenBerechnungsresultatDto personenHaushaltGroups(List<PersonenHaushaltGruppeDto> personenHaushaltGroups) {
+    this.personenHaushaltGroups = personenHaushaltGroups;
+    return this;
+  }
+
+  
+  @JsonProperty("personenHaushaltGroups")
+  @NotNull
+  public List<PersonenHaushaltGruppeDto> getPersonenHaushaltGroups() {
+    return personenHaushaltGroups;
+  }
+
+  @JsonProperty("personenHaushaltGroups")
+  public void setPersonenHaushaltGroups(List<PersonenHaushaltGruppeDto> personenHaushaltGroups) {
+    this.personenHaushaltGroups = personenHaushaltGroups;
+  }
+
+  public TranchenBerechnungsresultatDto addPersonenHaushaltGroupsItem(PersonenHaushaltGruppeDto personenHaushaltGroupsItem) {
+    if (this.personenHaushaltGroups == null) {
+      this.personenHaushaltGroups = new ArrayList<>();
+    }
+
+    this.personenHaushaltGroups.add(personenHaushaltGroupsItem);
+    return this;
+  }
+
+  public TranchenBerechnungsresultatDto removePersonenHaushaltGroupsItem(PersonenHaushaltGruppeDto personenHaushaltGroupsItem) {
+    if (personenHaushaltGroupsItem != null && this.personenHaushaltGroups != null) {
+      this.personenHaushaltGroups.remove(personenHaushaltGroupsItem);
+    }
+
+    return this;
+  }
 
   @Override
   public boolean equals(Object o) {
@@ -323,6 +382,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     }
     TranchenBerechnungsresultatDto tranchenBerechnungsresultat = (TranchenBerechnungsresultatDto) o;
     return Objects.equals(this.total, tranchenBerechnungsresultat.total) &&
+        Objects.equals(this.ungekuerztTotal, tranchenBerechnungsresultat.ungekuerztTotal) &&
         Objects.equals(this.gueltigAb, tranchenBerechnungsresultat.gueltigAb) &&
         Objects.equals(this.gueltigBis, tranchenBerechnungsresultat.gueltigBis) &&
         Objects.equals(this.ausbildungAb, tranchenBerechnungsresultat.ausbildungAb) &&
@@ -334,12 +394,13 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
         Objects.equals(this.berechnungsanteilKinderPia, tranchenBerechnungsresultat.berechnungsanteilKinderPia) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, tranchenBerechnungsresultat.persoenlichesBudgetresultat) &&
-        Objects.equals(this.familienBudgetresultate, tranchenBerechnungsresultat.familienBudgetresultate);
+        Objects.equals(this.familienBudgetresultate, tranchenBerechnungsresultat.familienBudgetresultate) &&
+        Objects.equals(this.personenHaushaltGroups, tranchenBerechnungsresultat.personenHaushaltGroups);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate);
+    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups);
   }
 
   @Override
@@ -348,6 +409,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     sb.append("class TranchenBerechnungsresultatDto {\n");
     
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
+    sb.append("    ungekuerztTotal: ").append(toIndentedString(ungekuerztTotal)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");
     sb.append("    gueltigBis: ").append(toIndentedString(gueltigBis)).append("\n");
     sb.append("    ausbildungAb: ").append(toIndentedString(ausbildungAb)).append("\n");
@@ -360,6 +422,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
+    sb.append("    personenHaushaltGroups: ").append(toIndentedString(personenHaushaltGroups)).append("\n");
     sb.append("}");
     return sb.toString();
   }

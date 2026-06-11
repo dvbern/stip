@@ -1,6 +1,6 @@
-<div class="tw:flex tw:h-full" *transloco="let t">
+<div class="tw:flex tw:h-full" *dvTranslocoSb="let t">
   <ng-template #navigation cdkPortal>
-    <div class="sidenav tw:p-4">
+    <div class="sidenav tw:p-6">
       @let gesuchId = gesuchIdSig();
       @for (option of verfuegungOptions; track $index) {
         <a
@@ -19,21 +19,24 @@
         </a>
       }
       <hr class="tw:dv-divider" />
-      @for (group of berechnungenSig(); track group.trancheId) {
+      @for (tranche of berechnungenSig(); track tranche.gesuchTrancheId) {
         @if (!$first) {
           <hr class="tw:dv-divider" />
         }
-        @for (option of group.options; track $index) {
+        <div class="tw:my-4 tw:font-semibold">
+          {{ t('sachbearbeitung-app.verfuegung.option.berechnung.tranche', tranche) }}
+        </div>
+        @for (option of tranche.options; track $index) {
           <a
             type="button"
-            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-4 tw:w-full"
+            class="tw:dv-nav-button tw:flex tw:justify-start tw:items-center fw-normal tw:mb-2 tw:w-full"
             [attr.data-testid]="'option-nav-' + option.route"
             [routerLink]="option.fullRoute"
             routerLinkActive="active"
             queryParamsHandling="merge"
             (click)="navClicked$.emit()"
           >
-            <i class="material-symbols-rounded tw:mr-4">{{ option.iconSymbolName }}</i>
+            <i class="material-symbols-rounded tw:mr-4 tw:text-base!">{{ option.iconSymbolName }}</i>
             <span class="tw:text-start">
               {{ t(option.translationKey, option.translationOptions) }}
             </span>

@@ -23,6 +23,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -30,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 @JsonPropertyOrder({
+  PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_HAUSHALT_NAMES,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_VORNAME,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_NACHNAME,
   PersoenlichesBudgetresultatDtoSpec.JSON_PROPERTY_VORNAME_PARTNER,
@@ -51,6 +55,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("PersoenlichesBudgetresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class PersoenlichesBudgetresultatDtoSpec {
+  public static final String JSON_PROPERTY_HAUSHALT_NAMES = "haushaltNames";
+  private List<String> haushaltNames;
+
   public static final String JSON_PROPERTY_VORNAME = "vorname";
   private String vorname;
 
@@ -104,6 +111,40 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   public PersoenlichesBudgetresultatDtoSpec() {
   }
+
+  public PersoenlichesBudgetresultatDtoSpec haushaltNames(List<String> haushaltNames) {
+    
+    this.haushaltNames = haushaltNames;
+    return this;
+  }
+
+  public PersoenlichesBudgetresultatDtoSpec addHaushaltNamesItem(String haushaltNamesItem) {
+    if (this.haushaltNames == null) {
+      this.haushaltNames = new ArrayList<>();
+    }
+    this.haushaltNames.add(haushaltNamesItem);
+    return this;
+  }
+
+   /**
+   * Get haushaltNames
+   * @return haushaltNames
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<String> getHaushaltNames() {
+    return haushaltNames;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHaushaltNames(List<String> haushaltNames) {
+    this.haushaltNames = haushaltNames;
+  }
+
 
   public PersoenlichesBudgetresultatDtoSpec vorname(String vorname) {
     
@@ -555,7 +596,8 @@ public class PersoenlichesBudgetresultatDtoSpec {
       return false;
     }
     PersoenlichesBudgetresultatDtoSpec persoenlichesBudgetresultat = (PersoenlichesBudgetresultatDtoSpec) o;
-    return Objects.equals(this.vorname, persoenlichesBudgetresultat.vorname) &&
+    return Objects.equals(this.haushaltNames, persoenlichesBudgetresultat.haushaltNames) &&
+        Objects.equals(this.vorname, persoenlichesBudgetresultat.vorname) &&
         Objects.equals(this.nachname, persoenlichesBudgetresultat.nachname) &&
         Objects.equals(this.vornamePartner, persoenlichesBudgetresultat.vornamePartner) &&
         Objects.equals(this.nachnamePartner, persoenlichesBudgetresultat.nachnamePartner) &&
@@ -576,13 +618,14 @@ public class PersoenlichesBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, totalNachProKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten);
+    return Objects.hash(haushaltNames, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, total, einnahmenMinusKosten, fehlbetrag, proKopfTeilung, totalNachProKopfTeilung, eigenerHaushalt, budgetTranche, anzahlMonate, anzahlPersonenImHaushalt, einnahmen, kosten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersoenlichesBudgetresultatDtoSpec {\n");
+    sb.append("    haushaltNames: ").append(toIndentedString(haushaltNames)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
