@@ -635,6 +635,19 @@
         }
       </div>
 
+      <!-- WOHNSITZ AUFTEILUNG -->
+      @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
+        <dv-shared-ui-wohnsitz-splitter
+          class="tw:dv-form-item"
+          [updateValidity]="updateValidity$ | async"
+          [controls]="form.controls"
+          [changes]="{
+            wohnsitzAnteilVater: view.formChanges.wohnsitzAnteilVater,
+            wohnsitzAnteilMutter: view.formChanges.wohnsitzAnteilMutter,
+          }"
+        ></dv-shared-ui-wohnsitz-splitter>
+      }
+
       <!-- VORMUNDSCHAFT -->
       <div class="tw:dv-form-item tw:items-center tw:flex tw:gap-4">
         <div>
@@ -693,20 +706,6 @@
               {{ 'shared.form.error.required' | transloco }}
             </mat-error>
           </mat-form-field>
-        </div>
-      }
-
-      <!-- WOHNSITZ AUFTEILUNG -->
-      @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
-        <div class="tw:dv-form-item">
-          <dv-shared-ui-wohnsitz-splitter
-            [updateValidity]="updateValidity$ | async"
-            [controls]="form.controls"
-            [changes]="{
-              wohnsitzAnteilVater: view.formChanges.wohnsitzAnteilVater,
-              wohnsitzAnteilMutter: view.formChanges.wohnsitzAnteilMutter,
-            }"
-          ></dv-shared-ui-wohnsitz-splitter>
         </div>
       }
 
