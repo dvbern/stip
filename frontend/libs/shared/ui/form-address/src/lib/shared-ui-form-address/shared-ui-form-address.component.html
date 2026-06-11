@@ -4,7 +4,7 @@
   @let changes = adresseChangesSig();
 
   <!-- Strasse und Nr -->
-  <div class="testing-library-fix tw:xl:col-span-2 tw:flex tw:gap-4">
+  <div class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4">
     <!-- Strasse -->
     <mat-form-field dvSharedUiFormField class="tw:flex-1">
       <mat-label>{{ 'shared.form.shared.address.street.label' | transloco }}</mat-label>
@@ -34,7 +34,7 @@
 
   <!-- PLZ und Ort -->
   <div
-    class="testing-library-fix tw:xl:col-span-2 tw:flex tw:gap-4"
+    class="testing-library-fix tw:dv-form-item tw:flex tw:gap-4"
     formGroupName="plzOrt"
     dvPlzOrtAutocomplete
     [autocompleteSig]="plzAutocomplete"
@@ -76,7 +76,7 @@
   </div>
 
   <!-- c/o -->
-  <mat-form-field dvSharedUiFormField class="testing-library-fix tw:xl:col-span-2">
+  <mat-form-field dvSharedUiFormField class="testing-library-fix tw:dv-form-item">
     <mat-label
       >{{ 'shared.form.shared.address.co.label' | transloco }} ({{
         'shared.form.optional.label' | transloco
@@ -87,7 +87,7 @@
   </mat-form-field>
 
   <!-- Land -->
-  <div class="testing-library-fix tw:xl:col-span-2">
+  <div class="testing-library-fix tw:dv-form-item">
     <dv-shared-ui-select-search
       formControlName="landId"
       [testIdSig]="'form-address-land'"
