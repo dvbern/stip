@@ -17,28 +17,30 @@
 
 package ch.dvbern.stip.api.gesuch.scheduledtask;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
+import ch.dvbern.stip.api.common.scheduledtask.RunForTenantsScheduledTask;
+import ch.dvbern.stip.api.common.type.ScheduledTaskCronKey;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.gesuch.service.GesuchService;
 import io.quarkus.arc.profile.UnlessBuildProfile;
-import io.quarkus.scheduler.Scheduled;
-import io.quarkus.scheduler.Scheduled.ConcurrentExecution;
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ApplicationScoped
-@RequiredArgsConstructor
 @UnlessBuildProfile("test")
-public class FehlendeDokumenteScheduledTask {
-    private final GesuchService gesuchService;
+public class FehlendeDokumenteScheduledTask extends RunForTenantsScheduledTask {
+    @Inject
+    GesuchService gesuchService;
 
+    FehlendeDokumenteScheduledTask() {
+        super(ScheduledTaskCronKey.FEHLENDE_DOKUMENTE, TenantIdentifier.values());
+    }
+
+    @Override
     @Transactional
-    @Scheduled(cron = "{kstip.scheduler.fehlende-dokumente.cron}", concurrentExecution = ConcurrentExecution.SKIP)
-    @RunForTenant(TenantIdentifier.BERN)
-    public void run() {
+    protected void run() {
         try {
             LOG.info("Processing gesuchs in FEHLENDE_DOKUMENTE");
             gesuchService.checkForFehlendeDokumenteOnAllGesuche();

@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.common.service.seeding;
 
 import java.util.Comparator;
 
-import ch.dvbern.stip.api.common.scheduledtask.RunForTenant;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.common.util.QuarkusTransactionUtil;
 import io.quarkus.runtime.Startup;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -34,10 +34,12 @@ public class TestSeedingExecutor {
     private final Instance<Seeder> seeders;
 
     @Startup
-    @RunForTenant(TenantIdentifier.BERN)
-    public void seedForBern() {
+    public void seed() {
         LOG.info("SeedingExecutor starting execution for testing");
-        seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed);
+        QuarkusTransactionUtil.runForTenantInNewTransaction(
+            TenantIdentifier.BERN,
+            () -> seeders.stream().sorted(Comparator.comparing(Seeder::getPriority).reversed()).forEach(Seeder::seed)
+        );
         LOG.info("SeedingExecutor finished execution for testing");
     }
 }

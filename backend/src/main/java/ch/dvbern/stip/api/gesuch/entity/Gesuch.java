@@ -228,7 +228,7 @@ public class Gesuch extends AbstractMandantEntity {
     private InBearbeitungSbReason inBearbeitungSbReason;
 
     @Nullable
-    @OneToOne(mappedBy = "gesuch")
+    @OneToOne(mappedBy = "gesuch", orphanRemoval = true)
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")

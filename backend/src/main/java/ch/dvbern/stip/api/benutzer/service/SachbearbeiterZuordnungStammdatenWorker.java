@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.benutzer.service;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.WorkerExecutorUtil;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
 import io.quarkus.runtime.ShutdownEvent;
@@ -58,19 +59,19 @@ public class SachbearbeiterZuordnungStammdatenWorker {
         executor.close();
     }
 
-    public void updateZuordnung(final String tenantId) {
+    public void updateZuordnung(final TenantIdentifier tenantIdentifier) {
         if (!running.compareAndSet(false, true)) {
             throw new IllegalStateException("A previous assignment run is still in progress");
         }
 
         run(
-            tenantId,
+            tenantIdentifier,
             zuordnungService::updateZuordnungOnAllFaelle,
             () -> running.set(false)
         );
     }
 
-    private void run(final String tenantId, final Runnable body, final @Nullable Runnable tail) {
-        WorkerExecutorUtil.executeBlockingWithTransaction(executor, tenantId, body, null, tail, LOG);
+    private void run(final TenantIdentifier tenantIdentifier, final Runnable body, final @Nullable Runnable tail) {
+        WorkerExecutorUtil.executeBlockingWithTransaction(executor, tenantIdentifier, body, null, tail, LOG);
     }
 }

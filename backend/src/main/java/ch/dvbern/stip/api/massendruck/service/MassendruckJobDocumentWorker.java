@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.massendruck.service;
 
 import java.util.UUID;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.WorkerExecutorUtil;
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.Startup;
@@ -53,10 +54,10 @@ public class MassendruckJobDocumentWorker {
         executor.close();
     }
 
-    public void combineDocuments(final UUID massendruckJobId, final String tenantId) {
+    public void combineDocuments(final UUID massendruckJobId, final TenantIdentifier tenantIdentifier) {
         WorkerExecutorUtil.executeBlockingWithTransaction(
             executor,
-            tenantId,
+            tenantIdentifier,
             () -> massendruckJobPdfService.downloadCombineAndSaveForJob(massendruckJobId),
             () -> massendruckJobPdfService.setFailedStatusOnJob(massendruckJobId),
             null,
