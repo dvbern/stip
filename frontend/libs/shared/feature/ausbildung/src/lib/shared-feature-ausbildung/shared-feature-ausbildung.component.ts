@@ -76,7 +76,6 @@ import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-button
 import {
   SharedUtilFormService,
   convertTempFormToRealValues,
-  provideMaterialDefaultOptions,
   updateVisbilityAndDisbledState,
 } from '@dv/shared/util/form';
 import {
@@ -140,9 +139,6 @@ const gesuchsPeriodenSelectErrorMap: Record<
     AusbildungStore,
     AusbildungsstaetteStore,
     provideDateFnsAdapter(),
-    provideMaterialDefaultOptions({
-      subscriptSizing: 'dynamic',
-    }),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -214,6 +210,9 @@ export class SharedFeatureAusbildungComponent implements OnInit {
       ? { type: 'dialog' as const, fallId }
       : { type: 'gesuch-form' as const, fallId: gesuchFallId };
   });
+  subscriptSizingSig = computed(() =>
+    this.dialogDataSig()?.fallId ? 'dynamic' : 'fixed',
+  );
   private ausbildungsstaetteIdSig = toSignal(
     this.form.controls.ausbildungsstaetteId.valueChanges,
   );

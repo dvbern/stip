@@ -34,10 +34,11 @@
           [valuesSig]="ausbildungsstaettenOptionsSig()"
           [languageSig]="languageSig()"
           [invalidValueLabelKeySig]="t('shared.form.ausbildung.ausbildungsstaette.error.invalid')"
+          [subscriptSizingSig]="subscriptSizingSig()"
         ></dv-shared-ui-select-search>
       } @else {
         <!-- Alternative STAETTE -->
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full" [subscriptSizing]="subscriptSizingSig()">
           <mat-label>{{ t('shared.form.ausbildung.ausbildungsstaette.label') }}</mat-label>
           <input
             matInput
@@ -83,10 +84,11 @@
             [valuesSig]="ausbildungsgangOptionsSig()"
             [languageSig]="languageSig()"
             [invalidValueLabelKeySig]="t('shared.form.ausbildung.ausbildungsgang.error.invalid')"
+            [subscriptSizingSig]="subscriptSizingSig()"
           ></dv-shared-ui-select-search>
         </div>
       } @else {
-        <mat-form-field dvSharedUiFormField class="tw:w-full">
+        <mat-form-field dvSharedUiFormField class="tw:w-full" [subscriptSizing]="subscriptSizingSig()">
           <mat-label>{{ t('shared.form.ausbildung.ausbildungsgang.label') }}</mat-label>
           <!-- alternativer Ausbildungsgang -->
           <input
@@ -122,7 +124,7 @@
     <!-- FACHRICHTUNG / BERUFSBEZEICHNUNG -->
     @if (!hiddenFieldsSetSig().has(form.controls.fachrichtungBerufsbezeichnung) && zusatzfrageSig(); as zusatzfrage) {
       <div class="testing-library-fix tw:flex tw:gap-4 tw:dv-form-item">
-        <mat-form-field class="tw:flex-1" dvSharedUiFormField>
+        <mat-form-field class="tw:flex-1" dvSharedUiFormField [subscriptSizing]="subscriptSizingSig()">
           <mat-label>{{ t(`shared.form.ausbildung.fachrichtung.label.${zusatzfrage}`) }}</mat-label>
           <input
             type="text"
@@ -173,6 +175,7 @@
           [hideDisabledOptionsSig]="true"
           [panelWidthSig]="'auto'"
           [invalidValueLabelKeySig]="'shared.form.error.land.invalidLand'"
+          [subscriptSizingSig]="subscriptSizingSig()"
         ></dv-shared-ui-select-search>
       } @else {
         <div
@@ -183,7 +186,7 @@
           (plzLookupValuesSig)="plzValues = $event"
         >
           <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:basis-32">
+          <mat-form-field dvSharedUiFormField class="tw:basis-32" [subscriptSizing]="subscriptSizingSig()">
             <mat-label>{{ t('shared.form.shared.address.zipcode.label') }}</mat-label>
             <input
               type="text"
@@ -206,7 +209,7 @@
           </mat-form-field>
 
           <!-- Ort -->
-          <mat-form-field dvSharedUiFormField class="tw:flex-1">
+          <mat-form-field dvSharedUiFormField class="tw:flex-1" [subscriptSizing]="subscriptSizingSig()">
             <mat-label>{{ t('shared.form.ausbildung.ausbildungsort.label') }}</mat-label>
             <input
               type="text"
@@ -257,7 +260,7 @@
     </h2>
 
     <!-- START -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item" [subscriptSizing]="subscriptSizingSig()">
       <mat-label>{{ t('shared.form.ausbildung.start.label') }}</mat-label>
 
       <input
@@ -307,7 +310,7 @@
     </mat-form-field>
 
     <!-- ENDE -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item" [subscriptSizing]="subscriptSizingSig()">
       <mat-label>{{ t('shared.form.ausbildung.ende.label') }}</mat-label>
 
       <input
@@ -337,7 +340,7 @@
     </mat-form-field>
 
     <!-- PENSUM -->
-    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item" [subscriptSizing]="subscriptSizingSig()">
       <mat-label>{{ t('shared.form.ausbildung.pensum.label') }}</mat-label>
 
       <mat-select
