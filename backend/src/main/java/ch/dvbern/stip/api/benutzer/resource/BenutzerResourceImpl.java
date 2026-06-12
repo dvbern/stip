@@ -66,7 +66,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     ) {
         benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
         benutzerService.createOrUpdateSachbearbeiterStammdaten(benutzerId, sachbearbeiterZuordnungStammdatenDto);
-        worker.updateZuordnung(tenantService.getCurrentStringIdentifier());
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     ) {
         benutzerAuthorizer.canCreateOrUpdateBuchstabenzuweisung();
         benutzerService.createOrUpdateSachbearbeiterStammdaten(sachbearbeiterZuordnungStammdatenListDto);
-        worker.updateZuordnung(tenantService.getCurrentStringIdentifier());
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
     }
 
     @Override
@@ -84,7 +84,7 @@ public class BenutzerResourceImpl implements BenutzerResource {
     public void deleteBenutzer(String benutzerId) {
         benutzerAuthorizer.canDeleteBenutzer();
         benutzerService.deleteBenutzer(benutzerId);
-        worker.updateZuordnung(tenantService.getCurrentStringIdentifier());
+        worker.updateZuordnung(tenantService.getCurrentTenantIdentifier());
     }
 
     @Override
