@@ -379,8 +379,8 @@ public class BerechnungService {
                                 stipendienCalculated.getPersoenlichesBudgetresultat(),
                                 familienBudgetresultatList
                             ),
-                        null,
-                        null
+                            null,
+                            null
                         )
                     );
                 } else {
