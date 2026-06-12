@@ -10278,9 +10278,7 @@ components:
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - berechnungsanteilKinder
         - teilzeitKinderBeiPiaAnrechnen
-        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -10316,7 +10314,7 @@ components:
         berechnungsanteilKinder:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         teilzeitKinderBeiPiaAnrechnen:
           description: >-
@@ -10326,7 +10324,7 @@ components:
         berechnungsanteilKinderPia:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         berechnungsStammdaten:
           description: Stammdaten für die Stipendienberechnung

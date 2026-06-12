@@ -96,9 +96,14 @@ export class BerechnungStore extends signalStore(
             };
           }
           acc.berechnungsresultate[curr.gesuchTrancheId].total += curr.total;
-          acc.berechnungsresultate[curr.gesuchTrancheId].berechnungen.push(
-            curr,
-          );
+          acc.berechnungsresultate[curr.gesuchTrancheId].berechnungen.push({
+            ...curr,
+            berechnungsanteilTotal: roundToTwo(
+              ((curr.berechnungsanteilKinder ?? 100) *
+                (curr.berechnungsanteilKinderPia ?? 100)) /
+                100,
+            ),
+          });
           return acc;
         }, value)
       : value;
@@ -154,4 +159,8 @@ export class BerechnungStore extends signalStore(
       ),
     ),
   );
+}
+
+function roundToTwo(value: number) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
 }

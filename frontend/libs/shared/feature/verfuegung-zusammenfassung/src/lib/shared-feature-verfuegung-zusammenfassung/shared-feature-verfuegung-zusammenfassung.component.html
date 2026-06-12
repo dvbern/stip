@@ -73,7 +73,10 @@
                   ></div>
                 </div>
                 <div>
-                  {{ zusammenfassung.totalNachKuerzungNachEinreichefrist | formatChf }}
+                  {{
+                    zusammenfassung.berechnungVorKuerzungUndTeilung -
+                      (zusammenfassung.totalNachKuerzungNachEinreichefrist ?? 0) | formatChfNegative: true
+                  }}
                 </div>
               </div>
             }
@@ -212,7 +215,7 @@
             @for (teilBerechnung of group.tranche.berechnungen; track $index; let berechnungsIndex = $index) {
               <span class="tw:whitespace-nowrap">
                 {{ t('shared.verfuegung.zusammenfassung.berechnung') }}
-                @if (group.tranche.berechnungen.length) {
+                @if (group.tranche.berechnungen.length > 1) {
                   {{ berechnungsIndex + 1 }}
                 }
               </span>
@@ -228,7 +231,7 @@
               <span class="tw:whitespace-nowrap tw:text-right tw:mr-8">
                 {{
                   t('shared.verfuegung.zusammenfassung.teilberechnung.wert', {
-                    percentage: teilBerechnung.berechnungsanteilKinder,
+                    percentage: teilBerechnung.berechnungsanteilTotal,
                     value: teilBerechnung.ungekuerztTotal | formatChf: false,
                   })
                 }}

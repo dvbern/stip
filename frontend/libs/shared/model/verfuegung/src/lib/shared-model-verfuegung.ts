@@ -11,7 +11,9 @@ export type TranchenBerechnungsresultatView = {
   startDate: string;
   endDate: string;
   anzahlMonate: number;
-  berechnungen: TranchenBerechnungsresultat[];
+  berechnungen: (TranchenBerechnungsresultat & {
+    berechnungsanteilTotal: number;
+  })[];
   total: number;
 };
 

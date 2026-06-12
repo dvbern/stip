@@ -367,9 +367,7 @@ public class BerechnungService {
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                             yearRange,
                             gesuchTranche.getId(),
-                            BigDecimal.ONE,
                             teilzeitKinderBeiPiaAnrechnenLoopVal,
-                            BigDecimal.ONE,
                             berechnungsStammdatenFromRequest(
                                 berechnungsRequest,
                                 majorVersion,
@@ -380,7 +378,9 @@ public class BerechnungService {
                             BerechnungUtil.getPersonenHaushaltGroups(
                                 stipendienCalculated.getPersoenlichesBudgetresultat(),
                                 familienBudgetresultatList
-                            )
+                            ),
+                        null,
+                        null
                         )
                     );
                 } else {
@@ -424,9 +424,7 @@ public class BerechnungService {
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                             yearRange,
                             gesuchTranche.getId(),
-                            kinderDerElternProzenteNormalized,
                             teilzeitKinderBeiPiaAnrechnenLoopVal,
-                            BigDecimal.ONE,
                             berechnungsStammdatenFromRequest(
                                 berechnungsRequest,
                                 majorVersion,
@@ -437,7 +435,9 @@ public class BerechnungService {
                             BerechnungUtil.getPersonenHaushaltGroups(
                                 stipendienCalculated.getPersoenlichesBudgetresultat(),
                                 familienBudgetresultatList
-                            )
+                            ),
+                            kinderDerElternProzenteNormalized,
+                            null
                         )
                     );
                 }
@@ -473,7 +473,7 @@ public class BerechnungService {
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
                 berechnungsresultatDto.setTotal(berechnetStipendien);
-                berechnungsresultatDto.setBerechnungsanteilKinderPia(kinderDerPiaProzente);
+                berechnungsresultatDto.setBerechnungsanteilKinderPia(kinderDerPiAProzenteToUse);
             }
         }
         return berechnungsresultatDtoList.stream();

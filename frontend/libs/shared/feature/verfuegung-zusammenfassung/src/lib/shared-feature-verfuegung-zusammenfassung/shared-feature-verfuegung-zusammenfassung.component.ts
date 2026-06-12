@@ -16,7 +16,10 @@ import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
-import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
+import {
+  SharedUiFormatChfNegativePipe,
+  SharedUiFormatChfPipe,
+} from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiInfoDialogDirective } from '@dv/shared/ui/info-dialog';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
@@ -29,6 +32,7 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
     MatCardModule,
     MatTooltipModule,
     SharedUiFormatChfPipe,
+    SharedUiFormatChfNegativePipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     SharedUiInfoDialogDirective,

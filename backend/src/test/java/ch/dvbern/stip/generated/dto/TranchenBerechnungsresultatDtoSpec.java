@@ -319,12 +319,12 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
    /**
-   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert &#x3D;&#x3D; 1.
+   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
    * @return berechnungsanteilKinder
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getBerechnungsanteilKinder() {
     return berechnungsanteilKinder;
@@ -332,7 +332,7 @@ public class TranchenBerechnungsresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBerechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
     this.berechnungsanteilKinder = berechnungsanteilKinder;
   }
@@ -371,12 +371,12 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
    /**
-   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert &#x3D;&#x3D; 1.
+   * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
    * @return berechnungsanteilKinderPia
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public BigDecimal getBerechnungsanteilKinderPia() {
     return berechnungsanteilKinderPia;
@@ -384,7 +384,7 @@ public class TranchenBerechnungsresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setBerechnungsanteilKinderPia(BigDecimal berechnungsanteilKinderPia) {
     this.berechnungsanteilKinderPia = berechnungsanteilKinderPia;
   }

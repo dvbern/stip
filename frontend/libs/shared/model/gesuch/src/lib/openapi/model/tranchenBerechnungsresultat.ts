@@ -33,17 +33,17 @@ export interface TranchenBerechnungsresultat {
     yearRange: string;
     gesuchTrancheId: string;
     /**
-     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
+     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
      */
-    berechnungsanteilKinder: number;
+    berechnungsanteilKinder?: number;
     /**
      * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
      */
     teilzeitKinderBeiPiaAnrechnen: boolean;
     /**
-     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
+     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
      */
-    berechnungsanteilKinderPia: number;
+    berechnungsanteilKinderPia?: number;
     berechnungsStammdaten: BerechnungsStammdaten;
     persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
