@@ -305,7 +305,7 @@
       </div>
 
       <!-- ZIVILSTAND -->
-      <div class="tw:dv-form-item tw:flex-col tw:gap-4">
+      <div class="tw:dv-form-item tw:flex tw:flex-col">
         <div class="tw:flex tw:gap-4">
           <mat-form-field dvSharedUiFormField class="tw:w-full">
             <mat-label>{{ 'shared.form.person.zivilstand.label' | transloco }}</mat-label>
@@ -336,14 +336,14 @@
         </div>
         <!-- Info Konkubinat -->
         @if (form.get('zivilstand')?.value === Zivilstand.LEDIG) {
-          <dv-shared-ui-info-container class="tw:mt-4">
+          <dv-shared-ui-info-container>
             <div class="tw:flex tw:gap-4">
               <span class="material-symbols-rounded tw:text-dv-blue"> info </span>
               <span>{{ 'shared.form.person.zivilstand.ledig.info' | transloco }}</span>
             </div>
           </dv-shared-ui-info-container>
         } @else if (form.get('zivilstand')?.value === Zivilstand.KONKUBINAT) {
-          <dv-shared-ui-info-container class="tw:mt-4">
+          <dv-shared-ui-info-container>
             <div class="tw:flex tw:gap-4">
               <span class="material-symbols-rounded tw:text-dv-blue">info</span>
               <span>{{ 'shared.form.person.zivilstand.konkubinat.info' | transloco }}</span>
@@ -550,7 +550,7 @@
 
       <!-- ZUSTAENDIGER_KANTON -->
       @if (!hiddenFieldsSetSig().has(form.controls.zustaendigerKanton)) {
-        <mat-form-field dvSharedUiFormField class="tw:dv-form-item tw:flex tw:flex-col tw:gap-4">
+        <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
           <mat-label>{{ 'shared.form.person.zustaendigerKanton.label' | transloco }}</mat-label>
           <mat-select
             [formControl]="form.controls.zustaendigerKanton"
@@ -579,33 +579,33 @@
 
       <!-- EINREISEDATUM -->
       @if (!hiddenFieldsSetSig().has(form.controls.einreisedatum)) {
-        <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-          <mat-label>{{ 'shared.form.person.einreisedatum.label' | transloco }}</mat-label>
-          <input
-            type="text"
-            matInput
-            [dvMaxLength]="'small'"
-            placeholder="dd.mm.yyyy"
-            [formControl]="form.controls.einreisedatum"
-            data-testid="form-person-einreisedatum"
-            (blur)="onEinreisedatumBlur()"
-          />
-          <mat-hint *dvZuvorHint="view.formChanges.einreisedatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
+        <div class="tw:dv-form-item tw:flex tw:flex-col">
+          <mat-form-field dvSharedUiFormField class="tw:w-full">
+            <mat-label>{{ 'shared.form.person.einreisedatum.label' | transloco }}</mat-label>
+            <input
+              type="text"
+              matInput
+              [dvMaxLength]="'small'"
+              placeholder="dd.mm.yyyy"
+              [formControl]="form.controls.einreisedatum"
+              data-testid="form-person-einreisedatum"
+              (blur)="onEinreisedatumBlur()"
+            />
+            <mat-hint *dvZuvorHint="view.formChanges.einreisedatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
+            <mat-error *dvSharedUiFormMessageError="'required'">
+              {{ 'shared.form.error.required' | transloco }}
+            </mat-error>
+          </mat-form-field>
 
-        @if (showEinreiseDatumWarningSig()) {
-          <div class="tw:xl:col-span-1">
+          @if (showEinreiseDatumWarningSig()) {
             <dv-shared-ui-info-container [type]="'warning'">
               <div class="tw:flex tw:gap-4">
                 <span class="material-symbols-rounded tw:text-dv-yellow">warning</span>
                 <span>{{ 'shared.form.person.einreisedatum.info' | transloco }}</span>
               </div>
             </dv-shared-ui-info-container>
-          </div>
-        }
+          }
+        </div>
       }
 
       <!-- Wohnsitz -->
