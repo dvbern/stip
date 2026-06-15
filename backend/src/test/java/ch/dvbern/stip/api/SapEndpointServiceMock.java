@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.sap.service;
+package ch.dvbern.stip.api;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -34,8 +34,16 @@ import ch.dvbern.stip.api.sap.generated.general.ReturnCodeID;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse;
 import ch.dvbern.stip.api.sap.generated.import_status.ImportStatusReadResponse.DELIVERY;
 import ch.dvbern.stip.api.sap.generated.vendor_posting.VendorPostingCreateResponse;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerChangeMapper;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerCreateMapper;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerReadMapper;
+import ch.dvbern.stip.api.sap.service.BusinessPartnerSearchMapper;
+import ch.dvbern.stip.api.sap.service.SapEndpointService;
+import ch.dvbern.stip.api.sap.service.VendorPostingCreateMapper;
+import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
 
+@Mock
 @RequestScoped
 public class SapEndpointServiceMock extends SapEndpointService {
     public static final String SUCCESS_STRING = "S";
@@ -172,6 +180,7 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerSearchResponse searchBusinessPartner(
+        Fall fall,
         String sozialversicherungsnummer
     ) {
         return businessPartnerSearchResponse;
@@ -195,13 +204,17 @@ public class SapEndpointServiceMock extends SapEndpointService {
 
     @Override
     public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         return businessPartnerReadResponse;
     }
 
     @Override
-    public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
+    public ImportStatusReadResponse readImportStatus(
+        Fall fall,
+        BigDecimal deliveryid
+    ) {
         return importStatusReadResponse;
     }
 

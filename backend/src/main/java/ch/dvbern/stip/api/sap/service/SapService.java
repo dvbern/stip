@@ -81,7 +81,9 @@ public class SapService {
         final Integer businessPartnerId
     ) {
         final var businessPartner =
-            sapEndpointService.readBusinessPartnerByBusinessPartnerId(businessPartnerId).getBUSINESSPARTNER();
+            sapEndpointService
+                .readBusinessPartnerByBusinessPartnerId(gesuch.getAusbildung().getFall(), businessPartnerId)
+                .getBUSINESSPARTNER();
         final var businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartner(gesuch.getAusbildung().getFall());
         final var addressLocal = businessPartnerChangeRequest.getADDRESS().get(0);
@@ -128,9 +130,9 @@ public class SapService {
     }
 
     @Transactional
-    public BUSINESSPARTNER searchBusinessPartner(final String sozialversicherungsnummer) {
+    public BUSINESSPARTNER searchBusinessPartner(final Fall fall, final String sozialversicherungsnummer) {
         final var businessPartnerSearchResponse =
-            sapEndpointService.searchBusinessPartner(sozialversicherungsnummer);
+            sapEndpointService.searchBusinessPartner(fall, sozialversicherungsnummer);
 
         if (businessPartnerSearchResponse.getBUSINESSPARTNER().isEmpty()) {
             return null;
@@ -145,14 +147,15 @@ public class SapService {
         final SapDelivery sapDelivery = buchhaltung.getLatestSapDelivery();
         final BigDecimal deliveryid = sapDelivery.getSapDeliveryId();
 
-        final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+        final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
 
         var status = SapStatus.FAILURE;
         if (SapReturnCodeType.isSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE())) {
             status = SapStatus.parse(readImportResponse.getDELIVERY().get(0).getSTATUS());
         }
         if (status == SapStatus.SUCCESS) {
-            final var readResponse = sapEndpointService.readBusinessPartnerByDeliveryId(deliveryid);
+            final var readResponse =
+                sapEndpointService.readBusinessPartnerByDeliveryId(buchhaltung.getFall(), deliveryid);
             SapReturnCodeType.assertSuccess(readResponse.getRETURNCODE().get(0).getTYPE());
             buchhaltung.getFall()
                 .getAuszahlung()
@@ -313,7 +316,7 @@ public class SapService {
         }
         final var sapDelivery = sapDeliveryOpt.get();
         final var deliveryid = sapDelivery.getSapDeliveryId();
-        final var readImportResponse = sapEndpointService.readImportStatus(deliveryid);
+        final var readImportResponse = sapEndpointService.readImportStatus(buchhaltung.getFall(), deliveryid);
         SapReturnCodeType.assertSuccess(readImportResponse.getRETURNCODE().get(0).getTYPE());
 
         sapDelivery
@@ -464,7 +467,8 @@ public class SapService {
     @Transactional
     public void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
         final PersonInAusbildung pia = SapMapperUtil.getPia(gesuch.getAusbildung().getFall());
-        final BUSINESSPARTNER businesspartner = searchBusinessPartner(pia.getSozialversicherungsnummer());
+        final BUSINESSPARTNER businesspartner =
+            searchBusinessPartner(gesuch.getAusbildung().getFall(), pia.getSozialversicherungsnummer());
         if (Objects.nonNull(businesspartner)) {
             gesuch.getAusbildung()
                 .getFall()
