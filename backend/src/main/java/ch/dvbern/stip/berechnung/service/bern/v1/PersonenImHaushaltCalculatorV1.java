@@ -26,6 +26,7 @@ import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
 import ch.dvbern.stip.berechnung.dto.PersonenImHaushaltResult;
 import ch.dvbern.stip.berechnung.dto.v1.FamiliensituationV1;
+import ch.dvbern.stip.berechnung.dto.v1.PersonInAusbildungV1;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1;
 import ch.dvbern.stip.berechnung.dto.v1.PersonenImHaushaltRequestV1.PersonenImHaushaltInputV1;
 import ch.dvbern.stip.berechnung.service.PersonenImHaushaltCalculator;
@@ -64,6 +65,27 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
         return switch (elternTyp) {
             case VATER -> personenImHaushalt.getGeschwisterVaterVollzeit();
             case MUTTER -> personenImHaushalt.getGeschwisterMutterVollzeit();
+        };
+    }
+
+    private int getPersonInAusbildungModifierForElternschaftsteilung(
+        final PersonInAusbildungV1 personInAusbildungV1,
+        final ElternTyp elternTyp
+    ) {
+        return switch (personInAusbildungV1.getWohnsitz()) {
+            case EIGENER_HAUSHALT -> 0;
+            case MUTTER_VATER -> getPiaForElternschaftsteilung(personInAusbildungV1, elternTyp);
+            case FAMILIE -> throw new IllegalStateException();
+        };
+    }
+
+    private int getPiaForElternschaftsteilung(
+        final PersonInAusbildungV1 personInAusbildungV1,
+        final ElternTyp elternTyp
+    ) {
+        return switch (elternTyp) {
+            case VATER -> Objects.requireNonNullElse(personInAusbildungV1.getWohnsitzAnteilVater(), 0) > 0 ? 1 : 0;
+            case MUTTER -> Objects.requireNonNullElse(personInAusbildungV1.getWohnsitzAnteilMutter(), 0) > 0 ? 1 : 0;
         };
     }
 
@@ -128,9 +150,12 @@ public class PersonenImHaushaltCalculatorV1 implements PersonenImHaushaltCalcula
                 .requireNonNullElse(familiensituation.getMutterUnbekanntVerstorben(), false)))
         ) {
             noBudgetsRequired = 1;
-            kinderImHaushalt1 = personInAusbildungModifier + personenImHaushalt.getGeschwisterTeilzeit();
-
             ElternTyp elternTyp = getOneHaushaltElternTypFromFamsit(familiensituation);
+
+            kinderImHaushalt1 = getPersonInAusbildungModifierForElternschaftsteilung(
+                personenImHaushalt.getPersonInAusbildung(),
+                elternTyp
+            ) + personenImHaushalt.getGeschwisterTeilzeit();
 
             kinderImHaushalt1 += getPiaGeschwisterForElternschaftsteilung(personenImHaushalt, elternTyp);
 
