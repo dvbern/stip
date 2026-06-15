@@ -85,7 +85,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
       dialogConfig = {
         ...dialogConfig,
         position: {
-          top: `${anchorRect.top}px`,
+          top: `calc(var(--header-size) + var(--tw-spacing) * 6)`,
           left: `${anchorRect.left}px`,
         },
         width: `${anchor.offsetWidth}px`,
