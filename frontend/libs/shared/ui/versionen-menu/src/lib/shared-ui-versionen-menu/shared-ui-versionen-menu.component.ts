@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { GesuchTrancheSlim, VerfuegtGesuch } from '@dv/shared/model/gesuch';
-import { TRANCHE } from '@dv/shared/model/gesuch-form';
 
 @Component({
   selector: 'dv-shared-ui-versionen-menu',
@@ -27,7 +26,7 @@ export class SharedUiVersionenMenuComponent {
   isGesuchRouteSig = input<boolean | undefined>();
   trancheIdSig = input.required<string | undefined>();
   berechnungIdSig = input.required<string | undefined>();
-  originStepSig = input<string | undefined>();
+  originStepSig = input.required<string>();
   currentTranchenSig = input.required<GesuchTrancheSlim[] | undefined>();
 
   firstCurrentTrancheIdSig = computed(() => {
@@ -40,9 +39,7 @@ export class SharedUiVersionenMenuComponent {
   tabRouteSegmentsSig = computed(() => {
     const originStep = this.originStepSig();
 
-    const tab = decodeURI(originStep ?? '') || TRANCHE.route;
-
-    return tab.split('/').filter(Boolean);
+    return originStep.split('/').filter(Boolean);
   });
 
   currentVersionSig = computed(() => {
