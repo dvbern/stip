@@ -15,6 +15,7 @@ import {
 } from '@angular/material/dialog';
 import { Subscription, fromEvent, throttleTime } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TranslocoHashMap } from '@dv/shared/model/type-util';
 import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 
@@ -39,6 +40,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
   scrollStrategyOptions = inject(ScrollStrategyOptions);
   destroyRef = inject(DestroyRef);
   dialogRef: MatDialogRef<SharedUiInfoDialogComponent> | undefined;
+  config = inject(SharedModelCompileTimeConfig);
 
   scrollSub: Subscription | undefined;
 
@@ -81,11 +83,14 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     if (isColumnar) {
       const anchor: HTMLElement = this.containerRef.element.nativeElement;
       const anchorRect = anchor.getBoundingClientRect();
+      const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
 
       dialogConfig = {
         ...dialogConfig,
         position: {
-          top: `calc(var(--header-size) + var(--tw-spacing) * 6)`,
+          top: isSachbearbeitungApp
+            ? `calc(var(--header-sub-size) + calc(var(--header-size) + var(--tw-spacing) * 6)`
+            : `calc(var(--header-size) + var(--tw-spacing) * 6)`,
           left: `${anchorRect.left}px`,
         },
         width: `${anchor.offsetWidth}px`,
