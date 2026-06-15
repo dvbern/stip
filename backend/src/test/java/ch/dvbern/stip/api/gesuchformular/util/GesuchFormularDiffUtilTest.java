@@ -107,30 +107,6 @@ class GesuchFormularDiffUtilTest {
     }
 
     @Test
-    void hasGerichtlicheAlimenteregelungChangedTest() {
-        // Create original GesuchFormular
-        GesuchFormular original = new GesuchFormular();
-        original.setFamiliensituation(new Familiensituation());
-        original.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
-
-        // Create updated GesuchFormular
-        GesuchFormularUpdateDto update = new GesuchFormularUpdateDto();
-        update.setFamiliensituation(new FamiliensituationUpdateDto());
-        update.getFamiliensituation().setGerichtlicheAlimentenregelung(false);
-
-        // Test hasGerichtlicheAlimenteregelungChanged method
-        assertTrue(GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(original, update));
-
-        // Test when no changes in GerichtlicheAlimentenregelung
-        update.getFamiliensituation().setGerichtlicheAlimentenregelung(true);
-        assertFalse(GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(original, update));
-
-        // Test when GerichtlicheAlimentenregelung not set in update
-        update.getFamiliensituation().setGerichtlicheAlimentenregelung(null);
-        assertTrue(GesuchFormularDiffUtil.hasGerichtlicheAlimenteregelungChanged(original, update));
-    }
-
-    @Test
     void hasWerZahltAlimenteChangedTest() {
         final var original = new GesuchFormular()
             .setFamiliensituation(
