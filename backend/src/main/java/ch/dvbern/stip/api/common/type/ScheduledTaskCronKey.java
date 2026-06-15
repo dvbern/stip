@@ -15,23 +15,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.scheduledtask;
+package ch.dvbern.stip.api.common.type;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-import ch.dvbern.stip.api.common.type.TenantIdentifier;
-import jakarta.enterprise.util.Nonbinding;
-import jakarta.interceptor.InterceptorBinding;
+@Getter
+@RequiredArgsConstructor
+public enum ScheduledTaskCronKey {
+    PLZ_DATA("plz-data"),
+    GESUCH_PERIODE("gesuch-periode"),
+    UNTERSCHRIFTENBLATT("unterschriftenblatt"),
+    FEHLENDE_DOKUMENTE("fehlende-dokumente"),
+    SAP_BUSINESS_PARTNER("sap-business-partner"),
+    SAP_PENDING_AUSZAHLUNG("sap-pending-auszahlung"),
+    SAP_REMAINDER_AUSZAHLUNG("sap-remainder-auszahlung"),
+    SAP_RETRY_FAILED_AUSZAHLUNGS_BUCHHALTUNG("sap-retry-failed-auszahlungs-buchhaltung");
 
-@InterceptorBinding
-@Target({ ElementType.TYPE, ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface RunForTenant {
-    @Nonbinding
-    TenantIdentifier value();
+    private final String configKey;
 }

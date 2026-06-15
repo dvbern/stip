@@ -246,7 +246,6 @@
       "@dv/shared/ui/remote-data-pipe": ["libs/shared/ui/remote-data-pipe/src/index.ts"],
       "@dv/shared/ui/replace-app-type": ["libs/shared/ui/replace-app-type/src/index.ts"],
       "@dv/shared/ui/router-outlet-wrapper": ["libs/shared/ui/router-outlet-wrapper/src/index.ts"],
-      "@dv/shared/ui/search": ["libs/shared/ui/search/src/index.ts"],
       "@dv/shared/ui/select-search": ["libs/shared/ui/select-search/src/index.ts"],
       "@dv/shared/ui/step-form-buttons": ["libs/shared/ui/step-form-buttons/src/index.ts"],
       "@dv/shared/ui/stepper-navigation": ["libs/shared/ui/stepper-navigation/src/index.ts"],

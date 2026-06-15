@@ -5,7 +5,7 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
+import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { selectLanguage } from '@dv/shared/data-access/language';
@@ -24,12 +24,12 @@ import { SharedFeatureGesuchFormGeschwisterEditorComponent } from '../shared-fea
 @Component({
   selector: 'dv-shared-feature-gesuch-form-geschwister',
   imports: [
-    TranslocoPipe,
     SharedFeatureGesuchFormGeschwisterEditorComponent,
     SharedUiInfoContainerComponent,
     SharedUiStepFormButtonsComponent,
     SharedUiChangeIndicatorComponent,
     SharedUiLoadingComponent,
+    TranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

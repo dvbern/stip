@@ -65,6 +65,7 @@
     --dv-base-font-size: 16px;
     --content-max-width: 1440px;
     --header-size: 76px;
+    --header-sub-size: 180px;
 
     --dv-body-bg: #fafbfd;
     --dv-border-color: var(--tw-color-dv-border);
@@ -122,8 +123,20 @@
   max-width: min(45vw, 547px);
 }
 
+@utility dv-page-title {
+  @apply tw:text-3xl tw:font-bold tw:mb-8;
+}
+
+@utility dv-page-title-mobile {
+  @apply tw:text-xl tw:font-bold;
+}
+
+@utility dv-table {
+  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm;
+}
+
 @utility dv-simple-table {
-  @apply tw:w-full tw:mb-4 tw:align-top tw:bg-white tw:-m-2 tw:p-2 tw:rounded-sm tw:mt-6;
+  @apply tw:w-full tw:rounded-xl tw:align-top tw:bg-white tw:border-separate;
   th {
     @apply tw:text-left;
   }
@@ -137,16 +150,28 @@
   }
 }
 
-@utility dv-table {
-  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm;
+@utility dv-form-grid {
+  @apply tw:grid tw:grid-cols-1 tw:xl:grid-cols-3 tw:gap-6;
 }
 
-@utility dv-form-grid {
-  @apply tw:grid tw:grid-cols-1 tw:gap-6 tw:md:grid-cols-2 tw:lg:grid-cols-3;
+@utility dv-form-grid-one-col {
+  @apply tw:grid tw:grid-cols-1 tw:gap-6;
+}
+
+@utility dv-form-title {
+  @apply tw:xl:col-span-2 tw:text-2xl tw:font-semibold tw:mt-6;
 }
 
 @utility dv-form-half {
   @apply tw:flex tw:flex-col tw:gap-6 tw:xl:max-w-[50%];
+}
+
+@utility dv-form-item {
+  @apply tw:xl:col-span-2;
+}
+
+@utility dv-form-action {
+  @apply tw:mt-6 tw:xl:col-span-2;
 }
 
 @utility dv-pass-height-shrink {

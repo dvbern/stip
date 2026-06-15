@@ -88,32 +88,6 @@ public final class GesuchFormularDiffUtil {
         return update.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
     }
 
-    /**
-     * Checks if the "Gerichtliche Alimentenregelung" flag has changed in the "Familiensituation" of the given
-     * updated "GesuchFormular".
-     *
-     * @param toUpdate the original GesuchFormular object
-     * @param update the updated GesuchFormular object
-     * @return true if the "Gerichtliche Alimentenregelung" flag has changed, false otherwise
-     */
-    public boolean hasGerichtlicheAlimenteregelungChanged(GesuchFormular toUpdate, GesuchFormularUpdateDto update) {
-        if (update.getFamiliensituation() == null) {
-            return false;
-        }
-
-        if (toUpdate.getFamiliensituation() == null) {
-            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-        }
-
-        if (toUpdate.getFamiliensituation().getGerichtlicheAlimentenregelung() == null) {
-            return update.getFamiliensituation().getGerichtlicheAlimentenregelung() != null;
-        }
-
-        return !toUpdate.getFamiliensituation()
-            .getGerichtlicheAlimentenregelung()
-            .equals(update.getFamiliensituation().getGerichtlicheAlimentenregelung());
-    }
-
     public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {
         if (NullDiffUtil.hasNullChanged(newFormular.getFamiliensituation(), toUpdate.getFamiliensituation())) {
             return true;

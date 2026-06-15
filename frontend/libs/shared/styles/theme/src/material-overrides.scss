@@ -161,7 +161,7 @@ $dv-all-colors: info, danger, success, warn, primary;
 }
 
 .dv-dialog-formular {
-  --mat-dialog-container-min-width: 900px;
+  --mat-dialog-container-min-width: min(900px, 100%);
 }
 
 .mat-mdc-tab-nav-bar {
@@ -229,6 +229,13 @@ dv-sachbearbeitung-app-feature-gesuch-layout {
     border: 1px solid var(--tw-color-gray-300);
   }
   .mat-mdc-tab-link.btn-nav {
+    box-shadow: none;
+    border: 1px solid var(--tw-color-gray-300);
+  }
+}
+
+dv-sachbearbeitung-app-feature-gesuch-form {
+  .tw\:dv-simple-table {
     box-shadow: none;
     border: 1px solid var(--tw-color-gray-300);
   }

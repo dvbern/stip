@@ -1,40 +1,30 @@
 <dv-shared-ui-info-container
-  class="tw:dv-container tw:flex tw:flex-col tw:bg-white tw:border tw:border-dv-border tw:rounded-lg tw:shadow tw:p-4"
+  class="tw:dv-container tw:flex tw:flex-col tw:gap-6 tw:bg-white tw:border tw:border-dv-border tw:rounded-lg tw:shadow tw:p-4"
   [type]="'light'"
 >
-  <div class="tw:grid tw:grid-cols-12">
-    <div class="tw:col-span-12">
-      <h3 class="tw:text-xl tw:font-semibold tw:flex tw:mb-6">
-        <dv-shared-ui-icon-chip class="tw:mr-1 tw:text-2xl!">
-          <i class="material-symbols-rounded title-icon tw:text-dv-blue tw:text-sm!">info</i>
-        </dv-shared-ui-icon-chip>
-        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | transloco }}
-      </h3>
-      <p class="tw:mb-6">{{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.description' | transloco }}</p>
-    </div>
-  </div>
-  <div class="tw:grid tw:grid-cols-12">
-    <div class="tw:flex tw:col-span-12 tw:justify-center">
-      <button
-        type="button"
-        class="tw:dv-button-main-primary align-self-center tw:col-span-12"
-        [disabled]="blockedReasonSig()?.data"
-        (click)="askForPublish$.emit()"
-      >
-        {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.button' | transloco }}
-      </button>
-    </div>
-  </div>
+  <h3 class="tw:text-xl tw:font-semibold tw:flex">
+    <dv-shared-ui-icon-chip class="tw:mr-1 tw:text-2xl!">
+      <i class="material-symbols-rounded title-icon tw:text-dv-blue tw:text-sm!">info</i>
+    </dv-shared-ui-icon-chip>
+    {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.title' | transloco }}
+  </h3>
+  <p>{{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.description' | transloco }}</p>
+
+  <button
+    type="button"
+    class="tw:dv-button-main-primary tw:w-fit"
+    [disabled]="blockedReasonSig()?.data"
+    (click)="askForPublish$.emit()"
+  >
+    {{ 'sachbearbeitung-app.admin.' + typeSig() + '.publizieren.button' | transloco }}
+  </button>
+
   @if (blockedReasonSig(); as blockedReasonRd) {
-    <div class="tw:grid tw:grid-cols-12 tw:mt-6">
-      <div class="tw:col-span-12">
-        @if (blockedReasonRd | rdIsPending) {
-          <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
-        }
-        @if (blockedReasonRd?.data; as blockedReason) {
-          <span class="tw:text-dv-main-danger">{{ blockedReason | transloco }}</span>
-        }
-      </div>
-    </div>
+    @if (blockedReasonRd | rdIsPending) {
+      <dv-shared-ui-loading type="compact"></dv-shared-ui-loading>
+    }
+    @if (blockedReasonRd?.data; as blockedReason) {
+      <span class="tw:text-dv-main-danger">{{ blockedReason | transloco }}</span>
+    }
   }
 </dv-shared-ui-info-container>

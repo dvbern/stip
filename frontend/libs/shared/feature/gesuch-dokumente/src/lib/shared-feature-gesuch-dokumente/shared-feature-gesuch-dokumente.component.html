@@ -2,85 +2,73 @@
 @let standardDokumente = standardDokumenteViewSig();
 @let customDokumente = customDokumenteViewSig();
 
-<!-- unterschriftenblaetter -->
-<div class="tw:mt-6" *dvIfSachbearbeiter>
-  @let additonalDokumente = additionalDokumenteViewSig();
-  @if (additonalDokumente.showList) {
-    <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente" class="tw:relative"></dv-additional-dokumente>
+<div class="tw:space-y-12">
+  <!-- unterschriftenblaetter -->
+  <div *dvIfSachbearbeiter>
+    @let additonalDokumente = additionalDokumenteViewSig();
+    @if (additonalDokumente.showList) {
+      <dv-additional-dokumente [dokumenteViewSig]="additonalDokumente" class="tw:relative"></dv-additional-dokumente>
 
-    @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
-      <div class="tw:relative tw:mt-6 tw:flex">
-        <!-- button sendMissingDocuments -->
-        <button
-          type="button"
-          class="tw:dv-button-main-primary tw:ml-auto"
-          (click)="setToAdditionalDokumenteErhalten()"
-          data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
-          [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
-        >
-          {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | transloco }}
-        </button>
-      </div>
+      @if (additonalDokumente.showList && gesuch.gesuch?.gesuchStatus === 'WARTEN_AUF_UNTERSCHRIFTENBLATT') {
+        <div class="tw:relative tw:mt-6 tw:flex">
+          <!-- button sendMissingDocuments -->
+          <button
+            type="button"
+            class="tw:dv-button-main-primary tw:ml-auto"
+            (click)="setToAdditionalDokumenteErhalten()"
+            data-testid="dokumente-button-setToAdditionalDokumenteErhalten"
+            [disabled]="!canSetToAdditionalDokumenteErhaltenSig()"
+          >
+            {{ 'shared.dokumente.setToAdditionalDokumenteErhalten' | transloco }}
+          </button>
+        </div>
+      }
     }
+  </div>
+
+  <!-- gesuchDokumente -->
+  @if (standardDokumente) {
+    <dv-required-dokumente
+      class="tw:relative"
+      [dokumenteViewSig]="standardDokumente"
+      (dokumentAblehnen)="dokumentAblehnen($event)"
+      (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
+      (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
+      (reloadGesuch)="reloadGesuch()"
+    ></dv-required-dokumente>
   }
-</div>
 
-<!-- gesuchDokumente -->
-@if (standardDokumente) {
-  <dv-required-dokumente
-    class="tw:relative tw:mt-6"
-    [dokumenteViewSig]="standardDokumente"
-    (dokumentAblehnen)="dokumentAblehnen($event)"
-    (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
-    (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
-    (reloadGesuch)="reloadGesuch()"
-  ></dv-required-dokumente>
-}
+  <!-- customDokumente -->
+  @if (customDokumente.showList) {
+    <dv-custom-dokumente
+      class="tw:relative"
+      [dokumenteViewSig]="customDokumente"
+      [canCreateCustomDokumentTypSig]="canCreateCustomDokumentTypSig()"
+      (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
+      (dokumentAblehnen)="dokumentAblehnen($event)"
+      (deleteCustomDokumentTyp)="deleteCustomDokumentTyp($event)"
+      (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
+      (createCustomDokumentTyp)="createCustomDokumentTyp()"
+    ></dv-custom-dokumente>
+  }
 
-<!-- customDokumente -->
-@if (customDokumente.showList) {
-  <dv-custom-dokumente
-    class="tw:relative tw:mt-6"
-    [dokumenteViewSig]="customDokumente"
-    [canCreateCustomDokumentTypSig]="canCreateCustomDokumentTypSig()"
-    (dokumentAkzeptieren)="dokumentAkzeptieren($event)"
-    (dokumentAblehnen)="dokumentAblehnen($event)"
-    (deleteCustomDokumentTyp)="deleteCustomDokumentTyp($event)"
-    (getGesuchDokumentKommentare)="getGesuchDokumentKommentare($event)"
-    (createCustomDokumentTyp)="createCustomDokumentTyp()"
-  ></dv-custom-dokumente>
-}
-
-<div class="tw:mt-6 tw:flex" *dvIfSachbearbeiter>
   @if (canSBSendMissingDocumentsSig()) {
-    <!-- button sendMissingDocuments -->
-    <button
-      type="button"
-      class="tw:dv-button-main-primary tw:ml-auto"
-      (click)="fehlendeDokumenteUebermitteln()"
-      data-testid="dokumente-button-sendMissingDocuments"
-      [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig() || (dokumentsStore.dokuments() | rdIsPending)"
-    >
-      {{ 'shared.dokumente.uebermitteln' | transloco }}
-    </button>
+    <div class="tw:flex" *dvIfSachbearbeiter>
+      <!-- button sendMissingDocuments -->
+      <button
+        type="button"
+        class="tw:dv-button-main-primary"
+        (click)="fehlendeDokumenteUebermitteln()"
+        data-testid="dokumente-button-sendMissingDocuments"
+        [disabled]="dokumentsStore.hasSBAusstehendeDokumentsSig() || (dokumentsStore.dokuments() | rdIsPending)"
+      >
+        {{ 'shared.dokumente.uebermitteln' | transloco }}
+      </button>
+    </div>
   }
-</div>
 
-@let dokumente = dokumentsStore.dokuments();
-<dv-shared-ui-step-form-buttons *dvIfSachbearbeiter>
-  <button
-    type="button"
-    class="tw:dv-button-main-primary"
-    (click)="handleContinue()"
-    data-testid="button-continue"
-    [disabled]="dokumente | rdIsPending"
-  >
-    {{ 'shared.form.gonext' | transloco }}
-  </button>
-</dv-shared-ui-step-form-buttons>
-
-<dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
-  @if (!gesuch.isFehlendeDokumente) {
+  @let dokumente = dokumentsStore.dokuments();
+  <dv-shared-ui-step-form-buttons *dvIfSachbearbeiter>
     <button
       type="button"
       class="tw:dv-button-main-primary"
@@ -90,20 +78,34 @@
     >
       {{ 'shared.form.gonext' | transloco }}
     </button>
-  } @else {
-    <button
-      type="button"
-      class="tw:dv-button-main-primary"
-      (click)="fehlendeDokumenteEinreichen()"
-      data-testid="button-save"
-      [disabled]="
-        (dokumente | rdIsPending) ||
-        !gesuch.permissions.canUploadDocuments ||
-        dokumentsStore.hasGSAussstehendeDokumentsSig() ||
-        !canGSSendMissingDocumentsSig()
-      "
-    >
-      {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | transloco }}
-    </button>
-  }
-</dv-shared-ui-step-form-buttons>
+  </dv-shared-ui-step-form-buttons>
+
+  <dv-shared-ui-step-form-buttons *dvIfGesuchsteller>
+    @if (!gesuch.isFehlendeDokumente) {
+      <button
+        type="button"
+        class="tw:dv-button-main-primary"
+        (click)="handleContinue()"
+        data-testid="button-continue"
+        [disabled]="dokumente | rdIsPending"
+      >
+        {{ 'shared.form.gonext' | transloco }}
+      </button>
+    } @else {
+      <button
+        type="button"
+        class="tw:dv-button-main-primary"
+        (click)="fehlendeDokumenteEinreichen()"
+        data-testid="button-save"
+        [disabled]="
+          (dokumente | rdIsPending) ||
+          !gesuch.permissions.canUploadDocuments ||
+          dokumentsStore.hasGSAussstehendeDokumentsSig() ||
+          !canGSSendMissingDocumentsSig()
+        "
+      >
+        {{ 'shared.dokumente.fehlendeDokumenteEinreichen' | transloco }}
+      </button>
+    }
+  </dv-shared-ui-step-form-buttons>
+</div>

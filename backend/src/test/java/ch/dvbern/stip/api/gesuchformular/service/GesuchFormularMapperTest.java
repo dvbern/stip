@@ -169,40 +169,6 @@ class GesuchFormularMapperTest {
     }
 
     @Test
-    void resetEinnahmenKostenRemovesAlimenteTest() {
-        // Arrange
-        final var updateFamsit = new FamiliensituationUpdateDto();
-        updateFamsit.setElternVerheiratetZusammen(false);
-        updateFamsit.setGerichtlicheAlimentenregelung(true);
-
-        final var updateEinnahmenKosten = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
-
-        final var updateEinnahmenKostenPartner = new EinnahmenKostenUpdateDto();
-        updateEinnahmenKosten.setUnterhaltsbeitraege(1);
-
-        final var update = new GesuchFormularUpdateDto();
-        update.setFamiliensituation(updateFamsit);
-        update.setEinnahmenKosten(updateEinnahmenKosten);
-        update.setEinnahmenKostenPartner(updateEinnahmenKostenPartner);
-
-        final var mapper = createMapper();
-        final var target = initTarget();
-
-        // Initialise target
-        mapper.partialUpdate(update, target);
-
-        updateFamsit.setGerichtlicheAlimentenregelung(false);
-
-        // Act
-        mapper.resetEinnahmenKosten(update, target);
-
-        // Assert
-        assertThat(update.getEinnahmenKosten().getUnterhaltsbeitraege(), is(nullValue()));
-        assertThat(update.getEinnahmenKostenPartner().getUnterhaltsbeitraege(), is(nullValue()));
-    }
-
-    @Test
     void resetEinnahmenKostenRemovesAuswaertigeMittagessenTest() {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();

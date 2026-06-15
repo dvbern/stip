@@ -5,7 +5,6 @@ import {
   Directive,
   DoCheck,
   contentChildren,
-  effect,
   inject,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -50,24 +49,6 @@ export class SharedUiFormFieldDirective implements DoCheck, AfterViewInit {
       );
     }
     return this.nullableControl;
-  }
-
-  constructor() {
-    const checker = this.readonlyChecker;
-    if (checker && this.matFormField) {
-      const formField = this.matFormField;
-      effect(() => {
-        const previous = formField.subscriptSizing;
-        if (checker.isReadonly()) {
-          formField.subscriptSizing = 'dynamic';
-        } else {
-          formField.subscriptSizing = 'fixed';
-        }
-        if (previous !== formField.subscriptSizing) {
-          this.changeDetector.markForCheck();
-        }
-      });
-    }
   }
 
   ngDoCheck(): void {

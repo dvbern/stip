@@ -320,7 +320,7 @@ class BerechnungServiceTest {
                     .setBis(LocalDate.now().minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
-        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, oneOf(6, 7));
     }
 

@@ -32,7 +32,6 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
   SharedUiFormReadonlyDirective,
-  SharedUiFormSaveComponent,
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiIfGesuchstellerDirective } from '@dv/shared/ui/if-app-type';
@@ -61,7 +60,6 @@ import { ibanValidator } from '@dv/shared/util/validator-iban';
     SharedUiStepFormButtonsComponent,
     SharedUiLoadingComponent,
     SharedUiFormFieldDirective,
-    SharedUiFormSaveComponent,
     SharedUiFormMessageErrorDirective,
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
