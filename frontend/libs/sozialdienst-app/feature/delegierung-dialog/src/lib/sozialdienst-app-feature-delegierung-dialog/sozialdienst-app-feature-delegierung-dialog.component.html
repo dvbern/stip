@@ -9,7 +9,7 @@
   </button>
 
   <!-- dialog  title  -->
-  <h1 class="tw:text-3xl tw:font-semibold tw:mb-8">
+  <h1 class="tw:dv-page-title">
     @if (dialogData.delegierung.status === 'AKZEPTIERT') {
       {{ 'sozialdienst-app.cockpit.table.delegierung.title.delegierung' | transloco }}
     } @else {
@@ -17,17 +17,17 @@
     }
   </h1>
 
-  <!-- readonly angaben form -->
-  <h3 class="tw:text-2xl tw:font-semibold">
-    {{ 'shared.form.shared.section.personal-details' | transloco }}
-  </h3>
   <form
     [formGroup]="form"
     [dvSharedUiFormReadonly]="true"
     data-testid="form-delegierung-form"
-    class="tw:mt-4 tw:pt-4 tw:dv-form-grid"
+    class="tw:dv-form-grid-one-col"
     novalidate
   >
+    <!-- readonly angaben form -->
+    <h3 class="tw:dv-form-title">
+      {{ 'shared.form.shared.section.personal-details' | transloco }}
+    </h3>
     <!-- fallNummer -->
     <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'sozialdienst-app.delegierung-dialog.fallNummer.label' | transloco }}</mat-label>
@@ -146,17 +146,17 @@
   <!-- horizontal line -->
   <hr class="tw:my-8 tw:border-t-2 tw:border-t-gray-500" />
 
-  <!-- change zuweisung form -->
-  <h3 class="tw:text-2xl tw:font-semibold">
-    {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | transloco }}
-  </h3>
   <form
     [formGroup]="zuweisungSozMitarbeiterForm"
     (ngSubmit)="changeSozMitarbeiter()"
     data-testid="form-sozMitarbeiter-form"
-    class="tw:mt-4 tw:pt-4 tw:dv-form-grid"
+    class="tw:dv-form-grid-one-col"
     novalidate
   >
+    <!-- change zuweisung form -->
+    <h3 class="tw:dv-form-title">
+      {{ 'sozialdienst-app.delegierung-dialog.zuweisung.title' | transloco }}
+    </h3>
     <!-- sozMitarbeiter Select -->
     <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.label' | transloco }}</mat-label>
@@ -180,7 +180,7 @@
     @let pending = isPending(delegationStore.delegierenState());
 
     <div class="tw:dv-form-action tw:mt-4 tw:flex tw:flex-col">
-      <div class="tw:mb-8 tw:h-8 tw:self-end">
+      <div class="tw:h-8 tw:self-end">
         @if (showUnsavedChangesErrorSig()) {
           <div class="tw:text-red-500">
             {{ 'sozialdienst-app.delegierung-dialog.sozMitarbeiter.unsavedChanges' | transloco }}
