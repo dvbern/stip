@@ -62,7 +62,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @Slf4j
 @RequestScoped
-@UnlessBuildProfile(anyOf = { "test", "dev", "prod" })
+@UnlessBuildProfile("test")
 @RequiredArgsConstructor
 public class SapEndpointService {
     private final BusinessPartnerCreateMapper businessPartnerCreateMapper;
@@ -87,9 +87,9 @@ public class SapEndpointService {
     @ConfigProperty(name = "old.sap.receiveTimeout")
     Integer receiveTimeout;
 
-    private void configureLogHandler(BindingProvider port) {
+    private void configureLogHandler(BindingProvider port, final String fallNummer) {
         var handlerChain = port.getBinding().getHandlerChain();
-        handlerChain.add(new SOAPLoggingHandler());
+        handlerChain.add(new SOAPLoggingHandler(fallNummer));
         port.getBinding().setHandlerChain(handlerChain);
     }
 
@@ -100,8 +100,8 @@ public class SapEndpointService {
         port.getRequestContext().put("javax.xml.ws.client.receiveTimeout", String.valueOf(receiveTimeout));
     }
 
-    private void configurePortParams(BindingProvider port) {
-        configureLogHandler(port);
+    private void configurePortParams(BindingProvider port, final String fallNummer) {
+        configureLogHandler(port, fallNummer);
         configureTimeouts(port);
     }
 
@@ -111,9 +111,9 @@ public class SapEndpointService {
         port.getRequestContext().put(MessageContext.HTTP_REQUEST_HEADERS, headers);
     }
 
-    private void configurePort(BindingProvider port) {
+    private void configurePort(BindingProvider port, final String fallNummer) {
         configureAuthHeader(port);
-        configurePortParams(port);
+        configurePortParams(port, fallNummer);
     }
 
     public static BigDecimal generateDeliveryId(final BigInteger systemid) {
@@ -129,7 +129,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerCreateService businessPartnerCreateService = new OsBusinessPartnerCreateService();
         final var port = businessPartnerCreateService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final BusinessPartnerCreateRequest businessPartnerCreateRequest =
             businessPartnerCreateMapper.toBusinessPartnerCreateRequest(getSystemid(), sapDeliveryId, fall);
@@ -143,7 +143,7 @@ public class SapEndpointService {
     ) {
         final OsBusinessPartnerChangeService businessPartnerChangeService = new OsBusinessPartnerChangeService();
         final var port = businessPartnerChangeService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final BusinessPartnerChangeRequest businessPartnerChangeRequest =
             businessPartnerChangeMapper.toBusinessPartnerChangeRequest(getSystemid(), sapDeliveryId, fall);
@@ -151,11 +151,12 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerReadResponse readBusinessPartnerByDeliveryId(
+        Fall fall,
         BigDecimal sapDeliveryId
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestDeliveryId(getSystemid(), sapDeliveryId);
@@ -163,11 +164,12 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerReadResponse readBusinessPartnerByBusinessPartnerId(
+        Fall fall,
         Integer businessPartnerId
     ) {
         final OsBusinessPartnerReadService businessPartnerReadService = new OsBusinessPartnerReadService();
         final var port = businessPartnerReadService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final BusinessPartnerReadRequest businessPartnerReadRequest =
             businessPartnerReadMapper.toBusinessPartnerReadRequestBusinessPartnerId(getSystemid(), businessPartnerId);
@@ -175,21 +177,25 @@ public class SapEndpointService {
     }
 
     public BusinessPartnerSearchResponse searchBusinessPartner(
+        Fall fall,
         String sozialversicherungsnummer
     ) {
         final OsBusinessPartnerSearchService businessPartnerSearchService = new OsBusinessPartnerSearchService();
         final var port = businessPartnerSearchService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final BusinessPartnerSearchRequest businessPartnerSearchRequest =
             businessPartnerSearchMapper.toBusinessPartnerSearchRequest(getSystemid(), sozialversicherungsnummer);
         return port.osBusinessPartnerSearch(businessPartnerSearchRequest);
     }
 
-    public ImportStatusReadResponse readImportStatus(BigDecimal deliveryid) {
+    public ImportStatusReadResponse readImportStatus(
+        Fall fall,
+        BigDecimal deliveryid
+    ) {
         final OsImportStatusReadService importStatusReadService = new OsImportStatusReadService();
         final var port = importStatusReadService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final ImportStatusReadRequest importStatusReadRequest = new ImportStatusReadRequest();
         importStatusReadRequest.setSENDER(SapMapperUtil.getImportStatusReadSenderParms(getSystemid()));
@@ -208,7 +214,7 @@ public class SapEndpointService {
     ) {
         final OsVendorPostingCreateService vendorPostingCreateService = new OsVendorPostingCreateService();
         final var port = vendorPostingCreateService.getHTTPSPort();
-        configurePort((BindingProvider) port);
+        configurePort((BindingProvider) port, fall.getFallNummer());
 
         final VendorPostingCreateRequest vendorPostingCreateRequest =
             vendorPostingCreateMapper
