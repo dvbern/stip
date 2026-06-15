@@ -232,6 +232,8 @@ export * from './persoenlichesBudgetresultatKosten';
 export * from './personInAusbildung';
 export * from './personInAusbildungUpdate';
 export * from './personValueItem';
+export * from './personenHaushalt';
+export * from './personenHaushaltGruppe';
 export * from './plz';
 export * from './renameAbschluss';
 export * from './renameAusbildungsstaette';

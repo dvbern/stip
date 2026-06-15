@@ -10271,24 +10271,29 @@ components:
       description: Resultat der Berechnung (eine Tranche)
       required:
         - total
+        - ungekuerztTotal
         - gueltigAb
         - gueltigBis
         - ausbildungAb
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - berechnungsanteilKinder
         - teilzeitKinderBeiPiaAnrechnen
-        - berechnungsanteilKinderPia
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
+        - personenHaushaltGroups
       type: object
       properties:
         total:
           description: >-
             Die Summe der berechneten Stpendiums- und Darlehensansprüche für
             diese Tranche
+          type: integer
+        ungekuerztTotal:
+          description: >-
+            Die ungekürzte Summe der berechneten Stpendiums- und
+            Darlehensansprüche für diese Tranche
           type: integer
         gueltigAb:
           $ref: '#/components/schemas/LocalDate'
@@ -10309,7 +10314,7 @@ components:
         berechnungsanteilKinder:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         teilzeitKinderBeiPiaAnrechnen:
           description: >-
@@ -10319,7 +10324,7 @@ components:
         berechnungsanteilKinderPia:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
-            nur eine Berechnung haben ist dieser wert == 1.
+            nur eine Berechnung haben ist dieser Wert null.
           type: number
         berechnungsStammdaten:
           description: Stammdaten für die Stipendienberechnung
@@ -10332,6 +10337,13 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FamilienBudgetresultat'
+        personenHaushaltGroups:
+          description: >-
+            Enthällt eine Liste aller relevanten Personen für die jeweiligen
+            Personen Haushalt Gruppen
+          type: array
+          items:
+            $ref: '#/components/schemas/PersonenHaushaltGruppe'
     BerechnungsStammdaten:
       description: Stammdaten used for the calculation of the stipendium
       required:
@@ -10376,6 +10388,7 @@ components:
     PersoenlichesBudgetresultat:
       description: Persoenliche Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - vorname
         - nachname
         - sozialversicherungsnummer
@@ -10390,6 +10403,10 @@ components:
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         vorname:
           type: string
         nachname:
@@ -10572,6 +10589,7 @@ components:
     FamilienBudgetresultat:
       description: Familien Budget daten fuer und von der Berechnung
       required:
+        - haushaltNames
         - steuerdatenTyp
         - vorname
         - nachname
@@ -10593,6 +10611,10 @@ components:
         - einnahmen
         - kosten
       properties:
+        haushaltNames:
+          type: array
+          items:
+            type: string
         steuerdatenTyp:
           $ref: '#/components/schemas/SteuerdatenTyp'
         vorname:
@@ -10605,7 +10627,13 @@ components:
           type: string
         sozialversicherungsnummer:
           type: string
+        sozialversicherungsnummerPartner:
+          type: string
         geburtsdatum:
+          format: date
+          description: dd.MM.yyyy
+          type: string
+        geburtsdatumPartner:
           format: date
           description: dd.MM.yyyy
           type: string
@@ -10733,6 +10761,24 @@ components:
             $ref: '#/components/schemas/PersonValueItem'
         verpflegungTotal:
           type: integer
+    PersonenHaushalt:
+      enum:
+        - PIA
+        - MUTTER
+        - VATER
+        - FAMILIE
+    PersonenHaushaltGruppe:
+      type: object
+      required:
+        - typ
+        - names
+      properties:
+        typ:
+          $ref: '#/components/schemas/PersonenHaushalt'
+        names:
+          type: array
+          items:
+            type: string
     PersonInAusbildungUpdate:
       required:
         - adresse

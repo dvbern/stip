@@ -164,7 +164,8 @@ $dv-all-colors: info, danger, success, warn, primary;
   --mat-dialog-container-min-width: min(900px, 100%);
 }
 
-.mat-mdc-tab-nav-bar {
+.mat-mdc-tab-nav-bar,
+.mat-mdc-tab-group {
   &.nav-style-tabs {
     .mat-mdc-tab-links {
       gap: 0 24px;
@@ -177,6 +178,15 @@ $dv-all-colors: info, danger, success, warn, primary;
       --tw-duration,
       var(--tw-default-transition-duration)
     );
+  }
+}
+
+.mat-mdc-tab-group {
+  .mat-mdc-tab-body:not(.mat-mdc-tab-body-active) .mat-mdc-tab-body-content {
+    overflow: hidden;
+  }
+  .mdc-tab__text-label {
+    height: 100%;
   }
 }
 

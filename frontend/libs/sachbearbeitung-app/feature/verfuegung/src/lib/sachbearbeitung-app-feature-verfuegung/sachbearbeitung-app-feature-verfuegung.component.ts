@@ -14,7 +14,6 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { format } from 'date-fns/format';
 
@@ -23,6 +22,7 @@ import {
   VerfuegungOption,
   createBerechnungOption,
 } from '@dv/sachbearbeitung-app/model/verfuegung';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import {
   selectRouteGesuchId,
@@ -42,14 +42,14 @@ import { isPending } from '@dv/shared/util/remote-data';
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-verfuegung',
   imports: [
-    SharedUiRouterOutletWrapperComponent,
     CommonModule,
     RouterLink,
     RouterLinkActive,
-    MatSidenavModule,
-    SharedUiIconChipComponent,
-    TranslocoDirective,
     PortalModule,
+    MatSidenavModule,
+    SharedUiRouterOutletWrapperComponent,
+    SharedUiIconChipComponent,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './sachbearbeitung-app-feature-verfuegung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -106,36 +106,36 @@ export class SachbearbeitungAppFeatureVerfuegungComponent
     const berechnung = this.berechnungStore.berechnungZusammenfassungViewSig();
 
     return Object.entries(berechnung.berechnungsresultate).map(
-      ([trancheId, berechnungen]) => ({
-        trancheId,
-        options: berechnungen.map((b, index) => {
-          const startDate = format(b.gueltigAb, 'MM.yyyy');
-          const endDate = format(b.gueltigBis, 'MM.yyyy');
-          const option = createBerechnungOption(
-            index,
-            berechnungen.length,
-            startDate,
-            endDate,
-          );
-          return {
-            ...option,
-            active: this.route.isActive(option.route, {
-              paths: 'subset',
-              queryParams: 'subset',
-              fragment: 'ignored',
-              matrixParams: 'ignored',
-            }),
-            fullRoute: [
-              '/gesuch',
-              'verfuegung',
-              gesuchId,
-              trancheTyp,
-              trancheId,
-              ...option.route.split('/'),
-            ],
-          };
-        }),
-      }),
+      ([trancheId, tranche]) => {
+        return {
+          gesuchTrancheId: tranche.gesuchTrancheId,
+          startDate: format(tranche.startDate, 'MM.yyyy'),
+          endDate: format(tranche.endDate, 'MM.yyyy'),
+          options: tranche.berechnungen.map((b, index) => {
+            const option = createBerechnungOption(
+              index,
+              tranche.berechnungen.length,
+            );
+            return {
+              ...option,
+              active: this.route.isActive(option.route, {
+                paths: 'subset',
+                queryParams: 'subset',
+                fragment: 'ignored',
+                matrixParams: 'ignored',
+              }),
+              fullRoute: [
+                '/gesuch',
+                'verfuegung',
+                gesuchId,
+                trancheTyp,
+                trancheId,
+                ...option.route.split('/'),
+              ],
+            };
+          }),
+        };
+      },
     );
   });
 

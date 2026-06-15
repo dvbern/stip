@@ -2,7 +2,20 @@ import {
   BerechnungsStammdaten,
   FamilienBudgetresultat,
   PersoenlichesBudgetresultat,
+  PersonenHaushaltGruppe,
+  TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
+
+export type TranchenBerechnungsresultatView = {
+  gesuchTrancheId: string;
+  startDate: string;
+  endDate: string;
+  anzahlMonate: number;
+  berechnungen: (TranchenBerechnungsresultat & {
+    berechnungsanteilTotal: number;
+  })[];
+  total: number;
+};
 
 export interface PersoenlichesBudgetresultatView extends PersoenlichesBudgetresultat {
   typ: 'persoenlich';
@@ -30,6 +43,7 @@ export type BerechnungsValue = keyof Pick<
 >;
 
 export type BerechnungView = {
+  personenHaushaltGroups: PersonenHaushaltGruppe[];
   persoenlich: PersoenlichesBudgetresultatView;
   familien: FamilienBudgetresultatView[];
   berechnungsStammdaten: BerechnungsStammdaten;

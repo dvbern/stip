@@ -17,16 +17,22 @@ import { FamilienBudgetresultatEinnahmen } from './familienBudgetresultatEinnahm
  * Familien Budget daten fuer und von der Berechnung
  */
 export interface FamilienBudgetresultat { 
+    haushaltNames: Array<string>;
     steuerdatenTyp: SteuerdatenTyp;
     vorname: string;
     nachname: string;
     vornamePartner?: string;
     nachnamePartner?: string;
     sozialversicherungsnummer: string;
+    sozialversicherungsnummerPartner?: string;
     /**
      * dd.MM.yyyy
      */
     geburtsdatum: string;
+    /**
+     * dd.MM.yyyy
+     */
+    geburtsdatumPartner?: string;
     steuerjahr: number;
     veranlagungscode: string;
     total: number;

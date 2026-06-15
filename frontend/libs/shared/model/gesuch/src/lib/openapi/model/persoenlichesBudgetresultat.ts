@@ -16,6 +16,7 @@ import { PersoenlichesBudgetresultatEinnahmen } from './persoenlichesBudgetresul
  * Persoenliche Budget daten fuer und von der Berechnung
  */
 export interface PersoenlichesBudgetresultat { 
+    haushaltNames: Array<string>;
     vorname: string;
     nachname: string;
     vornamePartner?: string;

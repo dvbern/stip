@@ -92,10 +92,15 @@ public class FamilienbudgetCalculatorV1 {
 
         return new FamilienBudgetresultatDto()
             .steuerdatenTyp(elternteil.getSteuerdatenTyp())
-            .vorname(antragssteller.getVorname())
-            .nachname(antragssteller.getNachname())
-            .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())
-            .geburtsdatum(antragssteller.getGeburtsdatum())
+            .haushaltNames(elternteil.getHaushaltNames())
+            .vorname(elternteil.getVorname())
+            .nachname(elternteil.getNachname())
+            .sozialversicherungsnummer(elternteil.getSozialversicherungsnummer())
+            .geburtsdatum(elternteil.getGeburtsdatum())
+            .vornamePartner(elternteil.getVornamePartner())
+            .nachnamePartner(elternteil.getNachnamePartner())
+            .sozialversicherungsnummerPartner(elternteil.getSozialversicherungsnummerPartner())
+            .geburtsdatumPartner(elternteil.getGeburtsdatumPartner())
             .steuerjahr(elternteil.getSteuerjahr())
             .veranlagungscode(elternteil.getVeranlagungscode())
             .total(roundHalfUp(total))
@@ -110,9 +115,7 @@ public class FamilienbudgetCalculatorV1 {
             .proKopfTeilung(proKopfTeilung)
             .ungedeckterAnteilLebenshaltungskosten(roundHalfUp(ungedeckterAnteilLebenshaltungskosten))
             .einnahmen(einnahmen)
-            .kosten(kosten)
-            .vornamePartner(antragssteller.getVornamePartner())
-            .nachnamePartner(antragssteller.getNachnamePartner());
+            .kosten(kosten);
     }
 
     private FamilienBudgetresultatKostenDto calculateKosten(final ElternteilV1 elternteil) {

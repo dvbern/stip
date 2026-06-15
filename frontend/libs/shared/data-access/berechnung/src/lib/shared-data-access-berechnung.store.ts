@@ -7,8 +7,8 @@ import {
   BerechnungsStammdaten,
   Berechnungsresultat,
   GesuchService,
-  TranchenBerechnungsresultat,
 } from '@dv/shared/model/gesuch';
+import { TranchenBerechnungsresultatView } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
   cachedPending,
@@ -61,7 +61,7 @@ export class BerechnungStore extends signalStore(
       anzahlMonateUnterbruch?: number;
       berechnungStipendium: number;
       berechnungDarlehen?: number;
-      berechnungsresultate: Record<string, TranchenBerechnungsresultat[]>;
+      berechnungsresultate: Record<string, TranchenBerechnungsresultatView>;
       stammdaten?: BerechnungsStammdaten;
     } = {
       year: berechnungRd.data?.year ?? 0,
@@ -86,9 +86,24 @@ export class BerechnungStore extends signalStore(
     const byTrancheId = berechnungRd.data
       ? berechnungRd.data.tranchenBerechnungsresultate.reduce((acc, curr) => {
           if (!acc.berechnungsresultate[curr.gesuchTrancheId]) {
-            acc.berechnungsresultate[curr.gesuchTrancheId] = [];
+            acc.berechnungsresultate[curr.gesuchTrancheId] = {
+              gesuchTrancheId: curr.gesuchTrancheId,
+              startDate: curr.gueltigAb,
+              endDate: curr.gueltigBis,
+              anzahlMonate: curr.persoenlichesBudgetresultat.anzahlMonate,
+              total: 0,
+              berechnungen: [],
+            };
           }
-          acc.berechnungsresultate[curr.gesuchTrancheId].push(curr);
+          acc.berechnungsresultate[curr.gesuchTrancheId].total += curr.total;
+          acc.berechnungsresultate[curr.gesuchTrancheId].berechnungen.push({
+            ...curr,
+            berechnungsanteilTotal: roundToTwo(
+              ((curr.berechnungsanteilKinder ?? 100) *
+                (curr.berechnungsanteilKinderPia ?? 100)) /
+                100,
+            ),
+          });
           return acc;
         }, value)
       : value;
@@ -144,4 +159,8 @@ export class BerechnungStore extends signalStore(
       ),
     ),
   );
+}
+
+function roundToTwo(value: number) {
+  return Math.round((value + Number.EPSILON) * 100) / 100;
 }
