@@ -25,6 +25,8 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -61,6 +63,9 @@ public abstract class GesuchTrancheMapper {
 
     @Inject
     FamiliensituationMapper familiensituationMapper;
+
+    @Inject
+    GeschwisterMapper geschwisterMapper;
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch, @Context GesuchTranche context);
@@ -125,6 +130,14 @@ public abstract class GesuchTrancheMapper {
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
+        removeHiddenElternsData(gesuchTrancheDto, context);
+        removeHiddenGeschwistersData(gesuchTrancheDto, context);
+    }
+
+    protected void removeHiddenElternsData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche context
+    ) {
         Stream.of(
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKostenPartner()
@@ -149,19 +162,35 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
+    protected void removeHiddenGeschwistersData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche context
+    ) {
+        final var hiddenGeschwistersUUID = context.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(Geschwister::isHidden)
+            .map(Geschwister::getId)
+            .toList();
+        gesuchTrancheDto.getGesuchFormular()
+            .getGeschwisters()
+            .removeIf(geschwisterDto -> hiddenGeschwistersUUID.contains(geschwisterDto.getId()));
+    }
+
     @Named("centralMappingWithOverrideFieldsThatRequireElevatedPermissions")
     @BeforeMapping
     protected void centralBeforeMappingWithOverrideFieldsThatRequireElevatedPermissions(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         beforeMappingOverrideSteuern(newTranche, gesuchTranche);
         beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+        beforeMappingAddHiddenGeschwisters(newTranche, gesuchTranche);
     }
 
     protected void beforeMappingOverrideSteuern(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         final var ekDto = newTranche.getGesuchFormular().getEinnahmenKosten();
         final var ek = gesuchTranche.getGesuchFormular().getEinnahmenKosten();
@@ -178,7 +207,7 @@ public abstract class GesuchTrancheMapper {
 
     protected void beforeMappingOverrideIncomingVersteckteEltern(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (versteckteEltern.isEmpty()) {
@@ -236,5 +265,15 @@ public abstract class GesuchTrancheMapper {
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
         }
+    }
+
+    protected void beforeMappingAddHiddenGeschwisters(
+        final GesuchTrancheUpdateDto newTranche,
+        @MappingTarget final GesuchTranche gesuchTranche
+    ) {
+        final var hiddenGeschwisters =
+            gesuchTranche.getGesuchFormular().getGeschwisters().stream().filter(Geschwister::isHidden);
+        final var hiddenGeschwistersDtos = hiddenGeschwisters.map(geschwisterMapper::toUpdateDto).toList();
+        newTranche.getGesuchFormular().getGeschwisters().addAll(hiddenGeschwistersDtos);
     }
 }

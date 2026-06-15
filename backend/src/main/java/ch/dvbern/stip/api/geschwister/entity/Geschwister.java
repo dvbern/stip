@@ -60,4 +60,8 @@ public class Geschwister extends AbstractFamilieEntity {
     @NullableUnlessGenerated
     @Column(name = "entry_id", nullable = true)
     private UUID entryId;
+
+    @NotNull
+    @Column(name = "hidden", nullable = false)
+    private boolean hidden = false;
 }

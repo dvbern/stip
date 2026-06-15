@@ -8187,10 +8187,6 @@ components:
           type: boolean
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
-        mutterWiederverheiratetAlimente:
-          type: boolean
-        vaterWiederverheiratetAlimente:
-          type: boolean
         elternteilUnbekanntVerstorben:
           type: boolean
         mutterVerstorben:
@@ -8201,8 +8197,6 @@ components:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
         mutterKeineOptionen:
           type: boolean
-        mutterWiederverheiratetUnbekannt:
-          type: boolean
         vaterVerstorben:
           type: boolean
         vaterUnbekannt:
@@ -8210,12 +8204,6 @@ components:
         vaterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
         vaterKeineOptionen:
-          type: boolean
-        vaterWiederverheiratetUnbekannt:
-          type: boolean
-        mutterWiederverheiratetUngewiss:
-          type: boolean
-        vaterWiederverheiratetUngewiss:
           type: boolean
     DemoElternteil:
       required:
@@ -8274,6 +8262,8 @@ components:
         sozialhilfebeitraege:
           type: boolean
         ausweisbFluechtling:
+          type: boolean
+        wiederverheiratet:
           type: boolean
     DemoSteuererklaerung:
       required:
@@ -10874,14 +10864,10 @@ components:
           $ref: '#/components/schemas/ElternAbwesenheitsGrund'
         mutterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        mutterWiederverheiratet:
-          type: boolean
         vaterUnbekanntVerstorben:
           $ref: '#/components/schemas/ElternAbwesenheitsGrund'
         vaterUnbekanntGrund:
           $ref: '#/components/schemas/ElternUnbekanntheitsGrund'
-        vaterWiederverheiratet:
-          type: boolean
         werZahltAlimente:
           $ref: '#/components/schemas/Elternschaftsteilung'
           description: Required nur wenn gerichtlicheAlimentenregelung = true
@@ -10958,6 +10944,8 @@ components:
             Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen
             falls Sie zusammen wohnen
           type: integer
+        wiederverheiratet:
+          type: boolean
     GeschwisterUpdate:
       title: Root Type for Geschwister
       required:
@@ -10992,6 +10980,8 @@ components:
           type: number
         nachname:
           type: string
+        hidden:
+          type: boolean
     LebenslaufItemUpdate:
       title: Root Type for Lebenslauf
       required:

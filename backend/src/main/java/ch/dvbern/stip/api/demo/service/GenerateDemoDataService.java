@@ -462,22 +462,8 @@ public class GenerateDemoDataService {
             .gerichtlicheAlimentenregelung(famsitDto.getGerichtlicheAlimentenregelung())
             .mutterUnbekanntVerstorben(getAbwesenheitsGrund(famsitDto, ElternTyp.MUTTER))
             .mutterUnbekanntGrund(famsitDto.getMutterUnbekanntGrund())
-            .mutterWiederverheiratet(
-                firstSetValueOrNull(
-                    famsitDto.getMutterWiederverheiratetAlimente(),
-                    famsitDto.getMutterWiederverheiratetUnbekannt(),
-                    famsitDto.getMutterWiederverheiratetUngewiss()
-                )
-            )
             .vaterUnbekanntVerstorben(getAbwesenheitsGrund(famsitDto, ElternTyp.VATER))
             .vaterUnbekanntGrund(famsitDto.getVaterUnbekanntGrund())
-            .vaterWiederverheiratet(
-                firstSetValueOrNull(
-                    famsitDto.getVaterWiederverheiratetAlimente(),
-                    famsitDto.getVaterWiederverheiratetUnbekannt(),
-                    famsitDto.getVaterWiederverheiratetUngewiss()
-                )
-            )
             .werZahltAlimente(famsitDto.getWerZahltAlimente())
             .build();
         final List<Eltern> elterns = new ArrayList<>();
@@ -503,7 +489,8 @@ public class GenerateDemoDataService {
                         .identischerZivilrechtlicherWohnsitzOrt(elternDto.getIdentischerZivilrechtlicherWohnsitzOrt())
                         .identischerZivilrechtlicherWohnsitzPLZ(elternDto.getIdentischerZivilrechtlicherWohnsitzPLZ())
                         .sozialhilfebeitraege(elternDto.getSozialhilfebeitraege())
-                        .wohnkosten(elternDto.getWohnkosten()),
+                        .wohnkosten(elternDto.getWohnkosten())
+                        .wiederverheiratet(elternDto.getWiederverheiratet()),
                     AbstractPersonBuilder.abstractPerson()
                         .nachname(elternDto.getNachname())
                         .vorname(elternDto.getVorname())
@@ -581,7 +568,8 @@ public class GenerateDemoDataService {
                 DemoPerson.createGeschwister(
                     GeschwisterBuilder.geschwister()
                         .ausbildungssituation(geschwisterDto.getAusbildungssituation())
-                        .entryId(UUID.randomUUID()),
+                        .entryId(UUID.randomUUID())
+                        .hidden(false),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(

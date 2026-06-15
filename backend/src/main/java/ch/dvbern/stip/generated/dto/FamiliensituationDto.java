@@ -24,10 +24,8 @@ public class FamiliensituationDto  implements Serializable {
   private @Valid Boolean gerichtlicheAlimentenregelung;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund mutterUnbekanntVerstorben;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
-  private @Valid Boolean mutterWiederverheiratet;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
-  private @Valid Boolean vaterWiederverheiratet;
   private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
 
   /**
@@ -123,24 +121,6 @@ public class FamiliensituationDto  implements Serializable {
 
   /**
    **/
-  public FamiliensituationDto mutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-    return this;
-  }
-
-  
-  @JsonProperty("mutterWiederverheiratet")
-  public Boolean getMutterWiederverheiratet() {
-    return mutterWiederverheiratet;
-  }
-
-  @JsonProperty("mutterWiederverheiratet")
-  public void setMutterWiederverheiratet(Boolean mutterWiederverheiratet) {
-    this.mutterWiederverheiratet = mutterWiederverheiratet;
-  }
-
-  /**
-   **/
   public FamiliensituationDto vaterUnbekanntVerstorben(ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund vaterUnbekanntVerstorben) {
     this.vaterUnbekanntVerstorben = vaterUnbekanntVerstorben;
     return this;
@@ -177,24 +157,6 @@ public class FamiliensituationDto  implements Serializable {
 
   /**
    **/
-  public FamiliensituationDto vaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-    return this;
-  }
-
-  
-  @JsonProperty("vaterWiederverheiratet")
-  public Boolean getVaterWiederverheiratet() {
-    return vaterWiederverheiratet;
-  }
-
-  @JsonProperty("vaterWiederverheiratet")
-  public void setVaterWiederverheiratet(Boolean vaterWiederverheiratet) {
-    this.vaterWiederverheiratet = vaterWiederverheiratet;
-  }
-
-  /**
-   **/
   public FamiliensituationDto werZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
     return this;
@@ -226,16 +188,14 @@ public class FamiliensituationDto  implements Serializable {
         Objects.equals(this.gerichtlicheAlimentenregelung, familiensituation.gerichtlicheAlimentenregelung) &&
         Objects.equals(this.mutterUnbekanntVerstorben, familiensituation.mutterUnbekanntVerstorben) &&
         Objects.equals(this.mutterUnbekanntGrund, familiensituation.mutterUnbekanntGrund) &&
-        Objects.equals(this.mutterWiederverheiratet, familiensituation.mutterWiederverheiratet) &&
         Objects.equals(this.vaterUnbekanntVerstorben, familiensituation.vaterUnbekanntVerstorben) &&
         Objects.equals(this.vaterUnbekanntGrund, familiensituation.vaterUnbekanntGrund) &&
-        Objects.equals(this.vaterWiederverheiratet, familiensituation.vaterWiederverheiratet) &&
         Objects.equals(this.werZahltAlimente, familiensituation.werZahltAlimente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, mutterWiederverheiratet, vaterUnbekanntVerstorben, vaterUnbekanntGrund, vaterWiederverheiratet, werZahltAlimente);
+    return Objects.hash(elternVerheiratetZusammen, elternteilUnbekanntVerstorben, gerichtlicheAlimentenregelung, mutterUnbekanntVerstorben, mutterUnbekanntGrund, vaterUnbekanntVerstorben, vaterUnbekanntGrund, werZahltAlimente);
   }
 
   @Override
@@ -248,10 +208,8 @@ public class FamiliensituationDto  implements Serializable {
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");
     sb.append("    mutterUnbekanntVerstorben: ").append(toIndentedString(mutterUnbekanntVerstorben)).append("\n");
     sb.append("    mutterUnbekanntGrund: ").append(toIndentedString(mutterUnbekanntGrund)).append("\n");
-    sb.append("    mutterWiederverheiratet: ").append(toIndentedString(mutterWiederverheiratet)).append("\n");
     sb.append("    vaterUnbekanntVerstorben: ").append(toIndentedString(vaterUnbekanntVerstorben)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
-    sb.append("    vaterWiederverheiratet: ").append(toIndentedString(vaterWiederverheiratet)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
     sb.append("}");
     return sb.toString();
