@@ -1,428 +1,397 @@
 @let elternteil = elternteilSig();
-<h1 class="tw:mt-8">
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <div class="tw:text-2xl tw:font-semibold tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:gap-2">
-      {{ 'shared.form.eltern.' + elternteil.elternTyp + '.title' | transloco }}
-    </div>
+<h2 class="tw:dv-form-title tw:mb-6">
+  {{ 'shared.form.eltern.' + elternteil.elternTyp + '.title' | transloco }}
+</h2>
 
-    <div
-      class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:gap-2 tw:md:justify-end tw:relative"
-      *dvIfSachbearbeiter
-    >
-      <div class="tw:lg:absolute tw:top-0 tw:right-0 tw:text-right">
-        <div [matTooltip]="disableSichtbar ? ('shared.form.eltern.unableToHide' | transloco) : null">
-          <mat-checkbox
-            class="tw:text-base tw:font-normal"
-            [disabled]="disableSichtbar"
-            [checked]="sichtbar"
-            (change)="sichtbarChanged.emit($event.checked)"
-            >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
-          >
-        </div>
-        @if (
-          elternteil.id &&
-            currentlyLivesInSwitzerlandSig() &&
-            viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' &&
-            viewSig().gesuchId;
-          as gesuchId
-        ) {
-          <button
-            type="button"
-            class="tw:dv-button tw:p-0 tw:inline-flex tw:flex-col"
-            [attr.aria-label]="'shared.dokumente.table.download' | transloco"
-            [dvDownloadButton]="{
-              type: 'datenschutzbriefCreate',
-              id: elternteil.id,
-              gesuchId,
-            }"
-          >
-            <div class="material-symbols-rounded tw:text-4xl!">download</div>
-            <div>
-              {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
-            </div>
-          </button>
-        }
-      </div>
+<div class="tw:dv-form-grid" *dvIfSachbearbeiter>
+  <div class="tw:dv-form-item tw:flex tw:items-center tw:justify-between tw:gap-6">
+    <div [matTooltip]="disableSichtbar ? ('shared.form.eltern.unableToHide' | transloco) : null">
+      <mat-checkbox
+        class="tw:text-base tw:font-normal"
+        [disabled]="disableSichtbar"
+        [checked]="sichtbar"
+        (change)="sichtbarChanged.emit($event.checked)"
+        >{{ 'shared.form.eltern.sichtbar' | transloco }}</mat-checkbox
+      >
     </div>
+    @if (
+      elternteil.id &&
+        currentlyLivesInSwitzerlandSig() &&
+        viewSig().trancheSetting?.gesuchUrlTyp === 'TRANCHE' &&
+        viewSig().gesuchId;
+      as gesuchId
+    ) {
+      <button
+        type="button"
+        class="tw:dv-button tw:p-0 tw:inline-flex tw:flex-col"
+        [attr.aria-label]="'shared.dokumente.table.download' | transloco"
+        [dvDownloadButton]="{
+          type: 'datenschutzbriefCreate',
+          id: elternteil.id,
+          gesuchId,
+        }"
+      >
+        <div class="material-symbols-rounded tw:text-4xl!">download</div>
+        <div>
+          {{ 'shared.form.eltern.datenschutzbrief' | transloco }}
+        </div>
+      </button>
+    }
   </div>
-</h1>
+
+  <hr class="tw:border-t tw:mb-12 tw:border-gray-300 tw:xl:col-span-2" />
+</div>
 
 <form
   [formGroup]="form"
+  class="tw:dv-form-grid"
   [dvSharedUiFormReadonly]="viewSig().readonly"
   (gotReenabledSig)="gotReenabled$.next({})"
   data-testid="form-eltern-form"
   novalidate
-  class="tw:mt-6"
   (ngSubmit)="handleSave()"
 >
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:gap-2">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.shared.sozialversicherungsnummer.label' | transloco }}</mat-label>
+      <input
+        matInput
+        formControlName="sozialversicherungsnummer"
+        data-testid="form-eltern-sozialversicherungsnummer"
+        placeholder="756.xxxx.xxxx.xx"
+        [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
+      />
+      <mat-hint *dvZuvorHint="changes.sozialversicherungsnummer"></mat-hint>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'ahv'">
+        {{ 'shared.form.error.ahv' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
+        {{ 'shared.form.error.notUniqueAhv' | transloco }}
+      </mat-error>
+    </mat-form-field>
+
+    <button
+      type="button"
+      (click)="sozialversicherungsnummerDialog.toggle()"
+      class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+      [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+    >
+      <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+    </button>
+  </div>
+  <div
+    dvSharedUiInfoDialog
+    class="tw:hidden tw:xl:block tw:xl:col-start-3"
+    [dialogTitleKey]="'shared.form.eltern.sozialversicherungsnummer.infoTitle'"
+    [dialogMessageKey]="'shared.form.eltern.sozialversicherungsnummer.info'"
+    #sozialversicherungsnummerDialog="dvSharedUiInfoDialog"
+  ></div>
+
+  <!-- Nachname -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
+    <input formControlName="nachname" data-testid="form-eltern-nachname" matInput dvMaxLength type="text" />
+    <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Vorname -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
+    <input formControlName="vorname" data-testid="form-eltern-vorname" matInput dvMaxLength type="text" />
+    <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <dv-shared-ui-form-address
+    [group]="form.controls.adresse"
+    [changes]="changes.adresse"
+    [languageSig]="languageSig()"
+  />
+
+  <div class="tw:flex tw:items-center tw:gap-4 tw:dv-form-item">
+    <div>
+      <mat-checkbox
+        type="checkbox"
+        formControlName="identischerZivilrechtlicherWohnsitz"
+        data-testid="form-eltern-identischerZivilrechtlicherWohnsitz"
+        >{{ 'shared.form.shared.identical-civil-residence.label' | transloco }}</mat-checkbox
+      >
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="
+          changes.identischerZivilrechtlicherWohnsitz | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
+        "
+      ></dv-shared-ui-form-zuvor-hint>
+    </div>
+
+    <button
+      type="button"
+      (click)="identischerZivilrechtlicherWohnsitzDialog.toggle()"
+      class="tw:dv-button-icon tw:text-dv-blue"
+      [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+    >
+      <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+    </button>
+  </div>
+  <div
+    dvSharedUiInfoDialog
+    class="tw:hidden tw:xl:block tw:xl:col-start-3"
+    [dialogTitleKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.infoTitle'"
+    [dialogMessageKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.info'"
+    #identischerZivilrechtlicherWohnsitzDialog="dvSharedUiInfoDialog"
+  ></div>
+
+  <!-- alternative civil residence -->
+  @if (!form.value.identischerZivilrechtlicherWohnsitz) {
+    <label class="tw:xl:col-span-2">{{ 'shared.form.shared.alternative-civil-residence.title' | transloco }}</label>
+
+    @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
+    <div
+      class="tw:flex tw:dv-form-item tw:gap-4"
+      dvPlzOrtAutocomplete
+      [autocompleteSig]="plzAutocomplete"
+      [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
+      (plzLookupValuesSig)="plzValues = $event"
+    >
+      <!-- PLZ -->
+      <mat-form-field dvSharedUiFormField class="tw:basis-32">
+        <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
         <input
           matInput
-          formControlName="sozialversicherungsnummer"
-          data-testid="form-eltern-sozialversicherungsnummer"
-          placeholder="756.xxxx.xxxx.xx"
-          [maskito]="MASK_SOZIALVERSICHERUNGSNUMMER"
+          [dvMaxLength]="'small'"
+          type="text"
+          [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
+          [matAutocomplete]="plzAutocomplete"
+          data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
         />
-        <mat-hint *dvZuvorHint="changes.sozialversicherungsnummer"></mat-hint>
+        <mat-hint *dvZuvorHint="changes.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
         <mat-error *dvSharedUiFormMessageError="'required'">
           {{ 'shared.form.error.required' | transloco }}
         </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'ahv'">
-          {{ 'shared.form.error.ahv' | transloco }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'notUniqueAhv'">
-          {{ 'shared.form.error.notUniqueAhv' | transloco }}
-        </mat-error>
+        <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
+          @for (lookup of plzValues; track $index) {
+            <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
+              {{ lookup.plz }} {{ lookup.ort }}
+            </mat-option>
+          }
+        </mat-autocomplete>
       </mat-form-field>
 
-      <button
-        type="button"
-        (click)="sozialversicherungsnummerDialog.toggle()"
-        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
-        [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-      >
-        <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-      </button>
+      <!-- Ort -->
+      <mat-form-field dvSharedUiFormField class="tw:flex-1">
+        <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
+        <input
+          matInput
+          dvMaxLength
+          type="text"
+          [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
+          data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
+        />
+        <mat-hint *dvZuvorHint="changes.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+      </mat-form-field>
     </div>
-    <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
-    <div
-      dvSharedUiInfoDialog
-      [dialogTitleKey]="'shared.form.eltern.sozialversicherungsnummer.infoTitle'"
-      [dialogMessageKey]="'shared.form.eltern.sozialversicherungsnummer.info'"
-      #sozialversicherungsnummerDialog="dvSharedUiInfoDialog"
-      class="tw:hidden tw:xl:block tw:xl:col-span-4"
-    ></div>
-  </div>
+  }
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
-      <input formControlName="nachname" data-testid="form-eltern-nachname" matInput dvMaxLength type="text" />
-      <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
+  <h2 class="tw:dv-form-title">
+    {{ 'shared.weiterangaben' | transloco }}
+  </h2>
+
+  <!-- Wohnkosten-->
+  <div class="tw:flex tw:gap-4 tw:dv-form-item">
+    <mat-form-field dvSharedUiFormField class="tw:grow">
+      <mat-label>{{ 'shared.form.shared.wohnkosten.label' | transloco }}</mat-label>
+      <input
+        matInput
+        type="text"
+        formControlName="wohnkosten"
+        data-testid="form-eltern-wohnkosten"
+        [maskito]="maskitoNumber"
+      />
+      <mat-hint *dvZuvorHint="changes.wohnkosten"></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
     </mat-form-field>
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
-      <input formControlName="vorname" data-testid="form-eltern-vorname" matInput dvMaxLength type="text" />
-      <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
 
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <dv-shared-ui-form-address
-      class="tw:col-span-12 tw:xl:col-span-8"
-      [group]="form.controls.adresse"
-      [changes]="changes.adresse"
-      [languageSig]="languageSig()"
-    />
-  </div>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6">
-    <div class="tw:col-span-12 tw:xl:col-span-4 tw:md:col-span-6 tw:grow tw:flex tw:items-center tw:gap-1">
-      <div>
-        <mat-checkbox
-          type="checkbox"
-          formControlName="identischerZivilrechtlicherWohnsitz"
-          data-testid="form-eltern-identischerZivilrechtlicherWohnsitz"
-          >{{ 'shared.form.shared.identical-civil-residence.label' | transloco }}</mat-checkbox
-        >
-        <dv-shared-ui-form-zuvor-hint
-          [changes]="
-            changes.identischerZivilrechtlicherWohnsitz | dvTranslateChange: 'shared.form.zuvor.checkbox.$VALUE' | async
-          "
-        ></dv-shared-ui-form-zuvor-hint>
+    @if (wohnkostenDocumentSig(); as options) {
+      <div class="tw:flex tw:gap-4 tw:items-center">
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
       </div>
+    }
 
+    <button
+      type="button"
+      (click)="wohnkostenDialog.toggle()"
+      class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+      [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
+    >
+      <span class="material-symbols-rounded tw:text-3xl!"> info </span>
+    </button>
+  </div>
+  <div
+    dvSharedUiInfoDialog
+    class="tw:hidden tw:xl:block tw:xl:col-start-3"
+    [dialogTitleKey]="'shared.form.eltern.wohnkosten.infoTitle'"
+    [dialogMessageKey]="'shared.form.eltern.wohnkosten.info'"
+    #wohnkostenDialog="dvSharedUiInfoDialog"
+  ></div>
+
+  <!-- GEBURTSDATUM -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
+
+    <input
+      matInput
+      [dvMaxLength]="'small'"
+      type="text"
+      placeholder="dd.mm.yyyy"
+      formControlName="geburtsdatum"
+      data-testid="form-eltern-geburtsdatum"
+      (blur)="onGeburtsdatumBlur()"
+    />
+    <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'dateFormat'">
+      {{ 'shared.form.error.dateFormat' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'minDate'">
+      {{ 'shared.form.error.minDatePast' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'maxDate'">
+      {{ 'shared.form.error.maxDatePast' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Telefonnummer -->
+  <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+    <mat-label>{{ 'shared.form.shared.phone.label' | transloco }}</mat-label>
+    <input matInput dvMaxLength type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
+    <mat-hint *dvZuvorHint="changes.telefonnummer"></mat-hint>
+    <mat-error *dvSharedUiFormMessageError="'required'">
+      {{ 'shared.form.error.required' | transloco }}
+    </mat-error>
+    <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
+      {{ 'shared.form.error.telefonnummer' | transloco }}
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Sozialhilfebeitraege-->
+  <mat-radio-group
+    class="tw:dv-form-item"
+    formControlName="sozialhilfebeitraege"
+    data-testid="form-eltern-sozialhilfebeitraege"
+    dvSharedUiFormField
+  >
+    <div class="tw:flex tw:items-center tw:gap-4">
+      <label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | transloco }}</label>
       <button
         type="button"
-        (click)="identischerZivilrechtlicherWohnsitzDialog.toggle()"
+        (click)="sozialhilfebeitraegeDialog.toggle()"
         class="tw:dv-button-icon tw:text-dv-blue"
         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
         <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
     </div>
-    <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
-    <div
-      class="tw:hidden tw:xl:block tw:xl:col-span-4"
-      dvSharedUiInfoDialog
-      [dialogTitleKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.infoTitle'"
-      [dialogMessageKey]="'shared.form.eltern.identischerZivilrechtlicherWohnsitz.info'"
-      #identischerZivilrechtlicherWohnsitzDialog="dvSharedUiInfoDialog"
-    ></div>
-  </div>
-  <!-- alternative civil residence -->
-  @if (!form.value.identischerZivilrechtlicherWohnsitz) {
-    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
-      <div class="tw:col-span-12 tw:xl:col-span-8">
-        <label class="tw:mb-2">{{ 'shared.form.shared.alternative-civil-residence.title' | transloco }}</label>
-        @let identischerZivilrechtlicherWohnsitzPlzOrt = form.controls.identischerZivilrechtlicherWohnsitzPlzOrt;
-        <div
-          class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1"
-          dvPlzOrtAutocomplete
-          [autocompleteSig]="plzAutocomplete"
-          [plzFormSig]="identischerZivilrechtlicherWohnsitzPlzOrt"
-          (plzLookupValuesSig)="plzValues = $event"
-        >
-          <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:col-span-5 tw:md:col-span-4 tw:xl:col-span-3">
-            <mat-label>{{ 'shared.form.shared.address.zipcode.label' | transloco }}</mat-label>
-            <input
-              matInput
-              [dvMaxLength]="'small'"
-              type="text"
-              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.plz"
-              [matAutocomplete]="plzAutocomplete"
-              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzPLZ"
-            />
-            <mat-hint *dvZuvorHint="changes.identischerZivilrechtlicherWohnsitzPLZ"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-            <mat-autocomplete #plzAutocomplete="matAutocomplete" [panelWidth]="'320px'">
-              @for (lookup of plzValues; track $index) {
-                <mat-option [value]="lookup" [attr.data-testid]="'plz-' + lookup.plz">
-                  {{ lookup.plz }} {{ lookup.ort }}
-                </mat-option>
-              }
-            </mat-autocomplete>
-          </mat-form-field>
 
-          <!-- Ort -->
-          <mat-form-field dvSharedUiFormField class="tw:col-span-7 tw:md:col-span-8 tw:xl:col-span-9">
-            <mat-label>{{ 'shared.form.shared.address.city.label' | transloco }}</mat-label>
-            <input
-              matInput
-              dvMaxLength
-              type="text"
-              [formControl]="identischerZivilrechtlicherWohnsitzPlzOrt.controls.ort"
-              data-testid="form-eltern-identischerZivilrechtlicherWohnsitzOrt"
-            />
-            <mat-hint *dvZuvorHint="changes.identischerZivilrechtlicherWohnsitzOrt"></mat-hint>
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </mat-form-field>
-        </div>
+    <div class="tw:flex tw:gap-4">
+      <div class="tw:flex tw:flex-col">
+        <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
+        <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="changes.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+        ></dv-shared-ui-form-zuvor-hint>
       </div>
-    </div>
-  }
-
-  <h3 class="tw:pt-12">{{ 'shared.weiterangaben' | transloco }}</h3>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Wohnkosten-->
-    <div class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4 tw:flex tw:gap-2">
-      <mat-form-field dvSharedUiFormField class="tw:grow">
-        <mat-label>{{ 'shared.form.shared.wohnkosten.label' | transloco }}</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="wohnkosten"
-          data-testid="form-eltern-wohnkosten"
-          [maskito]="maskitoNumber"
-        />
-        <mat-hint *dvZuvorHint="changes.wohnkosten"></mat-hint>
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </mat-form-field>
-
-      @if (wohnkostenDocumentSig(); as options) {
-        <div class="tw:flex tw:gap-2 tw:items-center">
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        </div>
+      @if (sozialhilfeDocumentSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1 tw:ml-auto align-self-center"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
       }
+    </div>
+    <div class="group-errors">
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </div>
+  </mat-radio-group>
+  <div
+    dvSharedUiInfoDialog
+    class="tw:hidden tw:xl:block tw:xl:col-start-3"
+    [dialogTitleKey]="'shared.form.eltern.sozialhilfebeitraege.infoTitle'"
+    [dialogMessageKey]="'shared.form.eltern.sozialhilfebeitraege.info'"
+    #sozialhilfebeitraegeDialog="dvSharedUiInfoDialog"
+  ></div>
 
+  <!-- Ausweis B-->
+  <mat-radio-group
+    class="tw:dv-form-item"
+    formControlName="ausweisbFluechtling"
+    data-testid="form-eltern-ausweisFluechtling"
+    dvSharedUiFormField
+  >
+    <div class="tw:flex tw:items-center tw:gap-4">
+      <label>{{
+        'shared.form.eltern.ausweisbFluechtling.' +
+          (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
+          '.label' | transloco
+      }}</label>
       <button
         type="button"
-        (click)="wohnkostenDialog.toggle()"
-        class="tw:dv-button-icon tw:text-dv-blue tw:mt-2"
+        (click)="ausweisbFluechtlingDialog.toggle()"
+        class="tw:dv-button-icon tw:text-dv-blue"
         [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
       >
         <span class="material-symbols-rounded tw:text-3xl!"> info </span>
       </button>
     </div>
-    <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
-    <div class="tw:hidden tw:xl:block tw:xl:col-span-4">
-      <div
-        dvSharedUiInfoDialog
-        [dialogTitleKey]="'shared.form.eltern.wohnkosten.infoTitle'"
-        [dialogMessageKey]="'shared.form.eltern.wohnkosten.info'"
-        #wohnkostenDialog="dvSharedUiInfoDialog"
-      ></div>
+
+    <div class="tw:flex tw:gap-4">
+      <div class="tw:flex tw:flex-col">
+        <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
+        <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+      </div>
+      <dv-shared-ui-form-zuvor-hint
+        [changes]="changes.ausweisbFluechtling | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+      ></dv-shared-ui-form-zuvor-hint>
+      @if (lohnabrechnungVermoegenDocumentSig(); as options) {
+        <dv-shared-pattern-document-upload
+          class="flex-shrink-1 tw:ml-auto tw:mt-2"
+          [optionsSig]="options"
+        ></dv-shared-pattern-document-upload>
+      }
     </div>
-  </div>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- GEBURTSDATUM -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
-
-      <input
-        matInput
-        [dvMaxLength]="'small'"
-        type="text"
-        placeholder="dd.mm.yyyy"
-        formControlName="geburtsdatum"
-        data-testid="form-eltern-geburtsdatum"
-        (blur)="onGeburtsdatumBlur()"
-      />
-      <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
-
+    <div class="group-errors">
       <mat-error *dvSharedUiFormMessageError="'required'">
         {{ 'shared.form.error.required' | transloco }}
       </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-        {{ 'shared.form.error.dateFormat' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'minDate'">
-        {{ 'shared.form.error.minDatePast' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'maxDate'">
-        {{ 'shared.form.error.maxDatePast' | transloco }}
-      </mat-error>
-    </mat-form-field>
-
-    <!-- Telefonnummer -->
-    <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-      <mat-label>{{ 'shared.form.shared.phone.label' | transloco }}</mat-label>
-      <input matInput dvMaxLength type="text" formControlName="telefonnummer" data-testid="form-eltern-telefonnummer" />
-      <mat-hint *dvZuvorHint="changes.telefonnummer"></mat-hint>
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-      <mat-error *dvSharedUiFormMessageError="'telefonnummer'">
-        {{ 'shared.form.error.telefonnummer' | transloco }}
-      </mat-error>
-    </mat-form-field>
-  </div>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Sozialhilfebeitraege-->
-    <mat-radio-group
-      class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
-      formControlName="sozialhilfebeitraege"
-      data-testid="form-eltern-sozialhilfebeitraege"
-      dvSharedUiFormField
-    >
-      <div class="tw:flex tw:items-center tw:gap-2">
-        <label>{{ 'shared.form.eltern.sozialhilfebeitraege.label' | transloco }}</label>
-        <button
-          type="button"
-          (click)="sozialhilfebeitraegeDialog.toggle()"
-          class="tw:dv-button-icon tw:text-dv-blue"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-        >
-          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-        </button>
-      </div>
-
-      <div class="tw:flex tw:gap-2">
-        <div class="tw:flex tw:flex-col">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | transloco
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
-          <dv-shared-ui-form-zuvor-hint
-            [changes]="changes.sozialhilfebeitraege | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
-          ></dv-shared-ui-form-zuvor-hint>
-        </div>
-        @if (sozialhilfeDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 tw:ml-auto align-self-center"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-      <div class="group-errors">
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </div>
-    </mat-radio-group>
-    <div class="tw:hidden tw:xl:block tw:xl:col-span-4"></div>
-    <div
-      dvSharedUiInfoDialog
-      [dialogTitleKey]="'shared.form.eltern.sozialhilfebeitraege.infoTitle'"
-      [dialogMessageKey]="'shared.form.eltern.sozialhilfebeitraege.info'"
-      #sozialhilfebeitraegeDialog="dvSharedUiInfoDialog"
-      class="tw:hidden tw:xl:block tw:xl:col-span-4"
-    ></div>
-  </div>
-
-  <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-    <!-- Ausweis B-->
-    <mat-radio-group
-      formControlName="ausweisbFluechtling"
-      data-testid="form-eltern-ausweisFluechtling"
-      dvSharedUiFormField
-      class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
-    >
-      <div class="tw:flex tw:items-center tw:gap-2">
-        <label>{{
-          'shared.form.eltern.ausweisbFluechtling.' +
-            (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
-            '.label' | transloco
-        }}</label>
-        <button
-          type="button"
-          (click)="ausweisbFluechtlingDialog.toggle()"
-          class="tw:dv-button-icon tw:text-dv-blue"
-          [attr.aria-label]="'shared.form-field.toggle-info-messages' | transloco"
-        >
-          <span class="material-symbols-rounded tw:text-3xl!"> info </span>
-        </button>
-      </div>
-
-      <div class="tw:flex tw:gap-2">
-        <div class="tw:flex tw:flex-col">
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | transloco
-          }}</mat-radio-button>
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
-        </div>
-        <dv-shared-ui-form-zuvor-hint
-          [changes]="changes.ausweisbFluechtling | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
-        ></dv-shared-ui-form-zuvor-hint>
-        @if (lohnabrechnungVermoegenDocumentSig(); as options) {
-          <dv-shared-pattern-document-upload
-            class="flex-shrink-1 tw:ml-auto tw:mt-2"
-            [optionsSig]="options"
-          ></dv-shared-pattern-document-upload>
-        }
-      </div>
-      <div class="group-errors">
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-      </div>
-    </mat-radio-group>
-    <div class="tw:hidden tw:xl:block tw:md:col-span-6 tw:xl:col-span-4"></div>
-
-    <div
-      dvSharedUiInfoDialog
-      [dialogTitleKey]="'shared.form.eltern.ausweisbFluechtling.infoTitle'"
-      [dialogMessageKey]="'shared.form.eltern.ausweisbFluechtling.info'"
-      #ausweisbFluechtlingDialog="dvSharedUiInfoDialog"
-      class="tw:hidden tw:xl:block tw:md:col-span-6 tw:xl:col-span-4"
-    ></div>
-  </div>
+    </div>
+  </mat-radio-group>
+  <div
+    dvSharedUiInfoDialog
+    class="tw:hidden tw:xl:block tw:xl:col-start-3"
+    [dialogTitleKey]="'shared.form.eltern.ausweisbFluechtling.infoTitle'"
+    [dialogMessageKey]="'shared.form.eltern.ausweisbFluechtling.info'"
+    #ausweisbFluechtlingDialog="dvSharedUiInfoDialog"
+  ></div>
 
   <!-- Buttons -->
-  <dv-shared-ui-step-form-buttons>
+  <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
     @if (elternteil.id && !viewSig().readonly) {
       <button
         type="button"

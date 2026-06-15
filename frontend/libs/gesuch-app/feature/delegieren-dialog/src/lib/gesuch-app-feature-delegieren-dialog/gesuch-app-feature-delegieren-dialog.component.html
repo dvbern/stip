@@ -8,18 +8,13 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="tw:text-2xl tw:font-semibold tw:flex tw:mb-6">
+  <h1 class="tw:dv-page-title">
     {{ 'shared.form.shared.section.personal-details' | transloco }}
   </h1>
 
-  <form
-    [formGroup]="form"
-    data-testid="form-delegieren-form"
-    class="tw:mt-6 tw:grid tw:grid-cols-1 tw:gap-x-6 tw:gap-y-4 tw:pt-4 tw:md:grid-cols-2"
-    novalidate
-  >
+  <form [formGroup]="form" data-testid="form-delegieren-form" class="tw:mt-6 tw:dv-form-grid-one-col" novalidate>
     <!-- Anrede -->
-    <mat-form-field dvSharedUiFormField class="tw:w-full">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.person.salutation.label' | transloco }}</mat-label>
       <mat-select
         formControlName="anrede"
@@ -38,7 +33,7 @@
     </mat-form-field>
 
     <!-- nachname -->
-    <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="nachname" data-testid="form-delegieren-nachname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -46,7 +41,7 @@
       </mat-error>
     </mat-form-field>
     <!-- Vorname -->
-    <mat-form-field dvSharedUiFormField class="tw:w-full">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
       <input type="text" matInput dvMaxLength formControlName="vorname" data-testid="form-delegieren-vorname" />
       <mat-error *dvSharedUiFormMessageError="'required'">
@@ -54,13 +49,9 @@
       </mat-error>
     </mat-form-field>
 
-    <dv-shared-ui-form-address
-      class="tw:col-span-full tw:w-full"
-      [group]="form.controls.adresse"
-      [languageSig]="languageSig()"
-    />
+    <dv-shared-ui-form-address class="tw:dv-form-item" [group]="form.controls.adresse" [languageSig]="languageSig()" />
 
-    <mat-form-field dvSharedUiFormField class="tw:w-full">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
 
       <input
@@ -85,7 +76,7 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field dvSharedUiFormField class="tw:w-full">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <!-- E-Mail -->
       <mat-label>{{ 'shared.form.delegation.email.label' | transloco }}</mat-label>
       <input
@@ -103,7 +94,7 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="tw:col-start-1 tw:w-full">
+    <div class="tw:dv-form-item">
       <!-- Sprache -->
       <label>{{ 'shared.form.delegation.sprache.label' | transloco }}</label>
       <mat-radio-group
@@ -125,7 +116,7 @@
       </mat-radio-group>
     </div>
 
-    <div class="tw:col-start-1 tw:col-span-2 tw:w-full">
+    <div class="tw:dv-form-item">
       <mat-checkbox
         [formControl]="form.controls.nutzungsbedingungenAkzeptiert"
         data-testid="form-delegieren-nutzungsbedingungenAkzeptiert"
@@ -147,7 +138,7 @@
       </mat-checkbox>
     </div>
 
-    <div class="tw:flex tw:justify-between tw:col-span-full tw:mt-6">
+    <div class="tw:dv-form-action tw:flex tw:justify-between">
       <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
         {{ 'shared.cancel' | transloco }}
       </button>

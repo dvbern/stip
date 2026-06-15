@@ -28,7 +28,10 @@ import {
 } from '@dv/shared/ui/form';
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import {
+  convertTempFormToRealValues,
+  provideMaterialDefaultOptions,
+} from '@dv/shared/util/form';
 import {
   MAX_AGE_GESUCHSSTELLER,
   MEDIUM_AGE_GESUCHSSTELLER,
@@ -59,6 +62,11 @@ export type DelegierenDialogResult = DelegierungCreate;
   ],
   templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
+  ],
 })
 export class GesuchAppFeatureDelegierenDialogComponent {
   private dialog = inject(MatDialog);

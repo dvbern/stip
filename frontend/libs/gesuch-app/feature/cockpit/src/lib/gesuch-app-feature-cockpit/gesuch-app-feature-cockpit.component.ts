@@ -49,7 +49,6 @@ import {
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
-import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { isPending } from '@dv/shared/util/remote-data';
 
 import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.selector';
@@ -68,10 +67,7 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     GesuchAppUiAdvTranslocoDirective,
     MatMenuModule,
   ],
-  providers: [
-    SozialdienstStore,
-    provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' }),
-  ],
+  providers: [SozialdienstStore],
   templateUrl: './gesuch-app-feature-cockpit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

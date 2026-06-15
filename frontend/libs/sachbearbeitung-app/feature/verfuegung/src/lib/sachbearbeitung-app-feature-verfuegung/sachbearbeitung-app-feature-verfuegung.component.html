@@ -48,7 +48,8 @@
   <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:overflow-y-auto tw:bg-white">
     <ng-container *ngTemplateOutlet="navigation"></ng-container>
   </div>
-  <div class="tw:p-6 tw:dv-container tw:bg-white tw:dv-pass-height">
+
+  <div class="tw:dv-pass-height tw:dv-container tw:p-6 tw:pb-32 tw:bg-white">
     <!-- step header (mobile) -->
     <div class="tw:flex tw:items-center tw:justify-between border-bottom tw:lg:hidden tw:mt-4 tw:mb-6 border-1 tw:pb-4">
       <ng-container *ngTemplateOutlet="navigation"></ng-container>
@@ -56,22 +57,20 @@
 
     <!-- title (desktop) -->
     @if (option) {
-      <div class="tw:hidden tw:lg:flex tw:justify-start tw:items-center">
+      <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start tw:items-center">
         <dv-shared-ui-icon-chip class="tw:mr-4">
           <i class="material-symbols-rounded title-icon">{{ option.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
-        <h2 class="tw:font-semibold tw:m-0" data-testid="step-title">
+        <h1 class="tw:dv-page-title" data-testid="step-title">
           {{ t(option.titleTranslationKey) }}
-        </h2>
+        </h1>
       </div>
     }
 
-    <div>
-      <dv-shared-ui-router-outlet-wrapper
-        attribute="option"
-        (data)="option = $event"
-      ></dv-shared-ui-router-outlet-wrapper>
-    </div>
+    <dv-shared-ui-router-outlet-wrapper
+      attribute="option"
+      (data)="option = $event"
+    ></dv-shared-ui-router-outlet-wrapper>
   </div>
 </div>

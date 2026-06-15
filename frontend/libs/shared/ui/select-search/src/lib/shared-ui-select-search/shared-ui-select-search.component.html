@@ -1,4 +1,4 @@
-<mat-form-field dvSharedUiFormField class="clearable-select tw:w-full">
+<mat-form-field dvSharedUiFormField class="clearable-select tw:w-full" [subscriptSizing]="subscriptSizingSig()">
   <mat-label>{{ labelKeySig() | transloco }}</mat-label>
 
   @if (form.controls.select.value && form.controls.select.enabled) {

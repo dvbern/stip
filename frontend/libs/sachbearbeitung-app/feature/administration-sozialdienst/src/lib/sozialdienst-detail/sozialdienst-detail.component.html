@@ -1,68 +1,54 @@
 <form
   [formGroup]="form"
+  class="tw:dv-form-grid"
   data-testid="form-sozialdienst-form"
   novalidate
-  class="tw:mt-8 tw:px-2 tw:flex tw:flex-col tw:gap-6"
   (ngSubmit)="handleSubmit()"
 >
   @if (store.sozialdienst() | rdIsPending: { ignoreInitial: true }) {
-    <dv-shared-ui-loading></dv-shared-ui-loading>
+    <dv-shared-ui-loading class="tw:xl:col-span-3"></dv-shared-ui-loading>
   } @else {
     <!-- Name -->
-    <div class="tw:grid tw:grid-cols-12 tw:gap-6">
-      <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-        <mat-form-field dvSharedUiFormField class="tw:grow">
-          <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}</mat-label>
-          <input
-            [formControl]="form.controls.name"
-            data-testid="form-sozialdienst-name"
-            matInput
-            dvMaxLength
-            type="text"
-          />
-          <mat-error *dvSharedUiFormMessageError="'required'">
-            {{ 'shared.form.error.required' | transloco }}
-          </mat-error>
-        </mat-form-field>
-      </div>
-    </div>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.name.label' | transloco }}</mat-label>
+      <input [formControl]="form.controls.name" data-testid="form-sozialdienst-name" matInput dvMaxLength type="text" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+    </mat-form-field>
 
     @let zahlungsverbindungControls = form.controls.zahlungsverbindung.controls;
     <!-- IBAN -->
-    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:my-2">
-      <mat-form-field dvSharedUiFormField class="tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | transloco }}</mat-label>
-        <span matTextPrefix>CH</span>
-        <input
-          data-testid="form-sozialdienst-iban"
-          matInput
-          type="text"
-          [formControl]="zahlungsverbindungControls.iban"
-          [maskito]="MASK_IBAN"
-        />
-        <mat-error *dvSharedUiFormMessageError="'required'">
-          {{ 'shared.form.error.required' | transloco }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | transloco }}
-        </mat-error>
-        <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
-          {{ 'shared.form.error.invalidIBAN' | transloco }}
-        </mat-error>
-      </mat-form-field>
-    </div>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+      <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.ort.iban.label' | transloco }}</mat-label>
+      <span matTextPrefix>CH</span>
+      <input
+        data-testid="form-sozialdienst-iban"
+        matInput
+        type="text"
+        [formControl]="zahlungsverbindungControls.iban"
+        [maskito]="MASK_IBAN"
+      />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ 'shared.form.error.required' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'invalidIBAN'">
+        {{ 'shared.form.error.invalidIBAN' | transloco }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'qrIBAN'">
+        {{ 'shared.form.error.invalidIBAN' | transloco }}
+      </mat-error>
+    </mat-form-field>
 
     <!-- Adresse -->
-    <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
-      <dv-shared-ui-form-address
-        class="tw:col-span-12 tw:xl:col-span-8"
-        [group]="form.controls.zahlungsverbindung.controls.adresse"
-        [languageSig]="languageSig()"
-      />
-    </div>
+    <dv-shared-ui-form-address
+      class="tw:dv-form-item"
+      [group]="form.controls.zahlungsverbindung.controls.adresse"
+      [languageSig]="languageSig()"
+    />
 
-    <fieldset formGroupName="sozialdienstAdmin" class="tw:flex tw:flex-col tw:gap-6 tw:mt-6">
-      <legend class="tw:flex tw:gap-8 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
+    <fieldset formGroupName="sozialdienstAdmin" class="tw:contents">
+      <legend class="tw:xl:col-span-2 tw:mt-8 tw:flex tw:items-center tw:gap-4">
         <div class="tw:text-2xl tw:font-semibold">
           {{ 'sachbearbeitung-app.admin.sozialdienst.sozialdienstAdmin' | transloco }}
         </div>
@@ -79,73 +65,64 @@
         }
       </legend>
 
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-6">
-        <!-- nachname -->
-        <div class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-form-field dvSharedUiFormField class="tw:grow">
-            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
-            <input
-              [formControl]="zahlungsverbindungControls.nachname"
-              data-testid="form-sozialdienst-nachname"
-              matInput
-              dvMaxLength
-              type="text"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </mat-form-field>
-        </div>
+      <!-- nachname -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.nachname.label' | transloco }}</mat-label>
+        <input
+          [formControl]="zahlungsverbindungControls.nachname"
+          data-testid="form-sozialdienst-nachname"
+          matInput
+          dvMaxLength
+          type="text"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+      </mat-form-field>
 
-        <!-- vorname -->
-        <div class="tw:flex gap 2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4">
-          <mat-form-field dvSharedUiFormField class="tw:grow">
-            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
-            <input
-              [formControl]="zahlungsverbindungControls.vorname"
-              data-testid="form-sozialdienst-vorname"
-              matInput
-              dvMaxLength
-              type="text"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
+      <!-- vorname -->
+      <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
+        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.vorname.label' | transloco }}</mat-label>
+        <input
+          [formControl]="zahlungsverbindungControls.vorname"
+          data-testid="form-sozialdienst-vorname"
+          matInput
+          dvMaxLength
+          type="text"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+      </mat-form-field>
 
-      @let sozialdienstControls = form.controls.sozialdienstAdmin.controls;
       <!-- E-Mail Adresse -->
-      <div class="tw:grid tw:grid-cols-12 tw:gap-6 tw:mt-1">
-        <div
-          class="tw:flex tw:gap-2 tw:content-center tw:col-span-12 tw:md:col-span-6 tw:xl:col-span-4"
-          [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
-        >
-          <mat-form-field dvSharedUiFormField class="tw:grow">
-            <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
-            <input
-              data-testid="form-sozialdienst-email"
-              [formControl]="sozialdienstControls.email"
-              matInput
-              dvMaxLength
-              type="email"
-              (blur)="trimEmail()"
-            />
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-            <mat-error *dvSharedUiFormMessageError="'pattern'">
-              {{ 'shared.form.error.email' | transloco }}
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
+      @let sozialdienstControls = form.controls.sozialdienstAdmin.controls;
+      <mat-form-field
+        dvSharedUiFormField
+        class="tw:dv-form-item"
+        [class.readonly]="form.controls.sozialdienstAdmin.controls.email.disabled"
+      >
+        <mat-label>{{ 'sachbearbeitung-app.admin.sozialdienst.email.label' | transloco }}</mat-label>
+        <input
+          data-testid="form-sozialdienst-email"
+          [formControl]="sozialdienstControls.email"
+          matInput
+          dvMaxLength
+          type="email"
+          (blur)="trimEmail()"
+        />
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+        <mat-error *dvSharedUiFormMessageError="'pattern'">
+          {{ 'shared.form.error.email' | transloco }}
+        </mat-error>
+      </mat-form-field>
     </fieldset>
 
     @if (!form.disabled) {
       <dv-shared-ui-form-save
-        class="tw:mt-6"
+        class="tw:dv-form-action"
         [disabled]="form.invalid || form.pristine"
         [loading]="store.sozialdienst() | rdIsPending: { ignoreInitial: true }"
       ></dv-shared-ui-form-save>

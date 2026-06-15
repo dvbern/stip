@@ -40,7 +40,6 @@ import {
 import { SharedUiClearButtonComponent } from '@dv/shared/ui/clear-button';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
-import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 
 @Component({
   selector: 'dv-sachbearbeitung-app-feature-administration-eu-efta-laender',
@@ -60,11 +59,6 @@ import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
     SharedUiMaxLengthDirective,
     SharedUiClearButtonComponent,
     TypeSafeMatCellDefDirective,
-  ],
-  providers: [
-    provideMaterialDefaultOptions({
-      subscriptSizing: 'dynamic',
-    }),
   ],
   templateUrl:
     './sachbearbeitung-app-feature-administration-eu-efta-laender.component.html',

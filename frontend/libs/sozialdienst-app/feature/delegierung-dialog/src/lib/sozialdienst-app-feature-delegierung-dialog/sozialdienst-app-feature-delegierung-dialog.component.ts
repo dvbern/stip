@@ -45,6 +45,7 @@ import {
 import { SharedUiFormAddressComponent } from '@dv/shared/ui/form-address';
 import { SharedUiHasRolesDirective } from '@dv/shared/ui/has-roles';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
+import { provideMaterialDefaultOptions } from '@dv/shared/util/form';
 import { isPending } from '@dv/shared/util/remote-data';
 import {
   MEDIUM_AGE_GESUCHSSTELLER,
@@ -76,6 +77,11 @@ export interface DelegierungDialogData {
     SharedUiMaxLengthDirective,
     SharedUiFormAddressComponent,
     SharedUiFormSaveComponent,
+  ],
+  providers: [
+    provideMaterialDefaultOptions({
+      subscriptSizing: 'dynamic',
+    }),
   ],
   templateUrl: './sozialdienst-app-feature-delegierung-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
