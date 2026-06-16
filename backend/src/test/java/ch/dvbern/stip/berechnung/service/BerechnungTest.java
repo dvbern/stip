@@ -410,14 +410,13 @@ class BerechnungTest {
                 .setElternteilUnbekanntVerstorben(true)
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setElterns(
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(14000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
@@ -558,14 +557,13 @@ class BerechnungTest {
                 .setElternteilUnbekanntVerstorben(true)
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setElterns(
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(20000)
                     .setGeburtsdatum(LocalDate.now().minusYears(45))
             )
@@ -668,18 +666,18 @@ class BerechnungTest {
                 .setElternVerheiratetZusammen(false)
                 .setGerichtlicheAlimentenregelung(false)
                 .setElternteilUnbekanntVerstorben(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setElterns(
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(19_992)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(18_000)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )
@@ -840,8 +838,6 @@ class BerechnungTest {
                 .setElternteilUnbekanntVerstorben(true)
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.UNBEKANNT)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setLebenslaufItems(
@@ -984,8 +980,6 @@ class BerechnungTest {
                 .setGerichtlicheAlimentenregelung(false)
                 .setElternteilUnbekanntVerstorben(false)
                 .setWerZahltAlimente(Elternschaftsteilung.GEMEINSAM)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setLebenslaufItems(
@@ -1022,10 +1016,12 @@ class BerechnungTest {
             Set.of(
                 ((Eltern) new Eltern()
                     .setWohnkosten(0)
+                    .setWiederverheiratet(false)
                     .setGeburtsdatum(LocalDate.of(1963, 8, 1)))
                         .setElternTyp(ElternTyp.VATER),
                 ((Eltern) new Eltern()
                     .setWohnkosten(0)
+                    .setWiederverheiratet(false)
                     .setGeburtsdatum(LocalDate.of(1963, 6, 1)))
                         .setElternTyp(ElternTyp.MUTTER)
             )
@@ -1144,18 +1140,18 @@ class BerechnungTest {
                 .setElternVerheiratetZusammen(false)
                 .setGerichtlicheAlimentenregelung(false)
                 .setElternteilUnbekanntVerstorben(false)
-                .setMutterWiederverheiratet(false)
-                .setVaterWiederverheiratet(false)
         );
 
         gesuchFormular.setElterns(
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(19_992)
                     .setGeburtsdatum(LocalDate.of(1960, 1, 1)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(false)
                     .setWohnkosten(18_000)
                     .setGeburtsdatum(LocalDate.of(1961, 1, 1))
             )

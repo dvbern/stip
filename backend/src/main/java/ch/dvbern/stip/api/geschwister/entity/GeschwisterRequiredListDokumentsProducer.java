@@ -42,7 +42,9 @@ public class GeschwisterRequiredListDokumentsProducer implements RequiredRefDoku
         final var requiredDocs = new HashSet<Pair<DokumentTyp, UUID>>();
 
         for (var geschwister : geschwisters) {
-            if (geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG) {
+            if (
+                !geschwister.isHidden() && geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
+            ) {
                 requiredDocs.add(
                     Pair.of(
                         DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE,

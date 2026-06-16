@@ -188,11 +188,10 @@ class SteuerdatenServiceTest {
         final var vaterEltern = new Eltern();
         vaterEltern.setElternTyp(ElternTyp.VATER);
         vaterEltern.setSozialversicherungsnummer(ssvn);
+        vaterEltern.setWiederverheiratet(false);
 
         final var familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setVaterWiederverheiratet(false);
-        familiensituation.setMutterWiederverheiratet(false);
 
         final var formular = mock(GesuchFormular.class);
         when(formular.getSteuerdaten()).thenReturn(new LinkedHashSet<>());
@@ -278,6 +277,7 @@ class SteuerdatenServiceTest {
         final var mutterEltern = new Eltern();
         mutterEltern.setElternTyp(ElternTyp.MUTTER);
         mutterEltern.setSozialversicherungsnummer(ssvn);
+        mutterEltern.setWiederverheiratet(false);
 
         final var existingSteuerdaten = new Steuerdaten();
         existingSteuerdaten.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
@@ -288,8 +288,6 @@ class SteuerdatenServiceTest {
 
         final var familiensituation = new Familiensituation();
         familiensituation.setElternVerheiratetZusammen(false);
-        familiensituation.setVaterWiederverheiratet(false);
-        familiensituation.setMutterWiederverheiratet(false);
 
         final var formular = mock(GesuchFormular.class);
         when(formular.getSteuerdaten()).thenReturn(steuerdatenSet);
@@ -340,185 +338,5 @@ class SteuerdatenServiceTest {
         // The existing entry should have been updated (not a new one created)
         verify(steuerdatenMapper).partialUpdate(portData, existingSteuerdaten);
         verify(steuerdatenRepository).persistAndFlush(updatedSteuerdaten);
-    }
-
-    private Familiensituation familiensituationWith(
-        Boolean vaterWiederverheiratet,
-        Boolean mutterWiederverheiratet
-    ) {
-        final var fs = new Familiensituation();
-        fs.setElternVerheiratetZusammen(false);
-        fs.setVaterWiederverheiratet(vaterWiederverheiratet);
-        fs.setMutterWiederverheiratet(mutterWiederverheiratet);
-        return fs;
-    }
-
-    @Test
-    void notWiederverheiratet_returnsSelbstaendigFromActualSteuerdaten_whenTrue() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
-
-        final var familiensituation = familiensituationWith(false, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual),
-            familiensituation
-        );
-
-        assertThat(result, is(true));
-    }
-
-    @Test
-    void notWiederverheiratet_returnsSelbstaendigFromActualSteuerdaten_whenFalse() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var familiensituation = familiensituationWith(false, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual),
-            familiensituation
-        );
-
-        assertThat(result, is(false));
-    }
-
-    @Test
-    void notWiederverheiratet_nullWiederverheiratetFields_returnsSelbstaendigFromActualSteuerdaten() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
-
-        final var familiensituation = familiensituationWith(null, null);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual),
-            familiensituation
-        );
-
-        assertThat(result, is(true));
-    }
-
-    @Test
-    void vaterWiederverheiratet_noOtherSelbstaendigInSet_returnsFalse() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var other = new Steuerdaten();
-        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        other.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var familiensituation = familiensituationWith(true, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual, other),
-            familiensituation
-        );
-
-        assertThat(result, is(false));
-    }
-
-    @Test
-    void vaterWiederverheiratet_anotherSteuerdatenIsSelbstaendig_returnsTrue() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var other = new Steuerdaten();
-        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        other.setIsArbeitsverhaeltnisSelbstaendig(true);
-
-        final var familiensituation = familiensituationWith(true, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual, other),
-            familiensituation
-        );
-
-        assertThat(result, is(true));
-    }
-
-    @Test
-    void vaterWiederverheiratet_actualIsSelbstaendig_returnsTrue() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(true);
-
-        final var familiensituation = familiensituationWith(true, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual),
-            familiensituation
-        );
-
-        assertThat(result, is(true));
-    }
-
-    @Test
-    void mutterWiederverheiratet_noSelbstaendigInSet_returnsFalse() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var familiensituation = familiensituationWith(false, true);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual),
-            familiensituation
-        );
-
-        assertThat(result, is(false));
-    }
-
-    @Test
-    void mutterWiederverheiratet_anotherSteuerdatenIsSelbstaendig_returnsTrue() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(false);
-
-        final var other = new Steuerdaten();
-        other.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        other.setIsArbeitsverhaeltnisSelbstaendig(true);
-
-        final var familiensituation = familiensituationWith(false, true);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual, other),
-            familiensituation
-        );
-
-        assertThat(result, is(true));
-    }
-
-    @Test
-    void wiederverheiratet_nullSelbstaendigInSet_treatedAsFalse_returnsFalse() {
-        final var actual = new Steuerdaten();
-        actual.setSteuerdatenTyp(SteuerdatenTyp.MUTTER);
-        actual.setIsArbeitsverhaeltnisSelbstaendig(null);
-
-        final var other = new Steuerdaten();
-        other.setSteuerdatenTyp(SteuerdatenTyp.VATER);
-        other.setIsArbeitsverhaeltnisSelbstaendig(null);
-
-        final var familiensituation = familiensituationWith(true, false);
-
-        final var result = steuerdatenService.evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-            actual,
-            Set.of(actual, other),
-            familiensituation
-        );
-
-        assertThat(result, is(false));
     }
 }

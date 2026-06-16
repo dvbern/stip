@@ -68,21 +68,21 @@ public abstract class GesuchTrancheMapper {
     GeschwisterMapper geschwisterMapper;
 
     @ToDtoDefaultMapping
-    public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch, @Context GesuchTranche context);
+    public abstract GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch, @Context GesuchTranche context);
 
-    public GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch) {
-        return toDtoWithElevatedPermissions(gesuch, gesuch);
+    public GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch) {
+        return toDtoWithConfidentialFields(gesuch, gesuch);
     }
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedByName = "afterMappingWithoutElevatedPermissionFields")
-    public abstract GesuchTrancheDto toDtoWithoutElevatedPermissions(
+    @BeanMapping(qualifiedByName = "afterMappingWithoutConfidentialFields")
+    public abstract GesuchTrancheDto toDtoWithoutConfidentialFields(
         GesuchTranche gesuchTranche,
         @Context GesuchTranche context
     );
 
-    public GesuchTrancheDto toDtoWithoutElevatedPermissions(GesuchTranche gesuchTranche) {
-        return toDtoWithoutElevatedPermissions(gesuchTranche, gesuchTranche);
+    public GesuchTrancheDto toDtoWithoutConfidentialFields(GesuchTranche gesuchTranche) {
+        return toDtoWithoutConfidentialFields(gesuchTranche, gesuchTranche);
     }
 
     @ToDtoDefaultMapping
@@ -100,14 +100,14 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "centralMappingWithOverrideFieldsThatRequireElevatedPermissions"
+        qualifiedByName = "beforeMappingRejectConfidentialFields"
     )
-    public abstract GesuchTranche partialUpdateOverrideFieldsThatRequireElevatedPermissions(
+    public abstract GesuchTranche partialUpdateRejectConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    public abstract GesuchTranche partialUpdateAcceptFieldsThatRequireElevatedPermissions(
+    public abstract GesuchTranche partialUpdateAcceptConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
@@ -115,18 +115,18 @@ public abstract class GesuchTrancheMapper {
     public GesuchTranche partialUpdate(
         final GesuchTrancheUpdateDto gesuchUpdateDto,
         final GesuchTranche gesuch,
-        final boolean requiresElevatedPermissions
+        final boolean updateConfidentialFields
     ) {
-        if (requiresElevatedPermissions) {
-            return partialUpdateOverrideFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
+        if (updateConfidentialFields) {
+            return partialUpdateRejectConfidentialFields(gesuchUpdateDto, gesuch);
         } else {
-            return partialUpdateAcceptFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
+            return partialUpdateAcceptConfidentialFields(gesuchUpdateDto, gesuch);
         }
     }
 
-    @Named("afterMappingWithoutElevatedPermissionFields")
+    @Named("afterMappingWithoutConfidentialFields")
     @AfterMapping
-    protected void afterMappingWithoutElevatedPermissionFields(
+    protected void afterMappingWithoutConfidentialFields(
         @MappingTarget GesuchTrancheDto gesuchTrancheDto,
         @Context GesuchTranche context
     ) {
@@ -166,6 +166,9 @@ public abstract class GesuchTrancheMapper {
         GesuchTrancheDto gesuchTrancheDto,
         GesuchTranche context
     ) {
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getGeschwisters())) {
+            return;
+        }
         final var hiddenGeschwistersUUID = context.getGesuchFormular()
             .getGeschwisters()
             .stream()
@@ -177,9 +180,9 @@ public abstract class GesuchTrancheMapper {
             .removeIf(geschwisterDto -> hiddenGeschwistersUUID.contains(geschwisterDto.getId()));
     }
 
-    @Named("centralMappingWithOverrideFieldsThatRequireElevatedPermissions")
+    @Named("beforeMappingRejectConfidentialFields")
     @BeforeMapping
-    protected void centralBeforeMappingWithOverrideFieldsThatRequireElevatedPermissions(
+    protected void beforeMappingAddOverrideConfidentialFields(
         final GesuchTrancheUpdateDto newTranche,
         @MappingTarget final GesuchTranche gesuchTranche
     ) {
@@ -274,6 +277,18 @@ public abstract class GesuchTrancheMapper {
         final var hiddenGeschwisters =
             gesuchTranche.getGesuchFormular().getGeschwisters().stream().filter(Geschwister::isHidden);
         final var hiddenGeschwistersDtos = hiddenGeschwisters.map(geschwisterMapper::toUpdateDto).toList();
-        newTranche.getGesuchFormular().getGeschwisters().addAll(hiddenGeschwistersDtos);
+        if (Objects.isNull(newTranche.getGesuchFormular().getGeschwisters())) {
+            newTranche.getGesuchFormular().setGeschwisters(hiddenGeschwistersDtos);
+        } else {
+            newTranche.getGesuchFormular()
+                .setGeschwisters(
+                    Stream
+                        .concat(
+                            newTranche.getGesuchFormular().getGeschwisters().stream(),
+                            hiddenGeschwistersDtos.stream()
+                        )
+                        .toList()
+                );
+        }
     }
 }

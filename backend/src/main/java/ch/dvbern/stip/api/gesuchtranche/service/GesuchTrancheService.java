@@ -22,6 +22,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.auszahlung.service.AuszahlungValidatorService;
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -43,8 +44,10 @@ import ch.dvbern.stip.api.dokument.service.GesuchDokumentService;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.util.GesuchDokumentCopyUtil;
-import ch.dvbern.stip.api.dokument.util.IsDokumentOfVersteckterElternteilUtil;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfHiddenElternteilUtil;
+import ch.dvbern.stip.api.dokument.util.IsDokumentOfHiddenGeschwisterUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
@@ -303,12 +306,20 @@ public class GesuchTrancheService {
     }
 
     private List<GesuchDokumentDto> getAndCheckGesuchDokumentsForGesuchTrancheGS(final GesuchTranche gesuchTranche) {
-        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        final var hiddenElterns = gesuchTranche.getGesuchFormular().getVersteckteEltern();
+        final var hiddenGeschwisters = gesuchTranche.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(Geschwister::isHidden)
+            .collect(
+                Collectors.toSet()
+            );
         return gesuchTranche.getGesuchDokuments()
             .stream()
             .filter(
-                gesuchDokument -> !IsDokumentOfVersteckterElternteilUtil
-                    .isVerstecktesDokument(versteckteEltern, gesuchDokument)
+                gesuchDokument -> !IsDokumentOfHiddenElternteilUtil
+                    .isHiddenDokument(hiddenElterns, gesuchDokument)
+                && !IsDokumentOfHiddenGeschwisterUtil.isHiddenDokument(hiddenGeschwisters, gesuchDokument)
             )
             .map(gesuchDokumentMapper::toDto)
             .toList();
@@ -399,7 +410,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithoutElevatedPermissions(newTranche);
+        return gesuchTrancheMapper.toDtoWithoutConfidentialFields(newTranche);
     }
 
     @Transactional
@@ -424,7 +435,7 @@ public class GesuchTrancheService {
 
         gesuchDokumentKommentarService.copyKommentareFromTrancheToTranche(trancheToCopy, newTranche);
 
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(newTranche);
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(newTranche);
     }
 
     @Transactional
@@ -457,7 +468,7 @@ public class GesuchTrancheService {
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
         final var newTranche = gesuchTrancheRepository.findMostRecentCreatedTranche(aenderung.getGesuch());
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(newTranche.orElseThrow(NotFoundException::new));
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(newTranche.orElseThrow(NotFoundException::new));
     }
 
     @Transactional
@@ -556,7 +567,7 @@ public class GesuchTrancheService {
         notificationService
             .createAenderungAbgelehntNotificationAndSendStdMail(aenderung.getGesuch(), aenderung, kommentarDto);
 
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung.getGesuch().getLatestGesuchTranche());
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(aenderung.getGesuch().getLatestGesuchTranche());
     }
 
     @Transactional
@@ -587,7 +598,7 @@ public class GesuchTrancheService {
         gesuchStatusService
             .triggerStateMachineEvent(aenderung.getGesuch(), GesuchStatusChangeEvent.AENDERUNG_AKZEPTIEREN);
 
-        return gesuchTrancheMapper.toDtoWithElevatedPermissions(aenderung);
+        return gesuchTrancheMapper.toDtoWithConfidentialFields(aenderung);
     }
 
     private ValidationReportDto bearbeitungAbschliessenValidationReport(final GesuchTranche gesuchTranche) {

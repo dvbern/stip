@@ -117,6 +117,10 @@ import org.jilt.BuilderStyle;
     groups = GesuchEinreichenValidationGroup.class,
     property = "familiensituation"
 )
+@ElternWiederverheiratetRequiredConstraint(
+    groups = GesuchEinreichenValidationGroup.class,
+    property = "eltern"
+)
 @EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
     groups = {
