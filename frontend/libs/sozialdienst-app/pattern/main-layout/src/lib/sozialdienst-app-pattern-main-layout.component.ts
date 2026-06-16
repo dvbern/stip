@@ -73,15 +73,15 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   baseMenuItems = sozialdienstBaseMenuItems;
 
+  @HostBinding('class')
+  hostClass = 'tw:flex tw:flex-col';
+
   cacheSig = this.store.selectSignal(selectSharedDataAccessGesuchCache);
 
   fallIdFromGesuchCacheSig = computed(() => {
     const { gesuch } = this.cacheSig();
     return gesuch?.fallId;
   });
-
-  @HostBinding('class')
-  hostClass = 'tw:flex tw:flex-col';
 
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 

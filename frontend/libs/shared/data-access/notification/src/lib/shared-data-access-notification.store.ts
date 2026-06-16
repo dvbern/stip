@@ -3,7 +3,12 @@ import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { Notification, NotificationService } from '@dv/shared/model/gesuch';
+import {
+  Notification,
+  NotificationService,
+  NotificationServiceGetNotificationsForFallRequestParams,
+} from '@dv/shared/model/gesuch';
+import { getNotificationTranslationKey } from '@dv/shared/model/nachricht';
 import {
   CachedRemoteData,
   cachedPending,
@@ -28,25 +33,30 @@ export class NotificationStore extends signalStore(
   private notificationService = inject(NotificationService);
 
   notificationListViewSig = computed(() => {
-    return fromCachedDataSig(this.notifications) ?? [];
+    const n = fromCachedDataSig(this.notifications) ?? [];
+    return n.map((notification) => ({
+      ...notification,
+      translationKey: getNotificationTranslationKey(notification),
+    }));
   });
 
-  loadNotifications$ = rxMethod<void>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          notifications: cachedPending(state.notifications),
-        }));
-      }),
-      switchMap(() =>
-        this.notificationService
-          .getNotificationsForCurrentUser$()
-          .pipe(
-            handleApiResponse((notifications) =>
-              patchState(this, { notifications }),
+  getNotificationsForFall$ =
+    rxMethod<NotificationServiceGetNotificationsForFallRequestParams>(
+      pipe(
+        tap(() => {
+          patchState(this, (state) => ({
+            notifications: cachedPending(state.notifications),
+          }));
+        }),
+        switchMap(({ fallId }) =>
+          this.notificationService
+            .getNotificationsForFall$({ fallId })
+            .pipe(
+              handleApiResponse((notifications) =>
+                patchState(this, { notifications }),
+              ),
             ),
-          ),
+        ),
       ),
-    ),
-  );
+    );
 }

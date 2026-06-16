@@ -18,7 +18,6 @@ import {
   GesuchDashboardItem,
   GesuchService,
 } from '@dv/shared/model/gesuch';
-import { getNotificationTranslationKey } from '@dv/shared/model/nachricht';
 import {
   getGesuchPermissions,
   getTranchePermissions,
@@ -124,10 +123,11 @@ export class DashboardStore extends signalStore(
         rolesMap,
         fallDashboardItem.currentDelegierung,
       ),
-      notifications: fallDashboardItem.notifications.map((notification) => ({
-        ...notification,
-        translationKey: getNotificationTranslationKey(notification),
-      })),
+      // todo:
+      // notifications: fallDashboardItem.notifications.map((notification) => ({
+      //   ...notification,
+      //   translationKey: getNotificationTranslationKey(notification),
+      // })),
       hasActiveAusbildungen: activeAusbildungen.length > 0,
       activeAusbildungen,
       inactiveAusbildungen,

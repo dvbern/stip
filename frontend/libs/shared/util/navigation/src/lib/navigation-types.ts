@@ -9,6 +9,7 @@ import {
   BenutzerRole,
   SozialdienstBenutzerRole,
 } from '@dv/shared/model/benutzer';
+import { SharedModelState } from '@dv/shared/model/state-colors';
 
 export type Portal<T = unknown> =
   | TemplatePortal
@@ -28,6 +29,10 @@ interface NavItemBase {
   active?: boolean | undefined;
   routerlinkActiveOptions?: { exact: boolean };
   testId?: string;
+  badge?: {
+    count: number;
+    type: SharedModelState;
+  };
 }
 
 export interface NavItemLink extends NavItemBase {

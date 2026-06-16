@@ -931,12 +931,15 @@ Notification:
   description: Notification for a Gesuch
   type: object
   required:
+    - id
     - notificationType
     - fallId
     - timestampErstellt
     - userErstellt
     - absender
   properties:
+    id:
+      $ref: '#/UUID'
     notificationText:
       type: string
     notificationType:

@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,6 +36,8 @@ export class SharedUiNotificationsComponent {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'notifications',
   });
+  navigationMode = input<boolean>(false);
+  notificationClick = output<SharedModelNachricht>();
   newPageSig = signal<PageEvent | null>(null);
 
   notificationsViewSig = computed(() => {
@@ -51,6 +54,10 @@ export class SharedUiNotificationsComponent {
   });
 
   openNotification(notification: SharedModelNachricht) {
-    SharedUiNotificationDialogComponent.open(this.dialog, notification);
+    if (this.navigationMode()) {
+      this.notificationClick.emit(notification);
+    } else {
+      SharedUiNotificationDialogComponent.open(this.dialog, notification);
+    }
   }
 }

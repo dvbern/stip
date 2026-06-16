@@ -18,6 +18,7 @@ export interface GesuchHeader {
     initial?: VerfuegtGesuch;
     versions: Array<VerfuegtGesuch>;
     aenderungs: GesuchAenderungs;
+    unreadNotificationsCount: number;
     currentTranches: Array<GesuchTrancheSlim>;
     gesuchInfo: GesuchInfo;
 }

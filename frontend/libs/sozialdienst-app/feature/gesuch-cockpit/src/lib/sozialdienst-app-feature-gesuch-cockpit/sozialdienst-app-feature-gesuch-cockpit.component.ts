@@ -34,7 +34,6 @@ import {
   SharedUiDashboardCompactAusbildungComponent,
 } from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 
 @Component({
   selector: 'dv-sozialdienst-app-feature-gesuch-cockpit',
@@ -43,7 +42,6 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
     MatSelectModule,
     MatMenuModule,
     SharedUiIconChipComponent,
-    SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
     TranslocoDirective,

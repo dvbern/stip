@@ -12,12 +12,10 @@
 import { AusbildungDashboardItem } from './ausbildungDashboardItem';
 import { Fall } from './fall';
 import { DelegierungSlim } from './delegierungSlim';
-import { Notification } from './notification';
 
 export interface FallDashboardItem { 
     fall: Fall;
     ausbildungDashboardItems: Array<AusbildungDashboardItem>;
-    notifications: Array<Notification>;
     currentDelegierung?: DelegierungSlim;
     earliestActiveGesuchPeriodeStart?: string;
 }

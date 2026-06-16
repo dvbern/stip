@@ -102,6 +102,7 @@ export class GesuchAppPatternMainLayoutComponent {
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
+      const gesuchHeader = this.gesuchHeaderStore.viewSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -113,7 +114,7 @@ export class GesuchAppPatternMainLayoutComponent {
 
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
-        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        gesuchHeader.currentTranches ?? [],
         tabSegments,
         this.trancheIdSig(),
       );
@@ -124,6 +125,20 @@ export class GesuchAppPatternMainLayoutComponent {
         id: 'auszahlungen',
         label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
+      };
+
+      const nachrichten: NavItem = {
+        type: 'link',
+        id: 'nachrichten',
+        icon: 'mail',
+        label: { key: 'shared.menu.nachrichten' },
+        route: ['/nachrichten', fallId],
+        badge: gesuchHeader.unreadNotificationsCount
+          ? {
+              count: gesuchHeader.unreadNotificationsCount,
+              type: 'info',
+            }
+          : undefined,
       };
 
       const darlehenMenu = buildDarlehenMenu({
@@ -142,6 +157,7 @@ export class GesuchAppPatternMainLayoutComponent {
         ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
+        nachrichten,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

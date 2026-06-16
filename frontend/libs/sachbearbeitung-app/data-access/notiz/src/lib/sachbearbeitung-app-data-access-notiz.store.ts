@@ -35,6 +35,7 @@ export class NotizStore extends signalStore(
   withState(initialState),
 ) {
   private notizService = inject(GesuchNotizService);
+  //todo: consider renaming to toastStore or similar. notifications are app notifications to the app users.
   private notificationStore = inject(GlobalNotificationStore);
 
   notizenListViewSig = computed(() => {
