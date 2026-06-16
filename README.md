@@ -43,7 +43,7 @@
 
 If there are any problems occurring during deployment, check:
 
-- [Migration / Liquibase / DB Lock Problems](backend/docs/troubleshooting.md#Liquibase)
+- [Argo CD Sync / Migration / Liquibase / DB Lock Problems](backend/docs/troubleshooting.md)
 
 ## Project URLs
 
