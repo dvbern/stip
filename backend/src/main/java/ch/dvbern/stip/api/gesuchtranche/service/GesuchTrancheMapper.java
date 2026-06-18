@@ -169,15 +169,19 @@ public abstract class GesuchTrancheMapper {
         if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getGeschwisters())) {
             return;
         }
-        final var hiddenGeschwistersUUID = context.getGesuchFormular()
+        final var hiddenGeschwistersUUIDs = context.getGesuchFormular()
             .getGeschwisters()
             .stream()
             .filter(Geschwister::isHidden)
             .map(Geschwister::getId)
             .toList();
-        gesuchTrancheDto.getGesuchFormular()
+
+        final var onlyPublicGeschwisters = gesuchTrancheDto.getGesuchFormular()
             .getGeschwisters()
-            .removeIf(geschwisterDto -> hiddenGeschwistersUUID.contains(geschwisterDto.getId()));
+            .stream()
+            .filter(geschwisterDto -> !hiddenGeschwistersUUIDs.contains(geschwisterDto.getId()))
+            .toList();
+        gesuchTrancheDto.getGesuchFormular().setGeschwisters(onlyPublicGeschwisters);
     }
 
     @Named("beforeMappingRejectConfidentialFields")
