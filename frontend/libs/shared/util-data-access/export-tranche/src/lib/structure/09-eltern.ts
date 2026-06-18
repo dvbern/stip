@@ -71,6 +71,10 @@ export const getEltern = (
               'eltern.sozialhilfebeitraege.label',
               getBoolean(t, elternteil.sozialhilfebeitraege),
             ],
+            [
+              'eltern.wiederverheiratet.label',
+              getBoolean(t, elternteil.wiederverheiratet),
+            ],
           ],
           (key) => `shared.form.${key}`,
         ),

@@ -160,6 +160,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   maskitoNumber = maskitoNumber;
 
   readonly ElternTyp = ElternTyp;
+  elternVerheiratetZusammen?: boolean;
 
   languageSig = this.store.selectSignal(selectLanguage);
   plzValues?: Plz[];
@@ -207,6 +208,7 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
+    wiederverheiratet: [<boolean | undefined>undefined, [Validators.required]],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'wohnkosten',
@@ -271,11 +273,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
+
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
+
     effect(() => {
       this.gotReenabledSig();
       const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
@@ -317,6 +321,9 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     effect(() => {
       const elternteil = this.elternteilSig();
       const gesuchFormular = this.gesuchFormularSig();
+
+      this.elternVerheiratetZusammen =
+        gesuchFormular.familiensituation?.elternVerheiratetZusammen;
 
       this.form.patchValue({
         ...elternteil,

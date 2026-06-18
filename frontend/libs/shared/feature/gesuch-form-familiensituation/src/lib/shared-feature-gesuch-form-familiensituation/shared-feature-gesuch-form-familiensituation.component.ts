@@ -157,14 +157,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
     vaterUnbekanntGrund: this.formBuilder.control<
       ElternUnbekanntheitsGrund | undefined
     >(undefined, { validators: Validators.required }),
-    vaterWiederverheiratet: [
-      <boolean | undefined>undefined,
-      [Validators.required],
-    ],
-    mutterWiederverheiratet: [
-      <boolean | undefined>undefined,
-      [Validators.required],
-    ],
   });
 
   duringAnimation: 'show' | 'hide' = 'show';
@@ -276,8 +268,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
       mutterUnbekanntVerstorben,
       vaterUnbekanntGrund,
       mutterUnbekanntGrund,
-      mutterWiederverheiratet,
-      vaterWiederverheiratet,
     } = this.form.controls;
 
     elternVerheiratetZusammen.enable();
@@ -285,7 +275,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
       elternVerheiratetZusammen.valueChanges,
     );
 
-    const werZahltAlimenteSig = toSignal(werZahltAlimente.valueChanges);
     const elternteilUnbekanntVerstorbenSig = toSignal(
       elternteilUnbekanntVerstorben.valueChanges,
     );
@@ -405,58 +394,6 @@ export class SharedFeatureGesuchFormFamiliensituationComponent implements OnInit
 
     effect(() => {
       this.gotReenabledSig();
-    });
-
-    effect(() => {
-      this.gotReenabledSig();
-      const zahltMutterAlimente =
-        werZahltAlimenteSig() === Elternschaftsteilung.MUTTER;
-      const vaterWederVerstorbenNochUnbekannt =
-        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
-      const mutterVerstorbenOderUnbekannt =
-        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.VERSTORBEN ||
-        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
-      const keinElternTeilUnbekanntVerstorben =
-        elternteilUnbekanntVerstorbenSig() === false;
-
-      const showVaterVerheiratedFrage =
-        keinElternTeilUnbekanntVerstorben ||
-        zahltMutterAlimente ||
-        (mutterVerstorbenOderUnbekannt && vaterWederVerstorbenNochUnbekannt);
-
-      updateVisbilityAndDisbledState({
-        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-        formControl: vaterWiederverheiratet,
-        visible: showVaterVerheiratedFrage,
-        disabled: this.viewSig().readonly || !showVaterVerheiratedFrage,
-        resetOnInvisible: true,
-      });
-    });
-
-    effect(() => {
-      this.gotReenabledSig();
-      const zahltVaterAlimente =
-        werZahltAlimenteSig() === Elternschaftsteilung.VATER;
-      const mutterWederVerstorbenNochUnbekannt =
-        mutterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.WEDER_NOCH;
-      const vaterVerstorbenOderUnbekannt =
-        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.VERSTORBEN ||
-        vaterVerstorbenUnbekanntSig() === ElternAbwesenheitsGrund.UNBEKANNT;
-      const keinElternTeilUnbekanntVerstorben =
-        elternteilUnbekanntVerstorbenSig() === false;
-
-      const showMutterVerheiratedFrage =
-        keinElternTeilUnbekanntVerstorben ||
-        zahltVaterAlimente ||
-        (vaterVerstorbenOderUnbekannt && mutterWederVerstorbenNochUnbekannt);
-
-      updateVisbilityAndDisbledState({
-        hiddenFieldsSetSig: this.hiddenFieldsSetSig,
-        formControl: mutterWiederverheiratet,
-        visible: showMutterVerheiratedFrage,
-        disabled: this.viewSig().readonly || !showMutterVerheiratedFrage,
-        resetOnInvisible: true,
-      });
     });
   }
 

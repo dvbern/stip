@@ -747,6 +747,7 @@
   "shared.form.eltern.wohnkosten.info": "Un document attestant des frais de logement des parents (père et/ou mère) doit impérativement être fourni (copie du contrat de bail ou copie du décompte des intérêts hypothécaires de l’année précédente).",
   "shared.form.eltern.ausweisbFluechtling.infoTitle": "Votre parent a-t-il un permis B ou est-il réfugié ?",
   "shared.form.eltern.ausweisbFluechtling.info": "Si votre père/mère est titulaire de l’autorisation de séjour B (ou permis B) ou a le statut de réfugié·e, veuillez cocher «oui».",
+  "shared.form.eltern.wiederverheiratet.label": "Ist dieses Elternteil wiederverheiratet",
 
   "shared.eltern-steuerdaten.title.FAMILIE": "Données fiscales famille",
   "shared.eltern-steuerdaten.title.MUTTER": "Données fiscales mère",
@@ -849,6 +850,7 @@
   "shared.form.geschwister.delete": "Supprimer les frères et sœurs",
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE": "Attestation de l'établissement de formation",
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE_DESCRIPTION": "Copie d’une attestation actuelle de l’établissement de formation indiquant que votre frère ou sœur suit une formation postobligatoire et dont la date d’émission est postérieure au début de la formation (pour les apprenti-e-s, une attestation actuelle de l’employeur)",
+  "shared.form.geschwister.hidden": "Für Person in Ausbildung versteckt",
 
   "shared.kinder.title": "Propres enfants",
   "shared.form.kinder.add": "Ajouter un enfant",

@@ -128,6 +128,12 @@
     </div>
   </mat-radio-group>
 
+  <div class="tw:dv-form-item" *dvIfSachbearbeiter>
+    <mat-checkbox class="tw:text-base tw:font-normal" formControlName="hidden" data-testid="form-geschwister-hidden">
+      {{ 'shared.form.geschwister.hidden' | transloco }}
+    </mat-checkbox>
+  </div>
+
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
     <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
