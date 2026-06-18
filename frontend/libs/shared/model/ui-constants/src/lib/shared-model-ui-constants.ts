@@ -1,11 +1,10 @@
 export const DVBreakpoints = {
-  XS: 0,
-  SM: 576,
+  SM: 640,
   MD: 768,
-  LG: 992,
-  XL: 1200,
-  XXL: 1400,
-};
+  LG: 1024,
+  XL: 1280,
+  '2XL': 1536,
+} as const;
 
 export const PAGE_SIZES = [10, 20, 50];
 export const DEFAULT_PAGE_SIZE = 20;

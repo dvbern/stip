@@ -28,14 +28,15 @@
         [trancheIdSig]="trancheIdSig()"
         [currentTranchenSig]="this.headerViewSig().currentTranches"
         [berechnungIdSig]="berechnungIdSig()"
-        [originStepSig]="originStepSig()"
+        [originStepSig]="originOrTrancheStepSig()"
       ></dv-shared-ui-versionen-menu>
 
       <!-- Aenderungen Link -->
       @if (firstAenderungSig(); as firstAenderung) {
         <a
-          [routerLink]="['/gesuch', gesuchIdSig(), 'aenderung', firstAenderung.id]"
+          [routerLink]="['/gesuch', ...tabRouteSegmentsSig(), gesuchIdSig(), 'aenderung', firstAenderung.id]"
           [queryParams]="{ revision: firstAenderung.revision }"
+          [queryParamsHandling]="'merge'"
           class="tw:dv-nav-button-outline fw-normal tw:flex tw:items-center tw:px-2"
           data-testid="sb-gesuch-header-aenderungen-nav-link"
           [class.active]="isAenderungRouteSig()"

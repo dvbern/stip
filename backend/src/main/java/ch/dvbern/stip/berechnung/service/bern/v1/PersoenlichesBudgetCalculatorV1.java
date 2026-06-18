@@ -83,6 +83,7 @@ public class PersoenlichesBudgetCalculatorV1 {
         total = budgetTranche;
 
         return new PersoenlichesBudgetresultatDto()
+            .haushaltNames(antragssteller.getHaushaltNames())
             .vorname(antragssteller.getVorname())
             .nachname(antragssteller.getNachname())
             .sozialversicherungsnummer(antragssteller.getSozialversicherungsnummer())

@@ -26,6 +26,7 @@ import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { SharedUiRdIsPendingPipe } from '@dv/shared/ui/remote-data-pipe';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 
 @Component({
@@ -36,6 +37,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
     SharedUiInfoContainerComponent,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-abschluss.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

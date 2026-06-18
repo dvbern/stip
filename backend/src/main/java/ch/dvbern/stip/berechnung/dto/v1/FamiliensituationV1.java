@@ -21,6 +21,7 @@ import java.util.Objects;
 
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
@@ -33,7 +34,7 @@ import lombok.extern.jackson.Jacksonized;
 public class FamiliensituationV1 {
     Boolean elternVerheiratetZusammen;
     Boolean gerichtlicheAlimentenregelung;
-    String werZahltAlimente;
+    Elternschaftsteilung werZahltAlimente;
     Boolean elternteilUnbekanntVerstorben;
     Boolean vaterUnbekanntVerstorben;
     Boolean mutterUnbekanntVerstorben;
@@ -47,7 +48,7 @@ public class FamiliensituationV1 {
                 Objects.requireNonNullElse(familiensituation.getGerichtlicheAlimentenregelung(), false)
             )
             .werZahltAlimente(
-                Objects.requireNonNullElse(familiensituation.getWerZahltAlimente(), "GEMEINSAM").toString()
+                Objects.requireNonNullElse(familiensituation.getWerZahltAlimente(), Elternschaftsteilung.GEMEINSAM)
             )
             .elternteilUnbekanntVerstorben(
                 Objects.requireNonNullElse(familiensituation.getElternteilUnbekanntVerstorben(), false)

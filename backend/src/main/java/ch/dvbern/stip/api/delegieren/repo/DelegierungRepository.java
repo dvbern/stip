@@ -40,7 +40,8 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
         final SozialdienstBenutzer sozialdienstBenutzer,
         final UUID sozialdienstId
     ) {
-        return addMeineFilter(sozialdienstBenutzer, getFindAlleOfSozialdienstQuery(sozialdienstId));
+        return getFindAlleOfSozialdienstQuery(sozialdienstId)
+            .where(qDelegierung.delegierterMitarbeiter.id.eq(sozialdienstBenutzer.getId()));
     }
 
     public JPAQuery<Delegierung> getFindAllOffen(
@@ -62,11 +63,14 @@ public class DelegierungRepository implements BaseRepository<Delegierung> {
         return query;
     }
 
-    private JPAQuery<Delegierung> addMeineFilter(
-        final SozialdienstBenutzer sozialdienstBenutzer,
-        final JPAQuery<Delegierung> query
+    public long reassignAllOfSozialdienstBenutzerTo(
+        final SozialdienstBenutzer sozialdienstBenutzerFrom,
+        final SozialdienstBenutzer sozialdienstBenutzerTo
     ) {
-        query.where(qDelegierung.delegierterMitarbeiter.id.eq(sozialdienstBenutzer.getId()));
-        return query;
+        return new JPAQueryFactory(entityManager).update(qDelegierung)
+            .set(qDelegierung.delegierterMitarbeiter, sozialdienstBenutzerTo)
+            .where(qDelegierung.delegierterMitarbeiter.eq(sozialdienstBenutzerFrom))
+            .execute();
     }
+
 }

@@ -19,6 +19,7 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,6 +38,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
+import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 
@@ -47,6 +49,7 @@ import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 public class ElternteilV1 {
     int elternhaushalt;
     boolean isInitialized;
+    List<String> haushaltNames;
     String vorname;
     String nachname;
     String vornamePartner;
@@ -104,22 +107,24 @@ public class ElternteilV1 {
         final int gesuchsjahr
     ) {
         final ElternteilV1Builder builder = new ElternteilV1Builder();
+        final var haushaltNames = new LinkedHashSet<String>();
         final var steuernElternTyp = InputUtils.fromSteuerdatenTyp(steuerdaten.getSteuerdatenTyp());
         final var elternteilsToUse =
             InputUtils.getElterteileToUse(eltern, familiensituation.getElternVerheiratetZusammen(), steuernElternTyp);
         final var elternteil = elternteilsToUse.getLeft();
         final var elternteilPartner = elternteilsToUse.getRight();
-        final var elternteilPartnerName = elternteilPartner.map(Eltern::getVorname);
 
         final var verpflegungskostens = new PersonValueList();
         final var fahrkostens = new PersonValueList();
 
+        haushaltNames.add(elternteil.getFullName());
         builder.steuerdatenTyp(steuerdaten.getSteuerdatenTyp());
         verpflegungskostens.setPersonValue(elternteil.getVorname(), steuerdaten.getVerpflegung());
         fahrkostens.setPersonValue(elternteil.getVorname(), steuerdaten.getFahrkosten());
-        elternteilPartnerName.ifPresent(partnerName -> {
-            verpflegungskostens.setPartnerValue(partnerName, steuerdaten.getVerpflegungPartner());
-            fahrkostens.setPartnerValue(partnerName, steuerdaten.getFahrkostenPartner());
+        elternteilPartner.ifPresent(partner -> {
+            haushaltNames.add(partner.getFullName());
+            verpflegungskostens.setPartnerValue(partner.getVorname(), steuerdaten.getVerpflegungPartner());
+            fahrkostens.setPartnerValue(partner.getVorname(), steuerdaten.getFahrkostenPartner());
         });
 
         builder
@@ -127,11 +132,12 @@ public class ElternteilV1 {
             .elternhaushalt(elternhaushalt)
             .vorname(elternteil.getVorname())
             .nachname(elternteil.getNachname())
-            .vornamePartner(elternteilPartnerName.orElse(null))
-            .nachnamePartner(elternteilPartner.map(Eltern::getNachname).orElse(null))
             .sozialversicherungsnummer(elternteil.getSozialversicherungsnummer())
-            .sozialversicherungsnummerPartner(elternteilPartner.map(Eltern::getSozialversicherungsnummer).orElse(null))
             .geburtsdatum(elternteil.getGeburtsdatum())
+            .vornamePartner(elternteilPartner.map(Eltern::getVorname).orElse(null))
+            .nachnamePartner(elternteilPartner.map(Eltern::getNachname).orElse(null))
+            .sozialversicherungsnummerPartner(elternteilPartner.map(Eltern::getSozialversicherungsnummer).orElse(null))
+            .geburtsdatumPartner(elternteilPartner.map(Eltern::getGeburtsdatum).orElse(null))
             .steuerjahr(steuerdaten.getSteuerjahr())
             .veranlagungscode(steuerdaten.getVeranlagungsStatus())
             .grundbedarf(
@@ -150,6 +156,7 @@ public class ElternteilV1 {
                 );
             }
             for (final var kindDerElternInHaushalten : kinderDerElternInHaushalten) {
+                haushaltNames.add(kindDerElternInHaushalten.getFullName());
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kindDerElternInHaushalten.getGeburtsdatum(),
                     gesuchsjahr,
@@ -165,6 +172,7 @@ public class ElternteilV1 {
                 )
                 .toList();
             for (final var kind : kindDesElternteilsVollzeit) {
+                haushaltNames.add(kind.getFullName());
                 medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                     kind.getGeburtsdatum(),
                     gesuchsjahr,
@@ -184,6 +192,7 @@ public class ElternteilV1 {
                 ((elternTyp == ElternTyp.MUTTER) && (steuerdaten.getSteuerdatenTyp() == SteuerdatenTyp.MUTTER))
             ) {
                 for (final var kind : kinderDerElternTeilzeit) {
+                    haushaltNames.add(kind.getFullName());
                     medizinischeGrundversorgung += BerechnungRequestV1.getMedizinischeGrundversorgung(
                         kind.getGeburtsdatum(),
                         gesuchsjahr,
@@ -208,9 +217,17 @@ public class ElternteilV1 {
             if (Boolean.TRUE.equals(wiederverheiratet)) {
                 // Wir gehen davon aus, dass der Partner eines Elternteils erwachsen ist
                 medizinischeGrundversorgung += gesuchsperiode.getErwachsene2599();
+
+                final var partnerName = String
+                    .format("Partner %s", StringUtils.capitalize(steuerdaten.getSteuerdatenTyp().name().toLowerCase()));
+
+                haushaltNames.add(partnerName);
+                verpflegungskostens.setPartnerValue(partnerName, steuerdaten.getVerpflegungPartner());
+                fahrkostens.setPartnerValue(partnerName, steuerdaten.getFahrkostenPartner());
             }
         }
 
+        builder.haushaltNames(haushaltNames.stream().toList());
         builder.medizinischeGrundversorgung(medizinischeGrundversorgung);
 
         final var integrationzulageAnzahl = anzahlGeschwisterInAusbildung + InputUtils.PIA_COUNT;

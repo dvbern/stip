@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.tenancy.service;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
@@ -38,14 +39,9 @@ import static ch.dvbern.stip.api.tenancy.service.OidcTenantResolver.TENANT_IDENT
 @RequiredArgsConstructor(onConstructor_ = @Inject)
 @UnlessBuildProfile("test")
 public class TenantService {
-    private static final ThreadLocal<String> EXPLICIT_TENANT_ID = new ThreadLocal<>();
-
     private final RoutingContext context;
     private final StipConfig config;
-
-    public static ExplicitTenantIdScope setTenantId(final String tenantId) {
-        return new ExplicitTenantIdScope(EXPLICIT_TENANT_ID, tenantId);
-    }
+    private final TenantContext tenantContext;
 
     public TenantInfoDto getCurrentTenant() {
         final var tenantId = getCurrentStringIdentifier();
@@ -70,8 +66,8 @@ public class TenantService {
     }
 
     public String getCurrentStringIdentifier() {
-        if (EXPLICIT_TENANT_ID.get() != null) {
-            return EXPLICIT_TENANT_ID.get();
+        if (Objects.nonNull(tenantContext.getTenantIdentifier())) {
+            return tenantContext.getTenantIdentifier().getIdentifier();
         }
 
         return context.get(TENANT_IDENTIFIER_CONTEXT_NAME);

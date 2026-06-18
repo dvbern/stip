@@ -172,6 +172,12 @@ export class SharedUiSelectSearchComponent<T extends LookupType>
    * @defaultValue 'hint-autocomplete-zuvor'
    */
   zuvorHintTestIdSig = input<string>('hint-autocomplete-zuvor');
+  /**
+   * The sizing of the subscript text.
+   *
+   * @defaultValue 'fixed'
+   */
+  subscriptSizingSig = input<'fixed' | 'dynamic'>('fixed');
 
   // Component state
   private touched = false;

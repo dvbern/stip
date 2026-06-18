@@ -17,25 +17,31 @@
 
 package ch.dvbern.stip.api.common.util;
 
-import ch.dvbern.stip.api.tenancy.service.DataTenantResolver;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
+import java.util.Arrays;
+import java.util.List;
+
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
+import ch.dvbern.stip.api.tenancy.service.TenantContext;
 import io.quarkus.arc.Arc;
 import io.quarkus.narayana.jta.QuarkusTransaction;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class QuarkusTransactionUtil {
-    public void runForTenantInNewTransaction(final String tenantId, final Runnable runnable) {
-        QuarkusTransaction.requiringNew().run(() -> {
-            try (
-                // ignored because it's reset in the finalizer of the returned ExplicitTenantIdScope as such unused
-                final var ignored1 = DataTenantResolver.setTenantId(tenantId);
-                final var ignored2 = TenantService.setTenantId(tenantId);
-            ) {
-                Arc.container().requestContext().activate();
-                runnable.run();
-                Arc.container().requestContext().deactivate();
-            }
-        });
+    public void runForTenantInNewTransaction(final TenantIdentifier tenantIdentifier, final Runnable runnable) {
+        Arc.container().requestContext().activate();
+        Arc.container().instance(TenantContext.class).get().setTenantIdentifier(tenantIdentifier);
+        QuarkusTransaction.requiringNew().run(runnable);
+        Arc.container().requestContext().deactivate();
+    }
+
+    public void runForTenantsInNewTransaction(final List<TenantIdentifier> tenantIdentifiers, final Runnable runnable) {
+        tenantIdentifiers.forEach(
+            tenantIdentifier -> runForTenantInNewTransaction(tenantIdentifier, runnable)
+        );
+    }
+
+    public void runForTenantsInNewTransaction(final TenantIdentifier[] tenantIdentifiers, final Runnable runnable) {
+        runForTenantsInNewTransaction(Arrays.stream(tenantIdentifiers).toList(), runnable);
     }
 }

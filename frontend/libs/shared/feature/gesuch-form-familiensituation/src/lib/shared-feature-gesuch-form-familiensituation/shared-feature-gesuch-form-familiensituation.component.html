@@ -73,7 +73,7 @@
           "
           [@.disabled]="readonly"
         >
-          <div class="tw:grid tw:grid-cols-2 tw:my-6">
+          <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
             <mat-radio-group
               formControlName="gerichtlicheAlimentenregelung"
               data-testid="form-family-gerichtlicheAlimentenregelung"
@@ -203,7 +203,7 @@
           </div>
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntVerstorben)) {
             <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
-            <div class="tw:grid tw:grid-cols-2 tw:my-6">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
               <mat-radio-group
                 formControlName="mutterUnbekanntVerstorben"
                 data-testid="form-family-mutterUnbekanntVerstorben"
@@ -265,7 +265,7 @@
             </div>
           }
           @if (!hiddenFieldsSetSig().has(form.controls.mutterUnbekanntGrund)) {
-            <div class="tw:grid tw:grid-cols-2 tw:my-6">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
               <mat-radio-group
                 formControlName="mutterUnbekanntGrund"
                 data-testid="form-family-mutterUnbekanntGrund"
@@ -330,7 +330,7 @@
           }
           @if (!hiddenFieldsSetSig().has(form.controls.vaterUnbekanntVerstorben)) {
             <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
-            <div class="tw:grid tw:grid-cols-2 tw:my-6">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
               <mat-radio-group
                 formControlName="vaterUnbekanntVerstorben"
                 data-testid="form-family-vaterUnbekanntVerstorben"
@@ -375,7 +375,7 @@
             </div>
           }
           @if (!hiddenFieldsSetSig().has(this.form.controls.vaterUnbekanntGrund)) {
-            <div class="tw:grid tw:grid-cols-2 tw:my-6">
+            <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
               <mat-radio-group
                 formControlName="vaterUnbekanntGrund"
                 data-testid="form-family-vaterUnbekanntGrund"
@@ -466,7 +466,7 @@
       </div>
     </div>
     <!-- buttons -->
-    <dv-shared-ui-step-form-buttons [@hideDuringAnimation]="duringAnimation">
+    <dv-shared-ui-step-form-buttons class="tw:mt-6" [@hideDuringAnimation]="duringAnimation">
       @if (!readonly) {
         <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save-continue">
           {{ 'shared.form.save-and-continue' | transloco }}

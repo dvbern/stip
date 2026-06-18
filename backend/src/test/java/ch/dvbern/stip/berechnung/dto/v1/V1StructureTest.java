@@ -54,6 +54,7 @@ class V1StructureTest {
             "InputFamilienbudget_1_V1": {
               "elternteil": {
                 "elternhaushalt": 1,
+                "haushaltNames": ["a a"],
                 "vorname": "a",
                 "nachname": "a",
                 "vornamePartner": null,
@@ -94,6 +95,7 @@ class V1StructureTest {
             "InputFamilienbudget_2_V1": {
               "elternteil": {
                 "elternhaushalt": 2,
+                "haushaltNames": ["a a", "Partner Mutter"],
                 "vorname": "a",
                 "nachname": "a",
                 "vornamePartner": null,
@@ -126,13 +128,14 @@ class V1StructureTest {
                 "integrationszulageTotal": 2400,
                 "steuernKantonGemeinde": 0,
                 "steuernBund": 0,
-                "fahrkostens": [{ "vorname": "a", "value": 0 }],
-                "verpflegungskostens": [{ "vorname": "a", "value": 0 }],
+                "fahrkostens":[{"vorname":"a","value":0},{"vorname":"Partner Mutter","value":0}],
+                "verpflegungskostens":[{"vorname":"a","value":0},{"vorname":"Partner Mutter","value":0}],
                 "initialized": true
               }
             },
             "InputPersoenlichesbudget_V1": {
               "antragssteller": {
+                "haushaltNames": ["a a"],
                 "vorname": "a",
                 "nachname": "a",
                 "vornamePartner": "a",

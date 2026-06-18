@@ -40,7 +40,7 @@ public class GemeindeLookupScheduledJob implements Job {
         );
 
         QuarkusTransactionUtil.runForTenantInNewTransaction(
-            request.tenantIdentifier().getIdentifier(),
+            request.tenantIdentifier(),
             () -> {
                 final var gemeindeData =
                     gemeindeLookupPortFactory.getGemeindeLookupAdapter().findGemeindeData(request).orElseThrow();

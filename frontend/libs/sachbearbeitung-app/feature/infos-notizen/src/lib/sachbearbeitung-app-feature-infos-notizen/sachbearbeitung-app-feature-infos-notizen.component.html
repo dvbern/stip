@@ -103,7 +103,7 @@
             </button>
           }
 
-          <mat-menu #notizMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+          <mat-menu #notizMenu="matMenu" [xPosition]="'before'" class="header-menu-panel tw:mt-2 tw:rounded-lg">
             <div class="tw:flex tw:flex-col tw:gap-2">
               <button
                 *dvHasRoles="['V0_Sachbearbeiter']"

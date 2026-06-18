@@ -87,7 +87,7 @@
     <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()" />
   </div>
 
-  <div class="tw:p-6 tw:dv-pass-height tw:bg-white">
+  <div class="tw:dv-pass-height tw:dv-container tw:bg-white tw:p-6 tw:pb-32">
     @if (currentStepSig(); as step) {
       <!-- step header (mobile) -->
       <div
@@ -95,7 +95,7 @@
       >
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
-          <h1 class="step-title tw:text-2xl tw:font-semibold">
+          <h1 class="tw:dv-page-title-mobile" data-testid="step-title">
             {{ t(step.translationKey) }}
           </h1>
           @if (step.nextStep?.translationKey; as nextStepKey) {
@@ -108,24 +108,22 @@
       </div>
 
       <!-- title (desktop) -->
-      <div class="tw:hidden tw:lg:flex tw:justify-start">
+      <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start">
         <dv-shared-ui-icon-chip class="tw:mr-4">
           <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
         </dv-shared-ui-icon-chip>
 
-        <h2 class="tw:text-3xl tw:font-bold" data-testid="step-title">
+        <h1 data-testid="step-title">
           {{ t(step.titleTranslationKey) }}
-        </h2>
+        </h1>
         <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
       </div>
     }
 
-    <div class="tw:mt-6 tw:pb-10">
-      <dv-shared-ui-router-outlet-wrapper
-        attribute="step"
-        (data)="stepSig.set($event)"
-      ></dv-shared-ui-router-outlet-wrapper>
-    </div>
+    <dv-shared-ui-router-outlet-wrapper
+      attribute="step"
+      (data)="stepSig.set($event)"
+    ></dv-shared-ui-router-outlet-wrapper>
   </div>
 
   <ng-template cdkPortal>

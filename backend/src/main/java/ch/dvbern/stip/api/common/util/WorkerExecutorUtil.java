@@ -17,6 +17,7 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import io.vertx.core.WorkerExecutor;
 import jakarta.annotation.Nullable;
 import lombok.experimental.UtilityClass;
@@ -26,7 +27,7 @@ import org.slf4j.Logger;
 public class WorkerExecutorUtil {
     public void executeBlockingWithTransaction(
         final WorkerExecutor executor,
-        final String tenantId,
+        final TenantIdentifier tenantIdentifier,
         final Runnable body,
         final @Nullable Runnable onExceptionInTransaction,
         final @Nullable Runnable tailNoTransaction,
@@ -34,14 +35,14 @@ public class WorkerExecutorUtil {
     ) {
         executor.executeBlocking(() -> {
             try {
-                QuarkusTransactionUtil.runForTenantInNewTransaction(tenantId, body);
+                QuarkusTransactionUtil.runForTenantInNewTransaction(tenantIdentifier, body);
             } catch (Exception ex) {
                 if (log != null) {
                     log.error(ex.toString(), ex);
                 }
 
                 if (onExceptionInTransaction != null) {
-                    QuarkusTransactionUtil.runForTenantInNewTransaction(tenantId, onExceptionInTransaction);
+                    QuarkusTransactionUtil.runForTenantInNewTransaction(tenantIdentifier, onExceptionInTransaction);
                 }
             } finally {
                 if (tailNoTransaction != null) {

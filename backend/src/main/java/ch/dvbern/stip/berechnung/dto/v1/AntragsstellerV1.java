@@ -19,6 +19,7 @@ package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -50,6 +51,7 @@ import static ch.dvbern.stip.berechnung.dto.InputUtils.toJahresWert;
 @Value
 @Slf4j
 public class AntragsstellerV1 {
+    List<String> haushaltNames;
     String vorname;
     String nachname;
     String vornamePartner;
@@ -106,6 +108,7 @@ public class AntragsstellerV1 {
         final var gesuchsperiode = gesuch.getGesuchsperiode();
         final var ausbildung = gesuchFormular.getAusbildung();
 
+        final var haushaltNames = new LinkedHashSet<String>();
         final var einkommens = new PersonValueList();
         final var medizinischeGrundversorgungs = new PersonValueList();
         final var kinderAusbildungszulagens = new PersonValueList();
@@ -117,6 +120,7 @@ public class AntragsstellerV1 {
         final var andereEinnahmens = new PersonValueList();
         final var einnahmenBGSAs = new PersonValueList();
 
+        haushaltNames.add(personInAusbildung.getFullName());
         int alter = DateUtil.getAgeInYears(personInAusbildung.getGeburtsdatum());
         final AntragsstellerV1Builder builder = new AntragsstellerV1Builder();
         builder
@@ -247,6 +251,7 @@ public class AntragsstellerV1 {
 
         final var ekPartner = gesuchFormular.getEinnahmenKostenPartner();
         if (Objects.nonNull(partner) && Objects.nonNull(ekPartner)) {
+            haushaltNames.add(partner.getFullName());
             final var partnerName = partner.getVorname();
             builder.vornamePartner(partnerName);
             builder.nachnamePartner(partner.getNachname());
@@ -281,6 +286,7 @@ public class AntragsstellerV1 {
                 kind.getWohnsitzAnteilPia() > 0
                 && (kind.getWohnsitzAnteilPia() == 100 || teilzeitKinderBeiPiaAnrechnen)
             ) {
+                haushaltNames.add(kind.getFullName());
                 kinderAusbildungszulagens.addKindValue(
                     kind,
                     toJahresWert(kind.getKinderUndAusbildungszulagen())
@@ -311,6 +317,7 @@ public class AntragsstellerV1 {
         builder.vermoegen(vermoegen);
         builder.gemeindeInstitutionen(beitraegeGemeindeInstitutionen);
 
+        builder.haushaltNames = haushaltNames.stream().toList();
         builder.einkommens = einkommens.toList();
         builder.medizinischeGrundversorgungs = medizinischeGrundversorgungs.toList();
         builder.kinderAusbildungszulagens = kinderAusbildungszulagens.toList();

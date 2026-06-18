@@ -360,31 +360,34 @@ public class BerechnungService {
                     berechnungsresultatDtoList.add(
                         new TranchenBerechnungsresultatDto(
                             total,
+                            stipendienCalculated.getStipendien(),
                             gesuchTranche.getGueltigkeit().getGueltigAb(),
                             gesuchTranche.getGueltigkeit().getGueltigBis(),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                             yearRange,
                             gesuchTranche.getId(),
-                            BigDecimal.ONE,
                             teilzeitKinderBeiPiaAnrechnenLoopVal,
-                            BigDecimal.ONE,
                             berechnungsStammdatenFromRequest(
                                 berechnungsRequest,
                                 majorVersion,
                                 minorVersion
                             ),
                             stipendienCalculated.getPersoenlichesBudgetresultat(),
-                            familienBudgetresultatList
+                            familienBudgetresultatList,
+                            BerechnungUtil.getPersonenHaushaltGroups(
+                                stipendienCalculated.getPersoenlichesBudgetresultat(),
+                                familienBudgetresultatList
+                            ),
+                            null,
+                            null
                         )
                     );
                 } else {
                     // To address differences in the stipendienberechnung based on how many kids are in the households
-                    // and
-                    // how their care is divided between father and mother,
+                    // and how their care is divided between father and mother,
                     // we calculate how many "kidpercentages" each household has and divide this by the total number of
-                    // kids
-                    // in all households.
+                    // kids in all households.
                     // This value can then be multiplied with the respective stipendienberechnung to get a proportianal
                     // stipendienamount.
                     BigDecimal kinderDerElternProzente = BigDecimal.ZERO;
@@ -414,22 +417,27 @@ public class BerechnungService {
                     berechnungsresultatDtoList.add(
                         new TranchenBerechnungsresultatDto(
                             berechnetStipendien,
+                            stipendienCalculated.getStipendien(),
                             gesuchTranche.getGueltigkeit().getGueltigAb(),
                             gesuchTranche.getGueltigkeit().getGueltigBis(),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungBegin()),
                             DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()),
                             yearRange,
                             gesuchTranche.getId(),
-                            kinderDerElternProzenteNormalized,
                             teilzeitKinderBeiPiaAnrechnenLoopVal,
-                            BigDecimal.ONE,
                             berechnungsStammdatenFromRequest(
                                 berechnungsRequest,
                                 majorVersion,
                                 minorVersion
                             ),
                             stipendienCalculated.getPersoenlichesBudgetresultat(),
-                            familienBudgetresultatList
+                            familienBudgetresultatList,
+                            BerechnungUtil.getPersonenHaushaltGroups(
+                                stipendienCalculated.getPersoenlichesBudgetresultat(),
+                                familienBudgetresultatList
+                            ),
+                            kinderDerElternProzenteNormalized,
+                            null
                         )
                     );
                 }
@@ -465,7 +473,7 @@ public class BerechnungService {
                         .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
                 ).intValue();
                 berechnungsresultatDto.setTotal(berechnetStipendien);
-                berechnungsresultatDto.setBerechnungsanteilKinderPia(kinderDerPiaProzente);
+                berechnungsresultatDto.setBerechnungsanteilKinderPia(kinderDerPiAProzenteToUse);
             }
         }
         return berechnungsresultatDtoList.stream();

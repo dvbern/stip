@@ -23,7 +23,10 @@ import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
 } from '@dv/shared/ui/form';
-import { convertTempFormToRealValues } from '@dv/shared/util/form';
+import {
+  convertTempFormToRealValues,
+  provideMaterialDefaultOptions,
+} from '@dv/shared/util/form';
 
 export type EuEftaLandEditData = {
   laender: Land[];
@@ -46,6 +49,7 @@ export type EuEftaLandEditData = {
     MatCheckbox,
     MaskitoDirective,
   ],
+  providers: [provideMaterialDefaultOptions({ subscriptSizing: 'dynamic' })],
   templateUrl:
     './sachbearbeitung-app-dialog-eu-efta-laender-edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

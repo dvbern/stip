@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<ng-container *dvTranslocoSb="let t">
   <h1 class="tw:mb-6! tw:font-bold! tw:text-3xl!">{{ t('sachbearbeitung-app.verfuegung.berechnung.details') }}</h1>
 
   <mat-slide-toggle #hideZeroToggle [checked]="true" class="tw:mb-6" [hideIcon]="true">{{
@@ -9,34 +9,79 @@
     <dv-shared-ui-loading></dv-shared-ui-loading>
   } @else {
     @if (berechnungenRawSig(); as berechnung) {
-      <dv-berechnungs-card [berechnungSig]="berechnung.persoenlich" [stammdatenSig]="berechnung.berechnungsStammdaten">
-        <dv-persoenliche-einnahmen
-          [hideZeroSig]="hideZeroToggle.checked"
-          [budgetSig]="berechnung.persoenlich"
-          [stammdatenSig]="berechnung.berechnungsStammdaten"
-        ></dv-persoenliche-einnahmen>
-        <dv-persoenliche-kosten
-          [hideZeroSig]="hideZeroToggle.checked"
-          [budgetSig]="berechnung.persoenlich"
-        ></dv-persoenliche-kosten>
-      </dv-berechnungs-card>
-
-      <div class="tw:flex tw:flex-col tw:gap-6 tw:my-3">
-        @for (familienbudget of berechnung.familien; track $index) {
-          <dv-berechnungs-card [berechnungSig]="familienbudget" [stammdatenSig]="berechnung.berechnungsStammdaten">
-            <dv-familien-einnahmen
-              [hideZeroSig]="hideZeroToggle.checked"
-              [budgetSig]="familienbudget"
-              [stammdatenSig]="berechnung.berechnungsStammdaten"
-            ></dv-familien-einnahmen>
-            <dv-familien-kosten
-              [hideZeroSig]="hideZeroToggle.checked"
-              [budgetSig]="familienbudget"
-              [stammdatenSig]="berechnung.berechnungsStammdaten"
-            ></dv-familien-kosten>
-          </dv-berechnungs-card>
+      <h2 class="tw:font-bold tw:text-2xl tw:mb-4">
+        {{ t('sachbearbeitung-app.verfuegung.berechnung.personenHaushaltGroups') }}
+      </h2>
+      <div class="tw:flex tw:gap-2 tw:mb-4">
+        @for (group of berechnung.personenHaushaltGroups; track $index) {
+          <dl class="tw:rounded-lg tw:bg-gray-100 tw:text-sm tw:p-2">
+            <dt class="tw:font-semibold tw:mb-2">
+              {{ t(`sachbearbeitung-app.verfuegung.berechnung.personenHaushaltGroups.${group.typ}`) }}
+            </dt>
+            <dd class="tw:text-dv-muted">
+              @for (name of group.names; track $index) {
+                <div>{{ name }}</div>
+              }
+            </dd>
+          </dl>
         }
       </div>
+      <mat-tab-group class="tw:pt-6" mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab [labelClass]="'tw:dv-nav-button tw:p-0!'" #tab="matTab">
+          <ng-template mat-tab-label>
+            <div
+              class="tw:items-center tw:h-full tw:px-6 tw:dv-nav-button tw:bg-white! tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0!"
+              [class.active]="tab.isActive"
+            >
+              {{ t('sachbearbeitung-app.verfuegung.berechnung.persoenlich.title') }}
+            </div>
+          </ng-template>
+          <dv-berechnungs-card
+            class="tw:block tw:border tw:border-gray-300 tw:rounded-b-xl tw:rounded-tr-xl tw:p-4"
+            [berechnungSig]="berechnung.persoenlich"
+            [stammdatenSig]="berechnung.berechnungsStammdaten"
+          >
+            <dv-persoenliche-einnahmen
+              [hideZeroSig]="hideZeroToggle.checked"
+              [budgetSig]="berechnung.persoenlich"
+              [stammdatenSig]="berechnung.berechnungsStammdaten"
+            ></dv-persoenliche-einnahmen>
+            <dv-persoenliche-kosten
+              [hideZeroSig]="hideZeroToggle.checked"
+              [budgetSig]="berechnung.persoenlich"
+            ></dv-persoenliche-kosten>
+          </dv-berechnungs-card>
+        </mat-tab>
+
+        @for (familienbudget of berechnung.familien; track $index) {
+          <mat-tab [labelClass]="'tw:dv-nav-button tw:p-0!'" #tab="matTab">
+            <ng-template mat-tab-label>
+              <div
+                class="tw:items-center tw:h-full tw:px-6 tw:dv-nav-button tw:bg-white! tw:rounded-b-none! tw:border! tw:border-gray-300! tw:border-b-0!"
+                [class.active]="tab.isActive"
+              >
+                {{ t(`sachbearbeitung-app.verfuegung.berechnung.${familienbudget.steuerdatenTyp}.title`) }}
+              </div>
+            </ng-template>
+            <dv-berechnungs-card
+              class="tw:block tw:border tw:border-gray-300 tw:rounded-b-xl tw:rounded-tr-xl tw:p-4"
+              [berechnungSig]="familienbudget"
+              [stammdatenSig]="berechnung.berechnungsStammdaten"
+            >
+              <dv-familien-einnahmen
+                [hideZeroSig]="hideZeroToggle.checked"
+                [budgetSig]="familienbudget"
+                [stammdatenSig]="berechnung.berechnungsStammdaten"
+              ></dv-familien-einnahmen>
+              <dv-familien-kosten
+                [hideZeroSig]="hideZeroToggle.checked"
+                [budgetSig]="familienbudget"
+                [stammdatenSig]="berechnung.berechnungsStammdaten"
+              ></dv-familien-kosten>
+            </dv-berechnungs-card>
+          </mat-tab>
+        }
+      </mat-tab-group>
     } @else {
       <p class="tw:text-lg tw:text-dv-muted">{{ t('sachbearbeitung-app.verfuegung.berechnung.no-data') }}</p>
     }

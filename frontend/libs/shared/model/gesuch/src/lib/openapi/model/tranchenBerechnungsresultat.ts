@@ -12,6 +12,7 @@
 import { BerechnungsStammdaten } from './berechnungsStammdaten';
 import { FamilienBudgetresultat } from './familienBudgetresultat';
 import { PersoenlichesBudgetresultat } from './persoenlichesBudgetresultat';
+import { PersonenHaushaltGruppe } from './personenHaushaltGruppe';
 
 /**
  * Resultat der Berechnung (eine Tranche)
@@ -21,6 +22,10 @@ export interface TranchenBerechnungsresultat {
      * Die Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
      */
     total: number;
+    /**
+     * Die ungekürzte Summe der berechneten Stpendiums- und Darlehensansprüche für diese Tranche
+     */
+    ungekuerztTotal: number;
     gueltigAb: string;
     gueltigBis: string;
     ausbildungAb: string;
@@ -28,22 +33,26 @@ export interface TranchenBerechnungsresultat {
     yearRange: string;
     gesuchTrancheId: string;
     /**
-     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
+     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
      */
-    berechnungsanteilKinder: number;
+    berechnungsanteilKinder?: number;
     /**
      * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
      */
     teilzeitKinderBeiPiaAnrechnen: boolean;
     /**
-     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser wert == 1.
+     * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
      */
-    berechnungsanteilKinderPia: number;
+    berechnungsanteilKinderPia?: number;
     berechnungsStammdaten: BerechnungsStammdaten;
     persoenlichesBudgetresultat: PersoenlichesBudgetresultat;
     /**
      * Berechnungsdaten der Familienbudgets
      */
     familienBudgetresultate: Array<FamilienBudgetresultat>;
+    /**
+     * Enthällt eine Liste aller relevanten Personen für die jeweiligen Personen Haushalt Gruppen
+     */
+    personenHaushaltGroups: Array<PersonenHaushaltGruppe>;
 }
 

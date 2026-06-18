@@ -4,19 +4,22 @@
 
 <ng-container *dvTranslocoShared="let t">
   <ng-template dvHeaderSuffix>
-    <h2 data-testid="dynamic-tranche-step-title" class="tw:font-bold tw:text-3xl tw:flex tw:gap-8 tw:items-center">
+    <h1 data-testid="dynamic-tranche-step-title" class="tw:flex tw:gap-8 tw:items-center">
       @if (tranche) {
         {{ t(`shared.form.title.suffix.${tranche.typ}`) }}
 
         {{ tranche.gueltigAb | date: 'MM.yyyy' }} -
         {{ tranche.gueltigBis | date: 'MM.yyyy' }}
       }
-    </h2>
+    </h1>
   </ng-template>
 
-  <form [formGroup]="form" class="tw:dv-form-grid tw:pt-12" [dvSharedUiFormReadonly]="true">
+  <form [formGroup]="form" class="tw:dv-form-grid" [dvSharedUiFormReadonly]="true">
+    <h2 class="tw:dv-form-title">
+      {{ t('shared.form.tranche.title') }}
+    </h2>
     <!-- Status -->
-    <mat-form-field dvSharedUiFormField>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>
         @if (tranche) {
           @if (view.isEditingAenderung) {
@@ -31,14 +34,14 @@
     </mat-form-field>
 
     <!-- PiA -->
-    <mat-form-field dvSharedUiFormField>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.pia.label') }}</mat-label>
 
       <input readonly type="text" matInput [formControl]="form.controls.pia" data-testid="form-tranche-pia" />
     </mat-form-field>
 
     <!-- Gesuchsnummer -->
-    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.gesuchsnummer.label') }}</mat-label>
 
       <input
@@ -51,7 +54,7 @@
     </mat-form-field>
 
     <!-- Fallnummer -->
-    <mat-form-field dvSharedUiFormField>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.fallnummer.label') }}</mat-label>
 
       <input
@@ -64,7 +67,7 @@
     </mat-form-field>
 
     <!-- Einreichedatum -->
-    <div class="tw:col-start-1 tw:flex tw:gap-2">
+    <div class="tw:dv-form-item tw:flex tw:gap-4">
       <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ t('shared.form.tranche.einreichedatum.label') }}</mat-label>
         <input
@@ -91,8 +94,8 @@
     </div>
 
     <!-- Gesuchsperiode -->
-    <div class="tw:col-start-1 tw:flex tw:gap-2">
-      <mat-form-field dvSharedUiFormField class="tw:col-start-1 tw:w-full">
+    <div class="tw:dv-form-item tw:flex tw:gap-4">
+      <mat-form-field dvSharedUiFormField class="tw:w-full">
         <mat-label>{{ t('shared.form.tranche.gesuchsperiode.label') }}</mat-label>
 
         <input
@@ -118,7 +121,7 @@
     </div>
 
     <!-- Einreichefrist -->
-    <mat-form-field dvSharedUiFormField>
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.einreichefrist.label') }}</mat-label>
 
       <input
@@ -146,7 +149,7 @@
     </ng-template>
 
     <!-- Von -->
-    <div class="tw:col-start-1 tw:flex tw:gap-2">
+    <div class="tw:dv-form-item tw:flex tw:gap-4">
       <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ t('shared.form.tranche.von.label') }}</mat-label>
 
@@ -157,7 +160,7 @@
     </div>
 
     <!-- Bis -->
-    <div class="tw:flex tw:gap-2">
+    <div class="tw:dv-form-item tw:flex tw:gap-4">
       <mat-form-field dvSharedUiFormField class="tw:grow">
         <mat-label>{{ t('shared.form.tranche.bis.label') }}</mat-label>
 
@@ -168,7 +171,7 @@
     </div>
 
     <!-- Bemerkung -->
-    <mat-form-field dvSharedUiFormField class="tw:md:col-span-2">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.bemerkung.label') }}</mat-label>
       <textarea
         readonly
@@ -181,7 +184,7 @@
     </mat-form-field>
 
     <!-- Zuständiger Sachbearbeiter -->
-    <mat-form-field dvSharedUiFormField class="tw:col-start-1">
+    <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
       <mat-label>{{ t('shared.form.tranche.sachbearbeiter.label') }}</mat-label>
       <input
         readonly

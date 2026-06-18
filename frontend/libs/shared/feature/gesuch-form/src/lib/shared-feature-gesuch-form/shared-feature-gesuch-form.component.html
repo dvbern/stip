@@ -7,7 +7,7 @@
       <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
     </div>
 
-    <div class="tw:dv-pass-height tw:p-6">
+    <div class="tw:dv-pass-height tw:dv-container tw:p-6 tw:pb-32">
       @if (currentStepSig(); as step) {
         <!-- step header (mobile) -->
         <div
@@ -28,14 +28,14 @@
         </div>
 
         <!-- title (desktop) -->
-        <div class="tw:hidden tw:lg:flex tw:justify-start">
+        <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start">
           <dv-shared-ui-icon-chip class="tw:mr-4">
             <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
           </dv-shared-ui-icon-chip>
 
-          <h2 class="tw:font-bold tw:text-3xl" data-testid="step-title">
+          <h1 data-testid="step-title">
             {{ t(step.titleTranslationKey) }}
-          </h2>
+          </h1>
           <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
         </div>
       }

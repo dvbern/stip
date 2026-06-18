@@ -16,92 +16,80 @@
     <dv-shared-ui-loading data-testid="lebenslauf-editor-loading"></dv-shared-ui-loading>
   } @else {
     @if (minDatesSig() && maxDateSig()) {
-      <!-- Infobx -->
-      @if (!viewSig().readonly) {
-        <div class="tw:grid tw:grid-cols-12">
-          <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-            <span>{{
-              'shared.form.lebenslauf.top.info'
-                | transloco
-                  : {
-                      von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
-                      bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
-                    }
-            }}</span>
-          </div>
-        </div>
+      <div class="tw:dv-form-grid">
+        <!-- Infobox -->
+        @if (!viewSig().readonly) {
+          <span class="tw:dv-form-item">{{
+            'shared.form.lebenslauf.top.info'
+              | transloco
+                : {
+                    von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
+                    bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
+                  }
+          }}</span>
 
-        <!-- ADD -->
-        <div class="tw:grid tw:grid-cols-12">
-          <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-            <div class="tw:grid tw:grid-cols-12 add-buttons tw:gap-6">
-              <div class="tw:col-span-6 tw:my-4">
-                <!-- class="tw:dv-button-outline tw:border-dv-blue tw:text-dv-blue tw:hover:bg-dv-blue tw:hover:text-white tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg" -->
-                <button
-                  type="button"
-                  class="tw:dv-button-outline-info tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
-                  (click)="handleAddAusbildung(undefined)"
-                  data-testid="lebenslauf-add-ausbildung"
-                >
-                  <i class="material-symbols-rounded tw:text-4xl!">school</i>
-                  {{ 'shared.form.lebenslauf.add.ausbildung' | transloco }}
-                </button>
-              </div>
-              <div class="tw:col-span-6 tw:my-4">
-                <button
-                  type="button"
-                  class="tw:dv-button-outline tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
-                  (click)="handleAddTaetigkeit(undefined)"
-                  data-testid="lebenslauf-add-taetigkeit"
-                >
-                  <i class="material-symbols-rounded tw:text-4xl!">work</i>
-                  {{ 'shared.form.lebenslauf.add.taetigkeit' | transloco }}
-                </button>
-              </div>
+          <!-- ADD -->
+          <div class="add-buttons tw:dv-form-item tw:flex tw:gap-4">
+            <div class="tw:flex-1">
+              <button
+                type="button"
+                class="tw:dv-button-outline-info tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
+                (click)="handleAddAusbildung(undefined)"
+                data-testid="lebenslauf-add-ausbildung"
+              >
+                <i class="material-symbols-rounded tw:text-4xl!">school</i>
+                {{ 'shared.form.lebenslauf.add.ausbildung' | transloco }}
+              </button>
+            </div>
+            <div class="tw:flex-1">
+              <button
+                type="button"
+                class="tw:dv-button-outline tw:w-full tw:flex tw:flex-col tw:items-center tw:text-lg"
+                (click)="handleAddTaetigkeit(undefined)"
+                data-testid="lebenslauf-add-taetigkeit"
+              >
+                <i class="material-symbols-rounded tw:text-4xl!">work</i>
+                {{ 'shared.form.lebenslauf.add.taetigkeit' | transloco }}
+              </button>
             </div>
           </div>
-        </div>
-      }
+        }
 
-      <!-- visual -->
-      @if (viewSig().lebenslaufItems; as items) {
-        <div class="tw:grid tw:grid-cols-12">
+        <!-- visual -->
+        @if (viewSig().lebenslaufItems; as items) {
           @if (viewSig().ausbildung; as ausbildung) {
-            <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-              <dv-shared-feature-gesuch-form-lebenslauf-visual
-                [startDate]="minDatesSig()?.required ?? null"
-                [language]="languageSig()"
-                [lebenslaufItems]="items"
-                [ausbildung]="ausbildung"
-                [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig().data ?? []"
-                (addAusbildungTriggered)="handleAddAusbildung($event)"
-                (addTaetigkeitTriggered)="handleAddTaetigkeit($event)"
-                (editItemTriggered)="handleEditItemId($event, items)"
-                (deleteItemTriggered)="handleDeleteItem($event)"
-              />
-            </div>
+            <dv-shared-feature-gesuch-form-lebenslauf-visual
+              class="tw:dv-form-item"
+              [startDate]="minDatesSig()?.required ?? null"
+              [language]="languageSig()"
+              [lebenslaufItems]="items"
+              [ausbildung]="ausbildung"
+              [ausbildungsstaettes]="ausbildungsstatteStore.ausbildungsstaetteViewSig().data ?? []"
+              (addAusbildungTriggered)="handleAddAusbildung($event)"
+              (addTaetigkeitTriggered)="handleAddTaetigkeit($event)"
+              (editItemTriggered)="handleEditItemId($event, items)"
+              (deleteItemTriggered)="handleDeleteItem($event)"
+            />
           }
-        </div>
-      }
-      <!-- Buttons -->
-      <dv-shared-ui-step-form-buttons>
-        <button
-          type="button"
-          class="tw:dv-button-main-primary"
-          (click)="handleContinue()"
-          [disabled]="!viewSig().gesuch?.id"
-          data-testid="button-continue"
-        >
-          {{ 'shared.form.gonext' | transloco }}
-        </button>
-      </dv-shared-ui-step-form-buttons>
+        }
+        <!-- Buttons -->
+        <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+          <button
+            type="button"
+            class="tw:dv-button-main-primary"
+            (click)="handleContinue()"
+            [disabled]="!viewSig().gesuch?.id"
+            data-testid="button-continue"
+          >
+            {{ 'shared.form.gonext' | transloco }}
+          </button>
+        </dv-shared-ui-step-form-buttons>
+      </div>
     } @else {
-      <div class="tw:grid tw:grid-cols-12">
-        <div class="tw:col-span-12 tw:xl:col-span-8 tw:my-4">
-          <dv-shared-ui-info-container>{{
-            'shared.form.lebenslauf.top.missing-dates' | transloco
-          }}</dv-shared-ui-info-container>
-        </div>
+      <div class="tw:dv-form-grid">
+        <dv-shared-ui-info-container class="tw:dv-form-item">{{
+          'shared.form.lebenslauf.top.missing-dates' | transloco
+        }}</dv-shared-ui-info-container>
       </div>
     }
   }

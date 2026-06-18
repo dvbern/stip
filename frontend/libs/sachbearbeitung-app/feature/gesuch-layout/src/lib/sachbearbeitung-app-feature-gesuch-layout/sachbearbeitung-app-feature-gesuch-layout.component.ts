@@ -133,7 +133,14 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
   berechnungIdSig = getQueryParamValueSig(this.route, 'berechnungId');
 
-  originStepSig = getQueryParamValueSig(this.route, 'originStep');
+  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
+  originOrTrancheStepSig = computed(() => {
+    return this.originStepSig() || TRANCHE.route;
+  });
+  tabRouteSegmentsSig = computed(() => {
+    const originOrTrancheStep = this.originOrTrancheStepSig();
+    return originOrTrancheStep.split('/').filter(Boolean);
+  });
 
   routeUrlSig = toSignal(
     urlAfterNavigationEnd(this.router).pipe(
@@ -194,7 +201,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const { gesuchInfo } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
-    const originStep = this.originStepSig();
+    const originOrTrancheStep = this.originOrTrancheStepSig();
     const isIntitial = this.isInitialRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
@@ -208,20 +215,19 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       return [];
     }
 
-    const tab = decodeURI(originStep ?? '') || TRANCHE.route;
-    const tabSegments = tab.split('/').filter(Boolean);
+    const tabSegments = originOrTrancheStep.split('/').filter(Boolean);
 
     const gesuchTab = {
       active: !activePath?.includes('/verfuegung'),
       route: ['/gesuch', ...tabSegments, gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId, originStep },
+      queryParams: { berechnungId, originStep: originOrTrancheStep },
       key: 'formular',
     };
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId, originStep },
+      queryParams: { berechnungId, originStep: originOrTrancheStep },
       key: 'verfuegung',
     };
 

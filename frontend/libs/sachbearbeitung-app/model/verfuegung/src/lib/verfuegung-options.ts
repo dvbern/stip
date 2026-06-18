@@ -1,8 +1,10 @@
+import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
+
 export type VerfuegungOption = {
   route: string;
-  translationKey: string;
+  translationKey: SachbearbeitungAppTranslationKey;
   translationOptions?: Record<string, string>;
-  titleTranslationKey: string;
+  titleTranslationKey: SachbearbeitungAppTranslationKey;
   iconSymbolName: string;
 };
 
@@ -18,21 +20,17 @@ export const BERECHNUNG_ROUTE = 'berechnung';
 export const createBerechnungOption = (
   index: number,
   totalBerechnungen: number,
-  startDate: string,
-  endDate: string,
 ): VerfuegungOption => {
   const key =
     totalBerechnungen > 1
-      ? 'sachbearbeitung-app.verfuegung.option.berechnung.withIndex'
+      ? 'sachbearbeitung-app.verfuegung.option.berechnung.withCounter'
       : 'sachbearbeitung-app.verfuegung.option.berechnung';
 
   return {
     route: `berechnung/${index + 1}`,
     translationKey: key,
     translationOptions: {
-      index: (index + 1).toString(),
-      startDate: startDate,
-      endDate: endDate,
+      counter: (index + 1).toString(),
     },
     titleTranslationKey:
       'sachbearbeitung-app.verfuegung.option.berechnung.title',

@@ -143,7 +143,7 @@ public class BerechnungRequestV1 implements CalculatorRequest {
         final var personInAusbildung = gesuchFormular.getPersonInAusbildung();
         int piaWohntInElternHaushalt = 0;
         if (personInAusbildung.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-            kinderDerElternInHaushalten.add(personInAusbildung);
+            kinderDerElternInHaushalten.add(0, personInAusbildung);
             if (personInAusbildung.getWohnsitz() == Wohnsitz.FAMILIE) {
                 piaWohntInElternHaushalt = 1;
             } else if (personInAusbildung.getWohnsitz() == Wohnsitz.MUTTER_VATER) {

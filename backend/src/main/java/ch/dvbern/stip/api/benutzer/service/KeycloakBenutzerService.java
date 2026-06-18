@@ -39,9 +39,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 @RequiredArgsConstructor
 @Slf4j
 public class KeycloakBenutzerService {
-
     private final TenantService tenantService;
-
     private final Keycloak keycloak;
 
     public String createKeycloakBenutzer(

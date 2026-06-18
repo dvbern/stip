@@ -24,6 +24,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -31,13 +34,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Familien Budget daten fuer und von der Berechnung
  */
 @JsonPropertyOrder({
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_HAUSHALT_NAMES,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERDATEN_TYP,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_VORNAME,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_NACHNAME,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_VORNAME_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_NACHNAME_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_GEBURTSDATUM_PARTNER,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_STEUERJAHR,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_VERANLAGUNGSCODE,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_TOTAL,
@@ -57,6 +63,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("FamilienBudgetresultat")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class FamilienBudgetresultatDtoSpec {
+  public static final String JSON_PROPERTY_HAUSHALT_NAMES = "haushaltNames";
+  private List<String> haushaltNames;
+
   public static final String JSON_PROPERTY_STEUERDATEN_TYP = "steuerdatenTyp";
   private SteuerdatenTypDtoSpec steuerdatenTyp;
 
@@ -75,8 +84,14 @@ public class FamilienBudgetresultatDtoSpec {
   public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER = "sozialversicherungsnummer";
   private String sozialversicherungsnummer;
 
+  public static final String JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER = "sozialversicherungsnummerPartner";
+  private String sozialversicherungsnummerPartner;
+
   public static final String JSON_PROPERTY_GEBURTSDATUM = "geburtsdatum";
   private LocalDate geburtsdatum;
+
+  public static final String JSON_PROPERTY_GEBURTSDATUM_PARTNER = "geburtsdatumPartner";
+  private LocalDate geburtsdatumPartner;
 
   public static final String JSON_PROPERTY_STEUERJAHR = "steuerjahr";
   private Integer steuerjahr;
@@ -125,6 +140,40 @@ public class FamilienBudgetresultatDtoSpec {
 
   public FamilienBudgetresultatDtoSpec() {
   }
+
+  public FamilienBudgetresultatDtoSpec haushaltNames(List<String> haushaltNames) {
+    
+    this.haushaltNames = haushaltNames;
+    return this;
+  }
+
+  public FamilienBudgetresultatDtoSpec addHaushaltNamesItem(String haushaltNamesItem) {
+    if (this.haushaltNames == null) {
+      this.haushaltNames = new ArrayList<>();
+    }
+    this.haushaltNames.add(haushaltNamesItem);
+    return this;
+  }
+
+   /**
+   * Get haushaltNames
+   * @return haushaltNames
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public List<String> getHaushaltNames() {
+    return haushaltNames;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HAUSHALT_NAMES)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setHaushaltNames(List<String> haushaltNames) {
+    this.haushaltNames = haushaltNames;
+  }
+
 
   public FamilienBudgetresultatDtoSpec steuerdatenTyp(SteuerdatenTypDtoSpec steuerdatenTyp) {
     
@@ -282,6 +331,32 @@ public class FamilienBudgetresultatDtoSpec {
   }
 
 
+  public FamilienBudgetresultatDtoSpec sozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
+    
+    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
+    return this;
+  }
+
+   /**
+   * Get sozialversicherungsnummerPartner
+   * @return sozialversicherungsnummerPartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getSozialversicherungsnummerPartner() {
+    return sozialversicherungsnummerPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_SOZIALVERSICHERUNGSNUMMER_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setSozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
+    this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
+  }
+
+
   public FamilienBudgetresultatDtoSpec geburtsdatum(LocalDate geburtsdatum) {
     
     this.geburtsdatum = geburtsdatum;
@@ -305,6 +380,32 @@ public class FamilienBudgetresultatDtoSpec {
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGeburtsdatum(LocalDate geburtsdatum) {
     this.geburtsdatum = geburtsdatum;
+  }
+
+
+  public FamilienBudgetresultatDtoSpec geburtsdatumPartner(LocalDate geburtsdatumPartner) {
+    
+    this.geburtsdatumPartner = geburtsdatumPartner;
+    return this;
+  }
+
+   /**
+   * dd.MM.yyyy
+   * @return geburtsdatumPartner
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getGeburtsdatumPartner() {
+    return geburtsdatumPartner;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GEBURTSDATUM_PARTNER)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeburtsdatumPartner(LocalDate geburtsdatumPartner) {
+    this.geburtsdatumPartner = geburtsdatumPartner;
   }
 
 
@@ -706,13 +807,16 @@ public class FamilienBudgetresultatDtoSpec {
       return false;
     }
     FamilienBudgetresultatDtoSpec familienBudgetresultat = (FamilienBudgetresultatDtoSpec) o;
-    return Objects.equals(this.steuerdatenTyp, familienBudgetresultat.steuerdatenTyp) &&
+    return Objects.equals(this.haushaltNames, familienBudgetresultat.haushaltNames) &&
+        Objects.equals(this.steuerdatenTyp, familienBudgetresultat.steuerdatenTyp) &&
         Objects.equals(this.vorname, familienBudgetresultat.vorname) &&
         Objects.equals(this.nachname, familienBudgetresultat.nachname) &&
         Objects.equals(this.vornamePartner, familienBudgetresultat.vornamePartner) &&
         Objects.equals(this.nachnamePartner, familienBudgetresultat.nachnamePartner) &&
         Objects.equals(this.sozialversicherungsnummer, familienBudgetresultat.sozialversicherungsnummer) &&
+        Objects.equals(this.sozialversicherungsnummerPartner, familienBudgetresultat.sozialversicherungsnummerPartner) &&
         Objects.equals(this.geburtsdatum, familienBudgetresultat.geburtsdatum) &&
+        Objects.equals(this.geburtsdatumPartner, familienBudgetresultat.geburtsdatumPartner) &&
         Objects.equals(this.steuerjahr, familienBudgetresultat.steuerjahr) &&
         Objects.equals(this.veranlagungscode, familienBudgetresultat.veranlagungscode) &&
         Objects.equals(this.total, familienBudgetresultat.total) &&
@@ -732,20 +836,23 @@ public class FamilienBudgetresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten);
+    return Objects.hash(haushaltNames, steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, sozialversicherungsnummerPartner, geburtsdatum, geburtsdatumPartner, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class FamilienBudgetresultatDtoSpec {\n");
+    sb.append("    haushaltNames: ").append(toIndentedString(haushaltNames)).append("\n");
     sb.append("    steuerdatenTyp: ").append(toIndentedString(steuerdatenTyp)).append("\n");
     sb.append("    vorname: ").append(toIndentedString(vorname)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");
     sb.append("    nachnamePartner: ").append(toIndentedString(nachnamePartner)).append("\n");
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
+    sb.append("    sozialversicherungsnummerPartner: ").append(toIndentedString(sozialversicherungsnummerPartner)).append("\n");
     sb.append("    geburtsdatum: ").append(toIndentedString(geburtsdatum)).append("\n");
+    sb.append("    geburtsdatumPartner: ").append(toIndentedString(geburtsdatumPartner)).append("\n");
     sb.append("    steuerjahr: ").append(toIndentedString(steuerjahr)).append("\n");
     sb.append("    veranlagungscode: ").append(toIndentedString(veranlagungscode)).append("\n");
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
