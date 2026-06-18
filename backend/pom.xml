@@ -13,7 +13,7 @@
     <contract.version>1.24.0</contract.version>
     <itext.version>9.4.0</itext.version>
     <kie.version>10.1.0</kie.version>
-    <liquibase-maven-plugin.version>5.0.1</liquibase-maven-plugin.version>
+    <liquibase-maven-plugin.version>5.0.3</liquibase-maven-plugin.version>
     <lombok.version>1.18.42</lombok.version>
     <mapstruct.version>1.6.3</mapstruct.version>
     <maven.compiler.release>21</maven.compiler.release>
@@ -521,7 +521,7 @@
         </dependencies>
         <configuration>
           <changeLogFile>src/main/resources/db/migration/changelog.xml</changeLogFile>
-          <diffChangeLogFile>src/main/resources/db/migration/XXXXX_diffchange.xml</diffChangeLogFile>
+          <diffChangeLogFile>src/main/resources/db/migration/KSTIP-XXXX.xml</diffChangeLogFile>
           <outputChangeLogFile>src/main/resources/db/migration/XXXXX_genchange.xml</outputChangeLogFile>
           <propertyFile>liquibase.properties</propertyFile>
           <driver>org.postgresql.Driver</driver>
