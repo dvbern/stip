@@ -29,15 +29,10 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class QuarkusTransactionUtil {
     public void runForTenantInNewTransaction(final TenantIdentifier tenantIdentifier, final Runnable runnable) {
-        QuarkusTransaction.requiringNew().run(() -> {
-            Arc.container().requestContext().activate();
-            Arc.container().instance(TenantContext.class).get().setTenantIdentifier(tenantIdentifier);
-            try {
-                runnable.run();
-            } finally {
-                Arc.container().requestContext().deactivate();
-            }
-        });
+        Arc.container().requestContext().activate();
+        Arc.container().instance(TenantContext.class).get().setTenantIdentifier(tenantIdentifier);
+        QuarkusTransaction.requiringNew().run(runnable);
+        Arc.container().requestContext().deactivate();
     }
 
     public void runForTenantsInNewTransaction(final List<TenantIdentifier> tenantIdentifiers, final Runnable runnable) {

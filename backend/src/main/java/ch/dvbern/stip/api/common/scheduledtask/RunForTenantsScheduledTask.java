@@ -76,7 +76,14 @@ public abstract class RunForTenantsScheduledTask implements Job {
             .build();
 
         try {
-            scheduler.scheduleJob(jobDetail, trigger);
+            if (scheduler.checkExists(jobDetail.getKey())) {
+                scheduler.rescheduleJob(trigger.getKey(), trigger);
+                LOG.info("Rescheduled existing job: {}", jobDetail.getKey().getName());
+            } else {
+                scheduler.scheduleJob(jobDetail, trigger);
+                LOG.info("Scheduled job: {}", jobDetail.getKey().getName());
+            }
+
         } catch (SchedulerException e) {
             LOG.error(String.format("Error scheduling %s%s", SCHEDULED_TASK_NAME_SUFFIX, jobName), e);
         }
