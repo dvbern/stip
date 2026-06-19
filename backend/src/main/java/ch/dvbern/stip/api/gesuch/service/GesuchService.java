@@ -1470,9 +1470,6 @@ public class GesuchService {
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
         final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
-        // final var unreadNotificationsCount = notificationService.getUnreadNotificationCountForFall(
-        // gesuch.getAusbildung().getFall().getId()
-        // );
 
         return new GesuchHeaderDto()
             .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
@@ -1480,7 +1477,6 @@ public class GesuchService {
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
             .initial(initialGesuch)
             .versions(versions);
-        // .unreadNotificationsCount((int) unreadNotificationsCount);
     }
 
     public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {

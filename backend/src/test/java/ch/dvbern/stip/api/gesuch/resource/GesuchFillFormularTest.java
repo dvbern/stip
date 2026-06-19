@@ -59,6 +59,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KindUpdateDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ValidationReportDto;
@@ -86,6 +87,7 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -107,6 +109,7 @@ class GesuchFillFormularTest {
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private UUID gesuchId;
+    private UUID fallId;
     private UUID gesuchTrancheId;
     private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
@@ -120,6 +123,7 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        fallId = gesuch.getFallId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
@@ -469,22 +473,23 @@ class GesuchFillFormularTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(25)
-    // void gesuchNotificationTest() {
-    // var notifications = notificationApiSpec.getNotificationsForCurrentUser()
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Status.OK.getStatusCode())
-    // .extract()
-    // .body()
-    // .as(NotificationDtoSpec[].class);
-    // Arrays.stream(notifications).forEach(notification -> {
-    // assertTrue(!notification.getNotificationText().isEmpty());
-    // });
-    // }
+    @Test
+    @TestAsGesuchsteller
+    @Order(25)
+    void gesuchNotificationTest() {
+        var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(fallId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+        Arrays.stream(notifications).forEach(notification -> {
+            assertTrue(!notification.getNotificationText().isEmpty());
+        });
+    }
 
     @Test
     @TestAsSuperUser
