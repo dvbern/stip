@@ -23,9 +23,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Entity
 @Table(
@@ -35,6 +39,9 @@ import org.hibernate.envers.Audited;
 @Audited
 @Getter
 @Setter
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Benutzereinstellungen extends AbstractMandantEntity {
     @NotNull
     @Column(name = "digitale_kommunikation", nullable = false)
