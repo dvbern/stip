@@ -99,7 +99,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @AllArgsConstructor
 public class Gesuch extends AbstractMandantEntity {
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
     private Ausbildung ausbildung;
 
@@ -228,7 +228,7 @@ public class Gesuch extends AbstractMandantEntity {
     private InBearbeitungSbReason inBearbeitungSbReason;
 
     @Nullable
-    @OneToOne(mappedBy = "gesuch", orphanRemoval = true)
+    @OneToOne(mappedBy = "gesuch", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")
