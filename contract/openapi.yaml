@@ -3106,13 +3106,8 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /fall/{fallId}/notifications/{notificationId}/markAsRead:
+  /fall/notifications/{notificationId}/markAsRead:
     parameters:
-      - name: fallId
-        in: path
-        required: true
-        schema:
-          $ref: '#/components/schemas/UUID'
       - name: notificationId
         in: path
         required: true
@@ -9486,6 +9481,7 @@ components:
         - timestampErstellt
         - userErstellt
         - absender
+        - read
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -9503,6 +9499,8 @@ components:
           $ref: '#/components/schemas/LocalDate'
         absender:
           type: string
+        read:
+          type: boolean
     GesuchDokumentKommentar:
       description: Kommentar zu einem (abgelehnten) GesuchDokument
       type: object

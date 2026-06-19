@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchHeaderDto  implements Serializable {
   private @Valid List<VerfuegtGesuchDto> versions = new ArrayList<>();
   private @Valid GesuchAenderungsDto aenderungs;
+  private @Valid Integer unreadNotificationsCount;
   private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
   private @Valid GesuchInfoDto gesuchInfo;
   private @Valid VerfuegtGesuchDto initial;
@@ -84,6 +85,25 @@ public class GesuchHeaderDto  implements Serializable {
   @JsonProperty("aenderungs")
   public void setAenderungs(GesuchAenderungsDto aenderungs) {
     this.aenderungs = aenderungs;
+  }
+
+  /**
+   **/
+  public GesuchHeaderDto unreadNotificationsCount(Integer unreadNotificationsCount) {
+    this.unreadNotificationsCount = unreadNotificationsCount;
+    return this;
+  }
+
+  
+  @JsonProperty("unreadNotificationsCount")
+  @NotNull
+  public Integer getUnreadNotificationsCount() {
+    return unreadNotificationsCount;
+  }
+
+  @JsonProperty("unreadNotificationsCount")
+  public void setUnreadNotificationsCount(Integer unreadNotificationsCount) {
+    this.unreadNotificationsCount = unreadNotificationsCount;
   }
 
   /**
@@ -170,6 +190,7 @@ public class GesuchHeaderDto  implements Serializable {
     GesuchHeaderDto gesuchHeader = (GesuchHeaderDto) o;
     return Objects.equals(this.versions, gesuchHeader.versions) &&
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
+        Objects.equals(this.unreadNotificationsCount, gesuchHeader.unreadNotificationsCount) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo) &&
         Objects.equals(this.initial, gesuchHeader.initial);
@@ -177,7 +198,7 @@ public class GesuchHeaderDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial);
+    return Objects.hash(versions, aenderungs, unreadNotificationsCount, currentTranches, gesuchInfo, initial);
   }
 
   @Override
@@ -187,6 +208,7 @@ public class GesuchHeaderDto  implements Serializable {
     
     sb.append("    versions: ").append(toIndentedString(versions)).append("\n");
     sb.append("    aenderungs: ").append(toIndentedString(aenderungs)).append("\n");
+    sb.append("    unreadNotificationsCount: ").append(toIndentedString(unreadNotificationsCount)).append("\n");
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("    initial: ").append(toIndentedString(initial)).append("\n");

@@ -40,13 +40,8 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-  '/fall/{fallId}/notifications/{notificationId}/markAsRead':
+  '/fall/notifications/{notificationId}/markAsRead':
     parameters:
-      - name: fallId
-        in: path
-        required: true
-        schema:
-          $ref: './components/common.yaml#/UUID'
       - name: notificationId
         in: path
         required: true

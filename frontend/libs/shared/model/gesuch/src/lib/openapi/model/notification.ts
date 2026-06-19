@@ -23,6 +23,7 @@ export interface Notification {
     userErstellt: string;
     timestampErstellt: string;
     absender: string;
+    read: boolean;
 }
 
 

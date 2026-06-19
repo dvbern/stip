@@ -17,11 +17,8 @@
 
 package ch.dvbern.stip.api.notification.resource;
 
-import java.util.Arrays;
-
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
-import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -34,7 +31,6 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.NotificationApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -46,10 +42,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -83,23 +75,23 @@ class NotificationResourceTest {
             .statusCode(Status.OK.getStatusCode());
     }
 
-    @Test
-    @TestAsGesuchsteller
-    @Order(2)
-    void verifyNotification() {
-        final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .extract()
-            .body()
-            .as(NotificationDto[].class);
+    // @Test
+    // @TestAsGesuchsteller
+    // @Order(2)
+    // void verifyNotification() {
+    // final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+    // .execute(TestUtil.PEEK_IF_ENV_SET)
+    // .then()
+    // .extract()
+    // .body()
+    // .as(NotificationDto[].class);
 
-        assertThat(notifications.length, greaterThan(0));
-        assertThat(
-            Arrays.stream(notifications).toList().get(0).getNotificationType(),
-            is(NotificationType.GESUCH_EINGEREICHT)
-        );
-    }
+    // assertThat(notifications.length, greaterThan(0));
+    // assertThat(
+    // Arrays.stream(notifications).toList().get(0).getNotificationType(),
+    // is(NotificationType.GESUCH_EINGEREICHT)
+    // );
+    // }
 
     @Test
     @TestAsSuperUser

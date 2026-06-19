@@ -37,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchHeaderDtoSpec.JSON_PROPERTY_INITIAL,
   GesuchHeaderDtoSpec.JSON_PROPERTY_VERSIONS,
   GesuchHeaderDtoSpec.JSON_PROPERTY_AENDERUNGS,
+  GesuchHeaderDtoSpec.JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT,
   GesuchHeaderDtoSpec.JSON_PROPERTY_CURRENT_TRANCHES,
   GesuchHeaderDtoSpec.JSON_PROPERTY_GESUCH_INFO
 })
@@ -51,6 +52,9 @@ public class GesuchHeaderDtoSpec {
 
   public static final String JSON_PROPERTY_AENDERUNGS = "aenderungs";
   private GesuchAenderungsDtoSpec aenderungs;
+
+  public static final String JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT = "unreadNotificationsCount";
+  private Integer unreadNotificationsCount;
 
   public static final String JSON_PROPERTY_CURRENT_TRANCHES = "currentTranches";
   private List<GesuchTrancheSlimDtoSpec> currentTranches;
@@ -147,6 +151,32 @@ public class GesuchHeaderDtoSpec {
   }
 
 
+  public GesuchHeaderDtoSpec unreadNotificationsCount(Integer unreadNotificationsCount) {
+    
+    this.unreadNotificationsCount = unreadNotificationsCount;
+    return this;
+  }
+
+   /**
+   * Get unreadNotificationsCount
+   * @return unreadNotificationsCount
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getUnreadNotificationsCount() {
+    return unreadNotificationsCount;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setUnreadNotificationsCount(Integer unreadNotificationsCount) {
+    this.unreadNotificationsCount = unreadNotificationsCount;
+  }
+
+
   public GesuchHeaderDtoSpec currentTranches(List<GesuchTrancheSlimDtoSpec> currentTranches) {
     
     this.currentTranches = currentTranches;
@@ -218,13 +248,14 @@ public class GesuchHeaderDtoSpec {
     return Objects.equals(this.initial, gesuchHeader.initial) &&
         Objects.equals(this.versions, gesuchHeader.versions) &&
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
+        Objects.equals(this.unreadNotificationsCount, gesuchHeader.unreadNotificationsCount) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(initial, versions, aenderungs, currentTranches, gesuchInfo);
+    return Objects.hash(initial, versions, aenderungs, unreadNotificationsCount, currentTranches, gesuchInfo);
   }
 
   @Override
@@ -234,6 +265,7 @@ public class GesuchHeaderDtoSpec {
     sb.append("    initial: ").append(toIndentedString(initial)).append("\n");
     sb.append("    versions: ").append(toIndentedString(versions)).append("\n");
     sb.append("    aenderungs: ").append(toIndentedString(aenderungs)).append("\n");
+    sb.append("    unreadNotificationsCount: ").append(toIndentedString(unreadNotificationsCount)).append("\n");
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("}");

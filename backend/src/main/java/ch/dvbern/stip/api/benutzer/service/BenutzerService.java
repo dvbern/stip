@@ -45,7 +45,6 @@ import ch.dvbern.stip.api.notification.service.NotificationMapper;
 import ch.dvbern.stip.api.sozialdienstbenutzer.repo.SozialdienstBenutzerRepository;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.generated.dto.BenutzerDto;
-import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenDto;
 import ch.dvbern.stip.generated.dto.SachbearbeiterZuordnungStammdatenListDto;
 import io.quarkus.arc.profile.UnlessBuildProfile;
@@ -80,15 +79,15 @@ public class BenutzerService {
 
     private final ZuordnungRepository zuordnungRepository;
 
-    @Transactional
-    public List<NotificationDto> getNotificationsForCurrentUser() {
-        return getNotificationsForUser(getCurrentBenutzer().getId());
-    }
+    // @Transactional
+    // public List<NotificationDto> getNotificationsForCurrentUser() {
+    // return getNotificationsForUser(getCurrentBenutzer().getId());
+    // }
 
-    @Transactional
-    public List<NotificationDto> getNotificationsForUser(final UUID userId) {
-        return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
-    }
+    // @Transactional
+    // public List<NotificationDto> getNotificationsForUser(final UUID userId) {
+    // return notificationRepository.getAllForUser(userId).map(notificationMapper::toDto).toList();
+    // }
 
     private Benutzer getBenutzerByKeycloakId(final String keycloakId) {
         final var benutzer = findBenutzerByKeycloakId(keycloakId);

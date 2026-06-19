@@ -39,6 +39,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.KommentarDto;
+import ch.dvbern.stip.generated.dto.NotificationDto;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -51,6 +52,7 @@ import lombok.RequiredArgsConstructor;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final MailService mailService;
+    private final NotificationMapper notificationMapper;
 
     @Transactional
     public void createDarlehenAbgelehntNotificationAndSendStdMail(final FreiwilligDarlehen freiwilligDarlehen) {
@@ -499,6 +501,22 @@ public class NotificationService {
         setAbsender(gesuch, notification);
         notificationRepository.persistAndFlush(notification);
         mailService.sendStandardNotificationEmailForGesuch(gesuch);
+    }
+
+    public Notification requireById(final UUID notificationId) {
+        return notificationRepository.requireById(notificationId);
+    }
+
+    public List<NotificationDto> getNotificationsForFall(final UUID fallId) {
+        return notificationRepository.getAllForFall(fallId).map(notificationMapper::toDto).toList();
+    }
+
+    public long getUnreadNotificationCountForFall(final UUID fallId) {
+        return notificationRepository.getUnreadNotificationsCountForFall(fallId);
+    }
+
+    public void markNotificationAsRead(final UUID notificationId) {
+        notificationRepository.markNotificationAsRead(notificationId);
     }
 
     private void setAbsender(final Gesuch gesuch, Notification notification) {

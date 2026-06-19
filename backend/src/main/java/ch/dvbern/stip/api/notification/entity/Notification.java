@@ -77,4 +77,9 @@ public class Notification extends AbstractMandantEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "absender")
     private String absender;
+
+    // read
+    @NotNull
+    @Column(name = "is_read")
+    private boolean isRead;
 }

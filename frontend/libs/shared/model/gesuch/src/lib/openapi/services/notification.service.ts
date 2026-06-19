@@ -29,7 +29,6 @@ export interface NotificationServiceGetNotificationsForFallRequestParams {
 }
 
 export interface NotificationServiceMarkNotificationAsReadRequestParams {
-    fallId: string;
     notificationId: string;
 }
 
@@ -187,15 +186,11 @@ export class NotificationService {
     }
 
     public markNotificationAsReadPath = (requestParameters: NotificationServiceMarkNotificationAsReadRequestParams) => {
-        const fallId = requestParameters.fallId;
-        if (fallId === null || fallId === undefined) {
-            throw new Error('Required parameter fallId was null or undefined when calling markNotificationAsRead$.');
-        }
         const notificationId = requestParameters.notificationId;
         if (notificationId === null || notificationId === undefined) {
             throw new Error('Required parameter notificationId was null or undefined when calling markNotificationAsRead$.');
         }
-        let path = `/api/v1/fall/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/notifications/${this.configuration.encodeParam({name: "notificationId", value: notificationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/markAsRead`;
+        let path = `/api/v1/fall/notifications/${this.configuration.encodeParam({name: "notificationId", value: notificationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/markAsRead`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -216,10 +211,6 @@ export class NotificationService {
      public markNotificationAsRead$(requestParameters: NotificationServiceMarkNotificationAsReadRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpResponse<any>>;
      public markNotificationAsRead$(requestParameters: NotificationServiceMarkNotificationAsReadRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<HttpEvent<any>>;
      public markNotificationAsRead$(requestParameters: NotificationServiceMarkNotificationAsReadRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'text/plain', context?: HttpContext}): Observable<any> {
-        const fallId = requestParameters.fallId;
-        if (fallId === null || fallId === undefined) {
-            throw new Error('Required parameter fallId was null or undefined when calling markNotificationAsRead$.');
-        }
         const notificationId = requestParameters.notificationId;
         if (notificationId === null || notificationId === undefined) {
             throw new Error('Required parameter notificationId was null or undefined when calling markNotificationAsRead$.');
@@ -269,7 +260,7 @@ export class NotificationService {
             }
         }
 
-        const localVarPath = `/fall/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/notifications/${this.configuration.encodeParam({name: "notificationId", value: notificationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/markAsRead`;
+        const localVarPath = `/fall/notifications/${this.configuration.encodeParam({name: "notificationId", value: notificationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/markAsRead`;
         return this.httpClient.request<any>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

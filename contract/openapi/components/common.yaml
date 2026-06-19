@@ -937,6 +937,7 @@ Notification:
     - timestampErstellt
     - userErstellt
     - absender
+    - read
   properties:
     id:
       $ref: '#/UUID'
@@ -954,6 +955,8 @@ Notification:
       $ref: '#/LocalDate'
     absender:
       type: string
+    read:
+      type: boolean
 NotificationType:
   enum:
     - GESUCH_EINGEREICHT

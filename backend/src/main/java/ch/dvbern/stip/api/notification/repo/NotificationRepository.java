@@ -21,7 +21,6 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.fall.entity.QFall;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.entity.QNotification;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -33,28 +32,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NotificationRepository implements BaseRepository<Notification> {
     private final EntityManager entityManager;
+    private final QNotification Q_NOTIFICATION = QNotification.notification;
 
     public void deleteAllForFall(final UUID fallId) {
-        final var notification = QNotification.notification;
 
         new JPAQueryFactory(entityManager)
-            .delete(notification)
-            .where(notification.fall.id.eq(fallId))
+            .delete(Q_NOTIFICATION)
+            .where(Q_NOTIFICATION.fall.id.eq(fallId))
             .execute();
     }
 
-    public Stream<Notification> getAllForUser(final UUID userId) {
-        final var notification = QNotification.notification;
-        final var fall = QFall.fall;
-
+    public Stream<Notification> getAllForFall(final UUID fallId) {
         final var queryFactory = new JPAQueryFactory(entityManager);
 
         return queryFactory
-            .selectFrom(notification)
-            .join(fall)
-            .on(notification.fall.id.eq(fall.id))
-            .where(fall.gesuchsteller.id.eq(userId))
-            .orderBy(notification.timestampErstellt.desc())
+            .selectFrom(Q_NOTIFICATION)
+            .where(Q_NOTIFICATION.fall.id.eq(fallId))
+            .orderBy(Q_NOTIFICATION.timestampErstellt.desc())
             .stream();
+    }
+
+    public long getUnreadNotificationsCountForFall(final UUID fallId) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+
+        return queryFactory
+            .select(Q_NOTIFICATION.count())
+            .from(Q_NOTIFICATION)
+            .where(Q_NOTIFICATION.fall.id.eq(fallId).and(Q_NOTIFICATION.isRead.isFalse()))
+            .fetchOne();
+    }
+
+    public void markNotificationAsRead(final UUID notificationId) {
+        final var queryFactory = new JPAQueryFactory(entityManager);
+
+        queryFactory
+            .update(Q_NOTIFICATION)
+            .set(Q_NOTIFICATION.isRead, true)
+            .where(Q_NOTIFICATION.id.eq(notificationId))
+            .execute();
+
     }
 }
