@@ -45,6 +45,8 @@ tags:
     x-displayName: Buchhaltung
   - name: Fall
     x-displayName: Fall
+  - name: FallHeader
+    x-displayName: FallHeader
   - name: Notification
     x-displayName: Notification
   - name: Dokument
@@ -2975,7 +2977,7 @@ paths:
         - auth-uat-bern: []
         - auth-dev-bern: []
   /buchhaltung/failed:
-    summary: asdf
+    summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
     get:
       tags:
         - Buchhaltung
@@ -3071,6 +3073,30 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createFallForGs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/header/{fallId}:
+    get:
+      tags:
+        - FallHeader
+      parameters:
+        - $ref: '#/components/parameters/fallId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallHeader'
+          description: Get the FallHeader by FallId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallHeader
+      summary: Get FallHeader for the GS and Soz App
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -9448,6 +9474,16 @@ components:
           type: string
         mandant:
           type: string
+    FallHeader:
+      required:
+        - fallId
+        - unreadNotificationsCount
+      type: object
+      properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        unreadNotificationsCount:
+          type: integer
     NotificationType:
       enum:
         - GESUCH_EINGEREICHT
@@ -10164,7 +10200,6 @@ components:
         - versions
         - aenderungs
         - currentTranches
-        - unreadNotificationsCount
       type: object
       properties:
         initial:
@@ -10175,8 +10210,6 @@ components:
             $ref: '#/components/schemas/VerfuegtGesuch'
         aenderungs:
           $ref: '#/components/schemas/GesuchAenderungs'
-        unreadNotificationsCount:
-          type: integer
         currentTranches:
           type: array
           items:

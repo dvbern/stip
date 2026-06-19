@@ -1522,7 +1522,6 @@ components:
         - versions
         - aenderungs
         - currentTranches
-        - unreadNotificationsCount
       type: object
       properties:
         initial:
@@ -1533,8 +1532,6 @@ components:
             $ref: '#/components/schemas/VerfuegtGesuch'
         aenderungs:
           $ref: '#/components/schemas/GesuchAenderungs'
-        unreadNotificationsCount:
-          type: integer
         currentTranches:
           type: array
           items:

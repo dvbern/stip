@@ -292,6 +292,16 @@ Fall:
       type: string
     mandant:
       type: string
+FallHeader:
+  required:
+    - fallId
+    - unreadNotificationsCount
+  type: object
+  properties:
+    fallId:
+      $ref: '#/UUID'
+    unreadNotificationsCount:
+      type: integer
 Gesuchsjahr:
   type: object
   required:

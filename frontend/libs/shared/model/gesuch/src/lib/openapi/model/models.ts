@@ -117,6 +117,7 @@ export * from './failedAuszahlungBuchhaltung';
 export * from './fall';
 export * from './fallAuszahlung';
 export * from './fallDashboardItem';
+export * from './fallHeader';
 export * from './familienBudgetresultat';
 export * from './familienBudgetresultatEinnahmen';
 export * from './familienBudgetresultatKosten';

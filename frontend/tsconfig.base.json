@@ -102,6 +102,7 @@
       "@dv/shared/data-access/dokuments": ["libs/shared/data-access/dokuments/src/index.ts"],
       "@dv/shared/data-access/einreichen": ["libs/shared/data-access/einreichen/src/index.ts"],
       "@dv/shared/data-access/fall": ["libs/shared/data-access/fall/src/index.ts"],
+      "@dv/shared/data-access/fall-header": ["./libs/shared/data-access/fall-header/src/index.ts"],
       "@dv/shared/data-access/gesuch": ["libs/shared/data-access/gesuch/src/index.ts"],
       "@dv/shared/data-access/gesuch-aenderung": ["libs/shared/data-access/gesuch-aenderung/src/index.ts"],
       "@dv/shared/data-access/gesuch-header": ["libs/shared/data-access/gesuch-header/src/index.ts"],

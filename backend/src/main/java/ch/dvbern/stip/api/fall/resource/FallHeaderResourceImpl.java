@@ -15,45 +15,34 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.notification.resource;
+package ch.dvbern.stip.api.fall.resource;
 
-import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.authorization.NotificationAuthorizer;
+import ch.dvbern.stip.api.common.authorization.FallAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
-import ch.dvbern.stip.api.notification.service.NotificationService;
-import ch.dvbern.stip.generated.api.NotificationResource;
-import ch.dvbern.stip.generated.dto.NotificationDto;
+import ch.dvbern.stip.api.fall.service.FallHeaderService;
+import ch.dvbern.stip.generated.api.FallHeaderResource;
+import ch.dvbern.stip.generated.dto.FallHeaderDto;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIFICATION_READ;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.FALL_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
-@Slf4j
 @Validated
 @PopulateCurrentBenutzerContext
-public class NotificationResourceImpl implements NotificationResource {
-    private final NotificationAuthorizer notificationAuthorizer;
-    private final NotificationService notificationService;
+public class FallHeaderResourceImpl implements FallHeaderResource {
+    private final FallAuthorizer fallAuthorizer;
+    private final FallHeaderService fallHeaderService;
 
-    @RolesAllowed(NOTIFICATION_READ)
     @Override
-    public List<NotificationDto> getNotificationsForFall(UUID fallId) {
-
-        notificationAuthorizer.canGetForFall(fallId);
-        return notificationService.getNotificationsForFall(fallId);
-    }
-
-    @RolesAllowed(NOTIFICATION_READ)
-    @Override
-    public void markNotificationAsRead(UUID notificationId) {
-        notificationAuthorizer.canMarkAsRead(notificationId);
-        notificationService.markNotificationAsRead(notificationId);
+    @RolesAllowed(FALL_READ)
+    public FallHeaderDto getFallHeader(UUID fallId) {
+        fallAuthorizer.canGetForFall(fallId);
+        return fallHeaderService.getFallHeader(fallId);
     }
 }

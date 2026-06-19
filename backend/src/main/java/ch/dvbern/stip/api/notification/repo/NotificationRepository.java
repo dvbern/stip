@@ -58,7 +58,7 @@ public class NotificationRepository implements BaseRepository<Notification> {
         return queryFactory
             .select(Q_NOTIFICATION.count())
             .from(Q_NOTIFICATION)
-            .where(Q_NOTIFICATION.fall.id.eq(fallId).and(Q_NOTIFICATION.isRead.isFalse()))
+            .where(Q_NOTIFICATION.fall.id.eq(fallId).and(Q_NOTIFICATION.read.isFalse()))
             .fetchOne();
     }
 
@@ -67,7 +67,7 @@ public class NotificationRepository implements BaseRepository<Notification> {
 
         queryFactory
             .update(Q_NOTIFICATION)
-            .set(Q_NOTIFICATION.isRead, true)
+            .set(Q_NOTIFICATION.read, true)
             .where(Q_NOTIFICATION.id.eq(notificationId))
             .execute();
 

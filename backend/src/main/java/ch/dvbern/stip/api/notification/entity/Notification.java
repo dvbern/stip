@@ -78,8 +78,7 @@ public class Notification extends AbstractMandantEntity {
     @Column(name = "absender")
     private String absender;
 
-    // read
     @NotNull
-    @Column(name = "is_read")
-    private boolean isRead;
+    @Column(name = "read")
+    private boolean read;
 }

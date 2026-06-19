@@ -10,6 +10,7 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -64,6 +65,7 @@ export class GesuchAppPatternMainLayoutComponent {
   private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private fallHeaderStore = inject(FallHeaderStore);
 
   baseMenuItems = gesuchBaseMenuItems;
 
@@ -91,6 +93,7 @@ export class GesuchAppPatternMainLayoutComponent {
 
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
+        this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
 
@@ -99,6 +102,7 @@ export class GesuchAppPatternMainLayoutComponent {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id;
+      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
@@ -133,9 +137,9 @@ export class GesuchAppPatternMainLayoutComponent {
         icon: 'mail',
         label: { key: 'shared.menu.nachrichten' },
         route: ['/nachrichten', fallId],
-        badge: gesuchHeader.unreadNotificationsCount
+        badge: fallHeader?.unreadNotificationsCount
           ? {
-              count: gesuchHeader.unreadNotificationsCount,
+              count: fallHeader.unreadNotificationsCount,
               type: 'info',
             }
           : undefined,
