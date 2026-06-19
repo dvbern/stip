@@ -491,8 +491,14 @@ public class SapService {
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            getUpdateOrCreateBusinessPartner(gesuch);
             gesuch.setPendingSapAction(AUSZAHLUNG_INITIAL);
+            if (
+                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
+                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
+            ) {
+                return;
+            }
+            getUpdateOrCreateBusinessPartner(gesuch);
             return;
         }
         final var pendingAuszahlungOpt =
@@ -541,8 +547,14 @@ public class SapService {
         fall.setFailedBuchhaltungAuszahlungType(null);
 
         if (Objects.isNull(fall.getAuszahlung().getSapBusinessPartnerId())) {
-            getUpdateOrCreateBusinessPartner(gesuch);
             gesuch.setPendingSapAction(BuchhaltungType.AUSZAHLUNG_REMAINDER);
+            if (
+                Objects.nonNull(fall.getAuszahlung().getBuchhaltung())
+                && fall.getAuszahlung().getBuchhaltung().getSapStatus() == SapStatus.IN_PROGRESS
+            ) {
+                return;
+            }
+            getUpdateOrCreateBusinessPartner(gesuch);
             return;
         }
         gesuch.setRemainderPaymentExecuted(true);
