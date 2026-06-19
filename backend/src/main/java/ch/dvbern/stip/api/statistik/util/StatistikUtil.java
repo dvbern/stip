@@ -40,6 +40,17 @@ public class StatistikUtil {
         return value ? 1 : 2;
     }
 
+    public static Optional<Integer> getGemeindeBfsNummerOrLookup(
+        final UUID gesuchId,
+        final Integer gemeindeBfsNr,
+        final Adresse adresse,
+        final TenantIdentifier tenantIdentifier,
+        final GemeindeLookupPortFactory gemeindeLookupPortFactory
+    ) {
+        return Optional.ofNullable(gemeindeBfsNr)
+            .or(() -> getGemeindeBfsNummer(gesuchId, adresse, tenantIdentifier, gemeindeLookupPortFactory));
+    }
+
     public static Optional<Integer> getGemeindeBfsNummer(
         final UUID gesuchId,
         final Adresse adresse,

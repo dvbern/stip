@@ -32,6 +32,7 @@ import org.jilt.BuilderStyle;
 @Data
 @XmlRootElement(name = "table")
 @XmlAccessorType(XmlAccessType.FIELD)
+@lombok.Builder
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor

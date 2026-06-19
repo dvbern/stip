@@ -57,5 +57,11 @@
   "demo-data-app.overview.test-berechnung.gesuch-invalid": "Ces données de test ne constituent pas une demande valide",
   "demo-data-app.overview.test-berechnung.copy-to-clipboard": "Copier dans le presse-papiers",
   "demo-data-app.overview.test-berechnung.soll-ist": "Doit être: {{soll}}\n Est: {{ist}}",
-  "demo-data-app.overview.test-berechnung.success": "Les données de test ont été calculées avec succès"
+  "demo-data-app.overview.test-berechnung.success": "Les données de test ont été calculées avec succès",
+  "demo-data-app.overview.generate-multi.aktionen": "Interactions",
+  "demo-data-app.overview.generate-multi.xmlStatistik": "Statistiques BFS pour tous les cas de test",
+  "demo-data-app.overview.generate-multi.xmlStatistik.success": "Les statistiques ont été générées avec succès",
+  "demo-data-app.overview.generate-multi.persistent": "Générer toutes les demandes",
+  "demo-data-app.overview.generate-multi.persistent.warning": "Cette action permet de créer des demandes pour tous les cas de test, qui seront directement classées comme « Traitées ».<br><b>Les demandes créées ne doivent pas être traitées.</b><br><br>Êtes-vous sûr?",
+  "demo-data-app.overview.generate-multi.persistent.success": "Les demandes ont été rédigées avec succès"
 }

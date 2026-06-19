@@ -213,5 +213,5 @@ const filterFn = (key: FilterTypes, value: unknown, data: Statistik) => {
       );
   }
 
-  return data[key].toString().includes(value as string);
+  return data[key]?.toString().includes(value as string);
 };

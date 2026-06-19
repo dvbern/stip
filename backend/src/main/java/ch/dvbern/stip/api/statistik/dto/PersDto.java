@@ -30,6 +30,7 @@ import org.jilt.BuilderStyle;
 
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
+@lombok.Builder
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,8 +41,8 @@ public class PersDto {
     @XmlElement(name = "nationality")
     private Integer nationality;
 
-    @XmlElement(name = "residencePermitCategoryType")
-    private String residencePermitCategoryType;
+    @XmlElement(name = "residencePermitCategory")
+    private String residencePermitCategory;
 
     @XmlElement(name = "place")
     private Integer place;

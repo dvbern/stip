@@ -28,6 +28,7 @@ import org.jilt.BuilderStyle;
 
 @Data
 @XmlAccessorType(XmlAccessType.FIELD)
+@lombok.Builder
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor

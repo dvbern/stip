@@ -131,6 +131,11 @@ quarkus:
     auth-methods: 'DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN'
     host: 'mailext.dvbern.ch'
     from: 'kstip@dvbern.ch'
+  otel:
+    metric:
+      enabled: true
+    logs:
+      enabled: true
   datasource:
     username: '${STIP_DB_USERNAME}'
     db-kind: 'postgresql'
@@ -145,7 +150,7 @@ quarkus:
     log:
       queries-slower-than-ms: 20
       jdbc-warnings: true
-#      sql: true
+    #      sql: true
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'

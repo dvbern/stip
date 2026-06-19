@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.statistik.entity.Statistik;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -54,7 +55,7 @@ public class StatistikRepository implements BaseRepository<Statistik> {
     UUID ausbildungId,
     boolean isAusbildungAusland,
     String ausbildungLandBfs,
-    String ausbildungKanton,
+    String ausbildungPlz,
     /* FormationDto */
     /* why opt? */ Integer bfsKategorie,
     boolean besuchtBMS,
@@ -74,6 +75,7 @@ public class StatistikRepository implements BaseRepository<Statistik> {
     ) {
     }
 
+    @WithSpan
     public List<StatistikOfYear> getStatistikValuesFor(final int year) {
         return getEntityManager().createQuery("""
             with buchhaltungUnion as (
@@ -147,7 +149,6 @@ public class StatistikRepository implements BaseRepository<Statistik> {
             join pia.nationalitaet piaNationalitaet
             left join gesuchFormular.lebenslaufItems lebenslaufItems on (
                 lebenslaufItems.abschluss is not null
-
             )
             left join lebenslaufItems.abschluss lebenslaufAbschluss on (
                 lebenslaufAbschluss.berufsbefaehigenderAbschluss = true

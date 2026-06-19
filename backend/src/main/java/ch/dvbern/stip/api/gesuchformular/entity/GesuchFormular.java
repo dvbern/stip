@@ -262,7 +262,11 @@ import org.jilt.BuilderStyle;
         AenderungGesuchDokumentsAcceptedValidationGroup.class
     }
 )
-@NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
+@NoOverlapInAusbildungenConstraint(
+    groups = {
+        LebenslaufItemPageValidation.class
+    }, property = "lebenslaufItems"
+)
 @SteuerdatenTabRequiredConstraint(
     groups = {
         SteuerdatenPageValidation.class
