@@ -1,12 +1,14 @@
-<ng-container *transloco="let t">
+<ng-container *dvTranslocoShared="let t">
   @let gesuchId = gesuchIdSig();
   @let trancheId = trancheIdSig();
   @let firstTrancheId = firstCurrentTrancheIdSig();
   @let versionen = versionenSig();
   @let initial = initialSig();
   @let originStep = originStepSig();
+  @let verfuegtGesuch = initial?.verfuegtGesuch;
+  @let eingereichtTranche = initial?.eingereichtGesuch;
 
-  @if (versionen.length || initial?.tranchen?.length) {
+  @if (versionen.length || verfuegtGesuch || eingereichtTranche) {
     <button
       type="button"
       class="tw:dv-nav-button-outline tw:flex tw:items-center tw:px-2"
@@ -39,51 +41,77 @@
           [queryParams]="{ originStep }"
           mat-menu-item
           [class.active]="
-            trancheId === firstTrancheId && isGesuchRouteSig() && !currentVersionSig() && !isInitialRouteSig()
+            trancheId === firstTrancheId &&
+            isGesuchRouteSig() &&
+            !currentVersionSig() &&
+            !isInitialRouteSig() &&
+            !isEingereichtRouteSig()
           "
         >
           <span>{{ t('shared.header.versionen') }}</span>
         </a>
-        <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
-        @for (version of versionen; track version.berechnungId) {
-          <a
-            [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', version.tranchen[0].id]"
-            [queryParams]="{
-              berechnungId: version.berechnungId,
-              revision: version.tranchen[0].revision,
-              originStep,
-            }"
-            class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
-            data-testid="versionen-nav-menu-item"
-            mat-menu-item
-            [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
-          >
-            <span>
-              {{
-                t('shared.header.versionen.item', {
-                  date: version.timestamp | date: 'dd.MM.yyyy',
-                })
-              }}
-            </span>
-          </a>
-        }
         @if (versionen.length) {
           <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
+          @for (version of versionen; track version.berechnungId) {
+            <a
+              [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'tranche', version.tranchen[0].id]"
+              [queryParams]="{
+                berechnungId: version.berechnungId,
+                revision: version.tranchen[0].revision,
+                originStep,
+              }"
+              class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
+              data-testid="versionen-nav-menu-item"
+              mat-menu-item
+              [class.active]="currentVersionSig()?.berechnungId === version.berechnungId && !isInitialRouteSig()"
+            >
+              <span>
+                {{
+                  t('shared.header.versionen.item', {
+                    date: version.timestamp | date: 'dd.MM.yyyy',
+                  })
+                }}
+              </span>
+            </a>
+          }
         }
-        @if (initial) {
+        @if (eingereichtTranche) {
+          <hr class="tw:my-2 tw:border-t tw:border-dv-border" />
+          @if (verfuegtGesuch) {
+            <a
+              [routerLink]="[
+                '/',
+                'gesuch',
+                ...tabRouteSegmentsSig(),
+                gesuchId,
+                'initial',
+                verfuegtGesuch.tranchen[0].id,
+              ]"
+              [queryParams]="{
+                berechnungId: verfuegtGesuch.berechnungId,
+                revision: verfuegtGesuch.tranchen[0].revision,
+                originStep,
+              }"
+              class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
+              data-testid="versionen-nav-menu-verfuegt-item"
+              mat-menu-item
+              [class.active]="isInitialRouteSig()"
+            >
+              <span>{{ t('shared.header.versionen.verfuegt') }}</span>
+            </a>
+          }
           <a
-            [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'initial', initial.tranchen[0].id]"
+            [routerLink]="['/', 'gesuch', ...tabRouteSegmentsSig(), gesuchId, 'eingereicht', eingereichtTranche.id]"
             [queryParams]="{
-              berechnungId: initial.berechnungId,
-              revision: initial.tranchen[0].revision,
+              revision: eingereichtTranche.revision,
               originStep,
             }"
             class="tw:dv-nav-button tw:flex tw:items-center tw:px-4"
-            data-testid="versionen-nav-menu-initial-item"
+            data-testid="versionen-nav-menu-eingereicht-item"
             mat-menu-item
-            [class.active]="isInitialRouteSig()"
+            [class.active]="isEingereichtRouteSig()"
           >
-            <span>{{ t('shared.header.versionen.initial') }}</span>
+            <span>{{ t('shared.header.versionen.eingereicht') }}</span>
           </a>
         }
       </div>

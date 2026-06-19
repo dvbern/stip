@@ -177,6 +177,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       map((url) => url.includes(`/${getTrancheRoute('initial')}/`)),
     ),
   );
+  isEingereichtRouteSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map((url) => url.includes(`/${getTrancheRoute('eingereicht')}/`)),
+    ),
+  );
 
   headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
     this.gesuchHeaderStore.viewSig;
@@ -203,13 +208,16 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const berechnungId = this.berechnungIdSig();
     const originOrTrancheStep = this.originOrTrancheStepSig();
     const isIntitial = this.isInitialRouteSig();
+    const isEingereicht = this.isEingereichtRouteSig();
     const isAenderung = this.isAenderungRouteSig();
 
     const trancheTyp = isIntitial
       ? 'initial'
-      : isAenderung
-        ? 'aenderung'
-        : 'tranche';
+      : isEingereicht
+        ? 'eingereicht'
+        : isAenderung
+          ? 'aenderung'
+          : 'tranche';
 
     if (!this.isGesuchRouteSig()) {
       return [];
@@ -455,7 +463,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const statusUebergaenge = this.statusUebergaengeOptionsSig();
     const availableTrancheInteraction = this.availableTrancheInteractionSig();
     const canExport = !!this.exportValuesSig();
-    const showGesuchActions = this.isGesuchRouteSig();
+    const showGesuchActions =
+      this.isGesuchRouteSig() &&
+      !this.isEingereichtRouteSig() &&
+      !this.isInitialRouteSig();
     const showAenderungActions = !!this.isAenderungRouteSig();
     const aenderungActions = this.aenderungActionsSig();
 

@@ -61,6 +61,8 @@
   "shared.header.versionen": "Aktuelle Version",
   "shared.header.versionen.item": "Version {{ date }}",
   "shared.header.versionen.initial": "Erstgesuch",
+  "shared.header.versionen.eingereicht": "Erstgesuch Eingereicht",
+  "shared.header.versionen.verfuegt": "Erstgesuch Verfügt",
   "shared.header.darlehen": "Darlehen",
   "shared.header.darlehen.create": "Darlehen beantragen",
   "shared.header.darlehen.item": "Darlehen vom {{ date }}",

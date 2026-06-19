@@ -4294,6 +4294,36 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /gesuch/eingereicht/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getEingereichtTranche
+      summary: Returns the inital eingereicht tranche by gesuchTrancheId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /gesuch/gs/{gesuchTrancheId}:
     parameters:
       - name: gesuchTrancheId
@@ -10079,6 +10109,13 @@ components:
             $ref: '#/components/schemas/GesuchTrancheSlim'
         canAenderungEinreichen:
           type: boolean
+    InitialGesuchs:
+      type: object
+      properties:
+        eingereichtGesuch:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        verfuegtGesuch:
+          $ref: '#/components/schemas/VerfuegtGesuch'
     VerfuegtGesuch:
       type: object
       required:
@@ -10130,7 +10167,7 @@ components:
       type: object
       properties:
         initial:
-          $ref: '#/components/schemas/VerfuegtGesuch'
+          $ref: '#/components/schemas/InitialGesuchs'
         versions:
           type: array
           items:

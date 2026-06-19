@@ -157,6 +157,7 @@ export const preparePermissions = (
   const getPermissions = {
     TRANCHE: () => getGesuchPermissions(gesuch, appType, rolesMap),
     AENDERUNG: () => getTranchePermissions(gesuch, appType, rolesMap),
+    EINGEREICHT: () => getGesuchPermissions(gesuch, appType, rolesMap),
     INITIAL: () => getGesuchPermissions(gesuch, appType, rolesMap),
   } satisfies Record<GesuchUrlType, unknown>;
   const { permissions, status } = getPermissions[trancheTyp ?? 'TRANCHE']();
