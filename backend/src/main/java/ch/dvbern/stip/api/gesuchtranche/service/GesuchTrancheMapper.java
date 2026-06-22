@@ -242,6 +242,10 @@ public abstract class GesuchTrancheMapper {
             )
             .map(AbstractEntity::getId)
             .toList();
+
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getLebenslaufItems())) {
+            return;
+        }
         gesuchTrancheDto.getGesuchFormular()
             .getLebenslaufItems()
             .stream()
