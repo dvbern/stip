@@ -28,7 +28,7 @@ import lombok.experimental.UtilityClass;
 public class ElternUtil {
     public Optional<Eltern> getElternByType(final Set<Eltern> elterns, final ElternTyp elternTyp) {
         return elterns.stream()
-            .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
+            .filter(eltern -> eltern.getElternTyp() == elternTyp)
             .findFirst();
     }
 }
