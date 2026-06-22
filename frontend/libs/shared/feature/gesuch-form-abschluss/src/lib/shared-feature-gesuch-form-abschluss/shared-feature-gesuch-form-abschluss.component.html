@@ -19,12 +19,8 @@
       @let einreichenView = einreichenStore.einreichenViewSig();
       @switch (einreichenView.abschlussPhase) {
         @case ('FEHLENDE_DOKUMENTE') {
-          <dv-shared-ui-info-container
-            class="tw:dv-form-item tw:flex-col"
-            [type]="'warning'"
-            data-testid="alert-warning"
-          >
-            <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
+          <dv-shared-ui-info-container class="tw:dv-form-item" [type]="'warning'" data-testid="alert-warning">
+            <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
             <div class="tw:ml-4">
               @if (dokumenteRouteSig(); as dokumenteRoute) {
                 <span [innerHTML]="'shared.form.abschluss.fehlendeDokumente' | transloco"></span>
@@ -42,8 +38,8 @@
               [type]="'warning'"
               data-testid="alert-warning"
             >
-              <div class="tw:flex tw:gap-2">
-                <span class="tw:text-dv-yellow material-symbols-rounded tw:mr-4">warning</span>
+              <div class="tw:flex tw:gap-4">
+                <span class="tw:text-dv-yellow material-symbols-rounded">warning</span>
                 <span [innerHTML]="'shared.form.abschluss.notReady' | transloco"></span>
               </div>
 
@@ -61,11 +57,7 @@
             </dv-shared-ui-info-container>
           } @else {
             @for (error of einreichenView.specialValidationErrors; track error) {
-              <dv-shared-ui-info-container
-                class="tw:dv-form-item tw:flex-col"
-                [type]="'danger'"
-                data-testid="alert-danger"
-              >
+              <dv-shared-ui-info-container class="tw:dv-form-item" [type]="'danger'" data-testid="alert-danger">
                 <span class="tw:text-dv-red material-symbols-rounded">error</span>
                 <div class="tw:ml-4">
                   <span [innerHTML]="error.validationErrorKey | transloco"></span>

@@ -29,6 +29,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
   private @Valid String fachrichtungBerufsbezeichnung;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
+  private @Valid Boolean invalid;
 
   /**
    * Datum im Format mm.YYYY
@@ -199,6 +200,25 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
   }
 
+  /**
+   * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+   **/
+  public LebenslaufItemUpdateDto invalid(Boolean invalid) {
+    this.invalid = invalid;
+    return this;
+  }
+
+  
+  @JsonProperty("invalid")
+  public Boolean getInvalid() {
+    return invalid;
+  }
+
+  @JsonProperty("invalid")
+  public void setInvalid(Boolean invalid) {
+    this.invalid = invalid;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -217,12 +237,13 @@ public class LebenslaufItemUpdateDto  implements Serializable {
         Objects.equals(this.ausbildungAbgeschlossen, lebenslaufItemUpdate.ausbildungAbgeschlossen) &&
         Objects.equals(this.fachrichtungBerufsbezeichnung, lebenslaufItemUpdate.fachrichtungBerufsbezeichnung) &&
         Objects.equals(this.taetigkeitsart, lebenslaufItemUpdate.taetigkeitsart) &&
-        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung);
+        Objects.equals(this.taetigkeitsBeschreibung, lebenslaufItemUpdate.taetigkeitsBeschreibung) &&
+        Objects.equals(this.invalid, lebenslaufItemUpdate.invalid);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung);
+    return Objects.hash(von, bis, wohnsitz, id, abschlussId, ausbildungAbgeschlossen, fachrichtungBerufsbezeichnung, taetigkeitsart, taetigkeitsBeschreibung, invalid);
   }
 
   @Override
@@ -239,6 +260,7 @@ public class LebenslaufItemUpdateDto  implements Serializable {
     sb.append("    fachrichtungBerufsbezeichnung: ").append(toIndentedString(fachrichtungBerufsbezeichnung)).append("\n");
     sb.append("    taetigkeitsart: ").append(toIndentedString(taetigkeitsart)).append("\n");
     sb.append("    taetigkeitsBeschreibung: ").append(toIndentedString(taetigkeitsBeschreibung)).append("\n");
+    sb.append("    invalid: ").append(toIndentedString(invalid)).append("\n");
     sb.append("}");
     return sb.toString();
   }
