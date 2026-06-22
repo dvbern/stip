@@ -3,13 +3,13 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
+import { ThemePalette } from '@angular/material/core';
 import { QueryParamsHandling, UrlTree } from '@angular/router';
 
 import {
   BenutzerRole,
   SozialdienstBenutzerRole,
 } from '@dv/shared/model/benutzer';
-import { SharedModelState } from '@dv/shared/model/state-colors';
 
 export type Portal<T = unknown> =
   | TemplatePortal
@@ -31,7 +31,7 @@ interface NavItemBase {
   testId?: string;
   badge?: {
     count: number;
-    type: SharedModelState;
+    color: ThemePalette;
   };
 }
 

@@ -1,12 +1,12 @@
 <div class="tw:p-6">
   <div class="tw:flex tw:bg-white">
-    <div class="tw:basis-1/3">
-      <dv-shared-ui-notifications
-        [notifications]="notificationStore.notificationListViewSig()"
-        [navigationMode]="true"
-        (notificationClick)="selectNotification($event)"
-      ></dv-shared-ui-notifications>
-    </div>
+    <dv-shared-ui-notifications
+      class="tw:basis-1/3"
+      [notifications]="notificationStore.notificationListViewSig()"
+      [navigationMode]="true"
+      (notificationClick)="selectNotification($event)"
+    ></dv-shared-ui-notifications>
+
     <div class="tw:basis-2/3">
       <router-outlet></router-outlet>
     </div>

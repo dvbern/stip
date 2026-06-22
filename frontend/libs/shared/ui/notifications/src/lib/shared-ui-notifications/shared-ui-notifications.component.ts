@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   computed,
   inject,
   input,
@@ -30,6 +31,8 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNotificationsComponent {
+  @HostBinding('class') class = 'tw:p-6';
+
   private dialog = inject(MatDialog);
   readonly pageSize = 5;
   notificationsSig = input.required<SharedModelNachricht[]>({

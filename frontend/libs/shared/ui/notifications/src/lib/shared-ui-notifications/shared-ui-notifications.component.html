@@ -28,7 +28,8 @@
   <div>{{ 'shared.nachrichten.noNotifications' | transloco }}</div>
 }
 
-@if (notificationsSig().length > 5) {
+<!-- todo: test pagination -->
+@if (notificationsSig().length > 10) {
   <mat-paginator
     [length]="notificationsSig().length"
     [pageSize]="pageSize"

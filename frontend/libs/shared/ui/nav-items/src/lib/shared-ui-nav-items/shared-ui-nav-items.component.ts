@@ -5,6 +5,7 @@ import {
   HostBinding,
   input,
 } from '@angular/core';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -23,6 +24,7 @@ import { NavItem } from '@dv/shared/util/navigation';
     MatButtonModule,
     TranslocoDirective,
     SharedUiBadgeComponent,
+    MatBadgeModule,
   ],
   templateUrl: './shared-ui-nav-items.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
