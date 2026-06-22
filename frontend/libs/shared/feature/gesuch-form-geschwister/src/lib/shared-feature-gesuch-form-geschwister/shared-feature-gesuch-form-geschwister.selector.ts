@@ -1,6 +1,9 @@
 import { createSelector } from '@ngrx/store';
 
-import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
+import {
+  selectSharedDataAccessGesuchCacheView,
+  selectSharedDataAccessGesuchsView,
+} from '@dv/shared/data-access/gesuch';
 import {
   getChangesForList,
   selectChangeForView,
@@ -8,7 +11,8 @@ import {
 
 export const selectSharedFeatureGesuchFormGeschwisterView = createSelector(
   selectSharedDataAccessGesuchsView,
-  (gesuchsView) => {
+  selectSharedDataAccessGesuchCacheView,
+  (gesuchsView, { cache }) => {
     const { current, previous } = selectChangeForView(
       gesuchsView,
       'geschwisters',
@@ -16,6 +20,12 @@ export const selectSharedFeatureGesuchFormGeschwisterView = createSelector(
 
     return {
       ...gesuchsView,
+      geschwisters: [...(cache.gesuchFormular?.geschwisters ?? [])].sort(
+        (a, b) =>
+          a.nachname.localeCompare(b.nachname) ||
+          a.vorname.localeCompare(b.vorname) ||
+          a.geburtsdatum.localeCompare(b.geburtsdatum),
+      ),
       listChanges: getChangesForList(
         current,
         previous,
