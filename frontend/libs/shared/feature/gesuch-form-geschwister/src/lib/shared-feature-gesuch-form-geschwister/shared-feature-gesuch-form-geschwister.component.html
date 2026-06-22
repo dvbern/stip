@@ -1,7 +1,7 @@
-@let view = viewSig();
+@let view = geschwistersViewSig();
 <!-- loading -->
-<ng-container *transloco="let t">
-  @if (view.loading) {
+<div class="tw:relative" *dvTranslocoShared="let t">
+  @if (view.loading && !view.geschwisters) {
     <dv-shared-ui-loading data-testid="form-geschwister-loading"></dv-shared-ui-loading>
   } @else if (editedGeschwister) {
     <dv-shared-feature-gesuch-form-geschwister-editor
@@ -12,6 +12,9 @@
       (formIsUnsaved)="hasUnsavedChanges = $event"
     />
   } @else {
+    @if (view.loading && view.geschwisters) {
+      <dv-shared-ui-loading data-testid="form-geschwister-loading" [overlay]="true"></dv-shared-ui-loading>
+    }
     <div class="tw:dv-form-grid">
       <!-- Infobx -->
       <dv-shared-ui-info-container class="tw:dv-form-item">
@@ -22,7 +25,7 @@
       </dv-shared-ui-info-container>
 
       <!-- Table -->
-      @if (view.gesuchFormular?.geschwisters; as geschwisters) {
+      @if (view.geschwisters; as geschwisters) {
         @if (geschwisters.length) {
           <table class="tw:dv-simple-table tw:dv-form-item" aria-describedby="List von Geschwister">
             <thead>
@@ -34,7 +37,6 @@
                 <th>
                   {{ t('shared.form.geschwister.geburtsdatum.label') }}
                 </th>
-                <th></th>
                 <th></th>
               </tr>
             </thead>
@@ -55,38 +57,53 @@
                     <td>
                       {{ parseBackendLocalDateAndPrint(geschwister.geburtsdatum, languageSig()) }}
                     </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="t('shared.form.geschwister.edit')"
-                        >
-                          <i class="material-symbols-rounded">edit</i>
-                        </button>
-                      }
-                    </td>
-                    <td>
-                      @if (!view.readonly) {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleDeleteGeschwister(geschwister)"
-                          [title]="t('shared.form.geschwister.delete')"
-                        >
-                          <i class="material-symbols-rounded">delete</i>
-                        </button>
-                      } @else {
-                        <button
-                          type="button"
-                          class="tw:dv-button tw:p-0 lh-1"
-                          (click)="handleSelectGeschwister(geschwister)"
-                          [title]="t('shared.form.geschwister.view')"
-                        >
-                          <i class="material-symbols-rounded">visibility</i>
-                        </button>
-                      }
+                    <td class="tw:w-0">
+                      <div class="tw:flex tw:items-center tw:gap-2">
+                        @if (!view.readonly) {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleSelectGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.edit')"
+                          >
+                            <i class="material-symbols-rounded">edit</i>
+                          </button>
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleDeleteGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.delete')"
+                          >
+                            <i class="material-symbols-rounded">delete</i>
+                          </button>
+                        } @else {
+                          <button
+                            type="button"
+                            class="tw:dv-button tw:p-0 lh-1"
+                            (click)="handleSelectGeschwister(geschwister)"
+                            [title]="t('shared.form.geschwister.view')"
+                          >
+                            <i class="material-symbols-rounded">visibility</i>
+                          </button>
+                        }
+                        @if (config.isSachbearbeitungApp) {
+                          @let disabled = view.readonly || viewSig().loading;
+                          <button
+                            class="tw:not-disabled:cursor-pointer"
+                            (click)="hideGeschwister(geschwister, !geschwister.hidden)"
+                            [disabled]="disabled"
+                          >
+                            <mat-checkbox
+                              #checkbox="matCheckbox"
+                              class="tw:pointer-events-none"
+                              [checked]="!!geschwister.hidden"
+                              [disabled]="disabled"
+                            >
+                              <mat-label>{{ t('shared.form.geschwister.hiddenShortened') }}</mat-label>
+                            </mat-checkbox>
+                          </button>
+                        }
+                      </div>
                     </td>
                   }
                 </tr>
@@ -124,4 +141,4 @@
       </dv-shared-ui-step-form-buttons>
     </div>
   }
-</ng-container>
+</div>

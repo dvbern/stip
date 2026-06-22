@@ -10,7 +10,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -210,13 +209,12 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
-    wiederverheiratet: [<boolean | undefined>undefined, [Validators.required]],
+    wiederverheiratet: [<boolean | undefined>undefined, []],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'wohnkosten',
   ]);
 
-  svnIsRequiredSig = signal(false);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   private sozialhilfeChangedSig = toSignal(
@@ -317,7 +315,15 @@ export class SharedFeatureGesuchFormElternEditorComponent {
         this.form.controls.sozialversicherungsnummer,
         svnIsRequired,
       );
-      this.svnIsRequiredSig.set(svnIsRequired);
+    });
+
+    effect(() => {
+      const wiederverheiratetRequired = this.elternVerheiratetZusammenSig();
+
+      this.formUtils.setRequired(
+        this.form.controls.wiederverheiratet,
+        !wiederverheiratetRequired,
+      );
     });
 
     effect(() => {

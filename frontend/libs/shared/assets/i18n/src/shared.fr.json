@@ -849,7 +849,8 @@
   "shared.form.geschwister.delete": "Supprimer les frères et sœurs",
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE": "Attestation de l'établissement de formation",
   "shared.form.geschwister.file.AUSBILDUNGSSTAETTE_DESCRIPTION": "Copie d’une attestation actuelle de l’établissement de formation indiquant que votre frère ou sœur suit une formation postobligatoire et dont la date d’émission est postérieure au début de la formation (pour les apprenti-e-s, une attestation actuelle de l’employeur)",
-  "shared.form.geschwister.hidden": "Für Person in Ausbildung versteckt",
+  "shared.form.geschwister.hidden": "Masqué pour les personnes en formation",
+  "shared.form.geschwister.hiddenShortened": "Masqué",
 
   "shared.kinder.title": "Propres enfants",
   "shared.form.kinder.add": "Ajouter un enfant",
