@@ -156,6 +156,7 @@ quarkus:
     multitenant: 'DISCRIMINATOR'
     jdbc:
       timezone: 'Europe/Zurich'
+      statement-batch-size: 50
     mapping:
       format:
         global: 'ignore'
