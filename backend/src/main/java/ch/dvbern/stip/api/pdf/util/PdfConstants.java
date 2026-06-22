@@ -33,6 +33,7 @@ public class PdfConstants {
 
     public static final String RECHTSMITTELBELEHRUNG_TITLE_KEY = "stip.pdf.rechtsmittelbelehrung.title";
     public static final String AUSBILDUNGSBEITRAEGE_LINK = "www.be.ch/ausbildungsbeitraege";
+    public static final String STIPENDIENSTELLEN_LINK = "www.edk.ch/de/themen/stipendien/stipendienstellen/";
     public static final String LOGO_PATH = "/images/bern_logo.svg";
 
     public static final int SPACING_BIG = 30;

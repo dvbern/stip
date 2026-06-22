@@ -21,13 +21,13 @@ Vous trouverez les conditions relatives aux personnes ayant droit aux cotisation
 KEIN_WOHNSITZ_KANTON_BE;Kein stipendienrechtlicher Wohnsitz im Kanton Bern;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben. Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden.
 
 Die Bedingungen des stipendienrechtlichen Wohnsitzes ersehen Sie aus beiliegendem Auszug.
-(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden (https://www.edk.ch/de/themen/stipendien/stipendienstellen)
+(Art. 12 und 13 des Gesetzes über die Ausbildungsbeiträge [ABG]). Sie können sich an die Stipendienstelle des Kantons {WOHNSITZKANTON} wenden https://www.edk.ch/de/themen/stipendien/stipendienstellen/
 
 ";"Après examen de votre situation, nous devons malheureusement vous informer que nous ne pouvons pas vous octroyer de subside de formation. En effet, vous ne faites pas partie du cercle des ayants droit et votre domicile légal en matière de subsides de formation n’est pas situé dans le canton de Berne. Vous pouvez vous adresser au service des bourses du canton {WOHNSITZKANTON}.
 
 Nous vous invitons à consulter l’extrait de loi ci-joint pour connaître les critères permettant de détermi-ner le domicile légal en matière de subsides de formation (art. 12 et 13 de la loi sur l’octroi de subsides de formation [LSF]).
 
-Vous pouvez vous adresser au service des bourses d’études du canton de {WOHNSITZKANTON} (https://www.edk.ch/fr/themes/bourses/services-cantonaux)..
+Vous pouvez vous adresser au service des bourses d’études du canton de {WOHNSITZKANTON} https://www.edk.ch/de/themen/stipendien/stipendienstellen/
 "
 KEIN_WOHNSITZ_SCHWEIZ;Kein stipendienrechtlicher Wohnsitz in der Schweiz;"Leider können wir Ihnen keine Ausbildungsbeiträge gewähren, da Sie nicht zum Kreis der berechtigten Personen gehören und keinen stipendienrechtlichen Wohnsitz im Kanton Bern erworben haben.
 
@@ -102,6 +102,7 @@ Deshalb können wir Ihnen keinen Ausbildungsbeitrag gewähren.
 En cas de changement de formation répété, il n’y a plus de droit aux subsides, que ce soit sous la forme d’une bourse ou d’un prêt (art. 14, al. 3 de la loi sur l’octroi de subsides de formation [LSF]). C’est pourquoi nous ne pouvons malheureusement pas vous accorder de subside de formation.
 "
 PIA_AELTER_35_JAHRE;Alter > 35 J.;"Nach dem vollendeten 35. Altersjahr entsteht keine Beitragsberechtigung mehr, ausser wenn
+
 • die Ausbildung dem beruflichen Einstieg oder Wiedereinstieg nach einer Familienphase oder nach der Betreuung von Angehörigen dient,
 • oder wichtige Gründe nachgewiesen werden, welche ein Fortsetzen der bisherigen Berufstätigkeit wesentlich erschweren (Art. 14 Abs. 4 des Gesetzes über die Ausbildungsbeiträge [ABG]).
 
