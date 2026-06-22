@@ -53,6 +53,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -1903,17 +1904,11 @@ class GesuchServiceTest {
     }
 
     private boolean hasMutter(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.MUTTER).isPresent();
+        return ElternUtil.getElternByType(elterns, ElternTyp.MUTTER).isPresent();
     }
 
     private boolean hasVater(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.VATER).isPresent();
-    }
-
-    private Optional<Eltern> getElternFromElternsByElternTyp(Set<Eltern> elterns, ElternTyp elternTyp) {
-        return elterns.stream()
-            .filter(eltern -> eltern.getElternTyp() == elternTyp)
-            .findFirst();
+        return ElternUtil.getElternByType(elterns, ElternTyp.VATER).isPresent();
     }
 
     private GesuchTranche updateElternteilUnbekanntVerstorben(

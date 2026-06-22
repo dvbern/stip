@@ -1,7 +1,7 @@
 import { TranslocoService } from '@jsverse/transloco';
 import type { Content } from 'pdfmake/interfaces';
 
-import { ElternTyp, GesuchTranche } from '@dv/shared/model/gesuch';
+import { GesuchTranche } from '@dv/shared/model/gesuch';
 
 import { ExportLand } from '../types';
 import { getSection, getTable, getTitle, getValueList } from './generic';
@@ -72,7 +72,7 @@ export const getEltern = (
               getBoolean(t, elternteil.sozialhilfebeitraege),
             ],
             [
-              'eltern.wiederverheiratet.label',
+              `eltern.wiederverheiratet.${elternteil.elternTyp}.label`,
               getBoolean(t, elternteil.wiederverheiratet),
             ],
           ],
@@ -82,7 +82,7 @@ export const getEltern = (
           {
             text: _t(
               t,
-              `shared.form.eltern.ausweisbFluechtling.${elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater'}.label`,
+              `shared.form.eltern.ausweisbFluechtling.${elternteil.elternTyp}.label`,
             ),
             bold: true,
           },

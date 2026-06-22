@@ -346,11 +346,7 @@
     dvSharedUiFormField
   >
     <div class="tw:flex tw:items-center tw:gap-4">
-      <label>{{
-        'shared.form.eltern.ausweisbFluechtling.' +
-          (elternteil.elternTyp === ElternTyp.MUTTER ? 'mutter' : 'vater') +
-          '.label' | transloco
-      }}</label>
+      <label>{{ `shared.form.eltern.ausweisbFluechtling.${elternteil.elternTyp}.label` | transloco }}</label>
       <button
         type="button"
         (click)="ausweisbFluechtlingDialog.toggle()"
@@ -391,32 +387,36 @@
   ></div>
 
   <!-- Wiederverheiratet -->
-  <mat-radio-group
-    class="tw:dv-form-item"
-    formControlName="wiederverheiratet"
-    data-testid="form-eltern-wiederverheiratet"
-    dvSharedUiFormField
-  >
-    <div class="tw:flex tw:items-center tw:gap-4">
-      <label>{{ 'shared.form.eltern.wiederverheiratet.label' | transloco }}</label>
-    </div>
-
-    <div class="tw:flex tw:gap-4">
-      <div class="tw:flex tw:flex-col">
-        <mat-radio-button data-testid="yes" [value]="true">{{ 'shared.form.radio.yes' | transloco }}</mat-radio-button>
-        <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+  @if (!elternVerheiratetZusammenSig()) {
+    <mat-radio-group
+      class="tw:dv-form-item"
+      formControlName="wiederverheiratet"
+      data-testid="form-eltern-wiederverheiratet"
+      dvSharedUiFormField
+    >
+      <div class="tw:flex tw:items-center tw:gap-4">
+        <label>{{ `shared.form.eltern.wiederverheiratet.${elternteil.elternTyp}.label` | transloco }}</label>
       </div>
-      <dv-shared-ui-form-zuvor-hint
-        [changes]="changes.wiederverheiratet | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
-      ></dv-shared-ui-form-zuvor-hint>
-    </div>
 
-    <div class="group-errors">
-      <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
-      </mat-error>
-    </div>
-  </mat-radio-group>
+      <div class="tw:flex tw:gap-4">
+        <div class="tw:flex tw:flex-col">
+          <mat-radio-button data-testid="yes" [value]="true">{{
+            'shared.form.radio.yes' | transloco
+          }}</mat-radio-button>
+          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
+        </div>
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="changes.wiederverheiratet | dvTranslateChange: 'shared.form.zuvor.radio.$VALUE' | async"
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+
+      <div class="group-errors">
+        <mat-error *dvSharedUiFormMessageError="'required'">
+          {{ 'shared.form.error.required' | transloco }}
+        </mat-error>
+      </div>
+    </mat-radio-group>
+  }
 
   <!-- Buttons -->
   <dv-shared-ui-step-form-buttons class="tw:dv-form-action">

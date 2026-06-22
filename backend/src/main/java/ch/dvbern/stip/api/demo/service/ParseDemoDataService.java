@@ -476,21 +476,21 @@ public class ParseDemoDataService {
         updateList(list, ".*Eltern verheiratet.*", 1, (c, d) -> d.setElternVerheiratetZusammen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Alimentenregelung.*", 2, (c, d) -> d.setGerichtlicheAlimentenregelung(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Wer zahlt Alimente.*", 2, (c, d) -> d.setWerZahltAlimente(ParseDemoEnumUtil.parseElternschaftsteilung(c.getCell())));
-//        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
-//        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetAlimente(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> {});
+        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> {});
         updateList(list, ".*unbekannt.*verstorben.*", 1, (c, d) -> d.setElternteilUnbekanntVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Mutter verstorben", 2, (c, d) -> d.setMutterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Mutter unbekannt", 2, (c, d) -> d.setMutterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Wieso.*Mutter unbekannt.*", 3, (c, d) -> d.setMutterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c.getCell())));
         updateList(list, "Mutter: keine der Optionen", 2, (c, d) -> d.setMutterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
-//        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> d.setMutterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Mutter wiederverheiratet.*", 3, (c, d) -> {});
         updateList(list, ".*Vater verstorben", 2, (c, d) -> d.setVaterVerstorben(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Vater unbekannt", 2, (c, d) -> d.setVaterUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         updateList(list, ".*Wieso.*Vater unbekannt.*", 3, (c, d) -> d.setVaterUnbekanntGrund(ParseDemoEnumUtil.parseElternUnbekanntheitsGrund(c.getCell())));
         updateList(list, "Vater: keine der Optionen", 2, (c, d) -> d.setVaterKeineOptionen(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
-//        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> d.setVaterWiederverheiratetUnbekannt(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
-//        updateList(list, ".*Mutter wiederverheiratet.*", 2, (c, d) -> d.setMutterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
-//        updateList(list, ".*Vater wiederverheiratet.*", 2, (c, d) -> d.setVaterWiederverheiratetUngewiss(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+        updateList(list, ".*Vater wiederverheiratet.*", 3, (c, d) -> {});
+        updateList(list, ".*Mutter wiederverheiratet.*", 2, (c, d) -> {});
+        updateList(list, ".*Vater wiederverheiratet.*", 2, (c, d) -> {});
         // spotless:on
 
         return list;
@@ -554,6 +554,7 @@ public class ParseDemoDataService {
             updateList(elterns, "Telefonnummer", 1, (c, l) -> l.get(i).setTelefonnummer(ParseDemoDataUtil.parseStringNullable(c.getCell())));
             updateList(elterns, ".*Sozialhilfebeiträge.*", 1, (c, l) -> l.get(i).setSozialhilfebeitraege(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
             updateList(elterns, ".*Ausweis B.*", 1, (c, l) -> l.get(i).ausweisbFluechtling(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
+            updateList(elterns, "wiederverheiratet", 1, (c, l) -> l.get(i).wiederverheiratet(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
             // spotless:on
             index++;
         }

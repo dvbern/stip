@@ -23,6 +23,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.Execution;
@@ -85,9 +86,7 @@ class EntityOverrideMapperTest {
         // Assert
         assertThat(targetEltern.size(), is(2));
 
-        final var targetVater = targetEltern.stream()
-            .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-            .findFirst();
+        final var targetVater = ElternUtil.getElternByType(targetEltern, ElternTyp.VATER);
         assertThat(targetVater.isPresent(), is(true));
     }
 

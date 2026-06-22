@@ -160,7 +160,9 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   maskitoNumber = maskitoNumber;
 
   readonly ElternTyp = ElternTyp;
-  elternVerheiratetZusammen?: boolean;
+  elternVerheiratetZusammenSig = computed(
+    () => this.gesuchFormularSig().familiensituation?.elternVerheiratetZusammen,
+  );
 
   languageSig = this.store.selectSignal(selectLanguage);
   plzValues?: Plz[];
@@ -321,9 +323,6 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     effect(() => {
       const elternteil = this.elternteilSig();
       const gesuchFormular = this.gesuchFormularSig();
-
-      this.elternVerheiratetZusammen =
-        gesuchFormular.familiensituation?.elternVerheiratetZusammen;
 
       this.form.patchValue({
         ...elternteil,

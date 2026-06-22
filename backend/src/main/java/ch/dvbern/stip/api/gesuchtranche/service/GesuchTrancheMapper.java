@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
@@ -281,18 +282,16 @@ public abstract class GesuchTrancheMapper {
         final var hiddenGeschwisters =
             gesuchTranche.getGesuchFormular().getGeschwisters().stream().filter(Geschwister::isHidden);
         final var hiddenGeschwistersDtos = hiddenGeschwisters.map(geschwisterMapper::toUpdateDto).toList();
-        if (Objects.isNull(newTranche.getGesuchFormular().getGeschwisters())) {
-            newTranche.getGesuchFormular().setGeschwisters(hiddenGeschwistersDtos);
-        } else {
-            newTranche.getGesuchFormular()
-                .setGeschwisters(
-                    Stream
-                        .concat(
-                            newTranche.getGesuchFormular().getGeschwisters().stream(),
-                            hiddenGeschwistersDtos.stream()
-                        )
-                        .toList()
-                );
-        }
+        final var currentGeschwisters =
+            Optional.ofNullable(newTranche.getGesuchFormular().getGeschwisters()).orElse(List.of());
+        newTranche.getGesuchFormular()
+            .setGeschwisters(
+                Stream
+                    .concat(
+                        currentGeschwisters.stream(),
+                        hiddenGeschwistersDtos.stream()
+                    )
+                    .toList()
+            );
     }
 }

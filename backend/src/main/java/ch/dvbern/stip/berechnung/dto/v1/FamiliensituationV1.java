@@ -22,6 +22,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -72,18 +73,10 @@ public class FamiliensituationV1 {
                 ) != ElternAbwesenheitsGrund.WEDER_NOCH
             )
             .vaterWiederverheiratet(
-                elterns.stream()
-                    .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-                    .findFirst()
-                    .map(Eltern::getWiederverheiratet)
-                    .orElse(false)
+                ElternUtil.getElternByType(elterns, ElternTyp.VATER).map(Eltern::getWiederverheiratet).orElse(false)
             )
             .mutterWiederverheiratet(
-                elterns.stream()
-                    .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-                    .findFirst()
-                    .map(Eltern::getWiederverheiratet)
-                    .orElse(false)
+                ElternUtil.getElternByType(elterns, ElternTyp.MUTTER).map(Eltern::getWiederverheiratet).orElse(false)
             )
             .build();
     }

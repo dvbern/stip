@@ -43,7 +43,7 @@ public class ElternWiederverheiratetRequiredConstraintValidator
         for (var eltern : gesuchFormular.getElterns()) {
             if (Objects.isNull(eltern.getWiederverheiratet())) {
                 valid = GesuchValidatorUtil
-                    .addProperty(context, String.format("%s.%s", property, eltern.getElternTyp().name()));
+                    .addProperty(context, property);
             }
         }
 
