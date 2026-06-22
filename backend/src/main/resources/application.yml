@@ -131,6 +131,8 @@ quarkus:
     auth-methods: 'DIGEST-MD5 CRAM-SHA256 CRAM-SHA1 CRAM-MD5 PLAIN LOGIN'
     host: 'mailext.dvbern.ch'
     from: 'kstip@dvbern.ch'
+  observability:
+    enabled: false
   otel:
     metric:
       enabled: true

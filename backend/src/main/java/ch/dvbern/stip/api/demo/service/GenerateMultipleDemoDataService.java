@@ -57,7 +57,6 @@ import ch.dvbern.stip.api.statistik.service.StatistikXMLService;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.type.ZuordnungType;
-import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -81,7 +80,6 @@ public class GenerateMultipleDemoDataService {
     private final SachbearbeiterRepository sachbearbeiterRepository;
     private final StatistikXMLService statistikXMLService;
     private final DokumentDownloadService dokumentDownloadService;
-    private final Tracer tracer;
 
     @Transactional
     @SneakyThrows

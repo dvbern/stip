@@ -68,7 +68,6 @@ import ch.dvbern.stip.api.statistik.util.StatistikConstants;
 import ch.dvbern.stip.api.statistik.util.StatistikUtil;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPortFactory;
-import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.inject.Singleton;
 import jakarta.transaction.Transactional;
@@ -91,7 +90,6 @@ public class StatistikXMLService {
     private final DokumentUploadService dokumentUploadService;
     private final S3AsyncClient s3AsyncClient;
     private final StipConfig config;
-    private final Tracer tracer;
 
     private final BuchhaltungRepository buchhaltungRepository;
     private final DarlehenBuchhaltungEntryRepository darlehenBuchhaltungEntryRepository;
@@ -269,81 +267,69 @@ public class StatistikXMLService {
     }
 
     private PersDto createPersonDto(StatistikOfYear value, TenantIdentifier tenantIdentifier) {
-        final var span = tracer.spanBuilder("createPersonDto")
-            .startSpan();
         final var isChNationality = value.nationalitaetBfs().equals(WellKnownLand.CHE.getLaendercodeBfs());
-        try {
-            return PersDtoBuilder.persDto()
-                .personIdentificationRoot(
-                    PersonIdentificationRootDtoBuilder.personIdentificationRootDto()
-                        .localPersonId(
-                            LocalPersonIdDtoBuilder.localPersonIdDto()
-                                .personIdCategory(StatistikConstants.STATISTIK_XML_PERSON_ID_CATEGORY)
-                                .personId(value.sozialversicherungsnummer())
-                                .build()
-                        )
-                        .sex(value.anrede().getBfsCode())
-                        .dateOfBirth(value.geburtsdatum().toString())
-                        .build()
-                )
-                .nationality(Integer.valueOf(value.nationalitaetBfs()))
-                .residencePermitCategory(
-                    !isChNationality
-                        ? value.niederlassungsstatus().getBfsCode()
-                        : null
-                )
-                .place(
-                    value.piaAdresseLand().is(WellKnownLand.CHE) ? StatistikUtil.getGemeindeBfsNummerOrLookup(
-                        value.gesuchId(),
-                        value.gemeindeBfsNr(),
-                        value.piaAdresse(),
-                        tenantIdentifier,
-                        gemeindeLookupPortFactory
+        return PersDtoBuilder.persDto()
+            .personIdentificationRoot(
+                PersonIdentificationRootDtoBuilder.personIdentificationRootDto()
+                    .localPersonId(
+                        LocalPersonIdDtoBuilder.localPersonIdDto()
+                            .personIdCategory(StatistikConstants.STATISTIK_XML_PERSON_ID_CATEGORY)
+                            .personId(value.sozialversicherungsnummer())
+                            .build()
                     )
-                        .orElseThrow(StatistikGemeindeLookupException::new)
-                        : null
+                    .sex(value.anrede().getBfsCode())
+                    .dateOfBirth(value.geburtsdatum().toString())
+                    .build()
+            )
+            .nationality(Integer.valueOf(value.nationalitaetBfs()))
+            .residencePermitCategory(
+                !isChNationality
+                    ? value.niederlassungsstatus().getBfsCode()
+                    : null
+            )
+            .place(
+                value.piaAdresseLand().is(WellKnownLand.CHE) ? StatistikUtil.getGemeindeBfsNummerOrLookup(
+                    value.gesuchId(),
+                    value.gemeindeBfsNr(),
+                    value.piaAdresse(),
+                    tenantIdentifier,
+                    gemeindeLookupPortFactory
                 )
-                .placeHist(null)
-                .country(
-                    value.piaAdresseLand().is(WellKnownLand.CHE) ? null
-                        : Integer.parseInt(value.piaAdresseLand().getLaendercodeBfs())
-                )
-                .com(null)
-                .forms(new LinkedList<>())
-                .build();
-        } finally {
-            span.end();
-        }
+                    .orElseThrow(StatistikGemeindeLookupException::new)
+                    : null
+            )
+            .placeHist(null)
+            .country(
+                value.piaAdresseLand().is(WellKnownLand.CHE) ? null
+                    : Integer.parseInt(value.piaAdresseLand().getLaendercodeBfs())
+            )
+            .com(null)
+            .forms(new LinkedList<>())
+            .build();
     }
 
     private FormDto createFormDto(StatistikOfYear value, int ausbildungCounter) {
-        final var span = tracer.spanBuilder("createFormDto")
-            .startSpan();
-        try {
-            return FormDtoBuilder.formDto()
-                .formId(ausbildungCounter)
-                .formation(
-                    FormationDtoBuilder.formationDto()
-                        .formLevel(value.bfsKategorie())
-                        .matuProf(StatistikUtil.booleanToBfsCode(value.besuchtBMS()))
-                        .diploma(value.bfsStudienStufe())
-                        .task(value.ausbildungspensum().getBfsCode())
-                        .firstForm(StatistikUtil.booleanToBfsCode(value.isFirstAusbildung()))
-                        .build()
-                )
-                .instIdentificationRoot(
-                    createInstIdentificationRoot(value)
-                )
-                .formPlace(
-                    value.isAusbildungAusland() ? Integer.parseInt(value.ausbildungLandBfs())
-                        : getKanton(value.ausbildungPlz()).getBfsCode()
-                )
-                .com(null)
-                .sums(new ArrayList<>())
-                .build();
-        } finally {
-            span.end();
-        }
+        return FormDtoBuilder.formDto()
+            .formId(ausbildungCounter)
+            .formation(
+                FormationDtoBuilder.formationDto()
+                    .formLevel(value.bfsKategorie())
+                    .matuProf(StatistikUtil.booleanToBfsCode(value.besuchtBMS()))
+                    .diploma(value.bfsStudienStufe())
+                    .task(value.ausbildungspensum().getBfsCode())
+                    .firstForm(StatistikUtil.booleanToBfsCode(value.isFirstAusbildung()))
+                    .build()
+            )
+            .instIdentificationRoot(
+                createInstIdentificationRoot(value)
+            )
+            .formPlace(
+                value.isAusbildungAusland() ? Integer.parseInt(value.ausbildungLandBfs())
+                    : getKanton(value.ausbildungPlz()).getBfsCode()
+            )
+            .com(null)
+            .sums(new ArrayList<>())
+            .build();
     }
 
     private static Kanton getKanton(final String ausbildungPlz) {
@@ -357,56 +343,44 @@ public class StatistikXMLService {
     }
 
     private InstIdentificationRootDto createInstIdentificationRoot(StatistikOfYear value) {
-        final var span = tracer.spanBuilder("createInstIdentificationRoot")
-            .startSpan();
-        try {
-            final InstIdentificationRootDto instIdentificationRootDto = new InstIdentificationRootDto();
+        final InstIdentificationRootDto instIdentificationRootDto = new InstIdentificationRootDto();
 
-            if (StatistikUtil.HOCHSCHULSTUFEN_BFS_KATEGORIES.contains(value.bfsKategorie())) {
-                var instCategory = value.ausbildungsstaetteNummerTyp().getBfsIdentification();
+        if (StatistikUtil.HOCHSCHULSTUFEN_BFS_KATEGORIES.contains(value.bfsKategorie())) {
+            var instCategory = value.ausbildungsstaetteNummerTyp().getBfsIdentification();
 
-                if (value.ausbildungsstaetteNummerTyp().equals(AusbildungsstaetteNummerTyp.CT_NO)) {
-                    final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
-                    final var kanton = KantonUtil.getByTenantIdentifier(tenantIdentifier);
-                    instCategory = String.format("%s%s", instCategory, kanton.toString());
-                }
+            if (value.ausbildungsstaetteNummerTyp().equals(AusbildungsstaetteNummerTyp.CT_NO)) {
+                final var tenantIdentifier = tenantService.getCurrentTenantIdentifier();
+                final var kanton = KantonUtil.getByTenantIdentifier(tenantIdentifier);
+                instCategory = String.format("%s%s", instCategory, kanton.toString());
+            }
 
-                if (!value.ausbildungsstaetteNummerTyp().equals(AusbildungsstaetteNummerTyp.OHNE_NO)) {
-                    final var instCodeDto = InstCodeDto.builder()
-                        .instCategory(instCategory)
-                        .instId(value.ausbildungsstaetteNummer())
-                        .build();
+            if (!value.ausbildungsstaetteNummerTyp().equals(AusbildungsstaetteNummerTyp.OHNE_NO)) {
+                final var instCodeDto = InstCodeDto.builder()
+                    .instCategory(instCategory)
+                    .instId(value.ausbildungsstaetteNummer())
+                    .build();
 
-                    instIdentificationRootDto.setInstCode(instCodeDto);
-                } else {
-                    instIdentificationRootDto.setInstName(value.ausbildungsstaetteNameDe());
-                }
+                instIdentificationRootDto.setInstCode(instCodeDto);
             } else {
                 instIdentificationRootDto.setInstName(value.ausbildungsstaetteNameDe());
             }
-
-            return instIdentificationRootDto;
-        } finally {
-            span.end();
+        } else {
+            instIdentificationRootDto.setInstName(value.ausbildungsstaetteNameDe());
         }
+
+        return instIdentificationRootDto;
     }
 
     private ByteArrayOutputStream generateXml(TableDto tableDto) throws JAXBException {
-        final var span = tracer.spanBuilder("generateXml")
-            .startSpan();
-        try {
-            JAXBContext context = JAXBContext.newInstance(TableDto.class);
+        JAXBContext context = JAXBContext.newInstance(TableDto.class);
 
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-            marshaller.setProperty(Marshaller.JAXB_ENCODING, StatistikConstants.STATISTIK_XML_ENCODING);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        marshaller.setProperty(Marshaller.JAXB_ENCODING, StatistikConstants.STATISTIK_XML_ENCODING);
 
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            marshaller.marshal(tableDto, outputStream);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        marshaller.marshal(tableDto, outputStream);
 
-            return outputStream;
-        } finally {
-            span.end();
-        }
+        return outputStream;
     }
 }
