@@ -75,7 +75,7 @@ public class DokumentDownloadService {
                 dokumentPathPrefix + objectId
             );
 
-        final var test = RestMulti.fromUniResponse(
+        return RestMulti.fromUniResponse(
             Uni.createFrom()
                 .completionStage(stageSupplier),
             response -> Multi.createFrom()
@@ -87,7 +87,6 @@ public class DokumentDownloadService {
                 }),
             response -> getRequiredHeaders(fileName)
         );
-        return test;
     }
 
     private Map<String, List<String>> getRequiredHeaders(final String fileName) {
