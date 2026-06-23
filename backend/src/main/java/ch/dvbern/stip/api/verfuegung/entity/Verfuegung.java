@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.verfuegung.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.type.Kanton;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -54,12 +54,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_BERECHN
 @Entity
 @Table(
     name = "verfuegung", indexes = {
-        @Index(name = "IX_verfuegung_mandant", columnList = "mandant")
+        @Index(name = "IX_verfuegung_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Verfuegung extends AbstractMandantEntity {
+public class Verfuegung extends AbstractTenantEntity {
     @Nullable
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision")

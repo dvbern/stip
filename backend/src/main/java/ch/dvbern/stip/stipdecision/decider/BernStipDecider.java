@@ -188,7 +188,7 @@ public class BernStipDecider extends BaseStipDecider {
             }
             if (piaFluechtlingOderStaatenlos(gesuchTranche)) {
                 if (elternlosOderElternImAusland(gesuchTranche)) {
-                    if (piaKantonMandantZugewiesen(gesuchTranche)) {
+                    if (piaKantonTenantZugewiesen(gesuchTranche)) {
                         return StipDeciderResult.GESUCH_VALID;
                     }
                     return StipDeciderResult.NEGATIVVERFUEGUNG_STIPENDIENRECHTLICHER_WOHNSITZ_FLUECHTLING_NICHT_BERN;
@@ -342,10 +342,10 @@ public class BernStipDecider extends BaseStipDecider {
                 .getZustaendigeKESB() == ZustaendigeKESB.KESB_BERN;
         }
 
-        private static boolean piaKantonMandantZugewiesen(final GesuchTranche gesuchTranche) {
+        private static boolean piaKantonTenantZugewiesen(final GesuchTranche gesuchTranche) {
             return gesuchTranche.getGesuchFormular()
                 .getPersonInAusbildung()
-                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT;
+                .getNiederlassungsstatus() == Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT;
         }
 
         private static boolean piaNationalitaetEuEfta(

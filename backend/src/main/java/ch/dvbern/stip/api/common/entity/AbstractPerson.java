@@ -43,7 +43,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class AbstractPerson extends AbstractMandantEntity {
+public class AbstractPerson extends AbstractTenantEntity {
     @NotBlank(message = VALIDATION_NACHNAME_NOTBLANK_MESSAGE)
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

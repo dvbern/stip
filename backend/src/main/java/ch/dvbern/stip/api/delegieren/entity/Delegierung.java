@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.delegieren.entity;
 
 import java.time.LocalDate;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.delegieren.type.DelegierungStatus;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
@@ -49,12 +49,12 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "delegierung",
     indexes = {
-        @Index(name = "IX_delegierung_mandant", columnList = "mandant")
+        @Index(name = "IX_delegierung_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Delegierung extends AbstractMandantEntity {
+public class Delegierung extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(

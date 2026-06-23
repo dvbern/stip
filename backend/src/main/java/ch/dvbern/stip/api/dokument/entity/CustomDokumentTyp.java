@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -38,12 +38,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "custom_dokument_typ",
     indexes = {
-        @Index(name = "IX_custom_gesuch_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_custom_gesuch_dokument_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class CustomDokumentTyp extends AbstractMandantEntity {
+public class CustomDokumentTyp extends AbstractTenantEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "type", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String type;

@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.land.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.land.type.WellKnownLand;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -44,9 +44,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "land",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_land_laendercode_bfs_mandant", columnNames = { "laendercode_bfs", "mandant" }
+        name = "UC_land_laendercode_bfs_tenant", columnNames = { "laendercode_bfs", "tenant" }
     ),
-    indexes = @Index(name = "IX_land_laendercode_bfs_mandant", columnList = "laendercode_bfs,mandant")
+    indexes = @Index(name = "IX_land_laendercode_bfs_tenant", columnList = "laendercode_bfs,tenant")
 )
 @Audited
 @Getter
@@ -54,7 +54,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Land extends AbstractMandantEntity {
+public class Land extends AbstractTenantEntity {
     @NotNull
     @Column(name = "is_eu_efta", nullable = false)
     private Boolean isEuEfta;

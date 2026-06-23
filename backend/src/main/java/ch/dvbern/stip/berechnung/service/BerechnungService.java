@@ -512,8 +512,8 @@ public class BerechnungService {
     public BerechnungResult calculateStipendien(final CalculatorRequest request) {
         final var calculator = stipendienCalculators.stream().filter(stipendienCalculator -> {
             final var clazz = stipendienCalculator.getClass();
-            final var forMandant = clazz.getAnnotation(CalculatorMandant.class);
-            if (forMandant != null && forMandant.value() != tenantService.getCurrentTenantIdentifier()) {
+            final var forTenant = clazz.getAnnotation(CalculatorTenant.class);
+            if (forTenant != null && forTenant.value() != tenantService.getCurrentTenantIdentifier()) {
                 return false;
             }
 

@@ -244,7 +244,7 @@ public class ParseDemoDataService {
         updateList(list, "Zuständiger Kanton.*", 4, (c, d) -> {
             final var zustaendigerKanton = ParseDemoDataUtil.parseStringNullable(c.getCell());
             if (Objects.equals(zustaendigerKanton, "Kanton Bern")) {
-                d.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
+                d.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT);
             }
         });
         updateList(list, "PLZ", 3, (c, d) -> d.setHeimatortPLZ(String.valueOf(ParseDemoDataUtil.parseIntegerNullable(c.getCell()))));
