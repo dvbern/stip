@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.einnahmen_kosten.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAlternativeWohnformValidConstraint;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenAnzahlPersonenWGValidConstraint;
@@ -43,7 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Table(
     name = "einnahmen_kosten",
-    indexes = @Index(name = "IX_einnahme_kosten_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_einnahme_kosten_tenant", columnList = "tenant")
 )
 
 @Getter
@@ -54,7 +54,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class EinnahmenKosten extends AbstractMandantEntity {
+public class EinnahmenKosten extends AbstractTenantEntity {
     @NotNull
     @Column(name = "nettoerwerbseinkommen", nullable = false)
     @Min(0)

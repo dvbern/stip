@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   FallDtoSpec.JSON_PROPERTY_ID,
   FallDtoSpec.JSON_PROPERTY_FALL_NUMMER,
-  FallDtoSpec.JSON_PROPERTY_MANDANT
+  FallDtoSpec.JSON_PROPERTY_TENANT
 })
 @JsonTypeName("Fall")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -41,8 +41,8 @@ public class FallDtoSpec {
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
 
-  public static final String JSON_PROPERTY_MANDANT = "mandant";
-  private String mandant;
+  public static final String JSON_PROPERTY_TENANT = "tenant";
+  private String tenant;
 
   public FallDtoSpec() {
   }
@@ -99,29 +99,29 @@ public class FallDtoSpec {
   }
 
 
-  public FallDtoSpec mandant(String mandant) {
+  public FallDtoSpec tenant(String tenant) {
     
-    this.mandant = mandant;
+    this.tenant = tenant;
     return this;
   }
 
    /**
-   * Get mandant
-   * @return mandant
+   * Get tenant
+   * @return tenant
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MANDANT)
+  @JsonProperty(JSON_PROPERTY_TENANT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getMandant() {
-    return mandant;
+  public String getTenant() {
+    return tenant;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MANDANT)
+  @JsonProperty(JSON_PROPERTY_TENANT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMandant(String mandant) {
-    this.mandant = mandant;
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
 
   @Override
@@ -135,12 +135,12 @@ public class FallDtoSpec {
     FallDtoSpec fall = (FallDtoSpec) o;
     return Objects.equals(this.id, fall.id) &&
         Objects.equals(this.fallNummer, fall.fallNummer) &&
-        Objects.equals(this.mandant, fall.mandant);
+        Objects.equals(this.tenant, fall.tenant);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, mandant);
+    return Objects.hash(id, fallNummer, tenant);
   }
 
   @Override
@@ -149,7 +149,7 @@ public class FallDtoSpec {
     sb.append("class FallDtoSpec {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
+    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("}");
     return sb.toString();
   }

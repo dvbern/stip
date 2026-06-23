@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.steuerdaten.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
@@ -43,7 +43,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "steuerdaten",
     indexes = {
-        @Index(name = "IX_steuerdaten_mandant", columnList = "mandant")
+        @Index(name = "IX_steuerdaten_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -51,7 +51,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Steuerdaten extends AbstractMandantEntity {
+public class Steuerdaten extends AbstractTenantEntity {
     @NotNull
     @Column(name = "steuerdaten_typ", nullable = false)
     @Enumerated(EnumType.STRING)

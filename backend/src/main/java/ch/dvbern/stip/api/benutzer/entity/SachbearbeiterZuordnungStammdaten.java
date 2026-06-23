@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.benutzer.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,14 +39,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "sachbearbeiter_zuordnung_stammdaten",
     indexes = {
-        @Index(name = "IX_sachbearbeiter_zuordnung_stammdaten_mandant", columnList = "mandant"),
+        @Index(name = "IX_sachbearbeiter_zuordnung_stammdaten_tenant", columnList = "tenant"),
         @Index(name = "IX_sachbearbeiter_zuordnung_stammdaten_benutzer_id", columnList = "benutzer_id")
     }
 )
 @Audited
 @Getter
 @Setter
-public class SachbearbeiterZuordnungStammdaten extends AbstractMandantEntity {
+public class SachbearbeiterZuordnungStammdaten extends AbstractTenantEntity {
     @Nullable
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "buchstaben_de", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

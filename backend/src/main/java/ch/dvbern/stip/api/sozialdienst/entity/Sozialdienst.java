@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.delegieren.entity.Delegierung;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
@@ -51,9 +51,9 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Entity
 @Table(
     name = "sozialdienst",
-    indexes = @Index(name = "IX_sozialdienst_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_sozialdienst_tenant", columnList = "tenant")
 )
-public class Sozialdienst extends AbstractMandantEntity {
+public class Sozialdienst extends AbstractTenantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "name", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
