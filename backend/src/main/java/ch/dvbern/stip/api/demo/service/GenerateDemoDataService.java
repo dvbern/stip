@@ -506,7 +506,7 @@ public class GenerateDemoDataService {
             .build();
         // </editor-fold>
 
-        // <editor-fold desc="Eltern..." defaultstate="collapsed">
+        // <editor-fold desc="Elterns..." defaultstate="collapsed">
         final List<Eltern> elterns = new ArrayList<>();
         for (var elternDto : demoDataDto.getElterns()) {
             elterns.add(
