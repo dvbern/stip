@@ -54,6 +54,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -70,8 +71,8 @@ class GesuchFormularServiceTest {
     @BeforeAll
     void setup() {
         when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
-        when(requiredDokumentServiceMock.getRequiredDokumentRefsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of());
+        when(requiredDokumentServiceMock.getRequiredDokumentRefsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of());
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
@@ -119,7 +120,8 @@ class GesuchFormularServiceTest {
         /* case there are no required documents */
         when(customDocumentsRequiredDocumentProducerMock.getRequiredDokuments(any()))
             .thenReturn(ImmutablePair.of("", Set.of()));
-        when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any(), anyBoolean()))
+            .thenReturn(List.of());
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of());
         // act

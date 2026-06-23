@@ -34,9 +34,12 @@ public class VaterRequiredDokumentsProducer implements RequiredDokumentsProducer
     private final ElternRequiredDokumentsProducer producer;
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var eltern = formular.getElterns();
-        if (eltern.isEmpty()) {
+        if (
+            eltern.isEmpty()
+            || (formular.getVersteckteEltern().contains(ElternTyp.VATER) && !includeHidden)
+        ) {
             return ImmutablePair.of("", Set.of());
         }
 

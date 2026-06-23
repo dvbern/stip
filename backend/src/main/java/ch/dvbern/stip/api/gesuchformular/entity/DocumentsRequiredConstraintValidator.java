@@ -42,8 +42,11 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
 public class DocumentsRequiredConstraintValidator
     implements ConstraintValidator<DocumentsRequiredConstraint, GesuchFormular> {
     private static final String PAGENAME = "dokuments";
+
+    private boolean includeHidden = false;
     @Inject
     Instance<RequiredDokumentsProducer> producers;
+
     @Inject
     Instance<RequiredRefDokumentsProducer> refProducers;
 
@@ -51,10 +54,16 @@ public class DocumentsRequiredConstraintValidator
     Instance<RequiredCustomDokumentsProducer> customProducers;
 
     @Override
+    public void initialize(DocumentsRequiredConstraint constraintAnnotation) {
+        includeHidden = constraintAnnotation.includeHidden();
+    }
+
+    @Override
     public boolean isValid(GesuchFormular formular, ConstraintValidatorContext context) {
-        final var requiredDocs = producers.stream().map(producer -> producer.getRequiredDokuments(formular)).toList();
+        final var requiredDocs =
+            producers.stream().map(producer -> producer.getRequiredDokuments(formular, includeHidden)).toList();
         final var requiredRefDocs =
-            refProducers.stream().map(producer -> producer.getRequiredDokuments(formular)).toList();
+            refProducers.stream().map(producer -> producer.getRequiredDokuments(formular, includeHidden)).toList();
 
         final var existingDokuments = getExistingRequiredGesuchDokuments(formular);
         final var existingDokumentTypMap = existingDokuments.stream()

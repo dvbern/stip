@@ -55,6 +55,7 @@ import org.mockito.InjectMocks;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 
 @QuarkusTest
@@ -175,8 +176,8 @@ class GesuchServiceDokumenteToUploadFlagsTest {
          */
         // arrange
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
-        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenCallRealMethod();
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(), any())).thenCallRealMethod();
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), true)).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -184,7 +185,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         assertThat(dokumenteToUploadDto.getGsCanDokumenteUebermitteln(), is(true));
 
         // arrange
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of(new CustomDokumentTyp()));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -200,7 +201,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(),any())).thenReturn(false);
         when(requiredDokumentService.getSBCanFehlendeDokumenteUebermitteln(any(Gesuch.class))).thenCallRealMethod();
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         gesuch.setGesuchStatus(Gesuchstatus.BEREIT_FUER_BEARBEITUNG);
         // act
@@ -225,7 +226,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), true)).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
 
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -280,7 +281,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         gesuchDokumentOfTranche2.setDokumente(List.of());
         gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         tranche2.setStatus(GesuchTrancheStatus.UEBERPRUEFEN);
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), true)).thenReturn(List.of(DokumentTyp.EK_BELEG_BETREUUNGSKOSTEN_KINDER));
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
         // assert

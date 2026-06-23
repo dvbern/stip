@@ -45,7 +45,7 @@ class GeschwisterRequiredDokumentsProducerTest {
             }
         });
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndRef(requiredDocs, DokumentTyp.GESCHWISTER_BESTAETIGUNG_AUSBILDUNGSSTAETTE);
     }
 }

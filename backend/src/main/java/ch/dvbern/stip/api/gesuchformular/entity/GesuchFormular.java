@@ -233,12 +233,12 @@ import org.jilt.BuilderStyle;
 @DocumentsRequiredConstraint(
     groups = {
         DocumentsRequiredValidationGroup.class
-    }, payload = Severity.Warning.class
+    }, payload = Severity.Warning.class, includeHidden = true
 )
 @DocumentsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class
-    }
+    }, includeHidden = false
 )
 @EinnahmenKostenPartnerRequiredConstraint(
     groups = {

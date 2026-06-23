@@ -73,18 +73,20 @@ public class RequiredDokumentService {
             return false;
         }
 
-        var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch);
+        var isAnyDocumentStillRequired = isAnyDocumentStillRequired(gesuch, false);
         return !isAnyDocumentStillRequired;
     }
 
-    private boolean isAnyDocumentStillRequired(final Gesuch gesuch) {
-        return gesuch.getGesuchTranchen().stream().anyMatch(this::isAnyDocumentStillRequired);
+    private boolean isAnyDocumentStillRequired(final Gesuch gesuch, final boolean includeHidden) {
+        return gesuch.getGesuchTranchen()
+            .stream()
+            .anyMatch(gesuchTranche -> isAnyDocumentStillRequired(gesuchTranche, includeHidden));
     }
 
-    private boolean isAnyDocumentStillRequired(final GesuchTranche gesuchTranche) {
+    private boolean isAnyDocumentStillRequired(final GesuchTranche gesuchTranche, final boolean includeHidden) {
         var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
         var gesuchDokumenteStillRequired =
-            !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular()).isEmpty();
+            !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden).isEmpty();
         // if any normal or custom GesuchDokument is still required,
         return (customDokumentsStillRequired || gesuchDokumenteStillRequired);
     }
@@ -102,7 +104,7 @@ public class RequiredDokumentService {
         final var containsAbgelehnteGesuchDokumente = RequiredDokumentUtil.containsAbgelehnteDokumente(aenderung);
 
         final var shouldFehlendeDokumenteUebermitteln =
-            isAnyDocumentStillRequired(aenderung)
+            isAnyDocumentStillRequired(aenderung, false)
             || containsAbgelehnteGesuchDokumente;
 
         return shouldFehlendeDokumenteUebermitteln && !containsUnprocessedGesuchDokuments;
@@ -122,7 +124,7 @@ public class RequiredDokumentService {
             .anyMatch(RequiredDokumentUtil::containsAbgelehnteDokumente);
 
         final var shouldFehlendeDokumenteUebermitteln =
-            isAnyDocumentStillRequired(gesuch)
+            isAnyDocumentStillRequired(gesuch, false)
             || containsAbgelehnteGesuchDokumente;
 
         return shouldFehlendeDokumenteUebermitteln && !containsUnprocessedGesuchDokuments;
@@ -132,7 +134,7 @@ public class RequiredDokumentService {
         final var allExistingDocumentsAccepted = gesuch.getTranchenTranchen()
             .allMatch(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche);
         final var noRequiredDokumentsExisting = gesuch.getTranchenTranchen()
-            .allMatch(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular()).isEmpty());
+            .allMatch(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular(), true).isEmpty());
         final var noCustomRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
         return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noCustomRequiredDokumentsExisting;
@@ -145,7 +147,7 @@ public class RequiredDokumentService {
 
         if (isRefDokument) {
             final var requiredListDocuments = RequiredDokumentUtil
-                .getRequiredListDokumentRefsForGesuch(tranche.getGesuchFormular(), requiredRefDokumentProducers);
+                .getRequiredListDokumentRefsForGesuch(tranche.getGesuchFormular(), requiredRefDokumentProducers, true);
 
             return requiredListDocuments.stream()
                 .anyMatch(
@@ -160,17 +162,20 @@ public class RequiredDokumentService {
         }
 
         final var requiredNormalDokuments = RequiredDokumentUtil
-            .getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular(), requiredDokumentProducers);
+            .getRequiredDokumentTypesForGesuch(tranche.getGesuchFormular(), requiredDokumentProducers, true);
         return requiredNormalDokuments.contains(gesuchDokument.getDokumentTyp());
     }
 
-    public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(final GesuchFormular formular) {
+    public List<DokumentTyp> getRequiredDokumentsForGesuchFormular(
+        final GesuchFormular formular,
+        final boolean includeHidden
+    ) {
         final var uploadedDocumentTypes = new HashSet<>(
             RequiredDokumentUtil.getExistingGesuchDokumentTypesWithoutAttachedDokumente(formular)
         );
 
         final var requiredByProducers =
-            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDokumentProducers);
+            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDokumentProducers, includeHidden);
         final var ausstehendWithMissingFiles =
             RequiredDokumentUtil.getAusstehendeDokumentTypesWithNoFilesAttached(formular);
 
@@ -187,13 +192,17 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefsForGesuchFormular(final GesuchFormular formular) {
+    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefsForGesuchFormular(
+        final GesuchFormular formular,
+        final boolean includeHidden
+    ) {
         final var uploadedDocumentRefs = new HashSet<>(
             RequiredDokumentUtil.getExistingGesuchDokumentRefsWithoutAttachedDokumente(formular)
         );
 
         final var requiredRefsByProducers =
-            RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(formular, requiredRefDokumentProducers);
+            RequiredDokumentUtil
+                .getRequiredListDokumentRefsForGesuch(formular, requiredRefDokumentProducers, includeHidden);
         final var ausstehendWithMissingFiles =
             RequiredDokumentUtil.getAusstehendeDokumentRefsWithNoFilesAttached(formular);
 
@@ -210,10 +219,13 @@ public class RequiredDokumentService {
             .toList();
     }
 
-    public Map<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokumentRefMap(final GesuchFormular formular) {
+    public Map<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokumentRefMap(
+        final GesuchFormular formular,
+        final boolean includeHidden
+    ) {
         return requiredRefDokumentProducers
             .stream()
-            .map(producer -> producer.getRequiredDokuments(formular))
+            .map(producer -> producer.getRequiredDokuments(formular, includeHidden))
             .collect(Collectors.toUnmodifiableMap(Pair::getLeft, Pair::getRight));
     }
 
@@ -244,10 +256,10 @@ public class RequiredDokumentService {
         final var existingDokumentRefs = RequiredDokumentUtil.getExistingGesuchDokumentTypes(formular);
 
         final var requiredDokumentTypesHashSet = new HashSet<>(
-            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDokumentProducers)
+            RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(formular, requiredDokumentProducers, true)
         );
         final var requiredDokumentRefHashSet = new HashSet<>(
-            RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(formular, requiredRefDokumentProducers)
+            RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(formular, requiredRefDokumentProducers, true)
         );
 
         final var superfluousDokumentTypesSet = existingDokumentRefs

@@ -33,7 +33,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class GeschwisterRequiredListDokumentsProducer implements RequiredRefDokumentsProducer {
     @Override
-    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(
+        GesuchFormular formular,
+        boolean includeHidden
+    ) {
         final var geschwisters = formular.getGeschwisters();
         if (Objects.isNull(geschwisters)) {
             return ImmutablePair.of("", Set.of());
@@ -43,7 +46,8 @@ public class GeschwisterRequiredListDokumentsProducer implements RequiredRefDoku
 
         for (var geschwister : geschwisters) {
             if (
-                !geschwister.isHidden() && geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
+                (!geschwister.isHidden() || includeHidden) &&
+                geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG
             ) {
                 requiredDocs.add(
                     Pair.of(

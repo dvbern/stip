@@ -189,8 +189,8 @@ public class GesuchTrancheService {
     public DokumenteToUploadDto getDokumenteToUploadGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
 
-        final var required = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var required = getRequiredDokumentTypes(gesuchTranche, false);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche, false);
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
         var dokumenteToUploadDto = dokumenteToUploadMapper.toDto(required, requiredRefs, List.of(), customRequired);
         return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
@@ -199,8 +199,8 @@ public class GesuchTrancheService {
     @Transactional
     public DokumenteToUploadDto getDokumenteToUploadSB(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId);
-        final var required = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var required = getRequiredDokumentTypes(gesuchTranche, true);
+        final var requiredRefs = getRequiredDokumentRefs(gesuchTranche, true);
         final var unterschriftenblaetter = unterschriftenblattService
             .getUnterschriftenblaetterToUpload(gesuchTranche.getGesuch());
         final var customRequired = getRequiredCustomDokumentTypes(gesuchTranche);
@@ -209,11 +209,11 @@ public class GesuchTrancheService {
         return setFlagsOnDokumenteToUploadDto(gesuchTranche, dokumenteToUploadDto);
     }
 
-    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId) {
+    public List<String> getAllRequiredDokumentTypes(final UUID gesuchTrancheId, final boolean includeHidden) {
         var allRequired = new ArrayList<String>();
         final var gesuchTranche = gesuchTrancheRepository.requireById(gesuchTrancheId);
-        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche);
-        final var requiredDokumentRefs = getRequiredDokumentRefs(gesuchTranche);
+        final var requiredDokumentTypes = getRequiredDokumentTypes(gesuchTranche, includeHidden);
+        final var requiredDokumentRefs = getRequiredDokumentRefs(gesuchTranche, includeHidden);
         final var requiredCustomDokumentTypes = getRequiredCustomDokumentTypes(gesuchTranche);
         allRequired.addAll(requiredDokumentTypes.stream().map(Enum::toString).toList());
         allRequired.addAll(
@@ -232,19 +232,24 @@ public class GesuchTrancheService {
             .toList();
     }
 
-    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    public List<DokumentTyp> getRequiredDokumentTypes(final GesuchTranche gesuchTranche, final boolean includeHidden) {
+        return requiredDokumentService
+            .getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden);
     }
 
-    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefs(final GesuchTranche gesuchTranche) {
-        return requiredDokumentService.getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular());
+    public List<Pair<DokumentTyp, UUID>> getRequiredDokumentRefs(
+        final GesuchTranche gesuchTranche,
+        final boolean includeHidden
+    ) {
+        return requiredDokumentService
+            .getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden);
     }
 
     @Transactional
     public GesuchDokumentListDto getGesuchDokumentListGS(final UUID gesuchTrancheId) {
         final var gesuchTranche = gesuchTrancheHistoryService.getCurrentOrHistoricalTrancheForGS(gesuchTrancheId);
         final var gesuchDokuments = getAndCheckGesuchDokumentsForGesuchTrancheGS(gesuchTranche);
-        final var entrys = getGesuchDokumentEntrys(gesuchTranche);
+        final var entrys = getGesuchDokumentEntrys(gesuchTranche, false);
 
         return new GesuchDokumentListDto().dokuments(gesuchDokuments)
             .entrys(entrys);
@@ -260,15 +265,18 @@ public class GesuchTrancheService {
             .stream()
             .map(gesuchDokumentMapper::toDto)
             .toList();
-        final var entrys = getGesuchDokumentEntrys(gesuchTranche);
+        final var entrys = getGesuchDokumentEntrys(gesuchTranche, true);
 
         return new GesuchDokumentListDto().dokuments(gesuchDokuments)
             .entrys(entrys);
     }
 
-    private List<GesuchDokumentEntryDto> getGesuchDokumentEntrys(final GesuchTranche gesuchTranche) {
+    private List<GesuchDokumentEntryDto> getGesuchDokumentEntrys(
+        final GesuchTranche gesuchTranche,
+        final boolean includeHidden
+    ) {
         final var requiredDokumentRefs =
-            requiredDokumentService.getRequiredDokumentRefMap(gesuchTranche.getGesuchFormular());
+            requiredDokumentService.getRequiredDokumentRefMap(gesuchTranche.getGesuchFormular(), includeHidden);
         final var entrys = new ArrayList<GesuchDokumentEntryDto>();
 
         for (var kind : gesuchTranche.getGesuchFormular().getKinds()) {
@@ -357,13 +365,6 @@ public class GesuchTrancheService {
         if (!dokumentObjectIds.isEmpty()) {
             gesuchDokumentService.executeDeleteDokumentsFromS3(dokumentObjectIds);
         }
-    }
-
-    @Transactional
-    public List<GesuchDokumentDto> getGesuchDokumenteForGesuchTranche(final UUID gesuchTrancheId) {
-        return gesuchDokumentRepository.findAllForGesuchTranche(gesuchTrancheId)
-            .map(gesuchDokumentMapper::toDto)
-            .toList();
     }
 
     @Transactional

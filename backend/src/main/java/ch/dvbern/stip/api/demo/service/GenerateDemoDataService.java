@@ -791,11 +791,13 @@ public class GenerateDemoDataService {
     public void createDemoDokumentsForAllRequired(GesuchTranche gesuchTranche) {
         final var requiredDokuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
             gesuchTranche.getGesuchFormular(),
-            requiredDokumentProducers
+            requiredDokumentProducers,
+            true
         );
         final var requiredListDocuments = RequiredDokumentUtil.getRequiredListDokumentRefsForGesuch(
             gesuchTranche.getGesuchFormular(),
-            requiredRefDokumentProducers
+            requiredRefDokumentProducers,
+            true
         );
 
         final var gesuchDokuments = Stream.concat(

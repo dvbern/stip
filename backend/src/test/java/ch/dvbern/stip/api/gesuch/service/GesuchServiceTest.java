@@ -145,6 +145,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -236,7 +237,8 @@ class GesuchServiceTest {
     static void setup() {
         final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any(), anyBoolean()))
+            .thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
 
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
