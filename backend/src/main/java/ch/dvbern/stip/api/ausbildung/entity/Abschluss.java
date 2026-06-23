@@ -25,7 +25,7 @@ import ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung;
 import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -54,17 +54,17 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @Table(
     name = "abschluss",
     uniqueConstraints = @UniqueConstraint(
-        name = "UC_abschluss_mandant_bezeichnung_ausbildungskategorie_bildungsrichtung",
-        columnNames = { "mandant", "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
+        name = "UC_abschluss_tenant_bezeichnung_ausbildungskategorie_bildungsrichtung",
+        columnNames = { "tenant", "bezeichnung_de", "bezeichnung_fr", "ausbildungskategorie", "bildungsrichtung" }
     ),
-    indexes = @Index(name = "IX_abschluss_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_abschluss_tenant", columnList = "tenant")
 )
 @Getter
 @Setter
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Abschluss extends AbstractMandantEntity {
+public class Abschluss extends AbstractTenantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "bezeichnung_de", nullable = false, length = DB_DEFAULT_STRING_MEDIUM_LENGTH)

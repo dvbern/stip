@@ -34,8 +34,8 @@ import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutz
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
-import { SharedUiMandantStylesDvComponent } from '@dv/shared/ui/mandant-styles-dv';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
+import { SharedUiTenantStylesDvComponent } from '@dv/shared/ui/tenant-styles-dv';
 import { NavItem } from '@dv/shared/util/navigation';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
@@ -47,7 +47,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
     MatMenuModule,
     MatButtonModule,
     SharedUiLanguageSelectorComponent,
-    SharedUiMandantStylesDvComponent,
+    SharedUiTenantStylesDvComponent,
     TranslocoDirective,
     SharedUiNavItemsComponent,
   ],

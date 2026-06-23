@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.darlehen.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -42,14 +42,14 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "gesetzlich_darlehen",
     indexes = {
-        @Index(name = "IX_gesetzlich_darlehen_mandant", columnList = "mandant"),
+        @Index(name = "IX_gesetzlich_darlehen_tenant", columnList = "tenant"),
         @Index(name = "IX_gesetzlich_darlehen_fall_id", columnList = "fall_id"),
         @Index(name = "IX_gesetzlich_darlehen_gesuch_id", columnList = "gesuch_id")
     }
 )
 @Getter
 @Setter
-public class GesetzlichDarlehen extends AbstractMandantEntity {
+public class GesetzlichDarlehen extends AbstractTenantEntity {
 
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)

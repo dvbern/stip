@@ -28,8 +28,8 @@ import org.hibernate.envers.Audited;
 @Audited
 @Getter
 @Setter
-public abstract class AbstractMandantEntity extends AbstractEntity {
+public abstract class AbstractTenantEntity extends AbstractEntity {
     @TenantId
-    @Column(name = "mandant", nullable = false)
-    private String mandant;
+    @Column(name = "tenant", nullable = false)
+    private String tenant;
 }

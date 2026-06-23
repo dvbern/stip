@@ -7520,7 +7520,7 @@ components:
           $ref: '#/components/schemas/LocalDate'
     DelegierungEntry:
       required:
-        - mandant
+        - tenant
       type: object
       allOf:
         - $ref: '#/components/schemas/Delegierung'
@@ -7529,7 +7529,7 @@ components:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        mandant:
+        tenant:
           type: string
     PaginatedSozDashboard:
       allOf:
@@ -8620,7 +8620,7 @@ components:
         - NIEDERLASSUNGSBEWILLIGUNG_C
         - PARTNER_ERWERBSTAETIG_UND_KIND_CI
         - VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
-        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+        - VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         - VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
         - GRENZGAENGIG_G
         - KURZAUFENTHALT_L
@@ -9450,14 +9450,14 @@ components:
       required:
         - id
         - fallNummer
-        - mandant
+        - tenant
       type: object
       properties:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
           type: string
-        mandant:
+        tenant:
           type: string
     GesuchDokumentKommentar:
       description: Kommentar zu einem (abgelehnten) GesuchDokument
@@ -9573,7 +9573,7 @@ components:
         - >-
           PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_OHNE_FLUECHTLINGSSTATUS
         - >-
-          PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+          PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         - >-
           PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON
         - PERSON_NIEDERLASSUNGSSTATUS_GRENZGAENGIG_G

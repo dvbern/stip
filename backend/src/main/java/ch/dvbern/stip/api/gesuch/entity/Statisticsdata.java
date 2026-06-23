@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.validation.NullOrNotBlank;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -44,14 +44,14 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "statisticsdata",
     indexes = {
         @Index(name = "IX_statisticsdata_gesuch_id", columnList = "gesuch_id"),
-        @Index(name = "IX_statisticsdata_mandant", columnList = "mandant")
+        @Index(name = "IX_statisticsdata_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Statisticsdata extends AbstractMandantEntity {
+public class Statisticsdata extends AbstractTenantEntity {
     @NotNull
     @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_id")

@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.notification.entity;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.notification.type.NotificationType;
 import jakarta.annotation.Nullable;
@@ -47,12 +47,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
     name = "notification",
     indexes = {
         @Index(name = "IX_notification_fall_id", columnList = "fall_id"),
-        @Index(name = "IX_notification_mandant", columnList = "mandant")
+        @Index(name = "IX_notification_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Notification extends AbstractMandantEntity {
+public class Notification extends AbstractTenantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "notification_type")
     private NotificationType notificationType;
