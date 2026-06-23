@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.common.service;
 import org.mapstruct.Mapping;
 
 @Mapping(target = "id", ignore = true)
-@Mapping(target = "mandant", ignore = true)
+@Mapping(target = "tenant", ignore = true)
 @Mapping(target = "timestampErstellt", ignore = true)
 @Mapping(target = "timestampMutiert", ignore = true)
 @Mapping(target = "version", ignore = true)

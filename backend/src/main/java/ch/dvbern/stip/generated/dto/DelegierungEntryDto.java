@@ -28,7 +28,7 @@ public class DelegierungEntryDto  implements Serializable {
   private @Valid SozialdienstSlimDto sozialdienst;
   private @Valid PersoenlicheAngabenDto persoenlicheAngaben;
   private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
-  private @Valid String mandant;
+  private @Valid String tenant;
   private @Valid SozialdienstBenutzerDto delegierterMitarbeiter;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
@@ -113,21 +113,21 @@ public class DelegierungEntryDto  implements Serializable {
 
   /**
    **/
-  public DelegierungEntryDto mandant(String mandant) {
-    this.mandant = mandant;
+  public DelegierungEntryDto tenant(String tenant) {
+    this.tenant = tenant;
     return this;
   }
 
   
-  @JsonProperty("mandant")
+  @JsonProperty("tenant")
   @NotNull
-  public String getMandant() {
-    return mandant;
+  public String getTenant() {
+    return tenant;
   }
 
-  @JsonProperty("mandant")
-  public void setMandant(String mandant) {
-    this.mandant = mandant;
+  @JsonProperty("tenant")
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
 
   /**
@@ -234,7 +234,7 @@ public class DelegierungEntryDto  implements Serializable {
         Objects.equals(this.sozialdienst, delegierungEntry.sozialdienst) &&
         Objects.equals(this.persoenlicheAngaben, delegierungEntry.persoenlicheAngaben) &&
         Objects.equals(this.status, delegierungEntry.status) &&
-        Objects.equals(this.mandant, delegierungEntry.mandant) &&
+        Objects.equals(this.tenant, delegierungEntry.tenant) &&
         Objects.equals(this.delegierterMitarbeiter, delegierungEntry.delegierterMitarbeiter) &&
         Objects.equals(this.startDate, delegierungEntry.startDate) &&
         Objects.equals(this.endDate, delegierungEntry.endDate) &&
@@ -244,7 +244,7 @@ public class DelegierungEntryDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, sozialdienst, persoenlicheAngaben, status, mandant, delegierterMitarbeiter, startDate, endDate, fallId, fallNummer);
+    return Objects.hash(id, sozialdienst, persoenlicheAngaben, status, tenant, delegierterMitarbeiter, startDate, endDate, fallId, fallNummer);
   }
 
   @Override
@@ -256,7 +256,7 @@ public class DelegierungEntryDto  implements Serializable {
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("    persoenlicheAngaben: ").append(toIndentedString(persoenlicheAngaben)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
+    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");

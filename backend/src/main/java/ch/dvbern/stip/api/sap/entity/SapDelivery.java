@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.type.SapStatus;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,12 +42,12 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "sapdelivery",
     indexes = {
-        @Index(name = "IX_sapdelivery_mandant", columnList = "mandant")
+        @Index(name = "IX_sapdelivery_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class SapDelivery extends AbstractMandantEntity {
+public class SapDelivery extends AbstractTenantEntity {
     @Nullable
     @Column(name = "sap_delivery_id")
     private BigDecimal sapDeliveryId;
