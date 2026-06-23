@@ -27,12 +27,12 @@ import lombok.RequiredArgsConstructor;
 public class GesuchNummerSeqRepository extends BaseNummerSeqRepository {
     private final EntityManager entityManager;
 
-    public String getSequenceString(final String mandant, final int technischesJahr) {
-        return String.format("gesuch_nummer_%s_%s_seq", mandant, technischesJahr);
+    public String getSequenceString(final String tenant, final int technischesJahr) {
+        return String.format("gesuch_nummer_%s_%s_seq", tenant, technischesJahr);
     }
 
-    public int getNextSequenceValue(final String mandant, final int technischesJahr) {
-        final String seqName = getSequenceString(mandant, technischesJahr);
+    public int getNextSequenceValue(final String tenant, final int technischesJahr) {
+        final String seqName = getSequenceString(tenant, technischesJahr);
         createSequenceIfNotExists(entityManager, seqName);
         return getNextValueFromSequence(entityManager, seqName);
     }

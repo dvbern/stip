@@ -314,7 +314,7 @@ export const niederlassungsStatusConverter = {
           fluechtlingsstatus: true,
           zustaendigerKanton: ZustaendigerKanton.ANDERER_KANTON,
         };
-      case 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT':
+      case 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT':
         return {
           niederlassungsstatus: VORLAEUFIG_AUFGENOMMEN_F,
           fluechtlingsstatus: true,
@@ -341,7 +341,7 @@ export const niederlassungsStatusConverter = {
       }
       switch (value.zustaendigerKanton) {
         case ZustaendigerKanton.BERN:
-          return 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT';
+          return 'VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT';
         case ZustaendigerKanton.ANDERER_KANTON:
           return 'VORLAEUFIG_AUFGENOMMEN_F_ANDERER_ZUESTAENDIGER_KANTON';
         default:

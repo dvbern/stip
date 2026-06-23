@@ -26,6 +26,6 @@ import ch.dvbern.stip.api.common.type.TenantIdentifier;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CalculatorMandant {
+public @interface CalculatorTenant {
     TenantIdentifier value();
 }

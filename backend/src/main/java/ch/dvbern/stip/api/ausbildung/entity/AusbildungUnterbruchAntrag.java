@@ -21,7 +21,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
@@ -55,11 +55,11 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 @Entity
 @Table(
     name = "ausbildung_unterbruch_antrag",
-    indexes = @Index(name = "IX_ausbildung_unterbruch_antrag_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_ausbildung_unterbruch_antrag_tenant", columnList = "tenant")
 )
 @Getter
 @Setter
-public class AusbildungUnterbruchAntrag extends AbstractMandantEntity {
+public class AusbildungUnterbruchAntrag extends AbstractTenantEntity {
     @NotNull
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
