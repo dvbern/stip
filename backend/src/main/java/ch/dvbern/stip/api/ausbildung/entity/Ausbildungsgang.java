@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.ausbildung.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,7 +41,7 @@ import org.jilt.BuilderStyle;
 @Table(
     name = "ausbildungsgang",
     indexes = {
-        @Index(name = "IX_ausbildungsgang_mandant", columnList = "mandant"),
+        @Index(name = "IX_ausbildungsgang_tenant", columnList = "tenant"),
         @Index(name = "IX_ausbildungsgang_ausbildungsstaette_id", columnList = "ausbildungsstaette_id"),
         @Index(name = "IX_ausbildungsgang_abschluss_id", columnList = "abschluss_id")
     }
@@ -51,7 +51,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ausbildungsgang extends AbstractMandantEntity {
+public class Ausbildungsgang extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.PERSIST })
     @JoinColumn(

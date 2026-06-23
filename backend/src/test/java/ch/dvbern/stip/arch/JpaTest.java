@@ -19,7 +19,7 @@ package ch.dvbern.stip.arch;
 
 import java.util.Arrays;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
@@ -89,7 +89,7 @@ class JpaTest {
     @Test
     void test_index_on_tenant_field() {
         var rule = classes().that()
-            .areAssignableTo(AbstractMandantEntity.class)
+            .areAssignableTo(AbstractTenantEntity.class)
             .and()
             .areNotAssignableTo(SozialdienstBenutzer.class)
             .and()
@@ -102,14 +102,14 @@ class JpaTest {
                     var tableAnnotation = javaClass.getAnnotationOfType(Table.class);
                     if (tableAnnotation != null) {
                         final var hasIndex = Arrays.stream(tableAnnotation.indexes())
-                            .anyMatch(index -> index.columnList().contains("mandant"));
+                            .anyMatch(index -> index.columnList().contains("tenant"));
 
                         if (hasIndex) {
                             return;
                         }
                     }
 
-                    String message = String.format("Mandant column on entity %s has no index", javaClass.getName());
+                    String message = String.format("Tenant column on entity %s has no index", javaClass.getName());
                     conditionEvents.add(SimpleConditionEvent.violated(javaClass, message));
                 }
             }));

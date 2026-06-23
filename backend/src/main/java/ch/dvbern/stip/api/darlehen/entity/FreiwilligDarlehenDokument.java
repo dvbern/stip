@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.darlehen.entity;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import jakarta.persistence.Column;
@@ -41,12 +41,12 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "freiwillig_darlehen_dokument",
     indexes = {
-        @Index(name = "IX_freiwillig_darlehen_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_freiwillig_darlehen_dokument_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class FreiwilligDarlehenDokument extends AbstractMandantEntity {
+public class FreiwilligDarlehenDokument extends AbstractTenantEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "dokument_type")
     private DarlehenDokumentType dokumentType;

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
 import ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus;
@@ -60,7 +60,7 @@ import org.jilt.BuilderStyle;
         @Index(
             name = "IX_gesuch_dokument_gesuch_tranche_id_dokument_typ", columnList = "gesuch_tranche_id,dokument_typ"
         ),
-        @Index(name = "IX_gesuch_dokument_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_dokument_tenant", columnList = "tenant")
     },
     uniqueConstraints = {
         @UniqueConstraint(
@@ -75,7 +75,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GesuchDokument extends AbstractMandantEntity {
+public class GesuchDokument extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "gesuch_tranche_id", foreignKey = @ForeignKey(name = "FK_gesuch_dokument_gesuch_tranche_id"))

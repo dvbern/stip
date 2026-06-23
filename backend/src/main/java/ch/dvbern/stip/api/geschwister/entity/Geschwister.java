@@ -41,7 +41,7 @@ import org.jilt.BuilderStyle;
 @Entity
 @Table(
     name = "geschwister",
-    indexes = @Index(name = "IX_geschwister_mandant", columnList = "mandant")
+    indexes = @Index(name = "IX_geschwister_tenant", columnList = "tenant")
 )
 @Getter
 @Setter

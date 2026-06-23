@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class FallNummerSeqRepository extends BaseNummerSeqRepository {
     private final EntityManager entityManager;
 
-    public int getNextValue(final String mandant) {
-        final var seqName = String.format("fall_nummer_%s_seq", mandant);
+    public int getNextValue(final String tenant) {
+        final var seqName = String.format("fall_nummer_%s_seq", tenant);
         createSequenceIfNotExists(entityManager, seqName);
         return getNextValueFromSequence(entityManager, seqName);
     }
