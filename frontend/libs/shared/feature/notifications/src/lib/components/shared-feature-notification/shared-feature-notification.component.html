@@ -1,25 +1,34 @@
 <ng-container>
   @let notification = notificationSig();
   @if (notification) {
-    <dl class="tw:flex tw:flex-col tw:mb-0">
-      <div class="tw:flex tw:gap-6">
-        <div class="tw:flex tw:flex-col">
-          <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.sender' | transloco }}:</dt>
-          <dd>{{ notification.absender }}</dd>
-        </div>
-        <div class="tw:flex tw:flex-col">
-          <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.date' | transloco }}:</dt>
-          <dd>
-            <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
-          </dd>
-        </div>
+    <dl class="tw:flex tw:gap-6 tw:justify-between">
+      <div class="tw:flex tw:flex-col">
+        <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.subject' | transloco }}</dt>
+        <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</dd>
       </div>
-      <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.subject' | transloco }}:</dt>
-      <dd>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</dd>
-      @if (notification.notificationText) {
-        <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.text' | transloco }}:</dt>
-        <dd class="tw:whitespace-pre-line">{{ notification.notificationText }}</dd>
-      }
+      <div class="tw:flex tw:flex-col">
+        <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.sender' | transloco }}</dt>
+        <dd>{{ notification.absender }}</dd>
+      </div>
+      <div class="tw:flex tw:flex-col">
+        <dt class="tw:font-bold tw:mt-1">{{ 'shared.nachrichten.date' | transloco }}</dt>
+        <dd>
+          <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
+        </dd>
+      </div>
     </dl>
+    @if (notification.notificationText) {
+      <hr class="tw:my-6 tw:border tw:border-dv-border" />
+      <p class="tw:whitespace-pre-line">{{ notification.notificationText }}</p>
+    }
+    <!-- markAsReadButton -->
+    <button
+      type="button"
+      [disabled]="notification.read"
+      class="tw:dv-button-main-primary tw:mt-6"
+      (click)="markAsRead(notification.id)"
+    >
+      {{ 'shared.nachrichten.markAsRead' | transloco }}
+    </button>
   }
 </ng-container>

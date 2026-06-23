@@ -1,3 +1,5 @@
+import { A11yModule } from '@angular/cdk/a11y';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +12,7 @@ import {
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelNachricht } from '@dv/shared/model/nachricht';
@@ -25,13 +28,16 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     MatPaginatorModule,
     SharedUiIconChipComponent,
     SharedUiTooltipDateComponent,
+    A11yModule,
+    RouterModule,
+    CommonModule,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './shared-ui-notifications.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNotificationsComponent {
-  @HostBinding('class') class = 'tw:p-6';
+  @HostBinding('class') class = '';
 
   private dialog = inject(MatDialog);
   readonly pageSize = 5;
@@ -39,7 +45,11 @@ export class SharedUiNotificationsComponent {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'notifications',
   });
-  navigationMode = input<boolean>(false);
+  selectedNotificationIdSig = input<string | undefined>(undefined, {
+    // eslint-disable-next-line @angular-eslint/no-input-rename
+    alias: 'selectedNotificationId',
+  });
+  navigationMode = input<boolean>(false); // todo: needed? for responsive?
   notificationClick = output<SharedModelNachricht>();
   newPageSig = signal<PageEvent | null>(null);
 

@@ -515,6 +515,7 @@ public class NotificationService {
         return notificationRepository.getUnreadNotificationsCountForFall(fallId);
     }
 
+    @Transactional
     public void markNotificationAsRead(final UUID notificationId) {
         notificationRepository.markNotificationAsRead(notificationId);
     }

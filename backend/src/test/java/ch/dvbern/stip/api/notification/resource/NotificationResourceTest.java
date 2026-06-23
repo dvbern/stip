@@ -99,6 +99,43 @@ class NotificationResourceTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(3)
+    void markNotificationAsRead() {
+        final var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+
+        final var notificationId = Arrays.stream(notifications).toList().get(0).getId();
+
+        notificationApiSpec.markNotificationAsRead()
+            .notificationIdPath(notificationId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        final var updatedNotifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+
+        final var updatedNotification = Arrays.stream(updatedNotifications)
+            .filter(notification -> notification.getId().equals(notificationId))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Notification not found after mark-as-read call"));
+
+        assertThat(updatedNotification.getRead()).isTrue();
+    }
+
+    @Test
     @TestAsSuperUser
     @Order(99)
     @AlwaysRun

@@ -228,11 +228,11 @@ export function buildDarlehenMenu(config: {
 }
 
 export function getQueryParamValueSig(
-  router: ActivatedRoute,
+  route: ActivatedRoute,
   paramName: string,
 ) {
   return toSignal(
-    router.queryParamMap.pipe(
+    route.queryParamMap.pipe(
       map((params) => params.get(paramName) ?? undefined),
     ),
   );

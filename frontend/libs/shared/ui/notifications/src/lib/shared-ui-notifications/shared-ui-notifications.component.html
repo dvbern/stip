@@ -1,34 +1,31 @@
-<h3 class="tw:flex tw:items-center tw:text-2xl tw:font-semibold" data-testid="nachrichten-title">
-  <dv-shared-ui-icon-chip style="background-color: #e6f9fd; color: #07c6e0" class="tw:mr-2">
-    <i class="material-symbols-rounded tw:text-lg!">mail</i>
-  </dv-shared-ui-icon-chip>
-  <span>{{ 'shared.nachrichten.title' | transloco }}</span>
-</h3>
-
 @let notifications = notificationsSig();
 @if (notifications.length > 0) {
-  <div class="tw:grid tw:grid-cols-[auto_auto_auto] tw:mt-6 tw:gap-x-2">
-    <h4 class="tw:text-lg tw:font-semibold tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:m-0 tw:mb-3">
+  <div class="tw:grid tw:grid-cols-[minmax(fit-content,1fr)_auto_auto] tw:gap-x-2">
+    <h4 class="tw:font-bold tw:grid tw:grid-cols-subgrid tw:px-1 tw:col-span-3 tw:m-0 tw:mb-3">
       <span>{{ 'shared.nachrichten.subject' | transloco }}</span>
       <span>{{ 'shared.nachrichten.sender' | transloco }}</span>
       <span>{{ 'shared.nachrichten.date' | transloco }}</span>
     </h4>
     @for (notification of notificationsViewSig(); track notification) {
-      <button
-        class="tw:dv-button tw:items-center tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:px-0 tw:py-3 tw:text-start tw:border-0 tw:border-t tw:rounded-none tw:border-dv-border"
-        (click)="openNotification(notification)"
+      <a
+        class="tw:items-center tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:px-1 tw:py-3 tw:text-start tw:border-0 tw:border-t tw:border-dv-border tw:hover:bg-dv-gray-subtle"
+        [ngClass]="{
+          'tw:font-bold': !notification.read,
+          'tw:[&&]:bg-dv-red-subtle': notification.id === selectedNotificationIdSig(),
+        }"
+        [routerLink]="[notification.id]"
       >
-        <span>{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</span>
+        <span class="tw:truncate">{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</span>
         <span>{{ notification.absender }}</span>
         <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
-      </button>
+      </a>
     }
   </div>
 } @else {
   <div>{{ 'shared.nachrichten.noNotifications' | transloco }}</div>
 }
 
-<!-- todo: test pagination -->
+<!-- todo: change to virtual scroll-->
 @if (notificationsSig().length > 10) {
   <mat-paginator
     [length]="notificationsSig().length"

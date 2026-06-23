@@ -4,6 +4,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   inject,
   input,
 } from '@angular/core';
@@ -27,7 +28,21 @@ export class SharedFeatureNotificationComponent {
 
   notificationSig = computed(() => {
     const notificationId = this.notificationId();
+
     const notifications = this.notificationStore.notificationListViewSig();
     return notifications.find((n) => n.id === notificationId) ?? null;
   });
+
+  markAsRead(notificationId: string) {
+    this.notificationStore.markNotificationAsRead$({ notificationId });
+  }
+
+  constructor() {
+    effect(() => {
+      const notificationId = this.notificationId();
+      if (notificationId) {
+        this.notificationStore.setSelectedNotificationId(notificationId);
+      }
+    });
+  }
 }
