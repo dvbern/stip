@@ -44,5 +44,15 @@ export class SharedFeatureNotificationComponent {
         this.notificationStore.setSelectedNotificationId(notificationId);
       }
     });
+
+    // mark as read
+    effect(() => {
+      const notification = this.notificationSig();
+      if (notification && !notification.read) {
+        setTimeout(() => {
+          this.markAsRead(notification.id);
+        }, 5000);
+      }
+    });
   }
 }

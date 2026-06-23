@@ -3,7 +3,6 @@ import type {
   DomPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
-import { ThemePalette } from '@angular/material/core';
 import { QueryParamsHandling, UrlTree } from '@angular/router';
 
 import {
@@ -31,7 +30,6 @@ interface NavItemBase {
   testId?: string;
   badge?: {
     count: number;
-    color: ThemePalette;
   };
 }
 

@@ -140,7 +140,6 @@ export class GesuchAppPatternMainLayoutComponent {
         badge: fallHeader?.unreadNotificationsCount
           ? {
               count: fallHeader.unreadNotificationsCount,
-              color: 'primary',
             }
           : undefined,
       };

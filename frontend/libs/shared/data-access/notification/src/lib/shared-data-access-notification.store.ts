@@ -17,6 +17,8 @@ import {
   fromCachedDataSig,
   handleApiResponse,
   initial,
+  isSuccess,
+  mapCachedData,
 } from '@dv/shared/util/remote-data';
 
 type NotificationState = {
@@ -85,10 +87,23 @@ export class NotificationStore extends signalStore(
           this.notificationService
             .markNotificationAsRead$({ notificationId })
             .pipe(
-              handleApiResponse((notification) =>
-                patchState(this, {
-                  markNotificationAsReadRequest: notification,
-                }),
+              handleApiResponse((res) =>
+                patchState(this, (state) => ({
+                  markNotificationAsReadRequest: res,
+                  notifications: mapCachedData(
+                    state.notifications,
+                    (notifications) => {
+                      if (isSuccess(res)) {
+                        return notifications.map((notification) =>
+                          notification.id === notificationId
+                            ? { ...notification, read: true }
+                            : notification,
+                        );
+                      }
+                      return notifications;
+                    },
+                  ),
+                })),
               ),
             ),
         ),

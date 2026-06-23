@@ -10,7 +10,6 @@
             [matMenuTriggerFor]="itemMenu"
             [class.isActive]="item.active"
             [matBadge]="item.badge?.count"
-            [matBadgeColor]="item.badge?.color"
           >
             @if (item.icon) {
               <i class="material-symbols-rounded tw:mr-2">{{ item.icon }}</i>
@@ -38,7 +37,6 @@
           [class.isActive]="item.active"
           routerLinkActive="active"
           [matBadge]="item.badge?.count"
-          [matBadgeColor]="item.badge?.color"
         >
           @if (item.icon) {
             <i class="material-symbols-rounded tw:mr-2">{{ item.icon }}</i>
@@ -56,7 +54,6 @@
           (click)="item.action()"
           [disabled]="item.disabled"
           [matBadge]="item.badge?.count"
-          [matBadgeColor]="item.badge?.color"
         >
           <div class="tw:flex tw:items-center tw:gap-2">
             @if (item.icon) {

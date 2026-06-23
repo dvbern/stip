@@ -21,14 +21,5 @@
       <hr class="tw:my-6 tw:border tw:border-dv-border" />
       <p class="tw:whitespace-pre-line">{{ notification.notificationText }}</p>
     }
-    <!-- markAsReadButton -->
-    <button
-      type="button"
-      [disabled]="notification.read"
-      class="tw:dv-button-main-primary tw:mt-6"
-      (click)="markAsRead(notification.id)"
-    >
-      {{ 'shared.nachrichten.markAsRead' | transloco }}
-    </button>
   }
 </ng-container>

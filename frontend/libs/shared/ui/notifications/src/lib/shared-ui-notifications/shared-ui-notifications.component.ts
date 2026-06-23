@@ -16,7 +16,6 @@ import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelNachricht } from '@dv/shared/model/nachricht';
-import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiNotificationDialogComponent } from '@dv/shared/ui/notification-dialog';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
@@ -26,7 +25,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   imports: [
     TranslocoPipe,
     MatPaginatorModule,
-    SharedUiIconChipComponent,
     SharedUiTooltipDateComponent,
     A11yModule,
     RouterModule,

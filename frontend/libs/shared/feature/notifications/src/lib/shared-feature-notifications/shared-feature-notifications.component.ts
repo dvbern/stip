@@ -36,10 +36,6 @@ export class SharedFeatureNotificationsComponent {
   // todo: needs fallback to cache for soz? fallIdFromGesuchCacheSig
   fallIdParamSig = input<string | undefined>(undefined, { alias: 'fallId' });
 
-  // selectNotification(notification: SharedModelNachricht) {
-  //   this.router.navigate([notification.id], { relativeTo: this.route });
-  // }
-
   constructor() {
     effect(() => {
       const fallId = this.fallIdParamSig();
@@ -47,9 +43,11 @@ export class SharedFeatureNotificationsComponent {
         this.notificationStore.getNotificationsForFall$({
           req: { fallId },
           onSuccess: (notifications) => {
-            this.router.navigate([notifications[0]?.id], {
-              relativeTo: this.route,
-            });
+            if (!this.notificationStore.selectedNotificationId()) {
+              this.router.navigate([notifications[0]?.id], {
+                relativeTo: this.route,
+              });
+            }
           },
         });
       }

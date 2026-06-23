@@ -6,6 +6,7 @@ import { map, pipe, switchMap, tap, throwError, withLatestFrom } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCache,
@@ -70,6 +71,7 @@ export class EinreichenStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private dokumentsStore = inject(DokumentsStore);
+  private fallHeaderStore = inject(FallHeaderStore);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private config = inject(SharedModelCompileTimeConfig);
   private gesuchViewSig = this.store.selectSignal(
@@ -288,8 +290,16 @@ export class EinreichenStore extends signalStore(
             (einreichen) =>
               patchState(this, { einreichungsResult: einreichen }),
             {
-              onSuccess: () => {
+              onSuccess: (einreichen) => {
                 this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+
+                const fallId = einreichen?.fallId;
+
+                if (fallId) {
+                  this.fallHeaderStore.loadFallHeader$({
+                    fallId: fallId,
+                  });
+                }
               },
             },
           ),
@@ -313,10 +323,18 @@ export class EinreichenStore extends signalStore(
               (einreichen) =>
                 patchState(this, { trancheEinreichenResult: einreichen }),
               {
-                onSuccess: () => {
+                onSuccess: (einreichen) => {
                   this.store.dispatch(
                     SharedDataAccessGesuchEvents.loadGesuch(),
                   );
+
+                  const fallId = einreichen?.fallId;
+
+                  if (fallId) {
+                    this.fallHeaderStore.loadFallHeader$({
+                      fallId: fallId,
+                    });
+                  }
                 },
               },
             ),
