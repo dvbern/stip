@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_ID,
   DelegierungEntryDtoSpec.JSON_PROPERTY_FALL_NUMMER,
-  DelegierungEntryDtoSpec.JSON_PROPERTY_MANDANT,
+  DelegierungEntryDtoSpec.JSON_PROPERTY_TENANT,
   DelegierungEntryDtoSpec.JSON_PROPERTY_ID,
   DelegierungEntryDtoSpec.JSON_PROPERTY_SOZIALDIENST,
   DelegierungEntryDtoSpec.JSON_PROPERTY_DELEGIERTER_MITARBEITER,
@@ -53,8 +53,8 @@ public class DelegierungEntryDtoSpec {
   public static final String JSON_PROPERTY_FALL_NUMMER = "fallNummer";
   private String fallNummer;
 
-  public static final String JSON_PROPERTY_MANDANT = "mandant";
-  private String mandant;
+  public static final String JSON_PROPERTY_TENANT = "tenant";
+  private String tenant;
 
   public static final String JSON_PROPERTY_ID = "id";
   private UUID id;
@@ -132,29 +132,29 @@ public class DelegierungEntryDtoSpec {
   }
 
 
-  public DelegierungEntryDtoSpec mandant(String mandant) {
+  public DelegierungEntryDtoSpec tenant(String tenant) {
     
-    this.mandant = mandant;
+    this.tenant = tenant;
     return this;
   }
 
    /**
-   * Get mandant
-   * @return mandant
+   * Get tenant
+   * @return tenant
   **/
   @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_MANDANT)
+  @JsonProperty(JSON_PROPERTY_TENANT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public String getMandant() {
-    return mandant;
+  public String getTenant() {
+    return tenant;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_MANDANT)
+  @JsonProperty(JSON_PROPERTY_TENANT)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setMandant(String mandant) {
-    this.mandant = mandant;
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
 
 
@@ -350,7 +350,7 @@ public class DelegierungEntryDtoSpec {
     DelegierungEntryDtoSpec delegierungEntry = (DelegierungEntryDtoSpec) o;
     return Objects.equals(this.fallId, delegierungEntry.fallId) &&
         Objects.equals(this.fallNummer, delegierungEntry.fallNummer) &&
-        Objects.equals(this.mandant, delegierungEntry.mandant) &&
+        Objects.equals(this.tenant, delegierungEntry.tenant) &&
         Objects.equals(this.id, delegierungEntry.id) &&
         Objects.equals(this.sozialdienst, delegierungEntry.sozialdienst) &&
         Objects.equals(this.delegierterMitarbeiter, delegierungEntry.delegierterMitarbeiter) &&
@@ -362,7 +362,7 @@ public class DelegierungEntryDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, mandant, id, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
+    return Objects.hash(fallId, fallNummer, tenant, id, sozialdienst, delegierterMitarbeiter, persoenlicheAngaben, status, startDate, endDate);
   }
 
   @Override
@@ -371,7 +371,7 @@ public class DelegierungEntryDtoSpec {
     sb.append("class DelegierungEntryDtoSpec {\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
+    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    sozialdienst: ").append(toIndentedString(sozialdienst)).append("\n");
     sb.append("    delegierterMitarbeiter: ").append(toIndentedString(delegierterMitarbeiter)).append("\n");

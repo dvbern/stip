@@ -21,7 +21,7 @@ import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.berechnung.dto.BerechnungResult;
 import ch.dvbern.stip.berechnung.dto.CalculatorRequest;
 import ch.dvbern.stip.berechnung.dto.CalculatorVersion;
-import ch.dvbern.stip.berechnung.service.CalculatorMandant;
+import ch.dvbern.stip.berechnung.service.CalculatorTenant;
 import ch.dvbern.stip.berechnung.service.StipendienCalculator;
 import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Singleton
 @RequiredArgsConstructor
 @CalculatorVersion(major = 1, minor = 0)
-@CalculatorMandant(TenantIdentifier.DV)
+@CalculatorTenant(TenantIdentifier.DV)
 public class StipendienCalculatorV1 implements StipendienCalculator {
     private final ch.dvbern.stip.berechnung.service.bern.v1.StipendienCalculatorV1 stipendienCalculatorBern;
 

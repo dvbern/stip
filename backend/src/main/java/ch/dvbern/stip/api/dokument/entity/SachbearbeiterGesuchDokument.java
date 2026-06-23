@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.dokument.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,13 +51,13 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
         name = "UC_sachbearbeiter_gesuch_dokument_gesuch_type", columnNames = { "gesuch_id", "type" }
     ),
     indexes = {
-        @Index(name = "IX_sachbearbeiter_gesuch_dokument_mandant", columnList = "mandant"),
+        @Index(name = "IX_sachbearbeiter_gesuch_dokument_tenant", columnList = "tenant"),
         @Index(name = "IX_sachbearbeiter_gesuch_dokument_gesuch_id", columnList = "gesuch_id")
     }
 )
 @Getter
 @Setter
-public class SachbearbeiterGesuchDokument extends AbstractMandantEntity {
+public class SachbearbeiterGesuchDokument extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(

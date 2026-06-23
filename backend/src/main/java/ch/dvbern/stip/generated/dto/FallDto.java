@@ -22,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class FallDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String fallNummer;
-  private @Valid String mandant;
+  private @Valid String tenant;
 
   /**
    **/
@@ -64,21 +64,21 @@ public class FallDto  implements Serializable {
 
   /**
    **/
-  public FallDto mandant(String mandant) {
-    this.mandant = mandant;
+  public FallDto tenant(String tenant) {
+    this.tenant = tenant;
     return this;
   }
 
   
-  @JsonProperty("mandant")
+  @JsonProperty("tenant")
   @NotNull
-  public String getMandant() {
-    return mandant;
+  public String getTenant() {
+    return tenant;
   }
 
-  @JsonProperty("mandant")
-  public void setMandant(String mandant) {
-    this.mandant = mandant;
+  @JsonProperty("tenant")
+  public void setTenant(String tenant) {
+    this.tenant = tenant;
   }
 
 
@@ -93,12 +93,12 @@ public class FallDto  implements Serializable {
     FallDto fall = (FallDto) o;
     return Objects.equals(this.id, fall.id) &&
         Objects.equals(this.fallNummer, fall.fallNummer) &&
-        Objects.equals(this.mandant, fall.mandant);
+        Objects.equals(this.tenant, fall.tenant);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, mandant);
+    return Objects.hash(id, fallNummer, tenant);
   }
 
   @Override
@@ -108,7 +108,7 @@ public class FallDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
-    sb.append("    mandant: ").append(toIndentedString(mandant)).append("\n");
+    sb.append("    tenant: ").append(toIndentedString(tenant)).append("\n");
     sb.append("}");
     return sb.toString();
   }
