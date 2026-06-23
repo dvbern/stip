@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.demo.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,12 +40,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Table(
     name = "demo_data_import",
     indexes = {
-        @Index(name = "IX_demo_data_import_mandant", columnList = "mandant")
+        @Index(name = "IX_demo_data_import_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class DemoDataImport extends AbstractMandantEntity {
+public class DemoDataImport extends AbstractTenantEntity {
     @NotNull
     @Size(max = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)
     @Column(name = "kommentar", nullable = false, length = DB_DEFAULT_STRING_INPUT_MAX_LENGTH)

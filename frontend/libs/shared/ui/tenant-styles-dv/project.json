@@ -1,7 +1,7 @@
 {
-  "name": "shared-ui-mandant-styles-dv",
+  "name": "shared-ui-tenant-styles-dv",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/ui/mandant-styles-dv/src",
+  "sourceRoot": "libs/shared/ui/tenant-styles-dv/src",
   "prefix": "dv",
   "projectType": "library",
   "tags": ["type:ui", "scope:shared"],
@@ -9,7 +9,7 @@
     "build": {
       "executor": "nx:noop",
       "options": {
-        "tsConfig": "libs/shared/ui/mandant-styles-dv/tsconfig.lib.json"
+        "tsConfig": "libs/shared/ui/tenant-styles-dv/tsconfig.lib.json"
       }
     }
   }

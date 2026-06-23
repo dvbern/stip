@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.stipdecision.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.type.StipDecision;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.persistence.Column;
@@ -37,12 +37,12 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "stip_decision_text",
     indexes = {
-        @Index(name = "IX_stip_decision_text_stip_decision", columnList = "stip_decision,mandant", unique = true),
+        @Index(name = "IX_stip_decision_text_stip_decision", columnList = "stip_decision,tenant", unique = true),
     }
 )
 @Audited
 @Entity
-public class StipDecisionText extends AbstractMandantEntity {
+public class StipDecisionText extends AbstractTenantEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "stip_decision", nullable = false)

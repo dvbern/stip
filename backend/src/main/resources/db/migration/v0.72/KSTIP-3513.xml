@@ -1,0 +1,1516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-5">
+      <addColumn tableName="abschluss">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-6">
+      <addColumn tableName="abschluss_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-7">
+      <addColumn tableName="adresse">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-8">
+      <addColumn tableName="adresse_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-9">
+      <addColumn tableName="ausbildung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-10">
+      <addColumn tableName="ausbildung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-11">
+      <addColumn tableName="ausbildung_unterbruch_antrag">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-12">
+      <addColumn tableName="ausbildung_unterbruch_antrag_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-13">
+      <addColumn tableName="ausbildungsgang">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-14">
+      <addColumn tableName="ausbildungsgang_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-15">
+      <addColumn tableName="ausbildungsstaette">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-16">
+      <addColumn tableName="ausbildungsstaette_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-17">
+      <addColumn tableName="auszahlung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-18">
+      <addColumn tableName="auszahlung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-19">
+      <addColumn tableName="benutzer">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-20">
+      <addColumn tableName="benutzer_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-21">
+      <addColumn tableName="benutzereinstellungen">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-22">
+      <addColumn tableName="benutzereinstellungen_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-23">
+      <addColumn tableName="beschwerde_entscheid">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-24">
+      <addColumn tableName="beschwerde_entscheid_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-25">
+      <addColumn tableName="beschwerde_verlauf_entry">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-26">
+      <addColumn tableName="beschwerde_verlauf_entry_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-27">
+      <addColumn tableName="buchhaltung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-28">
+      <addColumn tableName="buchhaltung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-29">
+      <addColumn tableName="custom_dokument_typ">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-30">
+      <addColumn tableName="custom_dokument_typ_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-31">
+      <addColumn tableName="darlehen_buchhaltung_entry">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-32">
+      <addColumn tableName="darlehen_buchhaltung_entry_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-33">
+      <addColumn tableName="datenschutzbrief">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-34">
+      <addColumn tableName="datenschutzbrief_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-35">
+      <addColumn tableName="datenschutzbrief_massendruck">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-36">
+      <addColumn tableName="datenschutzbrief_massendruck_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-37">
+      <addColumn tableName="delegierung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-38">
+      <addColumn tableName="delegierung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-39">
+      <addColumn tableName="demo_data">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-40">
+      <addColumn tableName="demo_data_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-41">
+      <addColumn tableName="demo_data_import">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-42">
+      <addColumn tableName="demo_data_import_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-43">
+      <addColumn tableName="dokument">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-44">
+      <addColumn tableName="dokument_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-45">
+      <addColumn tableName="einnahmen_kosten">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-46">
+      <addColumn tableName="einnahmen_kosten_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-47">
+      <addColumn tableName="eltern">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-48">
+      <addColumn tableName="eltern_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-49">
+      <addColumn tableName="fall">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-50">
+      <addColumn tableName="fall_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-51">
+      <addColumn tableName="familiensituation">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-52">
+      <addColumn tableName="familiensituation_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-53">
+      <addColumn tableName="freiwillig_darlehen">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-54">
+      <addColumn tableName="freiwillig_darlehen_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-55">
+      <addColumn tableName="freiwillig_darlehen_dokument">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-56">
+      <addColumn tableName="freiwillig_darlehen_dokument_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-57">
+      <addColumn tableName="geschwister">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-58">
+      <addColumn tableName="geschwister_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-59">
+      <addColumn tableName="gesetzlich_darlehen">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-60">
+      <addColumn tableName="gesetzlich_darlehen_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-61">
+      <addColumn tableName="gesuch">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-62">
+      <addColumn tableName="gesuch_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-63">
+      <addColumn tableName="gesuch_dokument">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-64">
+      <addColumn tableName="gesuch_dokument_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-65">
+      <addColumn tableName="gesuch_dokument_kommentar">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-66">
+      <addColumn tableName="gesuch_dokument_kommentar_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-67">
+      <addColumn tableName="gesuch_formular">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-68">
+      <addColumn tableName="gesuch_formular_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-69">
+      <addColumn tableName="gesuch_notizen">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-70">
+      <addColumn tableName="gesuch_notizen_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-71">
+      <addColumn tableName="gesuch_tranche">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-72">
+      <addColumn tableName="gesuch_tranche_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-73">
+      <addColumn tableName="gesuchsjahr">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-74">
+      <addColumn tableName="gesuchsjahr_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-75">
+      <addColumn tableName="gesuchsperiode">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-76">
+      <addColumn tableName="gesuchsperiode_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-77">
+      <addColumn tableName="kind">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-78">
+      <addColumn tableName="kind_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-79">
+      <addColumn tableName="land">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-80">
+      <addColumn tableName="land_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-81">
+      <addColumn tableName="lebenslauf_item">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-82">
+      <addColumn tableName="lebenslauf_item_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-83">
+      <addColumn tableName="massendruck_job">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-84">
+      <addColumn tableName="massendruck_job_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-85">
+      <addColumn tableName="notification">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-86">
+      <addColumn tableName="notification_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-87">
+      <addColumn tableName="partner">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-88">
+      <addColumn tableName="partner_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-89">
+      <addColumn tableName="person_in_ausbildung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-90">
+      <addColumn tableName="person_in_ausbildung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-91">
+      <addColumn tableName="rolle">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-92">
+      <addColumn tableName="rolle_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-93">
+      <addColumn tableName="sachbearbeiter">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-94">
+      <addColumn tableName="sachbearbeiter_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-95">
+      <addColumn tableName="sachbearbeiter_gesuch_dokument">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-96">
+      <addColumn tableName="sachbearbeiter_gesuch_dokument_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-97">
+      <addColumn tableName="sachbearbeiter_zuordnung_stammdaten">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-98">
+      <addColumn tableName="sachbearbeiter_zuordnung_stammdaten_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-99">
+      <addColumn tableName="sapdelivery">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-100">
+      <addColumn tableName="sapdelivery_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-101">
+      <addColumn tableName="scheduledtask">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-102">
+      <addColumn tableName="scheduledtask_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-103">
+      <addColumn tableName="sozialdienst">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-104">
+      <addColumn tableName="sozialdienst_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-105">
+      <addColumn tableName="sozialdienstbenutzer">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-106">
+      <addColumn tableName="sozialdienstbenutzer_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-107">
+      <addColumn tableName="statisticsdata">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-108">
+      <addColumn tableName="statisticsdata_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-109">
+      <addColumn tableName="statistik">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-110">
+      <addColumn tableName="statistik_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-111">
+      <addColumn tableName="statusprotokoll">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-112">
+      <addColumn tableName="statusprotokoll_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-113">
+      <addColumn tableName="steuerdaten">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-114">
+      <addColumn tableName="steuerdaten_access">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-115">
+      <addColumn tableName="steuerdaten_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-116">
+      <addColumn tableName="steuererklaerung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-117">
+      <addColumn tableName="steuererklaerung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-118">
+      <addColumn tableName="stip_decision_text">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-119">
+      <addColumn tableName="stip_decision_text_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-120">
+      <addColumn tableName="unterschriftenblatt">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-121">
+      <addColumn tableName="unterschriftenblatt_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-122">
+      <addColumn tableName="verfuegung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-123">
+      <addColumn tableName="verfuegung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-124">
+      <addColumn tableName="verfuegung_dokument">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-125">
+      <addColumn tableName="verfuegung_dokument_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-126">
+      <addColumn tableName="verfuegung_massendruck">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-127">
+      <addColumn tableName="verfuegung_massendruck_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-128">
+      <addColumn tableName="zahlungsverbindung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-129">
+      <addColumn tableName="zahlungsverbindung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-130">
+      <addColumn tableName="zuordnung">
+         <column name="tenant" type="VARCHAR(255)">
+            <constraints nullable="false"/>
+         </column>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-131">
+      <addColumn tableName="zuordnung_aud">
+         <column name="tenant" type="VARCHAR(255)"/>
+      </addColumn>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-132">
+      <addUniqueConstraint columnNames="tenant, bezeichnung_de, bezeichnung_fr, ausbildungskategorie, bildungsrichtung"
+                           constraintName="UC_abschluss_tenant_bezeichnung_ausbildungskategorie_bildungsrichtung"
+                           tableName="abschluss"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-133">
+      <addUniqueConstraint columnNames="laendercode_bfs, tenant"
+                           constraintName="UC_land_laendercode_bfs_tenant"
+                           tableName="land"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-134">
+      <createIndex indexName="IX_abschluss_tenant" tableName="abschluss">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-135">
+      <createIndex indexName="IX_adresse_tenant" tableName="adresse">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-136">
+      <createIndex indexName="IX_ausbildung_tenant" tableName="ausbildung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-137">
+      <createIndex indexName="IX_ausbildung_unterbruch_antrag_tenant"
+                   tableName="ausbildung_unterbruch_antrag">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-138">
+      <createIndex indexName="IX_ausbildungsgang_tenant" tableName="ausbildungsgang">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-139">
+      <createIndex indexName="IX_ausbildungsstaette_tenant" tableName="ausbildungsstaette">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-140">
+      <createIndex indexName="IX_auszahlung_tenant" tableName="auszahlung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-141">
+      <createIndex indexName="IX_benuter_tenant" tableName="benutzer">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-142">
+      <createIndex indexName="IX_benutzereinstellungen_tenant"
+                   tableName="benutzereinstellungen">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-143">
+      <createIndex indexName="IX_beschwerde_entscheid_tenant"
+                   tableName="beschwerde_entscheid">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-144">
+      <createIndex indexName="IX_beschwerde_verlauf_entry_tenant"
+                   tableName="beschwerde_verlauf_entry">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-145">
+      <createIndex indexName="IX_buchhaltung_tenant" tableName="buchhaltung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-146">
+      <createIndex indexName="IX_custom_gesuch_dokument_tenant"
+                   tableName="custom_dokument_typ">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-147">
+      <createIndex indexName="IX_darlehen_buchhaltung_entry_tenant"
+                   tableName="darlehen_buchhaltung_entry">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-148">
+      <createIndex indexName="IX_datenschutzbrief_massendruck_tenant"
+                   tableName="datenschutzbrief_massendruck">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-149">
+      <createIndex indexName="IX_datenschutzbrief_tenant" tableName="datenschutzbrief">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-150">
+      <createIndex indexName="IX_delegierung_tenant" tableName="delegierung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-151">
+      <createIndex indexName="IX_demo_data_import_tenant" tableName="demo_data_import">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-152">
+      <createIndex indexName="IX_demo_data_tenant" tableName="demo_data">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-153">
+      <createIndex indexName="IX_dokument_tenant" tableName="dokument">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-154">
+      <createIndex indexName="IX_einnahme_kosten_tenant" tableName="einnahmen_kosten">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-155">
+      <createIndex indexName="IX_eltern_tenant" tableName="eltern">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-156">
+      <createIndex indexName="IX_fall_tenant" tableName="fall">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-157">
+      <createIndex indexName="IX_familiensituation_tenant" tableName="familiensituation">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-158">
+      <createIndex indexName="IX_freiwillig_darlehen_dokument_tenant"
+                   tableName="freiwillig_darlehen_dokument">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-159">
+      <createIndex indexName="IX_freiwillig_darlehen_tenant"
+                   tableName="freiwillig_darlehen">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-160">
+      <createIndex indexName="IX_geschwister_tenant" tableName="geschwister">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-161">
+      <createIndex indexName="IX_gesetzlich_darlehen_tenant"
+                   tableName="gesetzlich_darlehen">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-162">
+      <createIndex indexName="IX_gesuch_dokument_kommentar_tenant"
+                   tableName="gesuch_dokument_kommentar">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-163">
+      <createIndex indexName="IX_gesuch_dokument_tenant" tableName="gesuch_dokument">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-164">
+      <createIndex indexName="IX_gesuch_formular_tenant" tableName="gesuch_formular">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-165">
+      <createIndex indexName="IX_gesuch_notiz_tenant" tableName="gesuch_notizen">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-166">
+      <createIndex indexName="IX_gesuch_tenant" tableName="gesuch">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-167">
+      <createIndex indexName="IX_gesuch_tranche_tenant" tableName="gesuch_tranche">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-168">
+      <createIndex indexName="IX_gesuchsjahr_tenant" tableName="gesuchsjahr">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-169">
+      <createIndex indexName="IX_gesuchsperiode_tenant" tableName="gesuchsperiode">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-170">
+      <createIndex indexName="IX_kind_tenant" tableName="kind">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-171">
+      <createIndex indexName="IX_lebenslauf_item_tenant" tableName="lebenslauf_item">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-172">
+      <createIndex indexName="IX_massendruck_tenant" tableName="massendruck_job">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-173">
+      <createIndex indexName="IX_notification_tenant" tableName="notification">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-174">
+      <createIndex indexName="IX_partner_tenant" tableName="partner">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-175">
+      <createIndex indexName="IX_person_in_ausbildung_tenant"
+                   tableName="person_in_ausbildung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-176">
+      <createIndex indexName="IX_rolle_tenant" tableName="rolle">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-177">
+      <createIndex indexName="IX_sachbearbeiter_gesuch_dokument_tenant"
+                   tableName="sachbearbeiter_gesuch_dokument">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-178">
+      <createIndex indexName="IX_sachbearbeiter_zuordnung_stammdaten_tenant"
+                   tableName="sachbearbeiter_zuordnung_stammdaten">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-179">
+      <createIndex indexName="IX_sapdelivery_tenant" tableName="sapdelivery">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-180">
+      <createIndex indexName="IX_scheduledtask_tenant" tableName="scheduledtask">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-181">
+      <createIndex indexName="IX_sozialdienst_tenant" tableName="sozialdienst">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-182">
+      <createIndex indexName="IX_statisticsdata_tenant" tableName="statisticsdata">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-183">
+      <createIndex indexName="IX_statistik_tenant" tableName="statistik">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-184">
+      <createIndex indexName="IX_statusprotokoll_tenant" tableName="statusprotokoll">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-185">
+      <createIndex indexName="IX_steuerdaten_access_tenant" tableName="steuerdaten_access">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-186">
+      <createIndex indexName="IX_steuerdaten_tenant" tableName="steuerdaten">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-187">
+      <createIndex indexName="IX_steuererklaerung_tenant" tableName="steuererklaerung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-188">
+      <createIndex indexName="IX_unterschriftenblatt_tenant"
+                   tableName="unterschriftenblatt">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-189">
+      <createIndex indexName="IX_verfuegung_dokument_tenant"
+                   tableName="verfuegung_dokument">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-190">
+      <createIndex indexName="IX_verfuegung_massendruck_tenant"
+                   tableName="verfuegung_massendruck">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-191">
+      <createIndex indexName="IX_verfuegung_tenant" tableName="verfuegung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-192">
+      <createIndex indexName="IX_zahlungsverbindung_tenant" tableName="zahlungsverbindung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-193">
+      <createIndex indexName="IX_zuordnung_tenant" tableName="zuordnung">
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-194">
+      <createIndex indexName="rolle_ZBED_IX" tableName="rolle" unique="true">
+         <column name="keycloak_identifier"/>
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-195">
+      <createIndex indexName="stip_decision_text_DWWL_IX"
+                   tableName="stip_decision_text"
+                   unique="true">
+         <column name="stip_decision"/>
+         <column name="tenant"/>
+      </createIndex>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-196">
+      <dropUniqueConstraint constraintName="UC_abschluss_mandant_bezeichnung_ausbildungskategorie_bildungsr"
+                            tableName="abschluss"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-197">
+      <dropUniqueConstraint constraintName="UC_land_laendercode_bfs_mandant" tableName="land"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-1">
+      <dropUniqueConstraint constraintName="IX_keycloak_identifier" tableName="rolle"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-3">
+      <dropUniqueConstraint constraintName="IX_stip_decision_text_stip_decision"
+                            tableName="stip_decision_text"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-198">
+      <dropColumn columnName="mandant" tableName="abschluss"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-199">
+      <dropColumn columnName="mandant" tableName="abschluss_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-200">
+      <dropColumn columnName="mandant" tableName="adresse"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-201">
+      <dropColumn columnName="mandant" tableName="adresse_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-202">
+      <dropColumn columnName="mandant" tableName="ausbildung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-203">
+      <dropColumn columnName="mandant" tableName="ausbildung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-204">
+      <dropColumn columnName="mandant" tableName="ausbildung_unterbruch_antrag"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-205">
+      <dropColumn columnName="mandant" tableName="ausbildung_unterbruch_antrag_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-206">
+      <dropColumn columnName="mandant" tableName="ausbildungsgang"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-207">
+      <dropColumn columnName="mandant" tableName="ausbildungsgang_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-208">
+      <dropColumn columnName="mandant" tableName="ausbildungsstaette"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-209">
+      <dropColumn columnName="mandant" tableName="ausbildungsstaette_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-210">
+      <dropColumn columnName="mandant" tableName="auszahlung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-211">
+      <dropColumn columnName="mandant" tableName="auszahlung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-212">
+      <dropColumn columnName="mandant" tableName="benutzer"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-213">
+      <dropColumn columnName="mandant" tableName="benutzer_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-214">
+      <dropColumn columnName="mandant" tableName="benutzereinstellungen"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-215">
+      <dropColumn columnName="mandant" tableName="benutzereinstellungen_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-216">
+      <dropColumn columnName="mandant" tableName="beschwerde_entscheid"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-217">
+      <dropColumn columnName="mandant" tableName="beschwerde_entscheid_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-218">
+      <dropColumn columnName="mandant" tableName="beschwerde_verlauf_entry"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-219">
+      <dropColumn columnName="mandant" tableName="beschwerde_verlauf_entry_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-220">
+      <dropColumn columnName="mandant" tableName="buchhaltung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-221">
+      <dropColumn columnName="mandant" tableName="buchhaltung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-222">
+      <dropColumn columnName="mandant" tableName="custom_dokument_typ"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-223">
+      <dropColumn columnName="mandant" tableName="custom_dokument_typ_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-224">
+      <dropColumn columnName="mandant" tableName="darlehen_buchhaltung_entry"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-225">
+      <dropColumn columnName="mandant" tableName="darlehen_buchhaltung_entry_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-226">
+      <dropColumn columnName="mandant" tableName="datenschutzbrief"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-227">
+      <dropColumn columnName="mandant" tableName="datenschutzbrief_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-228">
+      <dropColumn columnName="mandant" tableName="datenschutzbrief_massendruck"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-229">
+      <dropColumn columnName="mandant" tableName="datenschutzbrief_massendruck_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-230">
+      <dropColumn columnName="mandant" tableName="delegierung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-231">
+      <dropColumn columnName="mandant" tableName="delegierung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-232">
+      <dropColumn columnName="mandant" tableName="demo_data"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-233">
+      <dropColumn columnName="mandant" tableName="demo_data_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-234">
+      <dropColumn columnName="mandant" tableName="demo_data_import"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-235">
+      <dropColumn columnName="mandant" tableName="demo_data_import_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-236">
+      <dropColumn columnName="mandant" tableName="dokument"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-237">
+      <dropColumn columnName="mandant" tableName="dokument_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-238">
+      <dropColumn columnName="mandant" tableName="einnahmen_kosten"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-239">
+      <dropColumn columnName="mandant" tableName="einnahmen_kosten_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-240">
+      <dropColumn columnName="mandant" tableName="eltern"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-241">
+      <dropColumn columnName="mandant" tableName="eltern_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-242">
+      <dropColumn columnName="mandant" tableName="fall"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-243">
+      <dropColumn columnName="mandant" tableName="fall_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-244">
+      <dropColumn columnName="mandant" tableName="familiensituation"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-245">
+      <dropColumn columnName="mandant" tableName="familiensituation_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-246">
+      <dropColumn columnName="mandant" tableName="freiwillig_darlehen"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-247">
+      <dropColumn columnName="mandant" tableName="freiwillig_darlehen_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-248">
+      <dropColumn columnName="mandant" tableName="freiwillig_darlehen_dokument"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-249">
+      <dropColumn columnName="mandant" tableName="freiwillig_darlehen_dokument_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-250">
+      <dropColumn columnName="mandant" tableName="geschwister"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-251">
+      <dropColumn columnName="mandant" tableName="geschwister_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-252">
+      <dropColumn columnName="mandant" tableName="gesetzlich_darlehen"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-253">
+      <dropColumn columnName="mandant" tableName="gesetzlich_darlehen_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-254">
+      <dropColumn columnName="mandant" tableName="gesuch"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-255">
+      <dropColumn columnName="mandant" tableName="gesuch_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-256">
+      <dropColumn columnName="mandant" tableName="gesuch_dokument"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-257">
+      <dropColumn columnName="mandant" tableName="gesuch_dokument_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-258">
+      <dropColumn columnName="mandant" tableName="gesuch_dokument_kommentar"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-259">
+      <dropColumn columnName="mandant" tableName="gesuch_dokument_kommentar_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-260">
+      <dropColumn columnName="mandant" tableName="gesuch_formular"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-261">
+      <dropColumn columnName="mandant" tableName="gesuch_formular_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-262">
+      <dropColumn columnName="mandant" tableName="gesuch_notizen"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-263">
+      <dropColumn columnName="mandant" tableName="gesuch_notizen_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-264">
+      <dropColumn columnName="mandant" tableName="gesuch_tranche"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-265">
+      <dropColumn columnName="mandant" tableName="gesuch_tranche_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-266">
+      <dropColumn columnName="mandant" tableName="gesuchsjahr"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-267">
+      <dropColumn columnName="mandant" tableName="gesuchsjahr_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-268">
+      <dropColumn columnName="mandant" tableName="gesuchsperiode"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-269">
+      <dropColumn columnName="mandant" tableName="gesuchsperiode_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-270">
+      <dropColumn columnName="mandant" tableName="kind"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-271">
+      <dropColumn columnName="mandant" tableName="kind_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-272">
+      <dropColumn columnName="mandant" tableName="land"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-273">
+      <dropColumn columnName="mandant" tableName="land_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-274">
+      <dropColumn columnName="mandant" tableName="lebenslauf_item"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-275">
+      <dropColumn columnName="mandant" tableName="lebenslauf_item_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-276">
+      <dropColumn columnName="mandant" tableName="massendruck_job"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-277">
+      <dropColumn columnName="mandant" tableName="massendruck_job_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-278">
+      <dropColumn columnName="mandant" tableName="notification"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-279">
+      <dropColumn columnName="mandant" tableName="notification_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-280">
+      <dropColumn columnName="mandant" tableName="partner"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-281">
+      <dropColumn columnName="mandant" tableName="partner_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-282">
+      <dropColumn columnName="mandant" tableName="person_in_ausbildung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-283">
+      <dropColumn columnName="mandant" tableName="person_in_ausbildung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-284">
+      <dropColumn columnName="mandant" tableName="rolle"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-285">
+      <dropColumn columnName="mandant" tableName="rolle_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-286">
+      <dropColumn columnName="mandant" tableName="sachbearbeiter"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-287">
+      <dropColumn columnName="mandant" tableName="sachbearbeiter_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-288">
+      <dropColumn columnName="mandant" tableName="sachbearbeiter_gesuch_dokument"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-289">
+      <dropColumn columnName="mandant" tableName="sachbearbeiter_gesuch_dokument_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-290">
+      <dropColumn columnName="mandant" tableName="sachbearbeiter_zuordnung_stammdaten"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-291">
+      <dropColumn columnName="mandant"
+                  tableName="sachbearbeiter_zuordnung_stammdaten_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-292">
+      <dropColumn columnName="mandant" tableName="sapdelivery"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-293">
+      <dropColumn columnName="mandant" tableName="sapdelivery_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-294">
+      <dropColumn columnName="mandant" tableName="scheduledtask"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-295">
+      <dropColumn columnName="mandant" tableName="scheduledtask_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-296">
+      <dropColumn columnName="mandant" tableName="sozialdienst"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-297">
+      <dropColumn columnName="mandant" tableName="sozialdienst_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-298">
+      <dropColumn columnName="mandant" tableName="sozialdienstbenutzer"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-299">
+      <dropColumn columnName="mandant" tableName="sozialdienstbenutzer_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-300">
+      <dropColumn columnName="mandant" tableName="statisticsdata"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-301">
+      <dropColumn columnName="mandant" tableName="statisticsdata_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-302">
+      <dropColumn columnName="mandant" tableName="statistik"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-303">
+      <dropColumn columnName="mandant" tableName="statistik_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-304">
+      <dropColumn columnName="mandant" tableName="statusprotokoll"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-305">
+      <dropColumn columnName="mandant" tableName="statusprotokoll_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-306">
+      <dropColumn columnName="mandant" tableName="steuerdaten"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-307">
+      <dropColumn columnName="mandant" tableName="steuerdaten_access"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-308">
+      <dropColumn columnName="mandant" tableName="steuerdaten_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-309">
+      <dropColumn columnName="mandant" tableName="steuererklaerung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-310">
+      <dropColumn columnName="mandant" tableName="steuererklaerung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-311">
+      <dropColumn columnName="mandant" tableName="stip_decision_text"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-312">
+      <dropColumn columnName="mandant" tableName="stip_decision_text_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-313">
+      <dropColumn columnName="mandant" tableName="unterschriftenblatt"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-314">
+      <dropColumn columnName="mandant" tableName="unterschriftenblatt_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-315">
+      <dropColumn columnName="mandant" tableName="verfuegung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-316">
+      <dropColumn columnName="mandant" tableName="verfuegung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-317">
+      <dropColumn columnName="mandant" tableName="verfuegung_dokument"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-318">
+      <dropColumn columnName="mandant" tableName="verfuegung_dokument_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-319">
+      <dropColumn columnName="mandant" tableName="verfuegung_massendruck"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-320">
+      <dropColumn columnName="mandant" tableName="verfuegung_massendruck_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-321">
+      <dropColumn columnName="mandant" tableName="zahlungsverbindung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-322">
+      <dropColumn columnName="mandant" tableName="zahlungsverbindung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-323">
+      <dropColumn columnName="mandant" tableName="zuordnung"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-324">
+      <dropColumn columnName="mandant" tableName="zuordnung_aud"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-2">
+      <addUniqueConstraint columnNames="keycloak_identifier, tenant"
+                           constraintName="IX_keycloak_identifier"
+                           tableName="rolle"/>
+   </changeSet>
+   <changeSet author="philipp.schaerer (generated)" id="1782191412114-4">
+      <addUniqueConstraint columnNames="stip_decision, tenant"
+                           constraintName="IX_stip_decision_text_stip_decision"
+                           tableName="stip_decision_text"/>
+   </changeSet>
+</databaseChangeLog>

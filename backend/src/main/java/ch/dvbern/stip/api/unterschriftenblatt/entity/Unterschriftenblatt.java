@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.unterschriftenblatt.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.dokument.entity.Dokument;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp;
@@ -45,12 +45,12 @@ import org.hibernate.envers.Audited;
 @Table(
     name = "unterschriftenblatt",
     indexes = {
-        @Index(name = "IX_unterschriftenblatt_mandant", columnList = "mandant")
+        @Index(name = "IX_unterschriftenblatt_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class Unterschriftenblatt extends AbstractMandantEntity {
+public class Unterschriftenblatt extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "gesuch_id", foreignKey = @ForeignKey(name = "FK_unterschriftenblatt_gesuch_id"))

@@ -182,7 +182,7 @@ class BernStipDeciderTest {
         var decision = decider.decide(gesuch.getNewestGesuchTranche().get());
         assertThat(decision).isEqualTo(StipDeciderResult.NEGATIVVERFUEGUNG_NICHT_BERECHTIGTE_PERSON);
 
-        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT);
+        pia.setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT);
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setElterns(Set.of());
 
         decision = decider.decide(gesuch.getNewestGesuchTranche().get());
