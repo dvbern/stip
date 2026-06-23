@@ -132,8 +132,10 @@ quarkus:
     host: 'mailext.dvbern.ch'
     from: 'kstip@dvbern.ch'
   observability:
+    # To use tracing and nice grafana dashboard toggle this and otel.enabled bellow
     enabled: false
   otel:
+    enabled: false
     metric:
       enabled: true
     logs:
