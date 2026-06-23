@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  OnDestroy,
   effect,
   inject,
   input,
@@ -26,14 +27,13 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   templateUrl: './shared-feature-notifications.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureNotificationsComponent {
+export class SharedFeatureNotificationsComponent implements OnDestroy {
   @HostBinding('class') class = 'tw:dv-pass-height tw:p-6';
 
   notificationStore = inject(NotificationStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
 
-  // todo: needs fallback to cache for soz? fallIdFromGesuchCacheSig
   fallIdParamSig = input<string | undefined>(undefined, { alias: 'fallId' });
 
   constructor() {
@@ -52,5 +52,9 @@ export class SharedFeatureNotificationsComponent {
         });
       }
     });
+  }
+
+  ngOnDestroy() {
+    this.notificationStore.setSelectedNotificationId(undefined);
   }
 }

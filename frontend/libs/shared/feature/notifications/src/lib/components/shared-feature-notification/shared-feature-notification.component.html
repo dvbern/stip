@@ -20,6 +20,20 @@
     @if (notification.notificationText) {
       <hr class="tw:my-6 tw:border tw:border-dv-border" />
       <p class="tw:whitespace-pre-line">{{ notification.notificationText }}</p>
+
+      @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
+        <button
+          type="button"
+          class="tw:dv-button-outline tw:mt-6"
+          [attr.aria-label]="'sachbearbeitung-app.infos.beschwerde.table.document' | transloco"
+          [dvDownloadButton]="{
+            type: 'verfuegung',
+            id: notification.contextId,
+          }"
+        >
+          Download
+        </button>
+      }
     }
   }
 </ng-container>

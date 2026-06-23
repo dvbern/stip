@@ -1,7 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
 
 import {
   Notification,
@@ -14,6 +14,7 @@ import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
+  failure,
   fromCachedDataSig,
   handleApiResponse,
   initial,
@@ -105,6 +106,12 @@ export class NotificationStore extends signalStore(
                   ),
                 })),
               ),
+              catchError((error) => {
+                patchState(this, {
+                  markNotificationAsReadRequest: failure(error),
+                });
+                return EMPTY;
+              }),
             ),
         ),
       ),

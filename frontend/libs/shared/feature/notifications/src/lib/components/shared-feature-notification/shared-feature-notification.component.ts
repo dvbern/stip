@@ -11,11 +11,16 @@ import {
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NotificationStore } from '@dv/shared/data-access/notification';
+import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 
 @Component({
   selector: 'dv-shared-feature-notification',
-  imports: [TranslocoPipe, SharedUiTooltipDateComponent],
+  imports: [
+    TranslocoPipe,
+    SharedUiTooltipDateComponent,
+    SharedUiDownloadButtonDirective,
+  ],
   templateUrl: './shared-feature-notification.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,7 +56,7 @@ export class SharedFeatureNotificationComponent {
       if (notification && !notification.read) {
         setTimeout(() => {
           this.markAsRead(notification.id);
-        }, 5000);
+        }, 3000);
       }
     });
   }

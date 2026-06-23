@@ -102,11 +102,11 @@ export class GesuchAppPatternMainLayoutComponent {
       const gesuchId = this.gesuchIdSig();
       const darlehnen = this.darlehenStore.darlehenGsViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id;
-      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
       const gesuchHeader = this.gesuchHeaderStore.viewSig();
+      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);

@@ -4,19 +4,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  computed,
-  inject,
   input,
   output,
   signal,
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { RouterModule } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelNachricht } from '@dv/shared/model/nachricht';
-import { SharedUiNotificationDialogComponent } from '@dv/shared/ui/notification-dialog';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
 
@@ -37,8 +33,8 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 export class SharedUiNotificationsComponent {
   @HostBinding('class') class = '';
 
-  private dialog = inject(MatDialog);
-  readonly pageSize = 5;
+  // todo: implement in KSTIP-3146
+  // private dialog = inject(MatDialog);
   notificationsSig = input.required<SharedModelNachricht[]>({
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'notifications',
@@ -47,28 +43,17 @@ export class SharedUiNotificationsComponent {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     alias: 'selectedNotificationId',
   });
-  navigationMode = input<boolean>(false); // todo: needed? for responsive?
+  isMobile = input<boolean>(false);
   notificationClick = output<SharedModelNachricht>();
   newPageSig = signal<PageEvent | null>(null);
 
-  notificationsViewSig = computed(() => {
-    const notifications = this.notificationsSig();
-    const page = this.newPageSig();
-
-    if (!page) {
-      return notifications.slice(0, this.pageSize);
-    }
-    return notifications.slice(
-      page.pageIndex * page.pageSize,
-      page.pageIndex * page.pageSize + page.pageSize,
-    );
-  });
-
-  openNotification(notification: SharedModelNachricht) {
-    if (this.navigationMode()) {
-      this.notificationClick.emit(notification);
-    } else {
-      SharedUiNotificationDialogComponent.open(this.dialog, notification);
-    }
-  }
+  // todo: add scrolling to list in KSTIP-3146
+  // todo: implement in KSTIP-3146
+  // openNotification(notification: SharedModelNachricht) {
+  //   if (this.isMobile()) {
+  //     this.notificationClick.emit(notification);
+  //   } else {
+  //     SharedUiNotificationDialogComponent.open(this.dialog, notification);
+  //   }
+  // }
 }

@@ -14,7 +14,6 @@ type NotificationDialogData = {
   notification: SharedModelNachricht;
 };
 
-// todo: what to do with this?
 @Component({
   selector: 'dv-shared-ui-notification-dialog',
   imports: [
