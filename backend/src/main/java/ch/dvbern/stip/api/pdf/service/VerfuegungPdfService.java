@@ -72,7 +72,6 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.FONT_SIZE_BIG;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.PAGE_SIZE;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_TINY;
-import static ch.dvbern.stip.api.pdf.util.PdfConstants.STIPENDIENSTELLEN_LINK;
 
 @RequestScoped
 @RequiredArgsConstructor
