@@ -295,7 +295,9 @@ public class StatistikXMLService {
                     tenantIdentifier,
                     gemeindeLookupPortFactory
                 )
-                    .orElseThrow(StatistikGemeindeLookupException::new)
+                    .orElseGet(
+                        () -> KantonUtil.getByTenantIdentifier(tenantService.getCurrentTenantIdentifier()).getBfsCode()
+                    )
                     : null
             )
             .placeHist(null)
