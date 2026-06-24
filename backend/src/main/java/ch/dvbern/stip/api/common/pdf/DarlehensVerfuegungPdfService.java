@@ -67,6 +67,11 @@ import static ch.dvbern.stip.api.pdf.util.PdfConstants.SPACING_MEDIUM;
 public class DarlehensVerfuegungPdfService {
     private static final float[] TABLE_WIDTH_PERCENTAGES = { 30, 60 };
 
+    private enum DarlehenArt {
+        GESETZLICH,
+        FREIWILLIG
+    }
+
     private TL getTranslator(final Gesuch gesuch) {
         final Locale locale = gesuch
             .getLatestGesuchTranche()
@@ -92,7 +97,8 @@ public class DarlehensVerfuegungPdfService {
             darlehen.getRelatedGesuch(),
             darlehen.getDarlehenNr(),
             darlehen.getBetrag(),
-            darlehen.getEingabedatum()
+            darlehen.getEingabedatum(),
+            DarlehenArt.FREIWILLIG
         );
     }
 
@@ -101,7 +107,8 @@ public class DarlehensVerfuegungPdfService {
             darlehen.getGesuch(),
             darlehen.getDarlehenNr(),
             darlehen.getBetrag(),
-            darlehen.getGesuch().getEinreichedatum()
+            darlehen.getGesuch().getEinreichedatum(),
+            DarlehenArt.GESETZLICH
         );
     }
 
@@ -109,7 +116,8 @@ public class DarlehensVerfuegungPdfService {
         final Gesuch gesuch,
         final String darlehenNr,
         final Integer betrag,
-        final LocalDate datum
+        final LocalDate datum,
+        final DarlehenArt darlehenArt
     ) {
         final PdfFont pdfFont = PdfUtils.createFont();
         final PdfFont pdfFontBold = PdfUtils.createFontBold();
@@ -140,7 +148,8 @@ public class DarlehensVerfuegungPdfService {
                     pdfFont,
                     pdfFontBold,
                     pdfFontItalic,
-                    ausbildungsbeitraegeUri
+                    ausbildungsbeitraegeUri,
+                    darlehenArt
                 );
                 document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 PdfUtils.header(
@@ -167,7 +176,8 @@ public class DarlehensVerfuegungPdfService {
                 pdfFont,
                 pdfFontBold,
                 pdfFontItalic,
-                ausbildungsbeitraegeUri
+                ausbildungsbeitraegeUri,
+                darlehenArt
             );
 
         } catch (IOException e) {
@@ -208,7 +218,8 @@ public class DarlehensVerfuegungPdfService {
         final PdfFont pdfFont,
         final PdfFont pdfFontBold,
         final PdfFont pdfFontItalic,
-        final Link ausbildungsbeitraegeUri
+        final Link ausbildungsbeitraegeUri,
+        final DarlehenArt darlehenArt
     ) {
 
         PdfUtils
@@ -245,18 +256,37 @@ public class DarlehensVerfuegungPdfService {
             PdfUtils.getAnredeParagraph(personInAusbildung, pdfFont, translator, FONT_SIZE_BIG, leftMargin)
         );
 
-        final var text1 = String.format(
-            translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins"),
-            DateUtil.formatDate(datum)
-        );
-        document.add(
-            PdfUtils.createParagraph(
-                pdfFont,
-                FONT_SIZE_BIG,
-                leftMargin,
-                text1
-            )
-        );
+        if (darlehenArt == DarlehenArt.FREIWILLIG) {
+            final var text = String.format(
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei.freiwillig"),
+                DateUtil.formatDate(datum)
+            );
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    text
+                )
+            );
+        } else {
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins.gesetzlich")…
+                )
+            );
+            document.add(
+                PdfUtils.createParagraph(
+                    pdfFont,
+                    FONT_SIZE_BIG,
+                    leftMargin,
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei.gesetzlich")
+                )
+            );
+        }
 
         addDetailsForDarlehenTable(document, gesuch, betrag, translator, pdfFont, pdfFontBold);
 
@@ -265,9 +295,9 @@ public class DarlehensVerfuegungPdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.zwei"),
-                "\n",
                 translator.translate("stip.darlehen.verfuegung.positiv.textBlock.drei"),
+                "\n",
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.vier"),
                 "\n"
             )
         );
@@ -277,7 +307,7 @@ public class DarlehensVerfuegungPdfService {
                 pdfFont,
                 FONT_SIZE_BIG,
                 leftMargin,
-                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.vier")
+                translator.translate("stip.darlehen.verfuegung.positiv.textBlock.fuenf")
             )
         );
 
