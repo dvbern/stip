@@ -15,9 +15,9 @@
       <div
         class="tw:group tw:relative tw:border tw:rounded-lg tw:p-4"
         [ngClass]="{
-          'tw:border-dv-blue tw:bg-dv-blue-subtle': item.col === 'LEFT',
-          'tw:border-dv-gray-light tw:bg-white': item.col === 'RIGHT',
-          'tw:border-dv-red tw:bg-dv-red-subtle': item.col === 'BOTH',
+          'tw:border-dv-blue tw:bg-dv-blue-subtle': item.col === 'LEFT' && !item.invalid,
+          'tw:border-dv-gray-light tw:bg-white': item.col === 'RIGHT' && !item.invalid,
+          'tw:border-dv-red tw:bg-dv-red-subtle': item.col === 'BOTH' || item.invalid,
         }"
         [class.tw:group/both]="isTimelineGapBlock(item)"
         [style]="

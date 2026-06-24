@@ -54,6 +54,7 @@ import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
 import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
@@ -261,7 +262,7 @@ class AusbildungResourceTest {
 
         assertThat(
             gesuchWithChangesDto.getGesuchTrancheToWorkWith().getGesuchFormular().getLebenslaufItems(),
-            nullValue()
+            hasSize(1)
         );
     }
 

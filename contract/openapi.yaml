@@ -11063,6 +11063,9 @@ components:
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
           type: string
+        invalid:
+          description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+          type: boolean
     KindUpdate:
       title: Root Type for Kind
       required:

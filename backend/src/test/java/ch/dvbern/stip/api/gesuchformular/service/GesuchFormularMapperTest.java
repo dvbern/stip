@@ -18,7 +18,6 @@
 package ch.dvbern.stip.api.gesuchformular.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -78,7 +77,6 @@ import ch.dvbern.stip.generated.dto.ElternUpdateDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularDto;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
-import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDto;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDto;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDto;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDto;
@@ -248,39 +246,6 @@ class GesuchFormularMapperTest {
 
         mapper.resetDependentDataBeforeUpdate(update, target);
         assertThat(update.getEinnahmenKosten().getWgWohnend(), is(nullValue()));
-    }
-
-    @Test
-    void resetLebenslaufItemsClearsLebenslaufItems() {
-        // Arrange
-        final var updatePia = new PersonInAusbildungUpdateDto();
-        updatePia.setGeburtsdatum(LocalDate.now().minusYears(20));
-
-        final var dateFormatter = DateTimeFormatter.ofPattern("MM.yyyy");
-        final var updateLebenslaufItem = new LebenslaufItemUpdateDto();
-        updateLebenslaufItem.setVon(LocalDate.now().minusMonths(1).format(dateFormatter));
-        updateLebenslaufItem.setBis(LocalDate.now().plusMonths(1).format(dateFormatter));
-
-        final var updateLebenslaufItems = new ArrayList<LebenslaufItemUpdateDto>();
-        updateLebenslaufItems.add(updateLebenslaufItem);
-
-        final var update = new GesuchFormularUpdateDto();
-        update.setPersonInAusbildung(updatePia);
-        update.setLebenslaufItems(updateLebenslaufItems);
-
-        final var mapper = createMapper();
-        final var target = initTarget();
-
-        // Initialise target
-        mapper.partialUpdate(update, target);
-
-        updatePia.setGeburtsdatum(LocalDate.now().minusYears(10));
-
-        // Act
-        mapper.resetLebenslaufItems(update, target);
-
-        // Assert
-        assertThat(update.getLebenslaufItems().size(), is(0));
     }
 
     @Test

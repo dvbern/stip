@@ -13,47 +13,62 @@ describe('TwoColumnTimeline', () => {
       label: { type: 'TEXT', title: 'Informatiker EFZ' },
       von: new Date(2016, 7),
       bis: new Date(2017, 11),
+      invalid: false,
       editable: true,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem,
+    },
     JobA: {
       id: '12',
       col: 'RIGHT',
       label: { type: 'TEXT', title: 'Job A' },
       von: new Date(2016, 7),
       bis: new Date(2016, 9),
+      invalid: false,
       editable: true,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem,
+    },
     JobB: {
       id: '13',
       col: 'RIGHT',
       label: { type: 'TEXT', title: 'Job B' },
       von: new Date(2017, 7),
       bis: new Date(2017, 10),
+      invalid: false,
       editable: true,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem,
+    },
     JobC: {
       id: '14',
       col: 'RIGHT',
       label: { type: 'TEXT', title: 'Job C' },
       von: new Date(2017, 8),
       bis: new Date(2017, 8),
+      invalid: false,
       editable: true,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem,
+    },
     JobD: {
       id: '15',
       col: 'RIGHT',
       label: { type: 'TEXT', title: 'Job D' },
       von: new Date(2017, 10),
       bis: new Date(2017, 11),
+      invalid: false,
       editable: true,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem,
+    },
+  } satisfies Record<string, TimelineRawItem>;
+  const ausbildungItem: TimelineRawItem = {
+    id: 'planned-ausbildung',
+    col: 'LEFT',
+    label: { type: 'TEXT', title: 'Ausbildung' },
+    von: new Date(2017, 12),
+    bis: new Date(2021, 11),
+    invalid: false,
+    editable: false,
+    ausbildungAbgeschlossen: false,
   };
-  const dummyItems = createDummyItems();
+  const [dummyItems, dummyAusbildung] = createDummyItems();
 
   beforeEach(() => {
     vitest.spyOn(console, 'log').mockImplementation(() => {
@@ -63,28 +78,35 @@ describe('TwoColumnTimeline', () => {
 
   it('should fillWith correctly on empy', () => {
     const result = new TwoColumnTimeline();
-    result.fillWith(new Date(2016, 1), []);
+    result.fillWith(new Date(2016, 1), [], ausbildungItem);
     expect(result.leftCols).toEqual(1);
     expect(result.rightCols).toEqual(1);
   });
 
   it('should fillWith correctly like dummyItems', () => {
     const result = new TwoColumnTimeline();
-    result.fillWith(new Date(2016, 1), [
-      testItems.EFZ,
-      testItems.JobA,
-      testItems.JobB,
-      testItems.JobC,
-      testItems.JobD,
-    ]);
-    expect(result.items).toStrictEqual(dummyItems);
+    result.fillWith(
+      new Date(2016, 1),
+      [
+        testItems.EFZ,
+        testItems.JobA,
+        testItems.JobB,
+        testItems.JobC,
+        testItems.JobD,
+      ],
+      ausbildungItem,
+    );
+    expect(result.items).toStrictEqual([...dummyItems, dummyAusbildung]);
   });
 
-  function createDummyItems() {
+  function createDummyItems(): [
+    (TimelineBusyBlock | TimelineGapBlock)[],
+    TimelineBusyBlock,
+  ] {
     let leftIndex = 1;
     let rightIndex = 1;
 
-    const items = [];
+    const items: (TimelineBusyBlock | TimelineGapBlock)[] = [];
 
     items.push(
       // gap
@@ -104,78 +126,69 @@ describe('TwoColumnTimeline', () => {
     items.push(
       // job
       {
-        col: 'RIGHT',
-        label: { type: 'TEXT', title: 'Job A' },
-        von: testItems.JobA.von,
-        bis: testItems.JobA.bis,
-        editable: true,
-        id: '12',
+        ...testItems.JobA,
         positionStartRow: rightIndex,
         positionRowSpan: 1,
         positionStartCol: 2,
         positionColSpan: 1,
         ausbildungAbgeschlossen: false,
         children: [testItems.JobA],
-      } as TimelineBusyBlock,
+      },
     );
     rightIndex += 1;
 
     items.push(
       // ausbildung
       {
-        col: 'LEFT',
-        label: { type: 'TEXT', title: 'Informatiker EFZ' },
-        von: testItems.EFZ.von,
-        bis: testItems.EFZ.bis,
-        editable: true,
-        id: '11',
+        ...testItems.EFZ,
         positionStartRow: leftIndex,
         positionRowSpan: 5,
         positionStartCol: 1,
         positionColSpan: 1,
         ausbildungAbgeschlossen: false,
         children: [testItems.EFZ],
-      } as TimelineBusyBlock,
+      },
     );
     rightIndex += 1;
 
     items.push(
       // job
       {
-        col: 'RIGHT',
-        label: { type: 'TEXT', title: 'Job B' },
-        von: testItems.JobB.von,
-        bis: testItems.JobB.bis,
-        editable: true,
-        id: '13',
+        ...testItems.JobB,
         positionStartRow: rightIndex,
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
         ausbildungAbgeschlossen: false,
         children: [testItems.JobB, testItems.JobC],
-      } as TimelineBusyBlock,
+      },
     );
     rightIndex += 1;
 
     items.push(
       // job
       {
-        col: 'RIGHT',
-        label: { type: 'TEXT', title: 'Job D' },
-        von: testItems.JobD.von,
-        bis: testItems.JobD.bis,
-        editable: true,
-        id: '15',
+        ...testItems.JobD,
         positionStartRow: rightIndex,
         positionRowSpan: 2,
         positionStartCol: 2,
         positionColSpan: 1,
         ausbildungAbgeschlossen: false,
         children: [testItems.JobD],
-      } as TimelineBusyBlock,
+      },
     );
 
-    return items;
+    return [
+      items,
+      {
+        ...ausbildungItem,
+        positionStartRow: 7,
+        positionRowSpan: 1,
+        positionStartCol: 1,
+        positionColSpan: 1,
+        ausbildungAbgeschlossen: false,
+        children: [ausbildungItem],
+      },
+    ];
   }
 });

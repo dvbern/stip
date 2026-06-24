@@ -214,12 +214,6 @@ import org.jilt.BuilderStyle;
     }, property = "einnahmenKostenPartner",
     einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
-@LebenslaufAusbildungUeberschneidenConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        LebenslaufItemPageValidation.class
-    }, property = "lebenslaufItems"
-)
 @PartnerNullRequiredWhenAlleinstehendConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -262,7 +256,6 @@ import org.jilt.BuilderStyle;
         AenderungGesuchDokumentsAcceptedValidationGroup.class
     }
 )
-@NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @SteuerdatenTabRequiredConstraint(
     groups = {
         SteuerdatenPageValidation.class
