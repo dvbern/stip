@@ -27,7 +27,6 @@ import ch.dvbern.stip.api.ausbildung.repo.AusbildungRepository;
 import ch.dvbern.stip.api.ausbildung.repo.AusbildungsgangRepository;
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsException;
-import ch.dvbern.stip.api.common.service.DateMapperImpl;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.validation.CustomConstraintViolation;
 import ch.dvbern.stip.api.common.validation.ValidationsConstant;
@@ -118,14 +117,6 @@ public class AusbildungService {
 
         final var gesuch = ausbildung.getGesuchs().get(0);
 
-        // reset lebenslaufitems of each gesuchtranche if ausbildungBegin has changed
-        if (
-            !ausbildung.getAusbildungBegin()
-                .equals(DateMapperImpl.monthYearToBeginOfMonth(ausbildungUpdateDto.getAusbildungBegin()))
-        ) {
-            gesuch.getGesuchTranchen()
-                .forEach(gesuchTranche -> gesuchTranche.getGesuchFormular().getLebenslaufItems().clear());
-        }
         final var oldAusbildungsGang = ausbildung.getAusbildungsgang();
         ausbildung = ausbildungMapper.partialUpdate(ausbildungUpdateDto, ausbildung);
 

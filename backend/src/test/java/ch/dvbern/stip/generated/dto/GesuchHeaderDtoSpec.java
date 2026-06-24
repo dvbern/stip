@@ -18,6 +18,7 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.GesuchAenderungsDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchInfoDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDtoSpec;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -44,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class GesuchHeaderDtoSpec {
   public static final String JSON_PROPERTY_INITIAL = "initial";
-  private VerfuegtGesuchDtoSpec initial;
+  private InitialGesuchsDtoSpec initial;
 
   public static final String JSON_PROPERTY_VERSIONS = "versions";
   private List<VerfuegtGesuchDtoSpec> versions;
@@ -61,7 +62,7 @@ public class GesuchHeaderDtoSpec {
   public GesuchHeaderDtoSpec() {
   }
 
-  public GesuchHeaderDtoSpec initial(VerfuegtGesuchDtoSpec initial) {
+  public GesuchHeaderDtoSpec initial(InitialGesuchsDtoSpec initial) {
     
     this.initial = initial;
     return this;
@@ -75,14 +76,14 @@ public class GesuchHeaderDtoSpec {
   @JsonProperty(JSON_PROPERTY_INITIAL)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public VerfuegtGesuchDtoSpec getInitial() {
+  public InitialGesuchsDtoSpec getInitial() {
     return initial;
   }
 
 
   @JsonProperty(JSON_PROPERTY_INITIAL)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setInitial(VerfuegtGesuchDtoSpec initial) {
+  public void setInitial(InitialGesuchsDtoSpec initial) {
     this.initial = initial;
   }
 

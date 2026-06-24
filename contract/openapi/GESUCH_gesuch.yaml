@@ -149,6 +149,33 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
+  '/gesuch/eingereicht/{gesuchTrancheId}':
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: './components/common.yaml#/Gesuch'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getEingereichtTranche
+      summary: Returns the inital eingereicht tranche by gesuchTrancheId
   '/gesuch/gs/{gesuchTrancheId}':
     parameters:
       - name: gesuchTrancheId
@@ -1479,6 +1506,13 @@ components:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
         canAenderungEinreichen:
           type: boolean
+    InitialGesuchs:
+      type: object
+      properties:
+        eingereichtGesuch:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        verfuegtGesuch:
+          $ref: '#/components/schemas/VerfuegtGesuch'
     VerfuegtGesuch:
       type: object
       required:
@@ -1530,7 +1564,7 @@ components:
       type: object
       properties:
         initial:
-          $ref: '#/components/schemas/VerfuegtGesuch'
+          $ref: '#/components/schemas/InitialGesuchs'
         versions:
           type: array
           items:

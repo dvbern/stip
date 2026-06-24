@@ -228,7 +228,7 @@ public class Gesuch extends AbstractTenantEntity {
     private InBearbeitungSbReason inBearbeitungSbReason;
 
     @Nullable
-    @OneToOne(mappedBy = "gesuch", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "gesuch", orphanRemoval = true, cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")

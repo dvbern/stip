@@ -22,8 +22,9 @@
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"
         [initialSig]="headerViewSig().initial"
-        [isInitialRouteSig]="isInitialRouteSig()"
         [gesuchIdSig]="gesuchIdSig()"
+        [isInitialRouteSig]="isInitialRouteSig()"
+        [isEingereichtRouteSig]="isEingereichtRouteSig()"
         [isGesuchRouteSig]="isGesuchRouteSig()"
         [trancheIdSig]="trancheIdSig()"
         [currentTranchenSig]="this.headerViewSig().currentTranches"
@@ -96,7 +97,7 @@
     </div>
   </dv-shared-pattern-gesuch-info-bar>
 
-  @if (berechnungIdSig()) {
+  @if (berechnungIdSig() || isEingereichtRouteSig()) {
     <div
       class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
     >
