@@ -275,7 +275,7 @@ public class DarlehensVerfuegungPdfService {
                     pdfFont,
                     FONT_SIZE_BIG,
                     leftMargin,
-                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins.gesetzlich")…
+                    translator.translate("stip.darlehen.verfuegung.positiv.textBlock.eins.gesetzlich")
                 )
             );
             document.add(
