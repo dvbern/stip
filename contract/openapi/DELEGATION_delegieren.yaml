@@ -260,7 +260,7 @@ components:
           $ref: './components/common.yaml#/LocalDate'
     DelegierungEntry:
       required:
-        - mandant
+        - tenant
       type: object
       allOf:
         - $ref: '#/components/schemas/Delegierung'
@@ -269,7 +269,7 @@ components:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
           type: string
-        mandant:
+        tenant:
           type: string
     PaginatedSozDashboard:
       allOf:

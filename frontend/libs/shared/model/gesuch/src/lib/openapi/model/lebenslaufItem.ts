@@ -34,6 +34,10 @@ export interface LebenslaufItem {
      * Required wenn taetigkeitsart != null
      */
     taetigkeitsBeschreibung?: string;
+    /**
+     * Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+     */
+    invalid?: boolean;
 }
 
 

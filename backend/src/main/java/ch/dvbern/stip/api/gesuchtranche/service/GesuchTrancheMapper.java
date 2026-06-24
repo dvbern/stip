@@ -22,6 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -128,16 +129,17 @@ public abstract class GesuchTrancheMapper {
     @Named("afterMappingWithoutConfidentialFields")
     @AfterMapping
     protected void afterMappingWithoutConfidentialFields(
-        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
-        @Context GesuchTranche context
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
     ) {
-        removeHiddenElternsData(gesuchTrancheDto, context);
-        removeHiddenGeschwistersData(gesuchTrancheDto, context);
+        markInvalidLebenslaufItems(gesuchTranche, gesuchTrancheDto);
+        removeHiddenElternsData(gesuchTrancheDto, gesuchTranche);
+        removeHiddenGeschwistersData(gesuchTrancheDto, gesuchTranche);
     }
 
     protected void removeHiddenElternsData(
         GesuchTrancheDto gesuchTrancheDto,
-        GesuchTranche context
+        GesuchTranche gesuchTranche
     ) {
         Stream.of(
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
@@ -147,7 +149,7 @@ public abstract class GesuchTrancheMapper {
             .forEach(ek -> ek.setSteuern(null));
 
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
-        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (eltern != null) {
             eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
         }
@@ -293,5 +295,30 @@ public abstract class GesuchTrancheMapper {
                     )
                     .toList()
             );
+    }
+
+    @AfterMapping
+    public void markInvalidLebenslaufItems(
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
+    ) {
+        final var ausbildung = gesuchTranche.getGesuch().getAusbildung();
+        final var invalidLebenslaufItemsIds = gesuchTranche.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(
+                item -> item.getBis().isAfter(ausbildung.getAusbildungBegin())
+            )
+            .map(AbstractEntity::getId)
+            .toList();
+
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getLebenslaufItems())) {
+            return;
+        }
+        gesuchTrancheDto.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(item -> invalidLebenslaufItemsIds.contains(item.getId()))
+            .forEach(itemDto -> itemDto.setInvalid(true));
     }
 }

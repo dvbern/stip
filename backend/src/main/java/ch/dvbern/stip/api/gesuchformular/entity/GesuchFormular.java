@@ -22,7 +22,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.validation.EinnahmenKostenPartnerNeglectedFieldsNullConstraint;
 import ch.dvbern.stip.api.common.validation.HasPageValidation;
 import ch.dvbern.stip.api.common.validation.Severity;
@@ -218,12 +218,6 @@ import org.jilt.BuilderStyle;
     }, property = "einnahmenKostenPartner",
     einnahmenKostenType = EinnahmenKostenType.PARTNER
 )
-@LebenslaufAusbildungUeberschneidenConstraint(
-    groups = {
-        GesuchEinreichenValidationGroup.class,
-        LebenslaufItemPageValidation.class
-    }, property = "lebenslaufItems"
-)
 @PartnerNullRequiredWhenAlleinstehendConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class,
@@ -266,7 +260,6 @@ import org.jilt.BuilderStyle;
         AenderungGesuchDokumentsAcceptedValidationGroup.class
     }
 )
-@NoOverlapInAusbildungenConstraint(property = "lebenslaufItems")
 @SteuerdatenTabRequiredConstraint(
     groups = {
         SteuerdatenPageValidation.class
@@ -312,7 +305,7 @@ import org.jilt.BuilderStyle;
         @Index(name = "IX_gesuch_formular_partner_id", columnList = "partner_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_id", columnList = "einnahmen_kosten_id"),
         @Index(name = "FK_gesuch_formular_einnahmen_kosten_partner_id", columnList = "einnahmen_kosten_id"),
-        @Index(name = "IX_gesuch_formular_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_formular_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -320,7 +313,7 @@ import org.jilt.BuilderStyle;
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class GesuchFormular extends AbstractMandantEntity {
+public class GesuchFormular extends AbstractTenantEntity {
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(

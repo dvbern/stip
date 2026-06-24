@@ -60,6 +60,8 @@ export class TwoColumnTimelineComponent {
   ausbildungsstaettes = input.required<AusbildungsstaetteSlim[]>();
   language = input.required<string>();
 
+  plannedAusbildungId = 'planned-ausbildung';
+
   constructor() {
     this.ausbildungsstaetteStore.loadAbschluesse$();
 
@@ -82,7 +84,7 @@ export class TwoColumnTimelineComponent {
   setLebenslaufItems(
     expectedSartDate: Date | null,
     lebenslaufItems: LebenslaufItemUpdate[],
-    plannedAusbildung: Ausbildung | undefined,
+    plannedAusbildung: Ausbildung,
     ausbildungsstaettes: AusbildungsstaetteSlim[],
   ) {
     const timelineRawItems = lebenslaufItems.map(
@@ -93,6 +95,7 @@ export class TwoColumnTimelineComponent {
           bis: dateFromMonthYearString(lebenslaufItem.bis),
           id: lebenslaufItem.id,
           label: this.getLebenslaufItemLabel(lebenslaufItem),
+          invalid: !!lebenslaufItem.invalid,
           editable: true,
           wohnsitz: lebenslaufItem.wohnsitz,
           ausbildungAbgeschlossen: lebenslaufItem.ausbildungAbgeschlossen,
@@ -110,11 +113,11 @@ export class TwoColumnTimelineComponent {
       (each) => each.id === plannedAusbildung?.ausbildungsgang?.id,
     );
 
-    timelineRawItems.push({
-      id: 'planned-ausbildung',
+    this.timeline.fillWith(expectedSartDate, timelineRawItems, {
+      id: this.plannedAusbildungId,
       col: 'LEFT',
-      von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin),
-      bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd),
+      von: dateFromMonthYearString(plannedAusbildung?.ausbildungBegin)!,
+      bis: dateFromMonthYearString(plannedAusbildung?.ausbildungEnd)!,
       label: {
         type: 'TEXT',
         title:
@@ -132,11 +135,10 @@ export class TwoColumnTimelineComponent {
             }
           : {}),
       },
+      invalid: false,
       editable: false,
       ausbildungAbgeschlossen: false,
-    } as TimelineRawItem);
-
-    this.timeline.fillWith(expectedSartDate, timelineRawItems);
+    });
     this.cd.markForCheck();
   }
 

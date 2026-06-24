@@ -191,7 +191,6 @@ export class SachbearbeitungAppFeatureAdministrationBfsStatistikComponent {
 
 const filterData = (data: Statistik, filter: string) => {
   const filterCriteria = JSON.parse(filter);
-  console.log('filtering', { data, filter });
 
   return Object.entries(filterCriteria).every(([key, value]) =>
     filterFn(key as FilterTypes, value, data),

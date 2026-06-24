@@ -31,7 +31,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.beschwerdeentscheid.entity.BeschwerdeEntscheid;
 import ch.dvbern.stip.api.beschwerdeverlauf.entity.BeschwerdeVerlaufEntry;
 import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.datenschutzbrief.entity.Datenschutzbrief;
 import ch.dvbern.stip.api.dokument.entity.SachbearbeiterGesuchDokument;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
@@ -89,7 +89,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
     name = "gesuch",
     indexes = {
         @Index(name = "IX_gesuch_gesuchsperiode_id", columnList = "gesuchsperiode_id"),
-        @Index(name = "IX_gesuch_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_tenant", columnList = "tenant")
     }
 )
 @Getter
@@ -97,7 +97,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_SMALL_L
 @Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Gesuch extends AbstractMandantEntity {
+public class Gesuch extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     @JoinColumn(name = "ausbildung_id", foreignKey = @ForeignKey(name = "FK_gesuch_ausbildung_id"))
@@ -228,7 +228,7 @@ public class Gesuch extends AbstractMandantEntity {
     private InBearbeitungSbReason inBearbeitungSbReason;
 
     @Nullable
-    @OneToOne(mappedBy = "gesuch", orphanRemoval = true)
+    @OneToOne(mappedBy = "gesuch", orphanRemoval = true, cascade = CascadeType.REMOVE)
     private Statisticsdata statisticsdata;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, mappedBy = "gesuch")

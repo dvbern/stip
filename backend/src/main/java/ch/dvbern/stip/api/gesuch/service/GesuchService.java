@@ -101,7 +101,6 @@ import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
@@ -125,6 +124,7 @@ import ch.dvbern.stip.generated.dto.GesuchUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import ch.dvbern.stip.generated.dto.GesuchZurueckweisenResponseDto;
 import ch.dvbern.stip.generated.dto.GesuchsperiodeSelectErrorDto;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.PaginatedSbGesucheDashboardDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
@@ -995,8 +995,21 @@ public class GesuchService {
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
-    public Verfuegung getLatestVerfuegungForGesuch(final UUID gesuchId) {
-        return verfuegungService.getLatestVerfuegung(gesuchId);
+    @Transactional
+    public GesuchDto getEingereichtGesuchByTrancheId(UUID trancheId) {
+        final var tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
+        final var gesuch = tranche.getGesuch();
+
+        final var eingereichtTranche =
+            gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
+                .flatMap(eingereichtGesuch -> eingereichtGesuch.getTranchenTranchen().findFirst())
+                .orElseThrow(NotFoundException::new);
+
+        return gesuchMapperUtil.mapWithTranche(
+            eingereichtTranche.getGesuch(),
+            eingereichtTranche,
+            true
+        );
     }
 
     @Transactional
@@ -1430,20 +1443,26 @@ public class GesuchService {
     }
 
     @Transactional
-    public VerfuegtGesuchDto getInitialGesuchTranches(final Gesuch gesuch) {
-        final var initialVerfuegtGesuchOpt =
+    public InitialGesuchsDto getInitialGesuchTranches(final Gesuch gesuch) {
+        final var verfuegtGesuchOpt =
             gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.VERFUEGT);
-        if (initialVerfuegtGesuchOpt.isEmpty()) {
+        final var eingerichtGesuchOpt =
+            gesuchHistoryService.getFirstWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT);
+        if (verfuegtGesuchOpt.isEmpty() && eingerichtGesuchOpt.isEmpty()) {
             return null;
         }
-        final var initialVerfuegtGesuch = initialVerfuegtGesuchOpt.get();
-        final var verfuegtGesuch = new VerfuegtGesuchDto();
-        verfuegtGesuch.setTranchen(
-            initialVerfuegtGesuch.getGesuchTranchen().stream().map(gesuchTrancheMapper::toSlimDto).toList()
-        );
-        verfuegtGesuch.setTimestamp(initialVerfuegtGesuch.getTimestampMutiert().toLocalDate());
-        verfuegtGesuch.setBerechnungId(initialVerfuegtGesuch.getVerfuegungs().getLast().getId());
-        return verfuegtGesuch;
+        final var eingereichtGesuch = eingerichtGesuchOpt
+            .map(eingereicht -> gesuchTrancheMapper.toSlimDto(eingereicht.getLatestGesuchTranche()))
+            .orElse(null);
+        final var verfuegtGesuch = verfuegtGesuchOpt.map(
+            verfuegt -> new VerfuegtGesuchDto()
+                .tranchen(
+                    verfuegt.getGesuchTranchen().stream().map(gesuchTrancheMapper::toSlimDto).toList()
+                )
+                .timestamp(verfuegt.getTimestampMutiert().toLocalDate())
+                .berechnungId(verfuegt.getVerfuegungs().getLast().getId())
+        ).orElse(null);
+        return new InitialGesuchsDto(eingereichtGesuch, verfuegtGesuch);
     }
 
     public List<VerfuegtGesuchDto> getHistorizedVerfuegtVersionsOfGesuch(final Gesuch gesuch) {

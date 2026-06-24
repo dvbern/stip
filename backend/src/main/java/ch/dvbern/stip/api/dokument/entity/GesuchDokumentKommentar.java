@@ -17,7 +17,7 @@
 
 package ch.dvbern.stip.api.dokument.entity;
 
-import ch.dvbern.stip.api.common.entity.AbstractMandantEntity;
+import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
 import ch.dvbern.stip.api.common.util.Constants;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
@@ -42,12 +42,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_INPUT_M
 @Table(
     name = "gesuch_dokument_kommentar",
     indexes = {
-        @Index(name = "IX_gesuch_dokument_kommentar_mandant", columnList = "mandant")
+        @Index(name = "IX_gesuch_dokument_kommentar_tenant", columnList = "tenant")
     }
 )
 @Getter
 @Setter
-public class GesuchDokumentKommentar extends AbstractMandantEntity {
+public class GesuchDokumentKommentar extends AbstractTenantEntity {
     @NotNull
     @ManyToOne(optional = false)
     @JoinColumn(

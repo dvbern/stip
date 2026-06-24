@@ -768,29 +768,6 @@ class GesuchServiceTest {
 
     @Test
     @TestAsGesuchsteller
-    void resetLebenslaufIfGebrutsdatumChanged() {
-        GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
-        GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
-
-        assertThat(
-            tranche.getGesuchFormular().getLebenslaufItems().size(),
-            Matchers.is(1)
-        );
-
-        gesuchUpdateDto.getGesuchTrancheToWorkWith()
-            .getGesuchFormular()
-            .getPersonInAusbildung()
-            .setGeburtsdatum(LocalDate.of(2000, 10, 11));
-        when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-        gesuchService.updateGesuch(any(), gesuchUpdateDto, true);
-        assertThat(
-            tranche.getGesuchFormular().getLebenslaufItems().size(),
-            Matchers.is(0)
-        );
-    }
-
-    @Test
-    @TestAsGesuchsteller
     void noResetLebenslaufIfNoUpdateOfPersonInAusbildung() {
         GesuchUpdateDto gesuchUpdateDto = GesuchGenerator.createGesuch();
         GesuchTranche tranche = initTrancheFromGesuchUpdate(gesuchUpdateDto);
@@ -943,40 +920,6 @@ class GesuchServiceTest {
             Matchers.is(0)
         );
     }
-
-    // TODO KSTIP-1236: Enable this test
-    // @Test
-    // @TestAsGesuchsteller
-    // void gesuchEinreichenTest() {
-    // GesuchTranche tranche = initTrancheFromGesuchUpdate(GesuchGenerator.createFullGesuch());
-    // tranche.getGesuchFormular()
-    // .getAusbildung()
-    // .setAusbildungsgang(new Ausbildungsgang().setBildungsart(new Bildungsart()));
-    // final var oldZivilstand = tranche.getGesuchFormular().getPersonInAusbildung().getZivilstand();
-    // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(LEDIG);
-    //
-    // when(gesuchRepository.requireById(any())).thenReturn(tranche.getGesuch());
-    // when(gesuchRepository.findGesucheBySvNummer(any())).thenReturn(Stream.of(tranche.getGesuch()));
-    // doNothing().when(notificationService).createNotification(any(), any());
-    //
-    // tranche.getGesuchFormular().setTranche(tranche);
-    // tranche.getGesuchFormular().getEinnahmenKosten().setSteuerjahr(2022);
-    // tranche.getGesuchFormular().setPartner(null);
-    // tranche.getGesuch().setGesuchDokuments(
-    // Arrays.stream(DokumentTyp.values())
-    // .map(x -> new GesuchDokument().setDokumentTyp(x).setGesuch(tranche.getGesuch()))
-    // .toList()
-    // );
-    //
-    // gesuchService.gesuchEinreichen(tranche.getGesuch().getId());
-    //
-    // assertThat(
-    // tranche.getGesuch().getGesuchStatus(),
-    // Matchers.is(Gesuchstatus.BEREIT_FUER_BEARBEITUNG)
-    // );
-    //
-    // tranche.getGesuchFormular().getPersonInAusbildung().setZivilstand(oldZivilstand);
-    // }
 
     @Test
     @TestAsGesuchsteller

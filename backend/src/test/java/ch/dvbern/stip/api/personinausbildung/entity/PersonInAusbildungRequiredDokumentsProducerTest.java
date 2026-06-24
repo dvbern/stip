@@ -89,13 +89,13 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
     }
 
     @Test
-    void requiresIfNiederlassungsstatusVorlaeufigAufgenommen_Mandant() {
+    void requiresIfNiederlassungsstatusVorlaeufigAufgenommen_Tenant() {
         formular.setPersonInAusbildung(
-            createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
+            createWithNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT)
         );
         RequiredDocsUtil.requiresOneAndType(
             producer.getRequiredDokuments(formular, true),
-            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT
+            DokumentTyp.PERSON_NIEDERLASSUNGSSTATUS_VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT
         );
     }
 

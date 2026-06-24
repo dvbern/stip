@@ -69,7 +69,7 @@ import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATIO
     name = "person_in_ausbildung",
     indexes = {
         @Index(name = "IX_person_in_ausbildung_adresse_id", columnList = "adresse_id"),
-        @Index(name = "IX_person_in_ausbildung_mandant", columnList = "mandant")
+        @Index(name = "IX_person_in_ausbildung_tenant", columnList = "tenant")
     }
 )
 @Getter

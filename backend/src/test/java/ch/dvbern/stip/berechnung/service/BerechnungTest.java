@@ -798,7 +798,7 @@ class BerechnungTest {
         gesuchFormular.getPersonInAusbildung()
             .setSozialhilfebeitraege(true)
             .setZivilstand(Zivilstand.VERHEIRATET)
-            .setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_MANDANT)
+            .setNiederlassungsstatus(Niederlassungsstatus.VORLAEUFIG_AUFGENOMMEN_F_ZUESTAENDIGER_KANTON_TENANT)
             .setNationalitaet(LandGenerator.initIran())
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setGeburtsdatum(LocalDate.of(1996, 7, 1));

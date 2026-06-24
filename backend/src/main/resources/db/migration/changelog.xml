@@ -7,7 +7,9 @@
   <include file="db/migration/baseline.xml" />
   <include file="db/migration/quartz.init.xml" />
 
+
   <!-- <editor-fold desc="v0.72" defaultstate="collapsed"> -->
+  <include file="/db/migration/0.72/KSTIP-3513.xml" />
   <include file="/db/migration/0.72/KSTIP-3562.xml"/>
   <!-- </editor-fold> -->
 </databaseChangeLog>

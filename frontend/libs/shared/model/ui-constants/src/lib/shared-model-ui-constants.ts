@@ -16,6 +16,6 @@ export const BFSCODE_SCHWEIZ = '8100';
 export const MAX_EINKOMMEN = 9_999_999;
 
 // Is negative so not every form step has to be included!
-export const hideAktionenRoutes = ['initial', 'infos', 'darlehen'];
+export const hideAktionenRoutes = ['infos', 'darlehen'];
 // Is negative so not every form step has to be included!
 export const notGesuchRoute = ['aenderung', 'infos', 'darlehen'];

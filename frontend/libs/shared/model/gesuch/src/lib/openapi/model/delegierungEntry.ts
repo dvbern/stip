@@ -24,7 +24,7 @@ export interface DelegierungEntry {
     endDate?: string;
     fallId?: string;
     fallNummer?: string;
-    mandant: string;
+    tenant: string;
 }
 
 
