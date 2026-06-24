@@ -177,7 +177,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         gesuch.setGesuchStatus(Gesuchstatus.FEHLENDE_DOKUMENTE);
         when(requiredDokumentService.getGSCanFehlendeDokumenteEinreichen(any(), any())).thenCallRealMethod();
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), true)).thenReturn(List.of());
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of());
         when(requiredDokumentService.getRequiredCustomDokumentsForGesuchFormular(any())).thenReturn(List.of());
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
@@ -226,7 +226,7 @@ class GesuchServiceDokumenteToUploadFlagsTest {
         // arrange
         gesuchDokumentOfTranche1.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         gesuchDokumentOfTranche2.setStatus(GesuchDokumentStatus.AKZEPTIERT);
-        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), true)).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
+        when(requiredDokumentService.getRequiredDokumentsForGesuchFormular(any(), anyBoolean())).thenReturn(List.of(gesuchDokumentOfTranche1.getDokumentTyp()));
 
         // act
         dokumenteToUploadDto = gesuchTrancheService.getDokumenteToUploadSB(tranche1.getId());
