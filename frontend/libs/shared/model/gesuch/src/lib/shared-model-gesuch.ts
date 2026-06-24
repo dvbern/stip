@@ -58,7 +58,11 @@ export type SBFormStepProps =
 export type AllFormSteps = GSFormStepProps | SBFormStepProps;
 
 export const TRANCHE_TYPE_INITIAL = 'INITIAL' as const;
-export type GesuchUrlType = GesuchTrancheTyp | typeof TRANCHE_TYPE_INITIAL;
+export const TRANCHE_TYPE_EINGEREICHT = 'EINGEREICHT' as const;
+export type GesuchUrlType =
+  | GesuchTrancheTyp
+  | typeof TRANCHE_TYPE_INITIAL
+  | typeof TRANCHE_TYPE_EINGEREICHT;
 
 export type GesuchFilter = keyof typeof GetGesucheSBQueryType;
 

@@ -20,6 +20,8 @@
     /* Inputs */
     --mat-sys-label-large-size: var(--dv-base-font-size);
     --mat-form-field-outlined-disabled-input-text-color: var(--dv-gray-subtle);
+    --mat-select-disabled-trigger-text-color: var(--dv-gray-subtle);
+    --mat-checkbox-disabled-label-color: var(--dv-gray-subtle);
     --mat-select-placeholder-text-color: var(--tw-color-dv-gray);
     --mat-option-focus-state-layer-color: #eee;
     --mat-form-field-outlined-input-text-placeholder-color: var(

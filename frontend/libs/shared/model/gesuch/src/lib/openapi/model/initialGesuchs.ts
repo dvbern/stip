@@ -9,17 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { GesuchAenderungs } from './gesuchAenderungs';
 import { VerfuegtGesuch } from './verfuegtGesuch';
-import { GesuchInfo } from './gesuchInfo';
 import { GesuchTrancheSlim } from './gesuchTrancheSlim';
-import { InitialGesuchs } from './initialGesuchs';
 
-export interface GesuchHeader { 
-    initial?: InitialGesuchs;
-    versions: Array<VerfuegtGesuch>;
-    aenderungs: GesuchAenderungs;
-    currentTranches: Array<GesuchTrancheSlim>;
-    gesuchInfo: GesuchInfo;
+export interface InitialGesuchs { 
+    eingereichtGesuch?: GesuchTrancheSlim;
+    verfuegtGesuch?: VerfuegtGesuch;
 }
 

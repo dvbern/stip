@@ -180,6 +180,11 @@ public interface GesuchResource {
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/eingereicht/{gesuchTrancheId}")
+    @Produces({ "application/json", "text/plain" })
+    GesuchDto getEingereichtTranche(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+
+    @GET
     @Path("/gs/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchDto getGesuchGS(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);

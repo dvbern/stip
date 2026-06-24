@@ -6,11 +6,17 @@ export type StatusColor =
   | 'info'
   | 'danger';
 
-export const trancheRoutes = ['tranche', 'aenderung', 'initial'] as const;
+export const trancheRoutes = [
+  'tranche',
+  'aenderung',
+  'initial',
+  'eingereicht',
+] as const;
 export type TrancheRoute = (typeof trancheRoutes)[number];
 export const aenderungRoutes = [
   'aenderung',
   'initial',
+  'eingereicht',
 ] satisfies TrancheRoute[];
 export const darlehenRoutes = ['darlehen'] as const;
 export type DarlehenRoute = (typeof darlehenRoutes)[number];

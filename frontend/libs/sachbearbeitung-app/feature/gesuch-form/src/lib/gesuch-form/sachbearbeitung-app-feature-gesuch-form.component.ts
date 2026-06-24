@@ -35,7 +35,7 @@ import {
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { GesuchHeader } from '@dv/shared/model/gesuch';
+import { GesuchHeader, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -114,12 +114,17 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
 
   isAenderungRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return url?.includes('/aenderung/') ?? false;
+    return url?.includes(`/${getTrancheRoute('aenderung')}/`) ?? false;
   });
 
   isInitialRouteSig = computed(() => {
     const url = this.routeUrlSig();
-    return url?.includes('/initial/') ?? false;
+    return url?.includes(`/${getTrancheRoute('initial')}/`) ?? false;
+  });
+
+  isEingereichtRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes(`/${getTrancheRoute('eingereicht')}/`) ?? false;
   });
 
   isGesuchRouteSig = computed(() => {
@@ -172,7 +177,13 @@ export class SachbearbeitungAppFeatureGesuchFormComponent
     const berechnungId = this.berechnungIdSig();
 
     if (this.isInitialRouteSig()) {
-      return this.gesuchHeaderStore.viewSig().initial?.tranchen;
+      return this.gesuchHeaderStore.viewSig().initial?.verfuegtGesuch?.tranchen;
+    }
+
+    if (this.isEingereichtRouteSig()) {
+      const tranche =
+        this.gesuchHeaderStore.viewSig().initial?.eingereichtGesuch;
+      return tranche ? [tranche] : undefined;
     }
 
     if (berechnungId) {
