@@ -505,8 +505,8 @@ public class VerfuegungPdfService {
         );
 
         final int rueckforderungen =
-            relevantManuelleBuchhaltungOpt.map(Buchhaltung::getBetrag).orElse(0)
-            + (isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0);
+            relevantManuelleBuchhaltungOpt.map(Buchhaltung::getBetrag)
+                .orElse((isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0));
 
         calculationTable.addCell(
             PdfUtils.createCell(
