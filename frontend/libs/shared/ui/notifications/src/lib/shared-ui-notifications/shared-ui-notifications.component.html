@@ -1,23 +1,24 @@
 @let notifications = notificationsSig();
 @if (notifications.length > 0) {
-  <div class="tw:grid tw:grid-cols-[minmax(fit-content,1fr)_auto_auto] tw:gap-x-2">
-    <h4 class="tw:font-bold tw:grid tw:grid-cols-subgrid tw:px-1 tw:col-span-3 tw:m-0 tw:mb-3">
-      <span>{{ 'shared.nachrichten.subject' | transloco }}</span>
-      <span>{{ 'shared.nachrichten.sender' | transloco }}</span>
-      <span>{{ 'shared.nachrichten.date' | transloco }}</span>
-    </h4>
+  <div class="tw:grid tw:grid-cols-2 tw:gap-x-2">
     @for (notification of notifications; track notification) {
       <a
-        class="tw:items-center tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:px-1 tw:py-3 tw:text-start tw:border-0 tw:border-t tw:border-dv-border tw:hover:bg-dv-gray-subtle"
+        class="tw:items-center tw:grid tw:grid-cols-subgrid tw:col-span-3 tw:px-1 tw:py-3 tw:text-start tw:border-0 tw:hover:bg-dv-gray-subtle"
         [ngClass]="{
+          'tw:border-t tw:border-dv-border': !$first,
           'tw:font-bold': !notification.read,
           'tw:[&&]:bg-dv-red-subtle': notification.id === selectedNotificationIdSig(),
         }"
         [routerLink]="[notification.id]"
       >
-        <span class="tw:truncate">{{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}</span>
-        <span>{{ notification.absender }}</span>
-        <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
+        <span class="tw:text-dv-muted">{{ notification.absender }}</span>
+        <dv-shared-ui-tooltip-date
+          class="tw:text-dv-muted tw:text-sm tw:text-right"
+          [dateSig]="notification.timestampErstellt"
+        ></dv-shared-ui-tooltip-date>
+        <div class="tw:col-span-2 tw:truncate">
+          {{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}
+        </div>
       </a>
     }
   </div>
