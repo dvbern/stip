@@ -186,7 +186,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
             DeleteChangedDocumentsUtil.getChangedDocumentsToDelete(newFormular, targetFormular);
         resetEinnahmenKosten(newFormular, targetFormular);
         resetEltern(newFormular, targetFormular);
-        resetLebenslaufItems(newFormular, targetFormular);
         resetPartner(newFormular, targetFormular);
 
         resetSteuererklaerungTabs(newFormular, targetFormular);
@@ -395,17 +394,6 @@ public abstract class GesuchFormularMapper extends EntityUpdateMapper<GesuchForm
                         gesuchDokumentService.removeGesuchDokument(gesuchDokument);
                     });
             }
-        );
-    }
-
-    void resetLebenslaufItems(
-        final GesuchFormularUpdateDto newFormular,
-        final GesuchFormular targetFormular
-    ) {
-        resetFieldIf(
-            () -> GesuchFormularDiffUtil.hasGeburtsdatumOfPersonInAusbildungChanged(targetFormular, newFormular),
-            "Clear LebenslaufItems because Geburtsdatum has changed",
-            () -> newFormular.setLebenslaufItems(new ArrayList<>())
         );
     }
 

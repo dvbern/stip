@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import ch.dvbern.stip.api.common.entity.AbstractEntity;
 import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
@@ -36,7 +37,6 @@ import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -63,22 +63,11 @@ public abstract class GesuchTrancheMapper {
     FamiliensituationMapper familiensituationMapper;
 
     @ToDtoDefaultMapping
-    public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch, @Context GesuchTranche context);
-
-    public GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuch) {
-        return toDtoWithElevatedPermissions(gesuch, gesuch);
-    }
+    public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuchTranche);
 
     @ToDtoDefaultMapping
     @BeanMapping(qualifiedByName = "afterMappingWithoutElevatedPermissionFields")
-    public abstract GesuchTrancheDto toDtoWithoutElevatedPermissions(
-        GesuchTranche gesuchTranche,
-        @Context GesuchTranche context
-    );
-
-    public GesuchTrancheDto toDtoWithoutElevatedPermissions(GesuchTranche gesuchTranche) {
-        return toDtoWithoutElevatedPermissions(gesuchTranche, gesuchTranche);
-    }
+    public abstract GesuchTrancheDto toDtoWithoutElevatedPermissions(GesuchTranche gesuchTranche);
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
@@ -122,9 +111,10 @@ public abstract class GesuchTrancheMapper {
     @Named("afterMappingWithoutElevatedPermissionFields")
     @AfterMapping
     protected void afterMappingWithoutElevatedPermissionFields(
-        @MappingTarget GesuchTrancheDto gesuchTrancheDto,
-        @Context GesuchTranche context
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
     ) {
+        markInvalidLebenslaufItems(gesuchTranche, gesuchTrancheDto);
         Stream.of(
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKostenPartner()
@@ -133,7 +123,7 @@ public abstract class GesuchTrancheMapper {
             .forEach(ek -> ek.setSteuern(null));
 
         final var eltern = gesuchTrancheDto.getGesuchFormular().getElterns();
-        final var versteckteEltern = context.getGesuchFormular().getVersteckteEltern();
+        final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (eltern != null) {
             eltern.removeIf(elternteil -> versteckteEltern.contains(elternteil.getElternTyp()));
         }
@@ -236,5 +226,30 @@ public abstract class GesuchTrancheMapper {
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
         }
+    }
+
+    @AfterMapping
+    public void markInvalidLebenslaufItems(
+        GesuchTranche gesuchTranche,
+        @MappingTarget GesuchTrancheDto gesuchTrancheDto
+    ) {
+        final var ausbildung = gesuchTranche.getGesuch().getAusbildung();
+        final var invalidLebenslaufItemsIds = gesuchTranche.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(
+                item -> item.getBis().isAfter(ausbildung.getAusbildungBegin())
+            )
+            .map(AbstractEntity::getId)
+            .toList();
+
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getLebenslaufItems())) {
+            return;
+        }
+        gesuchTrancheDto.getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(item -> invalidLebenslaufItemsIds.contains(item.getId()))
+            .forEach(itemDto -> itemDto.setInvalid(true));
     }
 }

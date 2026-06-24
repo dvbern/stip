@@ -7,23 +7,33 @@ import {
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 
-import { GesuchTrancheSlim, VerfuegtGesuch } from '@dv/shared/model/gesuch';
+import {
+  GesuchTrancheSlim,
+  InitialGesuchs,
+  VerfuegtGesuch,
+} from '@dv/shared/model/gesuch';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 
 @Component({
   selector: 'dv-shared-ui-versionen-menu',
-  imports: [CommonModule, RouterModule, TranslocoDirective, MatMenuModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatMenuModule,
+    SharedUiAdvTranslocoDirective,
+  ],
   templateUrl: './shared-ui-versionen-menu.component.html',
   styleUrl: './shared-ui-versionen-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiVersionenMenuComponent {
   versionenSig = input.required<VerfuegtGesuch[]>();
-  initialSig = input.required<VerfuegtGesuch | undefined>();
-  isInitialRouteSig = input<boolean | undefined>();
+  initialSig = input.required<InitialGesuchs | undefined>();
+  isInitialRouteSig = input.required<boolean | undefined>();
+  isEingereichtRouteSig = input.required<boolean | undefined>();
   gesuchIdSig = input.required<string | undefined>();
-  isGesuchRouteSig = input<boolean | undefined>();
+  isGesuchRouteSig = input.required<boolean | undefined>();
   trancheIdSig = input.required<string | undefined>();
   berechnungIdSig = input.required<string | undefined>();
   originStepSig = input.required<string>();

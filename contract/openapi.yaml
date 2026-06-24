@@ -1549,6 +1549,44 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /demo-data/all:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '204':
+          description: Testcases were successfully generated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: generateAllGesucheAsVerfuegt
+      summary: Generate all Testcase Gesuche as verfuegt
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/bfs-statistik:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The XML with all Testcases and existing gesuche
+      operationId: getStatistikXmlWithAllTestcases
+      summary: Returns a BFS statistik file with all Testcases
+      x-quarkus-response-type: io.smallrye.mutiny.Multi<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /demo-data/test-all-berechnung:
     get:
       tags:
@@ -4353,6 +4391,36 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/eingereicht/{gesuchTrancheId}:
+    parameters:
+      - name: gesuchTrancheId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gesuch'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getEingereichtTranche
+      summary: Returns the inital eingereicht tranche by gesuchTrancheId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -10152,6 +10220,13 @@ components:
             $ref: '#/components/schemas/GesuchTrancheSlim'
         canAenderungEinreichen:
           type: boolean
+    InitialGesuchs:
+      type: object
+      properties:
+        eingereichtGesuch:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        verfuegtGesuch:
+          $ref: '#/components/schemas/VerfuegtGesuch'
     VerfuegtGesuch:
       type: object
       required:
@@ -10203,7 +10278,7 @@ components:
       type: object
       properties:
         initial:
-          $ref: '#/components/schemas/VerfuegtGesuch'
+          $ref: '#/components/schemas/InitialGesuchs'
         versions:
           type: array
           items:
@@ -11099,6 +11174,9 @@ components:
         taetigkeitsBeschreibung:
           description: Required wenn taetigkeitsart != null
           type: string
+        invalid:
+          description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+          type: boolean
     KindUpdate:
       title: Root Type for Kind
       required:
@@ -12192,8 +12270,6 @@ components:
         - valid
         - userTriggeredCreation
         - year
-        - filename
-        - filesize
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -12206,6 +12282,8 @@ components:
         year:
           type: integer
           format: int32
+        error:
+          type: string
         filename:
           type: string
         filesize:

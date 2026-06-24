@@ -162,7 +162,8 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
-        assertThat(gesuchHeader.getInitial().getTranchen()).hasSize(2);
+        assertThat(gesuchHeader.getInitial().getEingereichtGesuch()).isNotNull();
+        assertThat(gesuchHeader.getInitial().getVerfuegtGesuch().getTranchen()).hasSize(2);
     }
 
     @Test

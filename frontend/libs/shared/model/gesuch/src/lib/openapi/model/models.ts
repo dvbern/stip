@@ -181,6 +181,7 @@ export * from './getMassendruckJobQueryType';
 export * from './getSteuerdatenFromPortRequest';
 export * from './gueltigkeitStatus';
 export * from './inBearbeitungSbReason';
+export * from './initialGesuchs';
 export * from './juristischeAbklaerungNotizAntwort';
 export * from './kanton';
 export * from './kind';

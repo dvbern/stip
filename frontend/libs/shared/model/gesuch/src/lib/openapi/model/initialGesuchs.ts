@@ -9,15 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { VerfuegtGesuch } from './verfuegtGesuch';
+import { GesuchTrancheSlim } from './gesuchTrancheSlim';
 
-export interface Statistik { 
-    id: string;
-    timestampErstellt: string;
-    valid: boolean;
-    userTriggeredCreation: string;
-    year: number;
-    error?: string;
-    filename?: string;
-    filesize?: string;
+export interface InitialGesuchs { 
+    eingereichtGesuch?: GesuchTrancheSlim;
+    verfuegtGesuch?: VerfuegtGesuch;
 }
 

@@ -25,6 +25,7 @@ public class StatistikDto  implements Serializable {
   private @Valid Boolean valid;
   private @Valid String userTriggeredCreation;
   private @Valid Integer year;
+  private @Valid String error;
   private @Valid String filename;
   private @Valid String filesize;
 
@@ -125,6 +126,24 @@ public class StatistikDto  implements Serializable {
 
   /**
    **/
+  public StatistikDto error(String error) {
+    this.error = error;
+    return this;
+  }
+
+  
+  @JsonProperty("error")
+  public String getError() {
+    return error;
+  }
+
+  @JsonProperty("error")
+  public void setError(String error) {
+    this.error = error;
+  }
+
+  /**
+   **/
   public StatistikDto filename(String filename) {
     this.filename = filename;
     return this;
@@ -132,7 +151,6 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("filename")
-  @NotNull
   public String getFilename() {
     return filename;
   }
@@ -151,7 +169,6 @@ public class StatistikDto  implements Serializable {
 
   
   @JsonProperty("filesize")
-  @NotNull
   public String getFilesize() {
     return filesize;
   }
@@ -176,13 +193,14 @@ public class StatistikDto  implements Serializable {
         Objects.equals(this.valid, statistik.valid) &&
         Objects.equals(this.userTriggeredCreation, statistik.userTriggeredCreation) &&
         Objects.equals(this.year, statistik.year) &&
+        Objects.equals(this.error, statistik.error) &&
         Objects.equals(this.filename, statistik.filename) &&
         Objects.equals(this.filesize, statistik.filesize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, filename, filesize);
+    return Objects.hash(id, timestampErstellt, valid, userTriggeredCreation, year, error, filename, filesize);
   }
 
   @Override
@@ -195,6 +213,7 @@ public class StatistikDto  implements Serializable {
     sb.append("    valid: ").append(toIndentedString(valid)).append("\n");
     sb.append("    userTriggeredCreation: ").append(toIndentedString(userTriggeredCreation)).append("\n");
     sb.append("    year: ").append(toIndentedString(year)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    filename: ").append(toIndentedString(filename)).append("\n");
     sb.append("    filesize: ").append(toIndentedString(filesize)).append("\n");
     sb.append("}");

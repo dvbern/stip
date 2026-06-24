@@ -51,17 +51,13 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 @ApplicationScoped
 @UnlessBuildProfile("test")
 public class DokumentDownloadService {
-    public RestMulti<Buffer> getWrapedDokument(
+    public Multi<Buffer> getWrapedDokument(
         final String fileName,
         final ByteArrayOutputStream byteStream
     ) {
-        return RestMulti.fromUniResponse(
-            Uni.createFrom().item(byteStream),
-            response -> Multi.createFrom()
-                .items(response)
-                .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray())),
-            response -> getRequiredHeaders(fileName)
-        );
+        return Multi.createFrom()
+            .items(byteStream)
+            .map(byteArrayOutputStream -> Buffer.buffer(byteArrayOutputStream.toByteArray()));
     }
 
     public RestMulti<Buffer> getDokument(

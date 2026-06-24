@@ -40,6 +40,7 @@ import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import ch.dvbern.stip.generated.dto.NotificationDto;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.quarkus.qute.CheckedTemplate;
 import io.quarkus.qute.TemplateInstance;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -242,6 +243,7 @@ public class NotificationService {
     }
 
     @Transactional
+    @WithSpan
     public void createGesuchEingereichtNotificationAndSendStdMail(final Gesuch gesuch) {
         Notification notification = new Notification()
             .setNotificationType(NotificationType.GESUCH_EINGEREICHT)
@@ -303,6 +305,7 @@ public class NotificationService {
     }
 
     @Transactional
+    @WithSpan
     public void createGesuchStatusChangeWithCommentNotificationAndSendStdMail(
         final Gesuch gesuch,
         final KommentarDto kommentar

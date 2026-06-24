@@ -3,6 +3,7 @@ package ch.dvbern.stip.generated.dto;
 import ch.dvbern.stip.generated.dto.GesuchAenderungsDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDto;
+import ch.dvbern.stip.generated.dto.InitialGesuchsDto;
 import ch.dvbern.stip.generated.dto.VerfuegtGesuchDto;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class GesuchHeaderDto  implements Serializable {
   private @Valid GesuchAenderungsDto aenderungs;
   private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
   private @Valid GesuchInfoDto gesuchInfo;
-  private @Valid VerfuegtGesuchDto initial;
+  private @Valid InitialGesuchsDto initial;
 
   /**
    **/
@@ -142,19 +143,19 @@ public class GesuchHeaderDto  implements Serializable {
 
   /**
    **/
-  public GesuchHeaderDto initial(VerfuegtGesuchDto initial) {
+  public GesuchHeaderDto initial(InitialGesuchsDto initial) {
     this.initial = initial;
     return this;
   }
 
   
   @JsonProperty("initial")
-  public VerfuegtGesuchDto getInitial() {
+  public InitialGesuchsDto getInitial() {
     return initial;
   }
 
   @JsonProperty("initial")
-  public void setInitial(VerfuegtGesuchDto initial) {
+  public void setInitial(InitialGesuchsDto initial) {
     this.initial = initial;
   }
 

@@ -212,19 +212,32 @@ export const loadGesuch = createEffect(
               throwError(() => new Error('Not implemented for this AppType')),
           } satisfies Record<AppType, unknown>;
 
+          const eingereichtTrancheService$ = (gesuchTrancheId: string) =>
+            gesuchService.getEingereichtTranche$(
+              {
+                gesuchTrancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            );
+
+          const initialTrancheService$ = (gesuchTrancheId: string) =>
+            gesuchService.getInitialTrancheChanges$(
+              {
+                gesuchTrancheId,
+              },
+              undefined,
+              undefined,
+              handle404And401,
+            );
+
           // Different services for different types of tranches
           const services$ = {
             AENDERUNG: (appType: AppType) => aenderungServices$[appType],
             TRANCHE: (appType: AppType) => trancheServices$[appType],
-            INITIAL: () => (gesuchTrancheId: string) =>
-              gesuchService.getInitialTrancheChanges$(
-                {
-                  gesuchTrancheId,
-                },
-                undefined,
-                undefined,
-                handle404And401,
-              ),
+            EINGEREICHT: () => eingereichtTrancheService$,
+            INITIAL: () => initialTrancheService$,
           } satisfies Record<GesuchUrlType, unknown>;
 
           return services$[trancheTyp](compileTimeConfig.appType)(

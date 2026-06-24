@@ -10,14 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface Statistik { 
-    id: string;
-    timestampErstellt: string;
-    valid: boolean;
-    userTriggeredCreation: string;
-    year: number;
-    error?: string;
-    filename?: string;
-    filesize?: string;
+export interface RootTypeForLebenslauf { 
+    invalid?: boolean;
 }
 

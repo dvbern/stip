@@ -7,6 +7,7 @@ import {
   GesuchFormular,
   GesuchTrancheTyp,
   GesuchUrlType,
+  TRANCHE_TYPE_EINGEREICHT,
   TRANCHE_TYPE_INITIAL,
 } from '@dv/shared/model/gesuch';
 import {
@@ -44,7 +45,8 @@ const isExistingTrancheTyp = (
 ): trancheTyp is GesuchUrlType => {
   return (
     Object.keys(GesuchTrancheTyp).includes(trancheTyp ?? '') ||
-    trancheTyp === TRANCHE_TYPE_INITIAL
+    trancheTyp === TRANCHE_TYPE_INITIAL ||
+    trancheTyp === TRANCHE_TYPE_EINGEREICHT
   );
 };
 export const selectTrancheTyp = createSelector(

@@ -62,6 +62,8 @@
   "shared.header.versionen": "Version actuelle",
   "shared.header.versionen.item": "Version {{ date }}",
   "shared.header.versionen.initial": "Demande initiale",
+  "shared.header.versionen.eingereicht": "Première demande déposée",
+  "shared.header.versionen.verfuegt": "Première demande traitée",
   "shared.header.darlehen": "Prêts",
   "shared.header.darlehen.create": "Demander un prêt",
   "shared.header.darlehen.item": "Prêt du {{ date }}",

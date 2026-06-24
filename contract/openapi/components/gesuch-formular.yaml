@@ -319,6 +319,9 @@ LebenslaufItemUpdate:
     taetigkeitsBeschreibung:
       description: Required wenn taetigkeitsart != null
       type: string
+    invalid:
+      description: Falls es Überschneidungen gibt mit dem Ausbildung Beginn
+      type: boolean
 
 Kind:
   title: Root Type for Kind

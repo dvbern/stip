@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchformular.util;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -37,48 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GesuchFormularDiffUtilTest {
-
-    /**
-     * Testcase: PersonInAusbildung Geburtsdatum has changed
-     */
-    @Test
-    void hasGeburtsdatumOfPersonInAusbildungChangedTest() {
-        // Given
-        GesuchFormular toUpdate = new GesuchFormular();
-        toUpdate.setPersonInAusbildung(new PersonInAusbildung());
-        toUpdate.getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2000, 1, 1));
-
-        GesuchFormularUpdateDto update = new GesuchFormularUpdateDto();
-        update.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
-        update.getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2001, 1, 1)); // changed
-
-        // When
-        boolean actual = GesuchFormularDiffUtil.hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update);
-
-        // Then
-        assertTrue(actual);
-    }
-
-    /**
-     * Testcase: PersonInAusbildung Geburtsdatum has not changed
-     */
-    @Test
-    void hasGeburtsdatumOfPersonInAusbildungNotChangedTest() {
-        // Given
-        GesuchFormular toUpdate = new GesuchFormular();
-        toUpdate.setPersonInAusbildung(new PersonInAusbildung());
-        toUpdate.getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2000, 1, 1));
-
-        GesuchFormularUpdateDto update = new GesuchFormularUpdateDto();
-        update.setPersonInAusbildung(new PersonInAusbildungUpdateDto());
-        update.getPersonInAusbildung().setGeburtsdatum(LocalDate.of(2000, 1, 1)); // NOT changed
-
-        // When
-        boolean actual = GesuchFormularDiffUtil.hasGeburtsdatumOfPersonInAusbildungChanged(toUpdate, update);
-
-        // Then
-        assertFalse(actual);
-    }
 
     // Test case for when the "Eigener Haushalt" has been updated in the GesuchFormularUpdateDto object.
     @Test

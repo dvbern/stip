@@ -34,6 +34,11 @@ public interface DemoDataResource {
     @Produces({ "application/json", "text/plain" })
     DemoDataListDto createNewDemoDataImport(@FormParam(value = "kommentar")  String kommentar,@FormParam(value = "ignoreBerechnungErrors")  Boolean ignoreBerechnungErrors,@FormParam(value = "fileUpload")  org.jboss.resteasy.reactive.multipart.FileUpload fileUpload);
 
+    @POST
+    @Path("/all")
+    @Produces({ "text/plain" })
+    void generateAllGesucheAsVerfuegt();
+
     @GET
     @Produces({ "application/json", "text/plain" })
     DemoDataListDto getAllDemoData();
@@ -47,6 +52,11 @@ public interface DemoDataResource {
     @Path("/dokument/{dokumentId}/token")
     @Produces({ "application/json", "text/plain" })
     FileDownloadTokenDto getDemoDataDokumentDownloadToken(@PathParam("dokumentId") UUID dokumentId);
+
+    @POST
+    @Path("/bfs-statistik")
+    @Produces({ "application/octet-stream" })
+    io.smallrye.mutiny.Multi<io.vertx.mutiny.core.buffer.Buffer> getStatistikXmlWithAllTestcases();
 
     @GET
     @Path("/test-all-berechnung")
