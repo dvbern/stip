@@ -16,7 +16,8 @@ export interface Statistik {
     valid: boolean;
     userTriggeredCreation: string;
     year: number;
-    filename: string;
-    filesize: string;
+    error?: string;
+    filename?: string;
+    filesize?: string;
 }
 

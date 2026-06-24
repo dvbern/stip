@@ -1569,6 +1569,44 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /demo-data/all:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '204':
+          description: Testcases were successfully generated
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: generateAllGesucheAsVerfuegt
+      summary: Generate all Testcase Gesuche as verfuegt
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /demo-data/bfs-statistik:
+    post:
+      tags:
+        - DemoData
+      responses:
+        '200':
+          content:
+            application/octet-stream:
+              schema:
+                format: binary
+                type: string
+          description: The XML with all Testcases and existing gesuche
+      operationId: getStatistikXmlWithAllTestcases
+      summary: Returns a BFS statistik file with all Testcases
+      x-quarkus-response-type: io.smallrye.mutiny.Multi<io.vertx.mutiny.core.buffer.Buffer>
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /demo-data/test-all-berechnung:
     get:
       tags:
@@ -12159,8 +12197,6 @@ components:
         - valid
         - userTriggeredCreation
         - year
-        - filename
-        - filesize
       properties:
         id:
           $ref: '#/components/schemas/UUID'
@@ -12173,6 +12209,8 @@ components:
         year:
           type: integer
           format: int32
+        error:
+          type: string
         filename:
           type: string
         filesize:

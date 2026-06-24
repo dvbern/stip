@@ -25,6 +25,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.notification.service.NotificationService;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
     private final DatenschutzbriefService datenschutzbriefService;
 
     @Override
+    @WithSpan
     public void handle(Gesuch gesuch) {
         notificationService.createGesuchEingereichtNotificationAndSendStdMail(gesuch);
         gesuch.getGesuchTranchen()

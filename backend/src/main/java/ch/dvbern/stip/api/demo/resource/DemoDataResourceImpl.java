@@ -28,6 +28,8 @@ import ch.dvbern.stip.api.common.util.DokumentDownloadConstants;
 import ch.dvbern.stip.api.common.util.OidcPermissions;
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.demo.service.DemoDataService;
+import ch.dvbern.stip.api.demo.service.GenerateMultipleDemoDataService;
+import ch.dvbern.stip.api.demo.type.DemoDataDefaults;
 import ch.dvbern.stip.api.dokument.service.DokumentDownloadService;
 import ch.dvbern.stip.generated.api.DemoDataResource;
 import ch.dvbern.stip.generated.dto.ApplyDemoDataResponseDto;
@@ -36,6 +38,7 @@ import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
+import io.smallrye.mutiny.Multi;
 import io.vertx.mutiny.core.buffer.Buffer;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
@@ -51,6 +54,7 @@ import org.jboss.resteasy.reactive.multipart.FileUpload;
 public class DemoDataResourceImpl implements DemoDataResource {
     private final DemoDataAuthorizer demoDataAuthorizer;
     private final DemoDataService demoDataService;
+    private final GenerateMultipleDemoDataService generateMultipleDemoDataService;
     private final BenutzerService benutzerService;
     private final StipConfig config;
     private final JWTParser jwtParser;
@@ -59,7 +63,7 @@ public class DemoDataResourceImpl implements DemoDataResource {
     @Override
     @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
     public ApplyDemoDataResponseDto applyDemoData(UUID demoDataId) {
-        demoDataAuthorizer.canRead();
+        demoDataAuthorizer.canGenerate();
         return demoDataService.applyDemoData(demoDataId);
     }
 
@@ -76,6 +80,21 @@ public class DemoDataResourceImpl implements DemoDataResource {
             fileUpload,
             ignoreBerechnungErrors
         );
+    }
+
+    @Override
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public void generateAllGesucheAsVerfuegt() {
+        demoDataAuthorizer.canGenerate();
+        generateMultipleDemoDataService.generateAllGesucheAsVerfuegt(false, DemoDataDefaults.MASS_GESUCH_FALL_PREFIX);
+    }
+
+    @Blocking
+    @Override
+    @RolesAllowed(OidcPermissions.DEMO_DATA_APPLY)
+    public Multi<Buffer> getStatistikXmlWithAllTestcases() {
+        demoDataAuthorizer.canGenerate();
+        return generateMultipleDemoDataService.generateStatistikXmlWithAllTestcases();
     }
 
     @Override

@@ -15,30 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.statistik.dto;
+package ch.dvbern.stip.api.statistik.exception;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.jilt.Builder;
-import org.jilt.BuilderStyle;
-
-@Data
-@XmlAccessorType(XmlAccessType.FIELD)
-@lombok.Builder
-@Builder(style = BuilderStyle.STAGED)
-@NoArgsConstructor
-@AllArgsConstructor
-public class PersonIdentificationRootDto {
-    @XmlElement(name = "localPersonId")
-    private LocalPersonIdDto localPersonId;
-
-    @XmlElement(name = "sex")
-    private Integer sex;
-
-    @XmlElement(name = "dateOfBirth")
-    private String dateOfBirth;
+public class StatistikGemeindeLookupException extends RuntimeException {
 }

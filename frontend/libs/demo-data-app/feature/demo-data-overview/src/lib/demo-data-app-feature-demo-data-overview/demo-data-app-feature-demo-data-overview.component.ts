@@ -12,6 +12,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { diff } from 'json-diff-ts';
 
@@ -49,6 +50,7 @@ import { SollIstComponent } from '../components/comparison/soll-ist.component';
     MatFormFieldModule,
     MatInputModule,
     MatTooltipModule,
+    MatMenuModule,
     SharedUiFileUploadComponent,
     SharedUiDownloadButtonDirective,
     SharedPatternBasicLayoutComponent,
@@ -202,6 +204,28 @@ export class DemoDataAppFeatureDemoDataOverviewComponent {
           : null,
       }));
     BerechnungComparisonDialogComponent.open(this.dialog, changes);
+  }
+
+  generateAllGesucheAsVerfuegt() {
+    SharedUiConfirmDialogComponent.open<DemoDataAppTranslationKey>(
+      this.dialog,
+      {
+        title: 'demo-data-app.overview.generate-multi.persistent',
+        message: 'demo-data-app.overview.generate-multi.persistent.warning',
+      },
+    )
+      .afterClosed()
+      .subscribe((confirmed) => {
+        if (!confirmed) {
+          return;
+        }
+
+        this.demoDataStore.generateAllGesucheAsVerfuegt$();
+      });
+  }
+
+  getStatistikXmlWithAllTestcases() {
+    this.demoDataStore.getStatistikXmlWithAllTestcases$();
   }
 
   copyToClipboard(text: string) {

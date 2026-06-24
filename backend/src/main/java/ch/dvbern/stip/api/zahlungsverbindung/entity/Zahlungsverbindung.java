@@ -19,8 +19,8 @@ package ch.dvbern.stip.api.zahlungsverbindung.entity;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.entity.AbstractTenantEntity;
+import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.validation.IbanConstraint;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,12 +60,12 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MEDIUM_
 @AllArgsConstructor
 public class Zahlungsverbindung extends AbstractTenantEntity {
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "vorname", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String vorname;
 
-    @Nullable
+    @NullableUnlessGenerated
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "nachname", length = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     private String nachname;
