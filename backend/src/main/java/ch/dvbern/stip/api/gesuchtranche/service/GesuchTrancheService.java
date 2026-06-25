@@ -375,7 +375,7 @@ public class GesuchTrancheService {
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
-        return gesuchFormularService.validatePages(gesuchFormular);
+        return gesuchFormularService.validatePagesGs(gesuchFormular);
     }
 
     @Transactional
@@ -385,7 +385,7 @@ public class GesuchTrancheService {
         if (gesuchFormular == null) {
             throw new NotFoundException();
         }
-        return gesuchFormularService.validatePages(gesuchFormular);
+        return gesuchFormularService.validatePagesSb(gesuchFormular);
     }
 
     @Transactional

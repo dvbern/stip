@@ -87,8 +87,10 @@ public class RequiredDokumentService {
         var customDokumentsStillRequired = !getRequiredCustomDokumentsForGesuchFormular(gesuchTranche).isEmpty();
         var gesuchDokumenteStillRequired =
             !getRequiredDokumentsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden).isEmpty();
+        var gesuchDokumentRefsStillRequired =
+            !getRequiredDokumentRefsForGesuchFormular(gesuchTranche.getGesuchFormular(), includeHidden).isEmpty();
         // if any normal or custom GesuchDokument is still required,
-        return (customDokumentsStillRequired || gesuchDokumenteStillRequired);
+        return customDokumentsStillRequired || gesuchDokumenteStillRequired || gesuchDokumentRefsStillRequired;
     }
 
     public boolean getSBCanFehlendeDokumenteUebermitteln(final GesuchTranche aenderung) {
@@ -139,7 +141,8 @@ public class RequiredDokumentService {
             .allMatch(tranche -> getRequiredDokumentRefsForGesuchFormular(tranche.getGesuchFormular(), true).isEmpty());
         final var noCustomRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
-        return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noRequiredRefDokumentsExisting && noCustomRequiredDokumentsExisting;
+        return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noRequiredRefDokumentsExisting
+        && noCustomRequiredDokumentsExisting;
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {

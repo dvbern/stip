@@ -217,12 +217,12 @@ class DokumentResourceImplTest {
 
         // act
         final var violations1 =
-            gesuchFormularService.validatePages(tranche.getGesuchFormular());
+            gesuchFormularService.validatePagesSb(tranche.getGesuchFormular());
 
         customGesuchDokument2.setDokumente(List.of(new Dokument()));
 
         final var violations2 =
-            gesuchFormularService.validatePages(tranche.getGesuchFormular());
+            gesuchFormularService.validatePagesSb(tranche.getGesuchFormular());
 
         // assert
         assertNotNull(violations1.getValidationWarnings());

@@ -17,5 +17,5 @@
 
 package ch.dvbern.stip.api.gesuchformular.validation;
 
-public interface DocumentsRequiredValidationGroup {
+public interface DocumentsRequiredSbValidationGroup {
 }

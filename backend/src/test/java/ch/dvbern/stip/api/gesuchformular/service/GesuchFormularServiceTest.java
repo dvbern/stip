@@ -88,11 +88,11 @@ class GesuchFormularServiceTest {
         gesuchTranche.setTyp(GesuchTrancheTyp.TRANCHE);
         gesuchTranche.setGesuchFormular(gesuchFormular);
         gesuchFormular.setTranche(gesuchTranche);
-        var reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        var reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         assertThat(reportDto.getValidationErrors(), Matchers.is(empty()));
 
         gesuchFormular.setEinnahmenKosten(new EinnahmenKosten());
-        reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         var violationCount = reportDto.getValidationErrors().size();
         assertThat(reportDto.getValidationErrors(), Matchers.is(not(empty())));
 
@@ -101,7 +101,7 @@ class GesuchFormularServiceTest {
                 .setElternteilUnbekanntVerstorben(true)
                 .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
-        reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         assertThat(reportDto.getValidationErrors().size(), Matchers.is(greaterThan(violationCount)));
     }
 
@@ -125,7 +125,7 @@ class GesuchFormularServiceTest {
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of());
         // act
-        var reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        var reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         // assert
         assertThat(reportDto.getValidationWarnings().size(), Matchers.is(0));
 
@@ -140,11 +140,11 @@ class GesuchFormularServiceTest {
         when(requiredDokumentServiceMock.getRequiredCustomDokumentsForGesuchFormular(any()))
             .thenReturn(List.of(customDokumentTyp));
         // act
-        reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         assertThat(reportDto.getValidationWarnings().size(), Matchers.is(1));
         // upload dokument
         customDokument.setDokumente(List.of(new Dokument()));
-        reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         assertThat(reportDto.getValidationWarnings().size(), Matchers.is(0));
 
         /* case there are both: required custom dokuments & normal dokuments */
@@ -157,7 +157,7 @@ class GesuchFormularServiceTest {
         gesuchDokument.setDokumentTyp(DokumentTyp.KINDER_ALIMENTENVERORDUNG);
         gesuchDokument.setStatus(GesuchDokumentStatus.AUSSTEHEND);
         customDokument.setDokumente(List.of());
-        reportDto = gesuchFormularService.validatePages(gesuchFormular);
+        reportDto = gesuchFormularService.validatePagesSb(gesuchFormular);
         assertThat(reportDto.getValidationWarnings().size(), Matchers.is(2));
     }
 }
