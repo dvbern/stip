@@ -7,6 +7,7 @@ import {
   effect,
   inject,
   input,
+  untracked,
 } from '@angular/core';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -43,9 +44,14 @@ export class SharedFeatureNotificationsComponent implements OnDestroy {
         this.notificationStore.getNotificationsForFall$({
           req: { fallId },
           onSuccess: (notifications) => {
-            if (!this.notificationStore.selectedNotificationId()) {
-              this.router.navigate([notifications[0]?.id], {
+            const selectedNotificationId = untracked(() =>
+              this.notificationStore.selectedNotificationId(),
+            );
+
+            if (!selectedNotificationId && notifications[0]?.id) {
+              this.router.navigate([notifications[0].id], {
                 relativeTo: this.route,
+                replaceUrl: true,
               });
             }
           },

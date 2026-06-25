@@ -238,7 +238,6 @@
       "@dv/shared/ui/loading": ["libs/shared/ui/loading/src/index.ts"],
       "@dv/shared/ui/max-length": ["libs/shared/ui/max-length/src/index.ts"],
       "@dv/shared/ui/nav-items": ["libs/shared/ui/nav-items/src/index.ts"],
-      "@dv/shared/ui/notification-dialog": ["libs/shared/ui/notification-dialog/src/index.ts"],
       "@dv/shared/ui/notifications": ["libs/shared/ui/notifications/src/index.ts"],
       "@dv/shared/ui/percentage-splitter": ["libs/shared/ui/percentage-splitter/src/index.ts"],
       "@dv/shared/ui/plz-ort-autocomplete": ["libs/shared/ui/plz-ort-autocomplete/src/index.ts"],

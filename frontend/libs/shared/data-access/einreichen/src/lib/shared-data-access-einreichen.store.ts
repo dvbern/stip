@@ -277,14 +277,17 @@ export class EinreichenStore extends signalStore(
     });
   };
 
-  gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(
+  gesuchEinreichen$ = rxMethod<{
+    gesuchTrancheId: string;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           einreichungsResult: pending(),
         }));
       }),
-      switchMap(({ gesuchTrancheId }) =>
+      switchMap(({ gesuchTrancheId, onSuccess }) =>
         this.gesuchService.gesuchEinreichenGs$({ gesuchTrancheId }).pipe(
           handleApiResponse(
             (einreichen) =>
@@ -293,13 +296,10 @@ export class EinreichenStore extends signalStore(
               onSuccess: (einreichen) => {
                 this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
 
-                const fallId = einreichen?.fallId;
-
-                if (fallId) {
-                  this.fallHeaderStore.loadFallHeader$({
-                    fallId: fallId,
-                  });
-                }
+                this.fallHeaderStore.loadFallHeader$({
+                  fallId: einreichen.fallId,
+                });
+                onSuccess();
               },
             },
           ),
@@ -308,14 +308,14 @@ export class EinreichenStore extends signalStore(
     ),
   );
 
-  aenderungEinreichen$ = rxMethod<{ trancheId: string }>(
+  aenderungEinreichen$ = rxMethod<{ trancheId: string; onSuccess: () => void }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           trancheEinreichenResult: pending(),
         }));
       }),
-      switchMap(({ trancheId }) =>
+      switchMap(({ trancheId, onSuccess }) =>
         this.gesuchTrancheService
           .aenderungEinreichen$({ aenderungId: trancheId })
           .pipe(
@@ -323,18 +323,11 @@ export class EinreichenStore extends signalStore(
               (einreichen) =>
                 patchState(this, { trancheEinreichenResult: einreichen }),
               {
-                onSuccess: (einreichen) => {
+                onSuccess: () => {
                   this.store.dispatch(
                     SharedDataAccessGesuchEvents.loadGesuch(),
                   );
-
-                  const fallId = einreichen?.fallId;
-
-                  if (fallId) {
-                    this.fallHeaderStore.loadFallHeader$({
-                      fallId: fallId,
-                    });
-                  }
+                  onSuccess();
                 },
               },
             ),

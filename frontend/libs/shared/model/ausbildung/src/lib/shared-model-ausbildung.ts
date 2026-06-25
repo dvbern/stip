@@ -37,7 +37,7 @@ export type SharedModelGsAusbildungView = Modify<
 >;
 export type SharedModelGsDashboardView = Omit<
   FallDashboardItem,
-  'ausbildungDashboardItems' | 'unreadNotificationsCount'
+  'ausbildungDashboardItems'
 > & {
   hasActiveAusbildungen: boolean;
   canCreateAusbildung: boolean;

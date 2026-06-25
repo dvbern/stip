@@ -8,16 +8,17 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { TranslocoPipe } from '@jsverse/transloco';
 
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { NotificationStore } from '@dv/shared/data-access/notification';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 
 @Component({
   selector: 'dv-shared-feature-notification',
   imports: [
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
     SharedUiTooltipDateComponent,
     SharedUiDownloadButtonDirective,
   ],
@@ -26,9 +27,14 @@ import { SharedUiTooltipDateComponent } from '@dv/shared/ui/tooltip-date';
 })
 export class SharedFeatureNotificationComponent {
   private notificationStore = inject(NotificationStore);
+  private fallHeaderStore = inject(FallHeaderStore);
 
   notificationId = input<string | undefined>(undefined, {
     alias: 'notificationId',
+  });
+
+  fallId = input<string | undefined>(undefined, {
+    alias: 'fallId',
   });
 
   notificationSig = computed(() => {
@@ -37,10 +43,6 @@ export class SharedFeatureNotificationComponent {
     const notifications = this.notificationStore.notificationListViewSig();
     return notifications.find((n) => n.id === notificationId) ?? null;
   });
-
-  markAsRead(notificationId: string) {
-    this.notificationStore.markNotificationAsRead$({ notificationId });
-  }
 
   constructor() {
     effect(() => {
@@ -53,10 +55,14 @@ export class SharedFeatureNotificationComponent {
     // mark as read
     effect(() => {
       const notification = this.notificationSig();
-      if (notification && !notification.read) {
-        setTimeout(() => {
-          this.markAsRead(notification.id);
-        }, 3000);
+      const fallId = this.fallId();
+      if (notification && !notification.read && fallId) {
+        this.notificationStore.markNotificationAsRead$({
+          req: { notificationId: notification.id },
+          onSuccess: () => {
+            this.fallHeaderStore.loadFallHeader$({ fallId });
+          },
+        });
       }
     });
   }

@@ -15,6 +15,7 @@ import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
   selectRouteTrancheId,
@@ -73,6 +74,7 @@ export class SharedFeatureGesuchDokumenteComponent {
   private config = inject(SharedModelCompileTimeConfig);
   private destroyRef = inject(DestroyRef);
   private einreichenStore = inject(EinreichenStore);
+  private fallHeaderStore = inject(FallHeaderStore);
   public dokumentsStore = inject(DokumentsStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
@@ -345,9 +347,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         tranchenTyp: trancheSetting.type,
-        onSuccess: () => {
+        onSuccess: (fallId) => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          this.fallHeaderStore.loadFallHeader$({ fallId });
           // Also load the required documents again
           this.dokumentsStore.getGesuchDokumenteAndDocumentsToUpload$({
             gesuchTrancheId: trancheId,

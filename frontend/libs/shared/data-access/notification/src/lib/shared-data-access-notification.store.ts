@@ -1,7 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
+import { pipe, switchMap, tap } from 'rxjs';
 
 import {
   Notification,
@@ -9,12 +9,10 @@ import {
   NotificationServiceGetNotificationsForFallRequestParams,
   NotificationServiceMarkNotificationAsReadRequestParams,
 } from '@dv/shared/model/gesuch';
-import { getNotificationTranslationKey } from '@dv/shared/model/nachricht';
 import {
   CachedRemoteData,
   RemoteData,
   cachedPending,
-  failure,
   fromCachedDataSig,
   handleApiResponse,
   initial,
@@ -41,13 +39,9 @@ export class NotificationStore extends signalStore(
 ) {
   private notificationService = inject(NotificationService);
 
-  notificationListViewSig = computed(() => {
-    const n = fromCachedDataSig(this.notifications) ?? [];
-    return n.map((notification) => ({
-      ...notification,
-      translationKey: getNotificationTranslationKey(notification),
-    }));
-  });
+  notificationListViewSig = computed(
+    () => fromCachedDataSig(this.notifications) ?? [],
+  );
 
   setSelectedNotificationId(notificationId: string | undefined) {
     patchState(this, { selectedNotificationId: notificationId });
@@ -78,42 +72,38 @@ export class NotificationStore extends signalStore(
     ),
   );
 
-  markNotificationAsRead$ =
-    rxMethod<NotificationServiceMarkNotificationAsReadRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, { markNotificationAsReadRequest: initial() });
-        }),
-        switchMap(({ notificationId }) =>
-          this.notificationService
-            .markNotificationAsRead$({ notificationId })
-            .pipe(
-              handleApiResponse((res) =>
-                patchState(this, (state) => ({
-                  markNotificationAsReadRequest: res,
-                  notifications: mapCachedData(
-                    state.notifications,
-                    (notifications) => {
-                      if (isSuccess(res)) {
-                        return notifications.map((notification) =>
-                          notification.id === notificationId
-                            ? { ...notification, read: true }
-                            : notification,
-                        );
-                      }
-                      return notifications;
-                    },
-                  ),
-                })),
-              ),
-              catchError((error) => {
-                patchState(this, {
-                  markNotificationAsReadRequest: failure(error),
-                });
-                return EMPTY;
-              }),
-            ),
+  markNotificationAsRead$ = rxMethod<{
+    req: NotificationServiceMarkNotificationAsReadRequestParams;
+    onSuccess: (res: Notification) => void;
+  }>(
+    pipe(
+      tap(() => {
+        patchState(this, { markNotificationAsReadRequest: initial() });
+      }),
+      switchMap(({ req, onSuccess }) =>
+        this.notificationService.markNotificationAsRead$(req).pipe(
+          handleApiResponse(
+            (res) =>
+              patchState(this, (state) => ({
+                markNotificationAsReadRequest: res,
+                notifications: mapCachedData(
+                  state.notifications,
+                  (notifications) => {
+                    if (isSuccess(res)) {
+                      return notifications.map((notification) =>
+                        notification.id === req.notificationId
+                          ? { ...notification, read: true }
+                          : notification,
+                      );
+                    }
+                    return notifications;
+                  },
+                ),
+              })),
+            { onSuccess },
+          ),
         ),
       ),
-    );
+    ),
+  );
 }

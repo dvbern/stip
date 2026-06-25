@@ -12,7 +12,6 @@ import {
   throwError,
 } from 'rxjs';
 
-import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -81,7 +80,6 @@ export class DokumentsStore extends signalStore(
   private trancheService = inject(GesuchTrancheService);
   private globalNotificationStore = inject(GlobalNotificationStore);
   private config = inject(SharedModelCompileTimeConfig);
-  private fallHeaderStore = inject(FallHeaderStore);
 
   private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
     return byAppType(this.config.appType, {
@@ -698,7 +696,7 @@ export class DokumentsStore extends signalStore(
   fehlendeDokumenteEinreichen$ = rxMethod<{
     trancheId: string;
     tranchenTyp: GesuchTrancheTyp;
-    onSuccess: () => void;
+    onSuccess: (fallId: string) => void;
   }>(
     pipe(
       tap(() => {
@@ -722,8 +720,7 @@ export class DokumentsStore extends signalStore(
           tapResponse({
             next: (res) => {
               this.getDocumentsToUploadByAppType$(trancheId);
-              this.fallHeaderStore.loadFallHeader$({ fallId: res.fallId });
-              onSuccess();
+              onSuccess(res.fallId);
             },
             error: (error) => {
               patchState(this, (state) => ({

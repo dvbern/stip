@@ -17,7 +17,7 @@
           [dateSig]="notification.timestampErstellt"
         ></dv-shared-ui-tooltip-date>
         <div class="tw:col-span-2 tw:truncate">
-          {{ 'shared.nachrichten.type.' + notification.notificationType | transloco }}
+          {{ `shared.nachrichten.type.${notification.notificationType}` | transloco }}
         </div>
       </a>
     }
