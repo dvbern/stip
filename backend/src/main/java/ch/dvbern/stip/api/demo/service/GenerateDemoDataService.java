@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.adresse.entity.Adresse;
@@ -118,6 +119,7 @@ import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungResultatDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValidDto;
 import ch.dvbern.stip.generated.dto.DemoDataTestBerechnungValuesDto;
 import ch.dvbern.stip.generated.dto.DemoFamiliensituationDto;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.smallrye.mutiny.Uni;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -189,15 +191,17 @@ public class GenerateDemoDataService {
     private Zahlungsverbindung getDefaultZahlungsverbindung(DemoDataDto demoDataDto, Adresse adresse) {
         final var pia = demoDataDto.getPersonInAusbildung();
         return ZahlungsverbindungBuilder.zahlungsverbindung()
+            .vorname(pia.getVorname())
+            .nachname(pia.getNachname())
             .adresse(adresse)
             .iban(DemoDataDefaults.ZAHLUNGSVERBINBDUNG_IBAN)
             .institution(null)
-            .vorname(pia.getVorname())
-            .nachname(pia.getNachname())
             .build();
     }
 
+    @WithSpan
     public Gesuch createEinreichableGesuch(DemoData demoData, Fall fall) {
+        // <editor-fold desc="Prepare..." defaultstate="collapsed">
         final var demoDataDto = demoData.parseDemoDataDto();
         final var piaDto = demoDataDto.getPersonInAusbildung();
         final var piaAdresse = AdresseBuilder.adresse()
@@ -216,7 +220,9 @@ public class GenerateDemoDataService {
             .build();
         fall.setAuszahlung(auszahlung);
         final var ausbildungDto = demoDataDto.getAusbildung();
+        // </editor-fold>
 
+        // <editor-fold desc="Ausbildung..." defaultstate="collapsed">
         // Reuse an existing Ausbildung if it exists and is not completed, otherwise create a new one
         final var ausbildung = fall.getAusbildungs()
             .stream()
@@ -249,6 +255,9 @@ public class GenerateDemoDataService {
                     .ausbildungUnterbruchAntrags(List.of())
                     .build()
             );
+        // </editor-fold>
+
+        // <editor-fold desc="PiA..." defaultstate="collapsed">
         final var pia = DemoPerson.createPersonInAusbildung(
             PersonInAusbildungBuilder.personInAusbildung()
                 .adresse(piaAdresse)
@@ -296,6 +305,9 @@ public class GenerateDemoDataService {
                 .vorname(piaDto.getNachname())
                 .geburtsdatum(getGeburtsdatum(demoData, piaDto.getGeburtsdatum(), piaDto.getAlter()))
         );
+        // </editor-fold>
+
+        // <editor-fold desc="Lebenslauf Items..." defaultstate="collapsed">
         final Set<LebenslaufItem> lebenslaufItems = new HashSet<>();
         for (var lebenslaufItemDto : demoDataDto.getLebenslauf().getAusbildung()) {
             final var lebenslauf = LebenslaufItemBuilder.lebenslaufItem()
@@ -333,6 +345,9 @@ public class GenerateDemoDataService {
                 .build();
             lebenslaufItems.add(lebenslauf);
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Partner..." defaultstate="collapsed">
         Partner partner = null;
         final var demoPartnerDto = demoDataDto.getPartner();
         if (Objects.nonNull(demoPartnerDto)) {
@@ -359,6 +374,9 @@ public class GenerateDemoDataService {
                     )
             );
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Kinds..." defaultstate="collapsed">
         final Set<Kind> kinds = new HashSet<>();
         for (var kindDto : demoDataDto.getKinder()) {
             final var kind = DemoPerson.createKind(
@@ -380,6 +398,9 @@ public class GenerateDemoDataService {
             );
             kinds.add(kind);
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Einnahmen & Kosten..." defaultstate="collapsed">
         final var ekDto = demoDataDto.getEinnahmenKosten();
         final var einnahmenKosten = EinnahmenKostenBuilder.einnahmenKosten()
             .nettoerwerbseinkommen(ekDto.getNettoerwerbseinkommen())
@@ -455,6 +476,9 @@ public class GenerateDemoDataService {
                 )
                 .build();
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Familiensituation..." defaultstate="collapsed">
         final var famsitDto = demoDataDto.getFamiliensituation();
         final var familiensituation = FamiliensituationBuilder.familiensituation()
             .elternVerheiratetZusammen(famsitDto.getElternVerheiratetZusammen())
@@ -466,6 +490,9 @@ public class GenerateDemoDataService {
             .vaterUnbekanntGrund(famsitDto.getVaterUnbekanntGrund())
             .werZahltAlimente(famsitDto.getWerZahltAlimente())
             .build();
+        // </editor-fold>
+
+        // <editor-fold desc="Elterns..." defaultstate="collapsed">
         final List<Eltern> elterns = new ArrayList<>();
         for (var elternDto : demoDataDto.getElterns()) {
             elterns.add(
@@ -498,6 +525,9 @@ public class GenerateDemoDataService {
                 )
             );
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Steuererklaerungs..." defaultstate="collapsed">
         final List<Steuererklaerung> steuererklaerungs = new ArrayList<>();
         for (var steuererklaerungDto : demoDataDto.getSteuererklaerung()) {
             steuererklaerungs.add(
@@ -512,6 +542,9 @@ public class GenerateDemoDataService {
                     .build()
             );
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Steuerdatens..." defaultstate="collapsed">
         final List<Steuerdaten> steuerdatens = new ArrayList<>();
         for (var steuerdatenDto : demoDataDto.getSteuerdaten()) {
             steuerdatens.add(
@@ -562,6 +595,9 @@ public class GenerateDemoDataService {
                     .build()
             );
         }
+        // </editor-fold>
+
+        // <editor-fold desc="Geschwisters..." defaultstate="collapsed">
         final List<Geschwister> geschwisters = new ArrayList<>();
         for (var geschwisterDto : demoDataDto.getGeschwister()) {
             geschwisters.add(
@@ -587,6 +623,7 @@ public class GenerateDemoDataService {
                 )
             );
         }
+        // </editor-fold>
 
         final Gesuch gesuch = new Gesuch();
         gesuch.setAusbildung(ausbildung);
@@ -612,10 +649,8 @@ public class GenerateDemoDataService {
         tranche.getGesuchFormular().setTranche(tranche);
 
         gesuch.getGesuchTranchen().add(tranche);
-        gesuch.setAusbildung(ausbildung);
         gesuch.setGesuchsperiode(gesuchsperiode);
         gesuch.setGesuchNummer(gesuchNummerService.createGesuchNummer(gesuch.getGesuchsperiode().getId()));
-        gesuch.getAusbildung().getGesuchs().add(gesuch);
 
         final var gesuchFormular = gesuch
             .getLatestGesuchTranche()
@@ -683,7 +718,7 @@ public class GenerateDemoDataService {
         var berechnungsResultatIst = new DemoDataTestBerechnungValuesDto();
         final var tenantConfig = tenantService.getConfigForCurrentTenant();
         String message = null;
-        VerfuegungStatus statusIst = null;
+        VerfuegungStatus statusIst;
         try {
             berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch,
@@ -788,7 +823,14 @@ public class GenerateDemoDataService {
         createDemoDokumentsForAllRequired(gesuchTrancheRepository.requireById(gesuchTrancheId));
     }
 
-    public void createDemoDokumentsForAllRequired(GesuchTranche gesuchTranche) {
+    public List<Dokument> createDemoDokumentsForAllRequired(GesuchTranche gesuchTranche) {
+        return createDemoDokumentsForAllRequired(gesuchTranche, this::createS3EntriesForDokumente);
+    }
+
+    public List<Dokument> createDemoDokumentsForAllRequired(
+        GesuchTranche gesuchTranche,
+        Consumer<List<Dokument>> handleS3
+    ) {
         final var requiredDokuments = RequiredDokumentUtil.getRequiredDokumentTypesForGesuch(
             gesuchTranche.getGesuchFormular(),
             requiredDokumentProducers,
@@ -809,11 +851,14 @@ public class GenerateDemoDataService {
         final var allDokuments =
             gesuchDokuments.stream().flatMap(gesuchDokument -> gesuchDokument.getDokumente().stream()).toList();
 
-        createS3EntriesForDokumente(allDokuments);
+        handleS3.accept(allDokuments);
+
         gesuchTranche.getGesuchDokuments().addAll(gesuchDokuments);
         dokumentRepository.persist(allDokuments);
         gesuchDokumentRepository.persist(gesuchDokuments);
         gesuchTrancheRepository.persist(gesuchTranche);
+
+        return allDokuments;
     }
 
     private GesuchDokument createDemoGesuchDokumentWithoutUpload(
@@ -844,7 +889,7 @@ public class GenerateDemoDataService {
         return gesuchDokument;
     }
 
-    private void createS3EntriesForDokumente(List<Dokument> dokuments) {
+    public void createS3EntriesForDokumente(List<Dokument> dokuments) {
         final var pngBody = AsyncRequestBody.fromBytes(Base64.decodeBase64(config.demo().smallestPng()));
         String firstDokumentKey = null;
         CompletableFuture<String> dokumentUploadOrCopyRequest = CompletableFuture.supplyAsync(() -> "pending");

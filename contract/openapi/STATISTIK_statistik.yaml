@@ -151,8 +151,6 @@ components:
         - valid
         - userTriggeredCreation
         - year
-        - filename
-        - filesize
       properties:
         id:
           $ref: './components/common.yaml#/UUID'
@@ -165,6 +163,8 @@ components:
         year:
           type: integer
           format: int32
+        error:
+          type: string
         filename:
           type: string
         filesize:

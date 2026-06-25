@@ -26,5 +26,7 @@ import lombok.RequiredArgsConstructor;
 public class DemoDataAuthorizer extends BaseAuthorizer {
     public void canRead() {}
 
+    public void canGenerate() {}
+
     public void canCreateDemoDataList() {}
 }

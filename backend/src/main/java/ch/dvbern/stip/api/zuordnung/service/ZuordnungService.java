@@ -37,6 +37,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.repo.ZuordnungRepository;
 import ch.dvbern.stip.api.zuordnung.type.ZuordnungType;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,7 @@ public class ZuordnungService {
         update(fitered);
     }
 
+    @WithSpan
     public void updateZuordnungOnGesuch(final Gesuch gesuch) {
         update(List.of(gesuch));
     }
@@ -104,6 +106,7 @@ public class ZuordnungService {
                     .setSachbearbeiter(sbToAssign.get())
                     .setZuordnungType(ZuordnungType.AUTOMATIC);
             }
+            newest.getAusbildung().getFall().setSachbearbeiterZuordnung(zuordnung);
         });
 
         // Persist the new Zuordnungen

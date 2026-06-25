@@ -12,7 +12,7 @@
   </h1>
 
   <form [formGroup]="form" data-testid="form-update-nachfrist-form" class="tw:mt-5" (ngSubmit)="handleSave()">
-    <mat-form-field dvSharedUiFormField class="tw:w-56">
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
       <mat-label>{{ 'shared.dokumente.nachfrist.dialog.label' | transloco }}</mat-label>
       <input
         formControlName="newNachfrist"

@@ -696,7 +696,7 @@ export class DokumentsStore extends signalStore(
   fehlendeDokumenteEinreichen$ = rxMethod<{
     trancheId: string;
     tranchenTyp: GesuchTrancheTyp;
-    onSuccess: () => void;
+    onSuccess: (fallId: string) => void;
   }>(
     pipe(
       tap(() => {
@@ -718,9 +718,9 @@ export class DokumentsStore extends signalStore(
         } satisfies Record<GesuchTrancheTyp, unknown>;
         return serviceMap$[tranchenTyp]().pipe(
           tapResponse({
-            next: () => {
+            next: (res) => {
               this.getDocumentsToUploadByAppType$(trancheId);
-              onSuccess();
+              onSuccess(res.fallId);
             },
             error: (error) => {
               patchState(this, (state) => ({

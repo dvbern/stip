@@ -186,7 +186,9 @@ public class DemoDataService {
             throw new DemoDataApplyException("ValidationError", preValidation.getValidationErrors());
         }
 
-        generateDemoDataService.createDemoDokumentsForAllRequired(gesuch.getLatestGesuchTranche());
+        final var allDokuments =
+            generateDemoDataService.createDemoDokumentsForAllRequired(gesuch.getLatestGesuchTranche());
+        generateDemoDataService.createS3EntriesForDokumente(allDokuments);
         zuordnungService.updateZuordnungOnGesuch(gesuch);
 
         final var violations =

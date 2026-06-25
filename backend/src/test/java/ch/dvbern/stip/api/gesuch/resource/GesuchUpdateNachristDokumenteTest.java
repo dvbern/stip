@@ -222,7 +222,8 @@ class GesuchUpdateNachristDokumenteTest {
     @TestAsGesuchsteller
     @Order(20)
     void verifyNotification() {
-        final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+        final var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()

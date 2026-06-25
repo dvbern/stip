@@ -154,6 +154,10 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
+.mat-mdc-dialog-container {
+  max-height: 100vh !important;
+}
+
 .info-dialog-columnar {
   &.cdk-overlay-pane.mat-mdc-dialog-panel {
     min-width: unset;

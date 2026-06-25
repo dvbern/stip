@@ -30,17 +30,22 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Notification for a Gesuch
  */
 @JsonPropertyOrder({
+  NotificationDtoSpec.JSON_PROPERTY_ID,
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TEXT,
   NotificationDtoSpec.JSON_PROPERTY_NOTIFICATION_TYPE,
   NotificationDtoSpec.JSON_PROPERTY_FALL_ID,
   NotificationDtoSpec.JSON_PROPERTY_CONTEXT_ID,
   NotificationDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   NotificationDtoSpec.JSON_PROPERTY_TIMESTAMP_ERSTELLT,
-  NotificationDtoSpec.JSON_PROPERTY_ABSENDER
+  NotificationDtoSpec.JSON_PROPERTY_ABSENDER,
+  NotificationDtoSpec.JSON_PROPERTY_READ
 })
 @JsonTypeName("Notification")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class NotificationDtoSpec {
+  public static final String JSON_PROPERTY_ID = "id";
+  private UUID id;
+
   public static final String JSON_PROPERTY_NOTIFICATION_TEXT = "notificationText";
   private String notificationText;
 
@@ -62,8 +67,37 @@ public class NotificationDtoSpec {
   public static final String JSON_PROPERTY_ABSENDER = "absender";
   private String absender;
 
+  public static final String JSON_PROPERTY_READ = "read";
+  private Boolean read;
+
   public NotificationDtoSpec() {
   }
+
+  public NotificationDtoSpec id(UUID id) {
+    
+    this.id = id;
+    return this;
+  }
+
+   /**
+   * Get id
+   * @return id
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public UUID getId() {
+    return id;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_ID)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setId(UUID id) {
+    this.id = id;
+  }
+
 
   public NotificationDtoSpec notificationText(String notificationText) {
     
@@ -246,6 +280,32 @@ public class NotificationDtoSpec {
     this.absender = absender;
   }
 
+
+  public NotificationDtoSpec read(Boolean read) {
+    
+    this.read = read;
+    return this;
+  }
+
+   /**
+   * Get read
+   * @return read
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_READ)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getRead() {
+    return read;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_READ)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setRead(Boolean read) {
+    this.read = read;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -255,24 +315,27 @@ public class NotificationDtoSpec {
       return false;
     }
     NotificationDtoSpec notification = (NotificationDtoSpec) o;
-    return Objects.equals(this.notificationText, notification.notificationText) &&
+    return Objects.equals(this.id, notification.id) &&
+        Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.fallId, notification.fallId) &&
         Objects.equals(this.contextId, notification.contextId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
-        Objects.equals(this.absender, notification.absender);
+        Objects.equals(this.absender, notification.absender) &&
+        Objects.equals(this.read, notification.read);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationText, notificationType, fallId, contextId, userErstellt, timestampErstellt, absender);
+    return Objects.hash(id, notificationText, notificationType, fallId, contextId, userErstellt, timestampErstellt, absender, read);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDtoSpec {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
@@ -280,6 +343,7 @@ public class NotificationDtoSpec {
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
+    sb.append("    read: ").append(toIndentedString(read)).append("\n");
     sb.append("}");
     return sb.toString();
   }

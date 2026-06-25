@@ -1,0 +1,40 @@
+<div *dvTranslocoShared="let t">
+  @let notification = notificationSig();
+  @if (notification) {
+    <dl class="tw:flex tw:gap-6">
+      <div class="tw:flex tw:flex-col">
+        <dt class="tw:font-bold tw:mt-1">{{ t('shared.nachrichten.date') }}</dt>
+        <dd>
+          <dv-shared-ui-tooltip-date [dateSig]="notification.timestampErstellt"></dv-shared-ui-tooltip-date>
+        </dd>
+      </div>
+      <div class="tw:flex tw:flex-col">
+        <dt class="tw:font-bold tw:mt-1">{{ t('shared.nachrichten.sender') }}</dt>
+        <dd>{{ notification.absender }}</dd>
+      </div>
+      <div class="tw:flex tw:flex-col tw:flex-1 tw:min-w-0">
+        <dt class="tw:font-bold tw:mt-1">{{ t('shared.nachrichten.subject') }}</dt>
+        <dd class="tw:truncate">
+          {{ t(`shared.nachrichten.type.${notification.notificationType}`) }}
+        </dd>
+      </div>
+    </dl>
+    @if (notification.notificationText) {
+      <hr class="tw:my-6 tw:border tw:border-dv-border" />
+      <p class="tw:whitespace-pre-line">{{ notification.notificationText }}</p>
+
+      @if (notification.notificationType === 'NEUE_VERFUEGUNG' && notification.contextId) {
+        <button
+          type="button"
+          class="tw:dv-button-outline tw:mt-6"
+          [dvDownloadButton]="{
+            type: 'verfuegung',
+            id: notification.contextId,
+          }"
+        >
+          {{ t('shared.dokumente.table.download') }}
+        </button>
+      }
+    }
+  }
+</div>

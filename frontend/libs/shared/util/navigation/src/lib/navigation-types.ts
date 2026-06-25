@@ -28,6 +28,9 @@ interface NavItemBase {
   active?: boolean | undefined;
   routerlinkActiveOptions?: { exact: boolean };
   testId?: string;
+  badge?: {
+    count: number;
+  };
 }
 
 export interface NavItemLink extends NavItemBase {

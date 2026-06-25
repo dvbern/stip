@@ -23,13 +23,34 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class NotificationDto  implements Serializable {
+  private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.notification.type.NotificationType notificationType;
   private @Valid UUID fallId;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
   private @Valid String absender;
+  private @Valid Boolean read;
   private @Valid String notificationText;
   private @Valid UUID contextId;
+
+  /**
+   **/
+  public NotificationDto id(UUID id) {
+    this.id = id;
+    return this;
+  }
+
+  
+  @JsonProperty("id")
+  @NotNull
+  public UUID getId() {
+    return id;
+  }
+
+  @JsonProperty("id")
+  public void setId(UUID id) {
+    this.id = id;
+  }
 
   /**
    **/
@@ -128,6 +149,25 @@ public class NotificationDto  implements Serializable {
 
   /**
    **/
+  public NotificationDto read(Boolean read) {
+    this.read = read;
+    return this;
+  }
+
+  
+  @JsonProperty("read")
+  @NotNull
+  public Boolean getRead() {
+    return read;
+  }
+
+  @JsonProperty("read")
+  public void setRead(Boolean read) {
+    this.read = read;
+  }
+
+  /**
+   **/
   public NotificationDto notificationText(String notificationText) {
     this.notificationText = notificationText;
     return this;
@@ -172,18 +212,20 @@ public class NotificationDto  implements Serializable {
       return false;
     }
     NotificationDto notification = (NotificationDto) o;
-    return Objects.equals(this.notificationType, notification.notificationType) &&
+    return Objects.equals(this.id, notification.id) &&
+        Objects.equals(this.notificationType, notification.notificationType) &&
         Objects.equals(this.fallId, notification.fallId) &&
         Objects.equals(this.userErstellt, notification.userErstellt) &&
         Objects.equals(this.timestampErstellt, notification.timestampErstellt) &&
         Objects.equals(this.absender, notification.absender) &&
+        Objects.equals(this.read, notification.read) &&
         Objects.equals(this.notificationText, notification.notificationText) &&
         Objects.equals(this.contextId, notification.contextId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(notificationType, fallId, userErstellt, timestampErstellt, absender, notificationText, contextId);
+    return Objects.hash(id, notificationType, fallId, userErstellt, timestampErstellt, absender, read, notificationText, contextId);
   }
 
   @Override
@@ -191,11 +233,13 @@ public class NotificationDto  implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class NotificationDto {\n");
     
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    notificationType: ").append(toIndentedString(notificationType)).append("\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    timestampErstellt: ").append(toIndentedString(timestampErstellt)).append("\n");
     sb.append("    absender: ").append(toIndentedString(absender)).append("\n");
+    sb.append("    read: ").append(toIndentedString(read)).append("\n");
     sb.append("    notificationText: ").append(toIndentedString(notificationText)).append("\n");
     sb.append("    contextId: ").append(toIndentedString(contextId)).append("\n");
     sb.append("}");

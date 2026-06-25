@@ -85,7 +85,7 @@ public class Fall extends AbstractTenantEntity {
     @Opt
     private String fallNummer;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(
         name = "gesuchsteller_id",
         foreignKey = @ForeignKey(name = "FK_fall_gesuchsteller_id"),
@@ -98,13 +98,13 @@ public class Fall extends AbstractTenantEntity {
         name = "sachbearbeiter_zuordnung_id",
         foreignKey = @ForeignKey(name = "FK_fall_sachbearbeiter_id")
     )
-    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "fall", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Zuordnung sachbearbeiterZuordnung;
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
     private Set<Ausbildung> ausbildungs = new HashSet<>();
 
-    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     private List<Buchhaltung> buchhaltungs = new ArrayList<>();
 
     @OneToMany(mappedBy = "fall", fetch = FetchType.LAZY)

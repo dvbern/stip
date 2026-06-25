@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Validator;
@@ -56,6 +57,7 @@ public class GesuchStatusService {
     private final RequiredDokumentService requiredDokumentService;
 
     @Transactional
+    @WithSpan
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
         triggerStateMachineEventWithComment(gesuch, event, null, false);
     }

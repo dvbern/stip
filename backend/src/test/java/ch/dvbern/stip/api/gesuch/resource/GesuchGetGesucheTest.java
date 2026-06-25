@@ -105,8 +105,6 @@ class GesuchGetGesucheTest {
 
         assertThat(fallDashboardItem, is(notNullValue()));
 
-        assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
-
         /*
          * If only a ausbildung is created,
          * but not yet a gesuch (or a tranche),
@@ -201,8 +199,6 @@ class GesuchGetGesucheTest {
         assertThat(fallDashboardItem, is(notNullValue()));
 
         final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
-
-        assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
 
         assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
 

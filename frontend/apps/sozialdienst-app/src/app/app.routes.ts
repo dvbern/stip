@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
+import { NotificationStore } from '@dv/shared/data-access/notification';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
@@ -65,6 +66,15 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/auszahlung').then(
             (m) => m.sozialdienstAppFeatureAuszahlungRoutes,
+          ),
+      },
+      {
+        path: 'nachrichten',
+        title: 'shared.nachrichten.title',
+        providers: [NotificationStore],
+        loadChildren: () =>
+          import('@dv/shared/feature/notifications').then(
+            (m) => m.sharedFeatureNotificationsRoutes,
           ),
       },
     ],
