@@ -24,6 +24,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsJurist;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.config.type.StipConfig;
+import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -36,6 +37,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchNotizApiSpec;
+import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchNotizTypDtoSpec;
@@ -60,8 +62,12 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.jilt.shaded.com.github.javaparser.utils.Utils.assertNotNull;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -83,43 +89,41 @@ class GesuchGetGesucheTest {
 
     private static GesuchDtoSpec gesuch;
 
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(2)
-    // void getGsDashboardNoAusbildungTest() {
-    // final var fall = TestUtil.getOrCreateFall(fallApiSpec);
-    // final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Status.OK.getStatusCode())
-    // .extract()
-    // .body()
-    // .as(FallDashboardItemDto.class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(2)
+    void getGsDashboardNoAusbildungTest() {
+        final var fall = TestUtil.getOrCreateFall(fallApiSpec);
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto.class);
 
-    // assertThat(fallDashboardItem, is(notNullValue()));
+        assertThat(fallDashboardItem, is(notNullValue()));
 
-    // assertThat(fallDashboardItem.getNotifications().isEmpty(), is(true));
-
-    // /*
-    // * If only a ausbildung is created,
-    // * but not yet a gesuch (or a tranche),
-    // * an empty gesuch with a empty gesuchtranche should be returned
-    // */
-    // TestUtil
-    // .createAusbildung(ausbildungApiSpec, AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec(), fall.getId());
-    // final var fallDashboardItem2 = gesuchApiSpec.getGsDashboard()
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Status.OK.getStatusCode())
-    // .extract()
-    // .body()
-    // .as(FallDashboardItemDto.class);
-    // assertNotNull(
-    // fallDashboardItem2.getAusbildungDashboardItems().get(0).getGesuchs().get(0).getCurrentTrancheId()
-    // );
-    // }
+        /*
+         * If only a ausbildung is created,
+         * but not yet a gesuch (or a tranche),
+         * an empty gesuch with a empty gesuchtranche should be returned
+         */
+        TestUtil
+            .createAusbildung(ausbildungApiSpec, AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec(), fall.getId());
+        final var fallDashboardItem2 = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto.class);
+        assertNotNull(
+            fallDashboardItem2.getAusbildungDashboardItems().get(0).getGesuchs().get(0).getCurrentTrancheId()
+        );
+    }
 
     @Test
     @TestAsGesuchsteller
@@ -179,39 +183,37 @@ class GesuchGetGesucheTest {
         allAreNotInWrongStatus(found, GesuchstatusDtoSpec.IN_BEARBEITUNG_GS, GesuchstatusDtoSpec.EINGEREICHT);
     }
 
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(10)
-    // void getGsDashboardTest() {
-    // final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .assertThat()
-    // .statusCode(Status.OK.getStatusCode())
-    // .extract()
-    // .body()
-    // .as(FallDashboardItemDto.class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(10)
+    void getGsDashboardTest() {
+        final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(FallDashboardItemDto.class);
 
-    // assertThat(fallDashboardItem, is(notNullValue()));
+        assertThat(fallDashboardItem, is(notNullValue()));
 
-    // final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
+        final var ausbildungDashboardItems = fallDashboardItem.getAusbildungDashboardItems();
 
-    // assertThat(fallDashboardItem.getNotifications().size(), greaterThanOrEqualTo(1));
+        assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
 
-    // assertThat(ausbildungDashboardItems.size(), greaterThanOrEqualTo(1));
+        final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
+        final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
 
-    // final var ausbildungDashboardItem = ausbildungDashboardItems.get(0);
-    // final var gesuchDashboardItems = ausbildungDashboardItem.getGesuchs();
+        assertThat(gesuchDashboardItems.size(), greaterThanOrEqualTo(1));
 
-    // assertThat(gesuchDashboardItems.size(), greaterThanOrEqualTo(1));
+        final var gesuchDashboardItem = gesuchDashboardItems.get(0);
 
-    // final var gesuchDashboardItem = gesuchDashboardItems.get(0);
+        assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.EINGEREICHT));
 
-    // assertThat(gesuchDashboardItem.getGesuchStatus(), is(Gesuchstatus.EINGEREICHT));
-
-    // // since every document is uploaded by GS, there should not be any document missing
-    // assertThat(gesuchDashboardItem.getMissingDocuments(), is(nullValue()));
-    // }
+        // since every document is uploaded by GS, there should not be any document missing
+        assertThat(gesuchDashboardItem.getMissingDocuments(), is(nullValue()));
+    }
 
     @Test
     @TestAsSuperUser

@@ -25,6 +25,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
+import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
@@ -44,6 +45,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NachfristAendernRequestDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -56,6 +58,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -215,28 +218,29 @@ class GesuchUpdateNachristDokumenteTest {
     }
 
     // verify that notification is present
-    // @Test
-    // @TestAsGesuchsteller
-    // @Order(20)
-    // void verifyNotification() {
-    // final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
-    // .execute(TestUtil.PEEK_IF_ENV_SET)
-    // .then()
-    // .extract()
-    // .body()
-    // .as(NotificationDto[].class);
+    @Test
+    @TestAsGesuchsteller
+    @Order(20)
+    void verifyNotification() {
+        final var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDto[].class);
 
-    // assertThat(notifications.length, greaterThan(0));
-    // assertThat(
-    // Arrays.stream(notifications)
-    // .toList()
-    // .stream()
-    // .anyMatch(
-    // notification -> notification.getNotificationType() == NotificationType.NACHFRIST_DOKUMENTE_CHANGED
-    // ),
-    // is(true)
-    // );
-    // }
+        assertThat(notifications.length, greaterThan(0));
+        assertThat(
+            Arrays.stream(notifications)
+                .toList()
+                .stream()
+                .anyMatch(
+                    notification -> notification.getNotificationType() == NotificationType.NACHFRIST_DOKUMENTE_CHANGED
+                ),
+            is(true)
+        );
+    }
 
     // check that einreichefrist doesnt get changed by updateGesuch operation
     @TestAsSachbearbeiter
