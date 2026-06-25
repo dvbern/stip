@@ -133,12 +133,13 @@ export class TwoColumnTimeline {
     const unevenStartHeight = 1;
 
     // Startluecke falls Startdatum vorhanden
-    if (inputSorted.length && expectedStartDate) {
-      if (isAfter(inputSorted[0].von, expectedStartDate)) {
+    if (expectedStartDate) {
+      const firstVon = inputSorted[0]?.von ?? plannedAusbildung.von;
+      if (isAfter(firstVon, expectedStartDate)) {
         output.push({
           col: 'BOTH',
           von: expectedStartDate,
-          bis: subMonths(inputSorted[0].von, 1),
+          bis: subMonths(firstVon, 1),
           positionStartRow: startRow,
           positionRowSpan: 1,
         } as TimelineGapBlock);
