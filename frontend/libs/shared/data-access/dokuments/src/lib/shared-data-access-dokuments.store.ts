@@ -373,9 +373,9 @@ export class DokumentsStore extends signalStore(
   }>(
     pipe(
       tap(() => {
-        patchState(this, (state) => ({
-          additionalDokumente: cachedPending(state.additionalDokumente),
-        }));
+        patchState(this, {
+          additionalDokumente: pending(),
+        });
       }),
       switchMap(({ gesuchId }) =>
         this.dokumentService
