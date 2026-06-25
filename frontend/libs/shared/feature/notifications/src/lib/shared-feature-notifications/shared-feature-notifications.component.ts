@@ -44,8 +44,8 @@ export class SharedFeatureNotificationsComponent implements OnDestroy {
         this.notificationStore.getNotificationsForFall$({
           req: { fallId },
           onSuccess: (notifications) => {
-            const selectedNotificationId = untracked(() =>
-              this.notificationStore.selectedNotificationId(),
+            const selectedNotificationId = untracked(
+              this.notificationStore.selectedNotificationId,
             );
 
             if (!selectedNotificationId && notifications[0]?.id) {
