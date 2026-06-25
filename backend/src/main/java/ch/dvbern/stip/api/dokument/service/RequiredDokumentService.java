@@ -135,9 +135,11 @@ public class RequiredDokumentService {
             .allMatch(RequiredDokumentUtil::allGesuchDokumentsAreAcceptedInTranche);
         final var noRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredDokumentsForGesuchFormular(tranche.getGesuchFormular(), true).isEmpty());
+        final var noRequiredRefDokumentsExisting = gesuch.getTranchenTranchen()
+            .allMatch(tranche -> getRequiredDokumentRefsForGesuchFormular(tranche.getGesuchFormular(), true).isEmpty());
         final var noCustomRequiredDokumentsExisting = gesuch.getTranchenTranchen()
             .allMatch(tranche -> getRequiredCustomDokumentsForGesuchFormular(tranche).isEmpty());
-        return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noCustomRequiredDokumentsExisting;
+        return allExistingDocumentsAccepted && noRequiredDokumentsExisting && noRequiredRefDokumentsExisting && noCustomRequiredDokumentsExisting;
     }
 
     public boolean isGesuchDokumentRequired(final GesuchDokument gesuchDokument) {
