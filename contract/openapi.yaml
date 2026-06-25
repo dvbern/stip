@@ -19,8 +19,6 @@ tags:
     x-displayName: Tenant
   - name: Plz
     x-displayName: Plz
-  - name: Notification
-    x-displayName: Notification
   - name: Darlehen
     x-displayName: Darlehen
   - name: Delegieren
@@ -47,6 +45,10 @@ tags:
     x-displayName: Buchhaltung
   - name: Fall
     x-displayName: Fall
+  - name: FallHeader
+    x-displayName: FallHeader
+  - name: Notification
+    x-displayName: Notification
   - name: Dokument
     x-displayName: Dokument
   - name: GesuchNotiz
@@ -158,28 +160,6 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: getPlz
       summary: Gets all PLZs
-      security:
-        - auth-uat-bern: []
-        - auth-dev-bern: []
-  /notifications:
-    get:
-      tags:
-        - Notification
-      responses:
-        '200':
-          description: Returns all Notifications for the user
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Notification'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/ServerError'
-      operationId: getNotificationsForCurrentUser
-      summary: Gets all notifications for the User
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -3035,7 +3015,7 @@ paths:
         - auth-uat-bern: []
         - auth-dev-bern: []
   /buchhaltung/failed:
-    summary: asdf
+    summary: Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed
     get:
       tags:
         - Buchhaltung
@@ -3131,6 +3111,88 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: createFallForGs
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/header/{fallId}:
+    get:
+      tags:
+        - FallHeader
+      parameters:
+        - $ref: '#/components/parameters/fallId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FallHeader'
+          description: Get the FallHeader by FallId
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getFallHeader
+      summary: Get FallHeader for the GS and Soz App
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/{fallId}/notifications:
+    parameters:
+      - name: fallId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    get:
+      tags:
+        - Notification
+      operationId: getNotificationsForFall
+      summary: Returns all notifications for the given Fall
+      responses:
+        '200':
+          description: List of notifications for the Fall
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /fall/notifications/{notificationId}/markAsRead:
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/UUID'
+    patch:
+      tags:
+        - Notification
+      operationId: markNotificationAsRead
+      summary: Marks a notification as read
+      responses:
+        '204':
+          description: Notification marked as read
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -7229,57 +7291,6 @@ components:
             Whether or not the Gesuch validated has one or more GesuchDokument
             attached
           type: boolean
-    NotificationType:
-      enum:
-        - GESUCH_EINGEREICHT
-        - GESUCH_STATUS_CHANGE_WITH_COMMENT
-        - FEHLENDE_DOKUMENTE_EINREICHEN
-        - FEHLENDE_DOKUMENTE
-        - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
-        - AENDERUNG_ABGELEHNT
-        - AENDERUNG_EINGEREICHT
-        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
-        - NACHFRIST_DOKUMENTE_CHANGED
-        - NEUE_VERFUEGUNG
-        - FAILED_AUSZAHLUNG
-        - DELEGIERUNG_ANGENOMMEN
-        - DELEGIERUNG_ABGELEHNT
-        - DELEGIERUNG_AUFGELOEST
-        - DARLEHEN_EINGEGEBEN
-        - DARLEHEN_ZURUECKGEWIESEN
-        - DARLEHEN_AKZEPTIERT
-        - DARLEHEN_ABGELEHNT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
-        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
-    LocalDate:
-      format: date
-      type: string
-      example: '2022-03-10'
-    Notification:
-      description: Notification for a Gesuch
-      type: object
-      required:
-        - notificationType
-        - fallId
-        - timestampErstellt
-        - userErstellt
-        - absender
-      properties:
-        notificationText:
-          type: string
-        notificationType:
-          $ref: '#/components/schemas/NotificationType'
-        fallId:
-          $ref: '#/components/schemas/UUID'
-        contextId:
-          $ref: '#/components/schemas/UUID'
-        userErstellt:
-          type: string
-        timestampErstellt:
-          $ref: '#/components/schemas/LocalDate'
-        absender:
-          type: string
     SbFreiwilligDarlehenDashboardColumn:
       enum:
         - FALLNUMMER
@@ -7665,6 +7676,10 @@ components:
         - HERR
         - FRAU
       type: string
+    LocalDate:
+      format: date
+      type: string
+      example: '2022-03-10'
     Sprache:
       enum:
         - DEUTSCH
@@ -9527,6 +9542,69 @@ components:
           type: string
         tenant:
           type: string
+    FallHeader:
+      required:
+        - fallId
+        - unreadNotificationsCount
+      type: object
+      properties:
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        unreadNotificationsCount:
+          type: integer
+    NotificationType:
+      enum:
+        - GESUCH_EINGEREICHT
+        - GESUCH_STATUS_CHANGE_WITH_COMMENT
+        - FEHLENDE_DOKUMENTE_EINREICHEN
+        - FEHLENDE_DOKUMENTE
+        - FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
+        - AENDERUNG_ABGELEHNT
+        - AENDERUNG_EINGEREICHT
+        - GESUCH_IN_BEARBEITUNG_AS_AENDERUNG
+        - NACHFRIST_DOKUMENTE_CHANGED
+        - NEUE_VERFUEGUNG
+        - FAILED_AUSZAHLUNG
+        - DELEGIERUNG_ANGENOMMEN
+        - DELEGIERUNG_ABGELEHNT
+        - DELEGIERUNG_AUFGELOEST
+        - DARLEHEN_EINGEGEBEN
+        - DARLEHEN_ZURUECKGEWIESEN
+        - DARLEHEN_AKZEPTIERT
+        - DARLEHEN_ABGELEHNT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_EINGEREICHT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_AKZEPTIERT
+        - AUSBILDUNG_UNTERBRUCH_ANTRAG_ABGELEHNT
+    Notification:
+      description: Notification for a Gesuch
+      type: object
+      required:
+        - id
+        - notificationType
+        - fallId
+        - timestampErstellt
+        - userErstellt
+        - absender
+        - read
+      properties:
+        id:
+          $ref: '#/components/schemas/UUID'
+        notificationText:
+          type: string
+        notificationType:
+          $ref: '#/components/schemas/NotificationType'
+        fallId:
+          $ref: '#/components/schemas/UUID'
+        contextId:
+          $ref: '#/components/schemas/UUID'
+        userErstellt:
+          type: string
+        timestampErstellt:
+          $ref: '#/components/schemas/LocalDate'
+        absender:
+          type: string
+        read:
+          type: boolean
     GesuchDokumentKommentar:
       description: Kommentar zu einem (abgelehnten) GesuchDokument
       type: object
@@ -9894,7 +9972,6 @@ components:
       required:
         - fall
         - ausbildungDashboardItems
-        - notifications
       type: object
       properties:
         fall:
@@ -9903,10 +9980,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungDashboardItem'
-        notifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/Notification'
         currentDelegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         earliestActiveGesuchPeriodeStart:

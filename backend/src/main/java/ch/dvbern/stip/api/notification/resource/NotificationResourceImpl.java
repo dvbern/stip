@@ -18,11 +18,12 @@
 package ch.dvbern.stip.api.notification.resource;
 
 import java.util.List;
+import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.service.BenutzerService;
 import ch.dvbern.stip.api.common.authorization.NotificationAuthorizer;
 import ch.dvbern.stip.api.common.interceptors.PopulateCurrentBenutzerContext;
 import ch.dvbern.stip.api.common.interceptors.Validated;
+import ch.dvbern.stip.api.notification.service.NotificationService;
 import ch.dvbern.stip.generated.api.NotificationResource;
 import ch.dvbern.stip.generated.dto.NotificationDto;
 import jakarta.annotation.security.RolesAllowed;
@@ -39,12 +40,20 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.NOTIFICATION_READ;
 @PopulateCurrentBenutzerContext
 public class NotificationResourceImpl implements NotificationResource {
     private final NotificationAuthorizer notificationAuthorizer;
-    private final BenutzerService benutzerService;
+    private final NotificationService notificationService;
 
-    @Override
     @RolesAllowed(NOTIFICATION_READ)
-    public List<NotificationDto> getNotificationsForCurrentUser() {
-        notificationAuthorizer.canGetForCurrentUser();
-        return benutzerService.getNotificationsForCurrentUser();
+    @Override
+    public List<NotificationDto> getNotificationsForFall(UUID fallId) {
+
+        notificationAuthorizer.canGetForFall(fallId);
+        return notificationService.getNotificationsForFall(fallId);
+    }
+
+    @RolesAllowed(NOTIFICATION_READ)
+    @Override
+    public void markNotificationAsRead(UUID notificationId) {
+        notificationAuthorizer.canMarkAsRead(notificationId);
+        notificationService.markNotificationAsRead(notificationId);
     }
 }

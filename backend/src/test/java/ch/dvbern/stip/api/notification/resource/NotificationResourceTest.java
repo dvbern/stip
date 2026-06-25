@@ -21,7 +21,6 @@ import java.util.Arrays;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
-import ch.dvbern.stip.api.notification.type.NotificationType;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -34,7 +33,8 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.NotificationApiSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
-import ch.dvbern.stip.generated.dto.NotificationDto;
+import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
+import ch.dvbern.stip.generated.dto.NotificationTypeDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response.Status;
@@ -47,9 +47,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -87,18 +85,54 @@ class NotificationResourceTest {
     @TestAsGesuchsteller
     @Order(2)
     void verifyNotification() {
-        final var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+        final var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .extract()
             .body()
-            .as(NotificationDto[].class);
+            .as(NotificationDtoSpec[].class);
 
-        assertThat(notifications.length, greaterThan(0));
-        assertThat(
-            Arrays.stream(notifications).toList().get(0).getNotificationType(),
-            is(NotificationType.GESUCH_EINGEREICHT)
-        );
+        assertThat(notifications.length).isGreaterThan(0);
+        assertThat(Arrays.stream(notifications).toList().get(0).getNotificationType())
+            .isEqualTo(NotificationTypeDtoSpec.GESUCH_EINGEREICHT);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(3)
+    void markNotificationAsRead() {
+        final var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+
+        final var notificationId = Arrays.stream(notifications).toList().get(0).getId();
+
+        notificationApiSpec.markNotificationAsRead()
+            .notificationIdPath(notificationId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        final var updatedNotifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(NotificationDtoSpec[].class);
+
+        final var updatedNotification = Arrays.stream(updatedNotifications)
+            .filter(notification -> notification.getId().equals(notificationId))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("Notification not found after mark-as-read call"));
+
+        assertThat(updatedNotification.getRead()).isTrue();
     }
 
     @Test

@@ -37,13 +37,13 @@ export abstract class SharedFeatureAuszahlungComponent {
   hasUnsavedChanges = false;
 
   // QueryParam inputs
-  fallIdQuerySig = input<string | undefined>(undefined, { alias: 'fallId' });
+  fallIdParamSig = input<string | undefined>(undefined, { alias: 'fallId' });
 
   fallIdSig = computed(() => {
-    const fallIdQuery = this.fallIdQuerySig();
+    const fallId = this.fallIdParamSig();
 
-    if (isDefined(fallIdQuery)) {
-      return fallIdQuery;
+    if (isDefined(fallId)) {
+      return fallId;
     }
 
     const { gesuch } = this.gesuchsViewSig();

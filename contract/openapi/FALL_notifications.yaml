@@ -1,0 +1,70 @@
+openapi: 3.0.3
+info:
+  title: STIP API
+  version: '1.0'
+  license:
+    name: GNU AGPLv3
+    url: 'https://www.gnu.org/licenses/agpl.txt'
+servers:
+  - url: 'http://localhost:{port}/api/v1'
+    variables:
+      port:
+        default: '8080'
+paths:
+  '/fall/{fallId}/notifications':
+    parameters:
+      - name: fallId
+        in: path
+        required: true
+        schema:
+          $ref: './components/common.yaml#/UUID'
+    get:
+      tags:
+        - Notification
+      operationId: getNotificationsForFall
+      summary: Returns all notifications for the given Fall
+      responses:
+        '200':
+          description: List of notifications for the Fall
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/Notification'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+  '/fall/notifications/{notificationId}/markAsRead':
+    parameters:
+      - name: notificationId
+        in: path
+        required: true
+        schema:
+          $ref: './components/common.yaml#/UUID'
+    patch:
+      tags:
+        - Notification
+      operationId: markNotificationAsRead
+      summary: Marks a notification as read
+      responses:
+        '204':
+          description: Notification marked as read
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+components:
+  securitySchemes:
+    $ref: './components/security.yaml#/securitySchemes'
+security:
+  $ref: './components/security.yaml#/security'

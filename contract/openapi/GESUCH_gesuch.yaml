@@ -1251,7 +1251,6 @@ components:
       required:
         - fall
         - ausbildungDashboardItems
-        - notifications
       type: object
       properties:
         fall:
@@ -1260,10 +1259,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AusbildungDashboardItem'
-        notifications:
-          type: array
-          items:
-            $ref: './components/common.yaml#/Notification'
         currentDelegierung:
           $ref: './components/common.yaml#/DelegierungSlim'
         earliestActiveGesuchPeriodeStart:
