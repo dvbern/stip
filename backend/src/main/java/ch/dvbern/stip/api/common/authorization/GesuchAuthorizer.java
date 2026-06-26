@@ -72,6 +72,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
 
     @Transactional
     public void freigabestelleCanChangeGesuchStatusToVerfuegt(final UUID gesuchId) {
+        assertGesuchIsInGesuchStatus(gesuchId, Gesuchstatus.IN_FREIGABE);
         assertCanPerformStatusChange(gesuchId, GesuchStatusChangeEvent.VERFUEGT);
 
         final var canFreigabeVerfuegen =

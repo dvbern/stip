@@ -635,6 +635,32 @@ public class TestUtil {
             .statusCode(Response.Status.CREATED.getStatusCode());
     }
 
+    public static void acceptAllGesuchDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+
+        for (var dokument : gesuchdokuments) {
+            dokumentApiSpec.gesuchDokumentAkzeptieren()
+                .gesuchDokumentIdPath(dokument.getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+        }
+    }
+
     public static ValidatableResponse uploadUnterschriftenblatt(
         final DokumentApiSpec dokumentApiSpec,
         final UUID gesuchId,
