@@ -11474,6 +11474,7 @@ components:
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
         - canSBInitAenderung
+        - canVerfuegen
       type: object
       properties:
         gesuchStatus:
@@ -11492,6 +11493,8 @@ components:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
+        canVerfuegen:
+          type: boolean
     GesuchTrancheSlim:
       type: object
       required:

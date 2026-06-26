@@ -57,6 +57,24 @@ public class GesuchHistoryRepository {
         return revisions;
     }
 
+    @SuppressWarnings("unchecked")
+    public Optional<UUID> getUserMutiertOfLatestToInFreigabeChange(final UUID gesuchId) {
+        final var reader = AuditReaderFactory.get(entityManager);
+
+        return (Optional<UUID>) reader
+            .createQuery()
+            .forRevisionsOfEntity(Gesuch.class, true, false)
+            .addProjection(AuditEntity.property("userMutiertId"))
+            .add(AuditEntity.property("id").eq(gesuchId))
+            .add(AuditEntity.property("gesuchStatus").eq(Gesuchstatus.IN_FREIGABE))
+            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addOrder(AuditEntityUtil.revisionTimestamp().desc())
+            .setMaxResults(1)
+            .getResultList()
+            .stream()
+            .findFirst();
+    }
+
     // Reason: forRevisionsOfEntity with Gesuch.class and selectEntitiesOnly will always return a List<Gesuch>
     @SuppressWarnings("unchecked")
     public Stream<Gesuch> getWhereStatusChangeHappenedBefore(

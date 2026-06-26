@@ -24,15 +24,16 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.generated.dto.GesuchStateInfoDto;
 import jakarta.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+@Slf4j
 @Mapper(config = MappingConfig.class)
 public abstract class GesuchStateInfoMapper {
     @Inject
     GesuchStatusService gesuchStatusService;
-
     @Inject
     RequiredDokumentService requiredDokumentService;
 
@@ -41,6 +42,7 @@ public abstract class GesuchStateInfoMapper {
     @Mapping(source = ".", target = "canBearbeitungAbschliessen", qualifiedByName = "canBearbeitungAbschliessen")
     @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
     @Mapping(source = ".", target = "canSBInitAenderung", qualifiedByName = "canSBInitAenderung")
+    @Mapping(source = ".", target = "canVerfuegen", qualifiedByName = "canVerfuegen")
     public abstract GesuchStateInfoDto toDto(Gesuch gesuch);
 
     @Named("getCanGetBerechnung")
@@ -67,6 +69,11 @@ public abstract class GesuchStateInfoMapper {
     @Named("canSBInitAenderung")
     boolean canSBInitAenderung(Gesuch gesuch) {
         return GesuchUtil.canSbInitAendererung(gesuch);
+    }
+
+    @Named("canVerfuegen")
+    boolean canVerfuegen(Gesuch gesuch) {
+        return gesuchStatusService.canFreigabeVerfuegen(gesuch);
     }
 
 }
