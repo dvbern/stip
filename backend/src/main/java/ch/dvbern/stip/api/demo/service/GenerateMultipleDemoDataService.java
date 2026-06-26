@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import ch.dvbern.stip.api.adresse.entity.AdresseBuilder;
 import ch.dvbern.stip.api.auszahlung.entity.AuszahlungBuilder;
@@ -48,6 +49,7 @@ import ch.dvbern.stip.api.fall.entity.FallBuilder;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.entity.StatisticsdataBuilder;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
+import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.land.repo.LandRepository;
@@ -76,10 +78,11 @@ public class GenerateMultipleDemoDataService {
     private final LandRepository landRepository;
     private final RolleService rolleService;
     private final TransactionManager transactionManager;
+    private final DokumentDownloadService dokumentDownloadService;
     private final MailAlreadySentCheckerService mailAlreadySentCheckerService;
     private final SachbearbeiterRepository sachbearbeiterRepository;
     private final StatistikXMLService statistikXMLService;
-    private final DokumentDownloadService dokumentDownloadService;
+    private final GesuchFormularService gesuchFormularService;
 
     @Transactional
     @SneakyThrows
@@ -133,6 +136,20 @@ public class GenerateMultipleDemoDataService {
                 .build()
         );
         createBuchhaltung(demoData, gesuch);
+
+        final var preValidation =
+            gesuchFormularService.validatePagesSb(gesuch.getLatestGesuchTranche().getGesuchFormular());
+        if (!preValidation.getValidationErrors().isEmpty()) {
+            throw new IllegalStateException(
+                "Tescase %s is invalid: %s".formatted(
+                    demoData.getTestFall(),
+                    preValidation.getValidationErrors()
+                        .stream()
+                        .map(v -> "\"%s\" %s".formatted(v.getPropertyPath(), v.getMessage()))
+                        .collect(Collectors.joining(", "))
+                )
+            );
+        }
 
         return gesuch;
     }
