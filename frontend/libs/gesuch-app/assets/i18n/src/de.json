@@ -1,6 +1,5 @@
 {
   "app-name": "Stipendien Online",
-  "gesuch-app.dashboard.title": "Dashboard",
   "gesuch-app.dashboard.welcome.title": "Guten Morgen, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Stipendium beantragen",
   "gesuch-app.dashboard.fall.delegated.title": "Keine Ausbildung erfasst",

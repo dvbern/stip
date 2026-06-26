@@ -142,7 +142,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const fallNav: NavItem = {
         type: 'link',
         id: 'fall',
-        label: { key: 'sozialdienst-app.header.fall' },
+        label: { key: 'shared.header.fall' },
         icon: 'assignment_ind',
         route: ['/fall', fallId],
       };
@@ -150,7 +150,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const auszahlungNav: NavItem = {
         type: 'link',
         id: 'auszahlung',
-        label: { key: 'sozialdienst-app.header.auszahlung' },
+        label: { key: 'shared.header.auszahlung' },
         icon: 'payments',
         route: ['/auszahlung', fallId],
       };
@@ -183,7 +183,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
         tabSegments,
         this.trancheIdSig(),
-        'sozialdienst-app',
       );
 
       const darlehenMenu = buildDarlehenMenu({

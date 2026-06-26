@@ -41,7 +41,7 @@ public abstract class GesuchStateInfoMapper {
 
     @Named("getCanGetBerechnung")
     boolean getCanGetBerechnung(Gesuch gesuch) {
-        return gesuchStatusService.canGetBerechnung(gesuch);
+        return gesuchStatusService.canGetBerechnungSb(gesuch);
     }
 
     @Named("getCanTriggerManuellPruefen")

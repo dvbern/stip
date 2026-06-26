@@ -1,3 +1,4 @@
+import { computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ActivationEnd,
@@ -6,8 +7,8 @@ import {
   Router,
 } from '@angular/router';
 import { GesuchUrlType } from '@dv/shared/model/gesuch';
-import { lowercased } from '@dv/shared/model/type-util';
-import { filter, map } from 'rxjs/operators';
+import { capitalized, lowercased } from '@dv/shared/model/type-util';
+import { filter, map, startWith } from 'rxjs/operators';
 
 /**
  * Returns the URL after a navigation end event.
@@ -73,3 +74,42 @@ const isTrancheRoute = (
   routeEvent.type === EventType.ActivationEnd &&
   'trancheId' in routeEvent.snapshot.params &&
   'trancheTyp' in routeEvent.snapshot.params;
+
+export const createUrlChecksSig = <const T extends string>(
+  router: Router,
+  ...values: T[]
+) => {
+  const urlSig = toSignal(
+    urlAfterNavigationEnd(router).pipe(
+      map(() => router.routerState.snapshot.url),
+      startWith(router.routerState.snapshot.url),
+    ),
+  );
+
+  return computed(() => {
+    const url = urlSig();
+    if (!url) {
+      return { matched: [] } as { [k in `is${Capitalize<T>}`]?: boolean } & {
+        matched: string[];
+      };
+    }
+
+    const matched: Set<T> = new Set();
+    const isMatches = values.reduce(
+      (acc, value) => {
+        const includes = url.includes(`/${value}/`);
+        acc[`is${capitalized(value)}`] = includes;
+        if (includes) {
+          matched.add(value);
+        }
+        return acc;
+      },
+      {} as { [k in `is${Capitalize<T>}`]: boolean },
+    );
+
+    return {
+      ...isMatches,
+      matched: Array.from(matched),
+    };
+  });
+};

@@ -327,8 +327,8 @@ public class DarlehenService {
     }
 
     @Transactional
-    public List<FreiwilligDarlehenDto> getFreiwilligDarlehenAllSb(final UUID gesuchId) {
-        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
+    public List<FreiwilligDarlehenDto> getFreiwilligDarlehenAllSb(final UUID fallId) {
+        final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
         return darlehenList.stream()
             .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
             .map(freiwilligDarlehenMapper::toDtoGs)

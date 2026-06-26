@@ -10,7 +10,7 @@ export const gesuchAppFeatureCockpitRoutes: Route[] = [
       {
         path: '',
         component: GesuchAppFeatureCockpitComponent,
-        title: 'gesuch-app.dashboard.title',
+        title: 'shared.dashboard.title',
       },
     ],
   },

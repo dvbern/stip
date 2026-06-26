@@ -306,10 +306,17 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
+    @RolesAllowed(GS_GESUCH_READ)
+    public GesuchInfoDto getGesuchInfoGs(UUID gesuchId) {
+        gesuchAuthorizer.gsCanRead(gesuchId);
+        return gesuchService.getGesuchInfoGs(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public GesuchInfoDto getGesuchInfoSb(UUID gesuchId) {
         gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
-        return gesuchService.getGesuchInfo(gesuchId);
+        return gesuchService.getGesuchInfoSb(gesuchId);
     }
 
     @Override
@@ -320,10 +327,10 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
-    @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchDto getEingereichtTranche(UUID gesuchTrancheId) {
-        gesuchTrancheAuthorizer.sbOrJuristCanRead();
-        return gesuchService.getEingereichtGesuchByTrancheId(gesuchTrancheId);
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public GesuchDto getEingereichtTranche(UUID gesuchId) {
+        gesuchAuthorizer.gsSbOrFreigabestelleOrJuristCanRead(gesuchId);
+        return gesuchService.getEingereichtGesuchByTrancheId(gesuchId);
     }
 
     @Override
@@ -423,10 +430,17 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public BerechnungsresultatDto getBerechnungForGesuchGs(UUID gesuchId) {
+        gesuchAuthorizer.canGetBerechnungGs(gesuchId);
+        return gesuchService.getBerechnungsresultatGs(gesuchId);
+    }
+
+    @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public BerechnungsresultatDto getBerechnungForGesuch(UUID gesuchId) {
-        gesuchAuthorizer.canGetBerechnung(gesuchId);
-        return gesuchService.getBerechnungsresultat(gesuchId);
+    public BerechnungsresultatDto getBerechnungForGesuchSb(UUID gesuchId) {
+        gesuchAuthorizer.canGetBerechnungSb(gesuchId);
+        return gesuchService.getBerechnungsresultatSb(gesuchId);
     }
 
     @Override
@@ -439,7 +453,7 @@ public class GesuchResourceImpl implements GesuchResource {
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public FileDownloadTokenDto getBerechnungsblattDownloadToken(UUID gesuchId) {
-        gesuchAuthorizer.canGetBerechnung(gesuchId);
+        gesuchAuthorizer.canGetBerechnungSb(gesuchId);
 
         return dokumentDownloadService.getFileDownloadToken(
             gesuchId,
@@ -473,14 +487,14 @@ public class GesuchResourceImpl implements GesuchResource {
     @RolesAllowed(GS_GESUCH_READ)
     public GesuchHeaderDto getGesuchHeaderGs(UUID gesuchId) {
         gesuchAuthorizer.gsCanRead(gesuchId);
-        return gesuchService.getGesuchTrancheHeader(gesuchId);
+        return gesuchService.getGesuchTrancheHeaderGs(gesuchId);
     }
 
     @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
     public GesuchHeaderDto getGesuchHeaderSb(UUID gesuchId) {
         gesuchAuthorizer.sbOrJuristCanRead();
-        return gesuchService.getGesuchTrancheHeader(gesuchId);
+        return gesuchService.getGesuchTrancheHeaderSb(gesuchId);
     }
 
     @Override

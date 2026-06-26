@@ -670,8 +670,13 @@ public class GesuchService {
         return fallDashboardItemMapper.toDto(fall);
     }
 
-    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
+    public GesuchInfoDto getGesuchInfoGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        return gesuchMapper.toInfoDtoGs(gesuch);
+    }
+
+    public GesuchInfoDto getGesuchInfoSb(UUID gesuchId) {
+        return gesuchMapper.toInfoDtoSb(gesuchRepository.requireById(gesuchId));
     }
 
     @Transactional
@@ -990,15 +995,22 @@ public class GesuchService {
         notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
-    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
+    @Transactional
+    public BerechnungsresultatDto getBerechnungsresultatGs(UUID gesuchId) {
+        // TODO: Historize
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
     }
 
     @Transactional
-    public GesuchDto getEingereichtGesuchByTrancheId(UUID trancheId) {
-        final var tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
-        final var gesuch = tranche.getGesuch();
+    public BerechnungsresultatDto getBerechnungsresultatSb(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+    }
+
+    @Transactional
+    public GesuchDto getEingereichtGesuchByTrancheId(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var eingereichtTranche =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
@@ -1484,14 +1496,29 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchId) {
+    public GesuchHeaderDto getGesuchTrancheHeaderGs(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
         final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
 
         return new GesuchHeaderDto()
-            .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
+            .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
+            .aenderungs(aenderungs)
+            .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .initial(initialGesuch)
+            .versions(versions);
+    }
+
+    @Transactional
+    public GesuchHeaderDto getGesuchTrancheHeaderSb(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
+        final var initialGesuch = getInitialGesuchTranches(gesuch);
+
+        return new GesuchHeaderDto()
+            .gesuchInfo(gesuchMapper.toInfoDtoSb(gesuch))
             .aenderungs(aenderungs)
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
             .initial(initialGesuch)

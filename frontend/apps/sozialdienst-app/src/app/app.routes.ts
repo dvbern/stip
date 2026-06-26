@@ -13,7 +13,7 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: 'dashboard',
-        title: 'sozialdienst-app.dashboard.title',
+        title: 'shared.dashboard.title',
         loadChildren: () =>
           import('@dv/sozialdienst-app/feature/cockpit').then(
             (m) => m.sozialdienstAppFeatureCockpitRoutes,
@@ -44,7 +44,7 @@ export const appRoutes: Route[] = [
       {
         path: 'darlehen',
         loadChildren: () =>
-          import('@dv/shared/feature/darlehen').then(
+          import('@dv/shared/feature/darlehen-form').then(
             (m) => m.sharedFeatureDarlehenFeatureRoutes,
           ),
       },

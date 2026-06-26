@@ -165,9 +165,14 @@ public interface GesuchResource {
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/berechnung")
+    @Path("/{gesuchId}/berechnung/gs")
     @Produces({ "application/json", "text/plain" })
-    BerechnungsresultatDto getBerechnungForGesuch(@PathParam("gesuchId") UUID gesuchId);
+    BerechnungsresultatDto getBerechnungForGesuchGs(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/berechnung/sb")
+    @Produces({ "application/json", "text/plain" })
+    BerechnungsresultatDto getBerechnungForGesuchSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/berechnung/{verfuegungId}")
@@ -180,9 +185,9 @@ public interface GesuchResource {
     FileDownloadTokenDto getBerechnungsblattDownloadToken(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/eingereicht/{gesuchTrancheId}")
+    @Path("/eingereicht/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
-    GesuchDto getEingereichtTranche(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
+    GesuchDto getEingereichtTranche(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/gs/{gesuchTrancheId}")
@@ -200,9 +205,14 @@ public interface GesuchResource {
     GesuchHeaderDto getGesuchHeaderSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{gesuchId}/info")
+    @Path("/{gesuchId}/info/gs")
     @Produces({ "application/json", "text/plain" })
-    GesuchInfoDto getGesuchInfo(@PathParam("gesuchId") UUID gesuchId);
+    GesuchInfoDto getGesuchInfoGs(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/{gesuchId}/info/sb")
+    @Produces({ "application/json", "text/plain" })
+    GesuchInfoDto getGesuchInfoSb(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
     @Path("/sb/{gesuchTrancheId}")

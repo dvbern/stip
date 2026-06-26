@@ -1,9 +1,11 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, tap } from 'rxjs';
+import { exhaustMap, pipe, tap, throwError } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchInfo, GesuchService } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -26,6 +28,7 @@ export class GesuchInfoStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
+  private config = inject(SharedModelCompileTimeConfig);
   private gesuchService = inject(GesuchService);
 
   infoViewSig = computed(() => ({
@@ -41,11 +44,15 @@ export class GesuchInfoStore extends signalStore(
         }));
       }),
       exhaustMap(({ gesuchId }) =>
-        this.gesuchService
-          .getGesuchInfo$({ gesuchId })
-          .pipe(
-            handleApiResponse((gesuchInfo) => patchState(this, { gesuchInfo })),
-          ),
+        byAppType(this.config.appType, {
+          'gesuch-app': () => this.gesuchService.getGesuchInfoGs$({ gesuchId }),
+          'sachbearbeitung-app': () =>
+            this.gesuchService.getGesuchInfoSb$({ gesuchId }),
+          'demo-data-app': () =>
+            throwError(() => new Error('Not implemented for this AppType')),
+        }).pipe(
+          handleApiResponse((gesuchInfo) => patchState(this, { gesuchInfo })),
+        ),
       ),
     ),
   );

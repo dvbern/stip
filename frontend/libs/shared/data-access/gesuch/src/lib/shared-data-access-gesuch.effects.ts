@@ -212,10 +212,10 @@ export const loadGesuch = createEffect(
               throwError(() => new Error('Not implemented for this AppType')),
           } satisfies Record<AppType, unknown>;
 
-          const eingereichtTrancheService$ = (gesuchTrancheId: string) =>
+          const eingereichtTrancheService$ = (gesuchId: string) =>
             gesuchService.getEingereichtTranche$(
               {
-                gesuchTrancheId,
+                gesuchId,
               },
               undefined,
               undefined,

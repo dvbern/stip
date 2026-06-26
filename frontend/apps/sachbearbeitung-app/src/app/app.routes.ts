@@ -73,11 +73,11 @@ export const appRoutes: Route[] = [
         providers: [SteuerdatenStore],
         title: 'sachbearbeitung-app.gesuch-form.title',
         loadComponent: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+          import('@dv/shared/feature/gesuch-layout').then(
             (m) => m.SachbearbeitungAppFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
-          import('@dv/sachbearbeitung-app/feature/gesuch-layout').then(
+          import('@dv/sachbearbeitung-app/feature/gesuch-layout-routes').then(
             (m) => m.sachbearbeitungAppFeatureGesuchLayoutRoutes,
           ),
       },

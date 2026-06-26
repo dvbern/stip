@@ -50,7 +50,7 @@ class GesuchAuthorizerCanGetBerechnungTest {
     void setUp() {
         gesuchRepository = Mockito.mock(GesuchRepository.class);
         gesuchStatusService = Mockito.mock(GesuchStatusService.class);
-        when(gesuchStatusService.canGetBerechnung(any())).thenCallRealMethod();
+        when(gesuchStatusService.canGetBerechnungSb(any())).thenCallRealMethod();
         gesuch = new Gesuch()
             .setAusbildung(
                 new Ausbildung()
@@ -79,11 +79,11 @@ class GesuchAuthorizerCanGetBerechnungTest {
         gesuch.setGesuchStatus(Gesuchstatus.IN_BEARBEITUNG_GS);
         when(gesuchRepository.requireById(any())).thenReturn(gesuch);
         assertThrows(ForbiddenException.class, () -> {
-            authorizer.canGetBerechnung(gesuch.getId());
+            authorizer.canGetBerechnungSb(gesuch.getId());
         });
         Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG.forEach(gesuchstatus -> {
             gesuch.setGesuchStatus(gesuchstatus);
-            assertDoesNotThrow(() -> authorizer.canGetBerechnung(gesuch.getId()));
+            assertDoesNotThrow(() -> authorizer.canGetBerechnungSb(gesuch.getId()));
 
         });
     }

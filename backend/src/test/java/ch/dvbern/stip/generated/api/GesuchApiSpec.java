@@ -106,14 +106,16 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisenAenderungUndo(),
                 getAllBeschwerdeVerlaufEntrys(),
-                getBerechnungForGesuch(),
+                getBerechnungForGesuchGs(),
+                getBerechnungForGesuchSb(),
                 getBerechnungForVerfuegung(),
                 getBerechnungsblattDownloadToken(),
                 getEingereichtTranche(),
                 getGesuchGS(),
                 getGesuchHeaderGs(),
                 getGesuchHeaderSb(),
-                getGesuchInfo(),
+                getGesuchInfoGs(),
+                getGesuchInfoSb(),
                 getGesuchSB(),
                 getGesucheGs(),
                 getGesucheSb(),
@@ -222,8 +224,12 @@ public class GesuchApiSpec {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
     }
 
-    public GetBerechnungForGesuchOper getBerechnungForGesuch() {
-        return new GetBerechnungForGesuchOper(createReqSpec());
+    public GetBerechnungForGesuchGsOper getBerechnungForGesuchGs() {
+        return new GetBerechnungForGesuchGsOper(createReqSpec());
+    }
+
+    public GetBerechnungForGesuchSbOper getBerechnungForGesuchSb() {
+        return new GetBerechnungForGesuchSbOper(createReqSpec());
     }
 
     public GetBerechnungForVerfuegungOper getBerechnungForVerfuegung() {
@@ -250,8 +256,12 @@ public class GesuchApiSpec {
         return new GetGesuchHeaderSbOper(createReqSpec());
     }
 
-    public GetGesuchInfoOper getGesuchInfo() {
-        return new GetGesuchInfoOper(createReqSpec());
+    public GetGesuchInfoGsOper getGesuchInfoGs() {
+        return new GetGesuchInfoGsOper(createReqSpec());
+    }
+
+    public GetGesuchInfoSbOper getGesuchInfoSb() {
+        return new GetGesuchInfoSbOper(createReqSpec());
     }
 
     public GetGesuchSBOper getGesuchSB() {
@@ -2101,28 +2111,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Berechnet und holt die Berechnung für ein Gesuch
+     * Berechnet und holt die Berechnung für ein potentiell historisiertes Gesuch
      * 
      *
      * @see #gesuchIdPath  (required)
      * return BerechnungsresultatDtoSpec
      */
-    public static class GetBerechnungForGesuchOper implements Oper {
+    public static class GetBerechnungForGesuchGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnung";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnung/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetBerechnungForGesuchOper(RequestSpecBuilder reqSpec) {
+        public GetBerechnungForGesuchGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/{gesuchId}/berechnung
+         * GET /gesuch/{gesuchId}/berechnung/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2133,7 +2143,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/berechnung
+         * GET /gesuch/{gesuchId}/berechnung/gs
          * @param handler handler
          * @return BerechnungsresultatDtoSpec
          */
@@ -2148,7 +2158,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetBerechnungForGesuchOper gesuchIdPath(Object gesuchId) {
+        public GetBerechnungForGesuchGsOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -2158,7 +2168,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetBerechnungForGesuchOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetBerechnungForGesuchGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2168,7 +2178,80 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetBerechnungForGesuchOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetBerechnungForGesuchGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Berechnet und holt die Berechnung für ein Gesuch
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return BerechnungsresultatDtoSpec
+     */
+    public static class GetBerechnungForGesuchSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/berechnung/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetBerechnungForGesuchSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnung/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/berechnung/sb
+         * @param handler handler
+         * @return BerechnungsresultatDtoSpec
+         */
+        public BerechnungsresultatDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<BerechnungsresultatDtoSpec> type = new TypeRef<BerechnungsresultatDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetBerechnungForGesuchSbOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForGesuchSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetBerechnungForGesuchSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -2323,13 +2406,13 @@ public class GesuchApiSpec {
      * Returns the inital eingereicht tranche by gesuchTrancheId
      * 
      *
-     * @see #gesuchTrancheIdPath  (required)
+     * @see #gesuchIdPath  (required)
      * return GesuchDtoSpec
      */
     public static class GetEingereichtTrancheOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/eingereicht/{gesuchTrancheId}";
+        public static final String REQ_URI = "/gesuch/eingereicht/{gesuchId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -2341,7 +2424,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/eingereicht/{gesuchTrancheId}
+         * GET /gesuch/eingereicht/{gesuchId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2352,7 +2435,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/eingereicht/{gesuchTrancheId}
+         * GET /gesuch/eingereicht/{gesuchId}
          * @param handler handler
          * @return GesuchDtoSpec
          */
@@ -2361,14 +2444,14 @@ public class GesuchApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_TRANCHE_ID_PATH = "gesuchTrancheId";
+        public static final String GESUCH_ID_PATH = "gesuchId";
 
         /**
-         * @param gesuchTrancheId (UUID)  (required)
+         * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetEingereichtTrancheOper gesuchTrancheIdPath(Object gesuchTrancheId) {
-            reqSpec.addPathParam(GESUCH_TRANCHE_ID_PATH, gesuchTrancheId);
+        public GetEingereichtTrancheOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
 
@@ -2612,28 +2695,28 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * Returns the basic Gesuch info with the given Id
+     * Returns the basic Gesuch info with the given Id, potentially historized
      * 
      *
      * @see #gesuchIdPath  (required)
      * return GesuchInfoDtoSpec
      */
-    public static class GetGesuchInfoOper implements Oper {
+    public static class GetGesuchInfoGsOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{gesuchId}/info";
+        public static final String REQ_URI = "/gesuch/{gesuchId}/info/gs";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetGesuchInfoOper(RequestSpecBuilder reqSpec) {
+        public GetGesuchInfoGsOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /gesuch/{gesuchId}/info
+         * GET /gesuch/{gesuchId}/info/gs
          * @param handler handler
          * @param <T> type
          * @return type
@@ -2644,7 +2727,7 @@ public class GesuchApiSpec {
         }
 
         /**
-         * GET /gesuch/{gesuchId}/info
+         * GET /gesuch/{gesuchId}/info/gs
          * @param handler handler
          * @return GesuchInfoDtoSpec
          */
@@ -2659,7 +2742,7 @@ public class GesuchApiSpec {
          * @param gesuchId (UUID)  (required)
          * @return operation
          */
-        public GetGesuchInfoOper gesuchIdPath(Object gesuchId) {
+        public GetGesuchInfoGsOper gesuchIdPath(Object gesuchId) {
             reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
             return this;
         }
@@ -2669,7 +2752,7 @@ public class GesuchApiSpec {
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetGesuchInfoOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetGesuchInfoGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -2679,7 +2762,80 @@ public class GesuchApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetGesuchInfoOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetGesuchInfoGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns the basic Gesuch info with the given Id
+     * 
+     *
+     * @see #gesuchIdPath  (required)
+     * return GesuchInfoDtoSpec
+     */
+    public static class GetGesuchInfoSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{gesuchId}/info/sb";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetGesuchInfoSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/info/sb
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{gesuchId}/info/sb
+         * @param handler handler
+         * @return GesuchInfoDtoSpec
+         */
+        public GesuchInfoDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchInfoDtoSpec> type = new TypeRef<GesuchInfoDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String GESUCH_ID_PATH = "gesuchId";
+
+        /**
+         * @param gesuchId (UUID)  (required)
+         * @return operation
+         */
+        public GetGesuchInfoSbOper gesuchIdPath(Object gesuchId) {
+            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetGesuchInfoSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetGesuchInfoSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -688,9 +688,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/getAllDarlehenSb/{gesuchId}:
+  /darlehen/getAllDarlehenSb/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -4394,9 +4394,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/eingereicht/{gesuchTrancheId}:
+  /gesuch/eingereicht/{gesuchId}:
     parameters:
-      - name: gesuchTrancheId
+      - name: gesuchId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -4484,7 +4484,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/info:
+  /gesuch/{gesuchId}/info/gs:
     parameters:
       - name: gesuchId
         schema:
@@ -4509,7 +4509,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuchInfo
+      operationId: getGesuchInfoGs
+      summary: Returns the basic Gesuch info with the given Id, potentially historized
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/info/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchInfoSb
       summary: Returns the basic Gesuch info with the given Id
       security:
         - auth-uat-bern: []
@@ -5423,7 +5453,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/berechnung:
+  /gesuch/{gesuchId}/berechnung/gs:
     parameters:
       - name: gesuchId
         schema:
@@ -5450,7 +5480,41 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getBerechnungForGesuch
+      operationId: getBerechnungForGesuchGs
+      summary: >-
+        Berechnet und holt die Berechnung für ein potentiell historisiertes
+        Gesuch
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/berechnung/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          description: Stipendien berechnet für Gesuch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Berechnungsresultat'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getBerechnungForGesuchSb
       summary: Berechnet und holt die Berechnung für ein Gesuch
       security:
         - auth-uat-bern: []
@@ -10237,6 +10301,7 @@ components:
       required:
         - id
         - fallNummer
+        - fallId
         - gesuchNummer
         - startDate
         - endDate
@@ -10246,6 +10311,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
+          type: string
+        fallId:
           type: string
         gesuchNummer:
           type: string

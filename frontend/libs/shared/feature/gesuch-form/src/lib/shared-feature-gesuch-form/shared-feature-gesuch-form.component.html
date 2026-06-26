@@ -1,53 +1,51 @@
-<ng-container *transloco="let t">
-  <div class="tw:flex tw:h-full">
-    <!-- left step nav (Desktop) -->
-    <div
-      class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white tw:overflow-y-auto tw:overflow-x-hidden"
-    >
-      <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
-    </div>
+<div class="tw:flex tw:h-full" *transloco="let t">
+  <!-- side menu -->
+  <div
+    class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white tw:overflow-y-auto tw:overflow-x-hidden"
+  >
+    <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
+  </div>
 
-    <div class="tw:dv-pass-height tw:dv-container tw:p-6 tw:pb-32">
-      @if (currentStepSig(); as step) {
-        <!-- step header (mobile) -->
-        <div
-          class="tw:flex tw:items-center tw:justify-between tw:border-b tw:border-dv-border tw:pb-4 tw:mt-4 tw:mb-6 tw:lg:hidden"
-        >
-          <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
-          <div class="tw:text-end">
-            <h5 class="step-title tw:font-semibold tw:text-lg/tight">
-              {{ t(step.translationKey) }}
-            </h5>
-            @if (step.nextStep?.translationKey; as nextStepKey) {
-              <p class="fst-italic tw:mb-0">
-                {{ t('shared.form.next') }}:
-                {{ t(nextStepKey) }}
-              </p>
-            }
-          </div>
+  <div class="tw:dv-pass-height tw:dv-container tw:bg-white tw:p-6 tw:pb-32">
+    @if (currentStepSig(); as step) {
+      <!-- step header (mobile) -->
+      <div
+        class="tw:flex tw:items-center tw:justify-between tw:border-b tw:border-dv-border tw:pb-4 tw:mt-4 tw:mb-6 tw:lg:hidden"
+      >
+        <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
+        <div class="tw:text-end">
+          <h5 class="step-title tw:font-semibold tw:text-lg/tight">
+            {{ t(step.translationKey) }}
+          </h5>
+          @if (step.nextStep?.translationKey; as nextStepKey) {
+            <p class="fst-italic tw:mb-0">
+              {{ t('shared.form.next') }}:
+              {{ t(nextStepKey) }}
+            </p>
+          }
         </div>
+      </div>
 
-        <!-- title (desktop) -->
-        <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start">
-          <dv-shared-ui-icon-chip class="tw:mr-4">
-            <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
-          </dv-shared-ui-icon-chip>
+      <!-- title (desktop) -->
+      <div class="tw:dv-page-title tw:hidden tw:lg:flex tw:justify-start">
+        <dv-shared-ui-icon-chip class="tw:mr-4">
+          <i class="material-symbols-rounded title-icon">{{ step.iconSymbolName }}</i>
+        </dv-shared-ui-icon-chip>
 
-          <h1 data-testid="step-title">
-            {{ t(step.titleTranslationKey) }}
-          </h1>
-          <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
-        </div>
-      }
+        <h1 data-testid="step-title">
+          {{ t(step.titleTranslationKey) }}
+        </h1>
+        <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
+      </div>
+    }
 
-      <dv-shared-ui-router-outlet-wrapper
-        attribute="step"
-        (data)="stepSig.set($event)"
-      ></dv-shared-ui-router-outlet-wrapper>
-    </div>
+    <dv-shared-ui-router-outlet-wrapper
+      attribute="step"
+      (data)="stepSig.set($event)"
+    ></dv-shared-ui-router-outlet-wrapper>
   </div>
 
   <ng-template cdkPortal>
     <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()"></dv-shared-pattern-gesuch-step-nav>
   </ng-template>
-</ng-container>
+</div>

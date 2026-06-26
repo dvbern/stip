@@ -225,7 +225,7 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
-dv-sachbearbeitung-app-feature-verfuegung {
+dv-shared-feature-verfuegung {
   .mat-mdc-card {
     background-color: var(--tw-color-gray-100);
     border-width: 1px;
@@ -237,7 +237,7 @@ dv-sachbearbeitung-app-feature-verfuegung {
   }
 }
 
-dv-sachbearbeitung-app-feature-gesuch-layout {
+dv-shared-feature-gesuch-layout {
   .tw\:dv-table {
     box-shadow: none;
     border: 1px solid var(--tw-color-gray-300);

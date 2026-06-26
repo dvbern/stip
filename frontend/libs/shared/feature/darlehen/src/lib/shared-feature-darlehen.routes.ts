@@ -2,13 +2,13 @@ import { Route } from '@angular/router';
 
 import { routeWithUnsavedChangesGuard } from '@dv/shared/pattern/unsaved-guard';
 
-import { SharedFeatureDarlehenFeatureComponent } from './shared-feature-darlehen/shared-feature-darlehen.component';
+import { SharedFeatureDarlehenComponent } from './shared-feature-darlehen/shared-feature-darlehen.component';
 
-export const sharedFeatureDarlehenFeatureRoutes: Route[] = [
+export const sharedFeatureDarlehenRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
-    path: ':darlehenId/fall/:fallId',
+    path: ':darlehenId/gesuch/:gesuchId',
     pathMatch: 'prefix',
-    component: SharedFeatureDarlehenFeatureComponent,
+    component: SharedFeatureDarlehenComponent,
     title: 'shared.darlehen.title',
     data: { shouldReuseRoute: false },
   }),

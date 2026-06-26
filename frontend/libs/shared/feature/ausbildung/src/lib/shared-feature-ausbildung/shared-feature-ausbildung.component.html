@@ -67,8 +67,8 @@
     <div
       dvSharedUiInfoDialog
       class="tw:hidden tw:xl:block tw:xl:col-start-3"
-      [dialogTitleKey]="'shared.form.ausbildung.ausbildungsstaette.label'"
-      [dialogMessageKey]="'shared.form.ausbildung.ausbildungsstaette.info'"
+      [dialogTitleKeySig]="'shared.form.ausbildung.ausbildungsstaette.label'"
+      [dialogMessageKeySig]="'shared.form.ausbildung.ausbildungsstaette.info'"
       [forceDialogPosition]="!!fallId"
       #ausbildungsstaetteInfoDialog="dvSharedUiInfoDialog"
     ></div>
@@ -115,8 +115,8 @@
     <div
       dvSharedUiInfoDialog
       class="tw:hidden tw:xl:block tw:xl:col-start-3"
-      [dialogTitleKey]="'shared.form.ausbildung.ausbildungsgang.label'"
-      [dialogMessageKey]="'shared.form.ausbildung.ausbildungsgang.info'"
+      [dialogTitleKeySig]="'shared.form.ausbildung.ausbildungsgang.label'"
+      [dialogMessageKeySig]="'shared.form.ausbildung.ausbildungsgang.info'"
       [forceDialogPosition]="!!fallId"
       #ausbildungsgangInfoDialog="dvSharedUiInfoDialog"
     ></div>
@@ -149,8 +149,8 @@
       <div
         dvSharedUiInfoDialog
         class="tw:hidden tw:xl:block tw:xl:col-start-3"
-        [dialogTitleKey]="t(`shared.form.ausbildung.fachrichtung.label.${zusatzfrage}`)"
-        [dialogMessageKey]="t('shared.form.ausbildung.fachrichtung.info')"
+        [dialogTitleKeySig]="`shared.form.ausbildung.fachrichtung.label.${zusatzfrage}`"
+        [dialogMessageKeySig]="'shared.form.ausbildung.fachrichtung.info'"
         [forceDialogPosition]="!!fallId"
         #fachrichtungInfoDialog="dvSharedUiInfoDialog"
       ></div>

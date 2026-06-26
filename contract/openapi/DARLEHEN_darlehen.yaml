@@ -495,9 +495,9 @@ paths:
       operationId: getAllFreiwilligDarlehenGs
       summary: Return all darlehen for a given fallId
 
-  /darlehen/getAllDarlehenSb/{gesuchId}:
+  /darlehen/getAllDarlehenSb/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path

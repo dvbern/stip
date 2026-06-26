@@ -26,7 +26,7 @@ const baseNavItems: (NavItem & {
   {
     type: 'link',
     id: 'dashboard',
-    label: { key: 'sachbearbeitung-app.header.antraege' },
+    label: { key: 'shared.header.dashboard' },
     icon: 'dashboard',
     route: ['/dashboard', 'antraege'],
     testId: 'dashboard-nav-item',
@@ -34,14 +34,14 @@ const baseNavItems: (NavItem & {
   {
     type: 'link',
     id: 'massendruck',
-    label: { key: 'sachbearbeitung-app.header.massendruck' },
+    label: { key: 'shared.header.massendruck' },
     icon: 'print',
     route: ['/massendruck'],
   },
   {
     type: 'link',
     id: 'administration',
-    label: { key: 'sachbearbeitung-app.header.administration' },
+    label: { key: 'shared.header.administration' },
     icon: 'settings',
     route: ['/administration'],
     rolesAllowed: ['V0_Sachbearbeiter-Admin', 'V0_Jurist'],
@@ -94,7 +94,7 @@ export class SachbearbeitungAppPatternMainLayoutComponent {
 
     const defaultFilter = getDefaultQueryForRole(rolesMap);
 
-    const navItems: NavItem[] = baseNavItems;
+    const navItems = baseNavItems;
 
     const filtered: NavItem[] = navItems
       .filter((item) => {

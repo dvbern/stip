@@ -17,6 +17,10 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -39,9 +43,15 @@ import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
+import org.mapstruct.Qualifier;
+
 
 @Mapper(
     config = MappingConfig.class,
@@ -54,6 +64,11 @@ import org.mapstruct.Named;
     }
 )
 public abstract class GesuchMapper {
+    @Qualifier
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.CLASS)
+    public @interface AfterToInfoDtoGs {}
+
     @Inject
     FallService fallService;
 
@@ -72,12 +87,29 @@ public abstract class GesuchMapper {
     public abstract GesuchDto toDto(Gesuch gesuch);
 
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
     @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
     @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
     @Mapping(source = ".", target = "state")
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
-    public abstract GesuchInfoDto toInfoDto(Gesuch gesuch);
+    @BeanMapping(qualifiedBy = { AfterToInfoDtoGs.class })
+    public abstract GesuchInfoDto toInfoDtoGs(Gesuch gesuch);
+
+    @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
+    @Mapping(source = "ausbildung.fall.id", target = "fallId")
+    @Mapping(source = ".", target = "startDate", qualifiedByName = "getStartDate")
+    @Mapping(source = ".", target = "endDate", qualifiedByName = "getEndDate")
+    @Mapping(source = ".", target = "state")
+    @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
+    @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
+    public abstract GesuchInfoDto toInfoDtoSb(Gesuch gesuch);
+
+    @AfterMapping
+    @AfterToInfoDtoGs
+    public void afterToInfoDtoGs(Gesuch gesuch, @MappingTarget GesuchInfoDto gesuchInfoDto) {
+        gesuchInfoDto.getState().setCanGetBerechnung(gesuch.isVerfuegt());
+    }
 
     @Nullable
     @Named("getPiaVorname")

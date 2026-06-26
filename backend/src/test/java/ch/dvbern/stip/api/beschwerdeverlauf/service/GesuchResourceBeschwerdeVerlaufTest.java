@@ -75,7 +75,7 @@ class GesuchResourceBeschwerdeVerlaufTest {
         TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuchWithAuszahlung(gesuchApiSpec, dokumentApiSpec, auszahlungApiSpec, gesuch);
 
-        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfoSb()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -127,7 +127,7 @@ class GesuchResourceBeschwerdeVerlaufTest {
     @TestAsGesuchsteller
     @Order(4)
     void verifyBeschwerdeHaengigHasBeenSetToTrue() {
-        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfoSb()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

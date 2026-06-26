@@ -1,13 +1,15 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, tap } from 'rxjs';
+import { exhaustMap, pipe, tap, throwError } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   BerechnungsStammdaten,
   Berechnungsresultat,
   GesuchService,
 } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { TranchenBerechnungsresultatView } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
@@ -32,6 +34,7 @@ export class BerechnungStore extends signalStore(
   withState(initialState),
 ) {
   private gesuchService = inject(GesuchService);
+  private config = inject(SharedModelCompileTimeConfig);
 
   /**
    * Transforms the raw berechnung data into a view model grouped by tranche ID.
@@ -132,11 +135,16 @@ export class BerechnungStore extends signalStore(
         }));
       }),
       exhaustMap(({ gesuchId }) =>
-        this.gesuchService
-          .getBerechnungForGesuch$({ gesuchId })
-          .pipe(
-            handleApiResponse((berechnung) => patchState(this, { berechnung })),
-          ),
+        byAppType(this.config.appType, {
+          'gesuch-app': () =>
+            this.gesuchService.getBerechnungForGesuchGs$({ gesuchId }),
+          'sachbearbeitung-app': () =>
+            this.gesuchService.getBerechnungForGesuchSb$({ gesuchId }),
+          'demo-data-app': () =>
+            throwError(() => new Error('Not implemented for this AppType')),
+        }).pipe(
+          handleApiResponse((berechnung) => patchState(this, { berechnung })),
+        ),
       ),
     ),
   );

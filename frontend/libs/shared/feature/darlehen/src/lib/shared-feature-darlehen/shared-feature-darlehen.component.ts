@@ -2,58 +2,64 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   effect,
   inject,
   input,
 } from '@angular/core';
-import { MatMenuModule } from '@angular/material/menu';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
+import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
 
 @Component({
-  selector: 'dv-shared-feature-darlehen-feature',
+  selector: 'dv-shared-feature-darlehen',
   imports: [
-    TranslocoDirective,
-    MatMenuModule,
+    MatSidenavModule,
     SharedPatternDarlehenFormComponent,
     SharedUiDarlehenVerfuegungDownloadComponent,
+    TranslocoDirective,
+    SharedUiDarlehenMenuComponent,
   ],
   templateUrl: './shared-feature-darlehen.component.html',
+  styleUrl: './shared-feature-darlehen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SharedFeatureDarlehenFeatureComponent {
+export class SharedFeatureDarlehenComponent {
+  @HostBinding('class') klass = 'tw:dv-pass-height';
+  private router = inject(Router);
+  private formUtils = inject(SharedUtilFormService);
   darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
-  route = inject(ActivatedRoute);
-  router = inject(Router);
-  private formUtils = inject(SharedUtilFormService);
-  hasUnsavedChanges = false;
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
+  fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
+  hasUnsavedChanges = false;
 
   constructor() {
-    this.formUtils.registerFormForUnsavedCheck(this);
-
     effect(() => {
       const darlehenId = this.darlehenIdSig();
       if (darlehenId) {
-        this.darlehenStore.getDarlehenGs$({
+        this.darlehenStore.getDarlehenSb$({
           darlehenId,
           onFailure: () => {
-            this.redirectToHome();
+            this.router.navigate(['/darlehen']);
           },
         });
       }
     });
+    this.formUtils.registerFormForUnsavedCheck(this);
   }
 
-  redirectToHome() {
-    this.hasUnsavedChanges = false;
-    this.router.navigate(['/']);
+  reloadDarlehenList() {
+    const fallId = this.fallIdSig();
+    if (fallId) {
+      this.darlehenStore.getAllDarlehen$({ fallId });
+    }
   }
 }

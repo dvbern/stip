@@ -135,8 +135,13 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void canGetBerechnung(final UUID gesuchId) {
-        assertSBCanGetBerechnung(gesuchId);
+    public void canGetBerechnungGs(final UUID gesuchId) {
+        assertCanGetBerechnungGs(gesuchId);
+    }
+
+    @Transactional
+    public void canGetBerechnungSb(final UUID gesuchId) {
+        assertCanGetBerechnungSb(gesuchId);
     }
 
     @Transactional
@@ -297,9 +302,17 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
     }
 
-    public void assertSBCanGetBerechnung(final UUID gesuchId) {
+    public void assertCanGetBerechnungGs(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusService.canGetBerechnung(gesuch)) {
+        if (gesuchStatusService.canGetBerechnungGs(gesuch)) {
+            return;
+        }
+        forbidden();
+    }
+
+    public void assertCanGetBerechnungSb(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuchStatusService.canGetBerechnungSb(gesuch)) {
             return;
         }
         forbidden();

@@ -110,7 +110,11 @@ public class GesuchStatusService {
         && requiredDokumentService.getSBCanBearbeitungAbschliessen(gesuch);
     }
 
-    public boolean canGetBerechnung(final Gesuch gesuch) {
+    public boolean canGetBerechnungGs(final Gesuch gesuch) {
+        return gesuch.isVerfuegt();
+    }
+
+    public boolean canGetBerechnungSb(final Gesuch gesuch) {
         boolean canGetBerechnung =
             GesuchUtil.gesuchIsInOneOfGesuchStatus(gesuch, Gesuchstatus.SACHBEARBEITER_CAN_GET_BERECHNUNG);
         for (var gesuchTranche : gesuch.getGesuchTranchen()) {

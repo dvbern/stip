@@ -2,9 +2,10 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, pipe, switchMap, tap } from 'rxjs';
+import { EMPTY, catchError, map, pipe, switchMap, tap, throwError } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   DarlehenService,
   DarlehenServiceCreateFreiwilligDarlehenRequestParams,
@@ -13,12 +14,12 @@ import {
   DarlehenServiceFreiwilligDarlehenUpdateSbRequestParams,
   DarlehenServiceFreiwilligDarlehenZurueckweisenRequestParams,
   DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams,
-  DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams,
   DarlehenServiceGetFreiwilligDarlehenDashboardSbRequestParams,
   FreiwilligDarlehen,
   FreiwilligDarlehenGsResponse,
   PaginatedSbFreiwilligDarlehenDashboard,
 } from '@dv/shared/model/gesuch';
+import { byAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -33,14 +34,14 @@ import {
 type DarlehenState = {
   cachedDarlehen: CachedRemoteData<FreiwilligDarlehen>;
   darlehenGs: CachedRemoteData<FreiwilligDarlehenGsResponse>;
-  darlehenListSb: CachedRemoteData<FreiwilligDarlehen[]>;
+  darlehenList: CachedRemoteData<FreiwilligDarlehen[]>;
   paginatedSbDarlehenDashboard: CachedRemoteData<PaginatedSbFreiwilligDarlehenDashboard>;
 };
 
 const initialState: DarlehenState = {
   cachedDarlehen: initial(),
   darlehenGs: initial(),
-  darlehenListSb: initial(),
+  darlehenList: initial(),
   paginatedSbDarlehenDashboard: initial(),
 };
 
@@ -49,6 +50,7 @@ export class DarlehenStore extends signalStore(
   { protectedState: false },
   withState(initialState),
 ) {
+  private config = inject(SharedModelCompileTimeConfig);
   private darlehenService = inject(DarlehenService);
   private router = inject(Router);
   private globalNotificationStore = inject(GlobalNotificationStore);
@@ -69,8 +71,8 @@ export class DarlehenStore extends signalStore(
 
   darlehenListSbViewSig = computed(() => {
     return {
-      list: fromCachedDataSig(this.darlehenListSb),
-      loading: isPending(this.darlehenListSb()),
+      list: fromCachedDataSig(this.darlehenList),
+      loading: isPending(this.darlehenList()),
     };
   });
 
@@ -275,25 +277,31 @@ export class DarlehenStore extends signalStore(
     ),
   );
 
-  getAllDarlehenSb$ =
-    rxMethod<DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams>(
-      pipe(
-        tap(() => {
-          patchState(this, () => ({
-            darlehenListSb: pending(),
-          }));
-        }),
-        switchMap((req) =>
-          this.darlehenService
-            .getAllFreiwilligDarlehenSb$(req)
-            .pipe(
-              handleApiResponse((darlehenListSb) =>
-                patchState(this, { darlehenListSb }),
-              ),
-            ),
+  getAllDarlehen$ = rxMethod<{ fallId: string }>(
+    pipe(
+      tap(() => {
+        patchState(this, () => ({
+          darlehenList: pending(),
+        }));
+      }),
+      switchMap((req) =>
+        byAppType(this.config.appType, {
+          'sachbearbeitung-app': () =>
+            this.darlehenService.getAllFreiwilligDarlehenSb$(req),
+          'gesuch-app': () =>
+            this.darlehenService
+              .getAllFreiwilligDarlehenGs$(req)
+              .pipe(map((d) => d.darlehenList)),
+          'demo-data-app': () =>
+            throwError(() => new Error('Not implemented for this AppType')),
+        }).pipe(
+          handleApiResponse((darlehenList) =>
+            patchState(this, { darlehenList }),
+          ),
         ),
       ),
-    );
+    ),
+  );
 
   // SB Methoden
   darlehenUpdateAndFreigebenSb$ = rxMethod<{
