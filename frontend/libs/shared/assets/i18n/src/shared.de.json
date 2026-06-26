@@ -167,6 +167,7 @@
   "shared.dialog.gesuch.tranche.create.success": "Die Tranche wurde erfolgreich erstellt",
   "shared.dialog.einreichedatum-aendern.title": "Einreichedatum ändern",
   "shared.dialog.einreichedatum-aendern.einreichedatum.label": "Neues Einreichedatum",
+  "shared.dialog.einreichedatum-aendern.success": "Das Einreichedatum wurde erfolgreich angepasst",
   "shared.dialog.change-gesuchsperiode.title": "Gesuchsperiode ändern",
   "shared.dialog.change-gesuchsperiode.text": "Bitte wählen Sie die neue Gesuchsperiode aus.",
   "shared.dialog.change-gesuchsperiode.gesuchsperiode.label": "Gesuchsperioden",

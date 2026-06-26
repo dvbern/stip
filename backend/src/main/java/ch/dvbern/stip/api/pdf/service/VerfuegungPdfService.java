@@ -771,9 +771,7 @@ public class VerfuegungPdfService {
 
             if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
                 darlehensVerfuegung =
-                    Optional.ofNullable(
-                        darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen())
-                    );
+                    darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen());
             }
 
             final var versendeteVerfuegungOutput = createVersendeteVerfuegung(

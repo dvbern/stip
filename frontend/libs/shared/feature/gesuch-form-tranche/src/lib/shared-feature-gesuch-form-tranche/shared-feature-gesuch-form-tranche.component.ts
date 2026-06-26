@@ -32,6 +32,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import { SharedDialogChangeGesuchsperiodeComponent } from '@dv/shared/dialog/change-gesuchsperiode';
 import { SharedDialogEinreichedatumAendernComponent } from '@dv/shared/dialog/einreichedatum-aendern';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
 import { isDefined } from '@dv/shared/model/type-util';
@@ -74,6 +75,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   private defaultCommentSig = translateSignal(
     translatableShared('shared.form.tranche.bemerkung.initialgesuch'),
   );
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
   isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
   einreichenStore = inject(EinreichenStore);
@@ -205,6 +207,9 @@ export class SharedFeatureGesuchFormTrancheComponent {
           this.einreichenStore.einreichedatumManuellAendern$({
             gesuchId,
             change: result,
+          });
+          this.globalNotificationStore.createSuccessNotification({
+            messageKey: 'shared.dialog.einreichedatum-aendern.success',
           });
         }
       });
