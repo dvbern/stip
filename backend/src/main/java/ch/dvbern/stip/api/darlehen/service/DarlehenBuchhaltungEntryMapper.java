@@ -31,5 +31,22 @@ public abstract class DarlehenBuchhaltungEntryMapper {
     );
 
     @Mapping(source = "comment", target = "kommentar")
+    @Mapping(target = "yearRange", expression = "java(toYearRange(darlehenBuchhaltungEntry))")
     public abstract DarlehenBuchhaltungEntryDto toDto(DarlehenBuchhaltungEntry darlehenBuchhaltungEntry);
+
+    protected String toYearRange(final DarlehenBuchhaltungEntry darlehenBuchhaltungEntry) {
+        if (
+            darlehenBuchhaltungEntry == null
+            || darlehenBuchhaltungEntry.getGesuch() == null
+            || darlehenBuchhaltungEntry.getGesuch().getGesuchsperiode() == null
+        ) {
+            return null;
+        }
+
+        final var gesuchsperiode = darlehenBuchhaltungEntry.getGesuch().getGesuchsperiode();
+        return "%s/%s".formatted(
+            gesuchsperiode.getGesuchsperiodeStart().getYear(),
+            gesuchsperiode.getGesuchsperiodeStopp().getYear()
+        );
+    }
 }

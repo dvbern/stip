@@ -48,6 +48,16 @@ public class DarlehenBuchhaltungEntryRepository implements BaseRepository<Darleh
             .reversed();
     }
 
+    // todo: fix!
+    public List<DarlehenBuchhaltungEntry> getByFallId(final UUID fallId) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_Entry)
+            .where(Q_Entry.gesuch.ausbildung.fall.id.eq(fallId).and(Q_Entry.betrag.isNotNull()))
+            .stream()
+            .toList()
+            .reversed();
+    }
+
     public Optional<DarlehenBuchhaltungEntry> getByVerfuegungDokumentId(final UUID verfuegungDokumentId) {
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_Entry)

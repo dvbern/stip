@@ -38,6 +38,7 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
+import ch.dvbern.stip.generated.api.VerfuegungApiSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
@@ -49,6 +50,8 @@ import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDtoSpec;
+import io.restassured.common.mapper.TypeRef;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
@@ -83,6 +86,7 @@ public class VerfuegungResourceTest {
     private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final VerfuegungApiSpec verfuegungApiSpec = VerfuegungApiSpec.verfuegung(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
     private UUID aenderungId;
@@ -322,6 +326,28 @@ public class VerfuegungResourceTest {
             .as(BerechnungsresultatDtoSpec.class);
 
         assertThat(berechnung.getBerechnungStipendium(), greaterThan(500));
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(10)
+    void getVerfuegungenByFallId() {
+        final var verfuegungenByFall = verfuegungApiSpec.getVerfuegungenByFallId()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(new TypeRef<List<VerfuegungFallDtoSpec>>() {
+            });
+
+        Assertions.assertThat(verfuegungenByFall).hasSize(2);
+        Assertions.assertThat(verfuegungenByFall).allSatisfy(verfuegung -> {
+            Assertions.assertThat(verfuegung.getYearRange()).isNotBlank();
+            Assertions.assertThat(verfuegung.getTotalbetragStipendium()).isNotNull();
+        });
     }
 
     @Test

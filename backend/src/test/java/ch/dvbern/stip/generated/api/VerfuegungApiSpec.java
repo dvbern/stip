@@ -17,6 +17,7 @@ import java.io.File;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDtoSpec;
 import java.util.UUID;
 import ch.dvbern.stip.generated.dto.VerfuegungDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDtoSpec;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +62,8 @@ public class VerfuegungApiSpec {
         return Arrays.asList(
                 getVerfuegungDokument(),
                 getVerfuegungDokumentDownloadToken(),
-                getVerfuegungen()
+                getVerfuegungen(),
+                getVerfuegungenByFallId()
         );
     }
 
@@ -75,6 +77,10 @@ public class VerfuegungApiSpec {
 
     public GetVerfuegungenOper getVerfuegungen() {
         return new GetVerfuegungenOper(createReqSpec());
+    }
+
+    public GetVerfuegungenByFallIdOper getVerfuegungenByFallId() {
+        return new GetVerfuegungenByFallIdOper(createReqSpec());
     }
 
     /**
@@ -161,7 +167,7 @@ public class VerfuegungApiSpec {
         }
     }
     /**
-     * get Token to downlaod Verfuegung
+     * get Token to download Verfuegung
      * 
      *
      * @see #verfuegungDokumentIdPath  (required)
@@ -302,6 +308,79 @@ public class VerfuegungApiSpec {
          * @return operation
          */
         public GetVerfuegungenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #fallIdPath  (required)
+     * return List&lt;VerfuegungFallDtoSpec&gt;
+     */
+    public static class GetVerfuegungenByFallIdOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/verfuegung/fall/{fallId}/verfuegungen";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetVerfuegungenByFallIdOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /verfuegung/fall/{fallId}/verfuegungen
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /verfuegung/fall/{fallId}/verfuegungen
+         * @param handler handler
+         * @return List&lt;VerfuegungFallDtoSpec&gt;
+         */
+        public List<VerfuegungFallDtoSpec> executeAs(Function<Response, Response> handler) {
+            TypeRef<List<VerfuegungFallDtoSpec>> type = new TypeRef<List<VerfuegungFallDtoSpec>>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID)  (required)
+         * @return operation
+         */
+        public GetVerfuegungenByFallIdOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetVerfuegungenByFallIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetVerfuegungenByFallIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
