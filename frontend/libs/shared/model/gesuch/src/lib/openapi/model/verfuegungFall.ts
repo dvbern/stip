@@ -9,18 +9,12 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DarlehenBuchhaltungEntryKategorie } from './darlehenBuchhaltungEntryKategorie';
-import { Dokument } from './dokument';
+import { VerfuegungDokument } from './verfuegungDokument';
 
-export interface DarlehenBuchhaltungEntry { 
+export interface VerfuegungFall { 
     timestampErstellt: string;
-    kategorie: DarlehenBuchhaltungEntryKategorie;
-    verfuegung?: Dokument;
-    betrag: number;
-    yearRange?: string;
-    userErstellt?: string;
-    kommentar?: string;
+    yearRange: string;
+    totalbetragStipendium: number;
+    dokument?: VerfuegungDokument;
 }
-
-
 

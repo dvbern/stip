@@ -1,0 +1,110 @@
+@let overview = fallDokumenteStore.darlehenBuchhaltungViewSig();
+<div class="tw:dv-table tw:my-3">
+  <div class="tw:relative tw:overflow-auto">
+    @if (overview.loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+
+    <div class="tw:p-4 tw:flex tw:gap-4 tw:justify-between">
+      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-semibold tw:text-lg">
+        <div>{{ 'shared.fallDokumente.darlehen.table.totalFreiwilligDarlehen' | transloco }}:</div>
+        <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
+        <div>{{ 'shared.fallDokumente.darlehen.table.totalGesetzlichesDarlehen' | transloco }}:</div>
+        <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
+      </div>
+      <div class="tw:flex tw:gap-2 tw:font-semibold tw:text-xl">
+        <div>{{ 'shared.fallDokumente.darlehen.table.total' | transloco }}</div>
+        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
+      </div>
+    </div>
+
+    <table
+      mat-table
+      [dataSource]="paginatedDokumenteSig()"
+      data-testid="darlehen-dokumente-fall-table"
+      class="tw:w-full tw:table-fixed!"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'shared.fallDokumente.darlehen.table.description' | transloco
+        }}
+      </caption>
+
+      <ng-container matColumnDef="timestampErstellt">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.table.datum' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="yearRange">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.table.periode' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.yearRange || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="kategorie">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.kategorie.label' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.kategorie.' + dokument.kategorie | transloco }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="verfuegung">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.darlehensverfuegung' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument.verfuegung) {
+            <button
+              type="button"
+              class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.verfuegung.id,
+              }"
+            >
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
+                'shared.fallDokumente.darlehen.table.darlehensverfuegung' | transloco
+              }}</span>
+              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="betrag">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.betrag' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.betrag | formatChf }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | transloco }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
+  ></mat-paginator>
+</div>

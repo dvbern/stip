@@ -1,0 +1,87 @@
+<div class="tw:dv-table tw:my-3">
+  <div class="tw:relative tw:overflow-auto">
+    @if (fallDokumenteStore.verfuegungenViewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+
+    <table
+      mat-table
+      [dataSource]="paginatedDokumenteSig()"
+      data-testid="fall-dokumente-table"
+      class="tw:w-full tw:table-fixed!"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          'shared.fallDokumente.fallDokumente.table.description' | transloco
+        }}
+      </caption>
+
+      <ng-container matColumnDef="datum">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.table.datum' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.datum | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="periode">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.table.periode' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.periode || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="verfuegung">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.fallDokumente.table.verfuegung' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument.verfuegung) {
+            <button
+              type="button"
+              class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.verfuegung.id,
+              }"
+            >
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
+                'shared.fallDokumente.fallDokumente.table.verfuegung' | transloco
+              }}</span>
+              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="stipendienbetrag">
+        <th mat-header-cell *matHeaderCellDef class="tw:w-36 tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.fallDokumente.table.stipendienbetrag' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.stipendienbetrag | formatChf }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+          {{ 'shared.table.noData' | transloco }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
+  ></mat-paginator>
+</div>

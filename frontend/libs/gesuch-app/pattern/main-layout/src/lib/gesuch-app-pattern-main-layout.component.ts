@@ -131,6 +131,14 @@ export class GesuchAppPatternMainLayoutComponent {
         route: ['/auszahlung', fallId],
       };
 
+      const verfuegungenDarlehenMenu: NavItem = {
+        type: 'link',
+        id: 'verfuegungen-darlehen',
+        icon: 'description',
+        label: { key: 'shared.menu.verfuegungenDarlehen' },
+        route: ['/fall-dokumente', fallId],
+      };
+
       const nachrichten: NavItem = {
         type: 'link',
         id: 'nachrichten',
@@ -159,6 +167,7 @@ export class GesuchAppPatternMainLayoutComponent {
         ...gesuchBaseMenuItems,
         ...gesuchNav,
         darlehenMenu,
+        verfuegungenDarlehenMenu,
         auszahlungMenu,
         nachrichten,
       ].filter((item) => {

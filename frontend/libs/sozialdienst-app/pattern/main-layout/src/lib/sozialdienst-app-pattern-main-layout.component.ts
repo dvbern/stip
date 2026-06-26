@@ -155,6 +155,14 @@ export class SozialdienstAppPatternMainLayoutComponent {
         route: ['/auszahlung', fallId],
       };
 
+      const verfuegungenDarlehenNav: NavItem = {
+        type: 'link',
+        id: 'verfuegungen-darlehen',
+        label: { key: 'shared.menu.verfuegungenDarlehen' },
+        icon: 'description',
+        route: ['/fall-dokumente', fallId],
+      };
+
       const nachrichten: NavItem[] = [
         {
           type: 'link',
@@ -201,6 +209,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
         fallNav,
         ...gesuchNav,
         darlehenMenu,
+        verfuegungenDarlehenNav,
         auszahlungNav,
         ...nachrichten,
         ...this.baseMenuItems,

@@ -12,14 +12,12 @@
 import { DarlehenBuchhaltungEntryKategorie } from './darlehenBuchhaltungEntryKategorie';
 import { Dokument } from './dokument';
 
-export interface DarlehenBuchhaltungEntry { 
+export interface DarlehenBuchhaltungEntryFall { 
     timestampErstellt: string;
     kategorie: DarlehenBuchhaltungEntryKategorie;
-    verfuegung?: Dokument;
     betrag: number;
-    yearRange?: string;
-    userErstellt?: string;
-    kommentar?: string;
+    yearRange: string;
+    verfuegung?: Dokument;
 }
 
 
