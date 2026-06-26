@@ -28,7 +28,9 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
+import ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType;
 import ch.dvbern.stip.api.common.i18n.translations.AppLanguages;
 import ch.dvbern.stip.api.common.i18n.translations.TL;
 import ch.dvbern.stip.api.common.i18n.translations.TLProducer;
@@ -333,8 +335,14 @@ public class VerfuegungPdfService {
         final PdfFont pdfFontBold,
         final Link ausbildungsbeitraegeUri
     ) {
-        final var relevantBuchhaltung =
-            buchhaltungService.getLatestBuchhaltungEntry(verfuegung.getGesuch().getAusbildung().getFall().getId());
+        final var relevantBuchhaltungs =
+            buchhaltungService.getLast2BuchhaltungEntrys(verfuegung.getGesuch().getAusbildung().getFall().getId());
+        final var relevantBuchhaltung = relevantBuchhaltungs.latest();
+        final var relevantManuelleBuchhaltungOpt = relevantBuchhaltungs.previous()
+            .filter(
+                buchhaltung -> buchhaltung.getBuchhaltungType() == BuchhaltungType.SALDOAENDERUNG
+                && buchhaltung.getSaldo() != 0
+            );
 
         final boolean isAenderung = VerfuegungUtil.isAenderung(verfuegung);
         final boolean isRueckforderung = VerfuegungUtil.isRueckforderung(verfuegung, buchhaltungService);
@@ -469,7 +477,8 @@ public class VerfuegungPdfService {
             ).setPaddings(1, 0, 1, 0)
         );
 
-        final int ausbezahlt = isRueckforderung ? 0 : anspruch - relevantBuchhaltung.getSaldo();
+        final int ausbezahlt = relevantManuelleBuchhaltungOpt.isPresent() || isRueckforderung ? 0
+            : anspruch - relevantBuchhaltung.getSaldo();
 
         calculationTable.addCell(
             PdfUtils.createCell(
@@ -481,18 +490,23 @@ public class VerfuegungPdfService {
             ).setPaddings(1, 0, 1, 0).setTextAlignment(TextAlignment.RIGHT)
         );
 
+        final var offeneRueckforderungOrAuszahlungText = relevantManuelleBuchhaltungOpt
+            .filter(manuelleBuchhaltung -> !isRueckforderung && manuelleBuchhaltung.getSaldo() > 0)
+            .map((b) -> "stip.pdf.verfuegungMitAnspruch.berechnung.offeneAuszahlungen")
+            .orElse("stip.pdf.verfuegungMitAnspruch.berechnung.offeneRueckforderungen");
         calculationTable.addCell(
             PdfUtils.createCell(
                 pdfFont,
                 FONT_SIZE_BIG,
                 1,
                 1,
-                translator.translate("stip.pdf.verfuegungMitAnspruch.berechnung.rueckforderungen")
+                translator.translate(offeneRueckforderungOrAuszahlungText)
             ).setPaddings(1, 0, 1, 0)
         );
 
         final int rueckforderungen =
-            isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0;
+            relevantManuelleBuchhaltungOpt.map(Buchhaltung::getSaldo)
+                .orElse((isRueckforderung ? relevantBuchhaltung.getStipendium() - relevantBuchhaltung.getSaldo() : 0));
 
         calculationTable.addCell(
             PdfUtils.createCell(

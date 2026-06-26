@@ -39,39 +39,39 @@
         </ng-container>
 
         <ng-container matColumnDef="stipendienbetrag">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:!text-right">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag' | transloco }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:!text-right"
+            class="tw:whitespace-nowrap tw:text-right!"
           >
             {{ buchhaltung.entry.stipendienBetrag | formatChf }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="auszahlung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:!text-right">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-28 tw:text-right!">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.auszahlung' | transloco }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:!text-right"
+            class="tw:whitespace-nowrap tw:text-right!"
           >
             {{ buchhaltung.entry.auszahlung | formatChf }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="rueckforderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:!text-right">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.rueckforderung' | transloco }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:!text-right"
+            class="tw:whitespace-nowrap tw:text-right!"
           >
             {{ buchhaltung.entry.rueckforderung | formatChf }}
           </td>
@@ -79,20 +79,20 @@
 
         <!-- saldoAenderung -->
         <ng-container matColumnDef="saldoAenderung">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:!text-right">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-32 tw:text-right!">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldoAenderung' | transloco }}
           </th>
           <td
             mat-cell
             *dvMatCellDef="let buchhaltung; dataSource: buchhaltungDataSource"
-            class="tw:whitespace-nowrap tw:!text-right tw:font-bold"
+            class="tw:whitespace-nowrap tw:text-right! tw:font-bold"
           >
             {{ buchhaltung.entry.saldoAenderung | formatChf }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="saldo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:!text-right">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="tw:w-20 tw:text-right!">
             {{ 'sachbearbeitung-app.infos.buchhaltung.table.saldo' | transloco }}
           </th>
           <td
@@ -147,7 +147,7 @@
               @if (buchhaltung.entry.verfuegungId) {
                 <button
                   type="button"
-                  class="tw:dv-button-outline tw:text-sm! tw:p-4 tw:text-sm"
+                  class="tw:dv-button-outline tw:p-4 tw:text-sm"
                   [dvDownloadButton]="{ type: 'berechnungsblatt', id: 'TBD' }"
                   [matTooltip]="'shared.dokumente.table.download' | transloco"
                 >
@@ -167,15 +167,15 @@
           mat-row
           *dvMatRowDef="let buchhaltung; columns: displayedColumns; dataSource: buchhaltungDataSource"
           [ngClass]="{
-            'tw:!bg-(--dv-blue-subtle)': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
-            'tw:!bg-(--dv-green-subtle)': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
-            'tw:!bg-(--dv-yellow-subtle)': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
+            'tw:bg-(--dv-blue-subtle)!': buchhaltung.entry.buchhaltungType === 'SALDOAENDERUNG',
+            'tw:bg-(--dv-green-subtle)!': buchhaltung.entry.buchhaltungType === 'AUSZAHLUNG',
+            'tw:bg-(--dv-yellow-subtle)!': buchhaltung.entry.buchhaltungType === 'STIPENDIUM',
           }"
         ></tr>
         <tr
           mat-row
           *matRowDef="let separator; columns: ['separator']; when: isStartOfNewGesuch"
-          class="tw:!h-4 tw:!bg-(--dv-red-subtle)"
+          class="tw:h-4! tw:bg-(--dv-red-subtle)!"
         ></tr>
         <tr class="mat-mdc-row" *matNoDataRow>
           <td class="mat-mdc-cell tw:px-4" [colSpan]="displayedColumns.length">
