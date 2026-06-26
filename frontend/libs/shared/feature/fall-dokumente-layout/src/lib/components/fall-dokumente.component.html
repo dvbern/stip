@@ -12,59 +12,59 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'shared.fallDokumente.fallDokumente.table.description' | transloco
+          'shared.fallDokumente.stipendien.table.description' | transloco
         }}
       </caption>
 
-      <ng-container matColumnDef="datum">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.table.datum' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.datum | date: 'dd.MM.yyyy' }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="periode">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.table.periode' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.periode || '-' }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="verfuegung">
+      <ng-container matColumnDef="timestampErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.fallDokumente.table.verfuegung' | transloco }}
+          {{ 'shared.fallDokumente.stipendien.table.timestampErstellt' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          @if (dokument.verfuegung) {
+          {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="yearRange">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.stipendien.table.yearRange' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.yearRange || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalbetragStipendium">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.stipendien.table.totalbetragStipendium' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.totalbetragStipendium | formatChf }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dokument">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.stipendien.table.dokument' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument.dokument) {
             <button
               type="button"
               class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
               [dvDownloadButton]="{
                 type: 'verfuegung',
-                id: dokument.verfuegung.id,
+                id: dokument.dokument.id,
               }"
             >
-              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
-                'shared.fallDokumente.fallDokumente.table.verfuegung' | transloco
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename">{{
+                'shared.fallDokumente.stipendien.table.dokument' | transloco
               }}</span>
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>
           }
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="stipendienbetrag">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-36 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.fallDokumente.table.stipendienbetrag' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.stipendienbetrag | formatChf }}
         </td>
       </ng-container>
 

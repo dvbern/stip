@@ -123,7 +123,7 @@ export class GesuchAppPatternMainLayoutComponent {
         this.trancheIdSig(),
       );
 
-      const auszahlungMenu: NavItem = {
+      const auszahlung: NavItem = {
         type: 'link',
         icon: 'payments',
         id: 'auszahlungen',
@@ -131,11 +131,11 @@ export class GesuchAppPatternMainLayoutComponent {
         route: ['/auszahlung', fallId],
       };
 
-      const verfuegungenDarlehenMenu: NavItem = {
+      const fallDokumente: NavItem = {
         type: 'link',
-        id: 'verfuegungen-darlehen',
+        id: 'fall-dokumente',
         icon: 'description',
-        label: { key: 'shared.menu.verfuegungenDarlehen' },
+        label: { key: 'shared.menu.fallDokumente' },
         route: ['/fall-dokumente', fallId],
       };
 
@@ -167,8 +167,8 @@ export class GesuchAppPatternMainLayoutComponent {
         ...gesuchBaseMenuItems,
         ...gesuchNav,
         darlehenMenu,
-        verfuegungenDarlehenMenu,
-        auszahlungMenu,
+        fallDokumente,
+        auszahlung,
         nachrichten,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {

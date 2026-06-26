@@ -52,10 +52,10 @@ export class DarlehenDokumenteComponent {
 
   displayedColumns = [
     'timestampErstellt',
-    'yearRange',
     'kategorie',
-    'verfuegung',
+    'yearRange',
     'betrag',
+    'verfuegung',
   ];
 
   paginatedDokumenteSig = computed(() => {

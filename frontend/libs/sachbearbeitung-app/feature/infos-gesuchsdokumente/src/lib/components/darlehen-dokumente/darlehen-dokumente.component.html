@@ -6,19 +6,24 @@
     }
 
     <!-- Summary -->
-    <div class="tw:p-4 tw:flex tw:gap-4 tw:justify-between">
-      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-semibold tw:text-lg">
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen' | transloco }}:</div>
+    <div class="tw:p-6 tw:flex tw:gap-6 tw:justify-between">
+      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-bold">
+        <div class="tw:font-bold tw:text-lg">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total' | transloco }}:
+        </div>
+        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
+        <div class="tw:font-bold">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalFreiwilligDarlehen' | transloco }}:
+        </div>
         <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen' | transloco }}:</div>
+        <div class="tw:font-bold">
+          {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.totalGesetzlichesDarlehen' | transloco }}:
+        </div>
         <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
       </div>
-      <div class="tw:flex tw:gap-2 tw:font-semibold tw:text-xl">
-        <div>{{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.total' | transloco }}</div>
-        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
-      </div>
+
       <!-- manuelle korrektur -->
-      <div class="">
+      <div>
         <button type="button" class="tw:dv-button-outline" (click)="createDarlehenBuchhaltungSaldokorrektur()">
           {{ 'sachbearbeitung-app.infos.gesuchsdokumente.darlehen.manuelleKorrektur' | transloco }}
         </button>

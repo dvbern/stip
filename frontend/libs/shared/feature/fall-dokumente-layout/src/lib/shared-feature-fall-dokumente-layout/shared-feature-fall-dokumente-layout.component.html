@@ -1,17 +1,25 @@
-<nav mat-tab-nav-bar [tabPanel]="tabPanel" class="tw:mt-6 nav-style-tabs" [disablePagination]="true">
-  @for (tab of tabsSig(); track tab.name) {
-    <a
-      mat-tab-link
-      [routerLink]="[tab.name]"
-      [active]="tab.active"
-      class="tw:dv-nav-button tw:bg-white! tw:not-[.active]:border-dv-border! tw:border!"
-      [class.active]="tab.active"
-    >
-      {{ 'shared.fallDokumente.tabs.' + tab.name | transloco }}
-    </a>
-  }
-</nav>
+<div class="tw:border tw:border-dv-border tw:rounded-xl tw:bg-white tw:p-6 tw:dv-pass-height">
+  <h3 class="tw:flex tw:mb-12 tw:items-center tw:text-2xl tw:font-semibold" data-testid="fall-dokumente-title">
+    <dv-shared-ui-icon-chip class="tw:mr-2 tw:dv-icon-chip-info">
+      <i class="material-symbols-rounded tw:text-lg!">download</i>
+    </dv-shared-ui-icon-chip>
+    <span>{{ 'shared.fallDokumente.title' | transloco }}</span>
+  </h3>
 
-<mat-tab-nav-panel #tabPanel>
-  <router-outlet></router-outlet>
-</mat-tab-nav-panel>
+  <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-style-tabs" [disablePagination]="true">
+    @for (tab of tabsSig(); track tab.name) {
+      <a
+        mat-tab-link
+        [routerLink]="[tab.name]"
+        [active]="tab.active"
+        class="tw:dv-nav-button tw:bg-white tw:not-[.active]:border-dv-border tw:border! tw:flex-0! tw:basis-1/4!"
+        [class.active]="tab.active"
+      >
+        {{ 'shared.fallDokumente.tabs.' + tab.name | transloco }}
+      </a>
+    }
+  </nav>
+  <mat-tab-nav-panel #tabPanel class="">
+    <router-outlet></router-outlet>
+  </mat-tab-nav-panel>
+</div>

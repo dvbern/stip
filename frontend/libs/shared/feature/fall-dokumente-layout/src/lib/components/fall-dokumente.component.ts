@@ -14,20 +14,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { FallDokumenteStore } from '@dv/shared/data-access/fall-dokumente';
-import { VerfuegungDokument } from '@dv/shared/model/gesuch';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
 import { TypeSafeMatCellDefDirective } from '@dv/shared/ui/table-helper';
 import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translation';
-
-type FallDokumenteColumns = {
-  datum: string;
-  periode: string;
-  verfuegung?: VerfuegungDokument;
-  stipendienbetrag: number;
-};
 
 @Component({
   selector: 'dv-fall-dokumente',
@@ -58,22 +50,16 @@ export class FallDokumenteComponent {
 
   paginatorSig = viewChild(MatPaginator);
 
-  displayedColumns: (keyof FallDokumenteColumns)[] = [
-    'datum',
-    'periode',
-    'verfuegung',
-    'stipendienbetrag',
+  displayedColumns = [
+    'timestampErstellt',
+    'yearRange',
+    'totalbetragStipendium',
+    'dokument',
   ];
 
   paginatedDokumenteSig = computed(() => {
-    const data = (
-      this.fallDokumenteStore.verfuegungenViewSig().verfuegungen ?? []
-    ).map((verfuegung) => ({
-      datum: verfuegung.timestampErstellt,
-      periode: verfuegung.yearRange,
-      verfuegung: verfuegung.dokument,
-      stipendienbetrag: verfuegung.totalbetragStipendium,
-    }));
+    const data =
+      this.fallDokumenteStore.verfuegungenViewSig().verfuegungen ?? [];
 
     const datasource = new MatTableDataSource(data);
     const paginator = this.paginatorSig();

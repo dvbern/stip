@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   DOCUMENT,
+  HostBinding,
   computed,
   inject,
 } from '@angular/core';
@@ -12,16 +13,25 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { map, startWith } from 'rxjs';
 
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
-const ALL_TABS = ['fall-dokumente', 'darlehen-dokumente'] as const;
+const ALL_TABS = ['stipendien', 'darlehen'] as const;
 
 @Component({
   selector: 'dv-shared-feature-fall-dokumente-layout',
-  imports: [RouterOutlet, RouterLink, MatTabsModule, TranslocoPipe],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    MatTabsModule,
+    TranslocoPipe,
+    SharedUiIconChipComponent,
+  ],
   templateUrl: './shared-feature-fall-dokumente-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureFallDokumenteLayoutComponent {
+  @HostBinding('class') class = 'tw:dv-pass-height tw:p-6';
+
   private router = inject(Router);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
 

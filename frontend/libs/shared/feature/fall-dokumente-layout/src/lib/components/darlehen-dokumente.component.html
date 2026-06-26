@@ -5,17 +5,13 @@
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
 
-    <div class="tw:p-4 tw:flex tw:gap-4 tw:justify-between">
-      <div class="tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2 tw:font-semibold tw:text-lg">
-        <div>{{ 'shared.fallDokumente.darlehen.table.totalFreiwilligDarlehen' | transloco }}:</div>
-        <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
-        <div>{{ 'shared.fallDokumente.darlehen.table.totalGesetzlichesDarlehen' | transloco }}:</div>
-        <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
-      </div>
-      <div class="tw:flex tw:gap-2 tw:font-semibold tw:text-xl">
-        <div>{{ 'shared.fallDokumente.darlehen.table.total' | transloco }}</div>
-        <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
-      </div>
+    <div class="tw:p-6 tw:grid tw:grid-cols-[1fr_max-content] tw:gap-2">
+      <div class="tw:font-bold tw:text-lg">{{ 'shared.fallDokumente.darlehen.table.total' | transloco }}:</div>
+      <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
+      <div class="tw:font-bold">{{ 'shared.fallDokumente.darlehen.table.totalFreiwilligDarlehen' | transloco }}:</div>
+      <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
+      <div class="tw:font-bold">{{ 'shared.fallDokumente.darlehen.table.totalGesetzlichesDarlehen' | transloco }}:</div>
+      <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
     </div>
 
     <table
@@ -31,20 +27,11 @@
       </caption>
 
       <ng-container matColumnDef="timestampErstellt">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.table.datum' | transloco }}
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.timestampErstellt' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="yearRange">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-40 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.table.periode' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.yearRange || '-' }}
         </td>
       </ng-container>
 
@@ -57,9 +44,28 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="yearRange">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.yearRange' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.yearRange || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="betrag">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ 'shared.fallDokumente.darlehen.table.betrag' | transloco }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.betrag | formatChf }}
+        </td>
+      </ng-container>
+
+      <!-- download -->
       <ng-container matColumnDef="verfuegung">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.darlehensverfuegung' | transloco }}
+          {{ 'shared.fallDokumente.darlehen.table.verfuegung' | transloco }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.verfuegung) {
@@ -72,22 +78,13 @@
               }"
             >
               <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
-                'shared.fallDokumente.darlehen.table.darlehensverfuegung' | transloco
+                'shared.fallDokumente.darlehen.table.verfuegung' | transloco
               }}</span>
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
             </button>
           } @else {
             <span class="tw:text-gray-400">-</span>
           }
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="betrag">
-        <th mat-header-cell *matHeaderCellDef class="tw:w-32 tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.betrag' | transloco }}
-        </th>
-        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ dokument.betrag | formatChf }}
         </td>
       </ng-container>
 
