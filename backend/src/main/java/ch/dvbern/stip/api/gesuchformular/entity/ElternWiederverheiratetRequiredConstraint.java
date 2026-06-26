@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchformular.entity;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -27,26 +26,18 @@ import java.lang.annotation.Target;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
+import static ch.dvbern.stip.api.common.validation.ValidationsConstant.VALIDATION_ELTERN_WIEDERVERHEIRATET_REQUIRED;
 
-@Target({ ElementType.TYPE })
+@Target({ ElementType.TYPE, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = DocumentsRequiredConstraintValidator.class)
+@Constraint(validatedBy = ElternWiederverheiratetRequiredConstraintValidator.class)
 @Documented
-@Repeatable(DocumentsRequiredConstraint.List.class)
-public @interface DocumentsRequiredConstraint {
-    String message() default VALIDATION_DOCUMENTS_REQUIRED_MESSAGE;
+public @interface ElternWiederverheiratetRequiredConstraint {
+    String message() default VALIDATION_ELTERN_WIEDERVERHEIRATET_REQUIRED;
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    boolean includeHidden() default true;
-
-    @Target({ ElementType.TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List {
-        DocumentsRequiredConstraint[] value();
-    }
+    String property() default "";
 }

@@ -15,14 +15,20 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.validation;
+package ch.dvbern.stip.api.eltern.util;
 
+import java.util.Optional;
 import java.util.Set;
 
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import org.apache.commons.lang3.tuple.Pair;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import lombok.experimental.UtilityClass;
 
-public interface RequiredDokumentsProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDokuments(final GesuchFormular formular, final boolean includeHidden);
+@UtilityClass
+public class ElternUtil {
+    public Optional<Eltern> getElternByType(final Set<Eltern> elterns, final ElternTyp elternTyp) {
+        return elterns.stream()
+            .filter(eltern -> eltern.getElternTyp() == elternTyp)
+            .findFirst();
+    }
 }

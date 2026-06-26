@@ -53,6 +53,7 @@ import ch.dvbern.stip.api.einnahmen_kosten.entity.EinnahmenKosten;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
@@ -144,6 +145,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.never;
@@ -235,7 +237,8 @@ class GesuchServiceTest {
     static void setup() {
         final var requiredDokumentServiceMock = Mockito.mock(RequiredDokumentService.class);
         Mockito.when(requiredDokumentServiceMock.getSuperfluousDokumentsForGesuch(any())).thenReturn(List.of());
-        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any())).thenReturn(List.of());
+        Mockito.when(requiredDokumentServiceMock.getRequiredDokumentsForGesuchFormular(any(), anyBoolean()))
+            .thenReturn(List.of());
         QuarkusMock.installMockForType(requiredDokumentServiceMock, RequiredDokumentService.class);
 
         final var ausbildungAuthorizerMock = Mockito.mock(AusbildungAuthorizer.class);
@@ -1846,17 +1849,11 @@ class GesuchServiceTest {
     }
 
     private boolean hasMutter(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.MUTTER).isPresent();
+        return ElternUtil.getElternByType(elterns, ElternTyp.MUTTER).isPresent();
     }
 
     private boolean hasVater(Set<Eltern> elterns) {
-        return getElternFromElternsByElternTyp(elterns, ElternTyp.VATER).isPresent();
-    }
-
-    private Optional<Eltern> getElternFromElternsByElternTyp(Set<Eltern> elterns, ElternTyp elternTyp) {
-        return elterns.stream()
-            .filter(eltern -> eltern.getElternTyp() == elternTyp)
-            .findFirst();
+        return ElternUtil.getElternByType(elterns, ElternTyp.VATER).isPresent();
     }
 
     private GesuchTranche updateElternteilUnbekanntVerstorben(

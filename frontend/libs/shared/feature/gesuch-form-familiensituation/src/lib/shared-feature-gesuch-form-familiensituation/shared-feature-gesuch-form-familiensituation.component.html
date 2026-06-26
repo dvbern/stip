@@ -153,16 +153,6 @@
             </div>
             <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
           }
-          @if (
-            !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
-          ) {
-            <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
-          }
-          @if (
-            !hiddenFieldsSetSig().has(form.controls.vaterWiederverheiratet) && form.value.gerichtlicheAlimentenregelung
-          ) {
-            <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
-          }
         </div>
 
         <!-- elternteilUnbekanntVerstorben -->
@@ -323,11 +313,6 @@
               ></div>
             </div>
           }
-          @if (
-            !hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet) && form.value.elternteilUnbekanntVerstorben
-          ) {
-            <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
-          }
           @if (!hiddenFieldsSetSig().has(form.controls.vaterUnbekanntVerstorben)) {
             <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
             <div class="tw:grid tw:grid-cols-2 tw:my-6 tw:gap-6">
@@ -436,32 +421,6 @@
               ></div>
             </div>
           }
-          @if (
-            !hiddenFieldsSetSig().has(this.form.controls.vaterWiederverheiratet) &&
-            form.value.elternteilUnbekanntVerstorben
-          ) {
-            <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
-          }
-        </div>
-
-        <!-- Elternteil Wiederverheiratet  -->
-        <div
-          (@inOutPaneAnimation.start)="duringAnimation = 'hide'"
-          (@inOutPaneAnimation.done)="duringAnimation = 'show'"
-          [@inOutPaneAnimation]="
-            readonly && form.controls.elternteilUnbekanntVerstorben.value === false
-              ? 'in'
-              : (stateSig()['ZWEI_FAMILIENBUDGET'] ?? 'hidden')
-          "
-          [@.disabled]="readonly"
-        >
-          @if (!hiddenFieldsSetSig().has(form.controls.mutterWiederverheiratet)) {
-            <ng-container [ngTemplateOutlet]="mutterWiederverheiratet"></ng-container>
-          }
-          <hr class="tw:my-1 tw:border-t tw:border-dv-gray" />
-          @if (!hiddenFieldsSetSig().has(form.controls.vaterWiederverheiratet)) {
-            <ng-container [ngTemplateOutlet]="vaterWiederverheiratet"></ng-container>
-          }
         </div>
       </div>
     </div>
@@ -477,58 +436,5 @@
         </button>
       }
     </dv-shared-ui-step-form-buttons>
-    <ng-template #mutterWiederverheiratet>
-      <div class="tw:grid tw:grid-cols-2 tw:my-6">
-        <mat-radio-group
-          formControlName="mutterWiederverheiratet"
-          data-testid="form-family-mutterWiederverheiratet"
-          dvSharedUiFormField
-          class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
-        >
-          <label class="tw:font-bold">{{
-            'shared.form.familiensituation.mutter-wiederverheiratet.label' | transloco
-          }}</label>
-
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | transloco
-          }}</mat-radio-button>
-
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
-
-          <div class="group-errors">
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </div>
-        </mat-radio-group>
-      </div>
-    </ng-template>
-
-    <ng-template #vaterWiederverheiratet>
-      <div class="tw:grid tw:grid-cols-2 tw:my-6">
-        <mat-radio-group
-          formControlName="vaterWiederverheiratet"
-          data-testid="form-family-vaterWiederverheiratet"
-          dvSharedUiFormField
-          class="tw:flex tw:flex-col tw:col-span-2 tw:xl:col-span-1"
-        >
-          <label class="tw:font-bold">{{
-            'shared.form.familiensituation.vater-wiederverheiratet.label' | transloco
-          }}</label>
-
-          <mat-radio-button data-testid="yes" [value]="true">{{
-            'shared.form.radio.yes' | transloco
-          }}</mat-radio-button>
-
-          <mat-radio-button data-testid="no" [value]="false">{{ 'shared.form.radio.no' | transloco }}</mat-radio-button>
-
-          <div class="group-errors">
-            <mat-error *dvSharedUiFormMessageError="'required'">
-              {{ 'shared.form.error.required' | transloco }}
-            </mat-error>
-          </div>
-        </mat-radio-group>
-      </div>
-    </ng-template>
   </form>
 }

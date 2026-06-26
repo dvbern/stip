@@ -36,7 +36,8 @@ import ch.dvbern.stip.api.gesuchformular.type.EinnahmenKostenType;
 import ch.dvbern.stip.api.gesuchformular.type.LandGueltigFor;
 import ch.dvbern.stip.api.gesuchformular.validation.AenderungGesuchDokumentsAcceptedValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.AuszahlungPageValidation;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredGsValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredSbValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.EinnahmenKostenPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.ElternPageValidation;
 import ch.dvbern.stip.api.gesuchformular.validation.FamiliensituationPageValidation;
@@ -116,6 +117,10 @@ import org.jilt.BuilderStyle;
 @FamiliensituationNotVerheiratetIfElternteilVerstecktConstraint(
     groups = GesuchEinreichenValidationGroup.class,
     property = "familiensituation"
+)
+@ElternWiederverheiratetRequiredConstraint(
+    groups = { GesuchEinreichenValidationGroup.class, ElternPageValidation.class },
+    property = "elterns"
 )
 @EinnahmeKostenPartnerVerpflegungskostenRequiredConstraint
 @EinnahmenKostenAuswaertigeMittagessenProWocheRequiredConstraint(
@@ -222,13 +227,18 @@ import org.jilt.BuilderStyle;
 )
 @DocumentsRequiredConstraint(
     groups = {
-        DocumentsRequiredValidationGroup.class
-    }, payload = Severity.Warning.class
+        DocumentsRequiredSbValidationGroup.class
+    }, payload = Severity.Warning.class, includeHidden = true
+)
+@DocumentsRequiredConstraint(
+    groups = {
+        DocumentsRequiredGsValidationGroup.class
+    }, payload = Severity.Warning.class, includeHidden = false
 )
 @DocumentsRequiredConstraint(
     groups = {
         GesuchEinreichenValidationGroup.class
-    }
+    }, includeHidden = false
 )
 @EinnahmenKostenPartnerRequiredConstraint(
     groups = {

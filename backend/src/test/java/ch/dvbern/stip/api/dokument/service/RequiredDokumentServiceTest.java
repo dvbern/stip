@@ -121,7 +121,7 @@ class RequiredDokumentServiceTest {
         final var service = new RequiredDokumentService(
             new MockInstance(List.of(new MockDocumentProducer())), null, null, null
         );
-        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
+        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()), true);
 
         assertThat(requiredDokuments.size(), is(1));
     }
@@ -132,7 +132,7 @@ class RequiredDokumentServiceTest {
             new MockInstance(List.of(new MockEmptyDocumentProducer())),
             null, null, null
         );
-        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()));
+        final var requiredDokuments = service.getRequiredDokumentsForGesuchFormular(initFormular(List.of()), true);
 
         assertThat(requiredDokuments.size(), is(0));
     }
@@ -145,7 +145,8 @@ class RequiredDokumentServiceTest {
         );
         final var requiredDokuments = service
             .getRequiredDokumentsForGesuchFormular(
-                initFormular(List.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE))
+                initFormular(List.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE)),
+                true
             );
 
         assertThat(requiredDokuments.size(), is(0));
@@ -166,14 +167,14 @@ class RequiredDokumentServiceTest {
 
     public static class MockDocumentProducer implements RequiredDokumentsProducer {
         @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
             return ImmutablePair.of("mock", Set.of(DokumentTyp.AUSBILDUNG_BESTAETIGUNG_AUSBILDUNGSSTAETTE));
         }
     }
 
     static class MockEmptyDocumentProducer implements RequiredDokumentsProducer {
         @Override
-        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+        public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
             return ImmutablePair.of("", Set.of());
         }
     }

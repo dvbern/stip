@@ -19,10 +19,8 @@ export interface FamiliensituationUpdate {
     gerichtlicheAlimentenregelung?: boolean;
     mutterUnbekanntVerstorben?: ElternAbwesenheitsGrund;
     mutterUnbekanntGrund?: ElternUnbekanntheitsGrund;
-    mutterWiederverheiratet?: boolean;
     vaterUnbekanntVerstorben?: ElternAbwesenheitsGrund;
     vaterUnbekanntGrund?: ElternUnbekanntheitsGrund;
-    vaterWiederverheiratet?: boolean;
     werZahltAlimente?: Elternschaftsteilung;
 }
 

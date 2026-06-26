@@ -33,7 +33,10 @@ import org.apache.commons.lang3.tuple.Pair;
 @RequiredArgsConstructor
 public class KindRequiredListDokumentsProducer implements RequiredRefDokumentsProducer {
     @Override
-    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<Pair<DokumentTyp, UUID>>> getRequiredDokuments(
+        GesuchFormular formular,
+        boolean includeHidden
+    ) {
         final var kinds = formular.getKinds();
         if (kinds == null) {
             return ImmutablePair.of("", Set.of());

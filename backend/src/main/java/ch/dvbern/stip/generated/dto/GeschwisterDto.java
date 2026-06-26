@@ -31,6 +31,7 @@ public class GeschwisterDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+  private @Valid Boolean hidden;
 
   /**
    **/
@@ -203,6 +204,24 @@ public class GeschwisterDto  implements Serializable {
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
   }
 
+  /**
+   **/
+  public GeschwisterDto hidden(Boolean hidden) {
+    this.hidden = hidden;
+    return this;
+  }
+
+  
+  @JsonProperty("hidden")
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+  @JsonProperty("hidden")
+  public void setHidden(Boolean hidden) {
+    this.hidden = hidden;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -221,12 +240,13 @@ public class GeschwisterDto  implements Serializable {
         Objects.equals(this.nachname, geschwister.nachname) &&
         Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
-        Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater);
+        Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
+        Objects.equals(this.hidden, geschwister.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, hidden);
   }
 
   @Override
@@ -243,6 +263,7 @@ public class GeschwisterDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
   }

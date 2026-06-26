@@ -209,12 +209,7 @@ public class ElternteilV1 {
                 gesuchsjahr,
                 gesuchsperiode
             );
-            final var wiederverheiratet = switch (steuerdaten.getSteuerdatenTyp()) {
-                case MUTTER -> familiensituation.getMutterWiederverheiratet();
-                case VATER -> familiensituation.getVaterWiederverheiratet();
-                case FAMILIE -> Boolean.FALSE;
-            };
-            if (Boolean.TRUE.equals(wiederverheiratet)) {
+            if (Objects.requireNonNullElse(elternteil.getWiederverheiratet(), false)) {
                 // Wir gehen davon aus, dass der Partner eines Elternteils erwachsen ist
                 medizinischeGrundversorgung += gesuchsperiode.getErwachsene2599();
 

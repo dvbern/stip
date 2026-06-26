@@ -15,14 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.common.validation;
+package ch.dvbern.stip.api.gesuchformular.validation;
 
-import java.util.Set;
-
-import ch.dvbern.stip.api.dokument.type.DokumentTyp;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import org.apache.commons.lang3.tuple.Pair;
-
-public interface RequiredDokumentsProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDokuments(final GesuchFormular formular, final boolean includeHidden);
+public interface DocumentsRequiredGsValidationGroup {
 }

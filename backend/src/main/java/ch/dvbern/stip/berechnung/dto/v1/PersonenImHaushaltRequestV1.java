@@ -106,7 +106,8 @@ public class PersonenImHaushaltRequestV1 implements CalculatorRequest {
             .count();
         return new PersonenImHaushaltRequestV1(
             new PersonenImHaushaltInputV1(
-                FamiliensituationV1.fromFamiliensituation(gesuchFormular.getFamiliensituation()),
+                FamiliensituationV1
+                    .fromFamiliensituation(gesuchFormular.getFamiliensituation(), gesuchFormular.getElterns()),
                 PersonInAusbildungV1.fromPersonInAusbildung(gesuchFormular.getPersonInAusbildung()),
                 elternToPrioritize,
                 geschwisterTeilzeit,
