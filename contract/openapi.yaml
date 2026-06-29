@@ -4394,9 +4394,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/eingereicht/{gesuchId}:
+  /gesuch/eingereicht/{gesuchTrancheId}:
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -5453,9 +5453,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/berechnung/gs:
+  /gesuch/{verfuegungId}/berechnung/gs:
     parameters:
-      - name: gesuchId
+      - name: verfuegungId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -11626,6 +11626,10 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
         isInitial:
           type: boolean
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
     InBearbeitungSbReason:
       enum:
         - INITIAL
@@ -11658,6 +11662,10 @@ components:
           type: boolean
         canSBInitAenderung:
           type: boolean
+        latestVerfuegungId:
+          $ref: '#/components/schemas/UUID'
+        latestVerfuegtAt:
+          $ref: '#/components/schemas/LocalDateTime'
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
     GesuchTrancheSlim:
@@ -12345,10 +12353,6 @@ components:
           type: string
         filesize:
           type: string
-    LocalDateTime:
-      format: date-time
-      type: string
-      example: '2022-03-10T12:00:00'
   responses:
     Unauthorized:
       content:

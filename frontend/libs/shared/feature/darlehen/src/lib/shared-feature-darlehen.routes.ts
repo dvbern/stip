@@ -6,7 +6,7 @@ import { SharedFeatureDarlehenComponent } from './shared-feature-darlehen/shared
 
 export const sharedFeatureDarlehenRoutes: Route[] = [
   routeWithUnsavedChangesGuard({
-    path: ':darlehenId/gesuch/:gesuchId',
+    path: ':darlehenId/fall/:fallId',
     pathMatch: 'prefix',
     component: SharedFeatureDarlehenComponent,
     title: 'shared.darlehen.title',

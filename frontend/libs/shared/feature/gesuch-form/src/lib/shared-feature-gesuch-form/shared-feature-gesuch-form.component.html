@@ -1,9 +1,91 @@
 <div class="tw:flex tw:h-full" *transloco="let t">
+  <!-- left step nav (Desktop) -->
+  @let trancheId = gesuchTrancheIdSig();
+  @let currentTranche = currentTrancheSig();
+  @let routes = routeChecksSig();
+  @let initialRoute = routes.isInitial;
+  @let trancheCount = tranchenSig()?.length ?? 0;
+
   <!-- side menu -->
   <div
-    class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:bg-white tw:overflow-y-auto tw:overflow-x-hidden"
+    class="tw:hidden tw:lg:flex tw:border-r tw:border-dv-border tw:bg-white tw:flex-col tw:overflow-hidden tw:max-w-87.5"
   >
-    <dv-shared-pattern-gesuch-step-nav class="sidenav tw:p-6" [stepsSig]="stepsSig()" />
+    <!-- Gesuch -->
+    @if (trancheCount > 0 || routes.isAenderung) {
+      <div class="tw:w-full tw:p-6">
+        @if (currentTranche && isGesuchRouteSig()) {
+          <div class="tw:relative">
+            <label class="tw:text-sm tw:text-dv-gray tw:absolute tw:-top-2.5 tw:ml-4 tw:bg-white tw:px-1 tw:rounded-md">
+              {{ t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: trancheCount }) }}
+            </label>
+            <button
+              type="button"
+              class="tw:dv-btn-tranche"
+              data-testid="sb-gesuch-header-tranche-nav-menu"
+              [disabled]="trancheCount <= 1"
+              [matMenuTriggerFor]="tranchenMenu"
+              [attr.aria-label]="
+                t('shared.header.tranchenMenu.' + currentTranche.typ, { anzahlTranchen: trancheCount })
+              "
+            >
+              <span
+                class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full tw:text-left"
+              >
+                {{ currentTranche.gueltigAb | date: 'MM.yyyy' }} -
+                {{ currentTranche.gueltigBis | date: 'MM.yyyy' }}
+              </span>
+              @if (trancheCount > 1) {
+                <i class="material-symbols-rounded tw:ml-2">expand_more</i>
+              }
+            </button>
+          </div>
+
+          <mat-menu #tranchenMenu="matMenu" class="header-menu-panel tw:mt-2 tw:rounded-lg">
+            <div class="tw:flex tw:flex-col tw:gap-2">
+              @for (tranche of tranchenSig(); track $index) {
+                <a
+                  [routerLink]="[
+                    '/',
+                    'gesuch',
+                    ...stepRouteSegmentsSig(),
+                    gesuchIdSig(),
+                    initialRoute ? 'initial' : 'tranche',
+                    tranche.id,
+                  ]"
+                  [queryParams]="{ revision: tranche.revision }"
+                  [queryParamsHandling]="'merge'"
+                  class="tw:dv-nav-button fw-normal tw:flex tw:items-center tw:px-4"
+                  data-testid="tranche-nav-menu-item"
+                  [class.active]="trancheId === tranche.id"
+                  mat-menu-item
+                >
+                  <span>
+                    {{ tranche.gueltigAb | date: 'MM.yyyy' }}
+                    -
+                    {{ tranche.gueltigBis | date: 'MM.yyyy' }}
+                  </span>
+                </a>
+              }
+            </div>
+          </mat-menu>
+        }
+        @if (routes.isAenderung) {
+          <dv-shared-ui-aenderungen-menu
+            class="tw:w-full"
+            [aenderungenSig]="headerViewSig().aenderungs"
+            [stepRouteSegmentsSig]="stepRouteSegmentsSig()"
+            [isAenderungRouteSig]="routes.isAenderung"
+            [gesuchIdSig]="gesuchIdSig()"
+            [trancheIdSig]="trancheIdSig()"
+            [revisionSig]="revisionSig()"
+          ></dv-shared-ui-aenderungen-menu>
+        }
+      </div>
+
+      <hr class="tw:m-0 tw:p-0 tw:border-t tw:border-dv-border" />
+    }
+
+    <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()" />
   </div>
 
   <div class="tw:dv-pass-height tw:dv-container tw:bg-white tw:p-6 tw:pb-32">
@@ -14,9 +96,9 @@
       >
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
-          <h5 class="step-title tw:font-semibold tw:text-lg/tight">
+          <h1 class="tw:dv-page-title-mobile" data-testid="step-title">
             {{ t(step.translationKey) }}
-          </h5>
+          </h1>
           @if (step.nextStep?.translationKey; as nextStepKey) {
             <p class="fst-italic tw:mb-0">
               {{ t('shared.form.next') }}:

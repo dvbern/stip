@@ -50,9 +50,14 @@ import { BerechnungsCardComponent } from '../components/berechnungs-card/berechn
 })
 export class SharedFeatureVerfuegungBerechnungComponent {
   private store = inject(Store);
+  berechnungStore = inject(BerechnungStore);
 
   indexSig = input.required<string>({ alias: 'index' });
   tranchenIdSig = input<string | null>(null, { alias: 'trancheId' });
+  verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
+  latestVerfuegungIdSig = input<string | null>(null, {
+    alias: 'latestVerfuegungId',
+  });
 
   expansionState = {
     persoenlich: {
@@ -69,9 +74,6 @@ export class SharedFeatureVerfuegungBerechnungComponent {
     },
   };
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
-
-  verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
-  berechnungStore = inject(BerechnungStore);
 
   berechnungenRawSig = computed<BerechnungView | null>(() => {
     const zusammenfassung =
@@ -115,20 +117,17 @@ export class SharedFeatureVerfuegungBerechnungComponent {
   constructor() {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
-
       const verfuegungId = this.verfuegungIdSig();
+      const latestVerfuegungId = this.latestVerfuegungIdSig();
 
       if (!gesuchId) {
         return;
       }
-
-      if (verfuegungId) {
-        // case mit verfuegungId => versionierte Berechnung für Verfuegung
-        this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
-      } else {
-        // case aktuelles gesuch
-        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
-      }
+      this.berechnungStore.getBerechnung$({
+        gesuchId,
+        verfuegungId,
+        latestVerfuegungId,
+      });
     });
   }
 }

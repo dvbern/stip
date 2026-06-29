@@ -69,21 +69,26 @@ export class DarlehenStore extends signalStore(
     };
   });
 
-  darlehenListSbViewSig = computed(() => {
-    return {
-      list: fromCachedDataSig(this.darlehenList),
-      loading: isPending(this.darlehenList()),
-    };
-  });
+  darlehenListViewSig = computed(() => {
+    return byAppType(this.config.appType, {
+      'gesuch-app': () => {
+        const data = fromCachedDataSig(this.darlehenGs);
 
-  darlehenGsViewSig = computed(() => {
-    const data = fromCachedDataSig(this.darlehenGs);
-
-    return {
-      list: data?.darlehenList ?? [],
-      canCreateDarlehen: data?.canCreateDarlehen ?? false,
-      loading: isPending(this.darlehenGs()),
-    };
+        return {
+          list: data?.darlehenList ?? [],
+          canCreateDarlehen: data?.canCreateDarlehen ?? false,
+          loading: isPending(this.darlehenGs()),
+        };
+      },
+      'sachbearbeitung-app': () => ({
+        list: fromCachedDataSig(this.darlehenList) ?? [],
+        canCreateDarlehen: false,
+        loading: isPending(this.darlehenList()),
+      }),
+      'demo-data-app': () => {
+        throw new Error('Not implemented for this AppType');
+      },
+    });
   });
 
   getDarlehenGs$ = rxMethod<{

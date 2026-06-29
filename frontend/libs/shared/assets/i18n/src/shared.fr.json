@@ -57,6 +57,8 @@
 
   "shared.header.gesuche": "Demandes",
   "shared.header.fall": "Cas",
+  "shared.header.ausbildungsjahr": "Année de formation {{ yearRange }}",
+  "shared.header.verfuegtAt": "Adopté le {{ date }}",
   "shared.header.auszahlung": "Paiement",
   "shared.header.dashboard": "Cockpit",
   "shared.header.aenderungen": "Modifications",
@@ -384,6 +386,7 @@
   "shared.admin.sozialdienstBenutzer.error.emailExists": "L'adresse e-mail existe déjà.",
   "shared.admin.sozialdienstBenutzer.aktualisiert": "L'employé du service social a été mis à jour avec succès",
 
+  "shared.gesuch-form.title": "Demande",
   "shared.gesuch.validation.generic": "Veuillez vérifier vos saisies dans le formulaire et remplir les champs requis.",
   "shared.gesuch.validation.uniqueSvnummer.message": "Le numéro AVS indiqué a déjà été utilisé dans une autre demande. Veuillez vérifier vos saisies dans:",
   "shared.gesuch.validation.wohnsitz.message": "Les informations de résidence ne correspondent pas aux informations de la situation familiale. Veuillez vérifier vos saisies dans:",

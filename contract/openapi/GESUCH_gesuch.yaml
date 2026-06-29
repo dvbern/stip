@@ -149,9 +149,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getInitialTrancheChanges
       summary: Returns the inital tranche changes by gesuchTrancheId
-  '/gesuch/eingereicht/{gesuchId}':
+  '/gesuch/eingereicht/{gesuchTrancheId}':
     parameters:
-      - name: gesuchId
+      - name: gesuchTrancheId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -1101,9 +1101,9 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getBerechnungForVerfuegung
       summary: Holt die Berechnung für die angegebene Verfügung
-  '/gesuch/{gesuchId}/berechnung/gs':
+  '/gesuch/{verfuegungId}/berechnung/gs':
     parameters:
-      - name: gesuchId
+      - name: verfuegungId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path

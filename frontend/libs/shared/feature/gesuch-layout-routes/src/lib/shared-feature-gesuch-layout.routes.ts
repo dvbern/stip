@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
+import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 
 export const sharedFeatureGesuchLayoutRoutes: Route[] = [
   // todo: rename to berechnung => im UX Sammeltask erledigen
@@ -19,7 +20,7 @@ export const sharedFeatureGesuchLayoutRoutes: Route[] = [
       ),
   },
   {
-    path: 'darlehen',
+    path: ':gesuchId/darlehen',
     title: 'shared.darlehen.title',
     loadChildren: () =>
       import('@dv/shared/feature/darlehen').then(
@@ -29,6 +30,7 @@ export const sharedFeatureGesuchLayoutRoutes: Route[] = [
   {
     path: '',
     title: 'shared.gesuch-form.title',
+    providers: [SteuerdatenStore],
     loadComponent: () =>
       import('@dv/shared/feature/gesuch-form').then(
         (m) => m.SharedFeatureGesuchFormComponent,

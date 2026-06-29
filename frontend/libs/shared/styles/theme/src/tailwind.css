@@ -136,11 +136,11 @@
 }
 
 @utility dv-table {
-  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm;
+  @apply tw:mt-6 tw:overflow-x-auto tw:rounded-xl tw:bg-white tw:pb-6 tw:shadow-sm tw:border-gray-300;
 }
 
 @utility dv-simple-table {
-  @apply tw:w-full tw:rounded-xl tw:align-top tw:bg-white tw:border-separate;
+  @apply tw:w-full tw:rounded-xl tw:align-top tw:bg-white tw:border-separate tw:border tw:border-gray-300;
   th {
     @apply tw:text-left;
   }

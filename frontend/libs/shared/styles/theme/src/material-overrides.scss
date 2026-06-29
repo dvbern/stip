@@ -237,24 +237,6 @@ dv-shared-feature-verfuegung {
   }
 }
 
-dv-shared-feature-gesuch-layout {
-  .tw\:dv-table {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-  .mat-mdc-tab-link.btn-nav {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-}
-
-dv-sachbearbeitung-app-feature-gesuch-form {
-  .tw\:dv-simple-table {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-}
-
 .mat-mdc-slide-toggle {
   --mat-slide-toggle-selected-track-color: var(--tw-color-dv-red);
   --mat-slide-toggle-selected-focus-track-color: var(--tw-color-dv-red-hover);

@@ -33,12 +33,12 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         loadComponent: () =>
-          import('@dv/shared/feature/gesuch-form').then(
-            (m) => m.SharedFeatureGesuchFormComponent,
+          import('@dv/shared/feature/gesuch-layout').then(
+            (m) => m.SharedFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
-          import('@dv/shared/feature/gesuch-form').then(
-            (m) => m.sharedFeatureGesuchFormRoutes,
+          import('@dv/shared/feature/gesuch-layout-routes').then(
+            (m) => m.sharedFeatureGesuchLayoutRoutes,
           ),
       },
       {

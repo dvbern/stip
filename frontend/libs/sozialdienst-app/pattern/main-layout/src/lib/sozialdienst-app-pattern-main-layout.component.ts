@@ -126,7 +126,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
     effect(() => {
       // Read allRouteParamsSig to re-run on every navigation
       this.allRouteParamsSig();
-      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();

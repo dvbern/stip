@@ -20,6 +20,8 @@ export interface GesuchStateInfo {
     canTriggerManuellPruefen: boolean;
     canBearbeitungAbschliessen: boolean;
     canSBInitAenderung: boolean;
+    latestVerfuegungId?: string;
+    latestVerfuegtAt?: string;
     inBearbeitungSbReason?: InBearbeitungSbReason;
 }
 

@@ -29,7 +29,7 @@ export const appRoutes: Route[] = [
         path: 'gesuch',
         loadComponent: () =>
           import('@dv/shared/feature/gesuch-layout').then(
-            (m) => m.SachbearbeitungAppFeatureGesuchLayoutComponent,
+            (m) => m.SharedFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
           import('@dv/shared/feature/gesuch-layout-routes').then(

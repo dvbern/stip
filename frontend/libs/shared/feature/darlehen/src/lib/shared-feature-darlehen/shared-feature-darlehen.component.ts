@@ -12,7 +12,9 @@ import { Router } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
-import { DashboardStore } from '@dv/shared/data-access/dashboard';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { byAppType } from '@dv/shared/model/permission-state';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
@@ -35,9 +37,11 @@ export class SharedFeatureDarlehenComponent {
   @HostBinding('class') klass = 'tw:dv-pass-height';
   private router = inject(Router);
   private formUtils = inject(SharedUtilFormService);
+  private config = inject(SharedModelCompileTimeConfig);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   darlehenStore = inject(DarlehenStore);
-  dashboardStore = inject(DashboardStore);
   darlehenIdSig = input<string | undefined>(undefined, { alias: 'darlehenId' });
+  gesuchIdSig = input<string | undefined>(undefined, { alias: 'gesuchId' });
   fallIdSig = input<string | undefined>(undefined, { alias: 'fallId' });
   hasUnsavedChanges = false;
 
@@ -45,12 +49,32 @@ export class SharedFeatureDarlehenComponent {
     effect(() => {
       const darlehenId = this.darlehenIdSig();
       if (darlehenId) {
-        this.darlehenStore.getDarlehenSb$({
-          darlehenId,
-          onFailure: () => {
-            this.router.navigate(['/darlehen']);
+        byAppType(this.config.appType, {
+          'gesuch-app': () =>
+            this.darlehenStore.getDarlehenGs$({
+              darlehenId,
+              onFailure: () => {
+                this.router.navigate(['/darlehen']);
+              },
+            }),
+          'sachbearbeitung-app': () =>
+            this.darlehenStore.getDarlehenSb$({
+              darlehenId,
+              onFailure: () => {
+                this.router.navigate(['/darlehen']);
+              },
+            }),
+          'demo-data-app': () => {
+            throw new Error('Not implemented for this AppType');
           },
         });
+      }
+    });
+
+    effect(() => {
+      const gesuchId = this.gesuchIdSig();
+      if (gesuchId) {
+        this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
     this.formUtils.registerFormForUnsavedCheck(this);

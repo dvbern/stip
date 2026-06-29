@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 
-import { SteuerdatenStore } from '@dv/sachbearbeitung-app/data-access/steuerdaten';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 import { hasRoles } from '@dv/shared/pattern/status-guard';
 
@@ -70,11 +69,10 @@ export const appRoutes: Route[] = [
       {
         path: 'gesuch',
         canActivate: [hasBenutzer],
-        providers: [SteuerdatenStore],
-        title: 'sachbearbeitung-app.gesuch-form.title',
+        title: 'shared.gesuch-form.title',
         loadComponent: () =>
           import('@dv/shared/feature/gesuch-layout').then(
-            (m) => m.SachbearbeitungAppFeatureGesuchLayoutComponent,
+            (m) => m.SharedFeatureGesuchLayoutComponent,
           ),
         loadChildren: () =>
           import('@dv/sachbearbeitung-app/feature/gesuch-layout-routes').then(

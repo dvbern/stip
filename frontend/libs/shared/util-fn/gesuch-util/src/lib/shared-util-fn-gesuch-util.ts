@@ -13,6 +13,7 @@ import {
   GesuchFormularType,
   GesuchTranche,
   GesuchUrlType,
+  Gesuchstatus,
   SBFormStepProps,
   SharedModelGesuch,
   SteuerdatenTyp,
@@ -510,3 +511,10 @@ type FieldsThatContain<
 const formularPropsContaining = <T extends Record<string, unknown>>(
   obj: Record<FieldsThatContain<T>, null>,
 ) => Object.keys(obj) as FieldsThatContain<T>[];
+
+export const isInOneOfGivenStatus = (
+  gesuchStatus: Gesuchstatus,
+  list: Gesuchstatus[],
+) => {
+  return list.includes(gesuchStatus);
+};

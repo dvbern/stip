@@ -51,9 +51,14 @@ import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-i
 import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedPatternInfoBarActionsComponent } from '@dv/shared/pattern/info-bar-actions';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
-import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
+import {
+  SharedUiIfGesuchstellerDirective,
+  SharedUiIfSachbearbeiterDirective,
+} from '@dv/shared/ui/if-app-type';
 import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import { TabNavItem, getQueryParamValueSig } from '@dv/shared/util/navigation';
+import { getYearRangeFrom } from '@dv/shared/util/validator-date';
+import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
 
 @Component({
   selector: 'dv-shared-feature-gesuch-layout',
@@ -71,11 +76,12 @@ import { TabNavItem, getQueryParamValueSig } from '@dv/shared/util/navigation';
     SharedUiAdvTranslocoDirective,
     SharedPatternInfoBarActionsComponent,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiIfGesuchstellerDirective,
   ],
   templateUrl: './shared-feature-gesuch-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SachbearbeitungAppFeatureGesuchLayoutComponent {
+export class SharedFeatureGesuchLayoutComponent {
   @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
 
   private router = inject(Router);
@@ -131,6 +137,13 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     return {
       name: `${info.piaVorname} ${info.piaNachname}`,
+      ausbildungsjahr: getYearRangeFrom(info.startDate, info.endDate),
+      verfuegtAt: isInOneOfGivenStatus(info.state.gesuchStatus, [
+        'STIPENDIENANSPRUCH',
+        'KEIN_STIPENDIENANSPRUCH',
+      ])
+        ? info.state.latestVerfuegtAt
+        : null,
       fallNummer: info.fallNummer,
       gesuchNummer: info.gesuchNummer,
       status: info.state.gesuchStatus,
@@ -174,7 +187,11 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
-      queryParams: { berechnungId, originStep: originOrTrancheStep },
+      queryParams: {
+        berechnungId,
+        latestVerfuegungId: gesuchInfo?.state.latestVerfuegungId,
+        originStep: originOrTrancheStep,
+      },
       key: 'verfuegung' as const,
     };
 
@@ -225,7 +242,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
   });
 
   firstDarlehenIdSig = computed(() => {
-    const darlehen = this.darlehenStore.darlehenListSbViewSig().list ?? [];
+    const darlehen = this.darlehenStore.darlehenListViewSig().list ?? [];
 
     const byType = darlehen.reduce(
       (acc, darlehen) => {

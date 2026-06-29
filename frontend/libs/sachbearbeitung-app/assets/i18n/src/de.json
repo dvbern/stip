@@ -679,7 +679,6 @@
   "sachbearbeitung-app.dashboard.tabs.JURISTISCHE_ABKLAERUNG": "Juristische Abklärungen",
   "sachbearbeitung-app.dashboard.tabs.PENDENTE": "Markiert",
 
-  "sachbearbeitung-app.gesuch-form.title": "Gesuch",
   "sachbearbeitung-app.gesuch.steuerdaten.updateFromNesko": "Daten aus Nesko laden",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.title": "Steuerdaten mittels Nesko aktualisieren",
   "sachbearbeitung-app.gesuch.steuerdaten.dialog.updateSteuerdaten.description": "Wollen sie wirklich die Daten für das definierte Jahr aus Nesko laden?<br>Die Formularfelder werden überschrieben.",

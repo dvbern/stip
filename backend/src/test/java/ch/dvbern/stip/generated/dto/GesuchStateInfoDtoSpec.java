@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -36,6 +37,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG,
+  GesuchStateInfoDtoSpec.JSON_PROPERTY_LATEST_VERFUEGUNG_ID,
+  GesuchStateInfoDtoSpec.JSON_PROPERTY_LATEST_VERFUEGT_AT,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON
 })
 @JsonTypeName("GesuchStateInfo")
@@ -61,6 +64,12 @@ public class GesuchStateInfoDtoSpec {
 
   public static final String JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG = "canSBInitAenderung";
   private Boolean canSBInitAenderung;
+
+  public static final String JSON_PROPERTY_LATEST_VERFUEGUNG_ID = "latestVerfuegungId";
+  private UUID latestVerfuegungId;
+
+  public static final String JSON_PROPERTY_LATEST_VERFUEGT_AT = "latestVerfuegtAt";
+  private java.time.LocalDateTime latestVerfuegtAt;
 
   public static final String JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON = "inBearbeitungSbReason";
   private InBearbeitungSbReasonDtoSpec inBearbeitungSbReason;
@@ -250,6 +259,58 @@ public class GesuchStateInfoDtoSpec {
   }
 
 
+  public GesuchStateInfoDtoSpec latestVerfuegungId(UUID latestVerfuegungId) {
+    
+    this.latestVerfuegungId = latestVerfuegungId;
+    return this;
+  }
+
+   /**
+   * Get latestVerfuegungId
+   * @return latestVerfuegungId
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public UUID getLatestVerfuegungId() {
+    return latestVerfuegungId;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGUNG_ID)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+  }
+
+
+  public GesuchStateInfoDtoSpec latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    
+    this.latestVerfuegtAt = latestVerfuegtAt;
+    return this;
+  }
+
+   /**
+   * Get latestVerfuegtAt
+   * @return latestVerfuegtAt
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public java.time.LocalDateTime getLatestVerfuegtAt() {
+    return latestVerfuegtAt;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_LATEST_VERFUEGT_AT)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
+  }
+
+
   public GesuchStateInfoDtoSpec inBearbeitungSbReason(InBearbeitungSbReasonDtoSpec inBearbeitungSbReason) {
     
     this.inBearbeitungSbReason = inBearbeitungSbReason;
@@ -291,12 +352,14 @@ public class GesuchStateInfoDtoSpec {
         Objects.equals(this.canTriggerManuellPruefen, gesuchStateInfo.canTriggerManuellPruefen) &&
         Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen) &&
         Objects.equals(this.canSBInitAenderung, gesuchStateInfo.canSBInitAenderung) &&
+        Objects.equals(this.latestVerfuegungId, gesuchStateInfo.latestVerfuegungId) &&
+        Objects.equals(this.latestVerfuegtAt, gesuchStateInfo.latestVerfuegtAt) &&
         Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, inBearbeitungSbReason);
+    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, latestVerfuegungId, latestVerfuegtAt, inBearbeitungSbReason);
   }
 
   @Override
@@ -310,6 +373,8 @@ public class GesuchStateInfoDtoSpec {
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canBearbeitungAbschliessen: ").append(toIndentedString(canBearbeitungAbschliessen)).append("\n");
     sb.append("    canSBInitAenderung: ").append(toIndentedString(canSBInitAenderung)).append("\n");
+    sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
+    sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("    inBearbeitungSbReason: ").append(toIndentedString(inBearbeitungSbReason)).append("\n");
     sb.append("}");
     return sb.toString();

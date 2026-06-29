@@ -6,19 +6,24 @@ import {
   Component,
   HostBinding,
   OnDestroy,
+  Signal,
   ViewChild,
   computed,
   inject,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatMenuModule } from '@angular/material/menu';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
-import { filter, map } from 'rxjs';
+import { filter, map, startWith } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import {
+  selectRevision,
   selectRouteGesuchId,
   selectRouteTrancheId,
   selectSharedDataAccessGesuchCacheView,
@@ -26,12 +31,21 @@ import {
   selectSharedDataAccessGesuchsView,
   selectTrancheTyp,
 } from '@dv/shared/data-access/gesuch';
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { SteuerdatenStore } from '@dv/shared/data-access/steuerdaten';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { GesuchFormStep } from '@dv/shared/model/gesuch-form';
-import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import { GesuchHeader, getTrancheRoute } from '@dv/shared/model/gesuch';
+import { GesuchFormStep, TRANCHE } from '@dv/shared/model/gesuch-form';
+import {
+  createUrlChecksSig,
+  urlAfterNavigationEnd,
+} from '@dv/shared/model/router';
 import { isDefined } from '@dv/shared/model/type-util';
+import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchStepNavComponent } from '@dv/shared/pattern/gesuch-step-nav';
+import { SharedUiAenderungenMenuComponent } from '@dv/shared/ui/aenderungen-menu';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiProgressBarComponent } from '@dv/shared/ui/progress-bar';
 import { SharedUiRouterOutletWrapperComponent } from '@dv/shared/ui/router-outlet-wrapper';
@@ -43,13 +57,18 @@ import { createStepFallbackRouteEffect } from '@dv/shared/util/navigation';
 @Component({
   selector: 'dv-shared-feature-gesuch-form',
   imports: [
-    SharedUiRouterOutletWrapperComponent,
     CommonModule,
+    SharedUiRouterOutletWrapperComponent,
     SharedPatternGesuchStepNavComponent,
-    SharedUiProgressBarComponent,
     SharedUiIconChipComponent,
+    SharedUiProgressBarComponent,
     TranslocoDirective,
+    MatMenuModule,
+    RouterLink,
     PortalModule,
+    SharedUiAenderungenMenuComponent,
+    MatFormFieldModule,
+    FormsModule,
   ],
   templateUrl: './shared-feature-gesuch-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,49 +84,123 @@ export class SharedFeatureGesuchFormComponent
   private store = inject(Store);
   private einreichenStore = inject(EinreichenStore);
   private permissionStore = inject(PermissionStore);
+  private steuerdatenStore = inject(SteuerdatenStore);
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private navigationStore = inject(NavigationStore);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private config = inject(SharedModelCompileTimeConfig);
 
-  router = inject(Router);
+  revisionSig = this.store.selectSignal(selectRevision);
   headerService = inject(SharedUtilHeaderService);
   stepManager = inject(SharedUtilGesuchFormStepManagerService);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
-  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
-  trancheTypSig = this.store.selectSignal(selectTrancheTyp);
-  cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
-  stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
-
+  gesuchTrancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  berechnungIdSig = toSignal(
+    this.route.queryParamMap.pipe(map((params) => params.get('berechnungId'))),
+  );
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
   stepSig = signal<GesuchFormStep | undefined>(undefined);
+  cacheViewSig = this.store.selectSignal(selectSharedDataAccessGesuchCacheView);
+  stepsViewSig = this.store.selectSignal(selectSharedDataAccessGesuchStepsView);
+  trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
+  trancheTypSig = this.store.selectSignal(selectTrancheTyp);
+
+  headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
+    this.gesuchHeaderStore.viewSig;
+
+  routeUrlSig = toSignal(
+    urlAfterNavigationEnd(this.router).pipe(
+      map(() => this.router.routerState.snapshot.url),
+      startWith(this.router.routerState.snapshot.url),
+    ),
+  );
+
+  routeChecksSig = createUrlChecksSig(
+    this.router,
+    `${getTrancheRoute('aenderung')}`,
+    `${getTrancheRoute('initial')}`,
+    `${getTrancheRoute('eingereicht')}`,
+  );
+  isGesuchRouteSig = computed(() => {
+    const routes = this.routeChecksSig();
+    return !notGesuchRoute.some((route) => routes.matched.includes(route));
+  });
+
   stepsSig = computed(() => {
-    const { cache, trancheTyp } = this.cacheViewSig();
     const { invalidFormularProps } = this.einreichenStore.validationViewSig();
-    const steps = this.stepsViewSig().steps;
     const rolesMap = this.permissionStore.rolesMapSig();
-    const validatedSteps = this.stepManager.getValidatedSteps(
+    const { cache, trancheTyp } = this.cacheViewSig();
+    const steps = this.stepsViewSig().steps;
+    const steuerdaten = this.steuerdatenStore.cachedSteuerdatenListViewSig();
+
+    return this.stepManager.getValidatedSteps(
       steps,
       trancheTyp,
       cache.gesuch,
       rolesMap,
-      undefined,
+      this.config.isSachbearbeitungApp ? steuerdaten : undefined,
       invalidFormularProps.validations,
     );
-    return validatedSteps;
   });
+
   currentStepProgressSig = computed(() => {
+    const currentStep = this.stepSig();
     const stepsFlow = this.stepsViewSig().stepsFlow;
-    return this.stepManager.getStepProgress(stepsFlow, this.stepSig());
+    return this.stepManager.getStepProgress(stepsFlow, currentStep);
   });
+
+  stepRouteSegmentsSig = computed(() => {
+    const currentStep = this.stepSig();
+
+    const routeSegments = currentStep?.route.split('/').filter(Boolean) ?? [
+      TRANCHE.route,
+    ];
+
+    return routeSegments;
+  });
+
   currentStepSig = computed(() => {
+    const currentStep = this.stepSig();
     const steps = this.stepsSig();
-    return steps.find((step) => step.route === this.stepSig()?.route);
+    return steps.find((step) => step.route === currentStep?.route);
   });
-  isTrancheRouteSig = toSignal(
-    urlAfterNavigationEnd(this.router).pipe(
-      map((url) => url.includes('/tranche/')),
-    ),
-  );
+
+  tranchenSig = computed(() => {
+    const current = this.gesuchHeaderStore.header().data?.currentTranches;
+    const versions = this.gesuchHeaderStore.viewSig().versions;
+    const berechnungId = this.berechnungIdSig();
+    const routes = this.routeChecksSig();
+
+    if (routes.isInitial) {
+      return this.gesuchHeaderStore.viewSig().initial?.verfuegtGesuch?.tranchen;
+    }
+
+    if (routes.isEingereicht) {
+      const tranche =
+        this.gesuchHeaderStore.viewSig().initial?.eingereichtGesuch;
+      return tranche ? [tranche] : undefined;
+    }
+
+    if (berechnungId) {
+      const version = versions?.find(
+        (version) => version.berechnungId === berechnungId,
+      );
+      return version?.tranchen;
+    }
+
+    return current;
+  });
+
+  currentTrancheSig = computed(() => {
+    const trancheId = this.gesuchTrancheIdSig();
+    const tranchen = this.tranchenSig();
+
+    return trancheId && tranchen
+      ? tranchen.find((tranche) => tranche.id === trancheId)
+      : undefined;
+  });
 
   ngAfterViewInit(): void {
     this.navigationStore.setPortal(this.portalContent);
@@ -125,7 +218,7 @@ export class SharedFeatureGesuchFormComponent
       currentStepSig: this.currentStepSig,
       loadingSig: computed(() => this.viewSig().loading),
       gesuchIdSig: this.gesuchIdSig,
-      trancheIdSig: this.trancheIdSig,
+      trancheIdSig: this.gesuchTrancheIdSig,
       trancheTypSig: this.trancheTypSig,
     });
 
@@ -133,6 +226,10 @@ export class SharedFeatureGesuchFormComponent
       .pipe(filter(isDefined), takeUntilDestroyed())
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
+
+        if (this.config.isSachbearbeitungApp) {
+          this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
+        }
       });
   }
 }

@@ -429,6 +429,10 @@ GesuchStateInfo:
       type: boolean
     canSBInitAenderung:
       type: boolean
+    latestVerfuegungId:
+      $ref: '#/UUID'
+    latestVerfuegtAt:
+      $ref: '#/LocalDateTime'
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
 PersoenlicheAngaben:

@@ -22,6 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
@@ -37,6 +38,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
@@ -45,13 +47,11 @@ import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
-import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.Qualifier;
-
 
 @Mapper(
     config = MappingConfig.class,
@@ -67,7 +67,8 @@ public abstract class GesuchMapper {
     @Qualifier
     @Target(ElementType.METHOD)
     @Retention(RetentionPolicy.CLASS)
-    public @interface AfterToInfoDtoGs {}
+    public @interface AfterToInfoDtoGs {
+    }
 
     @Inject
     FallService fallService;
@@ -108,7 +109,13 @@ public abstract class GesuchMapper {
     @AfterMapping
     @AfterToInfoDtoGs
     public void afterToInfoDtoGs(Gesuch gesuch, @MappingTarget GesuchInfoDto gesuchInfoDto) {
-        gesuchInfoDto.getState().setCanGetBerechnung(gesuch.isVerfuegt());
+        final var state = gesuchInfoDto.getState();
+        final var latestVerfuegung = gesuch.getVerfuegungs()
+            .stream()
+            .max(Comparator.comparing(Verfuegung::getTimestampErstellt));
+        state.setCanGetBerechnung(gesuch.isVerfuegt());
+        state.setLatestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null));
+        state.setLatestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null));
     }
 
     @Nullable

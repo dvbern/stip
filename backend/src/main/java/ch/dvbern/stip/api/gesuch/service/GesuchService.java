@@ -1009,8 +1009,8 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchDto getEingereichtGesuchByTrancheId(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchDto getEingereichtGesuchByTrancheId(UUID gesuchTrancheId) {
+        final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
 
         final var eingereichtTranche =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
@@ -1497,7 +1497,7 @@ public class GesuchService {
 
     @Transactional
     public GesuchHeaderDto getGesuchTrancheHeaderGs(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
         final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);

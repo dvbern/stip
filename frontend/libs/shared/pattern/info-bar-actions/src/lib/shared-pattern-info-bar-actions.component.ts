@@ -57,7 +57,7 @@ import {
 } from '@dv/shared/util/gesuch';
 import { getQueryParamValueSig } from '@dv/shared/util/navigation';
 import { isPending } from '@dv/shared/util/remote-data';
-import { ExportView } from '@dv/shared/util-data-access/export-tranche';
+import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
 
 @Component({
   selector: 'dv-shared-pattern-info-bar-actions',

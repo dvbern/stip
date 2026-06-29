@@ -1,7 +1,7 @@
 <div class="tw:flex tw:h-full" *transloco="let t">
   <div class="tw:hidden tw:lg:block tw:border-r tw:border-dv-border tw:p-6 tw:bg-white tw:overflow-y-auto tw:w-[320px]">
     <dv-shared-ui-darlehen-menu
-      [darlehenListSig]="darlehenStore.darlehenListSbViewSig().list"
+      [darlehenListSig]="darlehenStore.darlehenListViewSig().list"
       [canCreateDarlehenSig]="false"
       [fallIdSig]="fallIdSig()"
     ></dv-shared-ui-darlehen-menu>

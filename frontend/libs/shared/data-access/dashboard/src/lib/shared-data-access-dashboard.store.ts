@@ -1,7 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { differenceInDays, endOfDay, format, isAfter } from 'date-fns';
+import { differenceInDays, endOfDay, isAfter } from 'date-fns';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -29,7 +29,10 @@ import {
   handleApiResponse,
   initial,
 } from '@dv/shared/util/remote-data';
-import { dateFromMonthYearString } from '@dv/shared/util/validator-date';
+import {
+  dateFromMonthYearString,
+  getYearRangeFrom,
+} from '@dv/shared/util/validator-date';
 
 type DashboardState = {
   dashboard: CachedRemoteData<FallDashboardItem>;
@@ -204,10 +207,11 @@ const toGesuchDashboardItemView =
       ),
       new Date(),
     );
-    const yearRange = [
-      format(Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStart), 'yy'),
-      format(Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStopp), 'yy'),
-    ].join('/');
+    const { gesuchsperiodeStart, gesuchsperiodeStopp } = gesuch.gesuchsperiode;
+    const yearRange = getYearRangeFrom(
+      gesuchsperiodeStart,
+      gesuchsperiodeStopp,
+    );
     const canCurrentlyEditGesuch = isNotReadonly(
       appType,
       rolesMap,
