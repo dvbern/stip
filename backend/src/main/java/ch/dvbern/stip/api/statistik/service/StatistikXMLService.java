@@ -327,20 +327,18 @@ public class StatistikXMLService {
             )
             .formPlace(
                 value.isAusbildungAusland() ? Integer.parseInt(value.ausbildungLandBfs())
-                    : getKanton(value.ausbildungPlz()).getBfsCode()
+                    : getKanton(value.ausbildungPlz(), tenantService.getCurrentTenantIdentifier()).getBfsCode()
             )
             .com(null)
             .sums(new ArrayList<>())
             .build();
     }
 
-    private static Kanton getKanton(final String ausbildungPlz) {
+    private static Kanton getKanton(final String ausbildungPlz, TenantIdentifier tenantIdentifier) {
         try {
             return Kanton.valueOf(ausbildungPlz);
         } catch (Exception e) {
-            throw new IllegalStateException(
-                "No valid Kanton was found with given PLZ [%s]".formatted(ausbildungPlz), e
-            );
+            return KantonUtil.getByTenantIdentifier(tenantIdentifier);
         }
     }
 

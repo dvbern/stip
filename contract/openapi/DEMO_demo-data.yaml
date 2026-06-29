@@ -593,10 +593,6 @@ components:
           type: boolean
         werZahltAlimente:
           $ref: './components/gesuch-formular.yaml#/Elternschaftsteilung'
-        mutterWiederverheiratetAlimente:
-          type: boolean
-        vaterWiederverheiratetAlimente:
-          type: boolean
         elternteilUnbekanntVerstorben:
           type: boolean
         mutterVerstorben:
@@ -607,8 +603,6 @@ components:
           $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         mutterKeineOptionen:
           type: boolean
-        mutterWiederverheiratetUnbekannt:
-          type: boolean
         vaterVerstorben:
           type: boolean
         vaterUnbekannt:
@@ -616,12 +610,6 @@ components:
         vaterUnbekanntGrund:
           $ref: './components/gesuch-formular.yaml#/ElternUnbekanntheitsGrund'
         vaterKeineOptionen:
-          type: boolean
-        vaterWiederverheiratetUnbekannt:
-          type: boolean
-        mutterWiederverheiratetUngewiss:
-          type: boolean
-        vaterWiederverheiratetUngewiss:
           type: boolean
     DemoElternteil:
       required:
@@ -680,6 +668,8 @@ components:
         sozialhilfebeitraege:
           type: boolean
         ausweisbFluechtling:
+          type: boolean
+        wiederverheiratet:
           type: boolean
     DemoSteuererklaerung:
       required:

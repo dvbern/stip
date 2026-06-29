@@ -41,6 +41,8 @@ public @interface DocumentsRequiredConstraint {
 
     Class<? extends Payload>[] payload() default {};
 
+    boolean includeHidden() default true;
+
     @Target({ ElementType.TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @Documented

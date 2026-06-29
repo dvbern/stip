@@ -16,21 +16,15 @@ export interface DemoFamiliensituation {
     elternVerheiratetZusammen: boolean;
     gerichtlicheAlimentenregelung?: boolean;
     werZahltAlimente?: Elternschaftsteilung;
-    mutterWiederverheiratetAlimente?: boolean;
-    vaterWiederverheiratetAlimente?: boolean;
     elternteilUnbekanntVerstorben?: boolean;
     mutterVerstorben?: boolean;
     mutterUnbekannt?: boolean;
     mutterUnbekanntGrund?: ElternUnbekanntheitsGrund;
     mutterKeineOptionen?: boolean;
-    mutterWiederverheiratetUnbekannt?: boolean;
     vaterVerstorben?: boolean;
     vaterUnbekannt?: boolean;
     vaterUnbekanntGrund?: ElternUnbekanntheitsGrund;
     vaterKeineOptionen?: boolean;
-    vaterWiederverheiratetUnbekannt?: boolean;
-    mutterWiederverheiratetUngewiss?: boolean;
-    vaterWiederverheiratetUngewiss?: boolean;
 }
 
 

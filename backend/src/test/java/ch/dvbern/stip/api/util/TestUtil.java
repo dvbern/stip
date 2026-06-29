@@ -864,8 +864,6 @@ public class TestUtil {
                 .setElternVerheiratetZusammen(false)
                 .setGerichtlicheAlimentenregelung(false)
                 .setElternteilUnbekanntVerstorben(false)
-                .setVaterWiederverheiratet(false)
-                .setMutterWiederverheiratet(true)
         );
 
         gesuchFormular.setGeschwisters(
@@ -901,6 +899,7 @@ public class TestUtil {
             Set.of(
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.VATER)
+                    .setWiederverheiratet(false)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_VATER)
                     .setWohnkosten(0)
                     .setTelefonnummer("0987654321")
@@ -917,6 +916,7 @@ public class TestUtil {
                     .setGeburtsdatum(LocalDate.now().minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
+                    .setWiederverheiratet(true)
                     .setSozialversicherungsnummer(AHV_NUMMER_VALID_MUTTER)
                     .setWohnkosten(0)
                     .setTelefonnummer("0987654321")

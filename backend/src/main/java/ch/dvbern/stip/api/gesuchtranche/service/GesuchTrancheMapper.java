@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractEntity;
@@ -26,6 +27,8 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.eltern.service.ElternMapper;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.service.FamiliensituationMapper;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.service.GeschwisterMapper;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
@@ -37,6 +40,7 @@ import jakarta.inject.Inject;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.BeforeMapping;
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -62,12 +66,26 @@ public abstract class GesuchTrancheMapper {
     @Inject
     FamiliensituationMapper familiensituationMapper;
 
-    @ToDtoDefaultMapping
-    public abstract GesuchTrancheDto toDtoWithElevatedPermissions(GesuchTranche gesuchTranche);
+    @Inject
+    GeschwisterMapper geschwisterMapper;
 
     @ToDtoDefaultMapping
-    @BeanMapping(qualifiedByName = "afterMappingWithoutElevatedPermissionFields")
-    public abstract GesuchTrancheDto toDtoWithoutElevatedPermissions(GesuchTranche gesuchTranche);
+    public abstract GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch, @Context GesuchTranche context);
+
+    public GesuchTrancheDto toDtoWithConfidentialFields(GesuchTranche gesuch) {
+        return toDtoWithConfidentialFields(gesuch, gesuch);
+    }
+
+    @ToDtoDefaultMapping
+    @BeanMapping(qualifiedByName = "afterMappingWithoutConfidentialFields")
+    public abstract GesuchTrancheDto toDtoWithoutConfidentialFields(
+        GesuchTranche gesuchTranche,
+        @Context GesuchTranche context
+    );
+
+    public GesuchTrancheDto toDtoWithoutConfidentialFields(GesuchTranche gesuchTranche) {
+        return toDtoWithoutConfidentialFields(gesuchTranche, gesuchTranche);
+    }
 
     @ToDtoDefaultMapping
     public abstract GesuchTrancheSlimDto toSlimDto(GesuchTranche gesuchTranche);
@@ -84,14 +102,14 @@ public abstract class GesuchTrancheMapper {
 
     @BeanMapping(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        qualifiedByName = "centralMappingWithOverrideFieldsThatRequireElevatedPermissions"
+        qualifiedByName = "beforeMappingRejectConfidentialFields"
     )
-    public abstract GesuchTranche partialUpdateOverrideFieldsThatRequireElevatedPermissions(
+    public abstract GesuchTranche partialUpdateRejectConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
 
-    public abstract GesuchTranche partialUpdateAcceptFieldsThatRequireElevatedPermissions(
+    public abstract GesuchTranche partialUpdateAcceptConfidentialFields(
         GesuchTrancheUpdateDto gesuchUpdateDto,
         @MappingTarget GesuchTranche gesuch
     );
@@ -99,22 +117,30 @@ public abstract class GesuchTrancheMapper {
     public GesuchTranche partialUpdate(
         final GesuchTrancheUpdateDto gesuchUpdateDto,
         final GesuchTranche gesuch,
-        final boolean requiresElevatedPermissions
+        final boolean updateConfidentialFields
     ) {
-        if (requiresElevatedPermissions) {
-            return partialUpdateOverrideFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
+        if (updateConfidentialFields) {
+            return partialUpdateRejectConfidentialFields(gesuchUpdateDto, gesuch);
         } else {
-            return partialUpdateAcceptFieldsThatRequireElevatedPermissions(gesuchUpdateDto, gesuch);
+            return partialUpdateAcceptConfidentialFields(gesuchUpdateDto, gesuch);
         }
     }
 
-    @Named("afterMappingWithoutElevatedPermissionFields")
+    @Named("afterMappingWithoutConfidentialFields")
     @AfterMapping
-    protected void afterMappingWithoutElevatedPermissionFields(
+    protected void afterMappingWithoutConfidentialFields(
         GesuchTranche gesuchTranche,
         @MappingTarget GesuchTrancheDto gesuchTrancheDto
     ) {
         markInvalidLebenslaufItems(gesuchTranche, gesuchTrancheDto);
+        removeHiddenElternsData(gesuchTrancheDto, gesuchTranche);
+        removeHiddenGeschwistersData(gesuchTrancheDto, gesuchTranche);
+    }
+
+    protected void removeHiddenElternsData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche gesuchTranche
+    ) {
         Stream.of(
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKosten(),
             gesuchTrancheDto.getGesuchFormular().getEinnahmenKostenPartner()
@@ -139,19 +165,42 @@ public abstract class GesuchTrancheMapper {
         }
     }
 
-    @Named("centralMappingWithOverrideFieldsThatRequireElevatedPermissions")
+    protected void removeHiddenGeschwistersData(
+        GesuchTrancheDto gesuchTrancheDto,
+        GesuchTranche context
+    ) {
+        if (Objects.isNull(gesuchTrancheDto.getGesuchFormular().getGeschwisters())) {
+            return;
+        }
+        final var hiddenGeschwistersUUIDs = context.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(Geschwister::isHidden)
+            .map(Geschwister::getId)
+            .toList();
+
+        final var onlyPublicGeschwisters = gesuchTrancheDto.getGesuchFormular()
+            .getGeschwisters()
+            .stream()
+            .filter(geschwisterDto -> !hiddenGeschwistersUUIDs.contains(geschwisterDto.getId()))
+            .toList();
+        gesuchTrancheDto.getGesuchFormular().setGeschwisters(onlyPublicGeschwisters);
+    }
+
+    @Named("beforeMappingRejectConfidentialFields")
     @BeforeMapping
-    protected void centralBeforeMappingWithOverrideFieldsThatRequireElevatedPermissions(
+    protected void beforeMappingAddOverrideConfidentialFields(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         beforeMappingOverrideSteuern(newTranche, gesuchTranche);
         beforeMappingOverrideIncomingVersteckteEltern(newTranche, gesuchTranche);
+        beforeMappingAddHiddenGeschwisters(newTranche, gesuchTranche);
     }
 
     protected void beforeMappingOverrideSteuern(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         final var ekDto = newTranche.getGesuchFormular().getEinnahmenKosten();
         final var ek = gesuchTranche.getGesuchFormular().getEinnahmenKosten();
@@ -168,7 +217,7 @@ public abstract class GesuchTrancheMapper {
 
     protected void beforeMappingOverrideIncomingVersteckteEltern(
         final GesuchTrancheUpdateDto newTranche,
-        final @MappingTarget GesuchTranche gesuchTranche
+        @MappingTarget final GesuchTranche gesuchTranche
     ) {
         final var versteckteEltern = gesuchTranche.getGesuchFormular().getVersteckteEltern();
         if (versteckteEltern.isEmpty()) {
@@ -226,6 +275,26 @@ public abstract class GesuchTrancheMapper {
 
             newFormular.getSteuererklaerung().add(replacementSteuererklaerung);
         }
+    }
+
+    protected void beforeMappingAddHiddenGeschwisters(
+        final GesuchTrancheUpdateDto newTranche,
+        @MappingTarget final GesuchTranche gesuchTranche
+    ) {
+        final var hiddenGeschwisters =
+            gesuchTranche.getGesuchFormular().getGeschwisters().stream().filter(Geschwister::isHidden);
+        final var hiddenGeschwistersDtos = hiddenGeschwisters.map(geschwisterMapper::toUpdateDto).toList();
+        final var currentGeschwisters =
+            Optional.ofNullable(newTranche.getGesuchFormular().getGeschwisters()).orElse(List.of());
+        newTranche.getGesuchFormular()
+            .setGeschwisters(
+                Stream
+                    .concat(
+                        currentGeschwisters.stream(),
+                        hiddenGeschwistersDtos.stream()
+                    )
+                    .toList()
+            );
     }
 
     @AfterMapping

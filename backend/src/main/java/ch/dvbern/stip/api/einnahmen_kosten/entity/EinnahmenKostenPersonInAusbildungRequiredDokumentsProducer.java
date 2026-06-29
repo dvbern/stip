@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 public class EinnahmenKostenPersonInAusbildungRequiredDokumentsProducer implements RequiredDokumentsProducer {
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         return ImmutablePair.of(
             "einnahmenKosten",
             EinnahmeKostenRequiredDokumentsProducerUtil.getRequiredDokuments(

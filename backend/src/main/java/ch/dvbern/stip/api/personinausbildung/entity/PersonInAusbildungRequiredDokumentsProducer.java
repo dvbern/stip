@@ -95,7 +95,7 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
     }
 
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var pia = formular.getPersonInAusbildung();
         if (pia == null) {
             return ImmutablePair.of("", Set.of());

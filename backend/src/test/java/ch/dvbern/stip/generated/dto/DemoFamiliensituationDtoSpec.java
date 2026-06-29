@@ -32,21 +32,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_ELTERN_VERHEIRATET_ZUSAMMEN,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_GERICHTLICHE_ALIMENTENREGELUNG,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_WER_ZAHLT_ALIMENTE,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_VERSTORBEN,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_UNBEKANNT,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_UNBEKANNT_GRUND,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_KEINE_OPTIONEN,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_VERSTORBEN,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT,
   DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_UNBEKANNT_GRUND,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_KEINE_OPTIONEN,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS,
-  DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS
+  DemoFamiliensituationDtoSpec.JSON_PROPERTY_VATER_KEINE_OPTIONEN
 })
 @JsonTypeName("DemoFamiliensituation")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -59,12 +53,6 @@ public class DemoFamiliensituationDtoSpec {
 
   public static final String JSON_PROPERTY_WER_ZAHLT_ALIMENTE = "werZahltAlimente";
   private ElternschaftsteilungDtoSpec werZahltAlimente;
-
-  public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE = "mutterWiederverheiratetAlimente";
-  private Boolean mutterWiederverheiratetAlimente;
-
-  public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE = "vaterWiederverheiratetAlimente";
-  private Boolean vaterWiederverheiratetAlimente;
 
   public static final String JSON_PROPERTY_ELTERNTEIL_UNBEKANNT_VERSTORBEN = "elternteilUnbekanntVerstorben";
   private Boolean elternteilUnbekanntVerstorben;
@@ -81,9 +69,6 @@ public class DemoFamiliensituationDtoSpec {
   public static final String JSON_PROPERTY_MUTTER_KEINE_OPTIONEN = "mutterKeineOptionen";
   private Boolean mutterKeineOptionen;
 
-  public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT = "mutterWiederverheiratetUnbekannt";
-  private Boolean mutterWiederverheiratetUnbekannt;
-
   public static final String JSON_PROPERTY_VATER_VERSTORBEN = "vaterVerstorben";
   private Boolean vaterVerstorben;
 
@@ -95,15 +80,6 @@ public class DemoFamiliensituationDtoSpec {
 
   public static final String JSON_PROPERTY_VATER_KEINE_OPTIONEN = "vaterKeineOptionen";
   private Boolean vaterKeineOptionen;
-
-  public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT = "vaterWiederverheiratetUnbekannt";
-  private Boolean vaterWiederverheiratetUnbekannt;
-
-  public static final String JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS = "mutterWiederverheiratetUngewiss";
-  private Boolean mutterWiederverheiratetUngewiss;
-
-  public static final String JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS = "vaterWiederverheiratetUngewiss";
-  private Boolean vaterWiederverheiratetUngewiss;
 
   public DemoFamiliensituationDtoSpec() {
   }
@@ -183,58 +159,6 @@ public class DemoFamiliensituationDtoSpec {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setWerZahltAlimente(ElternschaftsteilungDtoSpec werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
-  }
-
-
-  public DemoFamiliensituationDtoSpec mutterWiederverheiratetAlimente(Boolean mutterWiederverheiratetAlimente) {
-    
-    this.mutterWiederverheiratetAlimente = mutterWiederverheiratetAlimente;
-    return this;
-  }
-
-   /**
-   * Get mutterWiederverheiratetAlimente
-   * @return mutterWiederverheiratetAlimente
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getMutterWiederverheiratetAlimente() {
-    return mutterWiederverheiratetAlimente;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterWiederverheiratetAlimente(Boolean mutterWiederverheiratetAlimente) {
-    this.mutterWiederverheiratetAlimente = mutterWiederverheiratetAlimente;
-  }
-
-
-  public DemoFamiliensituationDtoSpec vaterWiederverheiratetAlimente(Boolean vaterWiederverheiratetAlimente) {
-    
-    this.vaterWiederverheiratetAlimente = vaterWiederverheiratetAlimente;
-    return this;
-  }
-
-   /**
-   * Get vaterWiederverheiratetAlimente
-   * @return vaterWiederverheiratetAlimente
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getVaterWiederverheiratetAlimente() {
-    return vaterWiederverheiratetAlimente;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_ALIMENTE)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterWiederverheiratetAlimente(Boolean vaterWiederverheiratetAlimente) {
-    this.vaterWiederverheiratetAlimente = vaterWiederverheiratetAlimente;
   }
 
 
@@ -368,32 +292,6 @@ public class DemoFamiliensituationDtoSpec {
   }
 
 
-  public DemoFamiliensituationDtoSpec mutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
-    
-    this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
-    return this;
-  }
-
-   /**
-   * Get mutterWiederverheiratetUnbekannt
-   * @return mutterWiederverheiratetUnbekannt
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getMutterWiederverheiratetUnbekannt() {
-    return mutterWiederverheiratetUnbekannt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
-    this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
-  }
-
-
   public DemoFamiliensituationDtoSpec vaterVerstorben(Boolean vaterVerstorben) {
     
     this.vaterVerstorben = vaterVerstorben;
@@ -497,84 +395,6 @@ public class DemoFamiliensituationDtoSpec {
     this.vaterKeineOptionen = vaterKeineOptionen;
   }
 
-
-  public DemoFamiliensituationDtoSpec vaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
-    
-    this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
-    return this;
-  }
-
-   /**
-   * Get vaterWiederverheiratetUnbekannt
-   * @return vaterWiederverheiratetUnbekannt
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getVaterWiederverheiratetUnbekannt() {
-    return vaterWiederverheiratetUnbekannt;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNBEKANNT)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
-    this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
-  }
-
-
-  public DemoFamiliensituationDtoSpec mutterWiederverheiratetUngewiss(Boolean mutterWiederverheiratetUngewiss) {
-    
-    this.mutterWiederverheiratetUngewiss = mutterWiederverheiratetUngewiss;
-    return this;
-  }
-
-   /**
-   * Get mutterWiederverheiratetUngewiss
-   * @return mutterWiederverheiratetUngewiss
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getMutterWiederverheiratetUngewiss() {
-    return mutterWiederverheiratetUngewiss;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_MUTTER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMutterWiederverheiratetUngewiss(Boolean mutterWiederverheiratetUngewiss) {
-    this.mutterWiederverheiratetUngewiss = mutterWiederverheiratetUngewiss;
-  }
-
-
-  public DemoFamiliensituationDtoSpec vaterWiederverheiratetUngewiss(Boolean vaterWiederverheiratetUngewiss) {
-    
-    this.vaterWiederverheiratetUngewiss = vaterWiederverheiratetUngewiss;
-    return this;
-  }
-
-   /**
-   * Get vaterWiederverheiratetUngewiss
-   * @return vaterWiederverheiratetUngewiss
-  **/
-  @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Boolean getVaterWiederverheiratetUngewiss() {
-    return vaterWiederverheiratetUngewiss;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_VATER_WIEDERVERHEIRATET_UNGEWISS)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setVaterWiederverheiratetUngewiss(Boolean vaterWiederverheiratetUngewiss) {
-    this.vaterWiederverheiratetUngewiss = vaterWiederverheiratetUngewiss;
-  }
-
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -587,26 +407,20 @@ public class DemoFamiliensituationDtoSpec {
     return Objects.equals(this.elternVerheiratetZusammen, demoFamiliensituation.elternVerheiratetZusammen) &&
         Objects.equals(this.gerichtlicheAlimentenregelung, demoFamiliensituation.gerichtlicheAlimentenregelung) &&
         Objects.equals(this.werZahltAlimente, demoFamiliensituation.werZahltAlimente) &&
-        Objects.equals(this.mutterWiederverheiratetAlimente, demoFamiliensituation.mutterWiederverheiratetAlimente) &&
-        Objects.equals(this.vaterWiederverheiratetAlimente, demoFamiliensituation.vaterWiederverheiratetAlimente) &&
         Objects.equals(this.elternteilUnbekanntVerstorben, demoFamiliensituation.elternteilUnbekanntVerstorben) &&
         Objects.equals(this.mutterVerstorben, demoFamiliensituation.mutterVerstorben) &&
         Objects.equals(this.mutterUnbekannt, demoFamiliensituation.mutterUnbekannt) &&
         Objects.equals(this.mutterUnbekanntGrund, demoFamiliensituation.mutterUnbekanntGrund) &&
         Objects.equals(this.mutterKeineOptionen, demoFamiliensituation.mutterKeineOptionen) &&
-        Objects.equals(this.mutterWiederverheiratetUnbekannt, demoFamiliensituation.mutterWiederverheiratetUnbekannt) &&
         Objects.equals(this.vaterVerstorben, demoFamiliensituation.vaterVerstorben) &&
         Objects.equals(this.vaterUnbekannt, demoFamiliensituation.vaterUnbekannt) &&
         Objects.equals(this.vaterUnbekanntGrund, demoFamiliensituation.vaterUnbekanntGrund) &&
-        Objects.equals(this.vaterKeineOptionen, demoFamiliensituation.vaterKeineOptionen) &&
-        Objects.equals(this.vaterWiederverheiratetUnbekannt, demoFamiliensituation.vaterWiederverheiratetUnbekannt) &&
-        Objects.equals(this.mutterWiederverheiratetUngewiss, demoFamiliensituation.mutterWiederverheiratetUngewiss) &&
-        Objects.equals(this.vaterWiederverheiratetUngewiss, demoFamiliensituation.vaterWiederverheiratetUngewiss);
+        Objects.equals(this.vaterKeineOptionen, demoFamiliensituation.vaterKeineOptionen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, gerichtlicheAlimentenregelung, werZahltAlimente, mutterWiederverheiratetAlimente, vaterWiederverheiratetAlimente, elternteilUnbekanntVerstorben, mutterVerstorben, mutterUnbekannt, mutterUnbekanntGrund, mutterKeineOptionen, mutterWiederverheiratetUnbekannt, vaterVerstorben, vaterUnbekannt, vaterUnbekanntGrund, vaterKeineOptionen, vaterWiederverheiratetUnbekannt, mutterWiederverheiratetUngewiss, vaterWiederverheiratetUngewiss);
+    return Objects.hash(elternVerheiratetZusammen, gerichtlicheAlimentenregelung, werZahltAlimente, elternteilUnbekanntVerstorben, mutterVerstorben, mutterUnbekannt, mutterUnbekanntGrund, mutterKeineOptionen, vaterVerstorben, vaterUnbekannt, vaterUnbekanntGrund, vaterKeineOptionen);
   }
 
   @Override
@@ -616,21 +430,15 @@ public class DemoFamiliensituationDtoSpec {
     sb.append("    elternVerheiratetZusammen: ").append(toIndentedString(elternVerheiratetZusammen)).append("\n");
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
-    sb.append("    mutterWiederverheiratetAlimente: ").append(toIndentedString(mutterWiederverheiratetAlimente)).append("\n");
-    sb.append("    vaterWiederverheiratetAlimente: ").append(toIndentedString(vaterWiederverheiratetAlimente)).append("\n");
     sb.append("    elternteilUnbekanntVerstorben: ").append(toIndentedString(elternteilUnbekanntVerstorben)).append("\n");
     sb.append("    mutterVerstorben: ").append(toIndentedString(mutterVerstorben)).append("\n");
     sb.append("    mutterUnbekannt: ").append(toIndentedString(mutterUnbekannt)).append("\n");
     sb.append("    mutterUnbekanntGrund: ").append(toIndentedString(mutterUnbekanntGrund)).append("\n");
     sb.append("    mutterKeineOptionen: ").append(toIndentedString(mutterKeineOptionen)).append("\n");
-    sb.append("    mutterWiederverheiratetUnbekannt: ").append(toIndentedString(mutterWiederverheiratetUnbekannt)).append("\n");
     sb.append("    vaterVerstorben: ").append(toIndentedString(vaterVerstorben)).append("\n");
     sb.append("    vaterUnbekannt: ").append(toIndentedString(vaterUnbekannt)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
     sb.append("    vaterKeineOptionen: ").append(toIndentedString(vaterKeineOptionen)).append("\n");
-    sb.append("    vaterWiederverheiratetUnbekannt: ").append(toIndentedString(vaterWiederverheiratetUnbekannt)).append("\n");
-    sb.append("    mutterWiederverheiratetUngewiss: ").append(toIndentedString(mutterWiederverheiratetUngewiss)).append("\n");
-    sb.append("    vaterWiederverheiratetUngewiss: ").append(toIndentedString(vaterWiederverheiratetUngewiss)).append("\n");
     sb.append("}");
     return sb.toString();
   }

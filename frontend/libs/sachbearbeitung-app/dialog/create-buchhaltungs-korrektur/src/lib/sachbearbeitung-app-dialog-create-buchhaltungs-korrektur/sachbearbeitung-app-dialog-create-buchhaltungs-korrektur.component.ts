@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
+  AbstractControl,
   NonNullableFormBuilder,
   ReactiveFormsModule,
   Validators,
@@ -7,9 +8,9 @@ import {
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { BuchhaltungSaldokorrektur } from '@dv/shared/model/gesuch';
 import {
   SharedUiFormFieldDirective,
@@ -24,13 +25,13 @@ import {
 @Component({
   selector: 'dv-sachbearbeitung-app-dialog-create-buchhaltungs-korrektur',
   imports: [
-    TranslocoPipe,
     ReactiveFormsModule,
     MaskitoDirective,
     MatFormFieldModule,
     MatInputModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl:
     './sachbearbeitung-app-dialog-create-buchhaltungs-korrektur.component.html',
@@ -41,7 +42,14 @@ export class SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent {
   private dialogRef = inject(MatDialogRef);
   maskitoNumberWithNegative = maskitoNumberWithNegative;
   form = this.formBuilder.group({
-    betrag: [<string | null>null, [Validators.required]],
+    betrag: [
+      <string | null>null,
+      [
+        Validators.required,
+        (control: AbstractControl) =>
+          +control.getRawValue() === 0 ? { notZero: true } : null,
+      ],
+    ],
     comment: [<string | null>null, [Validators.required]],
   });
 

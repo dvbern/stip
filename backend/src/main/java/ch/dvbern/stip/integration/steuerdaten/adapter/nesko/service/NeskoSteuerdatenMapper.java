@@ -50,12 +50,9 @@ public class NeskoSteuerdatenMapper {
         // Gemäss Spec isFrauErwerbstaetigkeitSUS:
         // - true=Unselbstaendige Erwerbstaetigkeit Frau
         // - false=Selbstaendige Erwerbstaetigkeit Frau
-        boolean isArbeitsverhaeltnisSelbstaendig = switch (steuerdatenTyp) {
-            case FAMILIE -> !Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), true)
+        final boolean isArbeitsverhaeltnisSelbstaendig =
+            !Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), true)
             || !Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), true);
-            case MUTTER -> !Objects.requireNonNullElse(steuerdatenNesko.isFrauErwerbstaetigkeitSUS(), true);
-            case VATER -> !Objects.requireNonNullElse(steuerdatenNesko.isMannErwerbstaetigkeitSUS(), true);
-        };
         portData.isArbeitsverhaeltnisSelbstaendig(isArbeitsverhaeltnisSelbstaendig);
 
         int saeule3a = 0;

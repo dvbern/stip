@@ -63,7 +63,7 @@ class BothElternRequiredDokumentsProducerTest {
         gesuchFormular.setTranche(tranche);
         gesuchFormular.getTranche().setGesuch(new Gesuch());
         final var requiredDokuments = requiredDokumentService
-            .getRequiredDokumentsForGesuchFormular(gesuchFormular);
+            .getRequiredDokumentsForGesuchFormular(gesuchFormular, true);
         assertEquals(1, requiredDokuments.size());
     }
 }

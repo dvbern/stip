@@ -18,11 +18,13 @@
 package ch.dvbern.stip.api.gesuchformular.service;
 
 import java.util.HashSet;
+import java.util.List;
 
 import ch.dvbern.stip.api.common.exception.CustomValidationsException;
 import ch.dvbern.stip.api.common.exception.ValidationsExceptionMapper;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
-import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredGsValidationGroup;
+import ch.dvbern.stip.api.gesuchformular.validation.DocumentsRequiredSbValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInFreigabeValidationGroup;
 import ch.dvbern.stip.api.gesuchformular.validation.LebenslaufItemPageValidation;
@@ -39,9 +41,15 @@ public class GesuchFormularService {
     private final Validator validator;
     private final GesuchFormularValidatorService gesuchFormularValidatorService;
 
-    public ValidationReportDto validatePages(final GesuchFormular gesuchFormular) {
-        final var validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
-        validationGroups.add(DocumentsRequiredValidationGroup.class);
+    private List<Class<?>> getValidationGroups(
+        final GesuchFormular gesuchFormular,
+        final boolean includeDokumentsOfHiden
+    ) {
+        final List<Class<?>> validationGroups = PageValidationUtil.getGroupsFromGesuchFormular(gesuchFormular);
+        validationGroups.add(
+            includeDokumentsOfHiden ? DocumentsRequiredSbValidationGroup.class
+                : DocumentsRequiredGsValidationGroup.class
+        );
         // Since lebenslaufItems are nullable in GesuchFormular the validator has to be added manually if it is not
         // already present
         // Only do this if we are also validating PersonInAusbildungPage and not already
@@ -57,7 +65,21 @@ public class GesuchFormularService {
             validationGroups.add(GesuchNachInBearbeitungSBValidationGroup.class);
             validationGroups.add(GesuchNachInFreigabeValidationGroup.class);
         }
+        return validationGroups;
+    }
 
+    public ValidationReportDto validatePagesGs(final GesuchFormular gesuchFormular) {
+        return validatePagesSb(gesuchFormular, getValidationGroups(gesuchFormular, false));
+    }
+
+    public ValidationReportDto validatePagesSb(final GesuchFormular gesuchFormular) {
+        return validatePagesSb(gesuchFormular, getValidationGroups(gesuchFormular, true));
+    }
+
+    public ValidationReportDto validatePagesSb(
+        final GesuchFormular gesuchFormular,
+        final List<Class<?>> validationGroups
+    ) {
         final var violations = new HashSet<>(
             validator.validate(
                 gesuchFormular,

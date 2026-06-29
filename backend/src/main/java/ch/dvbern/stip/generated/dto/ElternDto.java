@@ -36,6 +36,7 @@ public class ElternDto  implements Serializable {
   private @Valid String sozialversicherungsnummer;
   private @Valid UUID id;
   private @Valid Integer wohnkosten;
+  private @Valid Boolean wiederverheiratet;
 
   /**
    **/
@@ -302,6 +303,24 @@ public class ElternDto  implements Serializable {
     this.wohnkosten = wohnkosten;
   }
 
+  /**
+   **/
+  public ElternDto wiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+    return this;
+  }
+
+  
+  @JsonProperty("wiederverheiratet")
+  public Boolean getWiederverheiratet() {
+    return wiederverheiratet;
+  }
+
+  @JsonProperty("wiederverheiratet")
+  public void setWiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -325,12 +344,13 @@ public class ElternDto  implements Serializable {
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, eltern.identischerZivilrechtlicherWohnsitzPLZ) &&
         Objects.equals(this.sozialversicherungsnummer, eltern.sozialversicherungsnummer) &&
         Objects.equals(this.id, eltern.id) &&
-        Objects.equals(this.wohnkosten, eltern.wohnkosten);
+        Objects.equals(this.wohnkosten, eltern.wohnkosten) &&
+        Objects.equals(this.wiederverheiratet, eltern.wiederverheiratet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, geburtsdatum, ausweisbFluechtling, elternTyp, nachname, sozialhilfebeitraege, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id, wohnkosten);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, telefonnummer, geburtsdatum, ausweisbFluechtling, elternTyp, nachname, sozialhilfebeitraege, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, sozialversicherungsnummer, id, wohnkosten, wiederverheiratet);
   }
 
   @Override
@@ -352,6 +372,7 @@ public class ElternDto  implements Serializable {
     sb.append("    sozialversicherungsnummer: ").append(toIndentedString(sozialversicherungsnummer)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wiederverheiratet: ").append(toIndentedString(wiederverheiratet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

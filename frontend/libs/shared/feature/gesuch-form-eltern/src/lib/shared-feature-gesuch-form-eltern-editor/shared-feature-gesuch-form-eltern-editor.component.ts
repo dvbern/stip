@@ -10,7 +10,6 @@ import {
   effect,
   inject,
   input,
-  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -160,6 +159,9 @@ export class SharedFeatureGesuchFormElternEditorComponent {
   maskitoNumber = maskitoNumber;
 
   readonly ElternTyp = ElternTyp;
+  elternVerheiratetZusammenSig = computed(
+    () => this.gesuchFormularSig().familiensituation?.elternVerheiratetZusammen,
+  );
 
   languageSig = this.store.selectSignal(selectLanguage);
   plzValues?: Plz[];
@@ -207,12 +209,12 @@ export class SharedFeatureGesuchFormElternEditorComponent {
     ],
     sozialhilfebeitraege: [<boolean | null>null, [Validators.required]],
     ausweisbFluechtling: [<boolean | null>null, [Validators.required]],
+    wiederverheiratet: [<boolean | undefined>undefined, []],
   });
   private numberConverter = this.formUtils.createNumberConverter(this.form, [
     'wohnkosten',
   ]);
 
-  svnIsRequiredSig = signal(false);
   private createUploadOptionsSig = createUploadOptionsFactory(this.viewSig);
 
   private sozialhilfeChangedSig = toSignal(
@@ -271,11 +273,13 @@ export class SharedFeatureGesuchFormElternEditorComponent {
       this.einreichenStore.invalidFormularControlsSig,
       this.form,
     );
+
     // zivilrechtlicher Wohnsitz -> PLZ/Ort enable/disable
     const zivilrechtlichChangedSig = this.formUtils.signalFromChanges(
       this.form.controls.identischerZivilrechtlicherWohnsitz,
       { useDefault: true },
     );
+
     effect(() => {
       this.gotReenabledSig();
       const zivilrechtlichIdentisch = zivilrechtlichChangedSig() === true;
@@ -311,7 +315,15 @@ export class SharedFeatureGesuchFormElternEditorComponent {
         this.form.controls.sozialversicherungsnummer,
         svnIsRequired,
       );
-      this.svnIsRequiredSig.set(svnIsRequired);
+    });
+
+    effect(() => {
+      const wiederverheiratetRequired = this.elternVerheiratetZusammenSig();
+
+      this.formUtils.setRequired(
+        this.form.controls.wiederverheiratet,
+        !wiederverheiratetRequired,
+      );
     });
 
     effect(() => {

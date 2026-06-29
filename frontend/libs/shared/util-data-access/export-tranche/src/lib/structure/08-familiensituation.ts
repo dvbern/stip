@@ -2,7 +2,7 @@ import { TranslocoService } from '@jsverse/transloco';
 import type { Content } from 'pdfmake/interfaces';
 
 import { Familiensituation, GesuchTranche } from '@dv/shared/model/gesuch';
-import { isDefined, lowercased } from '@dv/shared/model/type-util';
+import { lowercased } from '@dv/shared/model/type-util';
 
 import { getTable, getTitle, getValueList } from './generic';
 import { _t, getBoolean } from '../utils/helpers';
@@ -78,39 +78,8 @@ export const getFamiliensituation = (
                           ],
                         ] as const)
                       : []),
-                    ...(isDefined(
-                      familiensituation[`${elternteil}Wiederverheiratet`],
-                    )
-                      ? ([
-                          [
-                            `${elternteil}-wiederverheiratet.label`,
-                            getBoolean(
-                              t,
-                              familiensituation[
-                                `${elternteil}Wiederverheiratet`
-                              ],
-                            ),
-                          ],
-                        ] as const)
-                      : []),
                   ] as const,
               )
-            : []),
-          ...(!familiensituation.elternteilUnbekanntVerstorben
-            ? ([
-                isDefined(familiensituation.mutterWiederverheiratet)
-                  ? ([
-                      'mutter-wiederverheiratet.label',
-                      getBoolean(t, familiensituation.mutterWiederverheiratet),
-                    ] as const)
-                  : null,
-                isDefined(familiensituation.vaterWiederverheiratet)
-                  ? ([
-                      'vater-wiederverheiratet.label',
-                      getBoolean(t, familiensituation.vaterWiederverheiratet),
-                    ] as const)
-                  : null,
-              ] as const)
             : []),
         ],
         (key) => `shared.form.familiensituation.${key}`,

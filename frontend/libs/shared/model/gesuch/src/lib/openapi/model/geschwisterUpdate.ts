@@ -31,6 +31,7 @@ export interface GeschwisterUpdate {
      */
     wohnsitzAnteilVater?: number;
     nachname: string;
+    hidden?: boolean;
 }
 
 

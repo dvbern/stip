@@ -18,6 +18,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -48,6 +49,7 @@ import {
   SharedUiFormZuvorHintComponent,
   SharedUiZuvorHintDirective,
 } from '@dv/shared/ui/form';
+import { SharedUiIfSachbearbeiterDirective } from '@dv/shared/ui/if-app-type';
 import { SharedUiMaxLengthDirective } from '@dv/shared/ui/max-length';
 import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { SharedUiTranslateChangePipe } from '@dv/shared/ui/translate-change';
@@ -82,6 +84,7 @@ const MEDIUM_AGE = 20;
     MatInputModule,
     MatSelectModule,
     MatRadioModule,
+    MatCheckboxModule,
     SharedUiFormMessageErrorDirective,
     SharedUiZuvorHintDirective,
     SharedUiFormZuvorHintComponent,
@@ -92,6 +95,7 @@ const MEDIUM_AGE = 20;
     SharedUiFormReadonlyDirective,
     SharedUiMaxLengthDirective,
     SharedUiAppDatePipe,
+    SharedUiIfSachbearbeiterDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -160,6 +164,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
+    hidden: [false, [Validators.required]],
   });
 
   wohnsitzHelper = prepareWohnsitzForm({
@@ -235,6 +240,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         geburtsdatum,
         wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
         ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
+        hidden: this.form.getRawValue().hidden,
       });
       this.form.markAsPristine();
     }

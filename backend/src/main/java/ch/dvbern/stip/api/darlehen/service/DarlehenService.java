@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -134,15 +135,11 @@ public class DarlehenService {
         return darlehenBuchhaltungEntry;
     }
 
-    public ByteArrayOutputStream createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
-        final boolean isAenderung = gesuch.getAkzeptierteAenderungs().findAny().isPresent();
-        int gesetzlicheDarlehenBisher = 0;
-        if (isAenderung) {
-            gesetzlicheDarlehenBisher = gesetzlichDarlehenRepository.findAllByGesuchId(gesuch.getId())
-                .stream()
-                .mapToInt(GesetzlichDarlehen::getBetrag)
-                .sum();
-        }
+    public Optional<ByteArrayOutputStream> createGesetzlichDarlehen(final Gesuch gesuch, final int betrag) {
+        final int gesetzlicheDarlehenBisher = gesetzlichDarlehenRepository.findAllByGesuchId(gesuch.getId())
+            .stream()
+            .mapToInt(GesetzlichDarlehen::getBetrag)
+            .sum();
         final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
         final int darlehenBisher = darlehenBuchhaltungEntrys.stream()
             .map(DarlehenBuchhaltungEntry::getBetrag)
@@ -163,12 +160,15 @@ public class DarlehenService {
         gesetzlichDarlehen.setBetrag(darlehenBetrag);
 
         gesetzlichDarlehenRepository.persistAndFlush(gesetzlichDarlehen);
+        if (darlehenBetrag == 0) {
+            return Optional.empty();
+        }
 
-        final ByteArrayOutputStream out =
+        final var byteArrayOutputStream =
             darlehensVerfuegungPdfService.generatePositiveDarlehensVerfuegungPdf(gesetzlichDarlehen);
 
-        final String objectId = dokumentUploadService.executeUploadDocument(
-            out.toByteArray(),
+        final var objectId = dokumentUploadService.executeUploadDocument(
+            byteArrayOutputStream.toByteArray(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
             s3,
             config,
@@ -179,7 +179,7 @@ public class DarlehenService {
         darlehensVerfuegung.setObjectId(objectId);
         darlehensVerfuegung.setFilename(DARLEHEN_VERFUEGUNG_DOKUMENT_NAME);
         darlehensVerfuegung.setFilepath(DARLEHEN_VERFUEGUNG_DOKUMENT_PATH);
-        darlehensVerfuegung.setFilesize(Integer.toString(out.size()));
+        darlehensVerfuegung.setFilesize(Integer.toString(byteArrayOutputStream.size()));
         gesetzlichDarlehen.setVerfuegung(darlehensVerfuegung);
 
         createDarlehenBuchhaltungEntry(
@@ -192,12 +192,12 @@ public class DarlehenService {
         mailService.sendDarlehenVerfuegungEmail(
             tenantService.getConfigForCurrentTenant().darlehen().verfuegung().emailRecipient(),
             DARLEHEN_VERFUEGUNG_DOKUMENT_NAME,
-            out.toByteArray(),
+            byteArrayOutputStream.toByteArray(),
             gesuch.getLatestGesuchTranche().getGesuchFormular().getPersonInAusbildung(),
             gesuch.getAusbildung().getFall().getSachbearbeiterZuordnung().getSachbearbeiter()
         );
 
-        return out;
+        return Optional.of(byteArrayOutputStream);
     }
 
     @Transactional

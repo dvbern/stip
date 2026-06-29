@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <changeSet author="jafa (generated)" id="1781187682707-555">
+    <addColumn tableName="geschwister">
+      <column name="hidden" type="BOOLEAN">
+        <constraints nullable="false"/>
+      </column>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-556">
+    <addColumn tableName="geschwister_aud">
+      <column name="hidden" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-557">
+    <addColumn tableName="eltern">
+      <column name="wiederverheiratet" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-558">
+    <addColumn tableName="eltern_aud">
+      <column name="wiederverheiratet" type="BOOLEAN"/>
+    </addColumn>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-559">
+    <dropColumn columnName="mutter_wiederverheiratet" tableName="familiensituation"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-560">
+    <dropColumn columnName="mutter_wiederverheiratet" tableName="familiensituation_aud"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-561">
+    <dropColumn columnName="vater_wiederverheiratet" tableName="familiensituation"/>
+  </changeSet>
+  <changeSet author="jafa (generated)" id="1781187682707-562">
+    <dropColumn columnName="vater_wiederverheiratet" tableName="familiensituation_aud"/>
+  </changeSet>
+</databaseChangeLog>

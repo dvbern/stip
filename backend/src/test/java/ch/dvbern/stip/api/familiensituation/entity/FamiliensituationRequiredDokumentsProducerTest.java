@@ -43,7 +43,7 @@ class FamiliensituationRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_VATER
         );
 
@@ -53,7 +53,7 @@ class FamiliensituationRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.FAMILIENSITUATION_AUFENTHALT_UNBEKANNT_MUTTER
         );
     }
@@ -67,7 +67,7 @@ class FamiliensituationRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
         );
 
@@ -77,7 +77,7 @@ class FamiliensituationRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.FAMILIENSITUATION_GEBURTSSCHEIN
         );
     }
@@ -89,7 +89,7 @@ class FamiliensituationRequiredDokumentsProducerTest {
                 .setGerichtlicheAlimentenregelung(true)
         );
 
-        final var requiredDokuments = producer.getRequiredDokuments(formular);
+        final var requiredDokuments = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndType(requiredDokuments, DokumentTyp.FAMILIENSITUATION_TRENNUNGSKONVENTION);
     }
 }

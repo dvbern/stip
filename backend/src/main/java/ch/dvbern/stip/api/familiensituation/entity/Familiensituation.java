@@ -73,10 +73,6 @@ public class Familiensituation extends AbstractTenantEntity {
     private ElternUnbekanntheitsGrund mutterUnbekanntGrund;
 
     @NullableUnlessGenerated
-    @Column(name = "mutter_wiederverheiratet")
-    private Boolean mutterWiederverheiratet;
-
-    @NullableUnlessGenerated
     @Column(name = "vater_unbekannt_verstorben")
     @Enumerated(EnumType.STRING)
     private ElternAbwesenheitsGrund vaterUnbekanntVerstorben;
@@ -85,10 +81,6 @@ public class Familiensituation extends AbstractTenantEntity {
     @Column(name = "vater_unbekannt_grund")
     @Enumerated(EnumType.STRING)
     private ElternUnbekanntheitsGrund vaterUnbekanntGrund;
-
-    @NullableUnlessGenerated
-    @Column(name = "vater_wiederverheiratet")
-    private Boolean vaterWiederverheiratet;
 
     @NullableUnlessGenerated
     @Column(name = "wer_zahlt_alimente")
