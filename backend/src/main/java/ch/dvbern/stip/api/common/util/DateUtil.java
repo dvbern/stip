@@ -27,6 +27,7 @@ import java.util.List;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
@@ -194,5 +195,16 @@ public class DateUtil {
             .map(DateRange::getGueltigBis)
             .orElseThrow(IllegalStateException::new);
         return new DateRange(startDatum, endDatum);
+    }
+
+    public String getGesuchsPeriodeYearRange(final Gesuchsperiode gesuchsperiode) {
+        if (gesuchsperiode == null) {
+            return null;
+        }
+
+        return "%s/%s".formatted(
+            gesuchsperiode.getGesuchsperiodeStart().getYear(),
+            gesuchsperiode.getGesuchsperiodeStopp().getYear()
+        );
     }
 }

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
@@ -44,9 +45,6 @@ public abstract class DarlehenBuchhaltungEntryMapper {
         }
 
         final var gesuchsperiode = darlehenBuchhaltungEntry.getGesuch().getGesuchsperiode();
-        return "%s/%s".formatted(
-            gesuchsperiode.getGesuchsperiodeStart().getYear(),
-            gesuchsperiode.getGesuchsperiodeStopp().getYear()
-        );
+        return DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
     }
 }

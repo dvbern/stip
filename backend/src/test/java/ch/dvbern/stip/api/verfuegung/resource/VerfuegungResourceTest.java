@@ -51,9 +51,9 @@ import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.VerfuegungFallDtoSpec;
-import io.restassured.common.mapper.TypeRef;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.common.mapper.TypeRef;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -340,8 +340,7 @@ public class VerfuegungResourceTest {
             .statusCode(Status.OK.getStatusCode())
             .extract()
             .body()
-            .as(new TypeRef<List<VerfuegungFallDtoSpec>>() {
-            });
+            .as(new TypeRef<List<VerfuegungFallDtoSpec>>() {});
 
         Assertions.assertThat(verfuegungenByFall).hasSize(2);
         Assertions.assertThat(verfuegungenByFall).allSatisfy(verfuegung -> {
