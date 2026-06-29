@@ -15,29 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.type;
-
-import java.util.Optional;
+package ch.dvbern.stip.integration.pdf.domain.qualifier;
 
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import io.smallrye.config.WithDefault;
+import jakarta.enterprise.util.AnnotationLiteral;
+import lombok.RequiredArgsConstructor;
 
-public interface TenantPortConfig {
-    Steuerdaten steuerdaten();
+@RequiredArgsConstructor
+public class PdfQualifierLiteral extends AnnotationLiteral<PdfQualifier> implements PdfQualifier {
 
-    Pdf pdf();
+    private final PdfAdapterType value;
 
-    interface Port {
-        @WithDefault("false")
-        Boolean enabled();
-    }
-
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
-
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
+    @Override
+    public PdfAdapterType value() {
+        return this.value;
     }
 }

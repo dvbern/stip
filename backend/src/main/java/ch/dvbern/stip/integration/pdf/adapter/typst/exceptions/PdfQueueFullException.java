@@ -15,29 +15,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.type;
+package ch.dvbern.stip.integration.pdf.adapter.typst.exceptions;
 
-import java.util.Optional;
-
-import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import io.smallrye.config.WithDefault;
-
-public interface TenantPortConfig {
-    Steuerdaten steuerdaten();
-
-    Pdf pdf();
-
-    interface Port {
-        @WithDefault("false")
-        Boolean enabled();
-    }
-
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
-
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
+public class PdfQueueFullException extends RuntimeException {
+    public PdfQueueFullException(String message) {
+        super(message);
     }
 }

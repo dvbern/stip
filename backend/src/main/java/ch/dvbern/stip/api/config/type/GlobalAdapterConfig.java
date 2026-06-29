@@ -17,27 +17,26 @@
 
 package ch.dvbern.stip.api.config.type;
 
-import java.util.Optional;
+import java.util.Map;
 
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import io.smallrye.config.WithDefault;
 
-public interface TenantPortConfig {
-    Steuerdaten steuerdaten();
+public interface GlobalAdapterConfig {
+    Map<PdfAdapterType, PdfAdapter> pdf();
 
-    Pdf pdf();
+    interface PdfAdapter {
+        String binary();
 
-    interface Port {
-        @WithDefault("false")
-        Boolean enabled();
-    }
+        int maxOutputBytes();
 
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
+        int minThreads();
 
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
+        int maxThreads();
+
+        int threadKeepAlive();
+
+        int queueSize();
+
+        int timeout();
     }
 }
