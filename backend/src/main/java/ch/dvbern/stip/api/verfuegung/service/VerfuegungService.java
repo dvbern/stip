@@ -83,7 +83,6 @@ public class VerfuegungService {
             .toList();
     }
 
-    // todo: returns duplicate entries
     @Transactional
     public List<VerfuegungFallDto> getVerfuegungenByFallId(final UUID fallId) {
         return gesuchRepository.findAllForFall(fallId)

@@ -1,4 +1,4 @@
-<div class="tw:dv-table tw:my-3">
+<div class="tw:dv-table tw:my-3" *dvTranslocoShared="let t">
   <div class="tw:relative tw:overflow-auto">
     @if (fallDokumenteStore.verfuegungenViewSig().loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
@@ -12,13 +12,13 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'shared.fallDokumente.stipendien.table.description' | transloco
+          t('shared.fallDokumente.stipendien.table.description')
         }}
       </caption>
 
       <ng-container matColumnDef="timestampErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.stipendien.table.timestampErstellt' | transloco }}
+          {{ t('shared.fallDokumente.stipendien.table.timestampErstellt') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -27,7 +27,7 @@
 
       <ng-container matColumnDef="yearRange">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.stipendien.table.yearRange' | transloco }}
+          {{ t('shared.fallDokumente.stipendien.table.yearRange') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.yearRange || '-' }}
@@ -36,7 +36,7 @@
 
       <ng-container matColumnDef="totalbetragStipendium">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.stipendien.table.totalbetragStipendium' | transloco }}
+          {{ t('shared.fallDokumente.stipendien.table.totalbetragStipendium') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.totalbetragStipendium | formatChf }}
@@ -45,7 +45,7 @@
 
       <ng-container matColumnDef="dokument">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.stipendien.table.dokument' | transloco }}
+          {{ t('shared.fallDokumente.stipendien.table.dokument') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.dokument) {
@@ -58,7 +58,7 @@
               }"
             >
               <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename">{{
-                'shared.fallDokumente.stipendien.table.dokument' | transloco
+                t('shared.fallDokumente.stipendien.table.dokument')
               }}</span>
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
             </button>
@@ -72,7 +72,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | transloco }}
+          {{ t('shared.table.noData') }}
         </td>
       </tr>
     </table>

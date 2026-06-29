@@ -1,9 +1,12 @@
-<div class="tw:border tw:border-dv-border tw:rounded-xl tw:bg-white tw:p-6 tw:dv-pass-height">
+<div
+  class="tw:border tw:border-dv-border tw:rounded-xl tw:bg-white tw:p-6 tw:dv-pass-height"
+  *dvTranslocoShared="let t"
+>
   <h3 class="tw:flex tw:mb-12 tw:items-center tw:text-2xl tw:font-semibold" data-testid="fall-dokumente-title">
     <dv-shared-ui-icon-chip class="tw:mr-2 tw:dv-icon-chip-info">
       <i class="material-symbols-rounded tw:text-lg!">download</i>
     </dv-shared-ui-icon-chip>
-    <span>{{ 'shared.fallDokumente.title' | transloco }}</span>
+    <span>{{ t('shared.fallDokumente.title') }}</span>
   </h3>
 
   <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-style-tabs" [disablePagination]="true">
@@ -15,7 +18,7 @@
         class="tw:dv-nav-button tw:bg-white tw:not-[.active]:border-dv-border tw:border! tw:flex-0! tw:basis-1/4!"
         [class.active]="tab.active"
       >
-        {{ 'shared.fallDokumente.tabs.' + tab.name | transloco }}
+        {{ t(`shared.fallDokumente.tabs.${tab.name}`) }}
       </a>
     }
   </nav>

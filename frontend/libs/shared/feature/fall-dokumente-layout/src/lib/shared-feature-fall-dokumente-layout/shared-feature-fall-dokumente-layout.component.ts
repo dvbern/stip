@@ -9,10 +9,10 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatTabsModule } from '@angular/material/tabs';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { map, startWith } from 'rxjs';
 
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 
 const ALL_TABS = ['stipendien', 'darlehen'] as const;
@@ -23,8 +23,8 @@ const ALL_TABS = ['stipendien', 'darlehen'] as const;
     RouterOutlet,
     RouterLink,
     MatTabsModule,
-    TranslocoPipe,
     SharedUiIconChipComponent,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-fall-dokumente-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,16 +1,16 @@
 @let overview = fallDokumenteStore.darlehenBuchhaltungViewSig();
-<div class="tw:dv-table tw:my-3">
+<div class="tw:dv-table tw:my-3" *dvTranslocoShared="let t">
   <div class="tw:relative tw:overflow-auto">
     @if (overview.loading) {
       <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
     }
 
     <div class="tw:p-6 tw:grid tw:grid-cols-[1fr_max-content] tw:w-fit tw:gap-2">
-      <div class="tw:font-bold tw:text-lg">{{ 'shared.fallDokumente.darlehen.table.total' | transloco }}:</div>
+      <div class="tw:font-bold tw:text-lg">{{ t('shared.fallDokumente.darlehen.table.total') }}:</div>
       <div>{{ overview.darlehenBuchhaltung?.total | formatChf }}</div>
-      <div class="tw:font-bold">{{ 'shared.fallDokumente.darlehen.table.totalFreiwilligDarlehen' | transloco }}:</div>
+      <div class="tw:font-bold">{{ t('shared.fallDokumente.darlehen.table.totalFreiwilligDarlehen') }}:</div>
       <div>{{ overview.darlehenBuchhaltung?.totalFreiwillig | formatChf }}</div>
-      <div class="tw:font-bold">{{ 'shared.fallDokumente.darlehen.table.totalGesetzlichesDarlehen' | transloco }}:</div>
+      <div class="tw:font-bold">{{ t('shared.fallDokumente.darlehen.table.totalGesetzlichesDarlehen') }}:</div>
       <div>{{ overview.darlehenBuchhaltung?.totalGesetzlich | formatChf }}</div>
     </div>
 
@@ -22,13 +22,13 @@
     >
       <caption class="cdk-visually-hidden">
         {{
-          'shared.fallDokumente.darlehen.table.description' | transloco
+          t('shared.fallDokumente.darlehen.table.description')
         }}
       </caption>
 
       <ng-container matColumnDef="timestampErstellt">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.timestampErstellt' | transloco }}
+          {{ t('shared.fallDokumente.darlehen.table.timestampErstellt') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
@@ -37,16 +37,16 @@
 
       <ng-container matColumnDef="kategorie">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.kategorie.label' | transloco }}
+          {{ t('shared.fallDokumente.darlehen.table.kategorie.label') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.kategorie.' + dokument.kategorie | transloco }}
+          {{ t(`shared.fallDokumente.darlehen.table.kategorie.${dokument.kategorie}`) }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="yearRange">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.yearRange' | transloco }}
+          {{ t('shared.fallDokumente.darlehen.table.yearRange') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.yearRange || '-' }}
@@ -55,7 +55,7 @@
 
       <ng-container matColumnDef="betrag">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.betrag' | transloco }}
+          {{ t('shared.fallDokumente.darlehen.table.betrag') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           {{ dokument.betrag | formatChf }}
@@ -65,7 +65,7 @@
       <!-- download -->
       <ng-container matColumnDef="verfuegung">
         <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
-          {{ 'shared.fallDokumente.darlehen.table.verfuegung' | transloco }}
+          {{ t('shared.fallDokumente.darlehen.table.verfuegung') }}
         </th>
         <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
           @if (dokument.verfuegung) {
@@ -78,7 +78,7 @@
               }"
             >
               <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.verfuegung.filename">{{
-                'shared.fallDokumente.darlehen.table.verfuegung' | transloco
+                t('shared.fallDokumente.darlehen.table.verfuegung')
               }}</span>
               <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
             </button>
@@ -92,7 +92,7 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       <tr class="mat-mdc-row" *matNoDataRow>
         <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
-          {{ 'shared.table.noData' | transloco }}
+          {{ t('shared.table.noData') }}
         </td>
       </tr>
     </table>

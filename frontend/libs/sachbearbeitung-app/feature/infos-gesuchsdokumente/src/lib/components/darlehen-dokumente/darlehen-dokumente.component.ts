@@ -13,10 +13,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 import { InfosGesuchsdokumenteStore } from '@dv/sachbearbeitung-app/data-access/infos-gesuchsdokumente';
 import { SachbearbeitungAppDialogCreateBuchhaltungsKorrekturComponent } from '@dv/sachbearbeitung-app/dialog/create-buchhaltungs-korrektur';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
@@ -29,7 +29,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   standalone: true,
   imports: [
     DatePipe,
-    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     TypeSafeMatCellDefDirective,
@@ -38,6 +37,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     MatTooltip,
     A11yModule,
     SharedUiDownloadButtonDirective,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './darlehen-dokumente.component.html',

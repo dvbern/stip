@@ -11,10 +11,10 @@ import {
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 import { FallDokumenteStore } from '@dv/shared/data-access/fall-dokumente';
 import { DEFAULT_PAGE_SIZE, PAGE_SIZES } from '@dv/shared/model/ui-constants';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiDownloadButtonDirective } from '@dv/shared/ui/download-button';
 import { SharedUiFormatChfPipe } from '@dv/shared/ui/format-chf-pipe';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -26,7 +26,6 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
   standalone: true,
   imports: [
     DatePipe,
-    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     TypeSafeMatCellDefDirective,
@@ -34,6 +33,7 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
     SharedUiFormatChfPipe,
     MatTooltip,
     SharedUiDownloadButtonDirective,
+    SharedUiAdvTranslocoDirective,
   ],
   providers: [paginatorTranslationProvider()],
   templateUrl: './darlehen-dokumente.component.html',
