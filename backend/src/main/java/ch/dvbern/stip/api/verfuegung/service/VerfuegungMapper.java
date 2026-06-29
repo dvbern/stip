@@ -38,7 +38,7 @@ public interface VerfuegungMapper {
     VerfuegungDto toDto(final Verfuegung verfuegung);
 
     @Mapping(target = "yearRange", expression = "java(toYearRange(verfuegung))")
-    @Mapping(target = "totalbetragStipendium", expression = "java(toTotalbetragStipendium(verfuegung))")
+    @Mapping(target = "totalbetragStipendium", expression = "java(toTotalBetragStipendium(verfuegung))")
     @Mapping(target = "dokument", expression = "java(toRelevantDokument(verfuegung))")
     VerfuegungFallDto toFallDto(final Verfuegung verfuegung);
 
@@ -53,7 +53,7 @@ public interface VerfuegungMapper {
         return DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
     }
 
-    default Integer toTotalbetragStipendium(final Verfuegung verfuegung) {
+    default Integer toTotalBetragStipendium(final Verfuegung verfuegung) {
         if (verfuegung.getBerechnungJsonData() == null) {
             return 0;
         }
