@@ -2,12 +2,12 @@
   class="tw:border tw:border-dv-border tw:rounded-xl tw:bg-white tw:p-6 tw:dv-pass-height"
   *dvTranslocoShared="let t"
 >
-  <h3 class="tw:flex tw:mb-12 tw:items-center tw:text-2xl tw:font-semibold" data-testid="fall-dokumente-title">
-    <dv-shared-ui-icon-chip class="tw:mr-2 tw:dv-icon-chip-info">
-      <i class="material-symbols-rounded tw:text-lg!">download</i>
+  <h1 class="tw:flex tw:dv-page-title tw:mb-12 tw:items-center" data-testid="fall-dokumente-title">
+    <dv-shared-ui-icon-chip class="tw:mr-4">
+      <i class="material-symbols-rounded tw:text-dv-blue">archive</i>
     </dv-shared-ui-icon-chip>
     <span>{{ t('shared.fallDokumente.title') }}</span>
-  </h3>
+  </h1>
 
   <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="nav-style-tabs" [disablePagination]="true">
     @for (tab of tabsSig(); track tab.name) {
