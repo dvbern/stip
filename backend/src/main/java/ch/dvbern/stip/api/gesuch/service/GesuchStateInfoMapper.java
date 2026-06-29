@@ -42,7 +42,7 @@ public abstract class GesuchStateInfoMapper {
     @Mapping(source = ".", target = "canBearbeitungAbschliessen", qualifiedByName = "canBearbeitungAbschliessen")
     @Mapping(source = ".", target = "canChangeGesuchsperiode", qualifiedByName = "canChangeGesuchsperiode")
     @Mapping(source = ".", target = "canSBInitAenderung", qualifiedByName = "canSBInitAenderung")
-    @Mapping(source = ".", target = "canVerfuegen", qualifiedByName = "canVerfuegen")
+    @Mapping(source = ".", target = "canFreigeben", qualifiedByName = "canFreigeben")
     public abstract GesuchStateInfoDto toDto(Gesuch gesuch);
 
     @Named("getCanGetBerechnung")
@@ -71,8 +71,8 @@ public abstract class GesuchStateInfoMapper {
         return GesuchUtil.canSbInitAendererung(gesuch);
     }
 
-    @Named("canVerfuegen")
-    boolean canVerfuegen(Gesuch gesuch) {
+    @Named("canFreigeben")
+    boolean canFreigeben(Gesuch gesuch) {
         return gesuchStatusService.canFreigabeVerfuegen(gesuch);
     }
 

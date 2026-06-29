@@ -5,13 +5,13 @@ Verfuegung:
     - dokumente
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     timestampErstellt:
       type: string
     dokumente:
       type: array
       items:
-        $ref: '#/VerfuegungDokument'
+        $ref: "#/VerfuegungDokument"
 VerfuegungDokument:
   type: object
   required:
@@ -20,9 +20,9 @@ VerfuegungDokument:
     - filename
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     typ:
-      $ref: '#/VerfuegungDokumentTyp'
+      $ref: "#/VerfuegungDokumentTyp"
     filename:
       type: string
 VerfuegungDokumentTyp:
@@ -42,7 +42,7 @@ CustomDokumentTyp:
     - description
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     type:
       type: string
     description:
@@ -194,11 +194,11 @@ GueltigkeitStatus:
 LocalDate:
   format: date
   type: string
-  example: '2022-03-10'
+  example: "2022-03-10"
 LocalDateTime:
   format: date-time
   type: string
-  example: '2022-03-10T12:00:00'
+  example: "2022-03-10T12:00:00"
 SteuerdatenTyp:
   enum:
     - FAMILIE
@@ -214,9 +214,9 @@ Adresse:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     landId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     coAdresse:
       type: string
     strasse:
@@ -233,9 +233,9 @@ GesuchDokumentRef:
   type: object
   properties:
     dokumentTyp:
-      $ref: '#/DokumentTyp'
+      $ref: "#/DokumentTyp"
     entryId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
 GesuchDokument:
   required:
     - id
@@ -244,20 +244,20 @@ GesuchDokument:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     entryId:
-      $ref: '#/UUID'
-      description: 'A specific entry ID to refine the uniqueness of gesuchDokumente for list elements'
+      $ref: "#/UUID"
+      description: "A specific entry ID to refine the uniqueness of gesuchDokumente for list elements"
     dokumentTyp:
-      $ref: '#/DokumentTyp'
+      $ref: "#/DokumentTyp"
     customDokumentTyp:
-      $ref: '#/CustomDokumentTyp'
+      $ref: "#/CustomDokumentTyp"
     dokumente:
       type: array
       items:
-        $ref: '#/Dokument'
+        $ref: "#/Dokument"
     status:
-      $ref: '#/Dokumentstatus'
+      $ref: "#/Dokumentstatus"
 Dokument:
   required:
     - id
@@ -268,7 +268,7 @@ Dokument:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     filename:
       type: string
     filepath:
@@ -287,7 +287,7 @@ Fall:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     fallNummer:
       type: string
     tenant:
@@ -302,7 +302,7 @@ Gesuchsjahr:
     - gueltigkeitStatus
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     bezeichnungDe:
       type: string
     bezeichnungFr:
@@ -310,7 +310,7 @@ Gesuchsjahr:
     technischesJahr:
       type: integer
     gueltigkeitStatus:
-      $ref: '#/GueltigkeitStatus'
+      $ref: "#/GueltigkeitStatus"
 UUID:
   format: uuid
   type: string
@@ -327,10 +327,10 @@ ZahlungsverbindungSlim:
     institution:
       type: string
     adresse:
-      $ref: '#/Adresse'
+      $ref: "#/Adresse"
 Zahlungsverbindung:
   allOf:
-    - $ref: '#/ZahlungsverbindungSlim'
+    - $ref: "#/ZahlungsverbindungSlim"
   required:
     - iban
   type: object
@@ -353,38 +353,38 @@ Gesuch:
   type: object
   properties:
     fallId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     fallNummer:
       type: string
     ausbildungId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     hasPendingAusbildungUnterbruchAntrag:
       type: boolean
     gesuchsperiode:
-      $ref: '#/Gesuchsperiode'
+      $ref: "#/Gesuchsperiode"
     gesuchStatus:
-      $ref: '#/Gesuchstatus'
+      $ref: "#/Gesuchstatus"
     gesuchNummer:
       type: string
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     aenderungsdatum:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
       description: Datum wann das Gesuch zu letzt geändert wurde
     bearbeiter:
       description: Zuständiger Sachbearbeiter des Gesuchs
       type: string
     gesuchTrancheToWorkWith:
-      $ref: '#/GesuchTranche'
+      $ref: "#/GesuchTranche"
     einreichedatum:
       format: date
       type: string
     hadDelegierungs:
       type: boolean
     delegierung:
-      $ref: '#/DelegierungSlim'
+      $ref: "#/DelegierungSlim"
     nachfristDokumente:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     verfuegt:
       type: boolean
 InBearbeitungSbReason:
@@ -403,11 +403,11 @@ GesuchStateInfo:
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
     - canSBInitAenderung
-    - canVerfuegen
+    - canFreigeben
   type: object
   properties:
     gesuchStatus:
-      $ref: '#/Gesuchstatus'
+      $ref: "#/Gesuchstatus"
     beschwerdeHaengig:
       type: boolean
     canGetBerechnung:
@@ -421,8 +421,8 @@ GesuchStateInfo:
     canSBInitAenderung:
       type: boolean
     inBearbeitungSbReason:
-      $ref: '#/InBearbeitungSbReason'
-    canVerfuegen:
+      $ref: "#/InBearbeitungSbReason"
+    canFreigeben:
       type: boolean
 PersoenlicheAngaben:
   required:
@@ -436,19 +436,19 @@ PersoenlicheAngaben:
   type: object
   properties:
     anrede:
-      $ref: '#/Anrede'
+      $ref: "#/Anrede"
     nachname:
       type: string
     vorname:
       type: string
     geburtsdatum:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     email:
       type: string
     sprache:
-      $ref: '#/Sprache'
+      $ref: "#/Sprache"
     adresse:
-      $ref: '#/Adresse'
+      $ref: "#/Adresse"
 DelegierungStatus:
   enum:
     - EINGEREICHT
@@ -462,18 +462,18 @@ DelegierungSlim:
   type: object
   properties:
     status:
-      $ref: '#/DelegierungStatus'
+      $ref: "#/DelegierungStatus"
     sozialdienst:
-      $ref: '#/SozialdienstSlim'
+      $ref: "#/SozialdienstSlim"
 GesuchWithChanges:
   allOf:
-    - $ref: '#/Gesuch'
-  description: '1 or 2 Aenderungstranche in relation to another Tranche'
+    - $ref: "#/Gesuch"
+  description: "1 or 2 Aenderungstranche in relation to another Tranche"
   properties:
     changes:
       type: array
       items:
-        $ref: '#/GesuchTranche'
+        $ref: "#/GesuchTranche"
     isInitial:
       type: boolean
 Land:
@@ -489,7 +489,7 @@ Land:
     - enKurzform
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     laendercodeBfs:
       type: string
     isEuEfta:
@@ -559,13 +559,13 @@ ValidationReport:
     validationErrors:
       type: array
       items:
-        $ref: '#/ValidationMessage'
+        $ref: "#/ValidationMessage"
     validationWarnings:
       type: array
       items:
-        $ref: '#/ValidationMessage'
+        $ref: "#/ValidationMessage"
     hasDocuments:
-      description: 'Whether or not the Gesuch validated has one or more GesuchDokument attached'
+      description: "Whether or not the Gesuch validated has one or more GesuchDokument attached"
       type: boolean
 ValidationMessage:
   required:
@@ -588,9 +588,9 @@ AusbildungBase:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     fallId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     fachrichtungBerufsbezeichnung:
       type: string
     ausbildungNichtGefunden:
@@ -605,7 +605,7 @@ AusbildungBase:
       description: Required wenn Abschluss.askForBerufsmaturitaet = true
       type: boolean
     pensum:
-      $ref: '#/AusbildungsPensum'
+      $ref: "#/AusbildungsPensum"
     alternativeAusbildungsstaette:
       description: Required wenn andere ausbildungNichtGefunden = true
       type: string
@@ -622,7 +622,7 @@ AusbildungBase:
       type: boolean
     landId:
       description: Required if isAusbildungAusland = true
-      $ref: '#/UUID'
+      $ref: "#/UUID"
 Ausbildung:
   required:
     - status
@@ -630,22 +630,22 @@ Ausbildung:
   type: object
   properties:
     status:
-      $ref: '#/AusbildungsStatus'
+      $ref: "#/AusbildungsStatus"
     ausbildungsgang:
-      $ref: '#/Ausbildungsgang'
+      $ref: "#/Ausbildungsgang"
     editable:
       type: boolean
     earliestActiveGesuchPeriodeStart:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
   allOf:
-    - $ref: '#/AusbildungBase'
+    - $ref: "#/AusbildungBase"
 GesuchsperiodeSelectError:
   type: object
   required:
     - type
   properties:
     type:
-      $ref: '#/GesuchsperiodeSelectErrorType'
+      $ref: "#/GesuchsperiodeSelectErrorType"
     context:
       type: string
       format: date
@@ -708,19 +708,19 @@ Abschluss:
     - aktiv
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     ausbildungskategorie:
-      $ref: '#/Ausbildungskategorie'
+      $ref: "#/Ausbildungskategorie"
     bildungskategorie:
-      $ref: '#/Bildungskategorie'
+      $ref: "#/Bildungskategorie"
     bildungsrichtung:
-      $ref: '#/Bildungsrichtung'
+      $ref: "#/Bildungsrichtung"
     bfsKategorie:
       type: integer
     berufsbefaehigenderAbschluss:
       type: boolean
     ferien:
-      $ref: '#/FerienTyp'
+      $ref: "#/FerienTyp"
     bezeichnungDe:
       type: string
     bezeichnungFr:
@@ -728,7 +728,7 @@ Abschluss:
     askForBerufsmaturitaet:
       type: boolean
     zusatzfrage:
-      $ref: '#/AbschlussZusatzfrage'
+      $ref: "#/AbschlussZusatzfrage"
     aktiv:
       type: boolean
 AusbildungsstaetteNummerTyp:
@@ -747,7 +747,7 @@ Ausbildungsstaette:
     - nummerTyp
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     nameDe:
       type: string
     nameFr:
@@ -755,7 +755,7 @@ Ausbildungsstaette:
     nummer:
       type: string
     nummerTyp:
-      $ref: '#/AusbildungsstaetteNummerTyp'
+      $ref: "#/AusbildungsstaetteNummerTyp"
     aktiv:
       type: boolean
 Ausbildungsgang:
@@ -767,11 +767,11 @@ Ausbildungsgang:
     - aktiv
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     abschluss:
-      $ref: '#/Abschluss'
+      $ref: "#/Abschluss"
     ausbildungsstaette:
-      $ref: '#/Ausbildungsstaette'
+      $ref: "#/Ausbildungsstaette"
     aktiv:
       type: boolean
 Gesuchsperiode:
@@ -792,25 +792,25 @@ Gesuchsperiode:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     bezeichnungDe:
       type: string
     bezeichnungFr:
       type: string
     gueltigkeitStatus:
-      $ref: '#/GueltigkeitStatus'
+      $ref: "#/GueltigkeitStatus"
     gesuchsperiodeStart:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     gesuchsperiodeStopp:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     aufschaltterminStart:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     einreichefristNormal:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     einreichefristReduziert:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     gesuchsjahr:
-      $ref: '#/Gesuchsjahr'
+      $ref: "#/Gesuchsjahr"
     ausbKosten_SekII:
       type: integer
     ausbKosten_Tertiaer:
@@ -847,19 +847,19 @@ GesuchTranche:
   type: object
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     gueltigAb:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     gueltigBis:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     comment:
       type: string
     gesuchFormular:
-      $ref: './gesuch-formular.yaml#/GesuchFormular'
+      $ref: "./gesuch-formular.yaml#/GesuchFormular"
     status:
-      $ref: '#/GesuchTrancheStatus'
+      $ref: "#/GesuchTrancheStatus"
     typ:
-      $ref: '#/GesuchTrancheTyp'
+      $ref: "#/GesuchTrancheTyp"
 GesuchTrancheSlim:
   type: object
   required:
@@ -870,17 +870,17 @@ GesuchTrancheSlim:
     - typ
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     gueltigAb:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     gueltigBis:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     status:
-      $ref: '#/GesuchTrancheStatus'
+      $ref: "#/GesuchTrancheStatus"
     comment:
       type: string
     typ:
-      $ref: '#/GesuchTrancheTyp'
+      $ref: "#/GesuchTrancheTyp"
     revision:
       type: integer
 SozialdienstBenutzerBase:
@@ -901,11 +901,11 @@ SozialdienstBenutzer:
     - id
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     isAdmin:
       type: boolean
   allOf:
-    - $ref: '#/SozialdienstBenutzerBase'
+    - $ref: "#/SozialdienstBenutzerBase"
 SozialdienstSlim:
   required:
     - id
@@ -914,13 +914,13 @@ SozialdienstSlim:
     - zahlungsverbindung
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     name:
       type: string
     aktiv:
       type: boolean
     zahlungsverbindung:
-      $ref: '#/ZahlungsverbindungSlim'
+      $ref: "#/ZahlungsverbindungSlim"
 GesuchTrancheTyp:
   enum:
     - AENDERUNG
@@ -943,15 +943,15 @@ Notification:
     notificationText:
       type: string
     notificationType:
-      $ref: '#/NotificationType'
+      $ref: "#/NotificationType"
     fallId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     contextId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     userErstellt:
       type: string
     timestampErstellt:
-      $ref: '#/LocalDate'
+      $ref: "#/LocalDate"
     absender:
       type: string
 NotificationType:
@@ -1024,9 +1024,9 @@ AusgewaehlterGrund:
     - decisionId
   properties:
     decisionId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     kanton:
-      $ref: '#/Kanton'
+      $ref: "#/Kanton"
 PersonValueItem:
   type: object
   properties:
@@ -1040,17 +1040,17 @@ FreiwilligDarlehen:
     - id
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     fallId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     relatedGesuchId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     status:
-      $ref: '#/DarlehenStatus'
+      $ref: "#/DarlehenStatus"
     gewaehren:
       type: boolean
     negativeVerfuegung:
-      $ref: '#/Dokument'
+      $ref: "#/Dokument"
     betrag:
       type: integer
       minimum: 0
@@ -1068,13 +1068,13 @@ FreiwilligDarlehen:
     gruende:
       type: array
       items:
-        $ref: '#/DarlehenGrund'
+        $ref: "#/DarlehenGrund"
     isDelegiert:
       type: boolean
     timestampErstellt:
       type: string
     verfuegung:
-      $ref: '#/Dokument'
+      $ref: "#/Dokument"
 DarlehenGrund:
   enum:
     - NICHT_BERECHTIGT
