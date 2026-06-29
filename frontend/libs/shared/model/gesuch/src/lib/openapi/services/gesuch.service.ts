@@ -161,10 +161,6 @@ export interface GesuchServiceGetAllBeschwerdeVerlaufEntrysRequestParams {
     gesuchId: string;
 }
 
-export interface GesuchServiceGetBerechnungForGesuchGsRequestParams {
-    verfuegungId: string;
-}
-
 export interface GesuchServiceGetBerechnungForGesuchSbRequestParams {
     gesuchId: string;
 }
@@ -2554,95 +2550,6 @@ export class GesuchService {
 
         const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/beschwerde`;
         return this.httpClient.request<Array<BeschwerdeVerlaufEntry>>('get', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: <any>observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    public getBerechnungForGesuchGsPath = (requestParameters: GesuchServiceGetBerechnungForGesuchGsRequestParams) => {
-        const verfuegungId = requestParameters.verfuegungId;
-        if (verfuegungId === null || verfuegungId === undefined) {
-            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForGesuchGs$.');
-        }
-        let path = `/api/v1/gesuch/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/berechnung/gs`;
-
-        // Query Params
-        let queryParams = new URLSearchParams();
-        const queryParamsString = queryParams.toString();
-        if (queryParamsString) {
-            return `${path}?${queryParamsString}`;
-        }
-        return `${path}`;
-    }
-
-    /**
-     * Berechnet und holt die Berechnung für ein potentiell historisiertes Gesuch
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-     public getBerechnungForGesuchGs$(requestParameters: GesuchServiceGetBerechnungForGesuchGsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<Berechnungsresultat>;
-     public getBerechnungForGesuchGs$(requestParameters: GesuchServiceGetBerechnungForGesuchGsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Berechnungsresultat>>;
-     public getBerechnungForGesuchGs$(requestParameters: GesuchServiceGetBerechnungForGesuchGsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Berechnungsresultat>>;
-     public getBerechnungForGesuchGs$(requestParameters: GesuchServiceGetBerechnungForGesuchGsRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const verfuegungId = requestParameters.verfuegungId;
-        if (verfuegungId === null || verfuegungId === undefined) {
-            throw new Error('Required parameter verfuegungId was null or undefined when calling getBerechnungForGesuchGs$.');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarCredential: string | undefined;
-        // authentication (auth-uat-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-uat-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        // authentication (auth-dev-bern) required
-        localVarCredential = this.configuration.lookupCredential('auth-dev-bern');
-        if (localVarCredential) {
-            // using credentials
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'text/plain'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        const localVarPath = `/gesuch/${this.configuration.encodeParam({name: "verfuegungId", value: verfuegungId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/berechnung/gs`;
-        return this.httpClient.request<Berechnungsresultat>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
                 responseType: <any>responseType_,

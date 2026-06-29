@@ -137,7 +137,7 @@ public class VerfuegungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);

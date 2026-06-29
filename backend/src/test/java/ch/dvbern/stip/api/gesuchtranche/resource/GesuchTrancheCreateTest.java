@@ -299,7 +299,7 @@ class GesuchTrancheCreateTest {
         TestUtil.executeAndAssert(
             gesuchApiSpec.getInitialTrancheChanges()
                 .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId()),
-            Status.INTERNAL_SERVER_ERROR.getStatusCode()
+            Status.FORBIDDEN.getStatusCode()
         );
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state

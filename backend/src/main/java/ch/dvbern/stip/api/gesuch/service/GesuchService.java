@@ -996,13 +996,6 @@ public class GesuchService {
     }
 
     @Transactional
-    public BerechnungsresultatDto getBerechnungsresultatGs(UUID gesuchId) {
-        // TODO: Historize
-        final var gesuch = gesuchRepository.requireById(gesuchId);
-        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
-    }
-
-    @Transactional
     public BerechnungsresultatDto getBerechnungsresultatSb(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);

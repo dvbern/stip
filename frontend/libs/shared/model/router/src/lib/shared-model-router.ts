@@ -1,4 +1,4 @@
-import { computed } from '@angular/core';
+import { Signal, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   ActivationEnd,
@@ -75,10 +75,17 @@ const isTrancheRoute = (
   'trancheId' in routeEvent.snapshot.params &&
   'trancheTyp' in routeEvent.snapshot.params;
 
+type MapIs<T extends string> = {
+  [k in `is${Capitalize<T>}`]?: boolean;
+};
 export const createUrlChecksSig = <const T extends string>(
   router: Router,
   ...values: T[]
-) => {
+): Signal<
+  MapIs<T> & {
+    matched: string[];
+  }
+> => {
   const urlSig = toSignal(
     urlAfterNavigationEnd(router).pipe(
       map(() => router.routerState.snapshot.url),
@@ -89,23 +96,18 @@ export const createUrlChecksSig = <const T extends string>(
   return computed(() => {
     const url = urlSig();
     if (!url) {
-      return { matched: [] } as { [k in `is${Capitalize<T>}`]?: boolean } & {
-        matched: string[];
-      };
+      return { matched: [] };
     }
 
     const matched: Set<T> = new Set();
-    const isMatches = values.reduce(
-      (acc, value) => {
-        const includes = url.includes(`/${value}/`);
-        acc[`is${capitalized(value)}`] = includes;
-        if (includes) {
-          matched.add(value);
-        }
-        return acc;
-      },
-      {} as { [k in `is${Capitalize<T>}`]: boolean },
-    );
+    const isMatches = values.reduce<MapIs<T>>((acc, value) => {
+      const includes = url.includes(`/${value}/`);
+      acc[`is${capitalized(value)}`] = includes;
+      if (includes) {
+        matched.add(value);
+      }
+      return acc;
+    }, {});
 
     return {
       ...isMatches,

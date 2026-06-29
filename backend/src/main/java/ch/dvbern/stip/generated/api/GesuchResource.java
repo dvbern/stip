@@ -165,11 +165,6 @@ public interface GesuchResource {
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
-    @Path("/{verfuegungId}/berechnung/gs")
-    @Produces({ "application/json", "text/plain" })
-    BerechnungsresultatDto getBerechnungForGesuchGs(@PathParam("verfuegungId") UUID verfuegungId);
-
-    @GET
     @Path("/{gesuchId}/berechnung/sb")
     @Produces({ "application/json", "text/plain" })
     BerechnungsresultatDto getBerechnungForGesuchSb(@PathParam("gesuchId") UUID gesuchId);

@@ -106,7 +106,6 @@ public class GesuchApiSpec {
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisenAenderungUndo(),
                 getAllBeschwerdeVerlaufEntrys(),
-                getBerechnungForGesuchGs(),
                 getBerechnungForGesuchSb(),
                 getBerechnungForVerfuegung(),
                 getBerechnungsblattDownloadToken(),
@@ -222,10 +221,6 @@ public class GesuchApiSpec {
 
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
-    }
-
-    public GetBerechnungForGesuchGsOper getBerechnungForGesuchGs() {
-        return new GetBerechnungForGesuchGsOper(createReqSpec());
     }
 
     public GetBerechnungForGesuchSbOper getBerechnungForGesuchSb() {
@@ -2106,79 +2101,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetAllBeschwerdeVerlaufEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * Berechnet und holt die Berechnung für ein potentiell historisiertes Gesuch
-     * 
-     *
-     * @see #verfuegungIdPath  (required)
-     * return BerechnungsresultatDtoSpec
-     */
-    public static class GetBerechnungForGesuchGsOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{verfuegungId}/berechnung/gs";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetBerechnungForGesuchGsOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{verfuegungId}/berechnung/gs
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{verfuegungId}/berechnung/gs
-         * @param handler handler
-         * @return BerechnungsresultatDtoSpec
-         */
-        public BerechnungsresultatDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<BerechnungsresultatDtoSpec> type = new TypeRef<BerechnungsresultatDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String VERFUEGUNG_ID_PATH = "verfuegungId";
-
-        /**
-         * @param verfuegungId (UUID)  (required)
-         * @return operation
-         */
-        public GetBerechnungForGesuchGsOper verfuegungIdPath(Object verfuegungId) {
-            reqSpec.addPathParam(VERFUEGUNG_ID_PATH, verfuegungId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetBerechnungForGesuchGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetBerechnungForGesuchGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

@@ -54,7 +54,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
         GesuchTranche tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
         Gesuch gesuch = gesuchRepository.requireById(tranche.getGesuch().getId());
         if (!gesuch.isVerfuegt()) {
-            throw new IllegalStateException("Gesuch was not Verfuegt");
+            forbidden();
         }
     }
 
