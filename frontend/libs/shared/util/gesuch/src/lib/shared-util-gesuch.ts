@@ -140,7 +140,8 @@ export const StatusUebergaengeMap: Partial<
 type UebergangDisabledReason =
   | 'VALIDIERUNG_FEHLER'
   | 'DOKUMENTE_OFFEN'
-  | 'CANNOT_NEGATIV_VERFUEGEN';
+  | 'CANNOT_NEGATIV_VERFUEGEN'
+  | 'SAME_USER_CANNOT_VERFUEGEN';
 
 type StatusUebergangOption = {
   icon: string;
@@ -155,6 +156,7 @@ type StatusUebergangOption = {
 export const StatusUebergaengeOptions: Record<
   StatusUebergang,
   (context?: {
+    canFreigeben: boolean;
     hasAcceptedAllDokuments: boolean;
     isInvalid: boolean;
     permissions: PermissionMap;
@@ -199,12 +201,14 @@ export const StatusUebergaengeOptions: Record<
       allowedFor: ['V0_Sachbearbeiter'],
       disabledReason: undefined,
     }) as const,
-  VERFUEGT: () =>
+  VERFUEGT: (context?: { canFreigeben: boolean }) =>
     ({
       icon: 'done',
       typ: 'VERFUEGT',
       allowedFor: ['V0_Freigabestelle'],
-      disabledReason: undefined,
+      disabledReason: !context?.canFreigeben
+        ? 'SAME_USER_CANNOT_VERFUEGEN'
+        : undefined,
     }) as const,
   BEREIT_FUER_BEARBEITUNG: () =>
     ({
