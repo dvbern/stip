@@ -29,6 +29,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -52,6 +53,7 @@ import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_MAX_LEN
 
 @Audited
 @SapDeliverysLengthConstraint
+@SaldoaenderungBuchhaltungNotZeroConstraint
 @Entity
 @Table(
     name = "buchhaltung",
@@ -81,7 +83,7 @@ public class Buchhaltung extends AbstractTenantEntity {
     private Integer stipendium;
 
     @Nullable
-    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "buchhaltung", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<SapDelivery> sapDeliverys = new ArrayList<>();
 
     @NotNull

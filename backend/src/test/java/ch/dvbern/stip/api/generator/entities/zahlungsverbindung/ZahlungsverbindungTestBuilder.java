@@ -34,6 +34,8 @@ extends AbstractTestBuilder<Zahlungsverbindung, ZahlungsverbindungTestBuilder> {
 
     public static ZahlungsverbindungTestBuilder empty(LocalDate referenceDate) {
         Zahlungsverbindung zahlungsverbindung = ZahlungsverbindungBuilder.zahlungsverbindung()
+            .vorname("a")
+            .nachname("b")
             .adresse(null)
             .iban(swissIban)
             .institution("Test Institute")
@@ -44,6 +46,8 @@ extends AbstractTestBuilder<Zahlungsverbindung, ZahlungsverbindungTestBuilder> {
 
     public static ZahlungsverbindungTestBuilder standardDirectDeps(LocalDate referenceDate) {
         Zahlungsverbindung zahlungsverbindung = ZahlungsverbindungBuilder.zahlungsverbindung()
+            .vorname("a")
+            .nachname("b")
             .adresse(AdresseTestBuilder.empty(referenceDate).build())
             .iban(swissIban)
             .institution("Test Institute")
@@ -54,6 +58,8 @@ extends AbstractTestBuilder<Zahlungsverbindung, ZahlungsverbindungTestBuilder> {
 
     public static ZahlungsverbindungTestBuilder standardNestedDeps(LocalDate referenceDate) {
         Zahlungsverbindung zahlungsverbindung = ZahlungsverbindungBuilder.zahlungsverbindung()
+            .vorname("a")
+            .nachname("b")
             .adresse(AdresseTestBuilder.standardDirectDeps(referenceDate).build())
             .iban(swissIban)
             .institution("Test Institute")

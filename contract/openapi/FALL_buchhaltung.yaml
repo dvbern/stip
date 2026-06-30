@@ -87,7 +87,7 @@ paths:
       operationId: retryFailedAuszahlungBuchhaltungForGesuch
       summary: return BuchhaltungEntry for retry
   /buchhaltung/failed:
-    summary: 'asdf'
+    summary: 'Returns all Auszahlungs buchhaltungsentrys that have thoroughly failed'
     get:
       tags:
         - Buchhaltung

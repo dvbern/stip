@@ -32,6 +32,8 @@ import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
 
 public final class DemoDataDefaults {
+    public static final String MASS_GESUCH_FALL_PREFIX = "DEMO_";
+    public static final String MASS_GESUCH_STATISTIK_FALL_PREFIX = "BFS_";
     public static final Sprache SPRACHE = Sprache.DEUTSCH;
     public static final String ZAHLUNGSVERBINBDUNG_IBAN = "CH3908704016075473007";
     public static final AusbildungsPensum AUSBILDUNG_PENSUM = AusbildungsPensum.VOLLZEIT;

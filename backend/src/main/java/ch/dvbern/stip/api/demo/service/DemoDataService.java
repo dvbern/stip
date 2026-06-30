@@ -181,12 +181,14 @@ public class DemoDataService {
         final var gesuch = gesuchRepository.requireById(gesuchId);
 
         final var preValidation =
-            gesuchFormularService.validatePages(gesuch.getLatestGesuchTranche().getGesuchFormular());
+            gesuchFormularService.validatePagesSb(gesuch.getLatestGesuchTranche().getGesuchFormular());
         if (!preValidation.getValidationErrors().isEmpty()) {
             throw new DemoDataApplyException("ValidationError", preValidation.getValidationErrors());
         }
 
-        generateDemoDataService.createDemoDokumentsForAllRequired(gesuch.getLatestGesuchTranche());
+        final var allDokuments =
+            generateDemoDataService.createDemoDokumentsForAllRequired(gesuch.getLatestGesuchTranche());
+        generateDemoDataService.createS3EntriesForDokumente(allDokuments);
         zuordnungService.updateZuordnungOnGesuch(gesuch);
 
         final var violations =

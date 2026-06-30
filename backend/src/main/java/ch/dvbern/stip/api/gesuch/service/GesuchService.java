@@ -279,7 +279,7 @@ public class GesuchService {
     public void updateGesuch(
         final UUID gesuchId,
         final GesuchUpdateDto gesuchUpdateDto,
-        final boolean requiresElevatedPermissions
+        final boolean withConfidentialFields
     ) throws ValidationsException {
         var gesuch = gesuchRepository.requireById(gesuchId);
         var trancheToUpdate = gesuch
@@ -305,7 +305,7 @@ public class GesuchService {
         updateGesuchTranche(
             gesuchUpdateDto.getGesuchTrancheToWorkWith(),
             trancheToUpdate,
-            requiresElevatedPermissions
+            withConfidentialFields
         );
 
         final var newFormular = trancheToUpdate.getGesuchFormular();
@@ -320,9 +320,9 @@ public class GesuchService {
     private void updateGesuchTranche(
         final GesuchTrancheUpdateDto trancheUpdate,
         final GesuchTranche trancheToUpdate,
-        final boolean requiresElevatedPermissions
+        final boolean withConfidentialFields
     ) {
-        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, requiresElevatedPermissions);
+        gesuchTrancheMapper.partialUpdate(trancheUpdate, trancheToUpdate, withConfidentialFields);
         Set<ConstraintViolation<GesuchTranche>> violations = validator.validate(trancheToUpdate);
         if (!violations.isEmpty()) {
             throw new ValidationsException(ValidationsException.ENTITY_NOT_VALID_MESSAGE, violations);

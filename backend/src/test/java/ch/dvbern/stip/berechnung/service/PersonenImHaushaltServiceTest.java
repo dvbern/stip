@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
@@ -51,16 +52,23 @@ class PersonenImHaushaltServiceTest {
     PersonenImHaushaltService personenImHaushaltService;
 
     GesuchFormular gesuchFormular;
+    Eltern mutter = new Eltern();
+    Eltern vater = new Eltern();
 
     @BeforeEach
     void setUpEach() {
+        mutter.setElternTyp(ElternTyp.MUTTER)
+            .setWiederverheiratet(false);
+        vater.setElternTyp(ElternTyp.VATER)
+            .setWiederverheiratet(false);
         gesuchFormular = new GesuchFormular()
             .setPersonInAusbildung(
                 new PersonInAusbildung()
             )
             .setFamiliensituation(
                 new Familiensituation()
-            );
+            )
+            .setElterns(Set.of(mutter, vater));
 
         final var calculators = (Instance<PersonenImHaushaltCalculator>) Mockito.mock(Instance.class);
         Mockito.doAnswer((ignored) -> Stream.of(new PersonenImHaushaltCalculatorV1())).when(calculators).stream();
@@ -145,9 +153,8 @@ class PersonenImHaushaltServiceTest {
         gesuchFormular.getFamiliensituation()
             .setElternVerheiratetZusammen(false)
             .setGerichtlicheAlimentenregelung(true)
-            .setWerZahltAlimente(Elternschaftsteilung.MUTTER)
-            .setVaterWiederverheiratet(true)
-            .setMutterWiederverheiratet(false);
+            .setWerZahltAlimente(Elternschaftsteilung.MUTTER);
+        vater.setWiederverheiratet(true);
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
@@ -190,9 +197,8 @@ class PersonenImHaushaltServiceTest {
             .setGerichtlicheAlimentenregelung(false)
             .setElternteilUnbekanntVerstorben(true)
             .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
-            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
-            .setVaterWiederverheiratet(false)
-            .setMutterWiederverheiratet(true);
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH);
+        mutter.setWiederverheiratet(true);
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
@@ -227,9 +233,8 @@ class PersonenImHaushaltServiceTest {
             .setGerichtlicheAlimentenregelung(false)
             .setElternteilUnbekanntVerstorben(true)
             .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.WEDER_NOCH)
-            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
-            .setVaterWiederverheiratet(true)
-            .setMutterWiederverheiratet(false);
+            .setMutterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN);
+        vater.setWiederverheiratet(true);
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()
@@ -262,9 +267,9 @@ class PersonenImHaushaltServiceTest {
         gesuchFormular.getFamiliensituation()
             .setElternVerheiratetZusammen(false)
             .setGerichtlicheAlimentenregelung(false)
-            .setElternteilUnbekanntVerstorben(false)
-            .setVaterWiederverheiratet(false)
-            .setMutterWiederverheiratet(true);
+            .setElternteilUnbekanntVerstorben(false);
+        vater.setWiederverheiratet(false);
+        mutter.setWiederverheiratet(true);
         gesuchFormular.setGeschwisters(
             Set.of(
                 (Geschwister) new Geschwister()

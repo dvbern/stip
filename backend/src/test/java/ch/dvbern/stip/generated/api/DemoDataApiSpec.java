@@ -63,9 +63,11 @@ public class DemoDataApiSpec {
         return Arrays.asList(
                 applyDemoData(),
                 createNewDemoDataImport(),
+                generateAllGesucheAsVerfuegt(),
                 getAllDemoData(),
                 getDemoDataDokument(),
                 getDemoDataDokumentDownloadToken(),
+                getStatistikXmlWithAllTestcases(),
                 testAllDemoDataBerechnung()
         );
     }
@@ -78,6 +80,10 @@ public class DemoDataApiSpec {
         return new CreateNewDemoDataImportOper(createReqSpec());
     }
 
+    public GenerateAllGesucheAsVerfuegtOper generateAllGesucheAsVerfuegt() {
+        return new GenerateAllGesucheAsVerfuegtOper(createReqSpec());
+    }
+
     public GetAllDemoDataOper getAllDemoData() {
         return new GetAllDemoDataOper(createReqSpec());
     }
@@ -88,6 +94,10 @@ public class DemoDataApiSpec {
 
     public GetDemoDataDokumentDownloadTokenOper getDemoDataDokumentDownloadToken() {
         return new GetDemoDataDokumentDownloadTokenOper(createReqSpec());
+    }
+
+    public GetStatistikXmlWithAllTestcasesOper getStatistikXmlWithAllTestcases() {
+        return new GetStatistikXmlWithAllTestcasesOper(createReqSpec());
     }
 
     public TestAllDemoDataBerechnungOper testAllDemoDataBerechnung() {
@@ -271,6 +281,56 @@ public class DemoDataApiSpec {
          * @return operation
          */
         public CreateNewDemoDataImportOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Generate all Testcase Gesuche as verfuegt
+     * 
+     *
+     */
+    public static class GenerateAllGesucheAsVerfuegtOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/demo-data/all";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GenerateAllGesucheAsVerfuegtOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /demo-data/all
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GenerateAllGesucheAsVerfuegtOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GenerateAllGesucheAsVerfuegtOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }
@@ -478,6 +538,67 @@ public class DemoDataApiSpec {
          * @return operation
          */
         public GetDemoDataDokumentDownloadTokenOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Returns a BFS statistik file with all Testcases
+     * 
+     *
+     * return File
+     */
+    public static class GetStatistikXmlWithAllTestcasesOper implements Oper {
+
+        public static final Method REQ_METHOD = POST;
+        public static final String REQ_URI = "/demo-data/bfs-statistik";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetStatistikXmlWithAllTestcasesOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/octet-stream");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * POST /demo-data/bfs-statistik
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * POST /demo-data/bfs-statistik
+         * @param handler handler
+         * @return File
+         */
+        public File executeAs(Function<Response, Response> handler) {
+            TypeRef<File> type = new TypeRef<File>(){};
+            return execute(handler).as(type);
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetStatistikXmlWithAllTestcasesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetStatistikXmlWithAllTestcasesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

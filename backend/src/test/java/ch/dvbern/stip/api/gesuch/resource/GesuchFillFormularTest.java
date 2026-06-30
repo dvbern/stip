@@ -109,6 +109,7 @@ class GesuchFillFormularTest {
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
 
     private UUID gesuchId;
+    private UUID fallId;
     private UUID gesuchTrancheId;
     private UUID ausbildungId;
     private final GesuchFormularUpdateDtoSpec currentFormular = new GesuchFormularUpdateDtoSpec();
@@ -122,6 +123,7 @@ class GesuchFillFormularTest {
     void testCreateEndpoint() {
         final var gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         gesuchId = gesuch.getId();
+        fallId = gesuch.getFallId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
         ausbildungId = gesuch.getAusbildungId();
         gesuchTrancheId = gesuch.getGesuchTrancheToWorkWith().getId();
@@ -475,7 +477,8 @@ class GesuchFillFormularTest {
     @TestAsGesuchsteller
     @Order(25)
     void gesuchNotificationTest() {
-        var notifications = notificationApiSpec.getNotificationsForCurrentUser()
+        var notifications = notificationApiSpec.getNotificationsForFall()
+            .fallIdPath(fallId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()

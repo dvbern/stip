@@ -12,7 +12,6 @@ import { TranslocoDirective } from '@jsverse/transloco';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
-import { FallStore } from '@dv/shared/data-access/fall';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
 import { SharedUtilFormService } from '@dv/shared/util/form';
@@ -32,7 +31,6 @@ export class SharedFeatureDarlehenFeatureComponent {
   darlehenStore = inject(DarlehenStore);
   dashboardStore = inject(DashboardStore);
   route = inject(ActivatedRoute);
-  fallStore = inject(FallStore);
   router = inject(Router);
   private formUtils = inject(SharedUtilFormService);
   hasUnsavedChanges = false;

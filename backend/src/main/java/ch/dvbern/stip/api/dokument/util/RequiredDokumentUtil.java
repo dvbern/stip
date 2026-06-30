@@ -100,11 +100,12 @@ public class RequiredDokumentUtil {
 
     public Set<DokumentTyp> getRequiredDokumentTypesForGesuch(
         final GesuchFormular formular,
-        final Instance<RequiredDokumentsProducer> requiredDokumentProducers
+        final Instance<RequiredDokumentsProducer> requiredDokumentProducers,
+        final boolean includeHidden
     ) {
         return requiredDokumentProducers
             .stream()
-            .map(requiredDokumentProducer -> requiredDokumentProducer.getRequiredDokuments(formular))
+            .map(requiredDokumentProducer -> requiredDokumentProducer.getRequiredDokuments(formular, includeHidden))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
@@ -113,11 +114,12 @@ public class RequiredDokumentUtil {
 
     public Set<Pair<DokumentTyp, UUID>> getRequiredListDokumentRefsForGesuch(
         final GesuchFormular formular,
-        final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers
+        final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers,
+        final boolean includeHidden
     ) {
         return requiredRefDokumentProducers
             .stream()
-            .map(producer -> producer.getRequiredDokuments(formular))
+            .map(producer -> producer.getRequiredDokuments(formular, includeHidden))
             .flatMap(
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
@@ -135,16 +137,6 @@ public class RequiredDokumentUtil {
                 dokumentTypPair -> dokumentTypPair.getRight().stream()
             )
             .collect(Collectors.toSet());
-    }
-
-    public boolean containsAusstehendeDokumenteWithNoFiles(final GesuchTranche gesuchTranche) {
-        return gesuchTranche.getGesuchDokuments()
-            .stream()
-            .filter(
-                gesuchDokument -> gesuchDokument.getStatus().equals(GesuchDokumentStatus.AUSSTEHEND)
-                && gesuchDokument.getDokumente().isEmpty()
-            )
-            .count() > 0;
     }
 
     public boolean containsAusstehendeDokumenteWithFiles(final GesuchTranche gesuchTranche) {

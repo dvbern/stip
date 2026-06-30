@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
+import { NotificationStore } from '@dv/shared/data-access/notification';
 import { hasBenutzer } from '@dv/shared/pattern/global-guards';
 
 export const appRoutes: Route[] = [
@@ -47,6 +48,15 @@ export const appRoutes: Route[] = [
         loadChildren: () =>
           import('@dv/gesuch-app/feature/auszahlung').then(
             (m) => m.gesuchAppFeatureAuszahlungRoutes,
+          ),
+      },
+      {
+        path: 'nachrichten',
+        title: 'shared.nachrichten.title',
+        providers: [NotificationStore],
+        loadChildren: () =>
+          import('@dv/shared/feature/notifications').then(
+            (m) => m.sharedFeatureNotificationsRoutes,
           ),
       },
     ],

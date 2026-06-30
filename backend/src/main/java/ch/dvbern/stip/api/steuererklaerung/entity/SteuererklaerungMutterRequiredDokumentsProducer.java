@@ -21,6 +21,7 @@ import java.util.Set;
 
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.util.SteuererklaerungRequiredDokumentsProducerUtil;
@@ -31,10 +32,14 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class SteuererklaerungMutterRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var steuererklarungen = formular.getSteuererklaerung();
 
-        if (steuererklarungen == null || steuererklarungen.isEmpty()) {
+        if (
+            steuererklarungen == null
+            || steuererklarungen.isEmpty()
+            || (formular.getVersteckteEltern().contains(ElternTyp.MUTTER) && !includeHidden)
+        ) {
             return ImmutablePair.of("", Set.of());
         }
 

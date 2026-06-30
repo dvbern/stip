@@ -31,6 +31,7 @@ public class GeschwisterUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+  private @Valid Boolean hidden;
 
   /**
    **/
@@ -203,6 +204,24 @@ public class GeschwisterUpdateDto  implements Serializable {
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
   }
 
+  /**
+   **/
+  public GeschwisterUpdateDto hidden(Boolean hidden) {
+    this.hidden = hidden;
+    return this;
+  }
+
+  
+  @JsonProperty("hidden")
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+  @JsonProperty("hidden")
+  public void setHidden(Boolean hidden) {
+    this.hidden = hidden;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -221,12 +240,13 @@ public class GeschwisterUpdateDto  implements Serializable {
         Objects.equals(this.nachname, geschwisterUpdate.nachname) &&
         Objects.equals(this.id, geschwisterUpdate.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwisterUpdate.wohnsitzAnteilMutter) &&
-        Objects.equals(this.wohnsitzAnteilVater, geschwisterUpdate.wohnsitzAnteilVater);
+        Objects.equals(this.wohnsitzAnteilVater, geschwisterUpdate.wohnsitzAnteilVater) &&
+        Objects.equals(this.hidden, geschwisterUpdate.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, hidden);
   }
 
   @Override
@@ -243,6 +263,7 @@ public class GeschwisterUpdateDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
   }

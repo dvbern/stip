@@ -38,6 +38,7 @@ public class DemoElternteilDto  implements Serializable {
   private @Valid String identischerZivilrechtlicherWohnsitzPLZ;
   private @Valid String identischerZivilrechtlicherWohnsitzOrt;
   private @Valid Integer wohnkosten;
+  private @Valid Boolean wiederverheiratet;
 
   /**
    **/
@@ -396,6 +397,24 @@ public class DemoElternteilDto  implements Serializable {
     this.wohnkosten = wohnkosten;
   }
 
+  /**
+   **/
+  public DemoElternteilDto wiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+    return this;
+  }
+
+  
+  @JsonProperty("wiederverheiratet")
+  public Boolean getWiederverheiratet() {
+    return wiederverheiratet;
+  }
+
+  @JsonProperty("wiederverheiratet")
+  public void setWiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -424,12 +443,13 @@ public class DemoElternteilDto  implements Serializable {
         Objects.equals(this.coAdresse, demoElternteil.coAdresse) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzPLZ, demoElternteil.identischerZivilrechtlicherWohnsitzPLZ) &&
         Objects.equals(this.identischerZivilrechtlicherWohnsitzOrt, demoElternteil.identischerZivilrechtlicherWohnsitzOrt) &&
-        Objects.equals(this.wohnkosten, demoElternteil.wohnkosten);
+        Objects.equals(this.wohnkosten, demoElternteil.wohnkosten) &&
+        Objects.equals(this.wiederverheiratet, demoElternteil.wiederverheiratet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, geburtsdatum, alter, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten);
+    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, land, identischerZivilrechtlicherWohnsitz, geburtsdatum, alter, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling, coAdresse, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, wiederverheiratet);
   }
 
   @Override
@@ -456,6 +476,7 @@ public class DemoElternteilDto  implements Serializable {
     sb.append("    identischerZivilrechtlicherWohnsitzPLZ: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzPLZ)).append("\n");
     sb.append("    identischerZivilrechtlicherWohnsitzOrt: ").append(toIndentedString(identischerZivilrechtlicherWohnsitzOrt)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wiederverheiratet: ").append(toIndentedString(wiederverheiratet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

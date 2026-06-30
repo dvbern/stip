@@ -41,7 +41,8 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
                 .setNettoerwerbseinkommen(1)
         );
 
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_LOHNABRECHNUNG);
+        RequiredDocsUtil
+            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_LOHNABRECHNUNG);
     }
 
     @Test
@@ -51,7 +52,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
                 .setWohnkosten(1)
         );
 
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_MIETVERTRAG);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_MIETVERTRAG);
     }
 
     @Test
@@ -62,7 +63,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.EK_BELEG_OV_ABONNEMENT
         );
     }
@@ -75,7 +76,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.EK_ENTSCHEID_ERGAENZUNGSLEISTUNGEN_EO
         );
     }
@@ -88,7 +89,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.EK_BELEG_BEZAHLTE_RENTEN
         );
     }
@@ -101,7 +102,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.EK_VERFUEGUNG_GEMEINDE_INSTITUTION
         );
     }
@@ -114,7 +115,7 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil.requiresOneAndType(
-            producer.getRequiredDokuments(formular),
+            producer.getRequiredDokuments(formular, true),
             DokumentTyp.EK_BELEG_KINDERZULAGEN
         );
     }
@@ -127,33 +128,36 @@ class EinnahmenKostenRequiredDokumentsProducerTest {
         );
 
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE);
+            .requiresOneAndType(
+                producer.getRequiredDokuments(formular, true),
+                DokumentTyp.EK_BELEG_UNTERHALTSBEITRAEGE
+            );
     }
 
     @Test
     void requiresIfVermoegen() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setVermoegen(1000));
-        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_VERMOEGEN);
+        RequiredDocsUtil.requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_VERMOEGEN);
     }
 
     @Test
     void requiresIfAndereEinnahmen() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setAndereEinnahmen(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
+            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_BELEG_ANDERE_EINNAHMEN);
     }
 
     @Test
     void requiresIfEinnahmenBGSA() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setEinnahmenBGSA(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
+            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_BELEG_EINNAHMEN_BGSA);
     }
 
     @Test
     void requiresIfTaggelderAHVIV() {
         formular.setEinnahmenKosten(new EinnahmenKosten().setTaggelderAHVIV(1000));
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDokuments(formular), DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
+            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.EK_BELEG_TAGGELDER_AHV_IV);
     }
 }

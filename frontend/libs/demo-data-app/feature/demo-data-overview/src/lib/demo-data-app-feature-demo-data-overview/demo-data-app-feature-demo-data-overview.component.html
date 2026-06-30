@@ -42,6 +42,45 @@
             >
               {{ t('demo-data-app.overview.apply-demo-data.test-all-berechnung') }}
             </button>
+
+            @let generateStatistiksIsLoading =
+              demoDataStore.generateStatistikRun() | rdIsPending: { ignoreInitial: true };
+            @let generateAllIsLoading = demoDataStore.generateAllRun() | rdIsPending: { ignoreInitial: true };
+            <div class="tw:relative">
+              <button
+                type="button"
+                class="tw:dv-button-outline tw:flex tw:justify-center tw:px-3 tw:relative"
+                data-testid="header-nav-user-menu"
+                [matMenuTriggerFor]="actions"
+                [matTooltip]="t('demo-data-app.overview.generate-multi.aktionen')"
+              >
+                <i class="material-symbols-rounded">expand_more</i>
+              </button>
+
+              @if (generateAllIsLoading || generateStatistiksIsLoading) {
+                <dv-shared-ui-loading type="icon" [overlay]="true"></dv-shared-ui-loading>
+              }
+            </div>
+
+            <mat-menu #actions="matMenu" xPosition="before">
+              <button
+                mat-menu-item
+                type="button"
+                (click)="getStatistikXmlWithAllTestcases()"
+                [disabled]="generateStatistiksIsLoading"
+              >
+                {{ t('demo-data-app.overview.generate-multi.xmlStatistik') }}
+              </button>
+              <button
+                mat-menu-item
+                [disabled]="generateAllIsLoading"
+                class="tw:bg-dv-main-danger! tw:hover:bg-dv-red-hover! tw:text-white! tw:rounded"
+                type="button"
+                (click)="generateAllGesucheAsVerfuegt()"
+              >
+                {{ t('demo-data-app.overview.generate-multi.persistent') }}
+              </button>
+            </mat-menu>
           }
         </div>
       </h1>

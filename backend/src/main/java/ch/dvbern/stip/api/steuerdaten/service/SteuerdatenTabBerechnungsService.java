@@ -23,6 +23,7 @@ import java.util.Objects;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import jakarta.enterprise.context.RequestScoped;
 
 import static ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung.MUTTER;
@@ -30,6 +31,7 @@ import static ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung.VAT
 
 @RequestScoped
 public class SteuerdatenTabBerechnungsService {
+    @WithSpan
     public List<SteuerdatenTyp> calculateTabs(final Familiensituation familiensituation) {
         if (Objects.isNull(familiensituation)) {
             return List.of();

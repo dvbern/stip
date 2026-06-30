@@ -13,6 +13,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { map, startWith } from 'rxjs';
 
+import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
 import { urlAfterNavigationEnd } from '@dv/shared/model/router';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -33,6 +34,7 @@ const ALL_TABS = ['verlauf', 'verwaltung'] as const;
   providers: [paginatorTranslationProvider()],
 })
 export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
+  private gesuchHeaderStore = inject(GesuchHeaderStore);
   private router = inject(Router);
   private wndw = inject(DOCUMENT, { optional: true })?.defaultView;
   gesuchInfoStore = inject(GesuchInfoStore);
@@ -63,6 +65,9 @@ export class SachbearbeitungAppFeatureInfosBeschwerdeComponent {
       }
 
       this.gesuchInfoStore.loadGesuchInfo$({ gesuchId });
+      this.gesuchHeaderStore.loadHeader$({
+        gesuchId,
+      });
     });
   }
 }

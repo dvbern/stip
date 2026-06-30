@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 @ApplicationScoped
 public class FamiliensituationRequiredDokumentsProducer implements RequiredDokumentsProducer {
     @Override
-    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular) {
+    public Pair<String, Set<DokumentTyp>> getRequiredDokuments(GesuchFormular formular, boolean includeHidden) {
         final var famsit = formular.getFamiliensituation();
         if (famsit == null) {
             return ImmutablePair.of("", Set.of());

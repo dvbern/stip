@@ -90,6 +90,10 @@
     --mat-dialog-container-min-width: min(500px, 100%);
     --mat-tooltip-supporting-text-line-height: 1.5;
     --mat-tooltip-supporting-text-size: 14px;
+    --mat-badge-background-color: var(--tw-color-black);
+    --mat-badge-text-size: 0.875rem;
+    --mat-badge-container-size: 1.25rem;
+    --mat-badge-line-height: var(--mat-badge-container-size);
 
     @media (min-width: theme('screens.lg')) {
       --header-size: 110px;
@@ -213,4 +217,8 @@
 
 @utility dv-divider {
   @apply tw:border-t tw:border-dv-border tw:my-4;
+}
+
+@utility dv-icon-chip-info {
+  @apply tw:bg-dv-blue-subtle tw:text-dv-blue;
 }

@@ -39,6 +39,7 @@ export interface ElternUpdate {
      * Die Wohnkosten vom Elternteil, werden gespiegelt auf den anderen falls Sie zusammen wohnen
      */
     wohnkosten?: number;
+    wiederverheiratet?: boolean;
 }
 
 

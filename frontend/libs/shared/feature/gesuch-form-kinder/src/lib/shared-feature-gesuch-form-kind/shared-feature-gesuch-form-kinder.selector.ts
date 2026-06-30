@@ -13,6 +13,12 @@ export const selectSharedFeatureGesuchFormKinderView = createSelector(
 
     return {
       ...gesuchsView,
+      kinds: [...(gesuchsView.gesuchFormular?.kinds ?? [])].sort(
+        (a, b) =>
+          a.nachname.localeCompare(b.nachname) ||
+          a.vorname.localeCompare(b.vorname) ||
+          a.geburtsdatum.localeCompare(b.geburtsdatum),
+      ),
       listChanges: getChangesForList(
         current,
         previous,

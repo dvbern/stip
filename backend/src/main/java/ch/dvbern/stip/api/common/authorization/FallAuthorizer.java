@@ -17,7 +17,10 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
 import ch.dvbern.stip.api.fall.repo.FallRepository;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -48,5 +51,17 @@ public class FallAuthorizer extends BaseAuthorizer {
     @Transactional
     public void gsCanGet() {
         permitAll();
+    }
+
+    public void canGetForFall(final UUID fallId) {
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                fallRepository.requireById(fallId),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
     }
 }

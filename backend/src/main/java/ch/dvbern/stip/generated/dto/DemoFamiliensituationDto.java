@@ -22,21 +22,15 @@ public class DemoFamiliensituationDto  implements Serializable {
   private @Valid Boolean elternVerheiratetZusammen;
   private @Valid Boolean gerichtlicheAlimentenregelung;
   private @Valid ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
-  private @Valid Boolean mutterWiederverheiratetAlimente;
-  private @Valid Boolean vaterWiederverheiratetAlimente;
   private @Valid Boolean elternteilUnbekanntVerstorben;
   private @Valid Boolean mutterVerstorben;
   private @Valid Boolean mutterUnbekannt;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
   private @Valid Boolean mutterKeineOptionen;
-  private @Valid Boolean mutterWiederverheiratetUnbekannt;
   private @Valid Boolean vaterVerstorben;
   private @Valid Boolean vaterUnbekannt;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
   private @Valid Boolean vaterKeineOptionen;
-  private @Valid Boolean vaterWiederverheiratetUnbekannt;
-  private @Valid Boolean mutterWiederverheiratetUngewiss;
-  private @Valid Boolean vaterWiederverheiratetUngewiss;
 
   /**
    **/
@@ -91,42 +85,6 @@ public class DemoFamiliensituationDto  implements Serializable {
   @JsonProperty("werZahltAlimente")
   public void setWerZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
     this.werZahltAlimente = werZahltAlimente;
-  }
-
-  /**
-   **/
-  public DemoFamiliensituationDto mutterWiederverheiratetAlimente(Boolean mutterWiederverheiratetAlimente) {
-    this.mutterWiederverheiratetAlimente = mutterWiederverheiratetAlimente;
-    return this;
-  }
-
-  
-  @JsonProperty("mutterWiederverheiratetAlimente")
-  public Boolean getMutterWiederverheiratetAlimente() {
-    return mutterWiederverheiratetAlimente;
-  }
-
-  @JsonProperty("mutterWiederverheiratetAlimente")
-  public void setMutterWiederverheiratetAlimente(Boolean mutterWiederverheiratetAlimente) {
-    this.mutterWiederverheiratetAlimente = mutterWiederverheiratetAlimente;
-  }
-
-  /**
-   **/
-  public DemoFamiliensituationDto vaterWiederverheiratetAlimente(Boolean vaterWiederverheiratetAlimente) {
-    this.vaterWiederverheiratetAlimente = vaterWiederverheiratetAlimente;
-    return this;
-  }
-
-  
-  @JsonProperty("vaterWiederverheiratetAlimente")
-  public Boolean getVaterWiederverheiratetAlimente() {
-    return vaterWiederverheiratetAlimente;
-  }
-
-  @JsonProperty("vaterWiederverheiratetAlimente")
-  public void setVaterWiederverheiratetAlimente(Boolean vaterWiederverheiratetAlimente) {
-    this.vaterWiederverheiratetAlimente = vaterWiederverheiratetAlimente;
   }
 
   /**
@@ -221,24 +179,6 @@ public class DemoFamiliensituationDto  implements Serializable {
 
   /**
    **/
-  public DemoFamiliensituationDto mutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
-    this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
-    return this;
-  }
-
-  
-  @JsonProperty("mutterWiederverheiratetUnbekannt")
-  public Boolean getMutterWiederverheiratetUnbekannt() {
-    return mutterWiederverheiratetUnbekannt;
-  }
-
-  @JsonProperty("mutterWiederverheiratetUnbekannt")
-  public void setMutterWiederverheiratetUnbekannt(Boolean mutterWiederverheiratetUnbekannt) {
-    this.mutterWiederverheiratetUnbekannt = mutterWiederverheiratetUnbekannt;
-  }
-
-  /**
-   **/
   public DemoFamiliensituationDto vaterVerstorben(Boolean vaterVerstorben) {
     this.vaterVerstorben = vaterVerstorben;
     return this;
@@ -309,60 +249,6 @@ public class DemoFamiliensituationDto  implements Serializable {
     this.vaterKeineOptionen = vaterKeineOptionen;
   }
 
-  /**
-   **/
-  public DemoFamiliensituationDto vaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
-    this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
-    return this;
-  }
-
-  
-  @JsonProperty("vaterWiederverheiratetUnbekannt")
-  public Boolean getVaterWiederverheiratetUnbekannt() {
-    return vaterWiederverheiratetUnbekannt;
-  }
-
-  @JsonProperty("vaterWiederverheiratetUnbekannt")
-  public void setVaterWiederverheiratetUnbekannt(Boolean vaterWiederverheiratetUnbekannt) {
-    this.vaterWiederverheiratetUnbekannt = vaterWiederverheiratetUnbekannt;
-  }
-
-  /**
-   **/
-  public DemoFamiliensituationDto mutterWiederverheiratetUngewiss(Boolean mutterWiederverheiratetUngewiss) {
-    this.mutterWiederverheiratetUngewiss = mutterWiederverheiratetUngewiss;
-    return this;
-  }
-
-  
-  @JsonProperty("mutterWiederverheiratetUngewiss")
-  public Boolean getMutterWiederverheiratetUngewiss() {
-    return mutterWiederverheiratetUngewiss;
-  }
-
-  @JsonProperty("mutterWiederverheiratetUngewiss")
-  public void setMutterWiederverheiratetUngewiss(Boolean mutterWiederverheiratetUngewiss) {
-    this.mutterWiederverheiratetUngewiss = mutterWiederverheiratetUngewiss;
-  }
-
-  /**
-   **/
-  public DemoFamiliensituationDto vaterWiederverheiratetUngewiss(Boolean vaterWiederverheiratetUngewiss) {
-    this.vaterWiederverheiratetUngewiss = vaterWiederverheiratetUngewiss;
-    return this;
-  }
-
-  
-  @JsonProperty("vaterWiederverheiratetUngewiss")
-  public Boolean getVaterWiederverheiratetUngewiss() {
-    return vaterWiederverheiratetUngewiss;
-  }
-
-  @JsonProperty("vaterWiederverheiratetUngewiss")
-  public void setVaterWiederverheiratetUngewiss(Boolean vaterWiederverheiratetUngewiss) {
-    this.vaterWiederverheiratetUngewiss = vaterWiederverheiratetUngewiss;
-  }
-
 
   @Override
   public boolean equals(Object o) {
@@ -376,26 +262,20 @@ public class DemoFamiliensituationDto  implements Serializable {
     return Objects.equals(this.elternVerheiratetZusammen, demoFamiliensituation.elternVerheiratetZusammen) &&
         Objects.equals(this.gerichtlicheAlimentenregelung, demoFamiliensituation.gerichtlicheAlimentenregelung) &&
         Objects.equals(this.werZahltAlimente, demoFamiliensituation.werZahltAlimente) &&
-        Objects.equals(this.mutterWiederverheiratetAlimente, demoFamiliensituation.mutterWiederverheiratetAlimente) &&
-        Objects.equals(this.vaterWiederverheiratetAlimente, demoFamiliensituation.vaterWiederverheiratetAlimente) &&
         Objects.equals(this.elternteilUnbekanntVerstorben, demoFamiliensituation.elternteilUnbekanntVerstorben) &&
         Objects.equals(this.mutterVerstorben, demoFamiliensituation.mutterVerstorben) &&
         Objects.equals(this.mutterUnbekannt, demoFamiliensituation.mutterUnbekannt) &&
         Objects.equals(this.mutterUnbekanntGrund, demoFamiliensituation.mutterUnbekanntGrund) &&
         Objects.equals(this.mutterKeineOptionen, demoFamiliensituation.mutterKeineOptionen) &&
-        Objects.equals(this.mutterWiederverheiratetUnbekannt, demoFamiliensituation.mutterWiederverheiratetUnbekannt) &&
         Objects.equals(this.vaterVerstorben, demoFamiliensituation.vaterVerstorben) &&
         Objects.equals(this.vaterUnbekannt, demoFamiliensituation.vaterUnbekannt) &&
         Objects.equals(this.vaterUnbekanntGrund, demoFamiliensituation.vaterUnbekanntGrund) &&
-        Objects.equals(this.vaterKeineOptionen, demoFamiliensituation.vaterKeineOptionen) &&
-        Objects.equals(this.vaterWiederverheiratetUnbekannt, demoFamiliensituation.vaterWiederverheiratetUnbekannt) &&
-        Objects.equals(this.mutterWiederverheiratetUngewiss, demoFamiliensituation.mutterWiederverheiratetUngewiss) &&
-        Objects.equals(this.vaterWiederverheiratetUngewiss, demoFamiliensituation.vaterWiederverheiratetUngewiss);
+        Objects.equals(this.vaterKeineOptionen, demoFamiliensituation.vaterKeineOptionen);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(elternVerheiratetZusammen, gerichtlicheAlimentenregelung, werZahltAlimente, mutterWiederverheiratetAlimente, vaterWiederverheiratetAlimente, elternteilUnbekanntVerstorben, mutterVerstorben, mutterUnbekannt, mutterUnbekanntGrund, mutterKeineOptionen, mutterWiederverheiratetUnbekannt, vaterVerstorben, vaterUnbekannt, vaterUnbekanntGrund, vaterKeineOptionen, vaterWiederverheiratetUnbekannt, mutterWiederverheiratetUngewiss, vaterWiederverheiratetUngewiss);
+    return Objects.hash(elternVerheiratetZusammen, gerichtlicheAlimentenregelung, werZahltAlimente, elternteilUnbekanntVerstorben, mutterVerstorben, mutterUnbekannt, mutterUnbekanntGrund, mutterKeineOptionen, vaterVerstorben, vaterUnbekannt, vaterUnbekanntGrund, vaterKeineOptionen);
   }
 
   @Override
@@ -406,21 +286,15 @@ public class DemoFamiliensituationDto  implements Serializable {
     sb.append("    elternVerheiratetZusammen: ").append(toIndentedString(elternVerheiratetZusammen)).append("\n");
     sb.append("    gerichtlicheAlimentenregelung: ").append(toIndentedString(gerichtlicheAlimentenregelung)).append("\n");
     sb.append("    werZahltAlimente: ").append(toIndentedString(werZahltAlimente)).append("\n");
-    sb.append("    mutterWiederverheiratetAlimente: ").append(toIndentedString(mutterWiederverheiratetAlimente)).append("\n");
-    sb.append("    vaterWiederverheiratetAlimente: ").append(toIndentedString(vaterWiederverheiratetAlimente)).append("\n");
     sb.append("    elternteilUnbekanntVerstorben: ").append(toIndentedString(elternteilUnbekanntVerstorben)).append("\n");
     sb.append("    mutterVerstorben: ").append(toIndentedString(mutterVerstorben)).append("\n");
     sb.append("    mutterUnbekannt: ").append(toIndentedString(mutterUnbekannt)).append("\n");
     sb.append("    mutterUnbekanntGrund: ").append(toIndentedString(mutterUnbekanntGrund)).append("\n");
     sb.append("    mutterKeineOptionen: ").append(toIndentedString(mutterKeineOptionen)).append("\n");
-    sb.append("    mutterWiederverheiratetUnbekannt: ").append(toIndentedString(mutterWiederverheiratetUnbekannt)).append("\n");
     sb.append("    vaterVerstorben: ").append(toIndentedString(vaterVerstorben)).append("\n");
     sb.append("    vaterUnbekannt: ").append(toIndentedString(vaterUnbekannt)).append("\n");
     sb.append("    vaterUnbekanntGrund: ").append(toIndentedString(vaterUnbekanntGrund)).append("\n");
     sb.append("    vaterKeineOptionen: ").append(toIndentedString(vaterKeineOptionen)).append("\n");
-    sb.append("    vaterWiederverheiratetUnbekannt: ").append(toIndentedString(vaterWiederverheiratetUnbekannt)).append("\n");
-    sb.append("    mutterWiederverheiratetUngewiss: ").append(toIndentedString(mutterWiederverheiratetUngewiss)).append("\n");
-    sb.append("    vaterWiederverheiratetUngewiss: ").append(toIndentedString(vaterWiederverheiratetUngewiss)).append("\n");
     sb.append("}");
     return sb.toString();
   }

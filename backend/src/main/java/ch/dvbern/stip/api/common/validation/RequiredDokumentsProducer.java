@@ -24,5 +24,5 @@ import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import org.apache.commons.lang3.tuple.Pair;
 
 public interface RequiredDokumentsProducer {
-    Pair<String, Set<DokumentTyp>> getRequiredDokuments(final GesuchFormular formular);
+    Pair<String, Set<DokumentTyp>> getRequiredDokuments(final GesuchFormular formular, final boolean includeHidden);
 }

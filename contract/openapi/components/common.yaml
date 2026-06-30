@@ -292,6 +292,16 @@ Fall:
       type: string
     tenant:
       type: string
+FallHeader:
+  required:
+    - fallId
+    - unreadNotificationsCount
+  type: object
+  properties:
+    fallId:
+      $ref: '#/UUID'
+    unreadNotificationsCount:
+      type: integer
 Gesuchsjahr:
   type: object
   required:
@@ -934,12 +944,16 @@ Notification:
   description: Notification for a Gesuch
   type: object
   required:
+    - id
     - notificationType
     - fallId
     - timestampErstellt
     - userErstellt
     - absender
+    - read
   properties:
+    id:
+      $ref: '#/UUID'
     notificationText:
       type: string
     notificationType:
@@ -954,6 +968,8 @@ Notification:
       $ref: "#/LocalDate"
     absender:
       type: string
+    read:
+      type: boolean
 NotificationType:
   enum:
     - GESUCH_EINGEREICHT

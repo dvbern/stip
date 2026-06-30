@@ -24,16 +24,18 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @XmlRootElement(name = "table")
 @XmlAccessorType(XmlAccessType.FIELD)
+@lombok.Builder
+@Builder(style = BuilderStyle.STAGED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class TableDto {
 
     @XmlElement(name = "head")

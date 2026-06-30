@@ -1,35 +1,40 @@
-<button
-  type="button"
-  class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-2"
-  [attr.aria-label]="'shared.dialog.unsavedChanges.cancel' | transloco"
-  (click)="cancel()"
->
-  <span class="material-symbols-rounded">close</span>
-</button>
-<form [formGroup]="form" class="tw:flex tw:w-full tw:flex-col tw:gap-4 tw:p-6" (ngSubmit)="returnKorrektur()">
-  <h1 class="tw:text-xl tw:font-semibold tw:mb-6!">
-    {{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title' | transloco }}
-  </h1>
-  <mat-form-field dvSharedUiFormField class="tw:w-full">
-    <mat-label>{{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag' | transloco }}</mat-label>
-    <input matInput [maskito]="maskitoNumberWithNegative" formControlName="betrag" />
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field dvSharedUiFormField class="tw:w-full">
-    <mat-label>{{ 'sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment' | transloco }}</mat-label>
-    <textarea matInput formControlName="comment" rows="4"></textarea>
-    <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
-    </mat-error>
-  </mat-form-field>
-  <div class="tw:mt-6 tw:flex tw:w-full tw:justify-end tw:gap-3">
-    <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
-      {{ 'shared.ui.confirmDialog.cancel' | transloco }}
-    </button>
-    <button type="submit" class="tw:dv-button-main-primary" data-testid="dialog-confirm">
-      {{ 'shared.form.save' | transloco }}
-    </button>
-  </div>
-</form>
+<ng-container *dvTranslocoSb="let t">
+  <button
+    type="button"
+    class="tw:dv-button-icon tw:absolute tw:right-0 tw:top-0 tw:m-2"
+    [attr.aria-label]="t('shared.dialog.unsavedChanges.cancel')"
+    (click)="cancel()"
+  >
+    <span class="material-symbols-rounded">close</span>
+  </button>
+  <form [formGroup]="form" class="tw:flex tw:w-full tw:flex-col tw:gap-4 tw:p-6" (ngSubmit)="returnKorrektur()">
+    <h1 class="tw:text-xl tw:font-semibold tw:mb-6!">
+      {{ t('sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title') }}
+    </h1>
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
+      <mat-label>{{ t('sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag') }}</mat-label>
+      <input matInput [maskito]="maskitoNumberWithNegative" formControlName="betrag" />
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+      <mat-error *dvSharedUiFormMessageError="'notZero'">
+        {{ t('sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.error.notZero') }}
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field dvSharedUiFormField class="tw:w-full">
+      <mat-label>{{ t('sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment') }}</mat-label>
+      <textarea matInput formControlName="comment" rows="4"></textarea>
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </mat-form-field>
+    <div class="tw:mt-6 tw:flex tw:w-full tw:justify-end tw:gap-3">
+      <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
+        {{ t('shared.ui.confirmDialog.cancel') }}
+      </button>
+      <button type="submit" class="tw:dv-button-main-primary" data-testid="dialog-confirm">
+        {{ t('shared.form.save') }}
+      </button>
+    </div>
+  </form>
+</ng-container>

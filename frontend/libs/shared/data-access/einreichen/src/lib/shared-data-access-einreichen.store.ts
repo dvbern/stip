@@ -6,6 +6,7 @@ import { map, pipe, switchMap, tap, throwError, withLatestFrom } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchCache,
@@ -70,6 +71,7 @@ export class EinreichenStore extends signalStore(
   private store = inject(Store);
   private gesuchService = inject(GesuchService);
   private dokumentsStore = inject(DokumentsStore);
+  private fallHeaderStore = inject(FallHeaderStore);
   private gesuchTrancheService = inject(GesuchTrancheService);
   private config = inject(SharedModelCompileTimeConfig);
   private gesuchViewSig = this.store.selectSignal(
@@ -275,21 +277,29 @@ export class EinreichenStore extends signalStore(
     });
   };
 
-  gesuchEinreichen$ = rxMethod<{ gesuchTrancheId: string }>(
+  gesuchEinreichen$ = rxMethod<{
+    gesuchTrancheId: string;
+    onSuccess: () => void;
+  }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           einreichungsResult: pending(),
         }));
       }),
-      switchMap(({ gesuchTrancheId }) =>
+      switchMap(({ gesuchTrancheId, onSuccess }) =>
         this.gesuchService.gesuchEinreichenGs$({ gesuchTrancheId }).pipe(
           handleApiResponse(
             (einreichen) =>
               patchState(this, { einreichungsResult: einreichen }),
             {
-              onSuccess: () => {
+              onSuccess: (einreichen) => {
                 this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+
+                this.fallHeaderStore.loadFallHeader$({
+                  fallId: einreichen.fallId,
+                });
+                onSuccess();
               },
             },
           ),
@@ -298,14 +308,14 @@ export class EinreichenStore extends signalStore(
     ),
   );
 
-  aenderungEinreichen$ = rxMethod<{ trancheId: string }>(
+  aenderungEinreichen$ = rxMethod<{ trancheId: string; onSuccess: () => void }>(
     pipe(
       tap(() => {
         patchState(this, () => ({
           trancheEinreichenResult: pending(),
         }));
       }),
-      switchMap(({ trancheId }) =>
+      switchMap(({ trancheId, onSuccess }) =>
         this.gesuchTrancheService
           .aenderungEinreichen$({ aenderungId: trancheId })
           .pipe(
@@ -317,6 +327,7 @@ export class EinreichenStore extends signalStore(
                   this.store.dispatch(
                     SharedDataAccessGesuchEvents.loadGesuch(),
                   );
+                  onSuccess();
                 },
               },
             ),

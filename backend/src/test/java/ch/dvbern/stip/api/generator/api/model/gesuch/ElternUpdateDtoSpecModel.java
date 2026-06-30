@@ -44,6 +44,7 @@ public class ElternUpdateDtoSpecModel {
             model.setIdentischerZivilrechtlicherWohnsitzPLZ("3011");
             model.setTelefonnummer("+41 79 111 11 11");
             model.setAusweisbFluechtling(false);
+            model.setWiederverheiratet(null);
         }, amount);
     }
 
