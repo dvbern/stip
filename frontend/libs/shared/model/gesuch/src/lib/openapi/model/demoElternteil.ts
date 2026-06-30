@@ -31,6 +31,7 @@ export interface DemoElternteil {
     telefonnummer: string;
     sozialhilfebeitraege: boolean;
     ausweisbFluechtling: boolean;
+    wiederverheiratet?: boolean;
 }
 
 

@@ -15,7 +15,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.gesuchformular.validation;
+package ch.dvbern.stip.api.statistik.exception;
 
-public interface DocumentsRequiredValidationGroup {
+public class StatistikGemeindeLookupException extends RuntimeException {
 }

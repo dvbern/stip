@@ -47,7 +47,6 @@ import {
   SharedUiDashboardCompactAusbildungComponent,
 } from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { isPending } from '@dv/shared/util/remote-data';
 
@@ -61,7 +60,6 @@ import { selectGesuchAppFeatureCockpitView } from './gesuch-app-feature-cockpit.
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiClearButtonComponent,
-    SharedUiNotificationsComponent,
     SharedUiDashboardAusbildungComponent,
     SharedUiDashboardCompactAusbildungComponent,
     GesuchAppUiAdvTranslocoDirective,

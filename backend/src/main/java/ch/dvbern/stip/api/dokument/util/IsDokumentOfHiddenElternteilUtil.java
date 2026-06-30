@@ -26,7 +26,7 @@ import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class IsDokumentOfVersteckterElternteilUtil {
+public class IsDokumentOfHiddenElternteilUtil {
     private static final EnumSet<DokumentTyp> POTENTIALLY_HIDDEN_VATER_DOKUMENTE = EnumSet.of(
         DokumentTyp.ELTERN_SOZIALHILFEBUDGET_VATER,
         DokumentTyp.ELTERN_MIETVERTRAG_HYPOTEKARZINSABRECHNUNG_VATER,
@@ -57,9 +57,9 @@ public class IsDokumentOfVersteckterElternteilUtil {
         };
     }
 
-    public boolean isVerstecktesDokument(final Set<ElternTyp> versteckteEltern, final GesuchDokument gesuchDokument) {
-        for (final var verstecktesElternteil : versteckteEltern) {
-            final var dokumente = getDokumenteFor(verstecktesElternteil);
+    public boolean isHiddenDokument(final Set<ElternTyp> hiddenElterns, final GesuchDokument gesuchDokument) {
+        for (final var hiddenElternteil : hiddenElterns) {
+            final var dokumente = getDokumenteFor(hiddenElternteil);
             if (dokumente.contains(gesuchDokument.getDokumentTyp())) {
                 return true;
             } else {

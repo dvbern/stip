@@ -40,7 +40,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_ID,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   GeschwisterUpdateDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
-  GeschwisterUpdateDtoSpec.JSON_PROPERTY_NACHNAME
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_NACHNAME,
+  GeschwisterUpdateDtoSpec.JSON_PROPERTY_HIDDEN
 })
 @JsonTypeName("GeschwisterUpdate")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -71,6 +72,9 @@ public class GeschwisterUpdateDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_HIDDEN = "hidden";
+  private Boolean hidden;
 
   public GeschwisterUpdateDtoSpec() {
   }
@@ -308,6 +312,32 @@ public class GeschwisterUpdateDtoSpec {
     this.nachname = nachname;
   }
 
+
+  public GeschwisterUpdateDtoSpec hidden(Boolean hidden) {
+    
+    this.hidden = hidden;
+    return this;
+  }
+
+   /**
+   * Get hidden
+   * @return hidden
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getHidden() {
+    return hidden;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_HIDDEN)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHidden(Boolean hidden) {
+    this.hidden = hidden;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -325,12 +355,13 @@ public class GeschwisterUpdateDtoSpec {
         Objects.equals(this.id, geschwisterUpdate.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwisterUpdate.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwisterUpdate.wohnsitzAnteilVater) &&
-        Objects.equals(this.nachname, geschwisterUpdate.nachname);
+        Objects.equals(this.nachname, geschwisterUpdate.nachname) &&
+        Objects.equals(this.hidden, geschwisterUpdate.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, hidden);
   }
 
   @Override
@@ -346,6 +377,7 @@ public class GeschwisterUpdateDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
   }

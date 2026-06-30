@@ -123,4 +123,8 @@ public class Eltern extends AbstractPerson {
     @Column(name = "wohnkosten")
     @Min(0)
     private Integer wohnkosten;
+
+    @Nullable
+    @Column(name = "wiederverheiratet")
+    private Boolean wiederverheiratet;
 }

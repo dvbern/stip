@@ -17,6 +17,13 @@
 
 package ch.dvbern.stip.api.common.authorization;
 
+import java.util.UUID;
+
+import ch.dvbern.stip.api.benutzer.service.BenutzerService;
+import ch.dvbern.stip.api.common.authorization.util.AuthorizerUtil;
+import ch.dvbern.stip.api.fall.service.FallService;
+import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +31,34 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Authorizer
 public class NotificationAuthorizer extends BaseAuthorizer {
-    public void canGetForCurrentUser() {
-        permitAll();
+    private final BenutzerService benutzerService;
+    private final SozialdienstService sozialdienstService;
+    private final FallService fallService;
+    private final NotificationService notificationService;
+
+    public void canGetForFall(final UUID fallId) {
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                fallService.getById(fallId),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
+    }
+
+    public void canMarkAsRead(final UUID notificationId) {
+        final var notification = notificationService.requireById(notificationId);
+
+        if (
+            !AuthorizerUtil.canReadAndIsGesuchstellerOfOrDelegatedToSozialdienst(
+                notification.getFall(),
+                benutzerService.getCurrentBenutzer(),
+                sozialdienstService
+            )
+        ) {
+            forbidden();
+        }
     }
 }

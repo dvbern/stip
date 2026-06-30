@@ -511,6 +511,7 @@
   "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.title": "Correction du solde",
   "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.betrag": "Montant",
   "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.comment": "Remarque",
+  "sachbearbeitung-app.infos.buchhaltung.manuelleSaldoKorrektur.error.notZero": "Zéro est une valeur non valide",
   "sachbearbeitung-app.infos.buchhaltung.table.user": "Utilisateur",
   "sachbearbeitung-app.infos.buchhaltung.table.datum": "Date",
   "sachbearbeitung-app.infos.buchhaltung.table.stipendienbetrag": "Montant",

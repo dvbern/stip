@@ -63,6 +63,9 @@ public class BuchhaltungService {
     private final ZahlungsverbindungRepository zahlungsverbindungRepository;
     private final EntityCopyMapper entityCopyMapper;
 
+    public record Last2Buchhaltungs(Buchhaltung latest, Optional<Buchhaltung> previous) {
+    }
+
     private int getLastEntrySaldo(List<Buchhaltung> buchhaltungList) {
         return buchhaltungList
             .stream()
@@ -77,6 +80,22 @@ public class BuchhaltungService {
             .max(Comparator.comparing(AbstractEntity::getTimestampErstellt))
             .map(Buchhaltung::getSaldo)
             .orElse(0);
+    }
+
+    @Transactional
+    public Last2Buchhaltungs getLast2BuchhaltungEntrys(final UUID fallId) {
+        final var buchhaltungs = buchhaltungRepository.findAllForFallId(fallId)
+            .sorted(Comparator.comparing(AbstractEntity::getTimestampErstellt).reversed())
+            .limit(2)
+            .toList();
+
+        if (buchhaltungs.isEmpty()) {
+            throw new NotFoundException();
+        }
+
+        return new Last2Buchhaltungs(
+            buchhaltungs.getFirst(), buchhaltungs.size() > 1 ? Optional.of(buchhaltungs.get(1)) : Optional.empty()
+        );
     }
 
     @Transactional

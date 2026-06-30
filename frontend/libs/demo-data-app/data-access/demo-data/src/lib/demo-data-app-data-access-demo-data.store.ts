@@ -1,7 +1,7 @@
 import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { mergeMap, pipe, switchMap, tap } from 'rxjs';
 
 import { DemoDataAppTranslationKey } from '@dv/demo-data-app/assets/i18n';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -32,12 +32,18 @@ type DemoDataState = {
   demoDataTestBerechnungResultats: CachedRemoteData<
     DemoDataTestBerechnungResultat[]
   >;
+  runningGenerateAllRuns: number[];
+  generateAllRun: RemoteData<unknown>;
+  generateStatistikRun: RemoteData<unknown>;
 };
 
 const initialState: DemoDataState = {
   demoData: initial(),
   lastDemoDataRun: initial(),
   demoDataTestBerechnungResultats: initial(),
+  runningGenerateAllRuns: [],
+  generateAllRun: initial(),
+  generateStatistikRun: initial(),
 };
 
 type DemoDataError = SharedModelError & {
@@ -259,6 +265,68 @@ export class DemoDataStore extends signalStore(
       ),
     ),
   );
+
+  generateAllGesucheAsVerfuegt$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          generateAllRun: pending(),
+        });
+      }),
+      mergeMap(() =>
+        this.demoDataService.generateAllGesucheAsVerfuegt$().pipe(
+          handleApiResponse(
+            (testResult) =>
+              patchState(this, () => ({
+                generateAllRun: testResult,
+              })),
+            {
+              onSuccess: () => {
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey:
+                      'demo-data-app.overview.generate-multi.persistent.success',
+                  },
+                );
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+
+  getStatistikXmlWithAllTestcases$ = rxMethod<void>(
+    pipe(
+      tap(() => {
+        patchState(this, {
+          generateStatistikRun: pending(),
+        });
+      }),
+      mergeMap(() =>
+        this.demoDataService.getStatistikXmlWithAllTestcases$().pipe(
+          handleApiResponse(
+            (generateStatistikRun) => {
+              patchState(this, () => ({
+                generateStatistikRun,
+              }));
+            },
+            {
+              onSuccess: (blob) => {
+                saveBlob(blob, 'Testcase_Statistik_XML.xml');
+                this.globalNotificationStore.createSuccessNotification<DemoDataAppTranslationKey>(
+                  {
+                    messageKey:
+                      'demo-data-app.overview.generate-multi.xmlStatistik.success',
+                  },
+                );
+              },
+            },
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 const TESTFALL_REGEX = /^(ST|TF)-([0-9]+)(\.([0-9]+))?$/;
@@ -277,4 +345,17 @@ const sortByTestfall = (a: DemoDataSlim, b: DemoDataSlim) => {
   const totalA = parseInt(matchesA[2]) + parseInt(matchesA[4] ?? 0) / 100;
   const totalB = parseInt(matchesB[2]) + parseInt(matchesB[4] ?? 0) / 100;
   return totalA - totalB;
+};
+
+const saveBlob = (blob: Blob, fileName: string) => {
+  const a = document.createElement('a');
+  document.body.appendChild(a);
+  a.style = 'display: none';
+
+  const url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+  a.remove();
 };

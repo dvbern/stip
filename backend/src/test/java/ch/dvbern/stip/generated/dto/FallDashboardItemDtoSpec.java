@@ -18,7 +18,6 @@ import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungDashboardItemDtoSpec;
 import ch.dvbern.stip.generated.dto.DelegierungSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDtoSpec;
-import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -37,7 +36,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonPropertyOrder({
   FallDashboardItemDtoSpec.JSON_PROPERTY_FALL,
   FallDashboardItemDtoSpec.JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS,
-  FallDashboardItemDtoSpec.JSON_PROPERTY_NOTIFICATIONS,
   FallDashboardItemDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG,
   FallDashboardItemDtoSpec.JSON_PROPERTY_EARLIEST_ACTIVE_GESUCH_PERIODE_START
 })
@@ -49,9 +47,6 @@ public class FallDashboardItemDtoSpec {
 
   public static final String JSON_PROPERTY_AUSBILDUNG_DASHBOARD_ITEMS = "ausbildungDashboardItems";
   private List<AusbildungDashboardItemDtoSpec> ausbildungDashboardItems;
-
-  public static final String JSON_PROPERTY_NOTIFICATIONS = "notifications";
-  private List<NotificationDtoSpec> notifications;
 
   public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
   private DelegierungSlimDtoSpec currentDelegierung;
@@ -122,40 +117,6 @@ public class FallDashboardItemDtoSpec {
   }
 
 
-  public FallDashboardItemDtoSpec notifications(List<NotificationDtoSpec> notifications) {
-    
-    this.notifications = notifications;
-    return this;
-  }
-
-  public FallDashboardItemDtoSpec addNotificationsItem(NotificationDtoSpec notificationsItem) {
-    if (this.notifications == null) {
-      this.notifications = new ArrayList<>();
-    }
-    this.notifications.add(notificationsItem);
-    return this;
-  }
-
-   /**
-   * Get notifications
-   * @return notifications
-  **/
-  @jakarta.annotation.Nonnull
-  @JsonProperty(JSON_PROPERTY_NOTIFICATIONS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-
-  public List<NotificationDtoSpec> getNotifications() {
-    return notifications;
-  }
-
-
-  @JsonProperty(JSON_PROPERTY_NOTIFICATIONS)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setNotifications(List<NotificationDtoSpec> notifications) {
-    this.notifications = notifications;
-  }
-
-
   public FallDashboardItemDtoSpec currentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
     
     this.currentDelegierung = currentDelegierung;
@@ -218,14 +179,13 @@ public class FallDashboardItemDtoSpec {
     FallDashboardItemDtoSpec fallDashboardItem = (FallDashboardItemDtoSpec) o;
     return Objects.equals(this.fall, fallDashboardItem.fall) &&
         Objects.equals(this.ausbildungDashboardItems, fallDashboardItem.ausbildungDashboardItems) &&
-        Objects.equals(this.notifications, fallDashboardItem.notifications) &&
         Objects.equals(this.currentDelegierung, fallDashboardItem.currentDelegierung) &&
         Objects.equals(this.earliestActiveGesuchPeriodeStart, fallDashboardItem.earliestActiveGesuchPeriodeStart);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fall, ausbildungDashboardItems, notifications, currentDelegierung, earliestActiveGesuchPeriodeStart);
+    return Objects.hash(fall, ausbildungDashboardItems, currentDelegierung, earliestActiveGesuchPeriodeStart);
   }
 
   @Override
@@ -234,7 +194,6 @@ public class FallDashboardItemDtoSpec {
     sb.append("class FallDashboardItemDtoSpec {\n");
     sb.append("    fall: ").append(toIndentedString(fall)).append("\n");
     sb.append("    ausbildungDashboardItems: ").append(toIndentedString(ausbildungDashboardItems)).append("\n");
-    sb.append("    notifications: ").append(toIndentedString(notifications)).append("\n");
     sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("    earliestActiveGesuchPeriodeStart: ").append(toIndentedString(earliestActiveGesuchPeriodeStart)).append("\n");
     sb.append("}");

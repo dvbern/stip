@@ -17,12 +17,28 @@
 
 package ch.dvbern.stip.api.demo.repo;
 
+import java.util.List;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.demo.entity.DemoData;
+import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.QGesuch;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class DemoDataRepository implements BaseRepository<DemoData> {
+    static final QGesuch Q_GESUCH = QGesuch.gesuch;
+
+    public List<UUID> getMassGeneratedGesuche(final String fallPrefix) {
+        final var queryFactory = new JPAQueryFactory(getEntityManager());
+
+        final var query = queryFactory
+            .selectFrom(Q_GESUCH)
+            .where(Q_GESUCH.ausbildung.fall.fallNummer.startsWith(fallPrefix));
+        return query.stream().map(Gesuch::getId).toList();
+    }
 }

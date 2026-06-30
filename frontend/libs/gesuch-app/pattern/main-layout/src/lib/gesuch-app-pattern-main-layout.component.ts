@@ -10,6 +10,7 @@ import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
@@ -64,6 +65,7 @@ export class GesuchAppPatternMainLayoutComponent {
   private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
+  private fallHeaderStore = inject(FallHeaderStore);
 
   baseMenuItems = gesuchBaseMenuItems;
 
@@ -91,6 +93,7 @@ export class GesuchAppPatternMainLayoutComponent {
 
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
+        this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
 
@@ -102,6 +105,8 @@ export class GesuchAppPatternMainLayoutComponent {
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
+      const gesuchHeader = this.gesuchHeaderStore.viewSig();
+      const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -113,7 +118,7 @@ export class GesuchAppPatternMainLayoutComponent {
 
       const gesuchNav = buildGesuchNavItems(
         gesuchId,
-        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
+        gesuchHeader.currentTranches ?? [],
         tabSegments,
         this.trancheIdSig(),
       );
@@ -124,6 +129,19 @@ export class GesuchAppPatternMainLayoutComponent {
         id: 'auszahlungen',
         label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
+      };
+
+      const nachrichten: NavItem = {
+        type: 'link',
+        id: 'nachrichten',
+        icon: 'mail',
+        label: { key: 'shared.menu.nachrichten' },
+        route: ['/nachrichten', fallId],
+        badge: fallHeader?.unreadNotificationsCount
+          ? {
+              count: fallHeader.unreadNotificationsCount,
+            }
+          : undefined,
       };
 
       const darlehenMenu = buildDarlehenMenu({
@@ -142,6 +160,7 @@ export class GesuchAppPatternMainLayoutComponent {
         ...gesuchNav,
         darlehenMenu,
         auszahlungMenu,
+        nachrichten,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

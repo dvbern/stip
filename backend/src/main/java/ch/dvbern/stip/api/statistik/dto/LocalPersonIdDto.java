@@ -21,15 +21,17 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jilt.Builder;
+import org.jilt.BuilderStyle;
 
 @Data
-@Builder
+@XmlAccessorType(XmlAccessType.FIELD)
+@lombok.Builder
+@Builder(style = BuilderStyle.STAGED)
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlAccessorType(XmlAccessType.FIELD)
 public class LocalPersonIdDto {
     @XmlElement(name = "personIdCategory", namespace = "http://www.ech.ch/xmlns/eCH-0044/1")
     private String personIdCategory;

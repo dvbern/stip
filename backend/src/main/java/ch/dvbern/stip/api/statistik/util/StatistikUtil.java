@@ -18,23 +18,13 @@
 package ch.dvbern.stip.api.statistik.util;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.UUID;
 
-import ch.dvbern.stip.api.buchhaltung.entity.Buchhaltung;
+import ch.dvbern.stip.api.adresse.entity.Adresse;
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.common.util.DateUtil;
-import ch.dvbern.stip.api.common.util.KantonUtil;
-import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
-import ch.dvbern.stip.api.fall.entity.Fall;
-import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.gesuch.entity.Statisticsdata;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
-import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
-import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungType;
-import ch.dvbern.stip.api.statistik.type.StatistikBuchhaltungUnion;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeData;
 import ch.dvbern.stip.integration.gemeindelookup.domain.model.GemeindeLookupRequest;
 import ch.dvbern.stip.integration.gemeindelookup.domain.port.GemeindeLookupPortFactory;
@@ -44,126 +34,59 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @UtilityClass
 public class StatistikUtil {
+    public static final List<Integer> HOCHSCHULSTUFEN_BFS_KATEGORIES = List.of(8, 9, 10);
+
     public static int booleanToBfsCode(final boolean value) {
-        return value ? 2 : 1;
+        return value ? 1 : 2;
     }
 
-    public int getBfsCodeFromTenantIdentifier(final TenantIdentifier tenantIdentifier) {
-        return KantonUtil.getByTenantIdentifier(tenantIdentifier).getBfsCode();
-    }
-
-    public static GesuchTranche getLatestGesuchTrancheFromFallByYear(final Fall fall, final int year) {
-        final var trancheStream = fall.getAusbildungs()
-            .stream()
-            .flatMap(ausbildung -> ausbildung.getGesuchs().stream())
-            .flatMap(gesuch -> gesuch.getGesuchTranchen().stream());
-
-        return getLatestGesuchTrancheByYear(trancheStream, year);
-    }
-
-    public static GesuchTranche getLatestGesuchTrancheByYear(
-        final Stream<GesuchTranche> gesuchTrancheStream,
-        final int year
-    ) {
-        return gesuchTrancheStream
-            .filter(tranche -> {
-                final var gueltigkeit = tranche.getGueltigkeit();
-                final var gueltigAb = gueltigkeit.getGueltigAb();
-                final var gueltigBis = gueltigkeit.getGueltigBis();
-                return (gueltigAb != null && gueltigAb.getYear() == year)
-                || (gueltigBis != null && gueltigBis.getYear() == year);
-            })
-            .max(Comparator.comparing(tranche -> tranche.getGueltigkeit().getGueltigBis()))
-            .orElse(null);
-    }
-
-    public static Integer getBfsGemeindeNrFromGesuch(
-        final GesuchTranche gesuchTranche,
+    public static Optional<Integer> getGemeindeBfsNummerOrLookup(
+        final UUID gesuchId,
+        final Integer gemeindeBfsNr,
+        final Adresse adresse,
         final TenantIdentifier tenantIdentifier,
         final GemeindeLookupPortFactory gemeindeLookupPortFactory
     ) {
-        final var gesuch = gesuchTranche.getGesuch();
-        final var statisticsdata = Optional.ofNullable(gesuch.getStatisticsdata());
-
-        if (statisticsdata.isEmpty()) {
-            final var address = gesuchTranche.getGesuchFormular().getPersonInAusbildung().getAdresse();
-            final var gemeindeLookupRequest = GemeindeLookupRequest.builder()
-                .gesuchId(gesuch.getId())
-                .tenantIdentifier(tenantIdentifier)
-                .strasse(address.getStrasse())
-                .hausnummer(address.getHausnummer())
-                .plz(address.getPlz())
-                .ort(address.getOrt())
-                .build();
-
-            return gemeindeLookupPortFactory.getGemeindeLookupAdapter()
-                .findGemeindeData(gemeindeLookupRequest)
-                .map(GemeindeData::bfsNummer)
-                .orElse(null);
-        }
-
-        return statisticsdata
-            .map(Statisticsdata::getGemeindeBfsNr)
-            .orElse(null);
+        return Optional.ofNullable(gemeindeBfsNr)
+            .or(() -> getGemeindeBfsNummer(gesuchId, adresse, tenantIdentifier, gemeindeLookupPortFactory));
     }
 
-    public static boolean isFirstAusbildung(final GesuchTranche gesuchTranche) {
-        final var lebenslaufItems = gesuchTranche.getGesuchFormular().getLebenslaufItems();
-
-        return lebenslaufItems.stream()
-            .filter(LebenslaufItem::isAusbildung)
-            .anyMatch(LebenslaufItem::isAusbildungAbgeschlossen);
-    }
-
-    public static List<StatistikBuchhaltungUnion> combineBuchhaltungs(
-        final List<Buchhaltung> buchhaltungs,
-        final List<DarlehenBuchhaltungEntry> darlehenBuchhaltungs,
-        int year
+    public static Optional<Integer> getGemeindeBfsNummer(
+        final UUID gesuchId,
+        final Adresse adresse,
+        final TenantIdentifier tenantIdentifier,
+        final GemeindeLookupPortFactory gemeindeLookupPortFactory
     ) {
-        final var stipendiumStream = buchhaltungs.stream()
-            .map(
-                buchhaltung -> StatistikBuchhaltungUnion.builder()
-                    .gesuch(buchhaltung.getGesuch())
-                    .type(StatistikBuchhaltungType.STIPENDIUM)
-                    .betrag(buchhaltung.getBetrag())
-                    .anzahlSemester(getSemesterCount(buchhaltung.getGesuch(), year))
-                    .build()
-            );
+        final var gemeindeLookupRequest = GemeindeLookupRequest.builder()
+            .gesuchId(gesuchId)
+            .tenantIdentifier(tenantIdentifier)
+            .strasse(adresse.getStrasse())
+            .hausnummer(adresse.getHausnummer())
+            .plz(adresse.getPlz())
+            .ort(adresse.getOrt())
+            .build();
 
-        final var darlehenStream = darlehenBuchhaltungs.stream()
-            .map(
-                darlehenBuchhaltung -> StatistikBuchhaltungUnion.builder()
-                    .gesuch(darlehenBuchhaltung.getGesuch())
-                    .type(StatistikBuchhaltungType.DARLEHEN)
-                    .betrag(darlehenBuchhaltung.getBetrag())
-                    .anzahlSemester(getSemesterCount(darlehenBuchhaltung.getGesuch(), year))
-                    .build()
-            );
-
-        return Stream.concat(stipendiumStream, darlehenStream)
-            .toList();
+        return gemeindeLookupPortFactory.getGemeindeLookupAdapter()
+            .findGemeindeData(gemeindeLookupRequest)
+            .map(GemeindeData::bfsNummer);
     }
 
-    public static Integer getSemesterCount(final Gesuch gesuch, int year) {
-        final var ausbildung = gesuch.getAusbildung();
-        final LocalDate begin = ausbildung.getAusbildungBegin();
-        final LocalDate end = ausbildung.getAusbildungEnd();
-
-        if (begin.getYear() == year) {
-            if (DateUtil.isFruehling(begin)) {
+    public static Integer getSemesterCount(final LocalDate ausbildungBegin, final LocalDate ausbildungEnd, int year) {
+        if (ausbildungBegin.getYear() == year) {
+            if (DateUtil.isFruehling(ausbildungBegin)) {
                 return 2;
             }
-            if (DateUtil.isHerbst(begin)) {
+            if (DateUtil.isHerbst(ausbildungBegin)) {
                 return 1;
             }
             return null;
         }
 
-        if (end.getYear() == year) {
-            if (DateUtil.isFruehling(end)) {
+        if (ausbildungEnd.getYear() == year) {
+            if (DateUtil.isFruehling(ausbildungEnd)) {
                 return 1;
             }
-            if (DateUtil.isHerbst(end)) {
+            if (DateUtil.isHerbst(ausbildungEnd)) {
                 return 2;
             }
             return null;

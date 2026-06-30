@@ -58,9 +58,9 @@ public class GesuchMapperUtil {
         final var gesuchDto = gesuchMapper.toDto(gesuch);
         final GesuchTrancheDto gesuchTrancheToWorkWith;
         if (withVersteckteEltern) {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithConfidentialFields(tranche);
         } else {
-            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutElevatedPermissions(tranche);
+            gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutConfidentialFields(tranche);
         }
 
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheToWorkWith);
@@ -72,15 +72,15 @@ public class GesuchMapperUtil {
         final GesuchTranche tranche,
         final GesuchTranche changes,
         final boolean isInitial,
-        final boolean withElevatedPermissions
+        final boolean withConfidentialFields
     ) {
         var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setIsInitial(isInitial);
-        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutElevatedPermission(tranche, withElevatedPermissions));
+        dto.setGesuchTrancheToWorkWith(mapWithOrWithoutConfidentialFields(tranche, withConfidentialFields));
         if (Objects.isNull(changes)) {
             dto.setChanges(List.of());
         } else {
-            dto.setChanges(List.of(mapWithOrWithoutElevatedPermission(changes, withElevatedPermissions)));
+            dto.setChanges(List.of(mapWithOrWithoutConfidentialFields(changes, withConfidentialFields)));
         }
         return dto;
     }
@@ -89,14 +89,14 @@ public class GesuchMapperUtil {
         final Gesuch gesuch,
         final GesuchTranche tranche,
         final GesuchTranche changes,
-        final boolean withElevatedPermissions
+        final boolean withConfidentialFields
     ) {
         return toWithChangesDto(
             gesuch,
             tranche,
             changes,
             false,
-            withElevatedPermissions
+            withConfidentialFields
         );
     }
 
@@ -106,19 +106,19 @@ public class GesuchMapperUtil {
         final List<GesuchTranche> changes
     ) {
         final var dto = gesuchMapper.toWithChangesDto(gesuch);
-        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche));
-        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithElevatedPermissions).toList());
+        dto.setGesuchTrancheToWorkWith(gesuchTrancheMapper.toDtoWithConfidentialFields(tranche));
+        dto.setChanges(changes.stream().map(gesuchTrancheMapper::toDtoWithConfidentialFields).toList());
         return dto;
     }
 
-    private GesuchTrancheDto mapWithOrWithoutElevatedPermission(
+    private GesuchTrancheDto mapWithOrWithoutConfidentialFields(
         final GesuchTranche tranche,
-        final boolean withElevatedPermissions
+        final boolean withConfidentialFields
     ) {
-        if (withElevatedPermissions) {
-            return gesuchTrancheMapper.toDtoWithElevatedPermissions(tranche);
+        if (withConfidentialFields) {
+            return gesuchTrancheMapper.toDtoWithConfidentialFields(tranche);
         } else {
-            return gesuchTrancheMapper.toDtoWithoutElevatedPermissions(tranche);
+            return gesuchTrancheMapper.toDtoWithoutConfidentialFields(tranche);
         }
     }
 

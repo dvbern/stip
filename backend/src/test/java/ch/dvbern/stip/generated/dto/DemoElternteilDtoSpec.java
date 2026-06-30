@@ -46,7 +46,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DemoElternteilDtoSpec.JSON_PROPERTY_ALTER,
   DemoElternteilDtoSpec.JSON_PROPERTY_TELEFONNUMMER,
   DemoElternteilDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
-  DemoElternteilDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING
+  DemoElternteilDtoSpec.JSON_PROPERTY_AUSWEISB_FLUECHTLING,
+  DemoElternteilDtoSpec.JSON_PROPERTY_WIEDERVERHEIRATET
 })
 @JsonTypeName("DemoElternteil")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -107,6 +108,9 @@ public class DemoElternteilDtoSpec {
 
   public static final String JSON_PROPERTY_AUSWEISB_FLUECHTLING = "ausweisbFluechtling";
   private Boolean ausweisbFluechtling;
+
+  public static final String JSON_PROPERTY_WIEDERVERHEIRATET = "wiederverheiratet";
+  private Boolean wiederverheiratet;
 
   public DemoElternteilDtoSpec() {
   }
@@ -604,6 +608,32 @@ public class DemoElternteilDtoSpec {
     this.ausweisbFluechtling = ausweisbFluechtling;
   }
 
+
+  public DemoElternteilDtoSpec wiederverheiratet(Boolean wiederverheiratet) {
+    
+    this.wiederverheiratet = wiederverheiratet;
+    return this;
+  }
+
+   /**
+   * Get wiederverheiratet
+   * @return wiederverheiratet
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getWiederverheiratet() {
+    return wiederverheiratet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -631,12 +661,13 @@ public class DemoElternteilDtoSpec {
         Objects.equals(this.alter, demoElternteil.alter) &&
         Objects.equals(this.telefonnummer, demoElternteil.telefonnummer) &&
         Objects.equals(this.sozialhilfebeitraege, demoElternteil.sozialhilfebeitraege) &&
-        Objects.equals(this.ausweisbFluechtling, demoElternteil.ausweisbFluechtling);
+        Objects.equals(this.ausweisbFluechtling, demoElternteil.ausweisbFluechtling) &&
+        Objects.equals(this.wiederverheiratet, demoElternteil.wiederverheiratet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, geburtsdatum, alter, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling);
+    return Objects.hash(type, sozialversicherungsnummer, nachname, vorname, strasse, hausnummer, plz, ort, coAdresse, land, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzPLZ, identischerZivilrechtlicherWohnsitzOrt, wohnkosten, geburtsdatum, alter, telefonnummer, sozialhilfebeitraege, ausweisbFluechtling, wiederverheiratet);
   }
 
   @Override
@@ -662,6 +693,7 @@ public class DemoElternteilDtoSpec {
     sb.append("    telefonnummer: ").append(toIndentedString(telefonnummer)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    ausweisbFluechtling: ").append(toIndentedString(ausweisbFluechtling)).append("\n");
+    sb.append("    wiederverheiratet: ").append(toIndentedString(wiederverheiratet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -15,6 +15,7 @@ import { filter } from 'rxjs';
 
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
+import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import {
   SharedDataAccessGesuchEvents,
   selectSharedDataAccessGesuchsView,
@@ -49,6 +50,7 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
   einreichenStore = inject(EinreichenStore);
   dokumentsStore = inject(DokumentsStore);
   headerStore = inject(GesuchHeaderStore);
+  fallHeaderStore = inject(FallHeaderStore);
 
   gesuchViewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
 
@@ -108,10 +110,16 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
           if (isEditingAenderung) {
             this.einreichenStore.aenderungEinreichen$({
               trancheId,
+              onSuccess: () => {
+                this.fallHeaderStore.loadFallHeader$({ fallId: gesuch.fallId });
+              },
             });
           } else {
             this.einreichenStore.gesuchEinreichen$({
               gesuchTrancheId: trancheId,
+              onSuccess: () => {
+                this.fallHeaderStore.loadFallHeader$({ fallId: gesuch.fallId });
+              },
             });
           }
         }
@@ -125,9 +133,10 @@ export class SharedFeatureGesuchFormAbschlussComponent implements OnInit {
       this.dokumentsStore.fehlendeDokumenteEinreichen$({
         trancheId,
         tranchenTyp: trancheSetting.type,
-        onSuccess: () => {
+        onSuccess: (fallId) => {
           // Reload gesuch because the status has changed
           this.store.dispatch(SharedDataAccessGesuchEvents.loadGesuch());
+          this.fallHeaderStore.loadFallHeader$({ fallId });
         },
       });
     }

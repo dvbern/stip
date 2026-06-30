@@ -77,4 +77,8 @@ public class Notification extends AbstractTenantEntity {
     @Size(max = DB_DEFAULT_STRING_MEDIUM_LENGTH)
     @Column(name = "absender")
     private String absender;
+
+    @NotNull
+    @Column(name = "read")
+    private boolean read;
 }

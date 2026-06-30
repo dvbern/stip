@@ -18,7 +18,11 @@
 package ch.dvbern.stip.berechnung.dto.v1;
 
 import java.util.Objects;
+import java.util.Set;
 
+import ch.dvbern.stip.api.eltern.entity.Eltern;
+import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
@@ -41,7 +45,10 @@ public class FamiliensituationV1 {
     Boolean vaterWiederverheiratet;
     Boolean mutterWiederverheiratet;
 
-    public static FamiliensituationV1 fromFamiliensituation(final Familiensituation familiensituation) {
+    public static FamiliensituationV1 fromFamiliensituation(
+        final Familiensituation familiensituation,
+        final Set<Eltern> elterns
+    ) {
         return new FamiliensituationV1Builder()
             .elternVerheiratetZusammen(familiensituation.getElternVerheiratetZusammen())
             .gerichtlicheAlimentenregelung(
@@ -65,8 +72,12 @@ public class FamiliensituationV1 {
                     ElternAbwesenheitsGrund.WEDER_NOCH
                 ) != ElternAbwesenheitsGrund.WEDER_NOCH
             )
-            .vaterWiederverheiratet(Objects.requireNonNullElse(familiensituation.getVaterWiederverheiratet(), false))
-            .mutterWiederverheiratet(Objects.requireNonNullElse(familiensituation.getMutterWiederverheiratet(), false))
+            .vaterWiederverheiratet(
+                ElternUtil.getElternByType(elterns, ElternTyp.VATER).map(Eltern::getWiederverheiratet).orElse(false)
+            )
+            .mutterWiederverheiratet(
+                ElternUtil.getElternByType(elterns, ElternTyp.MUTTER).map(Eltern::getWiederverheiratet).orElse(false)
+            )
             .build();
     }
 }

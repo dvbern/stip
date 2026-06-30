@@ -54,7 +54,7 @@ class DokumentsRequiredDokumentProducerTest {
                 )
             );
 
-        final var requiredDocs = producer.getRequiredDokuments(formular);
+        final var requiredDocs = producer.getRequiredDokuments(formular, true);
         RequiredDocsUtil.requiresOneAndType(requiredDocs, DokumentTyp.KINDER_UNTERHALTSVERTRAG_TRENNUNGSKONVENTION);
     }
 }

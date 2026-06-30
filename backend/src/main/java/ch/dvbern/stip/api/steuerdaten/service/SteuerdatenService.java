@@ -18,16 +18,13 @@
 package ch.dvbern.stip.api.steuerdaten.service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
-import ch.dvbern.stip.api.familiensituation.entity.Familiensituation;
-import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.eltern.util.ElternUtil;
 import ch.dvbern.stip.api.gesuchtranche.repo.GesuchTrancheRepository;
 import ch.dvbern.stip.api.gesuchtranchehistory.service.GesuchTrancheHistoryService;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
@@ -104,14 +101,8 @@ public class SteuerdatenService {
 
         final Optional<Eltern> elternToUse = switch (steuerdatenTyp) {
             // If Familie, use Vater for lookup, see KSTIP-2734
-            case FAMILIE, VATER -> gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.VATER)
-                .findFirst();
-            case MUTTER -> gesuchFormular.getElterns()
-                .stream()
-                .filter(eltern -> eltern.getElternTyp() == ElternTyp.MUTTER)
-                .findFirst();
+            case FAMILIE, VATER -> ElternUtil.getElternByType(gesuchFormular.getElterns(), ElternTyp.VATER);
+            case MUTTER -> ElternUtil.getElternByType(gesuchFormular.getElterns(), ElternTyp.MUTTER);
         };
 
         String ssvn = elternToUse.orElseThrow(NotFoundException::new).getSozialversicherungsnummer();
@@ -126,7 +117,6 @@ public class SteuerdatenService {
             );
 
         steuerdaten = steuerdatenMapper.partialUpdate(steuerdatenPortData, steuerdaten);
-        updateDependentDataInSteuerdaten(steuerdaten, gesuchFormular);
         gesuchFormular.getSteuerdaten().add(steuerdaten);
 
         steuerdatenRepository.persistAndFlush(steuerdaten);
@@ -136,39 +126,5 @@ public class SteuerdatenService {
             .stream()
             .map(steuerdatenMapper::toDto)
             .toList();
-    }
-
-    private void updateDependentDataInSteuerdaten(
-        Steuerdaten steuerdaten,
-        GesuchFormular gesuchFormular
-    ) {
-        steuerdaten.setIsArbeitsverhaeltnisSelbstaendig(
-            evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-                steuerdaten,
-                gesuchFormular.getSteuerdaten(),
-                gesuchFormular.getFamiliensituation()
-            )
-        );
-    }
-
-    public boolean evaluateIsArbeitsverhaltnisSelbstaendigIfWiederverheiratet(
-        Steuerdaten actualSteuerdaten,
-        Set<Steuerdaten> allSteuerdatenTabs,
-        Familiensituation familiensituation
-    ) {
-        if (
-            Objects.nonNull(familiensituation.getVaterWiederverheiratet()) &&
-            familiensituation.getVaterWiederverheiratet()
-            || Objects.nonNull(familiensituation.getMutterWiederverheiratet())
-            && familiensituation.getMutterWiederverheiratet()
-        ) {
-            return allSteuerdatenTabs.stream()
-                .anyMatch(
-                    steuerdaten1 -> Objects.nonNull(steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig())
-                    && steuerdaten1.getIsArbeitsverhaeltnisSelbstaendig()
-                );
-        }
-
-        return actualSteuerdaten.getIsArbeitsverhaeltnisSelbstaendig();
     }
 }

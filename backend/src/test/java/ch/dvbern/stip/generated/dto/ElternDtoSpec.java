@@ -44,7 +44,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   ElternDtoSpec.JSON_PROPERTY_ELTERN_TYP,
   ElternDtoSpec.JSON_PROPERTY_NACHNAME,
   ElternDtoSpec.JSON_PROPERTY_SOZIALHILFEBEITRAEGE,
-  ElternDtoSpec.JSON_PROPERTY_WOHNKOSTEN
+  ElternDtoSpec.JSON_PROPERTY_WOHNKOSTEN,
+  ElternDtoSpec.JSON_PROPERTY_WIEDERVERHEIRATET
 })
 @JsonTypeName("Eltern")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -90,6 +91,9 @@ public class ElternDtoSpec {
 
   public static final String JSON_PROPERTY_WOHNKOSTEN = "wohnkosten";
   private Integer wohnkosten;
+
+  public static final String JSON_PROPERTY_WIEDERVERHEIRATET = "wiederverheiratet";
+  private Boolean wiederverheiratet;
 
   public ElternDtoSpec() {
   }
@@ -457,6 +461,32 @@ public class ElternDtoSpec {
     this.wohnkosten = wohnkosten;
   }
 
+
+  public ElternDtoSpec wiederverheiratet(Boolean wiederverheiratet) {
+    
+    this.wiederverheiratet = wiederverheiratet;
+    return this;
+  }
+
+   /**
+   * Get wiederverheiratet
+   * @return wiederverheiratet
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public Boolean getWiederverheiratet() {
+    return wiederverheiratet;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_WIEDERVERHEIRATET)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setWiederverheiratet(Boolean wiederverheiratet) {
+    this.wiederverheiratet = wiederverheiratet;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -479,12 +509,13 @@ public class ElternDtoSpec {
         Objects.equals(this.elternTyp, eltern.elternTyp) &&
         Objects.equals(this.nachname, eltern.nachname) &&
         Objects.equals(this.sozialhilfebeitraege, eltern.sozialhilfebeitraege) &&
-        Objects.equals(this.wohnkosten, eltern.wohnkosten);
+        Objects.equals(this.wohnkosten, eltern.wohnkosten) &&
+        Objects.equals(this.wiederverheiratet, eltern.wiederverheiratet);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, sozialversicherungsnummer, geburtsdatum, ausweisbFluechtling, id, elternTyp, nachname, sozialhilfebeitraege, wohnkosten);
+    return Objects.hash(vorname, adresse, identischerZivilrechtlicherWohnsitz, identischerZivilrechtlicherWohnsitzOrt, identischerZivilrechtlicherWohnsitzPLZ, telefonnummer, sozialversicherungsnummer, geburtsdatum, ausweisbFluechtling, id, elternTyp, nachname, sozialhilfebeitraege, wohnkosten, wiederverheiratet);
   }
 
   @Override
@@ -505,6 +536,7 @@ public class ElternDtoSpec {
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
     sb.append("    sozialhilfebeitraege: ").append(toIndentedString(sozialhilfebeitraege)).append("\n");
     sb.append("    wohnkosten: ").append(toIndentedString(wohnkosten)).append("\n");
+    sb.append("    wiederverheiratet: ").append(toIndentedString(wiederverheiratet)).append("\n");
     sb.append("}");
     return sb.toString();
   }

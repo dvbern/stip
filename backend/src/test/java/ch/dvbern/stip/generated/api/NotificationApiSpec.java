@@ -14,6 +14,7 @@
 package ch.dvbern.stip.generated.api;
 
 import ch.dvbern.stip.generated.dto.NotificationDtoSpec;
+import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,12 +57,17 @@ public class NotificationApiSpec {
 
     public List<Oper> getAllOperations() {
         return Arrays.asList(
-                getNotificationsForCurrentUser()
+                getNotificationsForFall(),
+                markNotificationAsRead()
         );
     }
 
-    public GetNotificationsForCurrentUserOper getNotificationsForCurrentUser() {
-        return new GetNotificationsForCurrentUserOper(createReqSpec());
+    public GetNotificationsForFallOper getNotificationsForFall() {
+        return new GetNotificationsForFallOper(createReqSpec());
+    }
+
+    public MarkNotificationAsReadOper markNotificationAsRead() {
+        return new MarkNotificationAsReadOper(createReqSpec());
     }
 
     /**
@@ -75,27 +81,28 @@ public class NotificationApiSpec {
     }
 
     /**
-     * Gets all notifications for the User
+     * Returns all notifications for the given Fall
      * 
      *
+     * @see #fallIdPath  (required)
      * return List&lt;NotificationDtoSpec&gt;
      */
-    public static class GetNotificationsForCurrentUserOper implements Oper {
+    public static class GetNotificationsForFallOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/notifications";
+        public static final String REQ_URI = "/fall/{fallId}/notifications";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
 
-        public GetNotificationsForCurrentUserOper(RequestSpecBuilder reqSpec) {
+        public GetNotificationsForFallOper(RequestSpecBuilder reqSpec) {
             this.reqSpec = reqSpec;
             reqSpec.setAccept("application/json");
             this.respSpec = new ResponseSpecBuilder();
         }
 
         /**
-         * GET /notifications
+         * GET /fall/{fallId}/notifications
          * @param handler handler
          * @param <T> type
          * @return type
@@ -106,7 +113,7 @@ public class NotificationApiSpec {
         }
 
         /**
-         * GET /notifications
+         * GET /fall/{fallId}/notifications
          * @param handler handler
          * @return List&lt;NotificationDtoSpec&gt;
          */
@@ -115,12 +122,23 @@ public class NotificationApiSpec {
             return execute(handler).as(type);
         }
 
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID)  (required)
+         * @return operation
+         */
+        public GetNotificationsForFallOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
         /**
          * Customize request specification
          * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
          * @return operation
          */
-        public GetNotificationsForCurrentUserOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+        public GetNotificationsForFallOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
             reqSpecCustomizer.accept(reqSpec);
             return this;
         }
@@ -130,7 +148,69 @@ public class NotificationApiSpec {
          * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
          * @return operation
          */
-        public GetNotificationsForCurrentUserOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+        public GetNotificationsForFallOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Marks a notification as read
+     * 
+     *
+     * @see #notificationIdPath  (required)
+     */
+    public static class MarkNotificationAsReadOper implements Oper {
+
+        public static final Method REQ_METHOD = PATCH;
+        public static final String REQ_URI = "/fall/notifications/{notificationId}/markAsRead";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public MarkNotificationAsReadOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("text/plain");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * PATCH /fall/notifications/{notificationId}/markAsRead
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        public static final String NOTIFICATION_ID_PATH = "notificationId";
+
+        /**
+         * @param notificationId (UUID)  (required)
+         * @return operation
+         */
+        public MarkNotificationAsReadOper notificationIdPath(Object notificationId) {
+            reqSpec.addPathParam(NOTIFICATION_ID_PATH, notificationId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public MarkNotificationAsReadOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public MarkNotificationAsReadOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

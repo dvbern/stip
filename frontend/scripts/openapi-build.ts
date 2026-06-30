@@ -64,6 +64,7 @@ const generatedApis = [
   'Tenant',
   'Verfuegung',
   'Massendruck',
+  'FallHeader',
 ];
 
 const ngVersion = dependencies['@angular/core'].replace(/[^0-9.]/, '');
