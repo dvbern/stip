@@ -329,11 +329,6 @@ public class GesuchFormular extends AbstractTenantEntity {
     @HasPageValidation(PersonInAusbildungPageValidation.class)
     private @Valid PersonInAusbildung personInAusbildung;
 
-    @Transient
-    public Ausbildung getAusbildung() {
-        return tranche.getGesuch().getAusbildung();
-    }
-
     @NotNull(groups = GesuchEinreichenValidationGroup.class)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(
@@ -411,5 +406,10 @@ public class GesuchFormular extends AbstractTenantEntity {
 
     public Optional<Eltern> getElternteilOfTyp(final ElternTyp elternTyp) {
         return elterns.stream().filter(elternteil -> elternteil.getElternTyp() == elternTyp).findFirst();
+    }
+
+    @Transient
+    public Ausbildung getAusbildung() {
+        return tranche.getGesuch().getAusbildung();
     }
 }

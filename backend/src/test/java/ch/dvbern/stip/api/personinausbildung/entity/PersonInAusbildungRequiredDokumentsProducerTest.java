@@ -129,7 +129,7 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
                 .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
         );
         RequiredDocsUtil
-            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.PERSON_MIETVERTRAG);
+            .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.PERSON_EIGENER_HAUSHALT);
     }
 
     @Test

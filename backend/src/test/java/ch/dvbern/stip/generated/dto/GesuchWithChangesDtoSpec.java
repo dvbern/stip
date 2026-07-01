@@ -51,6 +51,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchWithChangesDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_TO_WORK_WITH,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_EINREICHEDATUM,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_HAD_DELEGIERUNGS,
+  GesuchWithChangesDtoSpec.JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_DELEGIERUNG,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_NACHFRIST_DOKUMENTE,
   GesuchWithChangesDtoSpec.JSON_PROPERTY_VERFUEGT
@@ -102,6 +103,9 @@ public class GesuchWithChangesDtoSpec {
 
   public static final String JSON_PROPERTY_HAD_DELEGIERUNGS = "hadDelegierungs";
   private Boolean hadDelegierungs;
+
+  public static final String JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ = "minDateEigenerWohnsitz";
+  private LocalDate minDateEigenerWohnsitz;
 
   public static final String JSON_PROPERTY_DELEGIERUNG = "delegierung";
   private DelegierungSlimDtoSpec delegierung;
@@ -513,6 +517,32 @@ public class GesuchWithChangesDtoSpec {
   }
 
 
+  public GesuchWithChangesDtoSpec minDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+    return this;
+  }
+
+   /**
+   * Get minDateEigenerWohnsitz
+   * @return minDateEigenerWohnsitz
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public LocalDate getMinDateEigenerWohnsitz() {
+    return minDateEigenerWohnsitz;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_MIN_DATE_EIGENER_WOHNSITZ)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setMinDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+  }
+
+
   public GesuchWithChangesDtoSpec delegierung(DelegierungSlimDtoSpec delegierung) {
     
     this.delegierung = delegierung;
@@ -614,6 +644,7 @@ public class GesuchWithChangesDtoSpec {
         Objects.equals(this.gesuchTrancheToWorkWith, gesuchWithChanges.gesuchTrancheToWorkWith) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.hadDelegierungs, gesuchWithChanges.hadDelegierungs) &&
+        Objects.equals(this.minDateEigenerWohnsitz, gesuchWithChanges.minDateEigenerWohnsitz) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
         Objects.equals(this.verfuegt, gesuchWithChanges.verfuegt);
@@ -621,7 +652,7 @@ public class GesuchWithChangesDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente, verfuegt);
+    return Objects.hash(changes, isInitial, fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, bearbeiter, gesuchTrancheToWorkWith, einreichedatum, hadDelegierungs, minDateEigenerWohnsitz, delegierung, nachfristDokumente, verfuegt);
   }
 
   @Override
@@ -643,6 +674,7 @@ public class GesuchWithChangesDtoSpec {
     sb.append("    gesuchTrancheToWorkWith: ").append(toIndentedString(gesuchTrancheToWorkWith)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
+    sb.append("    minDateEigenerWohnsitz: ").append(toIndentedString(minDateEigenerWohnsitz)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    verfuegt: ").append(toIndentedString(verfuegt)).append("\n");

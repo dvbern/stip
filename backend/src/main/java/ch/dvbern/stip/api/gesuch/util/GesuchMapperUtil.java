@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.service.GesuchMapper;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
@@ -31,6 +32,8 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
+
+import static ch.dvbern.stip.api.common.util.Constants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -63,6 +66,9 @@ public class GesuchMapperUtil {
             gesuchTrancheToWorkWith = gesuchTrancheMapper.toDtoWithoutConfidentialFields(tranche);
         }
 
+        gesuchDto.minDateEigenerWohnsitz(
+            DateUtil.getEigenerWohnsitzStichtagDate(tranche.getGesuchFormular()).minusYears(MIN_AGE_EIGENER_WOHNSITZ)
+        );
         gesuchDto.setGesuchTrancheToWorkWith(gesuchTrancheToWorkWith);
         return gesuchDto;
     }
@@ -77,6 +83,9 @@ public class GesuchMapperUtil {
         var dto = gesuchMapper.toWithChangesDto(gesuch);
         dto.setIsInitial(isInitial);
         dto.setGesuchTrancheToWorkWith(mapWithOrWithoutConfidentialFields(tranche, withConfidentialFields));
+        dto.minDateEigenerWohnsitz(
+            DateUtil.getEigenerWohnsitzStichtagDate(tranche.getGesuchFormular()).minusYears(MIN_AGE_EIGENER_WOHNSITZ)
+        );
         if (Objects.isNull(changes)) {
             dto.setChanges(List.of());
         } else {

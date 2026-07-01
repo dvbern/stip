@@ -37,6 +37,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
+import static ch.dvbern.stip.api.common.util.Constants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor
@@ -111,8 +112,11 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
             requiredDocs.add(DokumentTyp.PERSON_KESB_ERNENNUNG);
         }
 
-        if (pia.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
-            requiredDocs.add(DokumentTyp.PERSON_MIETVERTRAG);
+        if (
+            pia.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT
+            && DateUtil.getPiaAgeDifferenceToEigenerWohnsitzStichtagDate(formular) < MIN_AGE_EIGENER_WOHNSITZ
+        ) {
+            requiredDocs.add(DokumentTyp.PERSON_EIGENER_HAUSHALT);
         }
 
         if (pia.isSozialhilfebeitraege()) {
