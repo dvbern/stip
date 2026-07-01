@@ -144,17 +144,7 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        // Steuerdaten müssen mit der Familiensituation übereinstimmen,
-        // sonst schlägt die Validierung in bearbeitungAbschliessen fehl.
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(java.util.List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
+        TestUtil.updateSteuerdaten(steuerdatenApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), SteuerdatenTypDtoSpec.FAMILIE);
     }
 
     @Test

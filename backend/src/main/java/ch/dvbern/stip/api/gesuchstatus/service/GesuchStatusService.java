@@ -73,9 +73,6 @@ public class GesuchStatusService {
             return true;
         }
 
-        LOG.info("benutzer: {}", currentBenutzern.getId());
-        LOG.info("InFreigabeBenutzerUUID: {}", inFreigabeBenutzerUUID.get());
-
         return !inFreigabeBenutzerUUID.get().equals(currentBenutzern.getId());
     }
 

@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.util.AuditEntityUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
@@ -38,6 +39,7 @@ import org.hibernate.envers.query.AuditEntity;
 @RequiredArgsConstructor
 public class GesuchHistoryRepository {
     private final EntityManager entityManager;
+    private static final QGesuch Q_GESUCH = QGesuch.gesuch;
 
     public List<Gesuch> getStatusHistory(final UUID gesuchId) {
         final var reader = AuditReaderFactory.get(entityManager);
@@ -64,10 +66,10 @@ public class GesuchHistoryRepository {
         return (Optional<UUID>) reader
             .createQuery()
             .forRevisionsOfEntity(Gesuch.class, true, false)
-            .addProjection(AuditEntity.property("userMutiertId"))
-            .add(AuditEntity.property("id").eq(gesuchId))
-            .add(AuditEntity.property("gesuchStatus").eq(Gesuchstatus.IN_FREIGABE))
-            .add(AuditEntity.property("gesuchStatus").hasChanged())
+            .addProjection(AuditEntity.property(Q_GESUCH.userMutiertId.getMetadata().getName()))
+            .add(AuditEntity.property(Q_GESUCH.id.getMetadata().getName()).eq(gesuchId))
+            .add(AuditEntity.property(Q_GESUCH.gesuchStatus.getMetadata().getName()).eq(Gesuchstatus.IN_FREIGABE))
+            .add(AuditEntity.property(Q_GESUCH.gesuchStatus.getMetadata().getName()).hasChanged())
             .addOrder(AuditEntityUtil.revisionTimestamp().desc())
             .setMaxResults(1)
             .getResultList()

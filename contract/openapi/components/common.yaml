@@ -299,7 +299,7 @@ FallHeader:
   type: object
   properties:
     fallId:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     unreadNotificationsCount:
       type: integer
 Gesuchsjahr:
@@ -953,7 +953,7 @@ Notification:
     - read
   properties:
     id:
-      $ref: '#/UUID'
+      $ref: "#/UUID"
     notificationText:
       type: string
     notificationType:

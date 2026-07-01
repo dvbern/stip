@@ -100,6 +100,7 @@ import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.ZahlungsverbindungDtoSpec;
@@ -633,6 +634,39 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    /**
+     * Aligns Steuerdaten and accepts all GesuchDokuments for each of the given Tranchen.
+     * Works for a single Tranche as well as for multiple Tranchen (varargs).
+     */
+    public static void alignSteuerdatenAndAcceptAllDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final SteuerdatenTypDtoSpec steuerdatenTyp,
+        final UUID... gesuchTrancheIds
+    ) {
+        for (final var trancheId : gesuchTrancheIds) {
+            updateSteuerdaten(steuerdatenApiSpec, trancheId, steuerdatenTyp);
+            acceptAllGesuchDokuments(gesuchTrancheApiSpec, dokumentApiSpec, trancheId);
+        }
+    }
+
+    public static void updateSteuerdaten(
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final UUID gesuchTrancheId,
+        final SteuerdatenTypDtoSpec typDtoSpec
+    ) {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(typDtoSpec);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     public static void acceptAllGesuchDokuments(

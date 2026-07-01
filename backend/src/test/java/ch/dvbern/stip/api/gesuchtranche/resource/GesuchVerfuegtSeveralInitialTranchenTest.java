@@ -146,39 +146,14 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        // Accept documents and align Steuerdaten for BOTH tranches
-        TestUtil.acceptAllGesuchDokuments(
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
             gesuchTrancheApiSpec,
             dokumentApiSpec,
-            gesuch.getGesuchTrancheToWorkWith().getId()
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
+            gesuch.getGesuchTrancheToWorkWith().getId(),
+            newTranche.getId()
         );
-        TestUtil.acceptAllGesuchDokuments(gesuchTrancheApiSpec, dokumentApiSpec, newTranche.getId());
-
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(java.util.List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(newTranche.getId())
-            .body(java.util.List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
-
-        gesuchApiSpec.bearbeitungAbschliessen()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @TestAsFreigabestelle
@@ -202,7 +177,7 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test

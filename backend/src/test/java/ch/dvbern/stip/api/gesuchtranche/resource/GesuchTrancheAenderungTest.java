@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
+import ch.dvbern.stip.api.generator.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -55,6 +56,7 @@ import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jdk.jfr.Description;
@@ -78,6 +80,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class GesuchTrancheAenderungTest {
+    @Inject
+    DokumentGenerator dokumentGenerator;
+
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
@@ -161,23 +166,13 @@ class GesuchTrancheAenderungTest {
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
-        TestUtil.acceptAllGesuchDokuments(
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
             gesuchTrancheApiSpec,
             dokumentApiSpec,
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
             gesuch.getGesuchTrancheToWorkWith().getId()
         );
-
-        // Steuerdaten müssen mit der Familiensituation übereinstimmen,
-        // sonst schlägt die Validierung in bearbeitungAbschliessen fehl.
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(java.util.List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
 
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
@@ -391,10 +386,7 @@ class GesuchTrancheAenderungTest {
             .body()
             .as(DokumenteToUploadDtoSpec.class);
 
-        for (final var ref : requiredDokuments.getRequiredRefs()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, aenderungId, ref.getDokumentTyp(), file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(aenderungId);
 
         gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderungId)

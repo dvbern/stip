@@ -61,7 +61,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 
@@ -191,7 +191,7 @@ public class VerfuegungResourceTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @TestAsSachbearbeiter
@@ -220,7 +220,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchHeaderDtoSpec.class);
 
-        assertThat(header.getVersions().size(), is(1));
+        assertThat(header.getVersions().size()).isEqualTo(1);
 
         final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
@@ -232,7 +232,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(BerechnungsresultatDtoSpec.class);
 
-        assertThat(berechnung.getBerechnungStipendium(), greaterThan(500));
+        assertThat(berechnung.getBerechnungStipendium()).isGreaterThan(500);
     }
 
     @Test
@@ -325,7 +325,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
 
-        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+        assertThat(gesuchWithChanges.getGesuchStatus())
             .isIn(List.of(GesuchstatusDtoSpec.STIPENDIENANSPRUCH, GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH));
     }
 
@@ -343,7 +343,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchHeaderDtoSpec.class);
 
-        assertThat(header.getVersions().size(), is(2));
+        assertThat(header.getVersions().size()).isEqualTo(2);
 
         final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
@@ -355,7 +355,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(BerechnungsresultatDtoSpec.class);
 
-        assertThat(berechnung.getBerechnungStipendium(), greaterThan(500));
+        assertThat(berechnung.getBerechnungStipendium()).isGreaterThan(500);
     }
 
     @Test

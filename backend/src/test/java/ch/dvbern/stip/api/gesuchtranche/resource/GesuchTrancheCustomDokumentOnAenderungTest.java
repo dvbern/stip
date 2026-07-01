@@ -160,23 +160,13 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .assertThat()
             .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
 
-        TestUtil.acceptAllGesuchDokuments(
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
             gesuchTrancheApiSpec,
             dokumentApiSpec,
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
             gesuch.getGesuchTrancheToWorkWith().getId()
         );
-
-        // Steuerdaten müssen mit der Familiensituation übereinstimmen,
-        // sonst schlägt die Validierung in bearbeitungAbschliessen fehl.
-        final var steuerdatenUpdateDto =
-            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
-        steuerdatenApiSpec.updateSteuerdaten()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .body(java.util.List.of(steuerdatenUpdateDto))
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Response.Status.OK.getStatusCode());
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -215,7 +205,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test

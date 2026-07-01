@@ -327,9 +327,7 @@ class GesuchTrancheCreateTest {
                 .then()
                 .assertThat()
                 .statusCode(Status.OK.getStatusCode());
-        }
 
-        for (final var tranche : gesuchHeader.getCurrentTranches()) {
             final var dokumente = gesuchTrancheApiSpec.getGesuchDokumenteSB()
                 .gesuchTrancheIdPath(tranche.getId())
                 .execute(TestUtil.PEEK_IF_ENV_SET)
