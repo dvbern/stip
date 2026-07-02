@@ -33,7 +33,7 @@ public enum VerfuegungDokumentTyp {
     public static final Set<VerfuegungDokumentTyp> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG =
         Collections.unmodifiableSet(
             EnumSet.of(
-                VERFUEGUNGSBRIEF,
+                VERSENDETE_VERFUEGUNG,
                 MANUELLE_NEGATIVE_VERFUEGUNG
             )
         );
