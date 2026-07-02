@@ -34,6 +34,11 @@
                 Referrer-Policy no-referrer-when-downgrade
         }
 
+        @translations {
+          path assets/i18n/*.json
+        }
+
+        header @translations Cache-Control no-cache
 
         @assets {
           path *.js
