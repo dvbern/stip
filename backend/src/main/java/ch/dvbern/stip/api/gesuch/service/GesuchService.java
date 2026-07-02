@@ -1497,6 +1497,7 @@ public class GesuchService {
 
         return new GesuchHeaderDto()
             .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
+            .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
             .latestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null))
             .latestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null))
             .aenderungs(aenderungs)
