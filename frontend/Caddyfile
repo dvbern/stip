@@ -9,7 +9,9 @@
         file_server
 
         log {
-          format console
+          format console {
+              level_format upper
+          }
         }
 
         respond /_health 200
