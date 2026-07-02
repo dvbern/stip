@@ -31,7 +31,6 @@ import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsstaette;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
-import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.fall.entity.Fall;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
@@ -50,6 +49,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.util.TestConstants;
+import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.generated.dto.AuszahlungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDtoSpec;
@@ -64,9 +64,6 @@ import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PartnerUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.PersonInAusbildungUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuererklaerungUpdateDtoSpec;
-
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 
 @Deprecated
 public final class GesuchGenerator {
@@ -105,12 +102,7 @@ public final class GesuchGenerator {
 
     /* return a new instance of Gesuch with a valid GesuchPeriode */
     public static Gesuch initGesuch() {
-        final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
-        } else {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
-        }
+        final var gueltigkeitsRange = TestUtil.getActiveGueltigkeitsRange();
 
         var ausbildungDtoSpec = AusbildungUpdateDtoSpecModel.ausbildungUpdateDtoSpec();
 

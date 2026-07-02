@@ -23,7 +23,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.common.service.DateMapperImpl;
-import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
@@ -50,8 +49,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -229,12 +226,7 @@ class AusbildungResourceTest {
         ausbildungUpdateDtoSpec.setId(gesuch.getAusbildungId());
         ausbildungUpdateDtoSpec.setFallId(gesuch.getFallId());
 
-        final DateRange gueltigkeitsRange;
-        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
-        } else {
-            gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
-        }
+        final var gueltigkeitsRange = TestUtil.getActiveGueltigkeitsRange();
         final var newAusbildungBegin = gueltigkeitsRange.getGueltigAb().plusMonths(1);
         ausbildungUpdateDtoSpec.setAusbildungBegin(newAusbildungBegin.format(DATE_TIME_FORMATTER));
         ausbildungUpdateDtoSpec.setAusbildungEnd(newAusbildungBegin.plusYears(1).format(DATE_TIME_FORMATTER));
