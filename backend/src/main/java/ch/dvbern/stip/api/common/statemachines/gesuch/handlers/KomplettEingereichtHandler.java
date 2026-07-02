@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import java.time.ZonedDateTime;
 
-import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.BusinessDateConstants;
 import ch.dvbern.stip.api.datenschutzbrief.service.DatenschutzbriefService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason;
@@ -50,7 +50,7 @@ public class KomplettEingereichtHandler implements GesuchStatusChangeHandler {
         datenschutzbriefService.createAllRequiredDatenschutzbriefeForGesuch(gesuch);
 
         // Ensure that we don't rely on the timezone of the server to be Europe/Zurich
-        final var todayInZuerich = ZonedDateTime.now(DateUtil.ZUERICH_ZONE).toLocalDate();
+        final var todayInZuerich = ZonedDateTime.now(BusinessDateConstants.ZUERICH_ZONE).toLocalDate();
         gesuch.setEinreichedatum(todayInZuerich);
         gesuch.setInBearbeitungSbReason(InBearbeitungSbReason.INITIAL);
     }

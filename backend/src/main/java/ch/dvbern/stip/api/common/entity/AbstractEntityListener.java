@@ -23,7 +23,7 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.entity.CurrentBenutzerContext;
-import ch.dvbern.stip.api.common.util.DateUtil;
+import ch.dvbern.stip.api.common.util.BusinessDateConstants;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.PrePersist;
@@ -34,7 +34,7 @@ public class AbstractEntityListener {
     @Inject
     CurrentBenutzerContext currentBenutzerContext;
 
-    private final ZoneId zoneId = DateUtil.ZUERICH_ZONE;
+    private final ZoneId zoneId = BusinessDateConstants.ZUERICH_ZONE;
 
     @PrePersist
     protected void prePersist(AbstractEntity entity) {
