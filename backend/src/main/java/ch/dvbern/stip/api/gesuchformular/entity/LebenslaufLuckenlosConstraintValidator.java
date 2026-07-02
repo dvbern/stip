@@ -29,6 +29,10 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
 
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.PIA_GEBURTSDATUM_STICHTAG_DAY;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.PIA_GEBURTSDATUM_STICHTAG_MIN_AGE;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.PIA_GEBURTSDATUM_STICHTAG_MONTH;
+
 @Slf4j
 public class LebenslaufLuckenlosConstraintValidator
     implements ConstraintValidator<LebenslaufLuckenlosConstraint, GesuchFormular> {
@@ -47,9 +51,9 @@ public class LebenslaufLuckenlosConstraintValidator
 
         final LocalDate start = gesuchFormular.getPersonInAusbildung()
             .getGeburtsdatum()
-            .plusYears(16)
-            .withMonth(8)
-            .withDayOfMonth(1);
+            .plusYears(PIA_GEBURTSDATUM_STICHTAG_MIN_AGE)
+            .withMonth(PIA_GEBURTSDATUM_STICHTAG_MONTH)
+            .withDayOfMonth(PIA_GEBURTSDATUM_STICHTAG_DAY);
         final LocalDate stop = gesuchFormular.getAusbildung().getAusbildungBegin().withDayOfMonth(1);
 
         // If PIA is younger than 16 no items need to be present

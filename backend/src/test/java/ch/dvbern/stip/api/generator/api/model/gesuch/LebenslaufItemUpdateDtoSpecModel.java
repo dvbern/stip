@@ -19,26 +19,18 @@ package ch.dvbern.stip.api.generator.api.model.gesuch;
 
 import java.util.List;
 
-import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.LebenslaufItemUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.TaetigkeitsartDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzKantonDtoSpec;
 
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
-import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 
 public final class LebenslaufItemUpdateDtoSpecModel {
     public static List<LebenslaufItemUpdateDtoSpec> lebenslaufItemUpdateDtoSpecs() {
         return TestUtil.createUpdateDtoSpecs(LebenslaufItemUpdateDtoSpec::new, (model) -> {
-            final DateRange gueltigkeitsRange;
-            if (GUELTIGKEIT_PERIODE_CURRENT != null) {
-                gueltigkeitsRange = GUELTIGKEIT_PERIODE_CURRENT;
-            } else {
-                gueltigkeitsRange = GUELTIGKEIT_PERIODE_FIXED;
-            }
+            final var gueltigkeitsRange = TestUtil.getActiveGueltigkeitsRange();
             model.setWohnsitz(TestUtil.getRandomElementFromArray(WohnsitzKantonDtoSpec.values()));
             // model.setAusbildungAbgeschlossen(true);
             // model.setFachrichtung("Testrichtung");

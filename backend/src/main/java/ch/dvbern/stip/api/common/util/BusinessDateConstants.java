@@ -15,20 +15,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api;
+package ch.dvbern.stip.api.common.util;
 
-import java.util.TimeZone;
+import java.time.ZoneId;
 
-import ch.dvbern.stip.api.common.util.BusinessDateConstants;
-import io.quarkus.runtime.StartupEvent;
-import jakarta.enterprise.event.Observes;
-import jakarta.inject.Singleton;
+public final class BusinessDateConstants {
+    public static final ZoneId ZUERICH_ZONE = ZoneId.of("Europe/Zurich");
 
-@Singleton
-public class TimezoneSettings {
-    public void setTimezone(@Observes StartupEvent startupEvent) {
-        // Statically set the timezone to be Europe/Zurich, no matter what the local or passed zone is
-        TimeZone.setDefault(TimeZone.getTimeZone(BusinessDateConstants.ZUERICH_ZONE));
-        System.setProperty("user.timezone", BusinessDateConstants.ZUERICH_ZONE.getId());
-    }
+    public static final int VERSPAETET_EINGEREICHT_STICHTAG = 15;
+    public static final int MAX_AGE_AUSBILDUNGSBEGIN = 35;
+    public static final int PIA_GEBURTSDATUM_STICHTAG_MIN_AGE = 16;
+    public static final int PIA_GEBURTSDATUM_STICHTAG_MONTH = 8;
+    public static final int PIA_GEBURTSDATUM_STICHTAG_DAY = 1;
 }
