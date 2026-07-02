@@ -36,8 +36,8 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import static ch.dvbern.stip.api.common.util.Constants.MAX_AGE_AUSBILDUNGSBEGIN;
-import static ch.dvbern.stip.api.common.util.Constants.MIN_AGE_EIGENER_WOHNSITZ;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MAX_AGE_AUSBILDUNGSBEGIN;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor

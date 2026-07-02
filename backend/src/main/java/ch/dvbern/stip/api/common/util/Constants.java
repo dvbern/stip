@@ -28,8 +28,6 @@ public final class Constants {
     public static final int DB_DEFAULT_STRING_TESTCASE_JSON_DATA_LENGTH = 100_000;
     public static final int DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH = 100_000;
 
-    public static final int MIN_AGE_EIGENER_WOHNSITZ = 20;
-    public static final int MAX_AGE_AUSBILDUNGSBEGIN = 35;
     public static final int FALL_GESUCH_NUMBER_GEN_SEED = 184932;
 
     public static final float CH_STEUERN_PERCENTAGE = 0.1f;

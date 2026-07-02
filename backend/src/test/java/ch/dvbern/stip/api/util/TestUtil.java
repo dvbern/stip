@@ -115,6 +115,8 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -132,6 +134,14 @@ public class TestUtil {
 
             return response;
         };
+
+    public static DateRange getActiveGueltigkeitsRange() {
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            return GUELTIGKEIT_PERIODE_CURRENT;
+        } else {
+            return GUELTIGKEIT_PERIODE_FIXED;
+        }
+    }
 
     public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId) {
         gesuchApiSpec.deleteGesuch()

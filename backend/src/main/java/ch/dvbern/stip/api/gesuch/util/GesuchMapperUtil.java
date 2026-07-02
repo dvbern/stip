@@ -33,7 +33,7 @@ import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
-import static ch.dvbern.stip.api.common.util.Constants.MIN_AGE_EIGENER_WOHNSITZ;
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MIN_AGE_EIGENER_WOHNSITZ;
 
 @ApplicationScoped
 @RequiredArgsConstructor
