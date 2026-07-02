@@ -21,10 +21,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.common.repo.BaseRepository;
-import ch.dvbern.stip.api.gesuch.entity.QGesuch;
 import ch.dvbern.stip.api.verfuegung.entity.QVerfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
