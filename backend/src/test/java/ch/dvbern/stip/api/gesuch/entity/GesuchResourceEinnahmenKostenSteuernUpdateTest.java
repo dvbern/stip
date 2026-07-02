@@ -22,7 +22,6 @@ import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
-import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
@@ -144,7 +143,11 @@ class GesuchResourceEinnahmenKostenSteuernUpdateTest {
             .assertThat()
             .statusCode(Status.NO_CONTENT.getStatusCode());
 
-        TestUtil.updateSteuerdaten(steuerdatenApiSpec, gesuch.getGesuchTrancheToWorkWith().getId(), SteuerdatenTypDtoSpec.FAMILIE);
+        TestUtil.updateSteuerdaten(
+            steuerdatenApiSpec,
+            gesuch.getGesuchTrancheToWorkWith().getId(),
+            SteuerdatenTypDtoSpec.FAMILIE
+        );
     }
 
     @Test
