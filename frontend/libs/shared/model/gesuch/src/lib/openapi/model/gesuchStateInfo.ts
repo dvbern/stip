@@ -15,13 +15,12 @@ import { Gesuchstatus } from './gesuchstatus';
 export interface GesuchStateInfo { 
     gesuchStatus: Gesuchstatus;
     beschwerdeHaengig: boolean;
-    canGetBerechnung: boolean;
+    canGSGetBerechnung: boolean;
+    canSBGetBerechnung: boolean;
     canChangeGesuchsperiode: boolean;
     canTriggerManuellPruefen: boolean;
     canBearbeitungAbschliessen: boolean;
     canSBInitAenderung: boolean;
-    latestVerfuegungId?: string;
-    latestVerfuegtAt?: string;
     inBearbeitungSbReason?: InBearbeitungSbReason;
 }
 

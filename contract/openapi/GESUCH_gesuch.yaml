@@ -1600,6 +1600,10 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: './components/common.yaml#/UUID'
+        latestVerfuegtAt:
+          $ref: './components/common.yaml#/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:

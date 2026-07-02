@@ -14,7 +14,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
@@ -49,7 +49,7 @@ export class SharedFeatureDarlehenComponent {
     effect(() => {
       const darlehenId = this.darlehenIdSig();
       if (darlehenId) {
-        byAppType(this.config.appType, {
+        byBusinessAppType(this.config.appType, {
           'gesuch-app': () =>
             this.darlehenStore.getDarlehenGs$({
               darlehenId,
@@ -64,9 +64,6 @@ export class SharedFeatureDarlehenComponent {
                 this.router.navigate(['/darlehen']);
               },
             }),
-          'demo-data-app': () => {
-            throw new Error('Not implemented for this AppType');
-          },
         });
       }
     });

@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, catchError, map, pipe, switchMap, tap, throwError } from 'rxjs';
+import { EMPTY, catchError, map, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -19,7 +19,7 @@ import {
   FreiwilligDarlehenGsResponse,
   PaginatedSbFreiwilligDarlehenDashboard,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -70,7 +70,7 @@ export class DarlehenStore extends signalStore(
   });
 
   darlehenListViewSig = computed(() => {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () => {
         const data = fromCachedDataSig(this.darlehenGs);
 
@@ -85,9 +85,6 @@ export class DarlehenStore extends signalStore(
         canCreateDarlehen: false,
         loading: isPending(this.darlehenList()),
       }),
-      'demo-data-app': () => {
-        throw new Error('Not implemented for this AppType');
-      },
     });
   });
 
@@ -290,15 +287,13 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       switchMap((req) =>
-        byAppType(this.config.appType, {
+        byBusinessAppType(this.config.appType, {
           'sachbearbeitung-app': () =>
             this.darlehenService.getAllFreiwilligDarlehenSb$(req),
           'gesuch-app': () =>
             this.darlehenService
               .getAllFreiwilligDarlehenGs$(req)
               .pipe(map((d) => d.darlehenList)),
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
         }).pipe(
           handleApiResponse((darlehenList) =>
             patchState(this, { darlehenList }),

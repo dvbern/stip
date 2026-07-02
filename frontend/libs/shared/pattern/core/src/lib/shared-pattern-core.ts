@@ -5,6 +5,7 @@ import {
   importProvidersFrom,
   inject,
   isDevMode,
+  provideEnvironmentInitializer,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -137,19 +138,15 @@ export function provideSharedPatternCore(
     },
 
     // init (has to be last, order matters)
-    {
-      provide: ENVIRONMENT_INITIALIZER,
-      multi: true,
-      useValue() {
-        inject(SharedUtilRouteHistoryService);
-        const store = inject(Store);
-        // rework to ngrxOnEffectsInit once available for functional effects
-        // https://twitter.com/MarkoStDev/status/1661094873116581901
-        store.dispatch(
-          SharedDataAccessConfigEvents.appInit({ compileTimeConfig }),
-        );
-        store.dispatch(SharedDataAccessLanguageEvents.appInit());
-      },
-    },
+    provideEnvironmentInitializer(() => {
+      inject(SharedUtilRouteHistoryService);
+      const store = inject(Store);
+      // rework to ngrxOnEffectsInit once available for functional effects
+      // https://twitter.com/MarkoStDev/status/1661094873116581901
+      store.dispatch(
+        SharedDataAccessConfigEvents.appInit({ compileTimeConfig }),
+      );
+      store.dispatch(SharedDataAccessLanguageEvents.appInit());
+    }),
   ];
 }

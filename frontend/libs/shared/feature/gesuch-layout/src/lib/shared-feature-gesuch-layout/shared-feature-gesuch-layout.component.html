@@ -7,6 +7,7 @@
     <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
       @if (gesuchInfoDataSig(); as infoData) {
+        @let appKey = config.isSachbearbeitungApp ? 'sachbearbeitung-app' : 'gesuch-app';
         <div class="tw:ml-4">
           <ng-container *dvIfGesuchsteller>
             <span>{{ t('shared.header.ausbildungsjahr', { yearRange: infoData.ausbildungsjahr }) }}</span>
@@ -15,11 +16,7 @@
               @if (infoData.verfuegtAt) {
                 {{ t('shared.header.verfuegtAt', { date: infoData.verfuegtAt | date: 'dd.MM.yyyy' }) }}
               } @else {
-                {{
-                  t(
-                    `${config.isSachbearbeitungApp ? 'sachbearbeitung-app' : 'gesuch-app'}.gesuch.status.contract.${infoData.status}`
-                  )
-                }}
+                {{ t(`${appKey}.gesuch.status.contract.${infoData.status}`) }}
               }
             </span>
           </ng-container>
@@ -27,11 +24,7 @@
             <span>{{ infoData.fallNummer }} / </span>
             <span>{{ infoData.gesuchNummer }} / </span>
             <span>{{ infoData.name }} / </span>
-            <span>{{
-              t(
-                `${config.isSachbearbeitungApp ? 'sachbearbeitung-app' : 'gesuch-app'}.gesuch.status.contract.${infoData.status}`
-              )
-            }}</span>
+            <span>{{ t(`${appKey}.gesuch.status.contract.${infoData.status}`) }}</span>
           </ng-container>
         </div>
       } @else {

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, RedirectCommand, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { map, switchMap, throwError } from 'rxjs';
+import { map, switchMap } from 'rxjs';
 
 import { selectRouteId } from '@dv/shared/data-access/gesuch';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
@@ -11,7 +11,7 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchService } from '@dv/shared/model/gesuch';
 import {
   Permission,
-  byAppType,
+  byBusinessAppType,
   getGesuchPermissions,
 } from '@dv/shared/model/permission-state';
 import { capitalized, isDefined } from '@dv/shared/model/type-util';
@@ -31,12 +31,10 @@ export const isAllowedTo =
           return [false];
         }
 
-        return byAppType(config.appType, {
+        return byBusinessAppType(config.appType, {
           'gesuch-app': () => gesuchService.getGesuchInfoGs$({ gesuchId }),
           'sachbearbeitung-app': () =>
             gesuchService.getGesuchInfoSb$({ gesuchId }),
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
         }).pipe(
           map(({ state: { gesuchStatus } }) =>
             getGesuchPermissions({ gesuchStatus }, config.appType, {

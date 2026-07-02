@@ -1,7 +1,6 @@
 package ch.dvbern.stip.generated.dto;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -22,13 +21,12 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchStateInfoDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
   private @Valid Boolean beschwerdeHaengig;
-  private @Valid Boolean canGetBerechnung;
+  private @Valid Boolean canGSGetBerechnung;
+  private @Valid Boolean canSBGetBerechnung;
   private @Valid Boolean canChangeGesuchsperiode;
   private @Valid Boolean canTriggerManuellPruefen;
   private @Valid Boolean canBearbeitungAbschliessen;
   private @Valid Boolean canSBInitAenderung;
-  private @Valid UUID latestVerfuegungId;
-  private @Valid java.time.LocalDateTime latestVerfuegtAt;
   private @Valid ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
 
   /**
@@ -71,21 +69,40 @@ public class GesuchStateInfoDto  implements Serializable {
 
   /**
    **/
-  public GesuchStateInfoDto canGetBerechnung(Boolean canGetBerechnung) {
-    this.canGetBerechnung = canGetBerechnung;
+  public GesuchStateInfoDto canGSGetBerechnung(Boolean canGSGetBerechnung) {
+    this.canGSGetBerechnung = canGSGetBerechnung;
     return this;
   }
 
   
-  @JsonProperty("canGetBerechnung")
+  @JsonProperty("canGSGetBerechnung")
   @NotNull
-  public Boolean getCanGetBerechnung() {
-    return canGetBerechnung;
+  public Boolean getCanGSGetBerechnung() {
+    return canGSGetBerechnung;
   }
 
-  @JsonProperty("canGetBerechnung")
-  public void setCanGetBerechnung(Boolean canGetBerechnung) {
-    this.canGetBerechnung = canGetBerechnung;
+  @JsonProperty("canGSGetBerechnung")
+  public void setCanGSGetBerechnung(Boolean canGSGetBerechnung) {
+    this.canGSGetBerechnung = canGSGetBerechnung;
+  }
+
+  /**
+   **/
+  public GesuchStateInfoDto canSBGetBerechnung(Boolean canSBGetBerechnung) {
+    this.canSBGetBerechnung = canSBGetBerechnung;
+    return this;
+  }
+
+  
+  @JsonProperty("canSBGetBerechnung")
+  @NotNull
+  public Boolean getCanSBGetBerechnung() {
+    return canSBGetBerechnung;
+  }
+
+  @JsonProperty("canSBGetBerechnung")
+  public void setCanSBGetBerechnung(Boolean canSBGetBerechnung) {
+    this.canSBGetBerechnung = canSBGetBerechnung;
   }
 
   /**
@@ -166,42 +183,6 @@ public class GesuchStateInfoDto  implements Serializable {
 
   /**
    **/
-  public GesuchStateInfoDto latestVerfuegungId(UUID latestVerfuegungId) {
-    this.latestVerfuegungId = latestVerfuegungId;
-    return this;
-  }
-
-  
-  @JsonProperty("latestVerfuegungId")
-  public UUID getLatestVerfuegungId() {
-    return latestVerfuegungId;
-  }
-
-  @JsonProperty("latestVerfuegungId")
-  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
-    this.latestVerfuegungId = latestVerfuegungId;
-  }
-
-  /**
-   **/
-  public GesuchStateInfoDto latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
-    this.latestVerfuegtAt = latestVerfuegtAt;
-    return this;
-  }
-
-  
-  @JsonProperty("latestVerfuegtAt")
-  public java.time.LocalDateTime getLatestVerfuegtAt() {
-    return latestVerfuegtAt;
-  }
-
-  @JsonProperty("latestVerfuegtAt")
-  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
-    this.latestVerfuegtAt = latestVerfuegtAt;
-  }
-
-  /**
-   **/
   public GesuchStateInfoDto inBearbeitungSbReason(ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason) {
     this.inBearbeitungSbReason = inBearbeitungSbReason;
     return this;
@@ -230,19 +211,18 @@ public class GesuchStateInfoDto  implements Serializable {
     GesuchStateInfoDto gesuchStateInfo = (GesuchStateInfoDto) o;
     return Objects.equals(this.gesuchStatus, gesuchStateInfo.gesuchStatus) &&
         Objects.equals(this.beschwerdeHaengig, gesuchStateInfo.beschwerdeHaengig) &&
-        Objects.equals(this.canGetBerechnung, gesuchStateInfo.canGetBerechnung) &&
+        Objects.equals(this.canGSGetBerechnung, gesuchStateInfo.canGSGetBerechnung) &&
+        Objects.equals(this.canSBGetBerechnung, gesuchStateInfo.canSBGetBerechnung) &&
         Objects.equals(this.canChangeGesuchsperiode, gesuchStateInfo.canChangeGesuchsperiode) &&
         Objects.equals(this.canTriggerManuellPruefen, gesuchStateInfo.canTriggerManuellPruefen) &&
         Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen) &&
         Objects.equals(this.canSBInitAenderung, gesuchStateInfo.canSBInitAenderung) &&
-        Objects.equals(this.latestVerfuegungId, gesuchStateInfo.latestVerfuegungId) &&
-        Objects.equals(this.latestVerfuegtAt, gesuchStateInfo.latestVerfuegtAt) &&
         Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, latestVerfuegungId, latestVerfuegtAt, inBearbeitungSbReason);
+    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGSGetBerechnung, canSBGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, inBearbeitungSbReason);
   }
 
   @Override
@@ -252,13 +232,12 @@ public class GesuchStateInfoDto  implements Serializable {
     
     sb.append("    gesuchStatus: ").append(toIndentedString(gesuchStatus)).append("\n");
     sb.append("    beschwerdeHaengig: ").append(toIndentedString(beschwerdeHaengig)).append("\n");
-    sb.append("    canGetBerechnung: ").append(toIndentedString(canGetBerechnung)).append("\n");
+    sb.append("    canGSGetBerechnung: ").append(toIndentedString(canGSGetBerechnung)).append("\n");
+    sb.append("    canSBGetBerechnung: ").append(toIndentedString(canSBGetBerechnung)).append("\n");
     sb.append("    canChangeGesuchsperiode: ").append(toIndentedString(canChangeGesuchsperiode)).append("\n");
     sb.append("    canTriggerManuellPruefen: ").append(toIndentedString(canTriggerManuellPruefen)).append("\n");
     sb.append("    canBearbeitungAbschliessen: ").append(toIndentedString(canBearbeitungAbschliessen)).append("\n");
     sb.append("    canSBInitAenderung: ").append(toIndentedString(canSBInitAenderung)).append("\n");
-    sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
-    sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("    inBearbeitungSbReason: ").append(toIndentedString(inBearbeitungSbReason)).append("\n");
     sb.append("}");
     return sb.toString();

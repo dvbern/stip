@@ -69,7 +69,7 @@ public class GesuchTrancheAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void gsSbOrFreigabestelleOrJuristCanRead(final UUID gesuchTrancheId) {
+    public void gsSbFreigabestelleOrJuristCanRead(final UUID gesuchTrancheId) {
         if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }

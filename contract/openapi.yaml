@@ -10312,6 +10312,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: '#/components/schemas/UUID'
+        latestVerfuegtAt:
+          $ref: '#/components/schemas/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
@@ -11592,10 +11596,6 @@ components:
             $ref: '#/components/schemas/GesuchTranche'
         isInitial:
           type: boolean
-    LocalDateTime:
-      format: date-time
-      type: string
-      example: '2022-03-10T12:00:00'
     InBearbeitungSbReason:
       enum:
         - INITIAL
@@ -11607,7 +11607,8 @@ components:
       required:
         - gesuchStatus
         - beschwerdeHaengig
-        - canGetBerechnung
+        - canGSGetBerechnung
+        - canSBGetBerechnung
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
@@ -11618,7 +11619,9 @@ components:
           $ref: '#/components/schemas/Gesuchstatus'
         beschwerdeHaengig:
           type: boolean
-        canGetBerechnung:
+        canGSGetBerechnung:
+          type: boolean
+        canSBGetBerechnung:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
@@ -11628,10 +11631,6 @@ components:
           type: boolean
         canSBInitAenderung:
           type: boolean
-        latestVerfuegungId:
-          $ref: '#/components/schemas/UUID'
-        latestVerfuegtAt:
-          $ref: '#/components/schemas/LocalDateTime'
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
     GesuchTrancheSlim:
@@ -11657,6 +11656,10 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
     Kanton:
       enum:
         - AG

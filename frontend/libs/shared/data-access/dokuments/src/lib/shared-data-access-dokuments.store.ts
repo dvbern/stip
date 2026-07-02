@@ -2,15 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import {
-  EMPTY,
-  catchError,
-  combineLatest,
-  pipe,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -27,7 +19,7 @@ import {
   GesuchTrancheTyp,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   RemoteData,
@@ -82,13 +74,11 @@ export class DokumentsStore extends signalStore(
   private config = inject(SharedModelCompileTimeConfig);
 
   private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
       'sachbearbeitung-app': () =>
         this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -101,7 +91,7 @@ export class DokumentsStore extends signalStore(
     dokumentTyp: DokumentTyp;
     entryId: string | undefined;
   }) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.getGesuchDokumentForTypGS$({
           gesuchTrancheId: trancheId,
@@ -114,19 +104,15 @@ export class DokumentsStore extends signalStore(
           entryId,
           dokumentTyp,
         }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
   private getDocumentsToUploadByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
       'sachbearbeitung-app': () =>
         this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -466,13 +452,11 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((req) => {
-        const service$ = byAppType(this.config.appType, {
+        const service$ = byBusinessAppType(this.config.appType, {
           'gesuch-app': () =>
             this.dokumentService.getGesuchDokumentKommentareGS$(req),
           'sachbearbeitung-app': () =>
             this.dokumentService.getGesuchDokumentKommentareSB$(req),
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
         });
         return service$.pipe(
           handleApiResponse((gesuchDokumentKommentare) =>

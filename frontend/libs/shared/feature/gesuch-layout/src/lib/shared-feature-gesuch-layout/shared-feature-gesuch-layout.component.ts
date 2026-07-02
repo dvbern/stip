@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  Signal,
   computed,
   effect,
   inject,
@@ -31,11 +30,7 @@ import {
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import {
-  FreiwilligDarlehen,
-  GesuchHeader,
-  getTrancheRoute,
-} from '@dv/shared/model/gesuch';
+import { FreiwilligDarlehen, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import {
   createUrlChecksSig,
@@ -126,34 +121,36 @@ export class SharedFeatureGesuchLayoutComponent {
     ),
   );
 
-  headerViewSig: Signal<{ isLoading: boolean } & Partial<GesuchHeader>> =
-    this.gesuchHeaderStore.viewSig;
+  headerViewSig = this.gesuchHeaderStore.viewSig;
 
   gesuchInfoDataSig = computed(() => {
-    const info = this.headerViewSig().gesuchInfo;
-    if (!info) {
+    const { gesuchInfo, latestVerfuegtAt } = this.headerViewSig();
+    if (!gesuchInfo) {
       return;
     }
 
     return {
-      name: `${info.piaVorname} ${info.piaNachname}`,
-      ausbildungsjahr: getYearRangeFrom(info.startDate, info.endDate),
-      verfuegtAt: isInOneOfGivenStatus(info.state.gesuchStatus, [
+      name: `${gesuchInfo.piaVorname} ${gesuchInfo.piaNachname}`,
+      ausbildungsjahr: getYearRangeFrom(
+        gesuchInfo.startDate,
+        gesuchInfo.endDate,
+      ),
+      verfuegtAt: isInOneOfGivenStatus(gesuchInfo.state.gesuchStatus, [
         'STIPENDIENANSPRUCH',
         'KEIN_STIPENDIENANSPRUCH',
       ])
-        ? info.state.latestVerfuegtAt
+        ? latestVerfuegtAt
         : null,
-      fallNummer: info.fallNummer,
-      gesuchNummer: info.gesuchNummer,
-      status: info.state.gesuchStatus,
+      fallNummer: gesuchInfo.fallNummer,
+      gesuchNummer: gesuchInfo.gesuchNummer,
+      status: gesuchInfo.state.gesuchStatus,
     };
   });
 
   tabsSig = computed<TabNavItem[]>(() => {
     const gesuchId = this.gesuchIdSig();
     const trancheId = this.trancheIdSig();
-    const { gesuchInfo } = this.headerViewSig();
+    const { latestVerfuegungId, canGetBerechnung } = this.headerViewSig();
     const activePath = this.routeUrlSig();
     const berechnungId = this.berechnungIdSig();
     const originOrTrancheStep = this.originOrTrancheStepSig();
@@ -184,18 +181,24 @@ export class SharedFeatureGesuchLayoutComponent {
       key: 'formular' as const,
     };
 
+    const appTypeBasedQueryParams = this.config.isGesuchApp
+      ? {
+          latestVerfuegungId,
+        }
+      : {};
+
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),
       route: ['/gesuch/verfuegung', gesuchId, trancheTyp, trancheId],
       queryParams: {
+        ...appTypeBasedQueryParams,
         berechnungId,
-        latestVerfuegungId: gesuchInfo?.state.latestVerfuegungId,
         originStep: originOrTrancheStep,
       },
       key: 'verfuegung' as const,
     };
 
-    if (gesuchInfo?.state.canGetBerechnung) {
+    if (canGetBerechnung) {
       return [gesuchTab, verfuegungTab];
     }
 
@@ -211,7 +214,7 @@ export class SharedFeatureGesuchLayoutComponent {
 
   canViewBerechnungSig = computed(() => {
     const canViewBerechnung =
-      this.gesuchHeaderStore.viewSig()?.gesuchInfo?.state.canGetBerechnung;
+      this.gesuchHeaderStore.viewSig()?.canGetBerechnung;
 
     return canViewBerechnung;
   });

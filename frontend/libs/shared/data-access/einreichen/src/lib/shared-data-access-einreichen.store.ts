@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { map, pipe, switchMap, tap, throwError, withLatestFrom } from 'rxjs';
+import { map, pipe, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
@@ -25,7 +25,7 @@ import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import {
@@ -249,7 +249,7 @@ export class EinreichenStore extends signalStore(
     ] as const;
 
     if (allowNullValidation) {
-      return byAppType(this.config.appType, {
+      return byBusinessAppType(this.config.appType, {
         'gesuch-app': () =>
           this.gesuchTrancheService.validateGesuchTranchePagesGS$(
             ...requestArgs,
@@ -258,12 +258,10 @@ export class EinreichenStore extends signalStore(
           this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
             ...requestArgs,
           ),
-        'demo-data-app': () =>
-          throwError(() => new Error('Not implemented for this AppType')),
       });
     }
 
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
           ...requestArgs,
@@ -272,8 +270,6 @@ export class EinreichenStore extends signalStore(
         this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
           ...requestArgs,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   };
 

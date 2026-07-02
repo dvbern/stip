@@ -286,15 +286,21 @@ const applyDelegatedPermission = (
  *
  * @example
  * ```ts
- * byAppType(this.config.appType, {
+ * byBusinessAppType(this.config.appType, {
  *   'gesuch-app': () => this.trancheService.getGesuchDokumenteGS$(...),
  *   'sachbearbeitung-app': () => this.trancheService.getGesuchDokumenteSB$(...),
  * })()
  * ```
  */
-export const byAppType = <R>(
+export const byBusinessAppType = <R>(
   appType: AppType,
-  map: Record<AppType, () => R>,
+  map: Record<BusinessAppType, () => R>,
+  orElse: () => R = () => {
+    throw new Error('Not implemented for this AppType');
+  },
 ) => {
+  if (appType === 'demo-data-app') {
+    return orElse();
+  }
   return map[appType]();
 };

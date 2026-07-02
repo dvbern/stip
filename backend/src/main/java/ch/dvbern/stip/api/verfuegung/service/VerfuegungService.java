@@ -82,6 +82,10 @@ public class VerfuegungService {
             .toList();
     }
 
+    public Optional<Verfuegung> getLatestVerfuegungByGesuchId(final UUID gesuchId) {
+        return verfuegungRepository.getLatestVerfuegungByGesuchId(gesuchId);
+    }
+
     @Transactional
     public void createVerfuegung(final UUID gesuchId) {
         final Verfuegung verfuegung = new Verfuegung();

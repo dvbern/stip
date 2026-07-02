@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
-import { EMPTY, Subject, merge, of, throwError } from 'rxjs';
+import { EMPTY, Subject, merge, of } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -32,7 +32,7 @@ import {
   DokumentService,
   DokumentTyp,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -126,26 +126,22 @@ export class UploadStore {
     gesuchTrancheId: string;
     entryId: string | undefined;
   }) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.getGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
         this.dokumentService.getGesuchDokumentForTypSB$(params),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
   private getCustomGesuchDokumenteByAppType$(params: {
     customDokumentTypId: string;
   }) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.getCustomGesuchDokumentForTypGS$(params),
       'sachbearbeitung-app': () =>
         this.dokumentService.getCustomGesuchDokumentForTypSB$(params),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -159,13 +155,11 @@ export class UploadStore {
       },
     ] as const;
 
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.deleteDokumentGS$(...deleteCallParams),
       'sachbearbeitung-app': () =>
         this.dokumentService.deleteDokumentSB$(...deleteCallParams),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -174,7 +168,7 @@ export class UploadStore {
     dokument: SharedModelStandardGesuchDokument,
     serviceDefaultParams: ServiceDefaultParams,
   ) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.createDokumentGS$(
           {
@@ -195,8 +189,6 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -205,7 +197,7 @@ export class UploadStore {
     dokument: SharedModelCustomGesuchDokument,
     serviceDefaultParams: ServiceDefaultParams,
   ) {
-    return byAppType(this.config.appType, {
+    return byBusinessAppType(this.config.appType, {
       'gesuch-app': () =>
         this.dokumentService.uploadCustomGesuchDokumentGS$(
           {
@@ -222,8 +214,6 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 

@@ -17,12 +17,7 @@
 
 package ch.dvbern.stip.api.gesuch.service;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.Objects;
 
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
@@ -38,20 +33,16 @@ import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
 import ch.dvbern.stip.api.gesuchsperioden.service.GesuchsperiodeMapper;
 import ch.dvbern.stip.api.gesuchtranche.service.GesuchTrancheMapper;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
-import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.generated.dto.GesuchCreateDto;
 import ch.dvbern.stip.generated.dto.GesuchDto;
 import ch.dvbern.stip.generated.dto.GesuchInfoDto;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDto;
 import jakarta.annotation.Nullable;
 import jakarta.inject.Inject;
-import org.mapstruct.AfterMapping;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
-import org.mapstruct.Qualifier;
 
 @Mapper(
     config = MappingConfig.class,
@@ -64,12 +55,6 @@ import org.mapstruct.Qualifier;
     }
 )
 public abstract class GesuchMapper {
-    @Qualifier
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.CLASS)
-    public @interface AfterToInfoDtoGs {
-    }
-
     @Inject
     FallService fallService;
 
@@ -94,7 +79,6 @@ public abstract class GesuchMapper {
     @Mapping(source = ".", target = "state")
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
-    @BeanMapping(qualifiedBy = { AfterToInfoDtoGs.class })
     public abstract GesuchInfoDto toInfoDtoGs(Gesuch gesuch);
 
     @Mapping(source = "ausbildung.fall.fallNummer", target = "fallNummer")
@@ -105,18 +89,6 @@ public abstract class GesuchMapper {
     @Mapping(source = ".", target = "piaVorname", qualifiedByName = "getPiaVorname")
     @Mapping(source = ".", target = "piaNachname", qualifiedByName = "getPiaNachname")
     public abstract GesuchInfoDto toInfoDtoSb(Gesuch gesuch);
-
-    @AfterMapping
-    @AfterToInfoDtoGs
-    public void afterToInfoDtoGs(Gesuch gesuch, @MappingTarget GesuchInfoDto gesuchInfoDto) {
-        final var state = gesuchInfoDto.getState();
-        final var latestVerfuegung = gesuch.getVerfuegungs()
-            .stream()
-            .max(Comparator.comparing(Verfuegung::getTimestampErstellt));
-        state.setCanGetBerechnung(gesuch.isVerfuegt());
-        state.setLatestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null));
-        state.setLatestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null));
-    }
 
     @Nullable
     @Named("getPiaVorname")

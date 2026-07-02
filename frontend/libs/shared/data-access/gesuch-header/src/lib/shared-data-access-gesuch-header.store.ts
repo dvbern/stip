@@ -10,6 +10,7 @@ import {
   GesuchService,
   GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import { getRelativeTrancheRoute } from '@dv/shared/model/router';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
@@ -41,6 +42,11 @@ export class GesuchHeaderStore extends signalStore(
     const headerData = this.header().data;
     return {
       ...headerData,
+      canGetBerechnung: byBusinessAppType(this.config.appType, {
+        'gesuch-app': () => headerData?.gesuchInfo.state.canGSGetBerechnung,
+        'sachbearbeitung-app': () =>
+          headerData?.gesuchInfo.state.canSBGetBerechnung,
+      }),
       // The initial tranchen are also returned as version, but they are already handled with header.initial
       // so we can skip the last element as it is always the initial tranchen
       versions: headerData?.versions?.slice(0, -1),

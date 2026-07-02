@@ -408,7 +408,8 @@ GesuchStateInfo:
   required:
     - gesuchStatus
     - beschwerdeHaengig
-    - canGetBerechnung
+    - canGSGetBerechnung
+    - canSBGetBerechnung
     - canChangeGesuchsperiode
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
@@ -419,7 +420,9 @@ GesuchStateInfo:
       $ref: '#/Gesuchstatus'
     beschwerdeHaengig:
       type: boolean
-    canGetBerechnung:
+    canGSGetBerechnung:
+      type: boolean
+    canSBGetBerechnung:
       type: boolean
     canChangeGesuchsperiode:
       type: boolean
@@ -429,10 +432,6 @@ GesuchStateInfo:
       type: boolean
     canSBInitAenderung:
       type: boolean
-    latestVerfuegungId:
-      $ref: '#/UUID'
-    latestVerfuegtAt:
-      $ref: '#/LocalDateTime'
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
 PersoenlicheAngaben:

@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { EMPTY, exhaustMap, pipe, tap, throwError } from 'rxjs';
+import { EMPTY, exhaustMap, pipe, tap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
@@ -10,7 +10,7 @@ import {
   Berechnungsresultat,
   GesuchService,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byBusinessAppType } from '@dv/shared/model/permission-state';
 import { TranchenBerechnungsresultatView } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
@@ -139,7 +139,7 @@ export class BerechnungStore extends signalStore(
         }));
       }),
       exhaustMap(({ gesuchId, latestVerfuegungId, verfuegungId }) =>
-        byAppType(this.config.appType, {
+        byBusinessAppType(this.config.appType, {
           'sachbearbeitung-app': () => {
             if (verfuegungId) {
               // case mit verfuegungId => versionierte Berechnung für Verfuegung
@@ -164,8 +164,6 @@ export class BerechnungStore extends signalStore(
               return EMPTY;
             }
           },
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
         }).pipe(
           handleApiResponse((berechnung) => patchState(this, { berechnung })),
         ),
