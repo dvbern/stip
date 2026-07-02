@@ -1,7 +1,6 @@
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import {
   ApplicationConfig,
-  ENVIRONMENT_INITIALIZER,
   importProvidersFrom,
   inject,
   isDevMode,
