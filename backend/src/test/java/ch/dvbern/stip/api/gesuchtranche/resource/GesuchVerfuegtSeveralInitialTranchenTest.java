@@ -43,6 +43,7 @@ import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.MethodOrderer;
@@ -152,6 +153,13 @@ class GesuchVerfuegtSeveralInitialTranchenTest {
             gesuch.getGesuchTrancheToWorkWith().getId(),
             newTranche.getId()
         );
+
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
     }
 
     @TestAsFreigabestelle
