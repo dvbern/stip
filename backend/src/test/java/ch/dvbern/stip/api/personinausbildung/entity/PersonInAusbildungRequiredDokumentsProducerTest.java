@@ -28,7 +28,9 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.plz.service.PlzService;
@@ -44,6 +46,7 @@ import static ch.dvbern.stip.api.common.util.BusinessDateConstants.MAX_AGE_AUSBI
 class PersonInAusbildungRequiredDokumentsProducerTest {
     private PersonInAusbildungRequiredDokumentsProducer producer;
 
+    private final LocalDate date = LocalDate.now().withDayOfMonth(1);
     private GesuchFormular formular;
     @Inject
     PlzService plzService;
@@ -53,9 +56,12 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
         producer = new PersonInAusbildungRequiredDokumentsProducer(plzService);
         formular = new GesuchFormular();
 
-        final Ausbildung ausbildung = new Ausbildung();
-        ausbildung.setAusbildungBegin(LocalDate.now().withDayOfMonth(1));
-        formular.setTranche(new GesuchTranche().setGesuch(new Gesuch().setAusbildung(ausbildung)));
+        final var ausbildung = new Ausbildung();
+        ausbildung.setAusbildungBegin(date);
+        final var gesuch = new Gesuch();
+        gesuch.setAusbildung(ausbildung);
+        gesuch.setGesuchsperiode(new Gesuchsperiode().setGesuchsperiodeStart(date));
+        formular.setTranche(new GesuchTranche().setTyp(GesuchTrancheTyp.TRANCHE).setGesuch(gesuch));
     }
 
     @Test
@@ -122,7 +128,7 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
     }
 
     @Test
-    void requiresIfWohnsitz() {
+    void requiresIfWohnsitzAndYoungerThan20() {
         formular.setPersonInAusbildung(
             (PersonInAusbildung) createNewPia()
                 .setSozialhilfebeitraege(false)
@@ -130,6 +136,17 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
         );
         RequiredDocsUtil
             .requiresOneAndType(producer.getRequiredDokuments(formular, true), DokumentTyp.PERSON_EIGENER_HAUSHALT);
+    }
+
+    @Test
+    void notRequiresIfWohnsitzAndOlderThan20() {
+        formular.setPersonInAusbildung(
+            (PersonInAusbildung) createNewPia()
+                .setSozialhilfebeitraege(false)
+                .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
+                .setGeburtsdatum(date.minusYears(20))
+        );
+        RequiredDocsUtil.assertCount(producer.getRequiredDokuments(formular, true), 0);
     }
 
     @Test
