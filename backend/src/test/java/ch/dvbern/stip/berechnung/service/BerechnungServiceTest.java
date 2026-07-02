@@ -55,7 +55,6 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.oneOf;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -300,28 +299,30 @@ class BerechnungServiceTest {
 
     @Test
     void testGetMonateMitDarlehen() {
+        final var gueltigkeitsStartDate = TestUtil.getActiveGueltigkeitsRange().getGueltigAb();
         final var gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
 
-        var monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        var monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(0));
 
-        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(4));
-        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        gesuch.getAusbildung().setAusbildungBegin(gueltigkeitsStartDate.minusYears(4));
+        monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(12));
 
-        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        final var startDelayMonths = 4;
+        gesuch.getAusbildung().setAusbildungBegin(gueltigkeitsStartDate.minusYears(1));
         gesuch.getGesuchTranchen()
             .get(0)
             .getGesuchFormular()
             .getLebenslaufItems()
             .add(
                 new LebenslaufItem()
-                    .setVon(LocalDate.now().minusYears(3))
-                    .setBis(LocalDate.now().minusYears(1))
+                    .setVon(gueltigkeitsStartDate.minusYears(3).plusMonths(startDelayMonths))
+                    .setBis(gueltigkeitsStartDate.minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
         monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
-        assertThat(monateMitDarlehen, oneOf(6, 7));
+        assertThat(monateMitDarlehen, is(12 - startDelayMonths));
     }
 
 }

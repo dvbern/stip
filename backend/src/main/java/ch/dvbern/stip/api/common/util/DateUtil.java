@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
@@ -31,14 +30,12 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.VERSPAETET_EINGEREICHT_STICHTAG;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @UtilityClass
 public class DateUtil {
-    public final ZoneId ZUERICH_ZONE = ZoneId.of("Europe/Zurich");
-    public final int VERSPAETET_EINGEREICHT_STICHTAG = 15;
-
     /**
      * Clamps the given {@param date} to be no less than {@param min} and no more that {@param max},
      * if the given value is already between the two dates it returns it.
