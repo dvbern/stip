@@ -23,37 +23,33 @@ import ch.dvbern.stip.api.common.service.MappingConfig;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
-import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.VerfuegungDokumentDto;
 import ch.dvbern.stip.generated.dto.VerfuegungDokumentTypDto;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
 import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import static ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp.VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG;
 
 @Mapper(config = MappingConfig.class, uses = { VerfuegungDokumentMapper.class })
-public interface VerfuegungMapper {
-    VerfuegungDokumentTyp RELEVANT_DOKUMENT_TYPE = VerfuegungDokumentTyp.VERFUEGUNGSBRIEF;
+public abstract class VerfuegungMapper {
+    public abstract VerfuegungDto toDto(final Verfuegung verfuegung);
 
-    VerfuegungDto toDto(final Verfuegung verfuegung);
+    @Mapping(source = ".", target = "yearRange", qualifiedByName = "mapYearRangeOfAttachedGesuchsperiode")
+    @Mapping(source = ".", target = "totalbetragStipendium", qualifiedByName = "mapTotalBetragStipendium")
+    @Mapping(source = ".", target = "dokument", qualifiedByName = "mapVerfuegungsDokumentWithoutBerechnung")
+    public abstract VerfuegungFallDto toFallDto(final Verfuegung verfuegung);
 
-    @Mapping(target = "yearRange", expression = "java(toYearRange(verfuegung))")
-    @Mapping(target = "totalbetragStipendium", expression = "java(toTotalBetragStipendium(verfuegung))")
-    @Mapping(target = "dokument", expression = "java(toRelevantDokument(verfuegung))")
-    VerfuegungFallDto toFallDto(final Verfuegung verfuegung);
-
-    default String toYearRange(final Verfuegung verfuegung) {
-        if (
-            verfuegung == null || verfuegung.getGesuch() == null || verfuegung.getGesuch().getGesuchsperiode() == null
-        ) {
-            return null;
-        }
-
+    @Named("mapYearRangeOfAttachedGesuchsperiode")
+    String mapYearRangeOfAttachedGesuchsperiode(final Verfuegung verfuegung) {
         final var gesuchsperiode = verfuegung.getGesuch().getGesuchsperiode();
         return DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
     }
 
-    default Integer toTotalBetragStipendium(final Verfuegung verfuegung) {
+    @Named("mapTotalBetragStipendium")
+    Integer mapTotalBetragStipendium(final Verfuegung verfuegung) {
         if (verfuegung.getBerechnungJsonData() == null) {
             return 0;
         }
@@ -61,21 +57,20 @@ public interface VerfuegungMapper {
         return berechnung.getBerechnungStipendium() == null ? 0 : berechnung.getBerechnungStipendium();
     }
 
-    default VerfuegungDokumentDto toRelevantDokument(final Verfuegung verfuegung) {
-        final var relevantDokument = verfuegung.getDokumente()
+    @Named("mapVerfuegungsDokumentWithoutBerechnung")
+    VerfuegungDokumentDto mapVerfuegungsDokumentWithoutBerechnung(final Verfuegung verfuegung) {
+        final var relevantDokumentOpt = verfuegung.getDokumente()
             .stream()
-            .filter(dokument -> dokument.getTyp() == RELEVANT_DOKUMENT_TYPE)
-            .max(Comparator.comparing(VerfuegungDokument::getTimestampErstellt))
-            .or(
-                () -> verfuegung.getDokumente()
-                    .stream()
-                    .max(Comparator.comparing(VerfuegungDokument::getTimestampErstellt))
+            .filter(
+                dokument -> VERFUEGUNG_DOKUMENT_TYPS_WITHOUT_BERECHNUNG.contains(dokument.getTyp())
             )
-            .orElse(null);
+            .max(Comparator.comparing(VerfuegungDokument::getTimestampErstellt));
 
-        if (relevantDokument == null) {
+        if (relevantDokumentOpt.isEmpty()) {
             return null;
         }
+
+        final var relevantDokument = relevantDokumentOpt.get();
 
         final var verfuegungDokumentDto = new VerfuegungDokumentDto();
         verfuegungDokumentDto.setId(relevantDokument.getId());
