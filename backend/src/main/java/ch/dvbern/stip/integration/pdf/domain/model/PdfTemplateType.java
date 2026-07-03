@@ -15,12 +15,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.pdf.domain.port;
+package ch.dvbern.stip.integration.pdf.domain.model;
 
-import java.io.ByteArrayOutputStream;
-
-import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
-
-public interface PdfPort extends AutoCloseable {
-    ByteArrayOutputStream renderPdf(final PdfPayload<?> pdfPayload);
+public enum PdfTemplateType {
+    BERECHNUNGSBLATT_FAMILIE,
+    BERECHNUNGSBLATT_PIA
 }

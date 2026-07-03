@@ -1,4 +1,4 @@
 #let render(data, t) = {
-  text("pia berechnung: ")
+  text("familie berechnung: ")
   text(t("amount.label", amount: data.at("amount", default: "-")))
 }

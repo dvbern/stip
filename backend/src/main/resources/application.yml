@@ -65,6 +65,9 @@ kstip:
         pdf:
           typst:
             root-template-path: tenants/bern
+            template-path:
+              berechnungsblatt-pia: templates/berechnung/pia.typ
+              berechnungsblatt-familie: templates/berechnung/familie.typ
         steuerdaten:
           nesko:
             url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'

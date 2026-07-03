@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 
 public interface TenantAdapterConfig {
@@ -38,5 +39,7 @@ public interface TenantAdapterConfig {
 
     interface PdfAdapter {
         Optional<String> rootTemplatePath();
+
+        Map<PdfTemplateType, String> templatePath();
     }
 }

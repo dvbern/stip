@@ -31,12 +31,16 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfCompilationException;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfGenerationException;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfTimeoutException;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPort;
 import ch.dvbern.stip.integration.pdf.domain.qualifier.PdfQualifier;
 import io.quarkus.runtime.ShutdownEvent;
@@ -50,14 +54,19 @@ import lombok.extern.slf4j.Slf4j;
 public class TypstPdfService implements PdfPort {
 
     private static final String IO_EXECUTOR_NAME = "typst-io-";
+    private static final String FONTS_PATH = "/fonts";
+    private static final String TYPST_PATH = "/typst";
+    private static final String MAIN_TEMPLATE_NAME = "main.typ";
 
     private final StipConfig config;
     private final TenantService tenantService;
     private final ExecutorService ioExecutor;
+    private final ObjectMapper objectMapper;
 
-    public TypstPdfService(StipConfig config, TenantService tenantService) {
+    public TypstPdfService(final StipConfig config, final TenantService tenantService, final ObjectMapper objectMapper) {
         this.config = config;
         this.tenantService = tenantService;
+        this.objectMapper = objectMapper;
 
         this.ioExecutor = Executors.newThreadPerTaskExecutor(
             Thread.ofVirtual()
@@ -67,13 +76,13 @@ public class TypstPdfService implements PdfPort {
     }
 
     @Override
-    public ByteArrayOutputStream renderPdf(final String jsonData) {
+    public ByteArrayOutputStream renderPdf(final PdfPayload<?> pdfPayload) {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
 
         Process process = null;
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(buildCommand(jsonData));
+            ProcessBuilder pb = new ProcessBuilder(buildCommand(pdfPayload));
             pb.redirectErrorStream(false);
 
             process = pb.start();
@@ -140,41 +149,46 @@ public class TypstPdfService implements PdfPort {
         }
     }
 
-    private List<String> buildCommand(final String jsonData) {
+    private List<String> buildCommand(final PdfPayload<?> pdfPayload) {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
         final var tenantConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
 
-        final var rootTemplatePath =
-            Path.of(TypstPdfService.class.getResource("/typst").getPath(), tenantConfig.rootTemplatePath().get())
-                .toString();
-        final var mainTemplatePath = Path.of(rootTemplatePath, "main.typ").toString();
+        final var fontsPath = TypstPdfService.class.getResource(FONTS_PATH).getPath();
+        final var typstPath = TypstPdfService.class.getResource(TYPST_PATH).getPath();
+        final var mainTemplatePath = Path.of(typstPath, tenantConfig.rootTemplatePath().get(), MAIN_TEMPLATE_NAME).toString();
 
-        List<String> command = new ArrayList<>();
+        try {
+            final var jsonPayload = pdfPayload.toJson(objectMapper, tenantConfig);
 
-        command.add(adapterConfig.binary());
-        command.add("compile");
+            List<String> command = new ArrayList<>();
 
-        command.add("--format");
-        command.add("pdf");
+            command.add(adapterConfig.binary());
+            command.add("compile");
 
-        command.add("--jobs");
-        command.add("1");
+            command.add("--format");
+            command.add("pdf");
 
-        command.add("--root");
-        command.add(rootTemplatePath);
+            command.add("--jobs");
+            command.add("1");
 
-        command.add("--font-path");
-        command.add(TypstPdfService.class.getResource("/fonts").getPath());
+            command.add("--root");
+            command.add(typstPath);
 
-        command.add("--input");
-        command.add("data=" + jsonData);
+            command.add("--font-path");
+            command.add(fontsPath);
 
-        command.add("--ignore-system-fonts");
+            command.add("--input");
+            command.add("data=" + jsonPayload);
 
-        command.add(mainTemplatePath);
-        command.add("-");
+            command.add("--ignore-system-fonts");
 
-        return command;
+            command.add(mainTemplatePath);
+            command.add("-");
+
+            return command;
+        } catch (JsonProcessingException e) {
+            throw new PdfGenerationException("Failed to parse pdf payload to json", e);
+        }
     }
 
     private boolean isPdf(byte[] bytes) {

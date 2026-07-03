@@ -24,6 +24,9 @@ import java.time.Instant;
 
 import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.TenantContext;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import io.quarkus.arc.Arc;
 import io.quarkus.narayana.jta.QuarkusTransaction;
@@ -37,36 +40,41 @@ import lombok.extern.slf4j.Slf4j;
 public class TypstStartupService {
 
     private final PdfPortFactory pdfPortFactory;
+    private final TenantService tenantService;
 
-    public TypstStartupService(PdfPortFactory pdfPortFactory) {
+    public TypstStartupService(PdfPortFactory pdfPortFactory, TenantService tenantService) {
         this.pdfPortFactory = pdfPortFactory;
+        this.tenantService = tenantService;
     }
 
-    void startup(@Observes StartupEvent ev) {
-        Arc.container().requestContext().activate();
-        Arc.container().instance(TenantContext.class).get().setTenantIdentifier(TenantIdentifier.BERN);
-        QuarkusTransaction.requiringNew().run(() -> {
-            final var pdfAdapter = pdfPortFactory.getPdfAdapter();
+    // void startup(@Observes StartupEvent ev) {
+    //     Arc.container().requestContext().activate();
+    //     Arc.container().instance(TenantContext.class).get().setTenantIdentifier(TenantIdentifier.BERN);
+    //     QuarkusTransaction.requiringNew().run(() -> {
+    //         final var pdfAdapter = pdfPortFactory.getPdfAdapter();
 
-            final JsonObject json = Json.createObjectBuilder()
-                .add("template", "templates/berechnung/pia.typ")
-                .add("text", "test")
-                .build();
+    //         final var tenantAdapterConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
 
-            final var start = Instant.now();
+    //         final JsonObject json = Json.createObjectBuilder()
+    //             .add("template", tenantAdapterConfig.templatePath().get(PdfTemplateType.BERECHNUNGSBLATT_PIA))
+    //             .add("lang", "fr")
+    //             .add("amount", 23)
+    //             .build();
 
-            final var outputStream = pdfAdapter.renderPdf(json.toString());
+    //         final var start = Instant.now();
 
-            try {
-                Duration elapsed = Duration.between(start, Instant.now());
-                LOG.info("Generation took: {}", elapsed.toMillis());
+    //         final var outputStream = pdfAdapter.renderPdf(json.toString());
 
-                final Path target = Path.of("output.pdf");
-                Files.write(target, outputStream.toByteArray());
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to write PDF to disk", e);
-            }
-        });
-        Arc.container().requestContext().deactivate();
-    }
+    //         try {
+    //             Duration elapsed = Duration.between(start, Instant.now());
+    //             LOG.info("Generation took: {}ms", elapsed.toMillis());
+
+    //             final Path target = Path.of("output.pdf");
+    //             Files.write(target, outputStream.toByteArray());
+    //         } catch (Exception e) {
+    //             throw new RuntimeException("Failed to write PDF to disk", e);
+    //         }
+    //     });
+    //     Arc.container().requestContext().deactivate();
+    // }
 }
