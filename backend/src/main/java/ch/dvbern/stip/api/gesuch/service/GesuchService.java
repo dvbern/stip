@@ -1091,7 +1091,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+    public GesuchWithChangesDto getTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
         final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
         final var gesuch = getGesuchById(aenderung.getGesuch().getId());
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -1491,7 +1491,6 @@ public class GesuchService {
 
     public GesuchHeaderDto getGesuchTrancheHeader(Gesuch gesuch) {
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
-        final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
         final var latestVerfuegung = verfuegungService.getLatestVerfuegungByGesuchId(gesuch.getId());
 
@@ -1500,7 +1499,6 @@ public class GesuchService {
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
             .latestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null))
             .latestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null))
-            .aenderungs(aenderungs)
             .initial(initialGesuch)
             .versions(versions);
     }
@@ -1508,15 +1506,19 @@ public class GesuchService {
     @Transactional
     public GesuchHeaderDto getGesuchTrancheHeaderGs(UUID gesuchId) {
         final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsGs(gesuch, gesuchId);
 
-        return getGesuchTrancheHeader(gesuch);
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
     }
 
     @Transactional
     public GesuchHeaderDto getGesuchTrancheHeaderSb(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsSb(gesuch);
 
-        return getGesuchTrancheHeader(gesuch);
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
     }
 
     public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {

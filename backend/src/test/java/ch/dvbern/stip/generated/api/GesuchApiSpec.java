@@ -105,6 +105,8 @@ public class GesuchApiSpec {
                 gesuchManuellPruefenSB(),
                 gesuchTrancheFehlendeDokumenteEinreichen(),
                 gesuchZurueckweisenAenderungUndo(),
+                getAenderungChangesGs(),
+                getAenderungChangesSb(),
                 getAllBeschwerdeVerlaufEntrys(),
                 getBerechnungForGesuchSb(),
                 getBerechnungForVerfuegung(),
@@ -118,10 +120,8 @@ public class GesuchApiSpec {
                 getGesuchSB(),
                 getGesucheGs(),
                 getGesucheSb(),
-                getGsAenderungChangesInBearbeitung(),
                 getGsDashboard(),
                 getInitialTrancheChanges(),
-                getSbAenderungChanges(),
                 getSozialdienstMitarbeiterDashboard(),
                 getStatusProtokoll(),
                 setGesuchsperiodeForGesuch(),
@@ -219,6 +219,14 @@ public class GesuchApiSpec {
         return new GesuchZurueckweisenAenderungUndoOper(createReqSpec());
     }
 
+    public GetAenderungChangesGsOper getAenderungChangesGs() {
+        return new GetAenderungChangesGsOper(createReqSpec());
+    }
+
+    public GetAenderungChangesSbOper getAenderungChangesSb() {
+        return new GetAenderungChangesSbOper(createReqSpec());
+    }
+
     public GetAllBeschwerdeVerlaufEntrysOper getAllBeschwerdeVerlaufEntrys() {
         return new GetAllBeschwerdeVerlaufEntrysOper(createReqSpec());
     }
@@ -271,20 +279,12 @@ public class GesuchApiSpec {
         return new GetGesucheSbOper(createReqSpec());
     }
 
-    public GetGsAenderungChangesInBearbeitungOper getGsAenderungChangesInBearbeitung() {
-        return new GetGsAenderungChangesInBearbeitungOper(createReqSpec());
-    }
-
     public GetGsDashboardOper getGsDashboard() {
         return new GetGsDashboardOper(createReqSpec());
     }
 
     public GetInitialTrancheChangesOper getInitialTrancheChanges() {
         return new GetInitialTrancheChangesOper(createReqSpec());
-    }
-
-    public GetSbAenderungChangesOper getSbAenderungChanges() {
-        return new GetSbAenderungChangesOper(createReqSpec());
     }
 
     public GetSozialdienstMitarbeiterDashboardOper getSozialdienstMitarbeiterDashboard() {
@@ -2036,6 +2036,176 @@ public class GesuchApiSpec {
      * 
      * 
      *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     * @see #revisionQuery  (optional)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class GetAenderungChangesGsOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/gs/changes";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAenderungChangesGsOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{aenderungId}/aenderung/gs/changes
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{aenderungId}/aenderung/gs/changes
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public GetAenderungChangesGsOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        public static final String REVISION_QUERY = "revision";
+
+        /**
+         * @param revision (Integer)  (optional)
+         * @return operation
+         */
+        public GetAenderungChangesGsOper revisionQuery(Object... revision) {
+            reqSpec.addQueryParam(REVISION_QUERY, revision);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAenderungChangesGsOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAenderungChangesGsOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
+     * @see #aenderungIdPath Die ID der Aenderung (required)
+     * @see #revisionQuery  (optional)
+     * return GesuchWithChangesDtoSpec
+     */
+    public static class GetAenderungChangesSbOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/sb/changes";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetAenderungChangesSbOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /gesuch/{aenderungId}/aenderung/sb/changes
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /gesuch/{aenderungId}/aenderung/sb/changes
+         * @param handler handler
+         * @return GesuchWithChangesDtoSpec
+         */
+        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String AENDERUNG_ID_PATH = "aenderungId";
+
+        /**
+         * @param aenderungId (UUID) Die ID der Aenderung (required)
+         * @return operation
+         */
+        public GetAenderungChangesSbOper aenderungIdPath(Object aenderungId) {
+            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
+            return this;
+        }
+
+        public static final String REVISION_QUERY = "revision";
+
+        /**
+         * @param revision (Integer)  (optional)
+         * @return operation
+         */
+        public GetAenderungChangesSbOper revisionQuery(Object... revision) {
+            reqSpec.addQueryParam(REVISION_QUERY, revision);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetAenderungChangesSbOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetAenderungChangesSbOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * 
+     * 
+     *
      * @see #gesuchIdPath Die ID vom Gesuch (required)
      * return List&lt;BeschwerdeVerlaufEntryDtoSpec&gt;
      */
@@ -3150,79 +3320,6 @@ public class GesuchApiSpec {
         }
     }
     /**
-     * 
-     * 
-     *
-     * @see #aenderungIdPath Die ID der Aenderung (required)
-     * return GesuchWithChangesDtoSpec
-     */
-    public static class GetGsAenderungChangesInBearbeitungOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/gs/changes";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetGsAenderungChangesInBearbeitungOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{aenderungId}/aenderung/gs/changes
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{aenderungId}/aenderung/gs/changes
-         * @param handler handler
-         * @return GesuchWithChangesDtoSpec
-         */
-        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String AENDERUNG_ID_PATH = "aenderungId";
-
-        /**
-         * @param aenderungId (UUID) Die ID der Aenderung (required)
-         * @return operation
-         */
-        public GetGsAenderungChangesInBearbeitungOper aenderungIdPath(Object aenderungId) {
-            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetGsAenderungChangesInBearbeitungOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetGsAenderungChangesInBearbeitungOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
      * Returns gesuche for dashboard filtered by gs
      * 
      *
@@ -3352,91 +3449,6 @@ public class GesuchApiSpec {
          * @return operation
          */
         public GetInitialTrancheChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
-            respSpecCustomizer.accept(respSpec);
-            return this;
-        }
-    }
-    /**
-     * 
-     * 
-     *
-     * @see #aenderungIdPath Die ID der Aenderung (required)
-     * @see #revisionQuery  (optional)
-     * return GesuchWithChangesDtoSpec
-     */
-    public static class GetSbAenderungChangesOper implements Oper {
-
-        public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/gesuch/{aenderungId}/aenderung/sb/changes";
-
-        private RequestSpecBuilder reqSpec;
-        private ResponseSpecBuilder respSpec;
-
-        public GetSbAenderungChangesOper(RequestSpecBuilder reqSpec) {
-            this.reqSpec = reqSpec;
-            reqSpec.setAccept("application/json");
-            this.respSpec = new ResponseSpecBuilder();
-        }
-
-        /**
-         * GET /gesuch/{aenderungId}/aenderung/sb/changes
-         * @param handler handler
-         * @param <T> type
-         * @return type
-         */
-        @Override
-        public <T> T execute(Function<Response, T> handler) {
-            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
-        }
-
-        /**
-         * GET /gesuch/{aenderungId}/aenderung/sb/changes
-         * @param handler handler
-         * @return GesuchWithChangesDtoSpec
-         */
-        public GesuchWithChangesDtoSpec executeAs(Function<Response, Response> handler) {
-            TypeRef<GesuchWithChangesDtoSpec> type = new TypeRef<GesuchWithChangesDtoSpec>(){};
-            return execute(handler).as(type);
-        }
-
-        public static final String AENDERUNG_ID_PATH = "aenderungId";
-
-        /**
-         * @param aenderungId (UUID) Die ID der Aenderung (required)
-         * @return operation
-         */
-        public GetSbAenderungChangesOper aenderungIdPath(Object aenderungId) {
-            reqSpec.addPathParam(AENDERUNG_ID_PATH, aenderungId);
-            return this;
-        }
-
-        public static final String REVISION_QUERY = "revision";
-
-        /**
-         * @param revision (Integer)  (optional)
-         * @return operation
-         */
-        public GetSbAenderungChangesOper revisionQuery(Object... revision) {
-            reqSpec.addQueryParam(REVISION_QUERY, revision);
-            return this;
-        }
-
-        /**
-         * Customize request specification
-         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
-         * @return operation
-         */
-        public GetSbAenderungChangesOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
-            reqSpecCustomizer.accept(reqSpec);
-            return this;
-        }
-
-        /**
-         * Customize response specification
-         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
-         * @return operation
-         */
-        public GetSbAenderungChangesOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

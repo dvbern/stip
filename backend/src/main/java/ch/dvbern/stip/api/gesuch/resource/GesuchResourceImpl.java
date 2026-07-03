@@ -342,13 +342,6 @@ public class GesuchResourceImpl implements GesuchResource {
 
     @Override
     @RolesAllowed(GS_GESUCH_READ)
-    public GesuchWithChangesDto getGsAenderungChangesInBearbeitung(UUID aenderungId) {
-        gesuchTrancheAuthorizer.gsCanRead(aenderungId);
-        return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
-    }
-
-    @Override
-    @RolesAllowed(GS_GESUCH_READ)
     public List<GesuchDto> getGesucheGs() {
         gesuchAuthorizer.gsCanGetGesuche();
         return gesuchService.findGesucheGs();
@@ -491,11 +484,21 @@ public class GesuchResourceImpl implements GesuchResource {
     }
 
     @Override
+    @RolesAllowed(GS_GESUCH_READ)
+    public GesuchWithChangesDto getAenderungChangesGs(UUID aenderungId, Integer revision) {
+        gesuchTrancheAuthorizer.gsCanRead(aenderungId);
+        if (Objects.nonNull(revision)) {
+            return gesuchService.getTrancheChangesWithRevision(aenderungId, revision);
+        }
+        return gesuchService.getGsTrancheChangesInBearbeitung(aenderungId);
+    }
+
+    @Override
     @RolesAllowed({ SB_GESUCH_READ, JURIST_GESUCH_READ })
-    public GesuchWithChangesDto getSbAenderungChanges(UUID aenderungId, Integer revision) {
+    public GesuchWithChangesDto getAenderungChangesSb(UUID aenderungId, Integer revision) {
         gesuchTrancheAuthorizer.sbOrJuristCanRead();
         if (Objects.nonNull(revision)) {
-            return gesuchService.getSbTrancheChangesWithRevision(aenderungId, revision);
+            return gesuchService.getTrancheChangesWithRevision(aenderungId, revision);
         }
         return gesuchService.getSbTrancheChanges(aenderungId);
     }

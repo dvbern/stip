@@ -230,12 +230,14 @@ export class SharedFeatureGesuchLayoutComponent {
   firstAenderungSig = computed(() => {
     const aenderungen = this.headerViewSig().aenderungs;
     const offeneAenderung = aenderungen?.offen;
+    const eingereichteAenderung = aenderungen?.eingereicht;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
     const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
 
     const allAenderungen = [
       ...(offeneAenderung ? [offeneAenderung] : []),
+      ...(eingereichteAenderung ? [eingereichteAenderung] : []),
       ...(akzeptierteAenderungen ?? []),
       ...(manuelleAenderungen ?? []),
       ...(abgelehnteAenderungen ?? []),

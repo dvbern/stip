@@ -160,6 +160,16 @@ public interface GesuchResource {
     GesuchZurueckweisenResponseDto gesuchZurueckweisenAenderungUndo(@PathParam("gesuchTrancheId") UUID gesuchTrancheId,@Valid KommentarDto kommentarDto);
 
     @GET
+    @Path("/{aenderungId}/aenderung/gs/changes")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto getAenderungChangesGs(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
+
+    @GET
+    @Path("/{aenderungId}/aenderung/sb/changes")
+    @Produces({ "application/json", "text/plain" })
+    GesuchWithChangesDto getAenderungChangesSb(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
+
+    @GET
     @Path("/{gesuchId}/beschwerde")
     @Produces({ "application/json", "text/plain" })
     List<BeschwerdeVerlaufEntryDto> getAllBeschwerdeVerlaufEntrys(@PathParam("gesuchId") UUID gesuchId);
@@ -225,11 +235,6 @@ public interface GesuchResource {
     PaginatedSbGesucheDashboardDto getGesucheSb(@PathParam("getGesucheSBQueryType") ch.dvbern.stip.api.gesuch.type.GetGesucheSBQueryType getGesucheSBQueryType,@QueryParam("typ") @NotNull   ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ,@QueryParam("page") @NotNull   Integer page,@QueryParam("pageSize") @NotNull   Integer pageSize,@QueryParam("bearbeitbar")   Boolean bearbeitbar,@QueryParam("zugewiesen")   Boolean zugewiesen,@QueryParam("fallNummer")   String fallNummer,@QueryParam("piaNachname")   String piaNachname,@QueryParam("piaVorname")   String piaVorname,@QueryParam("piaGeburtsdatum")   LocalDate piaGeburtsdatum,@QueryParam("status")   String status,@QueryParam("bearbeiter")   String bearbeiter,@QueryParam("letzteAktivitaetFrom")   LocalDate letzteAktivitaetFrom,@QueryParam("letzteAktivitaetTo")   LocalDate letzteAktivitaetTo,@QueryParam("sortColumn")   ch.dvbern.stip.api.gesuch.type.SbGesucheDashboardColumn sortColumn,@QueryParam("sortOrder")   ch.dvbern.stip.api.gesuch.type.SortOrder sortOrder);
 
     @GET
-    @Path("/{aenderungId}/aenderung/gs/changes")
-    @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getGsAenderungChangesInBearbeitung(@PathParam("aenderungId") UUID aenderungId);
-
-    @GET
     @Path("/benutzer/me/gs-dashboard")
     @Produces({ "application/json", "text/plain" })
     FallDashboardItemDto getGsDashboard();
@@ -238,11 +243,6 @@ public interface GesuchResource {
     @Path("/changes/{gesuchTrancheId}")
     @Produces({ "application/json", "text/plain" })
     GesuchWithChangesDto getInitialTrancheChanges(@PathParam("gesuchTrancheId") UUID gesuchTrancheId);
-
-    @GET
-    @Path("/{aenderungId}/aenderung/sb/changes")
-    @Produces({ "application/json", "text/plain" })
-    GesuchWithChangesDto getSbAenderungChanges(@PathParam("aenderungId") UUID aenderungId,@QueryParam("revision")   Integer revision);
 
     @GET
     @Path("/benutzer/me/sozialdienst-mitarbeiter-dashboard/{fallId}")

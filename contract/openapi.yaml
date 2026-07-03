@@ -5575,6 +5575,11 @@ paths:
   /gesuch/{aenderungId}/aenderung/gs/changes:
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -5593,7 +5598,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5623,7 +5628,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -10294,6 +10299,8 @@ components:
         - canAenderungEinreichen
       properties:
         offen:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
+        eingereicht:
           $ref: '#/components/schemas/GesuchTrancheSlim'
         manuell:
           type: array

@@ -1162,6 +1162,11 @@ paths:
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -1180,7 +1185,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1207,7 +1212,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
 
 components:
   securitySchemes:
@@ -1509,6 +1514,8 @@ components:
         - canAenderungEinreichen
       properties:
         offen:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
+        eingereicht:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
         manuell:
           type: array

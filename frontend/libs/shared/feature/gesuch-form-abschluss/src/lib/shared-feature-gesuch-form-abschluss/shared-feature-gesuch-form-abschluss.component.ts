@@ -9,7 +9,6 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { filter } from 'rxjs';
 
@@ -23,6 +22,7 @@ import {
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedEventGesuchFormAbschluss } from '@dv/shared/event/gesuch-form-abschluss';
 import { isDefined } from '@dv/shared/model/type-util';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import { SharedUiInfoContainerComponent } from '@dv/shared/ui/info-container';
 import { SharedUiLoadingComponent } from '@dv/shared/ui/loading';
@@ -34,7 +34,7 @@ import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
   selector: 'dv-shared-feature-gesuch-form-abschluss',
   imports: [
     RouterLink,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
     SharedUiInfoContainerComponent,
     SharedUiLoadingComponent,
     SharedUiRdIsPendingPipe,
