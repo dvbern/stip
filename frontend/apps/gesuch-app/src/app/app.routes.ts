@@ -12,10 +12,10 @@ export const appRoutes: Route[] = [
     children: [
       {
         path: 'dashboard',
-        title: 'gesuch-app.dashboard.title',
+        title: 'shared.dashboard.title',
         loadChildren: () =>
-          import('@dv/gesuch-app/feature/cockpit').then(
-            (m) => m.gesuchAppFeatureCockpitRoutes,
+          import('@dv/shared/feature/gesuchsteller-dashboard').then(
+            (m) => m.sharedFeatureGesuchstellerDashboardRoutes,
           ),
       },
       {

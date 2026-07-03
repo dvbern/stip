@@ -23,7 +23,7 @@ export const gesuchBaseMenuItems: NavItem[] = [
     type: 'link',
     id: 'dashboard',
     icon: 'dashboard',
-    label: { key: 'gesuch-app.dashboard.title' },
+    label: { key: 'shared.dashboard.title' },
     route: ['/dashboard'],
   },
 ];

@@ -1,17 +1,21 @@
-<ng-container *transloco="let t; prefix: 'sozialdienst-app.dashboard'">
+<ng-container *dvTranslocoShared="let t">
   <div class="bg-image">
     <div class="gray-bg"></div>
   </div>
 
   <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
-    <h1 class="tw:mb-8 tw:text-white tw:text-4xl tw:font-semibold">
-      {{ t('welcome.title', { name: benutzerNameSig() }) }}
+    <!-- todo after merge KSTIP-3676: change title for soz app -->
+    <h1 class="tw:mb-8 tw:text-white tw:font-semibold tw:text-4xl">
+      {{ t('shared.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
     @let dashboard = dashboardStore.dashboardViewSig();
     @if (dashboard) {
       @let fall = dashboard.fall;
-      <div class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]">
+      <div
+        class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]"
+        [class.busy]="isUnterbruchOrAenderungPendingSig()"
+      >
         <!-- main column -->
         <div class="tw:flex tw:flex-col tw:gap-8">
           @if (dashboard.activeAusbildungen.length > 0) {
@@ -35,8 +39,20 @@
               <dv-shared-ui-icon-chip>
                 <i class="material-symbols-rounded">add</i>
               </dv-shared-ui-icon-chip>
-              {{ t('ausbildung.create') }}
+              {{ t('shared.dashboard.ausbildung.create') }}
             </button>
+          } @else {
+            <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
+              <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-3xl tw:font-semibold">
+                <dv-shared-ui-icon-chip class="tw:bg-dv-green-subtle tw:text-dv-green">
+                  <i class="material-symbols-rounded tw:text-2xl">school</i>
+                </dv-shared-ui-icon-chip>
+                {{ t('shared.dashboard.fall.delegated.title') }}
+              </h3>
+              <p class="tw:mb-0">
+                {{ t('shared.dashboard.fall.delegated.message') }}
+              </p>
+            </div>
           }
           @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
             <dv-shared-ui-dashboard-compact-ausbildung
@@ -49,17 +65,19 @@
         <div class="tw:flex tw:flex-col tw:gap-8 tw:lg:mb-8">
           <!-- INFOS -->
           <div class="tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-md">
-            <h3 class="tw:mb-4 tw:text-2xl tw:font-semibold">Allgemeine Informationen</h3>
+            <h3 class="tw:mb-4 tw:font-semibold tw:text-2xl">Allgemeine Informationen</h3>
             <p>
               Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis
               Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der
               Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen
               sind und weitere nützliche Grundlagen.
             </p>
-            <a class="tw:dv-button-outline tw:mt-6 tw:w-full"> Stipendien und Darlehen </a>
+            <a class="tw:dv-button-outline tw:mt-7 tw:w-full"> Stipendien und Darlehen </a>
           </div>
         </div>
       </div>
     }
   </div>
+
+  <dv-shared-ui-version-text [version]="cockpitViewSig().version" class="tw:text-white"></dv-shared-ui-version-text>
 </ng-container>

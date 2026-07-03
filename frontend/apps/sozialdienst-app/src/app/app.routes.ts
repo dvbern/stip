@@ -21,13 +21,14 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'fall/:fallId',
+        title: 'shared.dashboard.title',
         loadComponent: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
-            (m) => m.SozialdienstAppFeatureGesuchCockpitComponent,
+          import('@dv/shared/feature/gesuchsteller-dashboard').then(
+            (m) => m.SharedFeatureGesuchstellerDashboardComponent,
           ),
         loadChildren: () =>
-          import('@dv/sozialdienst-app/feature/gesuch-cockpit').then(
-            (m) => m.sozialdienstAppFeatureGesuchCockpitRoutes,
+          import('@dv/shared/feature/gesuchsteller-dashboard').then(
+            (m) => m.sharedFeatureGesuchstellerDashboardRoutes,
           ),
       },
       {

@@ -2,18 +2,24 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  computed,
   effect,
   inject,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 
+import { GesuchAppDialogDelegierenComponent } from '@dv/gesuch-app/dialog/delegieren';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
+import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
+import { SozialdienstSlim } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
@@ -38,6 +44,7 @@ import {
     SharedPatternMobileSidenavComponent,
     SharedPatternGlobalHeaderComponent,
   ],
+  providers: [SozialdienstStore],
   template: `<mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" position="end">
       <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
@@ -59,13 +66,17 @@ import {
 })
 export class GesuchAppPatternMainLayoutComponent {
   private fallStore = inject(FallStore);
+  private dialog = inject(MatDialog);
   private darlehenStore = inject(DarlehenStore);
+  // private dashboardStore = inject(DashboardStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private fallHeaderStore = inject(FallHeaderStore);
+  private sozialdienstStore = inject(SozialdienstStore);
+  private globalNotificationStore = inject(GlobalNotificationStore);
 
   baseMenuItems = gesuchBaseMenuItems;
 
@@ -85,6 +96,19 @@ export class GesuchAppPatternMainLayoutComponent {
 
   private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
+  // toto: if delegiert, only show delegierung, not menu, impl after dto change
+  private availableSozialdiensteSig = computed(() => {
+    const sozialdienste = this.sozialdienstStore.availableSozialdienste()?.data;
+    // const delegierterSozialdienst =
+    //   this.dashboardStore.dashboardViewSig()?.currentDelegierung?.sozialdienst;
+
+    // return sozialdienste?.filter(
+    //   (sozialdienst) =>
+    //     sozialdienst.aktiv || sozialdienst.id === delegierterSozialdienst?.id,
+    // );
+    return sozialdienste;
+  });
+
   constructor() {
     this.fallStore.loadCurrentFall$();
 
@@ -94,6 +118,8 @@ export class GesuchAppPatternMainLayoutComponent {
       if (fallId) {
         this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.fallHeaderStore.loadFallHeader$({ fallId });
+        // this.dashboardStore.loadDashboard$(); // todo: after change dto
+        this.sozialdienstStore.loadAvailableSozialdienste$();
       }
     });
 
@@ -107,6 +133,11 @@ export class GesuchAppPatternMainLayoutComponent {
       const originStep = this.originStepSig();
       const gesuchHeader = this.gesuchHeaderStore.viewSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
+      // todo: after change dto
+      // const dashboardView = this.dashboardStore.dashboardViewSig();
+      // const delegierterSozialdienst =
+      //   dashboardView?.currentDelegierung?.sozialdienst;
+      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -163,6 +194,27 @@ export class GesuchAppPatternMainLayoutComponent {
           }),
       });
 
+      // todo: to be moved into right menu!
+      const sozialdienstMenu: NavItem | undefined =
+        availableSozialdienste.length
+          ? {
+              type: 'menu',
+              id: 'sozialdienst-delegieren',
+              icon: 'interpreter_mode',
+              label: { key: 'shared.dashboard.gesuch.sozialdienst' },
+              children: availableSozialdienste.map((sozialdienst) => ({
+                type: 'action' as const,
+                id: `sozialdienst-delegieren-${sozialdienst.id}`,
+                label: {
+                  key: sozialdienst.name,
+                },
+                icon: 'arrow_forward',
+                disabled: !sozialdienst.aktiv,
+                action: () => this.delegiereSozialdienst(fallId, sozialdienst),
+              })),
+            }
+          : undefined;
+
       const navItems: NavItem[] = [
         ...gesuchBaseMenuItems,
         ...gesuchNav,
@@ -170,6 +222,7 @@ export class GesuchAppPatternMainLayoutComponent {
         fallDokumente,
         auszahlung,
         nachrichten,
+        ...(sozialdienstMenu ? [sozialdienstMenu] : []),
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;
@@ -187,5 +240,30 @@ export class GesuchAppPatternMainLayoutComponent {
         this.gesuchHeaderStore.loadHeader$({ gesuchId });
       }
     });
+  }
+
+  private delegiereSozialdienst(
+    fallId: string,
+    sozialdienst: SozialdienstSlim,
+  ) {
+    GesuchAppDialogDelegierenComponent.open(this.dialog)
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.sozialdienstStore.fallDelegieren$({
+            req: {
+              sozialdienstId: sozialdienst.id,
+              fallId,
+              delegierungCreate: result,
+            },
+            onSuccess: () => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: 'shared.dashboard.gesuch.delegieren.success',
+              });
+              // this.dashboardStore.loadDashboard$(); // todo: after change dto
+            },
+          });
+        }
+      });
   }
 }

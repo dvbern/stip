@@ -19,6 +19,7 @@ import {
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
+  byAppType,
   getGesuchPermissions,
   getTranchePermissions,
   isNotReadonly,
@@ -129,7 +130,22 @@ export class DashboardStore extends signalStore(
     };
   });
 
-  loadDashboard$ = rxMethod<void>(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  loadDashboard$(params: { fallId: string }) {
+    return byAppType(this.appType, {
+      'gesuch-app': () => this.loadDashboardGS$(), //todo: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
+      // todo: add after merge of KSTIP-3676
+      // 'sozialdienst-app': () => this.loadDashboardSoz$(params),
+      'demo-data-app': () => {
+        throw new Error('Not implemented for this AppType');
+      },
+      'sachbearbeitung-app': () => {
+        throw new Error('Not implemented for this AppType');
+      },
+    });
+  }
+
+  private loadDashboardGS$ = rxMethod<void>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({
@@ -146,7 +162,7 @@ export class DashboardStore extends signalStore(
     ),
   );
 
-  loadSozialdienstDashboard$ = rxMethod<{ fallId: string }>(
+  private loadDashboardSoz$ = rxMethod<{ fallId: string }>(
     pipe(
       tap(() => {
         patchState(this, (state) => ({

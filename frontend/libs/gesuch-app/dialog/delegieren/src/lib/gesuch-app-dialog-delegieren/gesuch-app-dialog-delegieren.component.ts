@@ -46,7 +46,7 @@ import {
 export type DelegierenDialogResult = DelegierungCreate;
 
 @Component({
-  selector: 'dv-gesuch-app-feature-delegieren-dialog',
+  selector: 'dv-gesuch-app-dialog-delegieren',
   imports: [
     TranslocoPipe,
     MatFormFieldModule,
@@ -60,7 +60,7 @@ export type DelegierenDialogResult = DelegierungCreate;
     ReactiveFormsModule,
     SharedUiFormAddressComponent,
   ],
-  templateUrl: './gesuch-app-feature-delegieren-dialog.component.html',
+  templateUrl: './gesuch-app-dialog-delegieren.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     provideMaterialDefaultOptions({
@@ -68,14 +68,11 @@ export type DelegierenDialogResult = DelegierungCreate;
     }),
   ],
 })
-export class GesuchAppFeatureDelegierenDialogComponent {
+export class GesuchAppDialogDelegierenComponent {
   private dialog = inject(MatDialog);
   private dialogRef =
     inject<
-      MatDialogRef<
-        GesuchAppFeatureDelegierenDialogComponent,
-        DelegierenDialogResult
-      >
+      MatDialogRef<GesuchAppDialogDelegierenComponent, DelegierenDialogResult>
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private store = inject(Store);
@@ -87,14 +84,11 @@ export class GesuchAppFeatureDelegierenDialogComponent {
 
   static open(
     dialog: MatDialog,
-  ): MatDialogRef<
-    GesuchAppFeatureDelegierenDialogComponent,
-    DelegierenDialogResult
-  > {
+  ): MatDialogRef<GesuchAppDialogDelegierenComponent, DelegierenDialogResult> {
     return dialog.open<
-      GesuchAppFeatureDelegierenDialogComponent,
+      GesuchAppDialogDelegierenComponent,
       DelegierenDialogResult
-    >(GesuchAppFeatureDelegierenDialogComponent);
+    >(GesuchAppDialogDelegierenComponent);
   }
 
   form = this.formBuilder.group({
@@ -144,14 +138,19 @@ export class GesuchAppFeatureDelegierenDialogComponent {
       const adresseValues = SharedUiFormAddressComponent.getRealValues(
         this.form.controls.adresse,
       );
+      const geburtsdatum = parseStringAndPrintForBackendLocalDate(
+        values.geburtsdatum,
+        this.languageSig(),
+        subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
+      );
+
+      if (!geburtsdatum) {
+        return;
+      }
 
       this.dialogRef.close({
         ...values,
-        geburtsdatum: parseStringAndPrintForBackendLocalDate(
-          values.geburtsdatum,
-          this.languageSig(),
-          subYears(new Date(), MEDIUM_AGE_GESUCHSSTELLER),
-        )!,
+        geburtsdatum,
         adresse: {
           ...adresseValues,
         },

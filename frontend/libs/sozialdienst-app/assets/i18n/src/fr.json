@@ -1,8 +1,6 @@
 {
   "app-name": "Stipends Online",
   "sozialdienst-app.dashboard.title": "Cockpit",
-  "sozialdienst-app.dashboard.welcome.title": "Demandeur {{name}}",
-  "sozialdienst-app.dashboard.ausbildung.create": "Demander une bourse",
 
   "sozialdienst-app.header.antraege": "Demandes",
   "sozialdienst-app.header.fall": "Cas",

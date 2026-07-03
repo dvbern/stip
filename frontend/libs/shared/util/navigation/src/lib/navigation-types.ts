@@ -20,6 +20,8 @@ export type TranslateLabel = {
   context?: Record<string, string | number>;
 };
 
+// todo: consider for name alongside label, so no translation happens.
+// (or leave as is and translation will fail and string is shown)
 interface NavItemBase {
   id: string;
   rolesAllowed?: BenutzerRole[] | SozialdienstBenutzerRole[];
