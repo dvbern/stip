@@ -1,6 +1,9 @@
 {
-  "shared.search": "Search",
+  "shared.allgemeine-informationen.title": "Informations générales",
+  "shared.allgemeine-informationen.message": "La brochure d'information sur les bourses et les prêts fournit un aperçu succinct des bases sur lesquelles les contributions à la formation sont accordées. De plus, vous serez informé de la manière de procéder lors de la soumission d'une demande, des conditions à remplir pour obtenir une bourse ou un prêt et d'autres informations utiles.",
+  "shared.search": "Recherche",
   "shared.menu": "Menu",
+  "shared.menu.allgemeine-informationen": "Informations générales",
   "shared.menu.workedBy": "en cours de traitement par",
   "shared.menu.dashboard": "Dashboard",
   "shared.menu.auszahlung": "Paiement",

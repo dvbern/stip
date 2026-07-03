@@ -76,8 +76,10 @@ import {
   hideAktionenRoutes,
   notGesuchRoute,
 } from '@dv/shared/model/ui-constants';
-import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
-import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
+import {
+  SharedPatternGesuchInfoBarComponent,
+  SharedPatternGesuchInfoBarPartsDirective,
+} from '@dv/shared/pattern/gesuch-info-bar';
 import { SharedUiKommentarDialogComponent } from '@dv/shared/ui/kommentar-dialog';
 import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import {
@@ -99,7 +101,7 @@ import type { ExportView } from '@dv/shared/util-data-access/export-tranche';
     MatMenuModule,
     MatTooltipModule,
     SharedPatternGesuchInfoBarComponent,
-    SharedPatternGlobalHeaderPartsDirective,
+    SharedPatternGesuchInfoBarPartsDirective,
     TranslocoDirective,
     SharedUiVersionenMenuComponent,
     MatIconModule,

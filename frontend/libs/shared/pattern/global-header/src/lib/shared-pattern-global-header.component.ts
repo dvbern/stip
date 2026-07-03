@@ -33,6 +33,7 @@ import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
 import { SharedUiTenantStylesDvComponent } from '@dv/shared/ui/tenant-styles-dv';
@@ -154,5 +155,12 @@ export class SharedPatternGlobalHeaderComponent {
           );
         }
       });
+  }
+
+  showAllgemeineInformationen() {
+    SharedUiInfoDialogComponent.open(this.dialog, {
+      titleKey: 'shared.allgemeine-informationen.title',
+      messageKey: 'shared.allgemeine-informationen.message',
+    });
   }
 }

@@ -64,9 +64,22 @@
           </button>
 
           <mat-menu #profileMenu="matMenu" xPosition="before">
+            <!-- Profile -->
             <button type="button" data-testid="button-profile" mat-menu-item>
               {{ t('shared.menu.profile') }}
             </button>
+
+            <!-- Allgemeine Informationen -->
+            <button
+              type="button"
+              data-testid="button-allgemeine-informationen"
+              mat-menu-item
+              (click)="showAllgemeineInformationen()"
+            >
+              {{ t('shared.menu.allgemeine-informationen') }}
+            </button>
+
+            <!-- Nutzungsbedingungen -->
             <button
               type="button"
               data-testid="button-nutzungsbedingungen"
@@ -75,10 +88,14 @@
             >
               {{ t('shared.menu.nutzungsbedingungen') }}
             </button>
+
+            <!-- Logout -->
             <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">
               {{ t('shared.menu.logout') }}
             </button>
             <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+
+            <!-- Language Selector -->
             <dv-shared-ui-language-selector
               class="tw:flex tw:justify-center tw:px-2"
               [language]="languageSig()"

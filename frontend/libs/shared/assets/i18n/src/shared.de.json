@@ -1,6 +1,9 @@
 {
+  "shared.allgemeine-informationen.title": "Allgemeine Informationen",
+  "shared.allgemeine-informationen.message": "Die Informationsbroschüre Stipendien und Darlehen gibt eine kurze Übersicht, auf welcher Basis Ausbildungsbeiträge ausgerichtet werden. Ausserdem werden Sie darüber informiert, wie bei der Gesuchseinreichung vorzugehen ist, welche Voraussetzungen für ein Stipendium oder Darlehen zu erfüllen sind und weitere nützliche Grundlagen.",
   "shared.search": "Suche",
   "shared.menu": "Menü",
+  "shared.menu.allgemeine-informationen": "Allgemeine Informationen",
   "shared.menu.workedBy": "in Bearbeitung durch",
   "shared.menu.dashboard": "Dashboard",
   "shared.menu.auszahlung": "Auszahlung",
