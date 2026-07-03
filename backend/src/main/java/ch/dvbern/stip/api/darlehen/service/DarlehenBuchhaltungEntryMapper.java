@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.darlehen.service;
 
 import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
@@ -31,5 +32,11 @@ public abstract class DarlehenBuchhaltungEntryMapper {
     );
 
     @Mapping(source = "comment", target = "kommentar")
+    @Mapping(target = "yearRange", expression = "java(toYearRange(darlehenBuchhaltungEntry))")
     public abstract DarlehenBuchhaltungEntryDto toDto(DarlehenBuchhaltungEntry darlehenBuchhaltungEntry);
+
+    protected String toYearRange(final DarlehenBuchhaltungEntry darlehenBuchhaltungEntry) {
+        final var gesuchsperiode = darlehenBuchhaltungEntry.getGesuch().getGesuchsperiode();
+        return DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
+    }
 }

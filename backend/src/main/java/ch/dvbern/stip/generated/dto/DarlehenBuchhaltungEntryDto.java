@@ -24,6 +24,7 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenBuchhaltungEntryKategorie kategorie;
   private @Valid Integer betrag;
   private @Valid DokumentDto verfuegung;
+  private @Valid String yearRange;
   private @Valid String userErstellt;
   private @Valid String kommentar;
 
@@ -104,6 +105,24 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
 
   /**
    **/
+  public DarlehenBuchhaltungEntryDto yearRange(String yearRange) {
+    this.yearRange = yearRange;
+    return this;
+  }
+
+  
+  @JsonProperty("yearRange")
+  public String getYearRange() {
+    return yearRange;
+  }
+
+  @JsonProperty("yearRange")
+  public void setYearRange(String yearRange) {
+    this.yearRange = yearRange;
+  }
+
+  /**
+   **/
   public DarlehenBuchhaltungEntryDto userErstellt(String userErstellt) {
     this.userErstellt = userErstellt;
     return this;
@@ -152,13 +171,14 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
         Objects.equals(this.kategorie, darlehenBuchhaltungEntry.kategorie) &&
         Objects.equals(this.betrag, darlehenBuchhaltungEntry.betrag) &&
         Objects.equals(this.verfuegung, darlehenBuchhaltungEntry.verfuegung) &&
+        Objects.equals(this.yearRange, darlehenBuchhaltungEntry.yearRange) &&
         Objects.equals(this.userErstellt, darlehenBuchhaltungEntry.userErstellt) &&
         Objects.equals(this.kommentar, darlehenBuchhaltungEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, kategorie, betrag, verfuegung, userErstellt, kommentar);
+    return Objects.hash(timestampErstellt, kategorie, betrag, verfuegung, yearRange, userErstellt, kommentar);
   }
 
   @Override
@@ -170,6 +190,7 @@ public class DarlehenBuchhaltungEntryDto  implements Serializable {
     sb.append("    kategorie: ").append(toIndentedString(kategorie)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
     sb.append("    verfuegung: ").append(toIndentedString(verfuegung)).append("\n");
+    sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");

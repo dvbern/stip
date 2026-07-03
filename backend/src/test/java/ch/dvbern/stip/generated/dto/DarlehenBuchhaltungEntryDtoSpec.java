@@ -33,6 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_KATEGORIE,
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_VERFUEGUNG,
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_BETRAG,
+  DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_YEAR_RANGE,
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_USER_ERSTELLT,
   DarlehenBuchhaltungEntryDtoSpec.JSON_PROPERTY_KOMMENTAR
 })
@@ -50,6 +51,9 @@ public class DarlehenBuchhaltungEntryDtoSpec {
 
   public static final String JSON_PROPERTY_BETRAG = "betrag";
   private Integer betrag;
+
+  public static final String JSON_PROPERTY_YEAR_RANGE = "yearRange";
+  private String yearRange;
 
   public static final String JSON_PROPERTY_USER_ERSTELLT = "userErstellt";
   private String userErstellt;
@@ -164,6 +168,32 @@ public class DarlehenBuchhaltungEntryDtoSpec {
   }
 
 
+  public DarlehenBuchhaltungEntryDtoSpec yearRange(String yearRange) {
+    
+    this.yearRange = yearRange;
+    return this;
+  }
+
+   /**
+   * Get yearRange
+   * @return yearRange
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public String getYearRange() {
+    return yearRange;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_YEAR_RANGE)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setYearRange(String yearRange) {
+    this.yearRange = yearRange;
+  }
+
+
   public DarlehenBuchhaltungEntryDtoSpec userErstellt(String userErstellt) {
     
     this.userErstellt = userErstellt;
@@ -228,13 +258,14 @@ public class DarlehenBuchhaltungEntryDtoSpec {
         Objects.equals(this.kategorie, darlehenBuchhaltungEntry.kategorie) &&
         Objects.equals(this.verfuegung, darlehenBuchhaltungEntry.verfuegung) &&
         Objects.equals(this.betrag, darlehenBuchhaltungEntry.betrag) &&
+        Objects.equals(this.yearRange, darlehenBuchhaltungEntry.yearRange) &&
         Objects.equals(this.userErstellt, darlehenBuchhaltungEntry.userErstellt) &&
         Objects.equals(this.kommentar, darlehenBuchhaltungEntry.kommentar);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(timestampErstellt, kategorie, verfuegung, betrag, userErstellt, kommentar);
+    return Objects.hash(timestampErstellt, kategorie, verfuegung, betrag, yearRange, userErstellt, kommentar);
   }
 
   @Override
@@ -245,6 +276,7 @@ public class DarlehenBuchhaltungEntryDtoSpec {
     sb.append("    kategorie: ").append(toIndentedString(kategorie)).append("\n");
     sb.append("    verfuegung: ").append(toIndentedString(verfuegung)).append("\n");
     sb.append("    betrag: ").append(toIndentedString(betrag)).append("\n");
+    sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    userErstellt: ").append(toIndentedString(userErstellt)).append("\n");
     sb.append("    kommentar: ").append(toIndentedString(kommentar)).append("\n");
     sb.append("}");

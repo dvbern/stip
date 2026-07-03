@@ -49,6 +49,13 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'fall-dokumente',
+        loadChildren: () =>
+          import('@dv/shared/feature/fall-dokumente-layout').then(
+            (m) => m.sharedFeatureFallDokumenteLayoutRoutes,
+          ),
+      },
+      {
         path: 'administration',
         canActivate: [hasBenutzer, hasRoles(['V0_Sozialdienst-Admin'])],
         title: 'sozialdienst-app.admin.title',
