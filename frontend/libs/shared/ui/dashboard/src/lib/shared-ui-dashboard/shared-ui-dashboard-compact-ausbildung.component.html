@@ -1,5 +1,5 @@
 @let ausbildung = ausbildungSig();
-<mat-expansion-panel [togglePosition]="'before'" class="dv-large">
+<mat-expansion-panel [togglePosition]="'before'" class="dv-large" *dvTranslocoShared="let t">
   <mat-expansion-panel-header>
     <mat-panel-title class="tw:flex tw:flex-col tw:py-8 tw:pl-8">
       <h2 class="tw:!mb-3 tw:flex tw:w-full tw:items-center tw:gap-4 tw:!text-2xl">
@@ -7,27 +7,42 @@
           <i class="material-symbols-rounded tw:text-2xl">school</i>
         </dv-shared-ui-icon-chip>
         {{
-          'shared.dashboard.ausbildung.title'
-            | transloco
-              : (ausbildung.ausbildungNichtGefunden
-                  ? { bezeichnungDe: ausbildung.alternativeAusbildungsgang }
-                  : ausbildung.ausbildungsgang)
+          t('shared.dashboard.ausbildung.title', {
+            bezeichnungDe: ausbildung.ausbildungNichtGefunden
+              ? ausbildung.alternativeAusbildungsgang
+              : ausbildung.ausbildungsgang,
+          })
         }}
         <div class="tw:grow tw:text-end tw:text-base">
-          {{ 'shared.dashboard.ausbildung.status.' + ausbildung.status | transloco: { status: ausbildung.status } }}
+          {{ t(`shared.dashboard.ausbildung.status.${ausbildung.status}`, { status: ausbildung.status }) }}
         </div>
       </h2>
 
-      <p class="tw:my-0 tw:w-full">
-        {{
-          'shared.dashboard.ausbildung.description'
-            | transloco
-              : {
-                  start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
-                  end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
-                }
-        }}
-      </p>
+      <div class="tw:flex tw:mb-6 tw:gap-2">
+        <!-- ausbildungsbeginn -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold"> {{ t('shared.dashboard.ausbildung.start') }}: </span>
+          <span>
+            {{ ausbildung.ausbildungBegin | date: 'dd.MM.yyyy' }}
+          </span>
+        </div>
+
+        <!-- ausbildungsende -->
+        <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+          <span class="tw:font-semibold">
+            {{
+              t(
+                ausbildung.status === 'AKTIV'
+                  ? 'shared.dashboard.ausbildung.voraussichtlichesEnde'
+                  : 'shared.dashboard.ausbildung.ende'
+              )
+            }}:
+          </span>
+          <span>
+            {{ ausbildung.ausbildungEnd | date: 'dd.MM.yyyy' }}
+          </span>
+        </div>
+      </div>
     </mat-panel-title>
   </mat-expansion-panel-header>
 

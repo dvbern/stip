@@ -133,8 +133,8 @@ export class DashboardStore extends signalStore(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadDashboard$(params: { fallId: string }) {
     return byAppType(this.appType, {
-      'gesuch-app': () => this.loadDashboardGS$(), //todo: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
-      // todo: add after merge of KSTIP-3676
+      'gesuch-app': () => this.loadDashboardGS$(), //todo-KSTIP-3643: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
+      // todo-KSTIP-3643: add after merge of KSTIP-3676
       // 'sozialdienst-app': () => this.loadDashboardSoz$(params),
       'demo-data-app': () => {
         throw new Error('Not implemented for this AppType');

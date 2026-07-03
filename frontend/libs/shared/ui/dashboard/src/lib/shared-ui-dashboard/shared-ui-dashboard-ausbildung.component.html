@@ -1,21 +1,40 @@
 @let ausbildung = ausbildungSig();
 <div class="tw:grid tw:grid-cols-[1fr_auto]" *dvTranslocoShared="let t">
   <div>
-    <h2 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-semibold">
+    <h2 class="tw:mb-6 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-semibold">
       <dv-shared-ui-icon-chip style="background-color: var(--dv-success-subtle); color: #81be06e0">
         <i class="material-symbols-rounded tw:text-2xl">school</i>
       </dv-shared-ui-icon-chip>
       {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
     </h2>
-    <p class="tw:mb-10 tw:ml-4">
-      {{
-        t('shared.dashboard.ausbildung.description', {
-          start: (ausbildung.ausbildungBegin | translatedDate: 'MMMM yyyy' | async),
-          end: (ausbildung.ausbildungEnd | translatedDate: 'MMMM yyyy' | async),
-        })
-      }}
-    </p>
+
+    <div class="tw:flex tw:mb-6 tw:gap-2">
+      <!-- ausbildungsbeginn -->
+      <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+        <span class="tw:font-semibold"> {{ t('shared.dashboard.ausbildung.start') }}: </span>
+        <span>
+          {{ ausbildung.ausbildungBegin | date: 'dd.MM.yyyy' }}
+        </span>
+      </div>
+
+      <!-- ausbildungsende -->
+      <div class="tw:bg-gray-100 tw:rounded-lg tw:px-2 tw:py-1">
+        <span class="tw:font-semibold">
+          {{
+            t(
+              ausbildung.status === 'AKTIV'
+                ? 'shared.dashboard.ausbildung.voraussichtlichesEnde'
+                : 'shared.dashboard.ausbildung.ende'
+            )
+          }}:
+        </span>
+        <span>
+          {{ ausbildung.ausbildungEnd | date: 'dd.MM.yyyy' }}
+        </span>
+      </div>
+    </div>
   </div>
+
   <div class="tw:flex tw:flex-col tw:gap-2">
     @if (ausbildung.canDelete) {
       <button type="button" class="tw:dv-button-outline tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">

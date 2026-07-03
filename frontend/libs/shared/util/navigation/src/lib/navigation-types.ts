@@ -20,8 +20,6 @@ export type TranslateLabel = {
   context?: Record<string, string | number>;
 };
 
-// todo: consider for name alongside label, so no translation happens.
-// (or leave as is and translation will fail and string is shown)
 interface NavItemBase {
   id: string;
   rolesAllowed?: BenutzerRole[] | SozialdienstBenutzerRole[];
@@ -47,7 +45,7 @@ export interface NavItemAction extends NavItemBase {
   disabled?: boolean;
 }
 
-export interface NavItemGroup extends NavItemBase {
+export interface NavItemMenu extends NavItemBase {
   type: 'menu';
   children: NavItem[];
 }
@@ -60,8 +58,10 @@ export interface NavItemSeparator extends NavItemBase {
 export type NavItem =
   | NavItemLink
   | NavItemAction
-  | NavItemGroup
+  | NavItemMenu
   | NavItemSeparator;
+
+export type NavMenuItem = NavItemLink | NavItemAction | NavItemSeparator;
 
 export interface TabNavItem {
   key: string;

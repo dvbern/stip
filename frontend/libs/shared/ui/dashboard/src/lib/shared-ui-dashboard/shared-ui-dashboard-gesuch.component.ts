@@ -7,9 +7,9 @@ import {
   output,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
 
 @Component({
@@ -17,7 +17,7 @@ import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry
   imports: [
     CommonModule,
     RouterLink,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
     SharedUiAenderungsEntryComponent,
   ],
   templateUrl: './shared-ui-dashboard-gesuch.component.html',

@@ -1,0 +1,64 @@
+<ng-container *transloco="let t">
+  @for (item of navMenuItemsSig(); track item.id) {
+    <!-- todo-KSTIP-3643 hier gibt es etwas viel duplication mit ui-nav-items, ev. fndest du eine bessere lösung, sonst auch ok -->
+    @switch (item.type) {
+      @case ('link') {
+        <a
+          class="tw:flex tw:items-center tw:px-2 tw:relative"
+          mat-menu-item
+          [routerLink]="item.route"
+          [queryParams]="item.queryParams"
+          [queryParamsHandling]="'merge'"
+          [attr.data-testid]="item.testId"
+          [class.isActive]="item.active"
+          routerLinkActive="active"
+          [matBadge]="item.badge?.count"
+        >
+          @if (item.icon) {
+            <i class="material-symbols-rounded tw:mr-2">{{ item.icon }}</i>
+          }
+          @if (item.label) {
+            <span>{{ t(item.label.key, item.label.context) }}</span>
+          }
+        </a>
+      }
+      @case ('action') {
+        <button
+          type="button"
+          class="tw:w-full"
+          mat-menu-item
+          [attr.data-testid]="item.testId"
+          (click)="item.action()"
+          [disabled]="item.disabled"
+          [matBadge]="item.badge?.count"
+        >
+          <div class="tw:flex tw:items-center tw:gap-2">
+            @if (item.icon) {
+              <i class="material-symbols-rounded">{{ item.icon }}</i>
+            }
+            @if (item.label) {
+              <span>{{ t(item.label.key, item.label.context) }}</span>
+            }
+          </div>
+        </button>
+      }
+      @case ('separator') {
+        @if (item.orientation === 'vertical') {
+          <div class="tw:w-px tw:bg-gray-300 tw:self-stretch"></div>
+        } @else {
+          @if (item.label) {
+            <div class="tw:flex tw:items-center tw:text-dv-gray tw:text-sm tw:gap-2 tw:w-full">
+              <div class="tw:grow tw:border tw:border-gray-300"></div>
+              <div class="tw:whitespace-nowrap">
+                {{ t(item.label.key, item.label.context) }}
+              </div>
+              <div class="tw:grow tw:border tw:border-gray-300"></div>
+            </div>
+          } @else {
+            <div class="tw:grow tw:border tw:border-gray-300 tw:w-full"></div>
+          }
+        }
+      }
+    }
+  }
+</ng-container>

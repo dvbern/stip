@@ -1,8 +1,7 @@
 import { Directive } from '@angular/core';
 
-// todo: is this needed?
 @Directive({
-  selector: '[dvGesuchNavItems], [dvGesuchStatusIndication]',
+  selector: '[dvGlobalHeaderRight]',
   standalone: true,
 })
 export class SharedPatternGlobalHeaderPartsDirective {}

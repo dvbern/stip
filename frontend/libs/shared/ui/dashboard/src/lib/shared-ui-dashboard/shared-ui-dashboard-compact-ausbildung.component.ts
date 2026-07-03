@@ -11,8 +11,8 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
 import { AenderungMelden } from '@dv/shared/model/gesuch';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
-import { SharedUiTranslatedDatePipe } from '@dv/shared/ui/translated-date-pipe';
 
 import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.component';
 
@@ -24,7 +24,7 @@ import { SharedUiDashboardGesuchComponent } from './shared-ui-dashboard-gesuch.c
     MatExpansionModule,
     SharedUiDashboardGesuchComponent,
     SharedUiIconChipComponent,
-    SharedUiTranslatedDatePipe,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-ui-dashboard-compact-ausbildung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

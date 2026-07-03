@@ -36,8 +36,9 @@ import { capitalized } from '@dv/shared/model/type-util';
 import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
+import { SharedUiNavMenuItemsComponent } from '@dv/shared/ui/nav-menu-items';
 import { SharedUiTenantStylesDvComponent } from '@dv/shared/ui/tenant-styles-dv';
-import { NavItem } from '@dv/shared/util/navigation';
+import { NavItem, NavMenuItem } from '@dv/shared/util/navigation';
 import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
 
 @Component({
@@ -51,6 +52,7 @@ import { SharedUtilTenantConfigService } from '@dv/shared/util/tenant-config';
     SharedUiTenantStylesDvComponent,
     TranslocoDirective,
     SharedUiNavItemsComponent,
+    SharedUiNavMenuItemsComponent,
   ],
   templateUrl: './shared-pattern-global-header.component.html',
   styles: `
@@ -68,6 +70,7 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
   staticNavItemsSig = input<NavItem[]>([]);
+  staticMenuItemsSig = input<NavMenuItem[]>([]);
 
   @Output() openSidenav = new EventEmitter<void>();
   @Output() closeSidenav = new EventEmitter<void>();
@@ -92,6 +95,16 @@ export class SharedPatternGlobalHeaderComponent {
     }
 
     return this.staticNavItemsSig() ?? [];
+  });
+
+  menuItemsSig = computed(() => {
+    const dynamicItems = this.navigationStore.menuItemsViewSig();
+
+    if (dynamicItems.length) {
+      return dynamicItems;
+    }
+
+    return this.staticMenuItemsSig() ?? [];
   });
 
   benutzerNameSig = computed(() => {

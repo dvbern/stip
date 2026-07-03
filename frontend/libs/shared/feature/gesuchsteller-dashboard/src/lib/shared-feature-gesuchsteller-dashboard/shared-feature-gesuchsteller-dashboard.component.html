@@ -1,65 +1,60 @@
 <ng-container *dvTranslocoShared="let t">
-  <div class="bg-image">
-    <div class="gray-bg"></div>
-  </div>
-
-  <div class="tw:relative tw:my-12 tw:justify-between tw:dv-container">
-    <!-- todo after merge KSTIP-3676: change title for soz app -->
-    <h1 class="tw:mb-8 tw:text-white tw:font-semibold tw:text-4xl">
+  <div class="tw:relative tw:justify-between tw:py-6 tw:dv-container">
+    <!-- todo-KSTIP-3643: after merge KSTIP-3676: change title for soz app -->
+    <h1 class="tw:mb-8 tw:dv-page-title">
       {{ t('shared.dashboard.welcome.title', { name: benutzerNameSig() }) }}
     </h1>
 
     @let dashboard = dashboardStore.dashboardViewSig();
     @if (dashboard) {
       @let fall = dashboard.fall;
+
+      <!-- main column -->
       <div
-        class="tw:grid tw:grid-cols-1 tw:gap-16 tw:lg:grid-cols-[2fr_1fr]"
+        class="tw:flex tw:flex-col tw:gap-8 tw:max-w-[1000px] tw:m-auto"
         [class.busy]="isUnterbruchOrAenderungPendingSig()"
       >
-        <!-- main column -->
-        <div class="tw:flex tw:flex-col tw:gap-8">
-          @if (dashboard.activeAusbildungen.length > 0) {
-            @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
-              <dv-shared-ui-dashboard-ausbildung
-                [ausbildungSig]="ausbildung"
-                (deleteAusbildung)="deleteAusbildung($event)"
-                (deleteGesuch)="deleteGesuch($event)"
-                (aenderungMelden)="aenderungMelden($event)"
-                (deleteAenderung)="deleteAenderung($event)"
-                (ausbildungUnterbrechen)="ausbildungUnterbrechen($event, ausbildung.openAusbildungUnterbruchAntragId)"
-              ></dv-shared-ui-dashboard-ausbildung>
-            }
-          } @else if (dashboard.canCreateAusbildung) {
-            <button
-              data-testid="cockpit-create-ausbildung"
-              type="button"
-              (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
-              class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
-            >
-              <dv-shared-ui-icon-chip>
-                <i class="material-symbols-rounded">add</i>
-              </dv-shared-ui-icon-chip>
-              {{ t('shared.dashboard.ausbildung.create') }}
-            </button>
-          } @else {
-            <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
-              <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-3xl tw:font-semibold">
-                <dv-shared-ui-icon-chip class="tw:bg-dv-green-subtle tw:text-dv-green">
-                  <i class="material-symbols-rounded tw:text-2xl">school</i>
-                </dv-shared-ui-icon-chip>
-                {{ t('shared.dashboard.fall.delegated.title') }}
-              </h3>
-              <p class="tw:mb-0">
-                {{ t('shared.dashboard.fall.delegated.message') }}
-              </p>
-            </div>
-          }
-          @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
-            <dv-shared-ui-dashboard-compact-ausbildung
+        @if (dashboard.activeAusbildungen.length > 0) {
+          @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
+            <dv-shared-ui-dashboard-ausbildung
               [ausbildungSig]="ausbildung"
-            ></dv-shared-ui-dashboard-compact-ausbildung>
+              (deleteAusbildung)="deleteAusbildung($event)"
+              (deleteGesuch)="deleteGesuch($event)"
+              (aenderungMelden)="aenderungMelden($event)"
+              (deleteAenderung)="deleteAenderung($event)"
+              (ausbildungUnterbrechen)="ausbildungUnterbrechen($event, ausbildung.openAusbildungUnterbruchAntragId)"
+            ></dv-shared-ui-dashboard-ausbildung>
           }
-        </div>
+        } @else if (dashboard.canCreateAusbildung) {
+          <button
+            data-testid="cockpit-create-ausbildung"
+            type="button"
+            (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
+            class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
+          >
+            <dv-shared-ui-icon-chip>
+              <i class="material-symbols-rounded">add</i>
+            </dv-shared-ui-icon-chip>
+            {{ t('shared.dashboard.ausbildung.create') }}
+          </button>
+        } @else {
+          <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
+            <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-3xl tw:font-semibold">
+              <dv-shared-ui-icon-chip class="tw:bg-dv-green-subtle tw:text-dv-green">
+                <i class="material-symbols-rounded tw:text-2xl">school</i>
+              </dv-shared-ui-icon-chip>
+              {{ t('shared.dashboard.fall.delegated.title') }}
+            </h3>
+            <p class="tw:mb-0">
+              {{ t('shared.dashboard.fall.delegated.message') }}
+            </p>
+          </div>
+        }
+        @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
+          <dv-shared-ui-dashboard-compact-ausbildung
+            [ausbildungSig]="ausbildung"
+          ></dv-shared-ui-dashboard-compact-ausbildung>
+        }
       </div>
     }
   </div>

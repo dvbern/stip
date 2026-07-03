@@ -97,8 +97,8 @@ export class SharedFeatureGesuchstellerDashboardComponent {
 
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
-  // todo: make explicit after merge of KSTIP-3676
-  private fallIdSigByAppType = computed(() => {
+  // todo-KSTIP-3643: make explicit after merge of KSTIP-3676
+  private fallIdByAppTypeSig = computed(() => {
     if (this.config.appType === 'gesuch-app') {
       return this.fallStore.currentFallViewSig()?.id;
     }
@@ -108,10 +108,9 @@ export class SharedFeatureGesuchstellerDashboardComponent {
 
   constructor() {
     this.store.dispatch(SharedDataAccessGesuchEvents.reset());
-    // this.fallStore.loadCurrentFall$(); //todo: remove
 
     effect(() => {
-      const fallId = this.fallIdSigByAppType();
+      const fallId = this.fallIdByAppTypeSig();
 
       if (fallId) {
         this.dashboardStore.loadDashboard$({ fallId });
@@ -120,7 +119,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
 
     effect(() => {
       if (this.gesuchUpdatedSig()) {
-        const fallId = untracked(() => this.fallIdSigByAppType());
+        const fallId = untracked(() => this.fallIdByAppTypeSig());
         if (fallId) {
           this.dashboardStore.loadDashboard$({ fallId });
         }
@@ -252,7 +251,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
             onSuccess: () => {
-              const fallId = this.fallIdSigByAppType();
+              const fallId = this.fallIdByAppTypeSig();
               if (fallId) {
                 this.dashboardStore.loadDashboard$({ fallId });
               }
