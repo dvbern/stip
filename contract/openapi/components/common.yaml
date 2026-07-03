@@ -12,6 +12,24 @@ Verfuegung:
       type: array
       items:
         $ref: '#/VerfuegungDokument'
+
+VerfuegungFall:
+  type: object
+  required:
+    - timestampErstellt
+    - yearRange
+    - totalbetragStipendium
+    - dokumente
+  properties:
+    timestampErstellt:
+      type: string
+    yearRange:
+      type: string
+    totalbetragStipendium:
+      type: integer
+    dokument:
+      $ref: '#/VerfuegungDokument'
+
 VerfuegungDokument:
   type: object
   required:

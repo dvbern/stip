@@ -266,10 +266,7 @@ public class BerechnungService {
         final var gesuchsperiode = gesuchTranche.getGesuch().getGesuchsperiode();
         final var gesuchFormular = gesuchTranche.getGesuchFormular();
         final var steuerdaten = gesuchFormular.getSteuerdaten();
-        final var yearRange = "%s/%s".formatted(
-            gesuchsperiode.getGesuchsperiodeStart().getYear(),
-            gesuchsperiode.getGesuchsperiodeStopp().getYear()
-        );
+        final var yearRange = DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
 
         List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
             gesuchFormular.getGeschwisters()

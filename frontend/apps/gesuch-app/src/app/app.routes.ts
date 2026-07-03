@@ -44,6 +44,13 @@ export const appRoutes: Route[] = [
           ),
       },
       {
+        path: 'fall-dokumente',
+        loadChildren: () =>
+          import('@dv/shared/feature/fall-dokumente-layout').then(
+            (m) => m.sharedFeatureFallDokumenteLayoutRoutes,
+          ),
+      },
+      {
         path: 'auszahlung',
         loadChildren: () =>
           import('@dv/gesuch-app/feature/auszahlung').then(

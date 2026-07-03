@@ -1,0 +1,87 @@
+<div class="tw:dv-table tw:my-3 tw:shadow-none tw:border" *dvTranslocoShared="let t">
+  <div class="tw:relative tw:overflow-auto">
+    @if (fallDokumenteStore.verfuegungenViewSig().loading) {
+      <dv-shared-ui-loading [overlay]="true"></dv-shared-ui-loading>
+    }
+
+    <table
+      mat-table
+      [dataSource]="paginatedDokumenteSig()"
+      data-testid="fall-dokumente-table"
+      class="tw:w-full tw:table-fixed!"
+    >
+      <caption class="cdk-visually-hidden">
+        {{
+          t('shared.fallDokumente.stipendien.table.description')
+        }}
+      </caption>
+
+      <ng-container matColumnDef="timestampErstellt">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('shared.fallDokumente.stipendien.table.timestampErstellt') }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.timestampErstellt | date: 'dd.MM.yyyy' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="yearRange">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('shared.fallDokumente.stipendien.table.yearRange') }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.yearRange || '-' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="totalbetragStipendium">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('shared.fallDokumente.stipendien.table.totalbetragStipendium') }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          {{ dokument.totalbetragStipendium | formatChf }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dokument">
+        <th mat-header-cell *matHeaderCellDef class="tw:whitespace-nowrap">
+          {{ t('shared.fallDokumente.stipendien.table.dokument') }}
+        </th>
+        <td mat-cell *dvMatCellDef="let dokument; dataSource: paginatedDokumenteSig()" class="tw:whitespace-nowrap">
+          @if (dokument.dokument) {
+            <button
+              type="button"
+              class="tw:dv-button tw:flex tw:max-w-full tw:p-0 tw:items-center"
+              [dvDownloadButton]="{
+                type: 'verfuegung',
+                id: dokument.dokument.id,
+              }"
+            >
+              <span class="tw:truncate tw:text-sm" [matTooltip]="dokument.dokument.filename">{{
+                t('shared.fallDokumente.stipendien.table.dokument')
+              }}</span>
+              <span class="material-symbols-rounded tw:ml-1 tw:align-middle tw:text-lg">download</span>
+            </button>
+          } @else {
+            <span class="tw:text-gray-400">-</span>
+          }
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-mdc-row" *matNoDataRow>
+        <td class="mat-mdc-cell tw:px-3" [colSpan]="displayedColumns.length">
+          {{ t('shared.table.noData') }}
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <mat-paginator
+    showFirstLastButtons
+    [pageSizeOptions]="pageSizes"
+    [pageSize]="defaultPageSize"
+    [length]="paginatedDokumenteSig().data.length"
+  ></mat-paginator>
+</div>

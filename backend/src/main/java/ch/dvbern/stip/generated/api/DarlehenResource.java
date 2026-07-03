@@ -123,6 +123,11 @@ public interface DarlehenResource {
     DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
 
     @GET
+    @Path("/buchhaltung/fall/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrysByFallId(@PathParam("fallId") UUID fallId);
+
+    @GET
     @Path("/dokument/{darlehenId}/{dokumentType}")
     @Produces({ "application/json", "text/plain" })
     NullableDarlehenDokumentDto getDarlehenDokument(@PathParam("darlehenId") UUID darlehenId,@PathParam("dokumentType") ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType);
