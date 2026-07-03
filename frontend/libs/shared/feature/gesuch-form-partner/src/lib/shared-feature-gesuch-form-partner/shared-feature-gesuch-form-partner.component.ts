@@ -102,7 +102,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
   private store = inject(Store);
   private permissionStore = inject(PermissionStore);
   private einreichenStore = inject(EinreichenStore);
-  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private appConfig = inject(SharedModelCompileTimeConfig).app;
   private formBuilder = inject(NonNullableFormBuilder);
   private formUtils = inject(SharedUtilFormService);
 
@@ -192,7 +192,7 @@ export class SharedFeatureGesuchFormPartnerComponent implements OnInit {
       const { permissions } = preparePermissions(
         trancheTyp,
         gesuch,
-        this.appType,
+        this.appConfig,
         rolesMap,
       );
       if (

@@ -17,7 +17,7 @@ export class SharedUiIfGesuchstellerDirective {
   config = inject(SharedModelCompileTimeConfig);
 
   constructor() {
-    if (this.config.isGesuchApp) {
+    if (this.config.app.view === 'gesuchsteller') {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainerRef.clear();

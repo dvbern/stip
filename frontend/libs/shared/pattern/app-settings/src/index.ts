@@ -1,6 +1,6 @@
 import { Provider } from '@angular/core';
 
-import { AppType } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 
 import {
   AppSettings,
@@ -9,14 +9,14 @@ import {
 } from './lib/app-settings/app-settings';
 export { AppSettings } from './lib/app-settings/app-settings';
 
-export function provideSharedAppSettings(type: AppType): Provider[] {
+export function provideSharedAppSettings(config: AppConfig): Provider[] {
   return [
     {
       provide: AppSettings,
       useClass:
-        type === 'gesuch-app'
-          ? AppSettingsGesuchApp
-          : AppSettingsSachbearbeitungApp,
+        config.view === 'sachbearbeiter'
+          ? AppSettingsSachbearbeitungApp
+          : AppSettingsGesuchApp,
     },
   ];
 }

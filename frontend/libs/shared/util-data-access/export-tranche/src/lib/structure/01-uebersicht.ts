@@ -1,10 +1,11 @@
 import { TranslocoService } from '@jsverse/transloco';
 import type { Content } from 'pdfmake/interfaces';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import {
-  AppType,
+  AppConfig,
   SharedModelCompileTimeConfig,
-  ensureIsBusinessAppType,
+  ensureIsBusinessAppConfig,
 } from '@dv/shared/model/config';
 import { GesuchTranche, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
@@ -22,7 +23,7 @@ export const getUebersicht = (
   return [
     getTitle(t, 'shared.tranche.title'),
     getTable([
-      getStatusTuple(t, gesuch, tranche, config.appType, isEditingAenderung),
+      getStatusTuple(t, gesuch, tranche, config.app, isEditingAenderung),
       ...getValueList(
         t,
         [
@@ -62,25 +63,29 @@ const getStatusTuple = (
   t: TranslocoService,
   gesuch: SharedModelGesuch,
   tranche: GesuchTranche,
-  appType: AppType,
+  appConfig: AppConfig,
   isEditingAenderung: boolean,
 ): [Content, string] => {
-  ensureIsBusinessAppType(appType);
+  ensureIsBusinessAppConfig(appConfig);
   return [
     {
       text: _t(
         t,
-        isEditingAenderung
-          ? `shared.form.tranche.status.label.${tranche.typ}`
-          : 'shared.form.tranche.status.label.GESUCH',
+        translatableShared(
+          isEditingAenderung
+            ? `shared.form.tranche.status.label.${tranche.typ}`
+            : 'shared.form.tranche.status.label.GESUCH',
+        ),
       ),
       bold: true,
     },
     _t(
       t,
-      isEditingAenderung
-        ? `shared.gesuch.status.tranche.${tranche.status}`
-        : `${appType}.gesuch.status.contract.${gesuch.gesuchStatus}`,
+      translatableShared(
+        isEditingAenderung
+          ? `shared.gesuch.status.tranche.${tranche.status}`
+          : `${appConfig.keyPrefix}.gesuch.status.contract.${gesuch.gesuchStatus}`,
+      ),
     ),
   ];
 };

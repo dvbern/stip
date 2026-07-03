@@ -25,8 +25,9 @@ describe('SharedUiInfoDialogDirective', () => {
           provide: SharedModelCompileTimeConfig,
           useFactory: () =>
             new SharedModelCompileTimeConfig({
-              appType: 'gesuch-app',
-              authClientId: 'stip-gesuch-app',
+              type: 'gesuch-app',
+              view: 'gesuchsteller',
+              keyPrefix: 'gesuch-app',
             }),
         },
       ],

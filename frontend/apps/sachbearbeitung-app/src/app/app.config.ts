@@ -19,8 +19,9 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideSharedPatternCore(routes, {
-      authClientId: 'stip-sachbearbeitung-app',
-      appType: 'sachbearbeitung-app',
+      type: 'sachbearbeitung-app',
+      view: 'sachbearbeiter',
+      keyPrefix: 'sachbearbeitung-app',
     }),
     provideNativeDateAdapter(),
     provideState(sharedDataAccessGesuchsFeature),

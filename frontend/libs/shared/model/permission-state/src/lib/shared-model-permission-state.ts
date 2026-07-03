@@ -1,8 +1,8 @@
 import { AvailableBenutzerRole, RolesMap } from '@dv/shared/model/benutzer';
 import {
-  AppType,
-  BusinessAppType,
-  ensureIsBusinessAppType,
+  AppConfig,
+  AppView,
+  ensureIsBusinessAppConfig,
 } from '@dv/shared/model/config';
 import {
   DelegierungSlim,
@@ -78,8 +78,8 @@ const parsePermissions = (permission: PermissionFlags) => {
   );
 };
 
-const GS_APP = 'gesuch-app' satisfies BusinessAppType;
-const SB_APP = 'sachbearbeitung-app' satisfies BusinessAppType;
+const GS_APP = 'gesuchsteller' satisfies AppView;
+const SB_APP = 'sachbearbeiter' satisfies AppView;
 
 const perm = (flags: PermissionFlags, roles: ShortRole[]) => {
   return (rolesMap: RolesMap): PermissionFlags =>
@@ -92,10 +92,10 @@ type PermissionCheck = ReturnType<typeof perm>;
 /**
  * Define the permissions for the gesuch based on the status.
  *
- * * Format is: { [Gesuchstatus]: { [BusinessAppType]: 'WV  ' | 'W   ' | ..., ... other BusinessAppType } }
+ * * Format is: { [Gesuchstatus]: { [BusinessAppView]: 'WV  ' | 'W   ' | ..., ... other BusinessAppView } }
  */
 // prettier-ignore
-export const permissionTableByBusinessAppType = {
+export const permissionTableByBusinessAppView = {
   IN_BEARBEITUNG_GS                : { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   EINGEREICHT                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   ANSPRUCH_PRUEFEN                 : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
@@ -121,15 +121,15 @@ export const permissionTableByBusinessAppType = {
   VERFUEGUNG_VERSENDET             : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
   VERFUEGT                         : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
   NEGATIVE_VERFUEGUNG              : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('   U   ', ['sb']) },
-} as const satisfies Record<Gesuchstatus, Record<BusinessAppType, PermissionCheck>>;
+} as const satisfies Record<Gesuchstatus, Record<AppView, PermissionCheck>>;
 
 /**
- * Similar as `permissionTableByBusinessAppType` but for the tranches
+ * Similar as `permissionTableByBusinessAppView` but for the tranches
  *
- * @see {@link permissionTableByBusinessAppType}
+ * @see {@link permissionTableByBusinessAppView}
  */
 // prettier-ignore
-export const trancheReadWritestatusByBusinessAppType = {
+export const trancheReadWritestatusByBusinessAppView = {
   IN_BEARBEITUNG_GS:  { [GS_APP]: perm('WDF    ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
   UEBERPRUEFEN:       { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('WD  A  ', ['sb']) },
   FEHLENDE_DOKUMENTE: { [GS_APP]: perm(' D     ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
@@ -138,7 +138,7 @@ export const trancheReadWritestatusByBusinessAppType = {
   MANUELLE_AENDERUNG: { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: perm('       ', ['sb']) },
 } as const satisfies Record<
   GesuchTrancheStatus,
-  Record<BusinessAppType, PermissionCheck>
+  Record<AppView, PermissionCheck>
 >;
 
 /**
@@ -147,18 +147,18 @@ export const trancheReadWritestatusByBusinessAppType = {
 export const preparePermissions = (
   trancheTyp: GesuchUrlType | null,
   gesuch: SharedModelGesuch | null,
-  appType: AppType | undefined,
+  appConfig: AppConfig | undefined,
   rolesMap: RolesMap,
 ) => {
-  if (!gesuch || !appType)
+  if (!gesuch || !appConfig)
     return { readonly: false, permissions: {} as PermissionMap };
 
-  ensureIsBusinessAppType(appType);
+  ensureIsBusinessAppConfig(appConfig);
   const getPermissions = {
-    TRANCHE: () => getGesuchPermissions(gesuch, appType, rolesMap),
-    AENDERUNG: () => getTranchePermissions(gesuch, appType, rolesMap),
-    EINGEREICHT: () => getGesuchPermissions(gesuch, appType, rolesMap),
-    INITIAL: () => getGesuchPermissions(gesuch, appType, rolesMap),
+    TRANCHE: () => getGesuchPermissions(gesuch, appConfig, rolesMap),
+    AENDERUNG: () => getTranchePermissions(gesuch, appConfig, rolesMap),
+    EINGEREICHT: () => getGesuchPermissions(gesuch, appConfig, rolesMap),
+    INITIAL: () => getGesuchPermissions(gesuch, appConfig, rolesMap),
   } satisfies Record<GesuchUrlType, unknown>;
   const { permissions, status } = getPermissions[trancheTyp ?? 'TRANCHE']();
   const canWrite = permissions.canWrite ?? true;
@@ -178,20 +178,22 @@ export const getGesuchPermissions = (
     gesuchStatus: Gesuchstatus;
     delegierung?: DelegierungSlim;
   } | null,
-  appType: AppType | undefined,
+  appConfig: AppConfig | undefined,
   rolesMap: RolesMap,
 ): { permissions: PermissionMap; status?: Gesuchstatus } => {
-  if (!gesuch || !appType) return { permissions: {} };
+  if (!gesuch || !appConfig) return { permissions: {} };
 
-  ensureIsBusinessAppType(appType);
+  ensureIsBusinessAppConfig(appConfig);
   const state =
-    permissionTableByBusinessAppType[gesuch.gesuchStatus][appType](rolesMap);
+    permissionTableByBusinessAppView[gesuch.gesuchStatus][appConfig.view](
+      rolesMap,
+    );
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(
       permissions,
       gesuch,
-      appType,
+      appConfig,
       rolesMap,
     ),
     status: gesuch.gesuchStatus,
@@ -206,22 +208,22 @@ export const getTranchePermissions = (
     gesuchTrancheToWorkWith: { status: GesuchTrancheStatus };
     delegierung?: DelegierungSlim;
   } | null,
-  appType: AppType | undefined,
+  appConfig: AppConfig | undefined,
   rolesMap: RolesMap,
 ): { permissions: PermissionMap; status?: GesuchTrancheStatus } => {
-  if (!gesuch || !appType) return { permissions: {} };
+  if (!gesuch || !appConfig) return { permissions: {} };
 
-  ensureIsBusinessAppType(appType);
+  ensureIsBusinessAppConfig(appConfig);
   const state =
-    trancheReadWritestatusByBusinessAppType[
+    trancheReadWritestatusByBusinessAppView[
       gesuch.gesuchTrancheToWorkWith.status
-    ][appType](rolesMap);
+    ][appConfig.view](rolesMap);
   const permissions = parsePermissions(state);
   return {
     permissions: applyDelegatedPermission(
       permissions,
       gesuch,
-      appType,
+      appConfig,
       rolesMap,
     ),
     status: gesuch.gesuchTrancheToWorkWith.status,
@@ -235,17 +237,17 @@ export const getTranchePermissions = (
  * depending on if it is delegated and the user roles of the current user.
  */
 export const isNotReadonly = (
-  appType: AppType,
+  appConfig: AppConfig,
   rolesMap: RolesMap,
   delegierung: Pick<DelegierungSlim, 'status'> | boolean | undefined,
 ) => {
-  ensureIsBusinessAppType(appType);
-  switch (appType) {
-    case 'sachbearbeitung-app':
+  ensureIsBusinessAppConfig(appConfig);
+  switch (appConfig.view) {
+    case 'sachbearbeiter':
       return (
         ['V0_Sachbearbeiter', 'V0_Jurist'] satisfies AvailableBenutzerRole[]
       ).some((role) => rolesMap[role] === true);
-    case 'gesuch-app': {
+    case 'gesuchsteller': {
       const isDelegiert =
         typeof delegierung === 'boolean'
           ? delegierung
@@ -256,7 +258,7 @@ export const isNotReadonly = (
       return rolesMap['V0_Sozialdienst-Mitarbeiter'] === true;
     }
     default:
-      assertUnreachable(appType);
+      assertUnreachable(appConfig);
   }
 };
 
@@ -266,10 +268,10 @@ export const isNotReadonly = (
 const applyDelegatedPermission = (
   permissions: PermissionMap,
   gesuch: { delegierung?: DelegierungSlim },
-  appType: AppType,
+  appConfig: AppConfig,
   rolesMap: RolesMap,
 ): PermissionMap => {
-  if (isNotReadonly(appType, rolesMap, gesuch.delegierung)) {
+  if (isNotReadonly(appConfig, rolesMap, gesuch.delegierung)) {
     return permissions;
   }
 
@@ -282,19 +284,26 @@ const applyDelegatedPermission = (
 };
 
 /**
- * Used to define values that are accessed by the app type
+ * Used to define values that are accessed by the AppConfig['view']
+ * demo is excluded and always throws
  *
  * @example
  * ```ts
- * byAppType(this.config.appType, {
- *   'gesuch-app': () => this.trancheService.getGesuchDokumenteGS$(...),
- *   'sachbearbeitung-app': () => this.trancheService.getGesuchDokumenteSB$(...),
+ * byAppConfig(this.config, {
+ *   'antragsteller': () => this.trancheService.getGesuchDokumenteGS$(...),
+ *   'sachbearbeiter': () => this.trancheService.getGesuchDokumenteSB$(...),
  * })()
  * ```
  */
-export const byAppType = <R>(
-  appType: AppType,
-  map: Record<AppType, () => R>,
-) => {
-  return map[appType]();
-};
+export function byAppConfig<R>(
+  config: AppConfig,
+  map: Record<Exclude<AppView, 'demo'>, () => R>,
+  orElse: () => R = () => {
+    throw new Error('Not implemented for this app view');
+  },
+) {
+  if (config.view === 'demo') {
+    return orElse();
+  }
+  return map[config.view]();
+}

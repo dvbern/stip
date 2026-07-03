@@ -97,7 +97,7 @@ export class SharedFeatureGesuchFormElternSteuererklaerungComponent {
     const { gesuchFormular } = this.viewSig();
     const typ = this.stepSig().type;
     return (
-      this.config.isGesuchApp &&
+      this.config.app.view === 'gesuchsteller' &&
       typ !== 'FAMILIE' &&
       gesuchFormular?.versteckteEltern?.includes(typ)
     );

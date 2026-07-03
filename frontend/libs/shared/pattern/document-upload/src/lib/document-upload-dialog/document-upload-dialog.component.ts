@@ -58,7 +58,7 @@ export class SharedPatternDocumentUploadDialogComponent {
     dokumentModel: this.data.dokumentModel,
     initialDokuments: this.data.options.initialDokumente,
     hasEntries: this.data.store.hasEntriesSig(),
-    isSachbearbeitungApp: this.config.isSachbearbeitungApp,
+    isSachbearbeitungApp: this.config.app.view === 'sachbearbeiter',
   }));
 
   showUplaodSig = computed(() => {
@@ -66,7 +66,7 @@ export class SharedPatternDocumentUploadDialogComponent {
 
     return isUploadable(
       dokumentModel,
-      this.config.appType === 'sachbearbeitung-app',
+      this.config.app.view === 'sachbearbeiter',
     );
   });
 

@@ -11,7 +11,10 @@ import {
   SharedModelGsGesuchView,
 } from '@dv/shared/model/ausbildung';
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { AppType, SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import {
+  AppConfig,
+  SharedModelCompileTimeConfig,
+} from '@dv/shared/model/config';
 import {
   Ausbildungsgang,
   FallDashboardItem,
@@ -45,7 +48,7 @@ export class DashboardStore extends signalStore(
   withState(initialState),
 ) {
   private gesuchService = inject(GesuchService);
-  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private config = inject(SharedModelCompileTimeConfig);
   private permissionStore = inject(PermissionStore);
 
   dashboardViewSig = computed<SharedModelGsDashboardView | undefined>(() => {
@@ -64,7 +67,7 @@ export class DashboardStore extends signalStore(
           ? []
           : (gesuchs.map(
               toGesuchDashboardItemView({
-                appType: this.appType,
+                appConfig: this.config.app,
                 gesuchs,
                 rolesMap,
                 fallItem: fallDashboardItem,
@@ -79,7 +82,7 @@ export class DashboardStore extends signalStore(
           !hasMoreThanOneGesuche &&
           filteredGesuchs[0]?.gesuchStatus === 'IN_BEARBEITUNG_GS';
         const canCurrentlyEditAusbildung = isNotReadonly(
-          this.appType,
+          this.config.app,
           rolesMap,
           fallDashboardItem.currentDelegierung,
         );
@@ -119,7 +122,7 @@ export class DashboardStore extends signalStore(
         fallDashboardItem.earliestActiveGesuchPeriodeStart,
       currentDelegierung: fallDashboardItem.currentDelegierung,
       canCreateAusbildung: isNotReadonly(
-        this.appType,
+        this.config.app,
         rolesMap,
         fallDashboardItem.currentDelegierung,
       ),
@@ -167,7 +170,7 @@ export class DashboardStore extends signalStore(
 const toGesuchDashboardItemView =
   (data: {
     fallItem: FallDashboardItem;
-    appType: AppType;
+    appConfig: AppConfig;
     gesuchs: GesuchDashboardItem[];
     rolesMap: RolesMap;
     isAusbildungActive: boolean;
@@ -177,7 +180,7 @@ const toGesuchDashboardItemView =
   (gesuch: GesuchDashboardItem, index: number): SharedModelGsGesuchView => {
     const {
       fallItem,
-      appType,
+      appConfig,
       gesuchs,
       rolesMap,
       isAusbildungActive,
@@ -209,15 +212,15 @@ const toGesuchDashboardItemView =
       format(Date.parse(gesuch.gesuchsperiode.gesuchsperiodeStopp), 'yy'),
     ].join('/');
     const canCurrentlyEditGesuch = isNotReadonly(
-      appType,
+      appConfig,
       rolesMap,
       fallItem.currentDelegierung,
     );
-    const gesuchPermission = getGesuchPermissions(gesuch, appType, rolesMap);
+    const gesuchPermission = getGesuchPermissions(gesuch, appConfig, rolesMap);
     const aenderungPermission = gesuch.offeneAenderung
       ? getTranchePermissions(
           { gesuchTrancheToWorkWith: gesuch.offeneAenderung },
-          appType,
+          appConfig,
           rolesMap,
         )
       : null;
