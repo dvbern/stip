@@ -25,60 +25,39 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfCompilationException;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfGenerationException;
-import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfQueueFullException;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfTimeoutException;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPort;
 import ch.dvbern.stip.integration.pdf.domain.qualifier.PdfQualifier;
 import io.quarkus.runtime.ShutdownEvent;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@ApplicationScoped
+@RequestScoped
 @PdfQualifier(PdfAdapterType.TYPST)
 public class TypstPdfService implements PdfPort {
 
-    private static final String RENDER_EXECUTOR_NAME = "typst-render-";
     private static final String IO_EXECUTOR_NAME = "typst-io-";
 
     private final StipConfig config;
     private final TenantService tenantService;
-    private final ExecutorService renderExecutor;
     private final ExecutorService ioExecutor;
 
     public TypstPdfService(StipConfig config, TenantService tenantService) {
         this.config = config;
         this.tenantService = tenantService;
-
-        final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
-
-        this.renderExecutor = new ThreadPoolExecutor(
-            adapterConfig.minThreads(),
-            adapterConfig.maxThreads(),
-            adapterConfig.threadKeepAlive(),
-            TimeUnit.MILLISECONDS,
-            new ArrayBlockingQueue<>(adapterConfig.queueSize()),
-            Thread.ofPlatform()
-                .name(RENDER_EXECUTOR_NAME, 0)
-                .factory(),
-            new ThreadPoolExecutor.AbortPolicy()
-        );
 
         this.ioExecutor = Executors.newThreadPerTaskExecutor(
             Thread.ofVirtual()
@@ -88,26 +67,13 @@ public class TypstPdfService implements PdfPort {
     }
 
     @Override
-    public CompletionStage<ByteArrayOutputStream> renderPdf(final String templatePath, final String jsonData) {
-        try {
-            return CompletableFuture.supplyAsync(
-                () -> renderBlocking(templatePath, jsonData),
-                renderExecutor
-            );
-        } catch (RejectedExecutionException e) {
-            return CompletableFuture.failedFuture(
-                new PdfQueueFullException("PDF generation queue is full")
-            );
-        }
-    }
-
-    private ByteArrayOutputStream renderBlocking(final String templatePath, final String jsonData) {
+    public ByteArrayOutputStream renderPdf(final String jsonData) {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
 
         Process process = null;
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(buildCommand(templatePath, jsonData));
+            ProcessBuilder pb = new ProcessBuilder(buildCommand(jsonData));
             pb.redirectErrorStream(false);
 
             process = pb.start();
@@ -174,10 +140,14 @@ public class TypstPdfService implements PdfPort {
         }
     }
 
-    private List<String> buildCommand(final String templatePath, final String jsonData) {
+    private List<String> buildCommand(final String jsonData) {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
-        final var typstResourcePath = TypstPdfService.class.getResource("/typst").getPath();
-        final var templateResourcePath = Path.of(typstResourcePath, templatePath).toString();
+        final var tenantConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
+
+        final var rootTemplatePath =
+            Path.of(TypstPdfService.class.getResource("/typst").getPath(), tenantConfig.rootTemplatePath().get())
+                .toString();
+        final var mainTemplatePath = Path.of(rootTemplatePath, "main.typ").toString();
 
         List<String> command = new ArrayList<>();
 
@@ -191,7 +161,7 @@ public class TypstPdfService implements PdfPort {
         command.add("1");
 
         command.add("--root");
-        command.add(typstResourcePath);
+        command.add(rootTemplatePath);
 
         command.add("--font-path");
         command.add(TypstPdfService.class.getResource("/fonts").getPath());
@@ -201,7 +171,7 @@ public class TypstPdfService implements PdfPort {
 
         command.add("--ignore-system-fonts");
 
-        command.add(templateResourcePath);
+        command.add(mainTemplatePath);
         command.add("-");
 
         return command;
@@ -257,7 +227,6 @@ public class TypstPdfService implements PdfPort {
 
     @Override
     public void close() {
-        shutdownGracefully(renderExecutor, RENDER_EXECUTOR_NAME);
         shutdownGracefully(ioExecutor, IO_EXECUTOR_NAME);
     }
 

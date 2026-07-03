@@ -1,4 +1,4 @@
 #let render(data) = {
-  text("verfuegung: ")
+  text("negativ verfuegung: ")
   text(data.at("text", default: "-"))
 }

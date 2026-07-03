@@ -37,5 +37,6 @@ public interface TenantAdapterConfig {
     }
 
     interface PdfAdapter {
+        Optional<String> rootTemplatePath();
     }
 }

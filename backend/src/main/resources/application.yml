@@ -34,12 +34,8 @@ kstip:
       typst:
         binary: "typst"
         max-output-bytes: 10000
-        min-threads: 2
-        max-threads: 5
-        thread-keep-alive: 300
-        queue-size: 20
         timeout: 10
-        
+
   # Tenants
   #
   # All tenant-specific configuration lives here. Each tenant has the same
@@ -66,6 +62,9 @@ kstip:
           enabled: true
           adapter-type: typst
       adapter:
+        pdf:
+          typst:
+            root-template-path: tenants/bern
         steuerdaten:
           nesko:
             url: 'https://nesko-int.sv.fin.be.ch/evasnp/AuskunftService/services/StipendienAuskunftService?wsdl'

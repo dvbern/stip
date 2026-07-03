@@ -18,8 +18,7 @@
 package ch.dvbern.stip.integration.pdf.domain.port;
 
 import java.io.ByteArrayOutputStream;
-import java.util.concurrent.CompletionStage;
 
 public interface PdfPort extends AutoCloseable {
-    CompletionStage<ByteArrayOutputStream> renderPdf(final String templatePath, final String jsonData);
+    ByteArrayOutputStream renderPdf(final String jsonData);
 }

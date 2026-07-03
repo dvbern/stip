@@ -29,14 +29,6 @@ public interface GlobalAdapterConfig {
 
         int maxOutputBytes();
 
-        int minThreads();
-
-        int maxThreads();
-
-        int threadKeepAlive();
-
-        int queueSize();
-
         int timeout();
     }
 }

@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.type.TenantIdentifier;
 import ch.dvbern.stip.api.tenancy.service.TenantContext;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import io.quarkus.arc.Arc;
+import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.StartupEvent;
 import jakarta.enterprise.event.Observes;
 import jakarta.json.Json;
@@ -44,37 +45,28 @@ public class TypstStartupService {
     void startup(@Observes StartupEvent ev) {
         Arc.container().requestContext().activate();
         Arc.container().instance(TenantContext.class).get().setTenantIdentifier(TenantIdentifier.BERN);
-        final var pdfAdapter = pdfPortFactory.getPdfAdapter();
+        QuarkusTransaction.requiringNew().run(() -> {
+            final var pdfAdapter = pdfPortFactory.getPdfAdapter();
 
-        final JsonObject json = Json.createObjectBuilder()
-            .add("template", "berechnung.typ")
-            .add("text", "test")
-            .build();
+            final JsonObject json = Json.createObjectBuilder()
+                .add("template", "templates/berechnung/pia.typ")
+                .add("text", "test")
+                .build();
 
-        var start = Instant.now();
+            final var start = Instant.now();
 
-        pdfAdapter.renderPdf("main.typ", json.toString())
-            .thenAccept(outputStream -> {
-                try {
-                    Instant end = Instant.now();
-                    Duration elapsed = Duration.between(start, end);
-                    LOG.info("Generation took: {}", elapsed.toMillis());
+            final var outputStream = pdfAdapter.renderPdf(json.toString());
 
-                    final Path target = Path.of("output.pdf");
-                    Files.write(target, outputStream.toByteArray());
-                } catch (Exception e) {
-                    throw new RuntimeException("Failed to write PDF to disk", e);
-                }
-            })
-            .exceptionally(throwable -> {
-                throwable.printStackTrace();
-                return null;
-            });
+            try {
+                Duration elapsed = Duration.between(start, Instant.now());
+                LOG.info("Generation took: {}", elapsed.toMillis());
+
+                final Path target = Path.of("output.pdf");
+                Files.write(target, outputStream.toByteArray());
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to write PDF to disk", e);
+            }
+        });
         Arc.container().requestContext().deactivate();
-
-        // final var outputStream = pdfAdapter.renderPdf("main.typ", json.toString())
-        // .toCompletableFuture()
-        // .join();
-        // Files.write(Path.of("output.pdf"), outputStream.toByteArray());
     }
 }
