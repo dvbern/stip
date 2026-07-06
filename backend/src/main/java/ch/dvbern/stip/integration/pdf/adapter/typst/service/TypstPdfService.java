@@ -118,25 +118,21 @@ public class TypstPdfService implements PdfPort {
                 CompletableFuture.supplyAsync(
                     () -> readBounded(finalProcess.getInputStream()),
                     ioExecutor
-                );
+                ).whenComplete((ignored, error) -> {
+                    if (error != null) {
+                        kill(finalProcess);
+                    }
+                });
 
             CompletableFuture<ByteArrayOutputStream> stderr =
                 CompletableFuture.supplyAsync(
                     () -> readBounded(finalProcess.getErrorStream()),
                     ioExecutor
-                );
-
-            stdout.whenComplete((ignored, error) -> {
-                if (error != null) {
-                    kill(finalProcess);
-                }
-            });
-
-            stderr.whenComplete((ignored, error) -> {
-                if (error != null) {
-                    kill(finalProcess);
-                }
-            });
+                ).whenComplete((ignored, error) -> {
+                    if (error != null) {
+                        kill(finalProcess);
+                    }
+                });
 
             boolean finished = process.waitFor(
                 Duration.ofSeconds(adapterConfig.timeout()).toMillis(),
