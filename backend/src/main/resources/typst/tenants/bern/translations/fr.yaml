@@ -10,6 +10,13 @@ berechnung:
   familie: Budget familial
   mutter: Budget de la mère
   vater: Budget du père
+  notes:
+    bgsa:
+      identifier: 1)
+      text: Revenus soumis à la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir)
+    hoechstwerte:
+      identifier: 2)
+      text: Vous trouverez les montants maximaux reconnus donnant droit à une bourse dans la feuille annexe (annexe 1) ou sur www.be.ch/allocationsdeformation > Bases légales > Montants maximaux reconnus donnant droit à une bourse
   einnahmen:
     label: Revenus
     info: Total des revenus annuels pris en compte
@@ -102,9 +109,35 @@ berechnung:
     anteilLebenshaltungskosten:
       label: Part non couverte des frais d’entretien
       info: Report du budget familial. Uniquement si la personne vit chez ses parents.
+    integrationszulage:
+      label: Supplément d’intégration pour {inAusbildungStehendeKinder} enfant(s) en formation
+      info: Le supplément d’intégration et la franchise sur le revenu ne doivent pas dépasser {abzugsLimite} par ménage.
+    kantonsGemeindesteuern:
+      label: Impôts cantonaux et communaux
+      info: Impôts à payer, voir l’année fiscale.
+    bundessteuern:
+      label: Impôt fédéral
+      info: Impôt à payer, voir l’année fiscale.
+    fahrkostenFam:
+      label: Frais de déplacement
+      info: Frais de déplacement reconnus fiscalement.
+    verpflegung:
+      label: Repas pris à l’extérieur
+      info: Frais supplémentaires fiscalement reconnus pour les repas pris à l’extérieur.
   total:
-    label: Droit total pour {anzahlMonate} mois
+    anspruch:
+      label: Droit total pour {anzahlMonate} mois
+    anrechenbareElterlicheLeistung:
+      label: Contribution parentale prise en compte
+      info: Reportée comme revenu dans le budget personnel
+    ungedeckterAnteilLebenshaltungskosten:
+      label: Part non couverte des frais d’entretien
+      info: Reportée comme dépense dans le budget personnel, uniquement si la personne vit chez ses parents
     fehlbetrag:
       label: Découvert
       info: Revenus moins coûts
       proKopfTeilung: Répartition par tête lors du calcul avec une partenaire ou un partenaire
+    einnahmeUeberschuss:
+      label: Excédent de revenus
+      info: Revenus moins dépenses.
+      proKopfTeilung: Divisé par le nombre d’enfants en formation

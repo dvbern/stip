@@ -37,27 +37,30 @@
         budget,
         "sozialversicherungsnummer",
       )),
-      badge.badge(t("common.birthday"), value: safe-get(
+      badge.badge(t("common.birthday"), value: display-date(safe-get(
         budget,
         "geburtsdatum",
-      )),
+      ))),
     ),
     (
       badge.badge(t("common.education-year"), value: safe-get(
         payload,
         "yearRange",
       )),
-
-      badge.badge(t("common.from"), value: display-date(safe-get(
-        payload,
-        "gueltigAb",
-      ))),
-
-      badge.badge(t("common.till"), value: display-date(safe-get(
-        payload,
-        "gueltigBis",
-      ))),
-
+      badge.badge(t("common.from"), value: display-date(
+        safe-get(
+          payload,
+          "gueltigAb",
+        ),
+        format: "[month].[year]",
+      )),
+      badge.badge(t("common.till"), value: display-date(
+        safe-get(
+          payload,
+          "gueltigBis",
+        ),
+        format: "[month].[year]",
+      )),
       badge.badge(t("common.months"), value: safe-get(
         payload,
         "berechnungsStammdaten.anzahlMonate",
@@ -72,7 +75,7 @@
     "einnahmen",
   )
 
-  table.rounded-bg(
+  table.einnahmen-kosten(
     header: table.header(
       t("berechnung.einnahmen.label"),
       t("berechnung.einnahmen.info"),
@@ -112,13 +115,13 @@
       let prefix = "berechnung.einnahmen.einnahmenBGSA."
 
       table.entry(
-        t(prefix + "label"),
+        table.with-note(
+          t(prefix + "label"),
+          t("berechnung.notes.bgsa.identifier"),
+        ),
         format.chf(
           safe-get(einnahmen, "einnahmenBGSATotal"),
           prefix: "positive",
-        ),
-        info: t(
-          prefix + "info",
         ),
         persons: (
           safe-get(einnahmen, "einnahmenBGSA", default: ()).map(
@@ -324,7 +327,7 @@
     "kosten",
   )
 
-  table.rounded-bg(
+  table.einnahmen-kosten(
     header: table.header(
       t("berechnung.kosten.label"),
       t("berechnung.kosten.info"),
@@ -339,7 +342,10 @@
       let prefix = "berechnung.kosten.ausbildungskosten."
 
       table.entry(
-        t(prefix + "label"),
+        table.with-note(
+          t(prefix + "label"),
+          t("berechnung.notes.hoechstwerte.identifier"),
+        ),
         format.chf(
           safe-get(kosten, "ausbildungskostenTotal"),
           prefix: "positive",
@@ -374,7 +380,10 @@
       let prefix = "berechnung.kosten.verpflegungskosten."
 
       table.entry(
-        t(prefix + "label"),
+        table.with-note(
+          t(prefix + "label"),
+          t("berechnung.notes.hoechstwerte.identifier"),
+        ),
         format.chf(safe-get(kosten, "verpflegungskosten"), prefix: "positive"),
         info: t(prefix + "info"),
       )
@@ -383,10 +392,13 @@
       let prefix = "berechnung.kosten.grundbedarf."
 
       table.entry(
-        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
-          budget,
-          "anzahlPersonenImHaushalt",
-        )),
+        table.with-note(
+          t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+            budget,
+            "anzahlPersonenImHaushalt",
+          )),
+          t("berechnung.notes.hoechstwerte.identifier"),
+        ),
         format.chf(safe-get(kosten, "grundbedarf"), prefix: "positive"),
         info: t(prefix + "info"),
       )
@@ -395,10 +407,13 @@
       let prefix = "berechnung.kosten.wohnkosten."
 
       table.entry(
-        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
-          budget,
-          "anzahlPersonenImHaushalt",
-        )),
+        table.with-note(
+          t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+            budget,
+            "anzahlPersonenImHaushalt",
+          )),
+          t("berechnung.notes.hoechstwerte.identifier"),
+        ),
         format.chf(safe-get(kosten, "wohnkosten"), prefix: "positive"),
         info: t(prefix + "info"),
       )
@@ -407,10 +422,13 @@
       let prefix = "berechnung.kosten.medizinischeGrundversorgung."
 
       table.entry(
-        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
-          budget,
-          "anzahlPersonenImHaushalt",
-        )),
+        table.with-note(
+          t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+            budget,
+            "anzahlPersonenImHaushalt",
+          )),
+          t("berechnung.notes.hoechstwerte.identifier"),
+        ),
         format.chf(
           safe-get(kosten, "medizinischeGrundversorgungTotal"),
           prefix: "positive",
@@ -484,7 +502,7 @@
     },
   )
 
-  table.rounded-bg(
+  table.einnahmen-kosten(
     footer: table.footer(
       t("berechnung.total.anspruch.label", anzahlMonate: safe-get(
         payload,
@@ -513,5 +531,16 @@
         },
       )
     },
+  )
+
+  table.notes(
+    table.note-entry(
+      t("berechnung.notes.bgsa.identifier"),
+      t("berechnung.notes.bgsa.text"),
+    ),
+    table.note-entry(
+      t("berechnung.notes.hoechstwerte.identifier"),
+      t("berechnung.notes.hoechstwerte.text"),
+    ),
   )
 }

@@ -10,6 +10,13 @@ berechnung:
   familie: Familienbudget
   mutter: Mutterbudget
   vater: Vaterbudget
+  notes:
+    bgsa:
+      identifier: 1)
+      text: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)
+    hoechstwerte:
+      identifier: 2)
+      text: Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte
   einnahmen:
     label: Einnahmen
     info: Total anrechenbare, jährliche Einnahmen
@@ -21,7 +28,6 @@ berechnung:
       info: Siehe Steuerjahr.
     einnahmenBGSA:
       label: Einkünfte nach BGSA
-      info: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit).
     kinderAusbildungszulagen:
       label: Kinder- und Ausbildungszulagen
     unterhaltsbeitraege:

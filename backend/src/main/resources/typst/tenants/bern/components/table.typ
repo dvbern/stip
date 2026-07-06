@@ -35,7 +35,7 @@
   1 + if item.info != none { 1 } else { 0 } + item.persons.len()
 )
 
-#let rounded-bg(
+#let einnahmen-kosten(
   header: none,
   footer: none,
   fill: constants.colors.bg,
@@ -91,7 +91,7 @@
         inset: 0pt,
       )[],
       table.cell()[
-        #item.label
+        #eval(item.label, mode: "markup")
       ],
       table.cell(align: right)[
         #item.amount
@@ -164,5 +164,43 @@
       inset: (x: 0pt, y: inset),
       ..cells,
     )
+  ]
+}
+
+#let with-note(text, note-id) = {
+  if note-id == none or note-id == "" {
+    return text
+  }
+  if text == none or text == "" {
+    return ""
+  }
+
+  let note-markup = "#super[" + note-id + "]"
+
+  return text + " " + note-markup
+}
+
+#let note-entry(identifier, content) = (
+  table.cell(align: center + horizon)[#text(
+    weight: constants.fonts.weight.bold,
+    identifier,
+  )],
+  table.cell()[#content],
+)
+
+#let notes(
+  fill: constants.colors.bg,
+  radius: constants.layout.radius.big,
+  inset: constants.layout.spacing.small,
+  ..children,
+) = {
+  block(fill: fill, radius: radius, width: 100%, inset: inset)[
+    #text(size: constants.fonts.size.small, fill: constants.colors.text-dim)[
+      #table(
+        columns: (auto, 1fr),
+        stroke: none,
+        ..children.pos().flatten()
+      )
+    ]
   ]
 }
