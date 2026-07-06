@@ -427,11 +427,6 @@
     )
   } else {
     table.einnahmen-kosten(
-      footer: table.footer(
-        t("berechnung.total.anrechenbareElterlicheLeistung.label"),
-        t("berechnung.total.anrechenbareElterlicheLeistung.info"),
-        format.chf(safe-get(budget, "anrechenbareElterlicheLeistung")),
-      ),
       {
         let prefix = "berechnung.total.einnahmeUeberschuss."
         let proKopfTeilung = safe-get(budget, "proKopfTeilung")
@@ -440,9 +435,9 @@
           t(prefix + "label"),
           format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
           info: t(prefix + "info"),
-          persons: if proKopfTeilung != none {
+          sub-table: if proKopfTeilung != none {
             (
-              table.person(
+              table.sub-entry(
                 t(prefix + "proKopfTeilung"),
                 proKopfTeilung,
               ),
@@ -452,6 +447,11 @@
           },
         )
       },
+      table.entry(
+        t("berechnung.total.anrechenbareElterlicheLeistung.label"),
+        format.chf(safe-get(budget, "anrechenbareElterlicheLeistung")),
+        info: t("berechnung.total.anrechenbareElterlicheLeistung.info"),
+      ),
     )
   }
 
