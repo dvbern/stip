@@ -1,6 +1,7 @@
 #import "/shared/translation/engine.typ": make-i18n
+#import "/tenants/bern/constants.typ"
 
-#let data = json(bytes(sys.inputs.at("data", default: "{}")))
+#let data = json(bytes(sys.inputs.at("data")))
 
 #let de = yaml("translations/de.yaml")
 #let fr = yaml("translations/fr.yaml")
@@ -15,7 +16,18 @@
   locale: data.lang,
 )
 
-#set page(margin: (x: 2.5cm))
+#set page(paper: "a4", margin: (x: 2.5cm))
+
+#set text(
+  font: constants.fonts.family,
+  size: constants.fonts.size.base,
+  weight: constants.fonts.weight.regular,
+  style: constants.fonts.style.normal,
+  lang: data.lang,
+  region: "CH",
+)
+
+#show link: underline
 
 #import data.template: render
 

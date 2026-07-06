@@ -1,2 +1,87 @@
-amount:
-  label: betrag {amount}
+common:
+  svNr: SV-Nr
+  birthday: Geburtsdatum
+  education-year: Aubdildungsjahr
+  from: Von
+  till: Bis
+  months: Monate
+berechnung:
+  persoenlich: Persönliches Budget
+  familie: Familienbudget
+  einnahmen:
+    label: Einnahmen
+    info: Total anrechenbare, jährliche Einnahmen
+    nettoerwerbseinkommen:
+      label: Nettoerwerbseinkommen
+      info: Während des Ausbildungsjahrs erzielt. Bei gesuchstellender Person mit Studium auf Tertiärstufe ist der Einkommensfreibetrag von CHF {einkommensfreibetrag} bereits abgezogen.
+    einnahmenBGSA:
+      label: Einkünfte nach BGSA
+      info: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit).
+    kinderAusbildungszulagen:
+      label: Kinder- und Ausbildungszulagen
+    unterhaltsbeitraege:
+      label: Unterhaltsbeiträge
+    eoLeistungen:
+      label: Leistungen Erwerbsersatzordnung (EO)
+      info: Militär-, Zivildienst- und Zivilschutz.
+    taggelderAHVIV:
+      label: Taggelder
+      info: Arbeitslosentaggelder, IV-Taggelder.
+    renten:
+      label: Renten
+      info: Kinder-/Waisenrenten, IV-Renten, PK-Renten, etc.
+    ergaenzungsleistungen:
+      label: Ergänzungsleistungen
+    beitraegeGemeindeInstitutionen:
+      label: Beiträge von Gemeinden oder Institutionen
+    andereEinnahmen:
+      label: Andere Einnahmen
+      info: Schenkungen, andere Stipendien, etc.
+    anrechenbaresVermoegen:
+      label: Anrechenbares Vermögen
+      info: Es werden 15% vom Steuerbaren Vermögen von CHF {steuerbaresVermoegen} angerechnet.
+    elterlicheLeistung:
+      label: Anrechenbare elterliche Leistung aus Familienbudget
+  kosten:
+    label: Kosten
+    info: Total anrechenbare, jährliche Kosten
+    ausbildungskosten:
+      label: Ausbildungskosten der Person in Ausbildung
+      info: Die Ausbildungskosten von {ausbildungskosten} werden bei verheirateten, eingetragener Partnerschaft lebenden oder in einem stabilen Konkubinat lebenden Personen in Ausbildung mit der Anzahl Personen im Haushalt {anzahlPersonenImHaushalt} multipliziert, damit der Anteil pro Person korrekt ausgewiesen wird.
+    fahrkosten:
+      label: Fahrkosten der Person in Ausbildung
+      info: Berücksichtigt werden nur Kosten für ein Jahresabonnement. Die Fahrkosten von {fahrkosten} werden bei verheirateten, eingetragener Partnerschaft lebenden oder in einem stabilen Konkubinat lebenden Personen in Ausbildung mit der Anzahl Personen im Haushalt {anzahlPersonenImHaushalt} multipliziert, damit der Anteil pro Person korrekt ausgewiesen wird.
+    verpflegungskosten:
+      label: Verpflegung auswärts der Person in Ausbildung
+      info: Nur wenn bei Eltern wohnend.
+    grundbedarf:
+      label: Grundbedarf für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    wohnkosten:
+      label: Wohnkosten für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    medizinischeGrundversorgung:
+      label: Medizinische Grundversorgung für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    fahrkostenPartner:
+      label: Fahrkosten der Partnerin / des Partners
+      info: Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.
+    verpflegungPartner:
+      label: Verpflegung der Partnerin / des Partners
+      info: Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.
+    betreuungskostenKinder:
+      label: Betreuungskosten für eigene Kinder
+    steuern:
+      label: Steuern
+      info: Während des Ausbildungsjahres zu bezahlende Steuern.
+    anteilLebenshaltungskosten:
+      label: Ungedeckter Anteil Lebenshaltungskosten
+      info: Übertrag aus dem Familienbudget. Nur wenn bei Eltern wohnend.
+  total:
+    label: Total Anspruch von {anzahlMonate} Monaten
+    fehlbetrag:
+      label: Fehlbetrag
+      info: Einnahmen minus Kosten
+      proKopfTeilung: Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner
+
+
