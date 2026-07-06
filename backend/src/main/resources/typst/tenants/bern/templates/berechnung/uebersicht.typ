@@ -105,7 +105,10 @@
 
     totalSubCells += (
       table.sub-entry(
-        table.with-note(t("berechnung.uebersicht.total.kuerzung"), identifier),
+        table.with-note(
+          t("berechnung.uebersicht.total.unterbruch"),
+          identifier,
+        ),
         format.chf(unterbruch, prefix: "negative"),
       ),
     )
