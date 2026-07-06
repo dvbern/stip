@@ -18,6 +18,7 @@
 package ch.dvbern.stip.integration.pdf.domain.model;
 
 public enum PdfTemplateType {
+    BERECHNUNGSBLATT_UEBERSICHT,
     BERECHNUNGSBLATT_FAMILIE,
     BERECHNUNGSBLATT_PIA
 }

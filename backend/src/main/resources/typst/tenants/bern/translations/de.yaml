@@ -17,6 +17,19 @@ berechnung:
     hoechstwerte:
       identifier: 2)
       text: Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte
+  uebersicht:
+    resultat: Resultat
+    abgelehnt: Stipendium abgelehnt
+    gewaehrt: Stipendium gewährt
+    total:
+      heading: Total
+      betrag: Total Betrag
+      ohneKuerzung: Total Betrag ohne Kürzungen
+      kuerzung: Kürzung wegen verspäteten Einreichen
+      stipendium: Total Betrag Stipendium
+      darlehen: Total Betrag Darlehen
+    berechnungen:
+      heading: Berechnungen
   einnahmen:
     label: Einnahmen
     info: Total anrechenbare, jährliche Einnahmen

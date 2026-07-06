@@ -68,6 +68,7 @@ kstip:
           typst:
             root-template-path: tenants/bern
             template-path:
+              berechnungsblatt-uebersicht: templates/berechnung/uebersicht.typ
               berechnungsblatt-pia: templates/berechnung/pia.typ
               berechnungsblatt-familie: templates/berechnung/familie.typ
         steuerdaten:

@@ -41,6 +41,7 @@
   line-dominant: constants.colors.border-dominant,
   radius: constants.layout.radius.small,
   inset: constants.layout.spacing.base,
+  cell-inset: constants.layout.spacing.base,
   font: font(
     constants.fonts.size.small,
     constants.fonts.size.base,
@@ -92,12 +93,15 @@
       )
     }
 
-    for se in item.sub-table {
+    for (idx, se) in item.sub-table.enumerate() {
+      let is-last = idx == item.sub-table.len() - 1
+      let bottom-inset = if is-last { cell-inset } else { cell-inset / 2 }
+
       cells += (
-        table.cell(inset: (top: 0pt))[
+        table.cell(inset: (top: 0pt, bottom: bottom-inset))[
           #text(size: font.small, fill: font.dim)[#se.label]
         ],
-        table.cell(inset: (top: 0pt), align: right)[
+        table.cell(inset: (top: 0pt, bottom: bottom-inset), align: right)[
           #text(size: font.small, fill: font.dim)[#se.amount]
         ],
       )
@@ -109,11 +113,11 @@
     }
   }
 
-  card(fill: fill, radius: radius, inset: (x: inset, y: 0pt))[
+  card(fill: fill, radius: radius, inset: (x: inset, y: inset - cell-inset))[
     #table(
       columns: (auto, 1fr, auto),
       stroke: none,
-      inset: (x: 0pt, y: inset),
+      inset: (x: 0pt, y: cell-inset),
       ..cells,
     )
   ]
