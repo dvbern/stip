@@ -5,6 +5,49 @@
 #import "/tenants/bern/components/card.typ": card
 #import "/tenants/bern/components/table.typ"
 
+#let group-tranchen(tranchen) = {
+  let grouped = (:)
+
+  for tranche in tranchen {
+    let t-id = tranche.at("gesuchTrancheId")
+
+    if t-id not in grouped {
+      grouped.insert(t-id, (
+        gesuchTrancheId: t-id,
+        startDate: safe-get(tranche, "gueltigAb"),
+        endDate: safe-get(tranche, "gueltigBis"),
+        anzahlMonate: safe-get(tranche, "berechnungsStammdaten.anzahlMonate"),
+        total: 0,
+        berechnungen: (),
+      ))
+    }
+
+    let current-group = grouped.at(t-id)
+
+    current-group.total += safe-get(tranche, "total", default: 0)
+
+    let anteil-kinder = safe-get(
+      tranche,
+      "berechnungsanteilKinder",
+      default: 100,
+    )
+    let anteil-pia = safe-get(
+      tranche,
+      "berechnungsanteilKinderPia",
+      default: 100,
+    )
+    let anteil-total = calc.round((anteil-kinder * anteil-pia) / 100, digits: 2)
+
+    let tranche-copy = tranche
+    tranche-copy.insert("berechnungsanteilTotal", anteil-total)
+    current-group.berechnungen.push(tranche-copy)
+
+    grouped.insert(t-id, current-group)
+  }
+
+  return grouped
+}
+
 #let render(data, t) = {
   let payload = safe-get(data, "payload")
 
@@ -164,6 +207,46 @@
   v(constants.layout.spacing.big)
 
   heading(level: 2)[#t("berechnung.uebersicht.berechnungen.heading")]
+
+  let tranchen = safe-get(payload, "tranchenBerechnungsresultate", default: ())
+
+  let grouped-tranchen = group-tranchen(tranchen)
+
+  for (_, group) in grouped-tranchen.pairs() {
+    let anzahlMonate = str(group.anzahlMonate)
+    let title = t(
+      "berechnung.uebersicht.berechnungen.tranche.heading",
+      anzahlMonate: anzahlMonate,
+    )
+
+    let start = display-date(group.startDate, format: "[month].[year]")
+    let end = display-date(group.endDate, format: "[month].[year]")
+    let date-range = "(" + start + " - " + end + ")"
+
+    let mapped-berechnungen = group
+      .berechnungen
+      .enumerate()
+      .map(((i, b)) => (
+        label: t(
+          "berechnung.uebersicht.berechnungen.tranche.berechnung-index",
+          index: i + 1,
+        ),
+        percentage-text: t(
+          "berechnung.uebersicht.berechnungen.tranche.percentage-von",
+          percentage: str(b.berechnungsanteilTotal),
+          base: format.chf(b.ungekuerztTotal),
+        ),
+        amount: format.chf(b.total, prefix: "positive"),
+      ))
+
+    table.tranche-group(
+      title,
+      date-range,
+      format.chf(group.total),
+      mapped-berechnungen,
+    )
+    v(constants.layout.spacing.base)
+  }
 
   pagebreak(weak: true)
 }

@@ -39,6 +39,10 @@ berechnung:
       darlehen: Total Betrag Darlehen
     berechnungen:
       heading: Berechnungen
+      tranche:
+        heading: Tranche für {anzahlMonate} Monate
+        berechnung-index: Berechnung {index}
+        percentage-von: "{percentage}% von {base}"
   einnahmen:
     label: Einnahmen
     info: Total anrechenbare, jährliche Einnahmen

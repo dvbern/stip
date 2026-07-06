@@ -65,7 +65,7 @@ public final class BerechnungUebersichtPdfData {
             .yearRange(t.getYearRange())
             .gesuchTrancheId(t.getGesuchTrancheId())
             .teilzeitKinderBeiPiaAnrechnen(t.getTeilzeitKinderBeiPiaAnrechnen())
-            .berechnungsStammdaten(null)
+            .berechnungsStammdaten(t.getBerechnungsStammdaten())
             .persoenlichesBudgetresultat(null)
             .familienBudgetresultate(new ArrayList<>())
             .personenHaushaltGroups(new ArrayList<>())

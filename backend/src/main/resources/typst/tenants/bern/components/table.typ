@@ -126,6 +126,75 @@
   ]
 }
 
+#let tranche-group(
+  title,
+  date-range,
+  total,
+  berechnungen,
+  fill: constants.colors.bg,
+  line: constants.colors.border,
+  radius: constants.layout.radius.small,
+  inset: constants.layout.spacing.big,
+  cell-inset: constants.layout.spacing.semi-big,
+  font: font(
+    constants.fonts.size.small,
+    constants.fonts.size.base,
+    constants.fonts.size.big,
+    constants.fonts.weight.bold,
+    constants.fonts.style.italic,
+    constants.colors.text-dim,
+  ),
+) = {
+  card(fill: fill, radius: radius, inset: (
+    x: inset,
+    y: inset - cell-inset,
+  ))[
+    #table(
+      columns: (1fr, auto, auto),
+      stroke: none,
+      inset: (x: 0pt, y: cell-inset),
+      column-gutter: (0pt, constants.layout.spacing.semi-big),
+
+      table.cell(colspan: 2)[
+        #text(weight: font.bold)[#title] #date-range
+      ],
+      table.cell(align: right)[
+        #text(weight: font.bold)[#total]
+      ],
+
+      table.hline(stroke: line),
+
+      ..berechnungen
+        .enumerate()
+        .map(((i, b)) => {
+          let top-inset = if i == 0 { cell-inset } else { cell-inset / 4 }
+          let bottom-inset = if i == berechnungen.len() - 1 {
+            cell-inset
+          } else { cell-inset / 4 }
+
+          (
+            table.cell(inset: (top: top-inset, bottom: bottom-inset))[
+              #text(fill: font.dim)[#b.label]
+            ],
+            table.cell(
+              inset: (top: top-inset, bottom: bottom-inset),
+              align: right,
+            )[
+              #text(fill: font.dim)[#b.percentage-text]
+            ],
+            table.cell(
+              inset: (top: top-inset, bottom: bottom-inset),
+              align: right,
+            )[
+              #text(fill: font.dim)[#b.amount]
+            ],
+          )
+        })
+        .flatten(),
+    )
+  ]
+}
+
 #let with-note(text, note-id) = {
   if note-id == none or note-id == "" {
     return text

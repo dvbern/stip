@@ -39,6 +39,10 @@ berechnung:
       darlehen: Montant total du prêt
     berechnungen:
       heading: Calculs
+      tranche:
+        heading: Tranche de {anzahlMonate} mois
+        berechnung-index: Calcul {index}
+        percentage-von: "{percentage} % de {base}"
   einnahmen:
     label: Revenus
     info: Total des revenus annuels pris en compte
