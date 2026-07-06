@@ -15,29 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.api.config.type;
+package ch.dvbern.stip.integration.pdf.domain.qualifier;
 
-import java.util.Optional;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
-import io.smallrye.config.WithDefault;
+import jakarta.inject.Qualifier;
 
-public interface TenantPortConfig {
-    Steuerdaten steuerdaten();
-
-    Pdf pdf();
-
-    interface Port {
-        @WithDefault("false")
-        Boolean enabled();
-    }
-
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
-
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
-    }
+@Qualifier
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface PdfQualifier {
+    PdfAdapterType value();
 }
