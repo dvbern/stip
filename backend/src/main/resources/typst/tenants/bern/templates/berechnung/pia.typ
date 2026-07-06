@@ -80,6 +80,7 @@
     ),
     footer: table.footer(
       t("berechnung.einnahmen.info"),
+      none,
       format.chf(safe-get(einnahmen, "total")),
     ),
     {
@@ -331,6 +332,7 @@
     ),
     footer: table.footer(
       t("berechnung.kosten.info"),
+      none,
       format.chf(safe-get(kosten, "total")),
     ),
     {
@@ -484,10 +486,11 @@
 
   table.rounded-bg(
     footer: table.footer(
-      t("berechnung.total.label", anzahlMonate: safe-get(
+      t("berechnung.total.anspruch.label", anzahlMonate: safe-get(
         payload,
         "berechnungsStammdaten.anzahlMonate",
       )),
+      none,
       format.chf(safe-get(budget, "total")),
     ),
     {
