@@ -34,7 +34,9 @@ kstip:
       typst:
         binary: "typst"
         max-output-bytes: 10000
-        timeout: 10
+        compile-timeout: 10
+        shutdown-wait-timeout: 10
+        shutdown-force-timeout: 5
 
   # Tenants
   #

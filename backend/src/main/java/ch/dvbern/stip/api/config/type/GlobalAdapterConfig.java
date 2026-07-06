@@ -29,6 +29,10 @@ public interface GlobalAdapterConfig {
 
         int maxOutputBytes();
 
-        int timeout();
+        int compileTimeout();
+
+        int shutdownWaitTimeout();
+
+        int shutdownForceTimeout();
     }
 }

@@ -31,9 +31,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import ch.dvbern.stip.api.config.type.StipConfig;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.integration.pdf.adapter.typst.exceptions.PdfCompilationException;
@@ -43,6 +40,8 @@ import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPort;
 import ch.dvbern.stip.integration.pdf.domain.qualifier.PdfQualifier;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.runtime.ShutdownEvent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
@@ -63,7 +62,9 @@ public class TypstPdfService implements PdfPort {
     private final ExecutorService ioExecutor;
     private final ObjectMapper objectMapper;
 
-    public TypstPdfService(final StipConfig config, final TenantService tenantService, final ObjectMapper objectMapper) {
+    public TypstPdfService(
+    final StipConfig config, final TenantService tenantService, final ObjectMapper objectMapper
+    ) {
         this.config = config;
         this.tenantService = tenantService;
         this.objectMapper = objectMapper;
@@ -110,7 +111,7 @@ public class TypstPdfService implements PdfPort {
                 });
 
             boolean finished = process.waitFor(
-                Duration.ofSeconds(adapterConfig.timeout()).toMillis(),
+                Duration.ofSeconds(adapterConfig.compileTimeout()).toMillis(),
                 TimeUnit.MILLISECONDS
             );
 
@@ -155,7 +156,8 @@ public class TypstPdfService implements PdfPort {
 
         final var fontsPath = TypstPdfService.class.getResource(FONTS_PATH).getPath();
         final var typstPath = TypstPdfService.class.getResource(TYPST_PATH).getPath();
-        final var mainTemplatePath = Path.of(typstPath, tenantConfig.rootTemplatePath().get(), MAIN_TEMPLATE_NAME).toString();
+        final var mainTemplatePath =
+            Path.of(typstPath, tenantConfig.rootTemplatePath().get(), MAIN_TEMPLATE_NAME).toString();
 
         try {
             final var jsonPayload = pdfPayload.toJson(objectMapper, tenantConfig);
@@ -248,12 +250,15 @@ public class TypstPdfService implements PdfPort {
         if (executor.isShutdown()) {
             return;
         }
+
+        final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
+
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+            if (!executor.awaitTermination(adapterConfig.shutdownWaitTimeout(), TimeUnit.SECONDS)) {
                 final var dropped = executor.shutdownNow();
                 LOG.warn("Executor '{}' did not terminate in time, {} pending tasks dropped", name, dropped.size());
-                if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                if (!executor.awaitTermination(adapterConfig.shutdownForceTimeout(), TimeUnit.SECONDS)) {
                     LOG.error("Executor '{}' failed to terminate after shutdownNow()", name);
                 }
             }
