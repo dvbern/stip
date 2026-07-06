@@ -1,13 +1,5 @@
 #import "/tenants/bern/constants.typ"
-
-#let section(label, info, value) = (
-  label: label,
-  info: info,
-  value: value,
-)
-
-#let header = section
-#let footer = section
+#import "/tenants/bern/components/card.typ": card
 
 #let font(small, base, big, bold, italic, dim) = (
   small: small,
@@ -23,12 +15,13 @@
   amount: amount,
 )
 
-#let entry(label, amount, info: none, persons: (), line: auto) = (
+#let entry(label, amount, info: none, persons: (), line: auto, bold: false) = (
   label: label,
   amount: amount,
   info: info,
   persons: persons,
   line: line,
+  bold: bold,
 )
 
 #let entry-rows(item) = (
@@ -36,12 +29,10 @@
 )
 
 #let einnahmen-kosten(
-  header: none,
-  footer: none,
   fill: constants.colors.bg,
   line: constants.colors.border,
   line-dominant: constants.colors.border-dominant,
-  radius: constants.layout.radius.big,
+  radius: constants.layout.radius.small,
   inset: constants.layout.spacing.base,
   font: font(
     constants.fonts.size.small,
@@ -56,33 +47,6 @@
   let entries = children.pos()
   let cells = ()
 
-  if header != none {
-    let header-cells = (
-      table.cell(inset: 0pt)[],
-      table.cell()[#text(weight: font.bold, header.label)],
-      table.cell(align: right)[
-        #text(weight: font.bold)[#header.value]
-      ],
-    )
-
-    if header.info != none {
-      header-cells += (
-        table.cell(inset: 0pt)[],
-        table.cell(inset: (top: 0pt))[
-          #text(size: font.small, fill: font.dim)[
-            #text(style: font.italic, header.info)
-          ]
-        ],
-        table.cell(inset: 0pt)[],
-      )
-    }
-
-    cells += (
-      table.header(..header-cells),
-      table.hline(stroke: line-dominant),
-    )
-  }
-
   for (i, item) in entries.enumerate() {
     cells += (
       table.cell(
@@ -91,10 +55,18 @@
         inset: 0pt,
       )[],
       table.cell()[
-        #eval(item.label, mode: "markup")
+        #if item.bold {
+          text(weight: font.bold)[#eval(item.label, mode: "markup")]
+        } else {
+          eval(item.label, mode: "markup")
+        }
       ],
       table.cell(align: right)[
-        #item.amount
+        #if item.bold {
+          text(weight: font.bold)[#item.amount]
+        } else {
+          item.amount
+        }
       ],
     )
 
@@ -130,34 +102,7 @@
     }
   }
 
-  if footer != none {
-    let footer-cells = (
-      table.cell(inset: 0pt)[],
-      table.cell()[#text(weight: font.bold, footer.label)],
-      table.cell(align: right)[
-        #text(weight: font.bold)[#footer.value]
-      ],
-    )
-
-    if footer.info != none {
-      footer-cells += (
-        table.cell(inset: 0pt)[],
-        table.cell(inset: (top: 0pt))[
-          #text(size: font.small, fill: font.dim)[
-            #text(style: font.italic, footer.info)
-          ]
-        ],
-        table.cell(inset: 0pt)[],
-      )
-    }
-
-    cells += (
-      table.hline(stroke: line-dominant),
-      table.footer(..footer-cells),
-    )
-  }
-
-  block(fill: fill, radius: radius, width: 100%, inset: (x: inset, y: 0pt))[
+  card(fill: fill, radius: radius, inset: (x: inset, y: 0pt))[
     #table(
       columns: (auto, 1fr, auto),
       stroke: none,
@@ -190,11 +135,11 @@
 
 #let notes(
   fill: constants.colors.bg,
-  radius: constants.layout.radius.big,
+  radius: constants.layout.radius.small,
   inset: constants.layout.spacing.small,
   ..children,
 ) = {
-  block(fill: fill, radius: radius, width: 100%, inset: inset)[
+  card(fill: fill, radius: radius, inset: inset)[
     #text(size: constants.fonts.size.small, fill: constants.colors.text-dim)[
       #table(
         columns: (auto, 1fr),

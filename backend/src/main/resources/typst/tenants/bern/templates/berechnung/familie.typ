@@ -21,11 +21,7 @@
 
   let steuerdaten-typ = safe-get(budget, "steuerdatenTyp")
 
-  heading(level: 1, text(
-    size: constants.fonts.size.big,
-    weight: constants.fonts.weight.bold,
-    t("berechnung." + lower(steuerdaten-typ)),
-  ))
+  heading(level: 1, t("berechnung." + lower(steuerdaten-typ)))
 
   v(constants.layout.spacing.base)
 
@@ -98,15 +94,12 @@
   )
 
   table.einnahmen-kosten(
-    header: table.header(
+    table.entry(
       t("berechnung.einnahmen.label"),
-      t("berechnung.einnahmen.info"),
       format.chf(safe-get(einnahmen, "total")),
-    ),
-    footer: table.footer(
-      t("berechnung.einnahmen.info"),
-      none,
-      format.chf(safe-get(einnahmen, "total")),
+      info: t("berechnung.einnahmen.info"),
+      bold: true,
+      line: constants.colors.border-dominant,
     ),
     {
       let prefix = "berechnung.einnahmen.totalEinkuenfte."
@@ -235,9 +228,14 @@
         )),
       )
     },
+    table.entry(
+      t("berechnung.einnahmen.info"),
+      format.chf(safe-get(einnahmen, "total")),
+      bold: true,
+    ),
   )
 
-  pagebreak()
+  pagebreak(weak: true)
 
   let kosten = safe-get(
     budget,
@@ -245,15 +243,12 @@
   )
 
   table.einnahmen-kosten(
-    header: table.header(
+    table.entry(
       t("berechnung.kosten.label"),
-      t("berechnung.kosten.info"),
       format.chf(safe-get(kosten, "total")),
-    ),
-    footer: table.footer(
-      t("berechnung.kosten.info"),
-      none,
-      format.chf(safe-get(kosten, "total")),
+      info: t("berechnung.kosten.info"),
+      bold: true,
+      line: constants.colors.border-dominant,
     ),
     {
       let prefix = "berechnung.kosten.grundbedarf."
@@ -395,15 +390,15 @@
         ),
       )
     },
+    table.entry(
+      t("berechnung.kosten.info"),
+      format.chf(safe-get(kosten, "total")),
+      bold: true,
+    ),
   )
 
   if safe-get(budget, "ungedeckterAnteilLebenshaltungskosten") != 0 {
     table.einnahmen-kosten(
-      footer: table.footer(
-        t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.label"),
-        t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.info"),
-        format.chf(safe-get(budget, "ungedeckterAnteilLebenshaltungskosten")),
-      ),
       {
         let prefix = "berechnung.total.fehlbetrag."
         let proKopfTeilung = safe-get(budget, "proKopfTeilung")
@@ -424,6 +419,11 @@
           },
         )
       },
+      table.entry(
+        t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.label"),
+        format.chf(safe-get(budget, "ungedeckterAnteilLebenshaltungskosten")),
+        info: t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.info"),
+      ),
     )
   } else {
     table.einnahmen-kosten(
