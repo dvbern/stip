@@ -43,23 +43,25 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
 
     @Override
     public void handle(Gesuch gesuch) {
-        BerechnungsresultatDto stipendien = null;
+        Optional<BerechnungsresultatDto> stipendien = Optional.empty();
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
         final var tenantConfig = tenantService.getConfigForCurrentTenant();
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {
-            stipendien = berechnungService.getBerechnungsresultatFromGesuch(
+            final var berechnungsresultatDto = berechnungService.getBerechnungsresultatFromGesuch(
                 gesuch,
                 tenantConfig.berechnung().currentMajorVersion(),
                 tenantConfig.berechnung().currentMinorVersion()
             );
+            stipendien = Optional.of(berechnungsresultatDto);
 
-            final int berechnungsresultat = stipendien.getBerechnungStipendium();
+            final int berechnungsresultat = berechnungsresultatDto.getBerechnungStipendium();
             final boolean hasAnspruch = berechnungsresultat > 0;
 
             latestVerfuegung.setVerfuegungStatus(
                 hasAnspruch ? VerfuegungStatus.ANSPRUCH : VerfuegungStatus.KEIN_ANSPRUCH
             );
-            latestVerfuegung.setBerechnungJsonData(BerechnungService.serializeBerechnungresultatDto(stipendien));
+            latestVerfuegung
+                .setBerechnungJsonData(BerechnungService.serializeBerechnungresultatDto(berechnungsresultatDto));
 
             if (hasAnspruch || !gesuch.isFirstVerfuegung()) {
                 buchhaltungService.createStipendiumBuchhaltungEntry(
@@ -70,7 +72,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
         }
 
         if (latestVerfuegung.getDokumente().isEmpty()) {
-            verfuegungPdfService.createVerfuegungsDocuments(gesuch, Optional.ofNullable(stipendien));
+            verfuegungPdfService.createVerfuegungsDocuments(gesuch, stipendien);
         }
     }
 }

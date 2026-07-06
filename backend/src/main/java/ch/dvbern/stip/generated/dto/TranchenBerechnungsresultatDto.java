@@ -55,7 +55,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("total")
   @NotNull
   public Integer getTotal() {
@@ -75,7 +75,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ungekuerztTotal")
   @NotNull
   public Integer getUngekuerztTotal() {
@@ -94,7 +94,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigAb")
   @NotNull
   public LocalDate getGueltigAb() {
@@ -113,7 +113,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gueltigBis")
   @NotNull
   public LocalDate getGueltigBis() {
@@ -132,7 +132,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungAb")
   @NotNull
   public String getAusbildungAb() {
@@ -151,7 +151,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("ausbildungBis")
   @NotNull
   public String getAusbildungBis() {
@@ -170,7 +170,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("yearRange")
   @NotNull
   public String getYearRange() {
@@ -189,7 +189,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("gesuchTrancheId")
   @NotNull
   public UUID getGesuchTrancheId() {
@@ -209,7 +209,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("teilzeitKinderBeiPiaAnrechnen")
   @NotNull
   public Boolean getTeilzeitKinderBeiPiaAnrechnen() {
@@ -228,7 +228,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnungsStammdaten")
   @NotNull
   public BerechnungsStammdatenDto getBerechnungsStammdaten() {
@@ -247,7 +247,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("persoenlichesBudgetresultat")
   @NotNull
   public PersoenlichesBudgetresultatDto getPersoenlichesBudgetresultat() {
@@ -267,7 +267,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("familienBudgetresultate")
   @NotNull
   public List<FamilienBudgetresultatDto> getFamilienBudgetresultate() {
@@ -303,7 +303,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("personenHaushaltGroups")
   @NotNull
   public List<PersonenHaushaltGruppeDto> getPersonenHaushaltGroups() {
@@ -339,7 +339,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnungsanteilKinder")
   public BigDecimal getBerechnungsanteilKinder() {
     return berechnungsanteilKinder;
@@ -358,7 +358,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("berechnungsanteilKinderPia")
   public BigDecimal getBerechnungsanteilKinderPia() {
     return berechnungsanteilKinderPia;
@@ -405,7 +405,7 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class TranchenBerechnungsresultatDto {\n");
-    
+
     sb.append("    total: ").append(toIndentedString(total)).append("\n");
     sb.append("    ungekuerztTotal: ").append(toIndentedString(ungekuerztTotal)).append("\n");
     sb.append("    gueltigAb: ").append(toIndentedString(gueltigAb)).append("\n");

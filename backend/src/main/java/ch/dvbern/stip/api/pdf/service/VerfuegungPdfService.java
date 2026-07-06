@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -50,6 +51,14 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.util.VerfuegungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import ch.dvbern.stip.integration.pdf.domain.model.BerechnungBlattPdfData;
+import ch.dvbern.stip.integration.pdf.domain.model.BerechnungUebersichtPdfData;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
+import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -83,9 +92,9 @@ public class VerfuegungPdfService {
     private final StipDecisionTextRepository stipDecisionTextRepository;
     private final BuchhaltungService buchhaltungService;
     private final VerfuegungService verfuegungService;
-    private final BerechnungsblattService berechnungsblattService;
     private final DarlehenService darlehenService;
     private final TenantService tenantService;
+    private final PdfPortFactory pdfPortFactory;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(
         final Verfuegung verfuegung,
@@ -751,32 +760,87 @@ public class VerfuegungPdfService {
 
         if (!verfuegung.getVerfuegungStatus().isNegativ() && stipendienOpt.isPresent()) {
             final var stipendien = stipendienOpt.get();
-            ByteArrayOutputStream berechnungsBlaetter;
+
             Optional<ByteArrayOutputStream> darlehensVerfuegung = Optional.empty();
+            final List<ByteArrayOutputStream> allBerechnungsBlaetter = new ArrayList<>();
+            final List<ByteArrayOutputStream> piaBlaetter = new ArrayList<>();
+            final EnumMap<SteuerdatenTyp, List<ByteArrayOutputStream>> familienBlaetterByTyp =
+                new EnumMap<>(SteuerdatenTyp.class);
 
-            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.MUTTER);
-            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.VATER);
-            createAndStoreBerechnungsblattPdf(gesuch, verfuegung, stipendien, SteuerdatenTyp.FAMILIE);
+            final var lang = LocaleUtil.getKorrespondenzSprache(gesuch);
+            final var pdfAdapter = pdfPortFactory.getPdfAdapter();
 
-            var berechnungsBlaetterPia =
-                berechnungsblattService.getBerechnungsblattPersonInAusbildung(gesuch, stipendien);
+            final var uebersichtPayload = PdfPayload.<BerechnungsresultatDto>builder()
+                .lang(lang)
+                .template(PdfTemplateType.BERECHNUNGSBLATT_UEBERSICHT)
+                .data(BerechnungUebersichtPdfData.from(stipendien))
+                .build();
+            allBerechnungsBlaetter.add(pdfAdapter.renderPdf(uebersichtPayload));
 
-            verfuegungService.createAndStoreVerfuegungDokument(
-                verfuegung,
-                VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
-                berechnungsBlaetterPia
-            );
+            for (final TranchenBerechnungsresultatDto tranche : stipendien.getTranchenBerechnungsresultate()) {
+                final PersoenlichesBudgetresultatDto persoenlich = tranche.getPersoenlichesBudgetresultat();
+                if (persoenlich != null) {
+                    final var persoenlichPayload =
+                        PdfPayload.<BerechnungBlattPdfData<PersoenlichesBudgetresultatDto>>builder()
+                            .lang(lang)
+                            .template(PdfTemplateType.BERECHNUNGSBLATT_PIA)
+                            .data(BerechnungBlattPdfData.of(persoenlich, tranche))
+                            .build();
 
-            berechnungsBlaetter = berechnungsblattService.getAllBerechnungsblaetterOfGesuch(gesuch, stipendien);
+                    final var piaBlatt = pdfAdapter.renderPdf(persoenlichPayload);
+                    piaBlaetter.add(piaBlatt);
+                    allBerechnungsBlaetter.add(piaBlatt);
+                }
+
+                for (final FamilienBudgetresultatDto familien : tranche.getFamilienBudgetresultate()) {
+                    final var familienPayload =
+                        PdfPayload.<BerechnungBlattPdfData<FamilienBudgetresultatDto>>builder()
+                            .lang(lang)
+                            .template(PdfTemplateType.BERECHNUNGSBLATT_FAMILIE)
+                            .data(BerechnungBlattPdfData.of(familien, tranche))
+                            .build();
+
+                    final var famBlatt = pdfAdapter.renderPdf(familienPayload);
+                    familienBlaetterByTyp
+                        .computeIfAbsent(familien.getSteuerdatenTyp(), k -> new ArrayList<>())
+                        .add(famBlatt);
+                    allBerechnungsBlaetter.add(famBlatt);
+                }
+            }
+
+            final ByteArrayOutputStream piaMerged = PdfUtils.mergePdfs(piaBlaetter);
+            if (piaMerged != null) {
+                verfuegungService.createAndStoreVerfuegungDokument(
+                    verfuegung,
+                    VerfuegungDokumentTyp.BERECHNUNGSBLATT_PIA,
+                    piaMerged
+                );
+            }
+
+            for (final SteuerdatenTyp typ : SteuerdatenTyp.values()) {
+                final var blaetter = familienBlaetterByTyp.get(typ);
+                if (blaetter == null || blaetter.isEmpty()) {
+                    continue;
+                }
+                final var merged = PdfUtils.mergePdfs(blaetter);
+                if (merged != null) {
+                    verfuegungService.createAndStoreVerfuegungDokument(
+                        verfuegung,
+                        mapToVerfuegungDokumentTyp(typ),
+                        merged
+                    );
+                }
+            }
 
             if (Objects.requireNonNullElse(stipendien.getBerechnungDarlehen(), 0) > 0) {
                 darlehensVerfuegung =
                     darlehenService.createGesetzlichDarlehen(gesuch, stipendien.getBerechnungDarlehen());
             }
 
+            final ByteArrayOutputStream mergedBerechnungsBlaetter = PdfUtils.mergePdfs(allBerechnungsBlaetter);
             final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
                 verfuegungsBrief,
-                berechnungsBlaetter,
+                mergedBerechnungsBlaetter,
                 darlehensVerfuegung
             );
             verfuegungService.createAndStoreVerfuegungDokument(
@@ -784,7 +848,6 @@ public class VerfuegungPdfService {
                 VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
                 versendeteVerfuegungOutput
             );
-
             return;
         }
 
@@ -793,26 +856,6 @@ public class VerfuegungPdfService {
             VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
             verfuegungsBrief
         );
-    }
-
-    private void createAndStoreBerechnungsblattPdf(
-        final Gesuch gesuch,
-        final Verfuegung verfuegung,
-        final BerechnungsresultatDto berechnungsResultat,
-        final SteuerdatenTyp steuerdatenTyp
-    ) {
-        ByteArrayOutputStream berechnungsBlaetter = berechnungsblattService.getAllElternTypeBerechnungsblaetterOfGesuch(
-            gesuch,
-            berechnungsResultat,
-            steuerdatenTyp
-        );
-        if (berechnungsBlaetter != null) {
-            verfuegungService.createAndStoreVerfuegungDokument(
-                verfuegung,
-                mapToVerfuegungDokumentTyp(steuerdatenTyp),
-                berechnungsBlaetter
-            );
-        }
     }
 
     private VerfuegungDokumentTyp mapToVerfuegungDokumentTyp(final SteuerdatenTyp steuerdatenTyp) {

@@ -25,7 +25,6 @@ import java.util.UUID;
 import ch.dvbern.stip.api.buchhaltung.service.BuchhaltungService;
 import ch.dvbern.stip.api.darlehen.service.DarlehenService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.pdf.service.BerechnungsblattService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
@@ -34,6 +33,7 @@ import ch.dvbern.stip.api.verfuegung.entity.VerfuegungDokument;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
@@ -49,17 +49,17 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     StipDecisionTextRepository stipDecisionTextRepository,
     BuchhaltungService buchhaltungService,
     VerfuegungService verfuegungService,
-    BerechnungsblattService berechnungsblattService,
     DarlehenService darlehenService,
-    TenantService tenantService
+    TenantService tenantService,
+    PdfPortFactory pdfPortFactory
     ) {
         super(
             stipDecisionTextRepository,
             buchhaltungService,
             verfuegungService,
-            berechnungsblattService,
             darlehenService,
-            tenantService
+            tenantService,
+            pdfPortFactory
         );
     }
 

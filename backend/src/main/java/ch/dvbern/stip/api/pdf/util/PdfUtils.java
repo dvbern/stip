@@ -50,8 +50,10 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfReader;
+import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
+import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
@@ -90,6 +92,34 @@ public class PdfUtils {
 
     public boolean isPageNumberEven(final Document document) {
         return document.getPdfDocument().getNumberOfPages() % 2 == 0;
+    }
+
+    public ByteArrayOutputStream mergePdfs(final List<ByteArrayOutputStream> pdfs) {
+        if (pdfs == null || pdfs.isEmpty()) {
+            return null;
+        }
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
+            final PdfMerger merger = new PdfMerger(targetPdf);
+
+            for (final var pdf : pdfs) {
+                if (pdf == null || pdf.size() == 0) {
+                    continue;
+                }
+                try (
+                    final PdfDocument sourcePdf = new PdfDocument(
+                        new PdfReader(new ByteArrayInputStream(pdf.toByteArray()))
+                    )
+                ) {
+                    merger.merge(sourcePdf, 1, sourcePdf.getNumberOfPages());
+                }
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException("Failed to merge PDFs", e);
+        }
+
+        return out;
     }
 
     public void makePageNumberEven(Document document) {
