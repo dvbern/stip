@@ -1,7 +1,7 @@
-#let chf(value, prefix: "none") = {
+#let chf(value, prefix: none) = {
   assert(
-    prefix in ("positive", "negative", "none"),
-    message: "prefix must be one of: \"positive\", \"negative\", or \"none\"",
+    prefix in ("positive", "negative", none),
+    message: "prefix must be one of: \"positive\", \"negative\", or none",
   )
 
   if value == none or type(value) != int {
@@ -28,5 +28,6 @@
     out = c + out
   }
 
-  [#sign #out CHF]
+  let space = "\u{00A0}"
+  sign + space + out + space + "CHF"
 }
