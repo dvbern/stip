@@ -19,7 +19,8 @@
     let name = m.captures.at(0)
 
     if name in values {
-      str(values.at(name))
+      let val = values.at(name)
+      if val == none { "" } else { str(val) }
     } else {
       panic("Missing translation placeholder: `" + name + "`")
     }
