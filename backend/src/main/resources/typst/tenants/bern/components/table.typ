@@ -1,15 +1,13 @@
 #import "/tenants/bern/constants.typ"
 
-#let header(label, info, value) = (
+#let section(label, info, value) = (
   label: label,
   info: info,
   value: value,
 )
 
-#let footer(label, value) = (
-  label: label,
-  value: value,
-)
+#let header = section
+#let footer = section
 
 #let font(small, base, big, bold, italic, dim) = (
   small: small,
@@ -25,11 +23,12 @@
   amount: amount,
 )
 
-#let entry(label, amount, info: none, persons: ()) = (
+#let entry(label, amount, info: none, persons: (), line: auto) = (
   label: label,
   amount: amount,
   info: info,
   persons: persons,
+  line: line,
 )
 
 #let entry-rows(item) = (
@@ -58,23 +57,28 @@
   let cells = ()
 
   if header != none {
-    cells += (
-      table.header(
-        table.cell(inset: 0pt)[],
-        table.cell()[#text(weight: font.bold, header.label)],
-        table.cell(align: right)[#text(
-          weight: font.bold,
-        )[#header.value]],
+    let header-cells = (
+      table.cell(inset: 0pt)[],
+      table.cell()[#text(weight: font.bold, header.label)],
+      table.cell(align: right)[
+        #text(weight: font.bold)[#header.value]
+      ],
+    )
 
-        if header.info != none {
-          table.cell(colspan: 2, inset: (top: 0pt))[
-            #text(size: font.small, fill: font.dim)[#text(
-              style: font.italic,
-              header.info,
-            )]
+    if header.info != none {
+      header-cells += (
+        table.cell(inset: 0pt)[],
+        table.cell(inset: (top: 0pt))[
+          #text(size: font.small, fill: font.dim)[
+            #text(style: font.italic, header.info)
           ]
-        },
-      ),
+        ],
+        table.cell(inset: 0pt)[],
+      )
+    }
+
+    cells += (
+      table.header(..header-cells),
       table.hline(stroke: line-dominant),
     )
   }
@@ -121,21 +125,35 @@
     }
 
     if i < entries.len() - 1 {
-      cells += (table.hline(stroke: line),)
+      let item-line = if item.line == auto { line } else { item.line }
+      cells += (table.hline(stroke: item-line),)
     }
   }
 
   if footer != none {
+    let footer-cells = (
+      table.cell(inset: 0pt)[],
+      table.cell()[#text(weight: font.bold, footer.label)],
+      table.cell(align: right)[
+        #text(weight: font.bold)[#footer.value]
+      ],
+    )
+
+    if footer.info != none {
+      footer-cells += (
+        table.cell(inset: 0pt)[],
+        table.cell(inset: (top: 0pt))[
+          #text(size: font.small, fill: font.dim)[
+            #text(style: font.italic, footer.info)
+          ]
+        ],
+        table.cell(inset: 0pt)[],
+      )
+    }
+
     cells += (
       table.hline(stroke: line-dominant),
-      table.footer(
-        repeat: false,
-        table.cell()[],
-        table.cell()[#text(weight: font.bold, footer.label)],
-        table.cell(
-          align: right,
-        )[#text(weight: font.bold)[#footer.value]],
-      ),
+      table.footer(..footer-cells),
     )
   }
 
