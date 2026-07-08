@@ -21,10 +21,11 @@
 
   heading(level: 1, text(
     size: constants.fonts.size.big,
+    weight: constants.fonts.weight.bold,
     t("berechnung.persoenlich"),
   ))
 
-  v(constants.layout.spacing.base)
+  v(constants.layout.spacing.small)
 
   row.rows(
     (
@@ -64,7 +65,7 @@
     ),
   )
 
-  v(constants.layout.spacing.base)
+  v(constants.layout.spacing.small)
 
   let einnahmen = safe-get(
     budget,
@@ -72,10 +73,14 @@
   )
 
   table.rounded-bg(
-    header: (
-      label: t("berechnung.einnahmen.label"),
-      info: t("berechnung.einnahmen.info"),
-      value: format.chf(safe-get(einnahmen, "total")),
+    header: table.header(
+      t("berechnung.einnahmen.label"),
+      t("berechnung.einnahmen.info"),
+      format.chf(safe-get(einnahmen, "total")),
+    ),
+    footer: table.footer(
+      t("berechnung.einnahmen.info"),
+      format.chf(safe-get(einnahmen, "total")),
     ),
     {
       let prefix = "berechnung.einnahmen.nettoerwerbseinkommen."
@@ -92,9 +97,11 @@
         ),
         persons: (
           safe-get(einnahmen, "nettoerwerbseinkommen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -114,9 +121,11 @@
         ),
         persons: (
           safe-get(einnahmen, "einnahmenBGSA", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -133,9 +142,11 @@
         ),
         persons: (
           safe-get(einnahmen, "kinderAusbildungszulagen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -152,9 +163,11 @@
         ),
         persons: (
           safe-get(einnahmen, "unterhaltsbeitraege", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -172,9 +185,11 @@
         info: t(prefix + "info"),
         persons: (
           safe-get(einnahmen, "eoLeistungen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -192,9 +207,11 @@
         info: t(prefix + "info"),
         persons: (
           safe-get(einnahmen, "taggelderAHVIV", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -209,9 +226,11 @@
         info: t(prefix + "info"),
         persons: (
           safe-get(einnahmen, "renten", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -228,9 +247,11 @@
         ),
         persons: (
           safe-get(einnahmen, "ergaenzungsleistungen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -259,9 +280,11 @@
         info: t(prefix + "info"),
         persons: (
           safe-get(einnahmen, "andereEinnahmen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
@@ -303,6 +326,10 @@
   table.rounded-bg(
     header: table.header(
       t("berechnung.kosten.label"),
+      t("berechnung.kosten.info"),
+      format.chf(safe-get(kosten, "total")),
+    ),
+    footer: table.footer(
       t("berechnung.kosten.info"),
       format.chf(safe-get(kosten, "total")),
     ),
@@ -393,9 +420,11 @@
             "medizinischeGrundversorgung",
             default: (),
           ).map(
-            person => table.person(safe-get(person, "vorname"), safe-get(
-              person,
-              "value",
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
             )),
           )
         ),
