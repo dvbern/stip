@@ -8,12 +8,17 @@ common:
 berechnung:
   persoenlich: Persönliches Budget
   familie: Familienbudget
+  mutter: Mutterbudget
+  vater: Vaterbudget
   einnahmen:
     label: Einnahmen
     info: Total anrechenbare, jährliche Einnahmen
     nettoerwerbseinkommen:
       label: Nettoerwerbseinkommen
       info: Während des Ausbildungsjahrs erzielt. Bei gesuchstellender Person mit Studium auf Tertiärstufe ist der Einkommensfreibetrag von CHF {einkommensfreibetrag} bereits abgezogen.
+    totalEinkuenfte:
+      label: Total der Einkünfte
+      info: Siehe Steuerjahr.
     einnahmenBGSA:
       label: Einkünfte nach BGSA
       info: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit).
@@ -42,6 +47,26 @@ berechnung:
       info: Es werden 15% vom Steuerbaren Vermögen von CHF {steuerbaresVermoegen} angerechnet.
     elterlicheLeistung:
       label: Anrechenbare elterliche Leistung aus Familienbudget
+    eigenmietwert:
+      label: abzüglich Eigenmietwert
+    unterhaltsbeitraegeAbzug:
+      label: abzüglich Unterhaltsbeiträge
+      info: Im Total der Einkünfte enthalten und für Person in Ausbildung.
+    sauele3:
+      label: abzüglich Säule 3a
+      info: Wird nur bei Selbständigerwerbenden berücksichtigt.
+    sauele2:
+      label: abzüglich 2. Säule
+      info: Wird nur bei Selbständigerwerbenden berücksichtigt, soweit diese Beiträge nicht in der Erfolgsrechnung enthalten sind.
+    rentenAbzug:
+      label: abzüglich Renten für Person in Ausbildung
+      info: IV-Renten, PK-Renten, etc.. Abzug sofern bereits im Total der Einkünfte enthalten.
+    einkommensfreibetragAbzug:
+      label: abzüglich Einkommensfreibetrag
+      info: Der Einkommensfreibetrag beträgt CHF {einkommensfreibetrag}.
+    zwischentotal:
+      label: Zwischentotal anrechenbare, jährliche Einnahmen
+      info: Einnahmen nach Abzug des Einkommensfreibetrags können nicht negativ sein.
   kosten:
     label: Kosten
     info: Total anrechenbare, jährliche Kosten
@@ -77,11 +102,35 @@ berechnung:
     anteilLebenshaltungskosten:
       label: Ungedeckter Anteil Lebenshaltungskosten
       info: Übertrag aus dem Familienbudget. Nur wenn bei Eltern wohnend.
+    integrationszulage:
+      label: Integrationszulage für {inAusbildungStehendeKinder} in Ausbildung stehende(s) Kind(er)
+      info: Integrationszulage und Einkommensfreibetrag dürfen pro Haushalt {abzugsLimite} nicht übersteigen.
+    kantonsGemeindesteuern:
+      label: Kantons- und Gemeindesteuern
+      info: Zu bezahlende Steuern, siehe Steuerjahr.
+    bundessteuern:
+      label: Bundessteuern
+      info: Zu bezahlende Steuern, siehe Steuerjahr.
+    fahrkostenFam:
+      label: Fahrkosten
+      info: Steuerrechtlich anerkannte Fahrkosten.
+    verpflegung:
+      label: Verpflegung auswärts
+      info:  Steuerrechtlich anerkannte Mehrkosten für auswärtige Verpflegung.
   total:
-    label: Total Anspruch von {anzahlMonate} Monaten
+    anspruch:
+      label: Total Anspruch von {anzahlMonate} Monaten
+    anrechenbareElterlicheLeistung:
+      label: Anrechenbare, elterliche Leistung
+      info: Übertrag als Einnahme ins persönliche Budget
+    ungedeckterAnteilLebenshaltungskosten:
+      label: Ungedeckter Anteil Lebenshaltungskosten
+      info: Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend
     fehlbetrag:
       label: Fehlbetrag
       info: Einnahmen minus Kosten
       proKopfTeilung: Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner
-
-
+    einnahmeUeberschuss:
+      label: Einnahmeüberschuss
+      info: Einnahmen minus Kosten.
+      proKopfTeilung: Geteilt durch die Anzahl in Ausbildung stehender Kinder

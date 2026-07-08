@@ -8,12 +8,17 @@ common:
 berechnung:
   persoenlich: Budget personnel
   familie: Budget familial
+  mutter: Budget de la mère
+  vater: Budget du père
   einnahmen:
     label: Revenus
     info: Total des revenus annuels pris en compte
     nettoerwerbseinkommen:
-      label: Revenu net de l’activité lucrative
-      info: Réalisé pendant l’année de formation. Pour la personne requérante suivant des études de degré tertiaire, la franchise sur le revenu de CHF {einkommensfreibetrag} a déjà été déduite.
+      label: Revenu net d’activité lucrative
+      info: Réalisé pendant l’année de formation. Pour une personne requérante suivant des études de niveau tertiaire, la franchise sur le revenu de CHF {einkommensfreibetrag} est déjà déduite.
+    totalEinkuenfte:
+      label: Total des revenus
+      info: Voir année fiscale.
     einnahmenBGSA:
       label: Revenus selon la LTN
       info: Revenus selon la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir).
@@ -42,12 +47,32 @@ berechnung:
       info: 15% de la fortune imposable de CHF {steuerbaresVermoegen} sont pris en compte.
     elterlicheLeistung:
       label: Contribution parentale prise en compte selon le budget familial
+    eigenmietwert:
+      label: déduction de la valeur locative
+    unterhaltsbeitraegeAbzug:
+      label: déduction des contributions d’entretien
+      info: Incluses dans le total des revenus et destinées à la personne en formation.
+    sauele3:
+      label: déduction du pilier 3a
+      info: Pris en compte uniquement pour les personnes exerçant une activité indépendante.
+    sauele2:
+      label: déduction du 2e pilier
+      info: Pris en compte uniquement pour les personnes exerçant une activité indépendante, pour autant que ces cotisations ne soient pas incluses dans le compte de résultat.
+    rentenAbzug:
+      label: déduction des rentes pour la personne en formation
+      info: Rentes AI, rentes de caisse de pension, etc. Déduction si elles sont déjà incluses dans le total des revenus.
+    einkommensfreibetragAbzug:
+      label: déduction de la franchise sur le revenu
+      info: La franchise sur le revenu s’élève à CHF {einkommensfreibetrag}.
+    zwischentotal:
+      label: Sous-total des revenus annuels pris en compte
+      info: Les revenus après déduction de la franchise sur le revenu ne peuvent pas être négatifs.
   kosten:
     label: Frais
     info: Total des frais annuels pris en compte
     ausbildungskosten:
       label: Frais de formation de la personne en formation
-      info: "Les frais de formation de {ausbildungskosten} sont multipliés, pour les personnes en formation mariées, vivant en partenariat enregistré ou en concubinage stable, par le nombre de personnes dans le ménage {anzahlPersonenImHaushalt}, afin que la part par personne soit correctement indiquée. Les montants maximaux reconnus donnant droit à une bourse figurent dans la notice complémentaire (annexe 1) ou sous #link(\"https://www.be.ch/ausbildungsbeitraege\")[www.be.ch/ausbildungsbeitraege] > Bases légales > Montants maximaux reconnus donnant droit à une bourse."
+      info: Les frais de formation de {ausbildungskosten} sont multipliés par le nombre de personnes dans le ménage {anzahlPersonenImHaushalt} pour les personnes en formation mariées, vivant en partenariat enregistré ou en concubinage stable, afin que la part par personne soit correctement indiquée.
     fahrkosten:
       label: Frais de transport de la personne en formation
       info: Seuls les frais d’un abonnement annuel sont pris en compte. Les frais de transport de {fahrkosten} sont multipliés, pour les personnes en formation mariées, vivant en partenariat enregistré ou en concubinage stable, par le nombre de personnes dans le ménage {anzahlPersonenImHaushalt}, afin que la part par personne soit correctement indiquée.
@@ -77,3 +102,9 @@ berechnung:
     anteilLebenshaltungskosten:
       label: Part non couverte des frais d’entretien
       info: Report du budget familial. Uniquement si la personne vit chez ses parents.
+  total:
+    label: Droit total pour {anzahlMonate} mois
+    fehlbetrag:
+      label: Découvert
+      info: Revenus moins coûts
+      proKopfTeilung: Répartition par tête lors du calcul avec une partenaire ou un partenaire

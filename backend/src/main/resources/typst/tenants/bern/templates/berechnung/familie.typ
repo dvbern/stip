@@ -1,3 +1,440 @@
+#import "/shared/utils/helper.typ": *
+#import "/shared/utils/format.typ"
+#import "/shared/components/row.typ"
+#import "/tenants/bern/components/badge.typ"
+#import "/tenants/bern/components/table.typ"
+#import "/tenants/bern/constants.typ"
+
 #let render(data, t) = {
-  text(t("berechnung.familie"))
+  let payload = safe-get(
+    data,
+    "payload",
+  )
+  let stammdaten = safe-get(
+    payload,
+    "berechnungsStammdaten",
+  )
+  let budget = safe-get(
+    payload,
+    "budget",
+  )
+
+  let steuerdaten-typ = safe-get(budget, "steuerdatenTyp")
+
+  heading(level: 1, text(
+    size: constants.fonts.size.big,
+    weight: constants.fonts.weight.bold,
+    t("berechnung." + lower(steuerdaten-typ)),
+  ))
+
+  v(constants.layout.spacing.base)
+
+  let badge-rows = (
+    (
+      badge.badge([#safe-get(budget, "vorname") #safe-get(
+          budget,
+          "nachname",
+        )]),
+      badge.badge(t("common.svNr"), value: safe-get(
+        budget,
+        "sozialversicherungsnummer",
+      )),
+      badge.badge(t("common.birthday"), value: safe-get(
+        budget,
+        "geburtsdatum",
+      )),
+    ),
+  )
+
+  if safe-get(budget, "vornamePartner") != none {
+    badge-rows.push((
+      badge.badge([#safe-get(budget, "vornamePartner") #safe-get(
+          budget,
+          "nachnamePartner",
+        )]),
+      badge.badge(t("common.svNr"), value: safe-get(
+        budget,
+        "sozialversicherungsnummerPartner",
+      )),
+      badge.badge(t("common.birthday"), value: safe-get(
+        budget,
+        "geburtsdatumPartner",
+      )),
+    ))
+  }
+
+  badge-rows.push((
+    badge.badge(t("common.education-year"), value: safe-get(
+      payload,
+      "yearRange",
+    )),
+    badge.badge(t("common.from"), value: display-date(safe-get(
+      payload,
+      "gueltigAb",
+    ))),
+    badge.badge(t("common.till"), value: display-date(safe-get(
+      payload,
+      "gueltigBis",
+    ))),
+    badge.badge(t("common.months"), value: safe-get(
+      payload,
+      "berechnungsStammdaten.anzahlMonate",
+    )),
+  ))
+
+  row.rows(..badge-rows)
+
+  v(constants.layout.spacing.base)
+
+  let einnahmen = safe-get(
+    budget,
+    "einnahmen",
+  )
+
+  table.rounded-bg(
+    header: table.header(
+      t("berechnung.einnahmen.label"),
+      t("berechnung.einnahmen.info"),
+      format.chf(safe-get(einnahmen, "total")),
+    ),
+    footer: table.footer(
+      t("berechnung.einnahmen.info"),
+      none,
+      format.chf(safe-get(einnahmen, "total")),
+    ),
+    {
+      let prefix = "berechnung.einnahmen.totalEinkuenfte."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "totalEinkuenfte"), prefix: "positive"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.einnahmenBGSA."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "einnahmenBGSA"), prefix: "positive"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.ergaenzungsleistungen."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(einnahmen, "ergaenzungsleistungen"),
+          prefix: "positive",
+        ),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.andereEinnahmen."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "andereEinnahmen"), prefix: "positive"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.eigenmietwert."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "eigenmietwert"), prefix: "negative"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.unterhaltsbeitraegeAbzug."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(einnahmen, "unterhaltsbeitraege"),
+          prefix: "negative",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.sauele3."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "sauele3"), prefix: "negative"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.sauele2."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "sauele2"), prefix: "negative"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.rentenAbzug."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "renten"), prefix: "negative"),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.einkommensfreibetragAbzug."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(einnahmen, "einkommensfreibetrag"),
+          prefix: "negative",
+        ),
+        info: t(prefix + "info", einkommensfreibetrag: safe-get(
+          stammdaten,
+          "einkommensfreibetrag",
+        )),
+        line: constants.colors.border-dominant,
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.zwischentotal."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(safe-get(einnahmen, "zwischentotal")),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.einnahmen.anrechenbaresVermoegen."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(einnahmen, "anrechenbaresVermoegen"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info", steuerbaresVermoegen: safe-get(
+          einnahmen,
+          "steuerbaresVermoegen",
+        )),
+      )
+    },
+  )
+
+  pagebreak()
+
+  let kosten = safe-get(
+    budget,
+    "kosten",
+  )
+
+  table.rounded-bg(
+    header: table.header(
+      t("berechnung.kosten.label"),
+      t("berechnung.kosten.info"),
+      format.chf(safe-get(kosten, "total")),
+    ),
+    footer: table.footer(
+      t("berechnung.kosten.info"),
+      none,
+      format.chf(safe-get(kosten, "total")),
+    ),
+    {
+      let prefix = "berechnung.kosten.grundbedarf."
+
+      table.entry(
+        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+          budget,
+          "anzahlPersonenImHaushalt",
+        )),
+        format.chf(
+          safe-get(kosten, "grundbedarf"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.wohnkosten."
+
+      table.entry(
+        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+          budget,
+          "anzahlPersonenImHaushalt",
+        )),
+        format.chf(
+          safe-get(kosten, "wohnkosten"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.medizinischeGrundversorgung."
+
+      table.entry(
+        t(prefix + "label", anzahlPersonenImHaushalt: safe-get(
+          budget,
+          "anzahlPersonenImHaushalt",
+        )),
+        format.chf(
+          safe-get(kosten, "medizinischeGrundversorgung"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.integrationszulage."
+
+      table.entry(
+        t(prefix + "label", inAusbildungStehendeKinder: safe-get(
+          kosten,
+          "integrationszulageAnzahl",
+        )),
+        format.chf(
+          safe-get(kosten, "integrationszulageTotal"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info", abzugsLimite: format.chf(safe-get(
+          stammdaten,
+          "abzugslimite",
+        ))),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.kantonsGemeindesteuern."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(kosten, "kantonsGemeindesteuern"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.bundessteuern."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(kosten, "bundessteuern"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.fahrkostenFam."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(kosten, "fahrkostenTotal"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+        persons: (
+          safe-get(kosten, "fahrkosten", default: ()).map(
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
+            )),
+          )
+        ),
+      )
+    },
+    {
+      let prefix = "berechnung.kosten.verpflegung."
+
+      table.entry(
+        t(prefix + "label"),
+        format.chf(
+          safe-get(kosten, "verpflegungTotal"),
+          prefix: "positive",
+        ),
+        info: t(prefix + "info"),
+        persons: (
+          safe-get(kosten, "verpflegung", default: ()).map(
+            person => table.person(safe-get(person, "vorname"), format.chf(
+              safe-get(
+                person,
+                "value",
+              ),
+            )),
+          )
+        ),
+      )
+    },
+  )
+
+  if safe-get(budget, "ungedeckterAnteilLebenshaltungskosten") != 0 {
+    table.rounded-bg(
+      footer: table.footer(
+        t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.label"),
+        t("berechnung.total.ungedeckterAnteilLebenshaltungskosten.info"),
+        format.chf(safe-get(budget, "ungedeckterAnteilLebenshaltungskosten")),
+      ),
+      {
+        let prefix = "berechnung.total.fehlbetrag."
+        let proKopfTeilung = safe-get(budget, "proKopfTeilung")
+
+        table.entry(
+          t(prefix + "label"),
+          format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
+          info: t(prefix + "info"),
+          persons: if proKopfTeilung != none {
+            (
+              table.person(
+                t(prefix + "proKopfTeilung"),
+                proKopfTeilung,
+              ),
+            )
+          } else {
+            ()
+          },
+        )
+      },
+    )
+  } else {
+    table.rounded-bg(
+      footer: table.footer(
+        t("berechnung.total.anrechenbareElterlicheLeistung.label"),
+        t("berechnung.total.anrechenbareElterlicheLeistung.info"),
+        format.chf(safe-get(budget, "anrechenbareElterlicheLeistung")),
+      ),
+      {
+        let prefix = "berechnung.total.einnahmeUeberschuss."
+        let proKopfTeilung = safe-get(budget, "proKopfTeilung")
+
+        table.entry(
+          t(prefix + "label"),
+          format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
+          info: t(prefix + "info"),
+          persons: if proKopfTeilung != none {
+            (
+              table.person(
+                t(prefix + "proKopfTeilung"),
+                proKopfTeilung,
+              ),
+            )
+          } else {
+            ()
+          },
+        )
+      },
+    )
+  }
 }
