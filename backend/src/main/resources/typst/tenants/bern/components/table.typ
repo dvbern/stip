@@ -10,22 +10,29 @@
   dim: dim,
 )
 
-#let person(name, amount) = (
-  name: name,
+#let sub-entry(label, amount) = (
+  label: label,
   amount: amount,
 )
 
-#let entry(label, amount, info: none, persons: (), line: auto, bold: false) = (
+#let entry(
+  label,
+  amount,
+  info: none,
+  sub-table: (),
+  line: auto,
+  bold: false,
+) = (
   label: label,
   amount: amount,
   info: info,
-  persons: persons,
+  sub-table: sub-table,
   line: line,
   bold: bold,
 )
 
 #let entry-rows(item) = (
-  1 + if item.info != none { 1 } else { 0 } + item.persons.len()
+  1 + if item.info != none { 1 } else { 0 } + item.sub-table.len()
 )
 
 #let einnahmen-kosten(
@@ -85,13 +92,13 @@
       )
     }
 
-    for p in item.persons {
+    for se in item.sub-table {
       cells += (
         table.cell(inset: (top: 0pt))[
-          #text(size: font.small, fill: font.dim)[#p.name]
+          #text(size: font.small, fill: font.dim)[#se.label]
         ],
         table.cell(inset: (top: 0pt), align: right)[
-          #text(size: font.small, fill: font.dim)[#p.amount]
+          #text(size: font.small, fill: font.dim)[#se.amount]
         ],
       )
     }

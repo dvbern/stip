@@ -356,9 +356,9 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(kosten, "fahrkosten", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -378,9 +378,9 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(kosten, "verpflegung", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -407,9 +407,9 @@
           t(prefix + "label"),
           format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
           info: t(prefix + "info"),
-          persons: if proKopfTeilung != none {
+          sub-table: if proKopfTeilung != none {
             (
-              table.person(
+              table.sub-entry(
                 t(prefix + "proKopfTeilung"),
                 proKopfTeilung,
               ),

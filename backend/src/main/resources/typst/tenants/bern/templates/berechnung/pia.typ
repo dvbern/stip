@@ -92,9 +92,9 @@
           prefix + "info",
           einkommensfreibetrag: safe-get(stammdaten, "einkommensfreibetrag"),
         ),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "nettoerwerbseinkommen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -116,9 +116,9 @@
           safe-get(einnahmen, "einnahmenBGSATotal"),
           prefix: "positive",
         ),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "einnahmenBGSA", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -137,9 +137,9 @@
           safe-get(einnahmen, "kinderAusbildungszulagenTotal"),
           prefix: "positive",
         ),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "kinderAusbildungszulagen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -158,9 +158,9 @@
           safe-get(einnahmen, "unterhaltsbeitraegeTotal"),
           prefix: "positive",
         ),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "unterhaltsbeitraege", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -180,9 +180,9 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "eoLeistungen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -202,9 +202,9 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "taggelderAHVIV", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -221,9 +221,9 @@
         t(prefix + "label"),
         format.chf(safe-get(einnahmen, "rentenTotal"), prefix: "positive"),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "renten", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -242,9 +242,9 @@
           safe-get(einnahmen, "ergaenzungsleistungenTotal"),
           prefix: "positive",
         ),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "ergaenzungsleistungen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -275,9 +275,9 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(einnahmen, "andereEinnahmen", default: ()).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -431,13 +431,13 @@
           prefix: "positive",
         ),
         info: t(prefix + "info"),
-        persons: (
+        sub-table: (
           safe-get(
             einnahmen,
             "medizinischeGrundversorgung",
             default: (),
           ).map(
-            person => table.person(safe-get(person, "vorname"), format.chf(
+            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
               safe-get(
                 person,
                 "value",
@@ -513,9 +513,9 @@
         t(prefix + "label"),
         format.chf(safe-get(budget, "fehlbetrag"), prefix: "negative"),
         info: t(prefix + "info"),
-        persons: if proKopfTeilung != none {
+        sub-table: if proKopfTeilung != none {
           (
-            table.person(
+            table.sub-entry(
               t(prefix + "proKopfTeilung"),
               proKopfTeilung,
             ),
