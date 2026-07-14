@@ -68,6 +68,7 @@
   )
 
   let totalSubCells = ()
+  let noteCells = ()
 
   if hasKuerzung or hasUnterbruch {
     totalSubCells += (
@@ -79,19 +80,43 @@
   }
 
   if hasKuerzung {
+    let identifier = t("berechnung.notes.uebersicht.kuerzung.identifier")
+
     totalSubCells += (
       table.sub-entry(
-        t("berechnung.uebersicht.total.kuerzung"),
+        table.with-note(t("berechnung.uebersicht.total.kuerzung"), identifier),
         format.chf(kuerzung, prefix: "negative"),
+      ),
+    )
+    noteCells += (
+      table.note-entry(
+        identifier,
+        t(
+          "berechnung.notes.uebersicht.kuerzung.text",
+          anzahlMonate: safe-get(payload, "anzahlMonateEinreichefrist"),
+          betrag: format.chf(kuerzung),
+        ),
       ),
     )
   }
 
   if hasUnterbruch {
+    let identifier = t("berechnung.notes.uebersicht.unterbruch.identifier")
+
     totalSubCells += (
       table.sub-entry(
-        "Kürzung wegen Unterbruch",
+        table.with-note(t("berechnung.uebersicht.total.kuerzung"), identifier),
         format.chf(unterbruch, prefix: "negative"),
+      ),
+    )
+    noteCells += (
+      table.note-entry(
+        identifier,
+        t(
+          "berechnung.notes.uebersicht.unterbruch.text",
+          anzahlMonate: safe-get(payload, "anzahlMonateUnterbruch"),
+          betrag: format.chf(unterbruch),
+        ),
       ),
     )
   }
@@ -126,6 +151,12 @@
     cell-inset: constants.layout.spacing.semi-big,
     ..totalCells,
   )
+
+  if hasKuerzung or hasUnterbruch {
+    table.notes(
+      ..noteCells,
+    )
+  }
 
   v(constants.layout.spacing.big)
 

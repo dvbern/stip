@@ -99,7 +99,10 @@
 
       cells += (
         table.cell(inset: (top: 0pt, bottom: bottom-inset))[
-          #text(size: font.small, fill: font.dim)[#se.label]
+          #text(size: font.small, fill: font.dim)[#eval(
+            se.label,
+            mode: "markup",
+          )]
         ],
         table.cell(inset: (top: 0pt, bottom: bottom-inset), align: right)[
           #text(size: font.small, fill: font.dim)[#se.amount]

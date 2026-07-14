@@ -11,12 +11,20 @@ berechnung:
   mutter: Mutterbudget
   vater: Vaterbudget
   notes:
-    bgsa:
-      identifier: 1)
-      text: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)
-    hoechstwerte:
-      identifier: 2)
-      text: Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte
+    uebersicht:
+      kuerzung:
+        identifier: k)
+        text: Das Gesuch wurde {anzahlMonate} Monat zu spät eingereicht. Dies ergibt eine Reduktion von CHF {betrag}.
+      unterbruch:
+        identifier: u)
+        text: Das Gesuch wurde {anzahlMonate} Monate Unterbrochen. Dies ergibt eine Reduktion von CHF {betrag}.
+    einnahmen-kosten:
+      bgsa:
+        identifier: 1)
+        text: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)
+      hoechstwerte:
+        identifier: 2)
+        text: Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte
   uebersicht:
     resultat: Resultat
     abgelehnt: Stipendium abgelehnt
@@ -26,6 +34,7 @@ berechnung:
       betrag: Total Betrag
       ohneKuerzung: Total Betrag ohne Kürzungen
       kuerzung: Kürzung wegen verspäteten Einreichen
+      unterbruch: Kürzung wegen Unterbruch
       stipendium: Total Betrag Stipendium
       darlehen: Total Betrag Darlehen
     berechnungen:

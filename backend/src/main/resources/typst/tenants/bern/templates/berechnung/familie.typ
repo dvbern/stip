@@ -116,7 +116,7 @@
       table.entry(
         table.with-note(
           t(prefix + "label"),
-          t("berechnung.notes.bgsa.identifier"),
+          t("berechnung.notes.einnahmen-kosten.bgsa.identifier"),
         ),
         format.chf(safe-get(einnahmen, "einnahmenBGSA"), prefix: "positive"),
       )
@@ -259,7 +259,7 @@
             budget,
             "anzahlPersonenImHaushalt",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(
           safe-get(kosten, "grundbedarf"),
@@ -292,7 +292,7 @@
             budget,
             "anzahlPersonenImHaushalt",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(
           safe-get(kosten, "medizinischeGrundversorgung"),
@@ -310,7 +310,7 @@
             kosten,
             "integrationszulageAnzahl",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(
           safe-get(kosten, "integrationszulageTotal"),
@@ -457,12 +457,12 @@
 
   table.notes(
     table.note-entry(
-      t("berechnung.notes.bgsa.identifier"),
-      t("berechnung.notes.bgsa.text"),
+      t("berechnung.notes.einnahmen-kosten.bgsa.identifier"),
+      t("berechnung.notes.einnahmen-kosten.bgsa.text"),
     ),
     table.note-entry(
-      t("berechnung.notes.hoechstwerte.identifier"),
-      t("berechnung.notes.hoechstwerte.text"),
+      t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
+      t("berechnung.notes.einnahmen-kosten.hoechstwerte.text"),
     ),
   )
 }

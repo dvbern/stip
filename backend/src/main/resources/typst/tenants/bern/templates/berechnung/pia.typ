@@ -110,7 +110,7 @@
       table.entry(
         table.with-note(
           t(prefix + "label"),
-          t("berechnung.notes.bgsa.identifier"),
+          t("berechnung.notes.einnahmen-kosten.bgsa.identifier"),
         ),
         format.chf(
           safe-get(einnahmen, "einnahmenBGSATotal"),
@@ -341,7 +341,7 @@
       table.entry(
         table.with-note(
           t(prefix + "label"),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(
           safe-get(kosten, "ausbildungskostenTotal"),
@@ -379,7 +379,7 @@
       table.entry(
         table.with-note(
           t(prefix + "label"),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(safe-get(kosten, "verpflegungskosten"), prefix: "positive"),
         info: t(prefix + "info"),
@@ -394,7 +394,7 @@
             budget,
             "anzahlPersonenImHaushalt",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(safe-get(kosten, "grundbedarf"), prefix: "positive"),
         info: t(prefix + "info"),
@@ -409,7 +409,7 @@
             budget,
             "anzahlPersonenImHaushalt",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(safe-get(kosten, "wohnkosten"), prefix: "positive"),
         info: t(prefix + "info"),
@@ -424,7 +424,7 @@
             budget,
             "anzahlPersonenImHaushalt",
           )),
-          t("berechnung.notes.hoechstwerte.identifier"),
+          t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
         ),
         format.chf(
           safe-get(kosten, "medizinischeGrundversorgungTotal"),
@@ -537,12 +537,12 @@
 
   table.notes(
     table.note-entry(
-      t("berechnung.notes.bgsa.identifier"),
-      t("berechnung.notes.bgsa.text"),
+      t("berechnung.notes.einnahmen-kosten.bgsa.identifier"),
+      t("berechnung.notes.einnahmen-kosten.bgsa.text"),
     ),
     table.note-entry(
-      t("berechnung.notes.hoechstwerte.identifier"),
-      t("berechnung.notes.hoechstwerte.text"),
+      t("berechnung.notes.einnahmen-kosten.hoechstwerte.identifier"),
+      t("berechnung.notes.einnahmen-kosten.hoechstwerte.text"),
     ),
   )
 }
