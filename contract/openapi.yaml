@@ -833,6 +833,32 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /darlehen/buchhaltung/fall/{fallId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenBuchhaltungEntrysByFallId
+      summary: Gets all darlehen buchhaltungsentrys by fallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /delegieren/{fallId}/{sozialdienstId}:
     parameters:
       - $ref: '#/components/parameters/fallId'
@@ -2066,6 +2092,35 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /verfuegung/fall/{fallId}/verfuegungen:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VerfuegungFall'
+          description: Returns a list of all Verfuegungen for a Fall
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungenByFallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /verfuegung/dokument/download:
     parameters:
       - name: token
@@ -2114,7 +2169,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to downlaod Verfuegung
+      summary: get Token to download Verfuegung
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -7455,6 +7510,8 @@ components:
           $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
+        yearRange:
+          type: string
         userErstellt:
           type: string
         kommentar:
@@ -8965,6 +9022,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VerfuegungDokument'
+    VerfuegungFall:
+      type: object
+      required:
+        - timestampErstellt
+        - yearRange
+        - totalbetragStipendium
+        - dokumente
+      properties:
+        timestampErstellt:
+          type: string
+        yearRange:
+          type: string
+        totalbetragStipendium:
+          type: integer
+        dokument:
+          $ref: '#/components/schemas/VerfuegungDokument'
     AusbildungBase:
       required:
         - fallId

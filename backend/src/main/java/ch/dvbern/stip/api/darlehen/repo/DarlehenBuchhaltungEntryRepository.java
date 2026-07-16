@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.ausbildung.entity.QAusbildung;
 import ch.dvbern.stip.api.common.repo.BaseRepository;
 import ch.dvbern.stip.api.darlehen.entity.DarlehenBuchhaltungEntry;
 import ch.dvbern.stip.api.darlehen.entity.QDarlehenBuchhaltungEntry;
@@ -36,6 +37,8 @@ import lombok.RequiredArgsConstructor;
 public class DarlehenBuchhaltungEntryRepository implements BaseRepository<DarlehenBuchhaltungEntry> {
     private static final QDarlehenBuchhaltungEntry Q_Entry =
         QDarlehenBuchhaltungEntry.darlehenBuchhaltungEntry;
+    private static final QAusbildung Q_Ausbildung =
+        QAusbildung.ausbildung;
 
     private final EntityManager entityManager;
 
@@ -43,6 +46,17 @@ public class DarlehenBuchhaltungEntryRepository implements BaseRepository<Darleh
         return new JPAQueryFactory(entityManager)
             .selectFrom(Q_Entry)
             .where(Q_Entry.gesuch.id.eq(gesuchId).and(Q_Entry.betrag.isNotNull()))
+            .stream()
+            .toList()
+            .reversed();
+    }
+
+    public List<DarlehenBuchhaltungEntry> getByFallId(final UUID fallId) {
+        return new JPAQueryFactory(entityManager)
+            .selectFrom(Q_Entry)
+            .join(Q_Ausbildung)
+            .on(Q_Entry.gesuch.ausbildung.id.eq(Q_Ausbildung.id))
+            .where(Q_Ausbildung.fall.id.eq(fallId).and(Q_Entry.betrag.isNotNull()))
             .stream()
             .toList()
             .reversed();
