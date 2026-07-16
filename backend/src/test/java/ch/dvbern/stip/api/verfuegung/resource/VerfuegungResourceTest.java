@@ -362,7 +362,7 @@ public class VerfuegungResourceTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(10)
+    @Order(14)
     void getVerfuegungenByFallId() {
         final var verfuegungenByFall = verfuegungApiSpec.getVerfuegungenByFallId()
             .fallIdPath(gesuch.getFallId())
