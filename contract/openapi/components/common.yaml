@@ -95,7 +95,7 @@ DokumentTyp:
     - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
     - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
     - PERSON_KESB_ERNENNUNG
-    - PERSON_MIETVERTRAG
+    - PERSON_EIGENER_HAUSHALT
     - PERSON_SOZIALHILFEBUDGET
     - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
     - PERSON_AUSWEIS
@@ -409,6 +409,8 @@ Gesuch:
       type: string
     hadDelegierungs:
       type: boolean
+    minDateEigenerWohnsitz:
+      $ref: '#/LocalDate'
     delegierung:
       $ref: '#/DelegierungSlim'
     nachfristDokumente:
