@@ -393,6 +393,26 @@ public class DarlehenResourceImplTest {
     }
 
     @Test
+    @TestAsGesuchsteller
+    @Order(18)
+    void getDarlehenBuchhaltungOverviewByFallId() {
+        var darlehenBuchhaltungOverviewDtoSpec = darlehenApiSpec.getDarlehenBuchhaltungEntrysByFallId()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DarlehenBuchhaltungOverviewDtoSpec.class);
+
+        assertEquals(123 + 2500, darlehenBuchhaltungOverviewDtoSpec.getTotal());
+        assertEquals(2500, darlehenBuchhaltungOverviewDtoSpec.getTotalFreiwillig());
+        assertEquals(2, darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().size());
+        assertNotNull(darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().getFirst().getYearRange());
+    }
+
+    @Test
     @Order(98)
     @Transactional
     void deleteDarlehen() {

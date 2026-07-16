@@ -27,6 +27,7 @@ import java.util.List;
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
@@ -209,5 +210,16 @@ public class DateUtil {
     public int getPiaAgeDifferenceToEigenerWohnsitzStichtagDate(final GesuchFormular gesuchFormular) {
         final var pia = gesuchFormular.getPersonInAusbildung();
         return DateUtil.getAgeInYearsAtDate(pia.getGeburtsdatum(), getEigenerWohnsitzStichtagDate(gesuchFormular));
+    }
+
+    public String getGesuchsPeriodeYearRange(final Gesuchsperiode gesuchsperiode) {
+        if (gesuchsperiode == null) {
+            return null;
+        }
+
+        return "%s/%s".formatted(
+            gesuchsperiode.getGesuchsperiodeStart().getYear(),
+            gesuchsperiode.getGesuchsperiodeStopp().getYear()
+        );
     }
 }

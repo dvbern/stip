@@ -89,6 +89,7 @@ public class DarlehenApiSpec {
                 getAllFreiwilligDarlehenGs(),
                 getAllFreiwilligDarlehenSb(),
                 getDarlehenBuchhaltungEntrys(),
+                getDarlehenBuchhaltungEntrysByFallId(),
                 getDarlehenDokument(),
                 getDarlehenDownloadToken(),
                 getDarlehenNegativVerfuegungDownloadToken(),
@@ -164,6 +165,10 @@ public class DarlehenApiSpec {
 
     public GetDarlehenBuchhaltungEntrysOper getDarlehenBuchhaltungEntrys() {
         return new GetDarlehenBuchhaltungEntrysOper(createReqSpec());
+    }
+
+    public GetDarlehenBuchhaltungEntrysByFallIdOper getDarlehenBuchhaltungEntrysByFallId() {
+        return new GetDarlehenBuchhaltungEntrysByFallIdOper(createReqSpec());
     }
 
     public GetDarlehenDokumentOper getDarlehenDokument() {
@@ -1511,6 +1516,79 @@ public class DarlehenApiSpec {
          * @return operation
          */
         public GetDarlehenBuchhaltungEntrysOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
+            respSpecCustomizer.accept(respSpec);
+            return this;
+        }
+    }
+    /**
+     * Gets all darlehen buchhaltungsentrys by fallId
+     * 
+     *
+     * @see #fallIdPath Die ID vom Fall (required)
+     * return DarlehenBuchhaltungOverviewDtoSpec
+     */
+    public static class GetDarlehenBuchhaltungEntrysByFallIdOper implements Oper {
+
+        public static final Method REQ_METHOD = GET;
+        public static final String REQ_URI = "/darlehen/buchhaltung/fall/{fallId}";
+
+        private RequestSpecBuilder reqSpec;
+        private ResponseSpecBuilder respSpec;
+
+        public GetDarlehenBuchhaltungEntrysByFallIdOper(RequestSpecBuilder reqSpec) {
+            this.reqSpec = reqSpec;
+            reqSpec.setAccept("application/json");
+            this.respSpec = new ResponseSpecBuilder();
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/fall/{fallId}
+         * @param handler handler
+         * @param <T> type
+         * @return type
+         */
+        @Override
+        public <T> T execute(Function<Response, T> handler) {
+            return handler.apply(RestAssured.given().spec(reqSpec.build()).expect().spec(respSpec.build()).when().request(REQ_METHOD, REQ_URI));
+        }
+
+        /**
+         * GET /darlehen/buchhaltung/fall/{fallId}
+         * @param handler handler
+         * @return DarlehenBuchhaltungOverviewDtoSpec
+         */
+        public DarlehenBuchhaltungOverviewDtoSpec executeAs(Function<Response, Response> handler) {
+            TypeRef<DarlehenBuchhaltungOverviewDtoSpec> type = new TypeRef<DarlehenBuchhaltungOverviewDtoSpec>(){};
+            return execute(handler).as(type);
+        }
+
+        public static final String FALL_ID_PATH = "fallId";
+
+        /**
+         * @param fallId (UUID) Die ID vom Fall (required)
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
+            return this;
+        }
+
+        /**
+         * Customize request specification
+         * @param reqSpecCustomizer consumer to modify the RequestSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper reqSpec(Consumer<RequestSpecBuilder> reqSpecCustomizer) {
+            reqSpecCustomizer.accept(reqSpec);
+            return this;
+        }
+
+        /**
+         * Customize response specification
+         * @param respSpecCustomizer consumer to modify the ResponseSpecBuilder
+         * @return operation
+         */
+        public GetDarlehenBuchhaltungEntrysByFallIdOper respSpec(Consumer<ResponseSpecBuilder> respSpecCustomizer) {
             respSpecCustomizer.accept(respSpec);
             return this;
         }

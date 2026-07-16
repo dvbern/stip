@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.generated.api.VerfuegungResource;
 import ch.dvbern.stip.generated.dto.FileDownloadTokenDto;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import io.smallrye.common.annotation.Blocking;
 import io.smallrye.jwt.auth.principal.JWTParser;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -92,5 +93,12 @@ public class VerfuegungResourceImpl implements VerfuegungResource {
         verfuegungAuthorizer.canGetVerfuegungen();
 
         return verfuegungService.getVerfuegungen(gesuchId);
+    }
+
+    @Override
+    @RolesAllowed({ GS_GESUCH_READ, SB_GESUCH_READ, JURIST_GESUCH_READ })
+    public List<VerfuegungFallDto> getVerfuegungenByFallId(UUID fallId) {
+        verfuegungAuthorizer.canGetVerfuegungenByFallId(fallId);
+        return verfuegungService.getVerfuegungenByFallId(fallId);
     }
 }

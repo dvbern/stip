@@ -60,6 +60,7 @@ import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_READ;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_GS;
 import static ch.dvbern.stip.api.common.util.OidcPermissions.FREIWILLIG_DARLEHEN_UPDATE_SB;
+import static ch.dvbern.stip.api.common.util.OidcPermissions.GS_GESUCH_READ;
 
 @RequestScoped
 @RequiredArgsConstructor
@@ -305,5 +306,12 @@ public class DarlehenResourceImpl implements DarlehenResource {
     public void deleteDarlehenDokument(UUID dokumentId) {
         darlehenAuthorizer.canDeleteDarlehenDokument(dokumentId);
         darlehenService.removeDokument(dokumentId);
+    }
+
+    @Override
+    @RolesAllowed({ FREIWILLIG_DARLEHEN_READ, GS_GESUCH_READ })
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrysByFallId(UUID fallId) {
+        darlehenAuthorizer.canGetDarlehenByFallId(fallId);
+        return darlehenService.getDarlehenBuchhaltungEntryOverviewByFallId(fallId);
     }
 }
