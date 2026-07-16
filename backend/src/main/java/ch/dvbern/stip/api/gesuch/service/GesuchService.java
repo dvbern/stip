@@ -104,7 +104,7 @@ import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.AusgewaehlterGrundDto;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.EinnahmenKostenUpdateDto;
@@ -765,9 +765,7 @@ public class GesuchService {
         final var tenantConfig = tenantService.getConfigForCurrentTenant();
 
         final var stipendien = berechnungService.getBerechnungsresultatFromGesuch(
-            gesuch,
-            tenantConfig.berechnung().currentMajorVersion(),
-            tenantConfig.berechnung().currentMinorVersion()
+            gesuch
         );
 
         if (stipendien.getBerechnungVorKuerzungUndTeilung() <= 0) {
@@ -992,7 +990,7 @@ public class GesuchService {
 
     public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        return berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        return berechnungService.getBerechnungsresultatFromGesuch(gesuch);
     }
 
     @Transactional

@@ -253,6 +253,7 @@ class GesuchFormularMapperTest {
         // Arrange
         final var updatePia = new PersonInAusbildungUpdateDto();
         updatePia.setZivilstand(Zivilstand.KONKUBINAT);
+        updatePia.setWohnsitz(Wohnsitz.MUTTER_VATER);
 
         final var updatePartner = new PartnerUpdateDto();
 

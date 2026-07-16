@@ -515,6 +515,7 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         Adresse adresse = new Adresse();
         Land land = new Land();

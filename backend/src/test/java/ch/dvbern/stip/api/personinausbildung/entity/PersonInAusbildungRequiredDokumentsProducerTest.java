@@ -223,6 +223,7 @@ class PersonInAusbildungRequiredDokumentsProducerTest {
     private PersonInAusbildung createNewPia() {
         final PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.now());
+        personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
         return personInAusbildung;
     }
 

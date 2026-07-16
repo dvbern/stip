@@ -348,9 +348,9 @@ public class TranchenBerechnungsresultatDtoSpec {
    * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
    * @return teilzeitKinderBeiPiaAnrechnen
   **/
-  @jakarta.annotation.Nonnull
+  @jakarta.annotation.Nullable
   @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
   public Boolean getTeilzeitKinderBeiPiaAnrechnen() {
     return teilzeitKinderBeiPiaAnrechnen;
@@ -358,7 +358,7 @@ public class TranchenBerechnungsresultatDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN)
-  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setTeilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
     this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
   }

@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.gesuchformular.entity;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -38,7 +37,7 @@ public class EinnahmenKostenWohnkostenRequiredConstraintValidator
         }
 
         if (
-            gesuchFormular.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT &&
+            gesuchFormular.getPersonInAusbildung().getWohnsitz().isEigenerHaushalt() &&
             gesuchFormular.getEinnahmenKosten().getWohnkosten() == null
         ) {
             return GesuchValidatorUtil.addProperty(context, property);

@@ -39,12 +39,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   private @Valid String ausbildungBis;
   private @Valid String yearRange;
   private @Valid UUID gesuchTrancheId;
-  private @Valid Boolean teilzeitKinderBeiPiaAnrechnen;
   private @Valid BerechnungsStammdatenDto berechnungsStammdaten;
   private @Valid PersoenlichesBudgetresultatDto persoenlichesBudgetresultat;
   private @Valid List<FamilienBudgetresultatDto> familienBudgetresultate = new ArrayList<>();
   private @Valid List<PersonenHaushaltGruppeDto> personenHaushaltGroups = new ArrayList<>();
   private @Valid BigDecimal berechnungsanteilKinder;
+  private @Valid Boolean teilzeitKinderBeiPiaAnrechnen;
   private @Valid BigDecimal berechnungsanteilKinderPia;
 
   /**
@@ -202,26 +202,6 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   /**
-   * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
-   **/
-  public TranchenBerechnungsresultatDto teilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
-    this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
-    return this;
-  }
-
-  
-  @JsonProperty("teilzeitKinderBeiPiaAnrechnen")
-  @NotNull
-  public Boolean getTeilzeitKinderBeiPiaAnrechnen() {
-    return teilzeitKinderBeiPiaAnrechnen;
-  }
-
-  @JsonProperty("teilzeitKinderBeiPiaAnrechnen")
-  public void setTeilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
-    this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
-  }
-
-  /**
    **/
   public TranchenBerechnungsresultatDto berechnungsStammdaten(BerechnungsStammdatenDto berechnungsStammdaten) {
     this.berechnungsStammdaten = berechnungsStammdaten;
@@ -351,6 +331,25 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
   }
 
   /**
+   * Werden kinder der PiA bei der berechnung dieser Tranche dem Budget der PiA angerechnet
+   **/
+  public TranchenBerechnungsresultatDto teilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
+    this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
+    return this;
+  }
+
+  
+  @JsonProperty("teilzeitKinderBeiPiaAnrechnen")
+  public Boolean getTeilzeitKinderBeiPiaAnrechnen() {
+    return teilzeitKinderBeiPiaAnrechnen;
+  }
+
+  @JsonProperty("teilzeitKinderBeiPiaAnrechnen")
+  public void setTeilzeitKinderBeiPiaAnrechnen(Boolean teilzeitKinderBeiPiaAnrechnen) {
+    this.teilzeitKinderBeiPiaAnrechnen = teilzeitKinderBeiPiaAnrechnen;
+  }
+
+  /**
    * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
    **/
   public TranchenBerechnungsresultatDto berechnungsanteilKinderPia(BigDecimal berechnungsanteilKinderPia) {
@@ -387,18 +386,18 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
         Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
         Objects.equals(this.yearRange, tranchenBerechnungsresultat.yearRange) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
-        Objects.equals(this.teilzeitKinderBeiPiaAnrechnen, tranchenBerechnungsresultat.teilzeitKinderBeiPiaAnrechnen) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
         Objects.equals(this.persoenlichesBudgetresultat, tranchenBerechnungsresultat.persoenlichesBudgetresultat) &&
         Objects.equals(this.familienBudgetresultate, tranchenBerechnungsresultat.familienBudgetresultate) &&
         Objects.equals(this.personenHaushaltGroups, tranchenBerechnungsresultat.personenHaushaltGroups) &&
         Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
+        Objects.equals(this.teilzeitKinderBeiPiaAnrechnen, tranchenBerechnungsresultat.teilzeitKinderBeiPiaAnrechnen) &&
         Objects.equals(this.berechnungsanteilKinderPia, tranchenBerechnungsresultat.berechnungsanteilKinderPia);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, teilzeitKinderBeiPiaAnrechnen, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups, berechnungsanteilKinder, berechnungsanteilKinderPia);
+    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia);
   }
 
   @Override
@@ -414,12 +413,12 @@ public class TranchenBerechnungsresultatDto  implements Serializable {
     sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
     sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
-    sb.append("    teilzeitKinderBeiPiaAnrechnen: ").append(toIndentedString(teilzeitKinderBeiPiaAnrechnen)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");
     sb.append("    persoenlichesBudgetresultat: ").append(toIndentedString(persoenlichesBudgetresultat)).append("\n");
     sb.append("    familienBudgetresultate: ").append(toIndentedString(familienBudgetresultate)).append("\n");
     sb.append("    personenHaushaltGroups: ").append(toIndentedString(personenHaushaltGroups)).append("\n");
     sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
+    sb.append("    teilzeitKinderBeiPiaAnrechnen: ").append(toIndentedString(teilzeitKinderBeiPiaAnrechnen)).append("\n");
     sb.append("    berechnungsanteilKinderPia: ").append(toIndentedString(berechnungsanteilKinderPia)).append("\n");
     sb.append("}");
     return sb.toString();

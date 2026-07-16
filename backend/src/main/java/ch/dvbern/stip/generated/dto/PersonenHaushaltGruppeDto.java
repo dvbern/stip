@@ -1,8 +1,8 @@
 package ch.dvbern.stip.generated.dto;
 
+import ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
@@ -10,11 +10,6 @@ import jakarta.validation.Valid;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.annotation.JsonTypeName;
-
-
 
 @JsonTypeName("PersonenHaushaltGruppe")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
@@ -22,25 +17,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
 
 public class PersonenHaushaltGruppeDto  implements Serializable {
-  private @Valid ch.dvbern.stip.berechnung.type.PersonenHaushalt typ;
+  private @Valid PersonenHaushalt typ;
   private @Valid List<String> names = new ArrayList<>();
 
   /**
    **/
-  public PersonenHaushaltGruppeDto typ(ch.dvbern.stip.berechnung.type.PersonenHaushalt typ) {
+  public PersonenHaushaltGruppeDto typ(PersonenHaushalt typ) {
     this.typ = typ;
     return this;
   }
 
-  
+
   @JsonProperty("typ")
   @NotNull
-  public ch.dvbern.stip.berechnung.type.PersonenHaushalt getTyp() {
+  public PersonenHaushalt getTyp() {
     return typ;
   }
 
   @JsonProperty("typ")
-  public void setTyp(ch.dvbern.stip.berechnung.type.PersonenHaushalt typ) {
+  public void setTyp(PersonenHaushalt typ) {
     this.typ = typ;
   }
 
@@ -51,7 +46,7 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
     return this;
   }
 
-  
+
   @JsonProperty("names")
   @NotNull
   public List<String> getNames() {
@@ -102,7 +97,7 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class PersonenHaushaltGruppeDto {\n");
-    
+
     sb.append("    typ: ").append(toIndentedString(typ)).append("\n");
     sb.append("    names: ").append(toIndentedString(names)).append("\n");
     sb.append("}");

@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -111,7 +110,7 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
             requiredDocs.add(DokumentTyp.PERSON_KESB_ERNENNUNG);
         }
 
-        if (pia.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+        if (pia.getWohnsitz().isEigenerHaushalt()) {
             requiredDocs.add(DokumentTyp.PERSON_MIETVERTRAG);
         }
 

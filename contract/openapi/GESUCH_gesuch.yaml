@@ -1701,7 +1701,6 @@ components:
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - teilzeitKinderBeiPiaAnrechnen
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -2020,6 +2019,7 @@ components:
         - fehlbetrag
         - proKopfTeilung
         - ungedeckterAnteilLebenshaltungskosten
+        - teilzeitKinderProzente
         - einnahmen
         - kosten
       properties:
@@ -2074,6 +2074,8 @@ components:
         proKopfTeilung:
           type: integer
         ungedeckterAnteilLebenshaltungskosten:
+          type: integer
+        teilzeitKinderProzente:
           type: integer
         einnahmen:
           description: 'Einnahmen des familien Budgets'

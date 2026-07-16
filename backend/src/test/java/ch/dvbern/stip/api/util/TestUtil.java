@@ -734,6 +734,7 @@ public class TestUtil {
             )
             .setEinreichedatum(LocalDate.now().plusMonths(5));
 
+        gesuch.setId(UUID.randomUUID());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setTranche(gesuch.getNewestGesuchTranche().get());
         gesuch.getNewestGesuchTranche().get().setGesuch(gesuch);
         return gesuch;

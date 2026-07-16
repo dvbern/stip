@@ -61,7 +61,7 @@ import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungEntryDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungOverviewDto;
 import ch.dvbern.stip.generated.dto.DarlehenBuchhaltungSaldokorrekturDto;
@@ -148,7 +148,7 @@ public class DarlehenService {
             .sum();
         final var remainingQuota = Math.max(
             0,
-            BerechnungUtil.darlehenLimit - darlehenBisher
+            BerechnungUtil.DARLEHEN_LIMIT - darlehenBisher
         );
 
         var darlehenBetrag = Math.max(0, betrag - gesetzlicheDarlehenBisher);

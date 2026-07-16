@@ -295,18 +295,6 @@ public class Gesuch extends AbstractTenantEntity {
             .findFirst();
     }
 
-    public LocalDate getGesuchGueltigkeitBis() {
-        final var relevantGesuchTranche = getTranchenTranchen().max(
-            Comparator.comparing(tranche -> {
-                assert tranche.getGueltigkeit().getGueltigBis() != null;
-                return tranche.getGueltigkeit().getGueltigBis();
-            })
-        )
-            .orElseThrow(IllegalStateException::new);
-        assert relevantGesuchTranche.getGueltigkeit().getGueltigBis() != null;
-        return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
-    }
-
     public LocalDate getGesuchGueltigkeitAb() {
         final var relevantGesuchTranche = getTranchenTranchen().min(
             Comparator.comparing(tranche -> {
@@ -317,6 +305,18 @@ public class Gesuch extends AbstractTenantEntity {
             .orElseThrow(IllegalStateException::new);
         assert relevantGesuchTranche.getGueltigkeit().getGueltigAb() != null;
         return relevantGesuchTranche.getGueltigkeit().getGueltigAb();
+    }
+
+    public LocalDate getGesuchGueltigkeitBis() {
+        final var relevantGesuchTranche = getTranchenTranchen().max(
+            Comparator.comparing(tranche -> {
+                assert tranche.getGueltigkeit().getGueltigBis() != null;
+                return tranche.getGueltigkeit().getGueltigBis();
+            })
+        )
+            .orElseThrow(IllegalStateException::new);
+        assert relevantGesuchTranche.getGueltigkeit().getGueltigBis() != null;
+        return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
     }
 
     public Stream<Datenschutzbrief> getAllPendingDatenschutschbriefsForMassendruck() {

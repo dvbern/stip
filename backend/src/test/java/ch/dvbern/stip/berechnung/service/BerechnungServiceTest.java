@@ -46,6 +46,7 @@ import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.util.TestConstants;
 import ch.dvbern.stip.api.util.TestDatabaseEnvironment;
 import ch.dvbern.stip.api.util.TestUtil;
+import ch.dvbern.stip.berechnung.adapter.bern.v1_0.service.BernBerechnungAdapterV1_0;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
@@ -63,7 +64,7 @@ import static org.hamcrest.Matchers.oneOf;
 class BerechnungServiceTest {
 
     @Inject
-    BerechnungService berechnungService;
+    ch.dvbern.stip.berechnung.domain.service.BerechnungService berechnungService;
 
     @Test
     void wasEingereichtAfterDueDateFalseTest() {
@@ -286,14 +287,14 @@ class BerechnungServiceTest {
                 .setVaterUnbekanntVerstorben(ElternAbwesenheitsGrund.VERSTORBEN)
         );
 
-        var sekResult = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        var sekResult = berechnungService.getBerechnungsresultatFromGesuch(gesuch);
 
         gesuch.getAusbildung()
             .getAusbildungsgang()
             .getAbschluss()
             .setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B);
 
-        var terResult = berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0);
+        var terResult = berechnungService.getBerechnungsresultatFromGesuch(gesuch);
 
         assertThat(sekResult.getBerechnungStipendium(), equalTo(terResult.getBerechnungStipendium() - 6000));
     }
@@ -302,11 +303,11 @@ class BerechnungServiceTest {
     void testGetMonateMitDarlehen() {
         final var gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
 
-        var monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        var monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(0));
 
         gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(4));
-        monateMitDarlehen = berechnungService.getMonateMitDarlehen(gesuch);
+        monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(12));
 
         gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
@@ -320,7 +321,7 @@ class BerechnungServiceTest {
                     .setBis(LocalDate.now().minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
-        monateMitDarlehen = BerechnungService.getMonateMitDarlehen(gesuch);
+        monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, oneOf(6, 7));
     }
 

@@ -46,6 +46,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid Integer fehlbetrag;
   private @Valid Integer proKopfTeilung;
   private @Valid Integer ungedeckterAnteilLebenshaltungskosten;
+  private @Valid Integer teilzeitKinderProzente;
   private @Valid FamilienBudgetresultatEinnahmenDto einnahmen;
   private @Valid FamilienBudgetresultatKostenDto kosten;
   private @Valid String vornamePartner;
@@ -433,6 +434,25 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   /**
    **/
+  public FamilienBudgetresultatDto teilzeitKinderProzente(Integer teilzeitKinderProzente) {
+    this.teilzeitKinderProzente = teilzeitKinderProzente;
+    return this;
+  }
+
+  
+  @JsonProperty("teilzeitKinderProzente")
+  @NotNull
+  public Integer getTeilzeitKinderProzente() {
+    return teilzeitKinderProzente;
+  }
+
+  @JsonProperty("teilzeitKinderProzente")
+  public void setTeilzeitKinderProzente(Integer teilzeitKinderProzente) {
+    this.teilzeitKinderProzente = teilzeitKinderProzente;
+  }
+
+  /**
+   **/
   public FamilienBudgetresultatDto einnahmen(FamilienBudgetresultatEinnahmenDto einnahmen) {
     this.einnahmen = einnahmen;
     return this;
@@ -571,6 +591,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
         Objects.equals(this.fehlbetrag, familienBudgetresultat.fehlbetrag) &&
         Objects.equals(this.proKopfTeilung, familienBudgetresultat.proKopfTeilung) &&
         Objects.equals(this.ungedeckterAnteilLebenshaltungskosten, familienBudgetresultat.ungedeckterAnteilLebenshaltungskosten) &&
+        Objects.equals(this.teilzeitKinderProzente, familienBudgetresultat.teilzeitKinderProzente) &&
         Objects.equals(this.einnahmen, familienBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, familienBudgetresultat.kosten) &&
         Objects.equals(this.vornamePartner, familienBudgetresultat.vornamePartner) &&
@@ -581,7 +602,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(haushaltNames, steuerdatenTyp, vorname, nachname, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten, vornamePartner, nachnamePartner, sozialversicherungsnummerPartner, geburtsdatumPartner);
+    return Objects.hash(haushaltNames, steuerdatenTyp, vorname, nachname, sozialversicherungsnummer, geburtsdatum, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, teilzeitKinderProzente, einnahmen, kosten, vornamePartner, nachnamePartner, sozialversicherungsnummerPartner, geburtsdatumPartner);
   }
 
   @Override
@@ -608,6 +629,7 @@ public class FamilienBudgetresultatDto  implements Serializable {
     sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
     sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
     sb.append("    ungedeckterAnteilLebenshaltungskosten: ").append(toIndentedString(ungedeckterAnteilLebenshaltungskosten)).append("\n");
+    sb.append("    teilzeitKinderProzente: ").append(toIndentedString(teilzeitKinderProzente)).append("\n");
     sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
     sb.append("    vornamePartner: ").append(toIndentedString(vornamePartner)).append("\n");

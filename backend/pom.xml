@@ -703,7 +703,7 @@
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
                     DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
                     DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    
+
                     SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
@@ -761,7 +761,7 @@
                     AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
                     InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
                     DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus,
-                    PersonenHaushalt=ch.dvbern.stip.berechnung.type.PersonenHaushalt,
+                    PersonenHaushalt=ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt,
                     SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
