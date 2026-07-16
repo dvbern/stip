@@ -19,12 +19,10 @@ package ch.dvbern.stip.api.gesuchtranche.resource;
 
 import java.io.File;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -45,7 +43,6 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.FallDashboardItemDto;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -54,7 +51,6 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
-import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDtoSpec;
 import ch.dvbern.stip.generated.dto.PatchAenderungsInfoRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
@@ -125,10 +121,10 @@ class GesuchTrancheAenderungEinbindenTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(4)
     @Test
-    void makeGesuchVerfuegt() {
+    void setGesuchToInBearbeitung() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -144,7 +140,12 @@ class GesuchTrancheAenderungEinbindenTest {
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
 
+    @TestAsSachbearbeiter
+    @Order(5)
+    @Test
+    void updateGesuchEinnahmenKostenAndSteuerdaten() {
         final var einnahmeKostenUpdateDto = EinnahmenKostenUpdateDtoSpecModel.einnahmenKostenUpdateDtoSpec();
 
         var gesuchUpdateDTO = GesuchTestSpecGenerator.gesuchUpdateDtoSpecEinnahmenKosten();
@@ -172,6 +173,17 @@ class GesuchTrancheAenderungEinbindenTest {
             .then()
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
+    }
+
+    @TestAsSachbearbeiter
+    @Order(6)
+    @Test
+    void changeGesuchToInFreigabe() {
+        TestUtil.acceptAllGesuchDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            gesuch.getGesuchTrancheToWorkWith().getId()
+        );
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -181,35 +193,25 @@ class GesuchTrancheAenderungEinbindenTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        var modifiableDokTypeList = Arrays.stream(DokumentTypDtoSpec.values()).toList();
-        modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
-                .dokumentTypPath(dokType)
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(NullableGesuchDokumentDto.class);
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
 
-            if (dokToAccept.getValue() != null) {
-                dokumentApiSpec.gesuchDokumentAkzeptieren()
-                    .gesuchDokumentIdPath(dokToAccept.getValue().getId())
-                    .execute(TestUtil.PEEK_IF_ENV_SET)
-                    .then()
-                    .assertThat()
-                    .statusCode(Status.NO_CONTENT.getStatusCode());
-            }
-        });
-
+    @TestAsFreigabestelle
+    @Order(7)
+    @Test
+    void changeGesuchToVerfuegt() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+
         gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -221,7 +223,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @Test
-    @Order(5)
+    @Order(8)
     @TestAsSachbearbeiter
     void changeToFinalState() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
@@ -247,7 +249,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(6)
+    @Order(9)
     void createFirstAenderungsantrag() {
         aenderung = gesuchTrancheApiSpec.createAenderungsantrag()
             .gesuchIdPath(gesuch.getId())
@@ -268,7 +270,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(10)
     void aenderungEinreichen() {
         gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderungId)
@@ -282,7 +284,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(8)
+    @Order(11)
     void patchGueltigkeitOfAenderung_InvalidValues() {
         var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
         aenderungPatch.setComment("change gueltigkeit");
@@ -299,7 +301,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(12)
     void patchGueltigkeitOfAenderung() {
         var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
         aenderungPatch.setComment("change gueltigkeit");
@@ -317,7 +319,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(10)
+    @Order(13)
     void aenderungAddCustomDokument() {
         CustomDokumentTypCreateDtoSpec customDokumentTypCreateDtoSpec = new CustomDokumentTypCreateDtoSpec();
         customDokumentTypCreateDtoSpec.setType("test");
@@ -337,7 +339,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(11)
+    @Order(14)
     void aenderungFehlendeDokumenteUebermitteln() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteUebermitteln()
             .gesuchTrancheIdPath(aenderungId)
@@ -349,7 +351,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(12)
+    @Order(15)
     void test_upload_custom_gesuchdokuments() {
         File file = new File(TEST_PNG_FILE_LOCATION);
         TestUtil.uploadCustomDokumentFile(dokumentApiSpec, customDokumentId, file);
@@ -357,7 +359,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(13)
+    @Order(16)
     void aenderungFehlendeDokumenteEinreichen() {
         gesuchTrancheApiSpec.aenderungFehlendeDokumenteEinreichen()
             .gesuchTrancheIdPath(aenderungId)
@@ -369,7 +371,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(14)
+    @Order(17)
     void aenderungAkzeptieren() {
         var nullableGesuchDokumentDto = dokumentApiSpec.getCustomGesuchDokumentForTypSB()
             .customDokumentTypIdPath(customDokumentId)
@@ -403,7 +405,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(18)
     void patchGueltigkeitOfAenderung_InvalidGesuchTrancheStatus() {
         var aenderungPatch = new PatchAenderungsInfoRequestDtoSpec();
         aenderungPatch.setComment("change gueltigkeit");
@@ -421,7 +423,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(19)
     void aenderungAkzeptiertZurueckweisen() {
         gesuchApiSpec.gesuchZurueckweisenAenderungUndo()
             .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
@@ -447,7 +449,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(20)
     void aenderungEinreichenAgain() {
         final var fallDashboardItem = gesuchApiSpec.getGsDashboard()
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -478,7 +480,7 @@ class GesuchTrancheAenderungEinbindenTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(18)
+    @Order(21)
     void aenderungAkzeptierenAgain() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -492,10 +494,17 @@ class GesuchTrancheAenderungEinbindenTest {
             gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
         assertThat(gesuchHeader.getCurrentTranches()).hasSize(2);
+
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
     }
 
     @TestAsFreigabestelle
-    @Order(19)
+    @Order(22)
     @Test
     void makeGesuchVerfuegtAgain() {
         gesuchApiSpec.changeGesuchStatusToVerfuegt()
@@ -507,7 +516,7 @@ class GesuchTrancheAenderungEinbindenTest {
     }
 
     @Test
-    @Order(20)
+    @Order(23)
     @TestAsSachbearbeiter
     void changeToFinalStateAgain() {
         gesuchApiSpec.changeGesuchStatusToVersendet()

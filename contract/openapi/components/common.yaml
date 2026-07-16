@@ -433,6 +433,7 @@ GesuchStateInfo:
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
     - canSBInitAenderung
+    - canFreigeben
   type: object
   properties:
     gesuchStatus:
@@ -451,6 +452,8 @@ GesuchStateInfo:
       type: boolean
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
+    canFreigeben:
+      type: boolean
 PersoenlicheAngaben:
   required:
     - anrede
