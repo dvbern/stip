@@ -11,12 +11,34 @@ berechnung:
   mutter: Budget de la mère
   vater: Budget du père
   notes:
-    bgsa:
-      identifier: 1)
-      text: Revenus soumis à la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir)
-    hoechstwerte:
-      identifier: 2)
-      text: Vous trouverez les montants maximaux reconnus donnant droit à une bourse dans la feuille annexe (annexe 1) ou sur www.be.ch/allocationsdeformation > Bases légales > Montants maximaux reconnus donnant droit à une bourse
+    uebersicht:
+      kuerzung:
+        identifier: k)
+        text: La demande a été déposée avec {anzahlMonate} mois de retard. Il en résulte une réduction de CHF {betrag}.
+      unterbruch:
+        identifier: u)
+        text: La demande a été interrompue pendant {anzahlMonate} mois. Il en résulte une réduction de CHF {betrag}.
+    einnahmen-kosten:
+      bgsa:
+        identifier: 1)
+        text: Revenus soumis à la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir)
+      hoechstwerte:
+        identifier: 2)
+        text: Vous trouverez les montants maximaux reconnus donnant droit à une bourse dans la feuille annexe (annexe 1) ou sur www.be.ch/allocationsdeformation > Bases légales > Montants maximaux reconnus donnant droit à une bourse
+  uebersicht:
+    resultat: Résultat
+    abgelehnt: Bourse refusée
+    gewaehrt: Bourse accordée
+    total:
+      heading: Total
+      betrag: Montant total
+      ohneKuerzung: Montant total avant réductions
+      kuerzung: Réduction pour dépôt tardif
+      unterbruch: Réduction pour interruption
+      stipendium: Montant total de la bourse
+      darlehen: Montant total du prêt
+    berechnungen:
+      heading: Calculs
   einnahmen:
     label: Revenus
     info: Total des revenus annuels pris en compte
@@ -28,7 +50,6 @@ berechnung:
       info: Voir année fiscale.
     einnahmenBGSA:
       label: Revenus selon la LTN
-      info: Revenus selon la procédure de décompte simplifiée (loi fédérale concernant des mesures en matière de lutte contre le travail au noir).
     kinderAusbildungszulagen:
       label: Allocations pour enfant et allocations de formation
     unterhaltsbeitraege:
