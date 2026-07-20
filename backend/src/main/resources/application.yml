@@ -32,7 +32,7 @@ kstip:
   global-adapter:
     pdf:
       typst:
-        binary: "typst"
+        binary: "/usr/local/bin/typst"
         max-output-bytes: 10000
         compile-timeout: 10
         shutdown-wait-timeout: 10
@@ -292,6 +292,10 @@ quarkus:
     pre-signed-request:
       issuer: 'https://stip.kibon.ch'
       expires-in-minutes: 5
+    global-adapter:
+      pdf:
+        typst:
+          binary: "typst"
 
 '%test':
   mp:
