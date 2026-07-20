@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.gesuchtranche.resource;
 
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -33,6 +33,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.CustomDokumentTypCreateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentDto;
@@ -42,6 +43,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
@@ -77,6 +79,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
     private UUID aenderungId;
@@ -130,10 +133,10 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .statusCode(Response.Status.FORBIDDEN.getStatusCode());
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(6)
     @Test
-    void makeGesuchVerfuegt() {
+    void changeGesuchToInFreigabe() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -156,6 +159,14 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .assertThat()
             .statusCode(Status.FORBIDDEN.getStatusCode());
 
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
+            gesuch.getGesuchTrancheToWorkWith().getId()
+        );
+
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
@@ -164,12 +175,28 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             TestUtil.getTestPng()
         );
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuchApiSpec.bearbeitungAbschliessen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(7)
+    @Test
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
         final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)

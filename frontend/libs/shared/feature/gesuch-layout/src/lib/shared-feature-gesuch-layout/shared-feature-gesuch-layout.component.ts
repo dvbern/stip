@@ -105,6 +105,7 @@ export class SharedFeatureGesuchLayoutComponent {
     this.router,
     `infos`,
     'darlehen',
+    `${getTrancheRoute('tranche')}`,
     `${getTrancheRoute('aenderung')}`,
     `${getTrancheRoute('initial')}`,
     `${getTrancheRoute('eingereicht')}`,
@@ -144,6 +145,9 @@ export class SharedFeatureGesuchLayoutComponent {
       fallNummer: gesuchInfo.fallNummer,
       gesuchNummer: gesuchInfo.gesuchNummer,
       status: gesuchInfo.state.gesuchStatus,
+      cannotFreigeben:
+        !gesuchInfo.state.canFreigeben &&
+        gesuchInfo.state.gesuchStatus === 'IN_FREIGABE',
     };
   });
 

@@ -123,6 +123,16 @@
       </span>
     </div>
   }
+  @if (routes.isTranche && gesuchInfoDataSig()?.cannotFreigeben) {
+    <div
+      class="tw:flex tw:items-center tw:bg-dv-warning-subtle tw:rounded-xl tw:p-2 tw:gap-2 tw:border tw:border-dv-warning tw:mb-6"
+    >
+      <i class="material-symbols-rounded tw:mr-1 tw:text-dv-warning">info</i>
+      <span class="tw:text-md tw:text-neutral-500">
+        {{ t('shared.header.info.cannotFreigeben') }}
+      </span>
+    </div>
+  }
 
   <div class="tw:flex tw:justify-between">
     <nav mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true" [class.tw:h-[48px]]="!isGesuchRouteSig()">

@@ -126,6 +126,7 @@ export class SharedPatternInfoBarActionsComponent {
 
     const {
       gesuchStatus,
+      canFreigeben,
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
       inBearbeitungSbReason,
@@ -163,6 +164,7 @@ export class SharedPatternInfoBarActionsComponent {
       .map((status) => ({
         ...StatusUebergaengeOptions[status]({
           permissions,
+          canFreigeben: !!canFreigeben,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),

@@ -20,12 +20,13 @@ package ch.dvbern.stip.api.gesuchtranche.resource;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller2;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.service.DokumentGenerator;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -37,8 +38,9 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumentstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentAblehnenRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentKommentarDtoSpec;
@@ -49,14 +51,17 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
 import ch.dvbern.stip.generated.dto.KommentarDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -74,6 +79,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
 class GesuchTrancheAenderungTest {
+    @Inject
+    DokumentGenerator dokumentGenerator;
+
     private final GesuchApiSpec gesuchApiSpec = GesuchApiSpec.gesuch(RequestSpecUtil.quarkusSpec());
     private final AusbildungApiSpec ausbildungApiSpec = AusbildungApiSpec.ausbildung(RequestSpecUtil.quarkusSpec());
     private final GesuchTrancheApiSpec gesuchTrancheApiSpec =
@@ -81,6 +89,7 @@ class GesuchTrancheAenderungTest {
     private final DokumentApiSpec dokumentApiSpec = DokumentApiSpec.dokument(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
     private GesuchHeaderDtoSpec gesuchHeader;
     private GesuchDtoSpec gesuch;
@@ -135,10 +144,10 @@ class GesuchTrancheAenderungTest {
             .statusCode(Status.FORBIDDEN.getStatusCode());
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(6)
     @Test
-    void makeGesuchVerfuegt() {
+    void changeGesuchToInFreigabe() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -148,20 +157,22 @@ class GesuchTrancheAenderungTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
+
         gesuchApiSpec.changeGesuchStatusToInBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
-        gesuchApiSpec.getInitialTrancheChanges()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.FORBIDDEN.getStatusCode());
 
-        // Upload Unterschriftenblatt to "skip" Verfuegt state
+        TestUtil.alignSteuerdatenAndAcceptAllDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            steuerdatenApiSpec,
+            SteuerdatenTypDtoSpec.FAMILIE,
+            gesuch.getGesuchTrancheToWorkWith().getId()
+        );
+
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
             gesuch.getId(),
@@ -169,12 +180,28 @@ class GesuchTrancheAenderungTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuchApiSpec.bearbeitungAbschliessen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(7)
+    @Test
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
         final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -182,7 +209,7 @@ class GesuchTrancheAenderungTest {
             .extract()
             .body()
             .as(GesuchWithChangesDtoSpec.class);
-        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+        Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
     }
 
     @Test
@@ -314,7 +341,7 @@ class GesuchTrancheAenderungTest {
     @Test
     @TestAsGesuchsteller
     @Order(15)
-    void aenderungEinreichenTest() {
+    void aenderungEinreichen() {
         aenderungId = gesuchTrancheApiSpec.createAenderungsantrag()
             .gesuchIdPath(gesuch.getId())
             .body(
@@ -348,55 +375,17 @@ class GesuchTrancheAenderungTest {
             .body()
             .as(GesuchDtoSpec.class);
 
-        final var tranche = fullGesuch.getGesuchTrancheToWorkWith();
-        tranche.setId(aenderungId);
-        final var formular = tranche.getGesuchFormular();
-        formular.getPersonInAusbildung()
-            .getAdresse()
-            .setId(
-                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPersonInAusbildung().getAdresse().getId()
-            );
-        formular.getPartner()
-            .getAdresse()
-            .setId(
-                aenderung.getGesuchTrancheToWorkWith().getGesuchFormular().getPartner().getAdresse().getId()
-            );
-
-        formular.getElterns()
-            .forEach(
-                eltern -> eltern.getAdresse()
-                    .setId(
-                        aenderung.getGesuchTrancheToWorkWith()
-                            .getGesuchFormular()
-                            .getElterns()
-                            .get(0)
-                            .getAdresse()
-                            .getId()
-                    )
-            );
-
-        tranche.getGesuchFormular()
-            .getEinnahmenKosten()
-            .setNettoerwerbseinkommen(
-                fullGesuch.getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getEinnahmenKosten()
-                    .getNettoerwerbseinkommen()
-                + 20
-            );
-
-        gesuchApiSpec.updateGesuchGS()
-            .gesuchIdPath(gesuch.getId())
-            .body(fullGesuch)
+        final var requiredDokuments = gesuchTrancheApiSpec.getDocumentsToUploadGS()
+            .gesuchTrancheIdPath(aenderungId)
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.NO_CONTENT.getStatusCode());
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DokumenteToUploadDtoSpec.class);
 
-        for (final var dokTyp : DokumentTypDtoSpec.values()) {
-            final var file = TestUtil.getTestPng();
-            TestUtil.uploadFile(dokumentApiSpec, aenderungId, dokTyp, file);
-        }
+        dokumentGenerator.createDokumentsForAllRequired(aenderungId);
 
         gesuchTrancheApiSpec.aenderungEinreichen()
             .aenderungIdPath(aenderungId)

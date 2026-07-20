@@ -21,11 +21,12 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
 import ch.dvbern.stip.api.generator.api.GesuchTestSpecGenerator;
+import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.util.RequestSpecUtil;
 import ch.dvbern.stip.api.util.StepwiseExtension;
 import ch.dvbern.stip.api.util.StepwiseExtension.AlwaysRun;
@@ -38,6 +39,7 @@ import ch.dvbern.stip.generated.api.DokumentApiSpec;
 import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
+import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
@@ -49,6 +51,7 @@ import ch.dvbern.stip.generated.dto.GesuchTrancheSlimDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
+import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -89,6 +92,7 @@ class GesuchTrancheCreateTest {
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final BenutzerApiSpec benutzerApiSpec = BenutzerApiSpec.benutzer(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
 
@@ -292,17 +296,58 @@ class GesuchTrancheCreateTest {
         assertThat(dokumentsOfTranche1.size(), is(greaterThan(dokumentsOfTranche2.size())));
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(13)
     @Test
-    void makeGesuchVerfuegt() {
-        TestUtil.executeAndAssert(
-            gesuchApiSpec.getInitialTrancheChanges()
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId()),
-            Status.FORBIDDEN.getStatusCode()
+    void changeGesuchToInFreigabe() {
+        final var gesuchHeader = TestUtil.executeAndExtract(
+            GesuchHeaderDtoSpec.class,
+            gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
 
-        // Upload Unterschriftenblatt to "skip" Verfuegt state
+        final var tranche2Id = gesuchHeader.getCurrentTranches().get(1).getId();
+        final var removeGeschwisterDto = GesuchTestSpecGenerator.gesuchUpdateDtoSpecGeschwister();
+        removeGeschwisterDto.getGesuchTrancheToWorkWith().setId(tranche2Id);
+        removeGeschwisterDto.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of());
+        gesuchApiSpec.updateGesuchSB()
+            .gesuchIdPath(gesuch.getId())
+            .body(removeGeschwisterDto)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.NO_CONTENT.getStatusCode());
+
+        for (final var tranche : gesuchHeader.getCurrentTranches()) {
+            final var steuerdatenUpdateDto =
+                SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
+            steuerdatenApiSpec.updateSteuerdaten()
+                .gesuchTrancheIdPath(tranche.getId())
+                .body(List.of(steuerdatenUpdateDto))
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Status.OK.getStatusCode());
+
+            final var dokumente = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+                .gesuchTrancheIdPath(tranche.getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.OK.getStatusCode())
+                .extract()
+                .body()
+                .as(GesuchDokumentListDtoSpec.class)
+                .getDokuments();
+            for (final var dokument : dokumente) {
+                dokumentApiSpec.gesuchDokumentAkzeptieren()
+                    .gesuchDokumentIdPath(dokument.getId())
+                    .execute(TestUtil.PEEK_IF_ENV_SET)
+                    .then()
+                    .assertThat()
+                    .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+            }
+        }
+
         TestUtil.uploadUnterschriftenblatt(
             dokumentApiSpec,
             gesuch.getId(),
@@ -310,23 +355,40 @@ class GesuchTrancheCreateTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        TestUtil.executeAndAssertOk(
-            gesuchApiSpec.changeGesuchStatusToVerfuegt()
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-        );
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode());
+    }
 
-        var gesuchWithChanges = TestUtil.executeAndExtract(
-            GesuchWithChangesDtoSpec.class,
-            gesuchApiSpec.getInitialTrancheChanges().gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-        );
+    @TestAsFreigabestelle
+    @Order(14)
+    @Test
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
 
+        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
         Assertions.assertThat(gesuchWithChanges.getChanges()).hasSize(1);
-        // make sure this flag is true whenever especially this endpoint is called
-        Assertions.assertThat(gesuchWithChanges.getIsInitial()).isTrue();
     }
 
     @Test
-    @Order(14)
+    @Order(15)
     @TestAsSachbearbeiter
     void changeToFinalState() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
@@ -355,7 +417,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(15)
+    @Order(16)
     void getInitialTrancheChangesAsSBInGesuchstatusEingereichtShouldThrow() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -376,7 +438,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsSachbearbeiter
-    @Order(16)
+    @Order(17)
     void getInitialTrancheChangesWithInvalidTrancheId() {
         // test for each tranche if SB gets correct status
         gesuchApiSpec.getInitialTrancheChanges()
@@ -389,7 +451,7 @@ class GesuchTrancheCreateTest {
 
     @Test
     @TestAsGesuchsteller
-    @Order(17)
+    @Order(18)
     void getTranchenAsGSShouldReturnStateOfGesuchEingereicht() {
         // the gesuch (tranchen) of state eingereicht should be returned to GS
         // so the total count of (visible) tranchen should be 1 instead of 2
