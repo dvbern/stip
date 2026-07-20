@@ -1,6 +1,6 @@
 ARG TYPST_VERSION=0.15.1
 
-FROM docker-registry.dvbern.ch/ghcr/typst/typst:$TYPST_VERSION
+FROM docker-registry.dvbern.ch/ghcr/typst/typst:$TYPST_VERSION AS typst
 
 FROM docker-registry.dvbern.ch/redhat/ubi8/openjdk-21:1.18
 
