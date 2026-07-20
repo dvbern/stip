@@ -37,6 +37,8 @@ kstip:
         compile-timeout: 10
         shutdown-wait-timeout: 10
         shutdown-force-timeout: 5
+        root-path: "/deployments/typst"
+        fonts-path: "/deployments/fonts"
 
   # Tenants
   #
@@ -296,7 +298,8 @@ quarkus:
       pdf:
         typst:
           binary: "typst"
-
+          root-path: "${user.dir}/src/main/resources/typst"
+          fonts-path: "${user.dir}/src/main/resources/fonts"
 '%test':
   mp:
     jwt:

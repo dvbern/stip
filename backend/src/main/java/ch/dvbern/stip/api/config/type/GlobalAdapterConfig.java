@@ -34,5 +34,9 @@ public interface GlobalAdapterConfig {
         int shutdownWaitTimeout();
 
         int shutdownForceTimeout();
+
+        String rootPath();
+
+        String fontsPath();
     }
 }

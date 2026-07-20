@@ -154,10 +154,20 @@ public class TypstPdfService implements PdfPort {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
         final var tenantConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
 
-        final var fontsPath = TypstPdfService.class.getResource(FONTS_PATH).getPath();
-        final var typstPath = TypstPdfService.class.getResource(TYPST_PATH).getPath();
+        final var fontsPath = adapterConfig.fontsPath();
+        final var typstPath = adapterConfig.rootPath();
+
         final var mainTemplatePath =
-            Path.of(typstPath, tenantConfig.rootTemplatePath().get(), MAIN_TEMPLATE_NAME).toString();
+            Path.of(
+                typstPath,
+                tenantConfig.rootTemplatePath()
+                    .orElseThrow(
+                        () -> new PdfGenerationException(
+                            "Root template path is not set for tenant " + tenantService.getCurrentTenantIdentifier()
+                        )
+                    ),
+                MAIN_TEMPLATE_NAME
+            ).toString();
 
         try {
             final var jsonPayload = pdfPayload.toJson(objectMapper, tenantConfig);
