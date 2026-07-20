@@ -11,8 +11,8 @@ ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
 COPY --from=typst --chmod=0755 /bin/typst /usr/local/bin/typst
 
 # Typst templates and fonts must be on the filesystem (Typst can't read from inside a JAR)
-COPY --chown=185 target/typst/ /deployments/typst/
-COPY --chown=185 target/fonts/ /deployments/fonts/
+COPY --chown=185 target/classes/typst/ /deployments/typst/
+COPY --chown=185 target/classes/fonts/ /deployments/fonts/
 
 # We make four distinct layers so if there are application changes the library layers can be re-used
 COPY --chown=185 target/quarkus-app/lib/ /deployments/lib/
