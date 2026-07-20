@@ -20,7 +20,6 @@ package ch.dvbern.stip.api.util;
 import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -667,10 +666,17 @@ public class TestUtil {
     }
 
     public static Gesuch getBaseGesuchForBerechnung(final UUID trancheUuid) {
-        final var gueltigkeit = DateRange.getFruehlingOrHerbst(LocalDate.now());
+        return getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, LocalDate.now());
+    }
+
+    public static Gesuch getBaseGesuchForBerechnungWithReferenceDate(
+        final UUID trancheUuid,
+        final LocalDate referenceDate
+    ) {
+        final var gueltigkeit = DateRange.getFruehlingOrHerbst(referenceDate);
         final var gesuch = new Gesuch().setGesuchsperiode(
             new Gesuchsperiode()
-                .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(Year.now().getValue()))
+                .setGesuchsjahr(new Gesuchsjahr().setTechnischesJahr(referenceDate.getYear()))
                 .setGesuchsperiodeStart(gueltigkeit.getGueltigAb())
                 .setGesuchsperiodeStopp(gueltigkeit.getGueltigBis())
                 .setMaxSaeule3a(7000)
@@ -707,10 +713,10 @@ public class TestUtil {
                 .setErwachsene2599(5400)
                 .setJugendlicheErwachsene1824(4600)
                 .setKinder0017(1400)
-                .setEinreichefristNormal(LocalDate.now().plusMonths(5))
-                .setEinreichefristReduziert(LocalDate.now().plusMonths(5))
+                .setEinreichefristNormal(referenceDate.plusMonths(5))
+                .setEinreichefristReduziert(referenceDate.plusMonths(5))
                 .setLimiteAlterAntragsstellerHalbierungElternbeitrag(25)
-                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate.of(Year.now().getValue(), 12, 31))
+                .setStichtagVolljaehrigkeitMedizinischeGrundversorgung(referenceDate.withMonth(12).withDayOfMonth(31))
         )
             .setGesuchTranchen(
                 List.of(
@@ -732,7 +738,7 @@ public class TestUtil {
                         .setId(trancheUuid)
                 )
             )
-            .setEinreichedatum(LocalDate.now().plusMonths(5));
+            .setEinreichedatum(referenceDate.plusMonths(5));
 
         gesuch.setId(UUID.randomUUID());
         gesuch.getNewestGesuchTranche().get().getGesuchFormular().setTranche(gesuch.getNewestGesuchTranche().get());
@@ -768,8 +774,15 @@ public class TestUtil {
     }
 
     public static Gesuch getGesuchForBerechnung(final UUID trancheUuid) {
-        final var baseGesuch = getBaseGesuchForBerechnung(trancheUuid);
-        final var baseRange = DateRange.getFruehlingOrHerbst(LocalDate.now());
+        return getGesuchForBerechnungWithReferenceDate(trancheUuid, LocalDate.now());
+    }
+
+    public static Gesuch getGesuchForBerechnungWithReferenceDate(
+        final UUID trancheUuid,
+        final LocalDate referenceDate
+    ) {
+        final var baseGesuch = getBaseGesuchForBerechnungWithReferenceDate(trancheUuid, referenceDate);
+        final var baseRange = DateRange.getFruehlingOrHerbst(referenceDate);
         baseGesuch.setAusbildung(
             new Ausbildung()
                 .setAusbildungsgang(
@@ -815,7 +828,7 @@ public class TestUtil {
             .setWohnsitz(Wohnsitz.EIGENER_HAUSHALT)
             .setNachname("a")
             .setVorname("a")
-            .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1));
+            .setGeburtsdatum(referenceDate.minusYears(18).minusDays(1));
 
         gesuchFormular.setEinnahmenKosten(
             new EinnahmenKosten()
@@ -844,7 +857,7 @@ public class TestUtil {
                 )
                 .setNachname("a")
                 .setVorname("a")
-                .setGeburtsdatum(LocalDate.now().minusYears(18).minusDays(1))
+                .setGeburtsdatum(referenceDate.minusYears(18).minusDays(1))
         );
 
         gesuchFormular.setEinnahmenKostenPartner(
@@ -874,7 +887,7 @@ public class TestUtil {
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
@@ -882,7 +895,7 @@ public class TestUtil {
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
@@ -890,7 +903,7 @@ public class TestUtil {
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))
-                    .setGeburtsdatum(LocalDate.now())
+                    .setGeburtsdatum(referenceDate)
                     .setNachname("a")
                     .setVorname("a")
             )
@@ -914,7 +927,7 @@ public class TestUtil {
                     )
                     .setNachname("a")
                     .setVorname("a")
-                    .setGeburtsdatum(LocalDate.now().minusYears(30)),
+                    .setGeburtsdatum(referenceDate.minusYears(30)),
                 (Eltern) new Eltern()
                     .setElternTyp(ElternTyp.MUTTER)
                     .setWiederverheiratet(true)
@@ -931,7 +944,7 @@ public class TestUtil {
                     )
                     .setNachname("a")
                     .setVorname("a")
-                    .setGeburtsdatum(LocalDate.now().minusYears(30))
+                    .setGeburtsdatum(referenceDate.minusYears(30))
             )
         );
 

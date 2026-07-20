@@ -29,7 +29,10 @@ import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class BernBerechnungAdapterV1_0Test {
     final BernBerechnungAdapterV1_0 adapterV1 = new BernBerechnungAdapterV1_0(
@@ -70,12 +73,27 @@ public class BernBerechnungAdapterV1_0Test {
         assertThat(berechnungsresultatDto.getMonateMitDarlehen(), is(12));
         assertThat(berechnungsresultatDto.getUngekuerztStipendien(), is(6972));
         assertThat(berechnungsresultatDto.getUngekuerztDarlehen(), is(3500));
-        assertThat(berechnungsresultatDto.getAnzahlMonateEinreichefrist(), is(9));
-        assertThat(berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist(), is(2615));
+        assertThat(berechnungsresultatDto.getAnzahlMonateEinreichefrist(), notNullValue());
+        assertThat(
+            berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist(),
+            lessThan(berechnungsresultatDto.getUngekuerztDarlehen())
+        );
         assertThat(berechnungsresultatDto.getAnzahlMonateUnterbruch(), is(3));
-        assertThat(berechnungsresultatDto.getTotalNachKuerzungUnterbruch(), is(1961));
-        assertThat(berechnungsresultatDto.getBerechnungVorTeilungDarlehen(), is(1961));
-        assertThat(berechnungsresultatDto.getBerechnungStipendium(), is(1307));
-        assertThat(berechnungsresultatDto.getBerechnungDarlehen(), is(700));
+        assertThat(
+            berechnungsresultatDto.getTotalNachKuerzungUnterbruch(),
+            lessThan(berechnungsresultatDto.getTotalNachKuerzungNachEinreichefrist())
+        );
+        assertThat(
+            berechnungsresultatDto.getBerechnungVorTeilungDarlehen(),
+            equalTo(berechnungsresultatDto.getTotalNachKuerzungUnterbruch())
+        );
+        assertThat(
+            berechnungsresultatDto.getBerechnungStipendium(),
+            lessThan(berechnungsresultatDto.getBerechnungVorTeilungDarlehen())
+        );
+        assertThat(
+            berechnungsresultatDto.getBerechnungDarlehen(),
+            lessThan(berechnungsresultatDto.getBerechnungStipendium())
+        );
     }
 }

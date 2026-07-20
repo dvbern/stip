@@ -56,7 +56,6 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.oneOf;
 
 @QuarkusTest
 @QuarkusTestResource(TestDatabaseEnvironment.class)
@@ -301,28 +300,30 @@ class BerechnungServiceTest {
 
     @Test
     void testGetMonateMitDarlehen() {
-        final var gesuch = TestUtil.getGesuchForBerechnung(UUID.randomUUID());
+        final var referenceDate = LocalDate.now().withMonth(6).withDayOfMonth(1);
+
+        final var gesuch = TestUtil.getGesuchForBerechnungWithReferenceDate(UUID.randomUUID(), referenceDate);
 
         var monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(0));
 
-        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(4));
+        gesuch.getAusbildung().setAusbildungBegin(referenceDate.minusYears(4));
         monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(12));
 
-        gesuch.getAusbildung().setAusbildungBegin(LocalDate.now().minusYears(1));
+        gesuch.getAusbildung().setAusbildungBegin(referenceDate.minusYears(1));
         gesuch.getGesuchTranchen()
             .get(0)
             .getGesuchFormular()
             .getLebenslaufItems()
             .add(
                 new LebenslaufItem()
-                    .setVon(LocalDate.now().minusYears(3))
-                    .setBis(LocalDate.now().minusYears(1))
+                    .setVon(referenceDate.minusYears(3))
+                    .setBis(referenceDate.minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
         monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
-        assertThat(monateMitDarlehen, oneOf(6, 7));
+        assertThat(monateMitDarlehen, is(7));
     }
 
 }

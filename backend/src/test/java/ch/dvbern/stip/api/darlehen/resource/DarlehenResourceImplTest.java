@@ -56,6 +56,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 
+import static ch.dvbern.stip.api.util.TestUtil.DATE_TIME_FORMATTER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -87,11 +88,24 @@ public class DarlehenResourceImplTest {
             dokumentApiSpec,
             auszahlungApiSpec,
             gesuch,
-            (updateDtoSpec) -> updateDtoSpec
-                .getGesuchTrancheToWorkWith()
-                .getGesuchFormular()
-                .getPersonInAusbildung()
-                .setGeburtsdatum(LocalDate.now().minusYears(18))
+            (updateDtoSpec) -> {
+                final var geburtsdatum = LocalDate.now().minusYears(18);
+                updateDtoSpec
+                    .getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getPersonInAusbildung()
+                    .setGeburtsdatum(geburtsdatum);
+                updateDtoSpec.getGesuchTrancheToWorkWith()
+                    .getGesuchFormular()
+                    .getLebenslaufItems()
+                    .get(0)
+                    .setVon(
+                        geburtsdatum.plusYears(16)
+                            .withMonth(8)
+                            .withDayOfMonth(1)
+                            .format(DATE_TIME_FORMATTER)
+                    );
+            }
         );
     }
 
