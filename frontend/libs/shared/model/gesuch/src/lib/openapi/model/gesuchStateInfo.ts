@@ -21,6 +21,7 @@ export interface GesuchStateInfo {
     canBearbeitungAbschliessen: boolean;
     canSBInitAenderung: boolean;
     inBearbeitungSbReason?: InBearbeitungSbReason;
+    canFreigeben: boolean;
 }
 
 

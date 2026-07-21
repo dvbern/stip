@@ -36,7 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_TRIGGER_MANUELL_PRUEFEN,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_BEARBEITUNG_ABSCHLIESSEN,
   GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_S_B_INIT_AENDERUNG,
-  GesuchStateInfoDtoSpec.JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON
+  GesuchStateInfoDtoSpec.JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON,
+  GesuchStateInfoDtoSpec.JSON_PROPERTY_CAN_FREIGEBEN
 })
 @JsonTypeName("GesuchStateInfo")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -64,6 +65,9 @@ public class GesuchStateInfoDtoSpec {
 
   public static final String JSON_PROPERTY_IN_BEARBEITUNG_SB_REASON = "inBearbeitungSbReason";
   private InBearbeitungSbReasonDtoSpec inBearbeitungSbReason;
+
+  public static final String JSON_PROPERTY_CAN_FREIGEBEN = "canFreigeben";
+  private Boolean canFreigeben;
 
   public GesuchStateInfoDtoSpec() {
   }
@@ -275,6 +279,32 @@ public class GesuchStateInfoDtoSpec {
     this.inBearbeitungSbReason = inBearbeitungSbReason;
   }
 
+
+  public GesuchStateInfoDtoSpec canFreigeben(Boolean canFreigeben) {
+    
+    this.canFreigeben = canFreigeben;
+    return this;
+  }
+
+   /**
+   * Get canFreigeben
+   * @return canFreigeben
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_CAN_FREIGEBEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Boolean getCanFreigeben() {
+    return canFreigeben;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CAN_FREIGEBEN)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setCanFreigeben(Boolean canFreigeben) {
+    this.canFreigeben = canFreigeben;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -291,12 +321,13 @@ public class GesuchStateInfoDtoSpec {
         Objects.equals(this.canTriggerManuellPruefen, gesuchStateInfo.canTriggerManuellPruefen) &&
         Objects.equals(this.canBearbeitungAbschliessen, gesuchStateInfo.canBearbeitungAbschliessen) &&
         Objects.equals(this.canSBInitAenderung, gesuchStateInfo.canSBInitAenderung) &&
-        Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason);
+        Objects.equals(this.inBearbeitungSbReason, gesuchStateInfo.inBearbeitungSbReason) &&
+        Objects.equals(this.canFreigeben, gesuchStateInfo.canFreigeben);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, inBearbeitungSbReason);
+    return Objects.hash(gesuchStatus, beschwerdeHaengig, canGetBerechnung, canChangeGesuchsperiode, canTriggerManuellPruefen, canBearbeitungAbschliessen, canSBInitAenderung, inBearbeitungSbReason, canFreigeben);
   }
 
   @Override
@@ -311,6 +342,7 @@ public class GesuchStateInfoDtoSpec {
     sb.append("    canBearbeitungAbschliessen: ").append(toIndentedString(canBearbeitungAbschliessen)).append("\n");
     sb.append("    canSBInitAenderung: ").append(toIndentedString(canSBInitAenderung)).append("\n");
     sb.append("    inBearbeitungSbReason: ").append(toIndentedString(inBearbeitungSbReason)).append("\n");
+    sb.append("    canFreigeben: ").append(toIndentedString(canFreigeben)).append("\n");
     sb.append("}");
     return sb.toString();
   }

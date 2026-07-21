@@ -88,7 +88,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
   PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN_DESCRIPTION:
     'shared.form.person.file.BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN_DESCRIPTION',
   PERSON_KESB_ERNENNUNG: 'shared.form.person.file.VORMUNDSCHAFT',
-  PERSON_MIETVERTRAG: 'shared.form.person.file.EIGENER_HAUSHALT',
+  PERSON_EIGENER_HAUSHALT: 'shared.form.person.file.EIGENER_HAUSHALT',
   PERSON_SOZIALHILFEBUDGET: 'shared.form.person.file.SOZIALHILFE',
   PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG: 'shared.form.person.file.ZIVILSTAND',
   PERSON_AUSWEIS: 'shared.form.person.file.HEIMATORT',
@@ -300,7 +300,7 @@ export const DOKUMENT_TYP_TO_DOCUMENT_OPTIONS: {
  * wohnsitzBeiDocumentOptionsSig = this.createUploadOptionsSig(() => {
  *   const wohnsitzBei = this.wohnsitzBeiChangedSig();
  *   return wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
- *     ? DokumentTyp.PERSON_MIETVERTRAG
+ *     ? DokumentTyp.PERSON_EIGENER_HAUSHALT
  *     : null;
  * });
  * ```
@@ -321,7 +321,7 @@ export function createUploadOptionsFactory<
    * createUploadOptionsSig(() => {
    *   const wohnsitzBei = this.wohnsitzBeiChangedSig();
    *   return wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
-   *     ? DokumentTyp.PERSON_MIETVERTRAG
+   *     ? DokumentTyp.PERSON_EIGENER_HAUSHALT
    *     : null;
    * });
    * ```

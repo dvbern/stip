@@ -31,6 +31,7 @@ import ch.dvbern.stip.api.common.util.ValidatorUtil;
 import ch.dvbern.stip.api.dokument.service.RequiredDokumentService;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchNachInBearbeitungSBValidationGroup;
+import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
@@ -55,6 +56,25 @@ public class GesuchStatusService {
     private final GesuchStatusConfigProducer configProducer;
     private final BenutzerService benutzerService;
     private final RequiredDokumentService requiredDokumentService;
+    private final GesuchHistoryRepository gesuchHistoryRepository;
+
+    @Transactional
+    public boolean canFreigabeVerfuegen(final Gesuch gesuch) {
+        if (gesuch.getGesuchStatus() != Gesuchstatus.IN_FREIGABE) {
+            return false;
+        }
+
+        final var currentBenutzern = benutzerService.getCurrentBenutzer();
+        final var inFreigabeBenutzerUUID =
+            gesuchHistoryRepository.getUserMutiertOfLatestToInFreigabeChange(gesuch.getId());
+
+        if (inFreigabeBenutzerUUID.isEmpty()) {
+            LOG.warn("No user found that made transition to InFreigabe state for gesuch {}", gesuch.getId());
+            return true;
+        }
+
+        return !inFreigabeBenutzerUUID.get().equals(currentBenutzern.getId());
+    }
 
     @Transactional
     @WithSpan

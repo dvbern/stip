@@ -158,6 +158,10 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
     const url = this.routeUrlSig();
     return !notGesuchRoute.some((route) => url?.includes(`/${route}/`));
   });
+  isTrancheRouteSig = computed(() => {
+    const url = this.routeUrlSig();
+    return url?.includes(`/${getTrancheRoute('tranche')}/`);
+  });
   isInfosRouteSig = computed(() => {
     const url = this.routeUrlSig();
     return url?.includes('/infos/');
@@ -197,6 +201,8 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       fallNummer: info.fallNummer,
       gesuchNummer: info.gesuchNummer,
       status: info.state.gesuchStatus,
+      cannotFreigeben:
+        !info.state.canFreigeben && info.state.gesuchStatus === 'IN_FREIGABE',
     };
   });
 
@@ -407,6 +413,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const {
       gesuchStatus,
+      canFreigeben,
       canTriggerManuellPruefen,
       canBearbeitungAbschliessen,
       inBearbeitungSbReason,
@@ -444,6 +451,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
       .map((status) => ({
         ...StatusUebergaengeOptions[status]({
           permissions,
+          canFreigeben: !!canFreigeben,
           hasAcceptedAllDokuments: !!canBearbeitungAbschliessen,
           isInvalid: hasValidationErrors || hasValidationWarnings,
         }),
