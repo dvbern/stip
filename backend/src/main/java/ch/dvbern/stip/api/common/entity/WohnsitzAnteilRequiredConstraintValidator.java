@@ -17,7 +17,11 @@
 
 package ch.dvbern.stip.api.common.entity;
 
+import java.util.Objects;
+
 import ch.dvbern.stip.api.common.type.Wohnsitz;
+import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -31,16 +35,26 @@ public class WohnsitzAnteilRequiredConstraintValidator
         AbstractFamilieEntity abstractFamilieEntity,
         ConstraintValidatorContext constraintValidatorContext
     ) {
-        if (abstractFamilieEntity.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
-            return abstractFamilieEntity.getWohnsitzAnteilVater() != null
-            && abstractFamilieEntity.getWohnsitzAnteilMutter() != null;
+        if (
+            abstractFamilieEntity instanceof Geschwister
+            && ((Geschwister) abstractFamilieEntity).getGeschwisterTyp() != GeschwisterTyp.LEIBLICH
+            && abstractFamilieEntity.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
+        ) {
+            return Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilVater())
+            ^ Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilMutter());
         }
+
+        if (abstractFamilieEntity.getWohnsitz() == Wohnsitz.MUTTER_VATER) {
+            return Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilVater())
+            && Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilMutter());
+        }
+
         constraintValidatorContext.disableDefaultConstraintViolation();
         constraintValidatorContext.buildConstraintViolationWithTemplate(
             VALIDATION_WOHNSITZ_ANTEIL_FIELD_REQUIRED_NULL_MESSAGE
         )
             .addConstraintViolation();
-        return abstractFamilieEntity.getWohnsitzAnteilVater() == null
-        && abstractFamilieEntity.getWohnsitzAnteilMutter() == null;
+        return Objects.isNull(abstractFamilieEntity.getWohnsitzAnteilVater())
+        && Objects.isNull(abstractFamilieEntity.getWohnsitzAnteilMutter());
     }
 }

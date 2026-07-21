@@ -25,6 +25,7 @@ public class DemoGeschwisterDto  implements Serializable {
   private @Valid Integer alter;
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitzBei;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+  private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid Integer wohnsitzAnteilVater;
   private @Valid Integer wohnsitzAnteilMutter;
 
@@ -144,6 +145,25 @@ public class DemoGeschwisterDto  implements Serializable {
 
   /**
    **/
+  public DemoGeschwisterDto geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("geschwisterTyp")
+  @NotNull
+  public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
+    return geschwisterTyp;
+  }
+
+  @JsonProperty("geschwisterTyp")
+  public void setGeschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+  }
+
+  /**
+   **/
   public DemoGeschwisterDto wohnsitzAnteilVater(Integer wohnsitzAnteilVater) {
     this.wohnsitzAnteilVater = wohnsitzAnteilVater;
     return this;
@@ -194,13 +214,14 @@ public class DemoGeschwisterDto  implements Serializable {
         Objects.equals(this.alter, demoGeschwister.alter) &&
         Objects.equals(this.wohnsitzBei, demoGeschwister.wohnsitzBei) &&
         Objects.equals(this.ausbildungssituation, demoGeschwister.ausbildungssituation) &&
+        Objects.equals(this.geschwisterTyp, demoGeschwister.geschwisterTyp) &&
         Objects.equals(this.wohnsitzAnteilVater, demoGeschwister.wohnsitzAnteilVater) &&
         Objects.equals(this.wohnsitzAnteilMutter, demoGeschwister.wohnsitzAnteilMutter);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzBei, ausbildungssituation, wohnsitzAnteilVater, wohnsitzAnteilMutter);
+    return Objects.hash(nachname, vorname, geburtsdatum, alter, wohnsitzBei, ausbildungssituation, geschwisterTyp, wohnsitzAnteilVater, wohnsitzAnteilMutter);
   }
 
   @Override
@@ -214,6 +235,7 @@ public class DemoGeschwisterDto  implements Serializable {
     sb.append("    alter: ").append(toIndentedString(alter)).append("\n");
     sb.append("    wohnsitzBei: ").append(toIndentedString(wohnsitzBei)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
+    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("}");

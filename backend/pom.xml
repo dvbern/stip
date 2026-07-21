@@ -762,7 +762,8 @@
                     InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
                     DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus,
                     PersonenHaushalt=ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt,
-                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType
+                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType,
+                    GeschwisterTyp=ch.dvbern.stip.api.geschwister.type.GeschwisterTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>

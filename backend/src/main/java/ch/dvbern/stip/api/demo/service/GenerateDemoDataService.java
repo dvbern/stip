@@ -603,7 +603,8 @@ public class GenerateDemoDataService {
                     GeschwisterBuilder.geschwister()
                         .ausbildungssituation(geschwisterDto.getAusbildungssituation())
                         .entryId(UUID.randomUUID())
-                        .hidden(false),
+                        .hidden(false)
+                        .geschwisterTyp(geschwisterDto.getGeschwisterTyp()),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(

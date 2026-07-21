@@ -8430,6 +8430,7 @@ components:
         - alter
         - wohnsitzBei
         - ausbildungssituation
+        - geschwisterTyp
       type: object
       properties:
         nachname:
@@ -8449,6 +8450,8 @@ components:
           type: integer
         ausbildungssituation:
           $ref: '#/components/schemas/Ausbildungssituation'
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -8779,6 +8782,12 @@ components:
         - FAMILIE
         - VATER
         - MUTTER
+      type: string
+    GeschwisterTyp:
+      enum:
+        - LEIBLICH
+        - STIEF
+        - HALB
       type: string
     DatenschutzbriefCreate:
       required:
@@ -11130,6 +11139,8 @@ components:
           type: number
         nachname:
           type: string
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
         hidden:
           type: boolean
     LebenslaufItemUpdate:

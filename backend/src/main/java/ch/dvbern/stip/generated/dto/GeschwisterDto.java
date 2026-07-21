@@ -31,6 +31,7 @@ public class GeschwisterDto  implements Serializable {
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
+  private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid Boolean hidden;
 
   /**
@@ -206,6 +207,24 @@ public class GeschwisterDto  implements Serializable {
 
   /**
    **/
+  public GeschwisterDto geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("geschwisterTyp")
+  public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
+    return geschwisterTyp;
+  }
+
+  @JsonProperty("geschwisterTyp")
+  public void setGeschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+  }
+
+  /**
+   **/
   public GeschwisterDto hidden(Boolean hidden) {
     this.hidden = hidden;
     return this;
@@ -241,12 +260,13 @@ public class GeschwisterDto  implements Serializable {
         Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
+        Objects.equals(this.geschwisterTyp, geschwister.geschwisterTyp) &&
         Objects.equals(this.hidden, geschwister.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, hidden);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, geschwisterTyp, hidden);
   }
 
   @Override
@@ -263,6 +283,7 @@ public class GeschwisterDto  implements Serializable {
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
+    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
     sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();

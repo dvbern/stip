@@ -60,6 +60,7 @@ import ch.dvbern.stip.api.generator.api.model.gesuch.AusbildungUpdateDtoSpecMode
 import ch.dvbern.stip.api.generator.api.model.gesuch.SteuerdatenUpdateTabsDtoSpecModel;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsjahr.entity.Gesuchsjahr;
@@ -884,6 +885,7 @@ public class TestUtil {
             Set.of(
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(50))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(50))
@@ -892,6 +894,7 @@ public class TestUtil {
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(30))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(70))
@@ -900,6 +903,7 @@ public class TestUtil {
                     .setVorname("a"),
                 (Geschwister) new Geschwister()
                     .setAusbildungssituation(Ausbildungssituation.KEINE)
+                    .setGeschwisterTyp(GeschwisterTyp.LEIBLICH)
                     .setWohnsitz(Wohnsitz.MUTTER_VATER)
                     .setWohnsitzAnteilVater(BigDecimal.valueOf(0))
                     .setWohnsitzAnteilMutter(BigDecimal.valueOf(100))

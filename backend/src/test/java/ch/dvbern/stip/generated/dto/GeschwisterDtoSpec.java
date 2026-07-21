@@ -16,6 +16,7 @@ package ch.dvbern.stip.generated.dto;
 import java.util.Objects;
 import java.util.Arrays;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,6 +42,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   GeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_MUTTER,
   GeschwisterDtoSpec.JSON_PROPERTY_WOHNSITZ_ANTEIL_VATER,
   GeschwisterDtoSpec.JSON_PROPERTY_NACHNAME,
+  GeschwisterDtoSpec.JSON_PROPERTY_GESCHWISTER_TYP,
   GeschwisterDtoSpec.JSON_PROPERTY_HIDDEN
 })
 @JsonTypeName("Geschwister")
@@ -72,6 +74,9 @@ public class GeschwisterDtoSpec {
 
   public static final String JSON_PROPERTY_NACHNAME = "nachname";
   private String nachname;
+
+  public static final String JSON_PROPERTY_GESCHWISTER_TYP = "geschwisterTyp";
+  private GeschwisterTypDtoSpec geschwisterTyp;
 
   public static final String JSON_PROPERTY_HIDDEN = "hidden";
   private Boolean hidden;
@@ -313,6 +318,32 @@ public class GeschwisterDtoSpec {
   }
 
 
+  public GeschwisterDtoSpec geschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+    
+    this.geschwisterTyp = geschwisterTyp;
+    return this;
+  }
+
+   /**
+   * Get geschwisterTyp
+   * @return geschwisterTyp
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public GeschwisterTypDtoSpec getGeschwisterTyp() {
+    return geschwisterTyp;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setGeschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+  }
+
+
   public GeschwisterDtoSpec hidden(Boolean hidden) {
     
     this.hidden = hidden;
@@ -356,12 +387,13 @@ public class GeschwisterDtoSpec {
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
         Objects.equals(this.nachname, geschwister.nachname) &&
+        Objects.equals(this.geschwisterTyp, geschwister.geschwisterTyp) &&
         Objects.equals(this.hidden, geschwister.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, hidden);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, nachname, geschwisterTyp, hidden);
   }
 
   @Override
@@ -377,6 +409,7 @@ public class GeschwisterDtoSpec {
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
     sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();

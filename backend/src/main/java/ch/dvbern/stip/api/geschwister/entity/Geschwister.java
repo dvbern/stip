@@ -22,6 +22,7 @@ import java.util.UUID;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Ausbildungssituation;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -64,4 +65,9 @@ public class Geschwister extends AbstractFamilieEntity {
     @NotNull
     @Column(name = "hidden", nullable = false)
     private boolean hidden = false;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "geschwister_typ", nullable = false)
+    private GeschwisterTyp geschwisterTyp;
 }

@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
+import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.WohnsitzDtoSpec;
@@ -41,6 +42,7 @@ public final class GeschwisterUpdateDtoSpecModel {
             model.setEntryId(UUID.randomUUID());
             model.setWohnsitz(WohnsitzDtoSpec.FAMILIE);
             model.setAusbildungssituation(AusbildungssituationDtoSpec.IN_AUSBILDUNG);
+            model.setGeschwisterTyp(GeschwisterTypDtoSpec.LEIBLICH);
         }, 1);
     }
 

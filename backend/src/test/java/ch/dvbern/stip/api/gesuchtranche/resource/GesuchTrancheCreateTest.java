@@ -41,6 +41,7 @@ import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.dto.AusbildungssituationDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateGesuchTrancheRequestDtoSpec;
 import ch.dvbern.stip.generated.dto.DokumenteToUploadDtoSpec;
+import ch.dvbern.stip.generated.dto.GeschwisterTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDokumentListDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
@@ -417,6 +418,7 @@ class GesuchTrancheCreateTest {
         geschwisterUpdate.setEntryId(UUID.randomUUID());
         geschwisterUpdate.setGeburtsdatum(LocalDate.now().minusYears(18));
         geschwisterUpdate.setWohnsitz(WohnsitzDtoSpec.EIGENER_HAUSHALT);
+        geschwisterUpdate.setGeschwisterTyp(GeschwisterTypDtoSpec.LEIBLICH);
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().getGesuchFormular().setGeschwisters(List.of(geschwisterUpdate));
 
         gesuchUpdateDTO.getGesuchTrancheToWorkWith().setId(trancheId);
