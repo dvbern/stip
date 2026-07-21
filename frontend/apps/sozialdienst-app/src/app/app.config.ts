@@ -14,7 +14,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideSharedPatternCore(routes, {
-      type: 'gesuch-app',
+      type: 'sozialdienst-app',
       view: 'gesuchsteller',
       keyPrefix: 'gesuch-app',
     }),
