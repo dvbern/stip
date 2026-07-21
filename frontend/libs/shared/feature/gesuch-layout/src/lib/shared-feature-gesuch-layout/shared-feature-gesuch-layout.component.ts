@@ -50,8 +50,8 @@ import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/glob
 import { SharedPatternInfoBarActionsComponent } from '@dv/shared/pattern/info-bar-actions';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
-  SharedUiIfGesuchstellerDirective,
   SharedUiIfSachbearbeiterDirective,
+  SharedUiIfTypeOneOfDirective,
 } from '@dv/shared/ui/if-app-type';
 import { SharedUiVersionenMenuComponent } from '@dv/shared/ui/versionen-menu';
 import { TabNavItem, getQueryParamValueSig } from '@dv/shared/util/navigation';
@@ -74,7 +74,7 @@ import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
     SharedUiAdvTranslocoDirective,
     SharedPatternInfoBarActionsComponent,
     SharedUiIfSachbearbeiterDirective,
-    SharedUiIfGesuchstellerDirective,
+    SharedUiIfTypeOneOfDirective,
   ],
   templateUrl: './shared-feature-gesuch-layout.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

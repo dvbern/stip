@@ -9,7 +9,7 @@
       @if (gesuchInfoDataSig(); as infoData) {
         @let appKey = businessAppConfig.keyPrefix;
         <div class="tw:ml-4">
-          <ng-container *dvIfGesuchsteller>
+          <ng-container *dvIfTypeOneOf="['gesuch-app']">
             <span>{{ t('shared.header.ausbildungsjahr', { yearRange: infoData.ausbildungsjahr }) }}</span>
             -
             <span>
@@ -20,7 +20,7 @@
               }
             </span>
           </ng-container>
-          <ng-container *dvIfSachbearbeiter>
+          <ng-container *dvIfTypeOneOf="['sozialdienst-app', 'sachbearbeitung-app']">
             <span>{{ infoData.fallNummer }} / </span>
             <span>{{ infoData.gesuchNummer }} / </span>
             <span>{{ infoData.name }} / </span>
