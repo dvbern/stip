@@ -27,7 +27,7 @@ export type AppView = BusinessAppConfig['view'];
 
 export function ensureIsBusinessAppConfig(
   appConfig: AppConfig,
-): asserts appConfig is Exclude<AppConfig, { view: 'demo' }> {
+): asserts appConfig is BusinessAppConfig {
   if (appConfig.view === 'demo') {
     throw new Error('Current app is not a business app');
   }
