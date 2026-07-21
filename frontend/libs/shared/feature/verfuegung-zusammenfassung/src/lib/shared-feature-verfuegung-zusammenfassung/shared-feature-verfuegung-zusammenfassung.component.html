@@ -222,6 +222,7 @@
               <a
                 class="tw:font-light tw:text-dv-blue"
                 [routerLink]="['../../', group.tranche.gesuchTrancheId, 'berechnung', berechnungsIndex + 1]"
+                queryParamsHandling="merge"
               >
                 <div class="tw:flex">
                   {{ t('shared.verfuegung.zusammenfassung.item.link') }}
