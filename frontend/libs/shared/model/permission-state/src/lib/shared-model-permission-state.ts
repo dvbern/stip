@@ -285,14 +285,15 @@ const applyDelegatedPermission = (
 
 /**
  * Used to define values that are accessed by the AppConfig['view']
- * demo is excluded and always throws
+ *
+ * `demo` view is excluded and always throws, unless `orElse` is specified
  *
  * @example
  * ```ts
  * byAppConfig(this.config, {
- *   'antragsteller': () => this.trancheService.getGesuchDokumenteGS$(...),
- *   'sachbearbeiter': () => this.trancheService.getGesuchDokumenteSB$(...),
- * })()
+ *   gesuchsteller: () => this.trancheService.getGesuchDokumenteGS$(...),
+ *   sachbearbeiter: () => this.trancheService.getGesuchDokumenteSB$(...),
+ * });
  * ```
  */
 export function byAppConfig<R>(
