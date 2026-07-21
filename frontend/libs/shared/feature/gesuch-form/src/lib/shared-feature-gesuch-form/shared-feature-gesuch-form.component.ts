@@ -140,7 +140,7 @@ export class SharedFeatureGesuchFormComponent
       trancheTyp,
       cache.gesuch,
       rolesMap,
-      this.config.isSachbearbeitungApp ? steuerdaten : undefined,
+      this.config.app.view === 'sachbearbeiter' ? steuerdaten : undefined,
       invalidFormularProps.validations,
     );
   });
@@ -227,7 +227,7 @@ export class SharedFeatureGesuchFormComponent
       .subscribe((gesuchTrancheId) => {
         this.einreichenStore.validateSteps$({ gesuchTrancheId });
 
-        if (this.config.isSachbearbeitungApp) {
+        if (this.config.app.view === 'sachbearbeiter') {
           this.steuerdatenStore.getSteuerdaten$({ gesuchTrancheId });
         }
       });

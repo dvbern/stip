@@ -1,7 +1,7 @@
 import { IChange, diff } from 'json-diff-ts';
 
 import { RolesMap } from '@dv/shared/model/benutzer';
-import { CompileTimeConfig } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 import {
   AppTrancheChange,
   ElternTyp,
@@ -28,6 +28,7 @@ import {
   GesuchFormStepView,
   isSteuererklaerungStep,
 } from '@dv/shared/model/gesuch-form';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { capitalized, lowercased } from '@dv/shared/model/type-util';
 
 export interface ElternSituation {
@@ -339,16 +340,18 @@ export const appendSteps = (
   }, [] as GesuchFormStep[]);
 };
 
-export function addStepsByAppType(
+export function addStepsByAppConfig(
   sharedSteps: GesuchFormStep[],
   rolesMap: RolesMap,
   steuerdatenTabs: SteuerdatenTyp[] | undefined,
-  compileTimeConfig?: CompileTimeConfig,
+  appConfig?: AppConfig,
 ) {
-  switch (compileTimeConfig?.appType) {
-    case 'gesuch-app':
-      return [...sharedSteps, ABSCHLUSS];
-    case 'sachbearbeitung-app': {
+  if (!appConfig || appConfig.view === 'demo') {
+    return [];
+  }
+  return byAppConfig(appConfig, {
+    gesuchsteller: () => [...sharedSteps, ABSCHLUSS],
+    sachbearbeiter: () => {
       const steuerdatenSteps =
         rolesMap.V0_Sachbearbeiter || rolesMap.V0_Freigabestelle
           ? steuerdatenTabs?.map((typ) => ({
@@ -367,11 +370,8 @@ export function addStepsByAppType(
             }),
           )
         : sharedSteps;
-    }
-
-    default:
-      return [];
-  }
+    },
+  });
 }
 
 /**

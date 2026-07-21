@@ -171,7 +171,7 @@ export class SachbearbeitungAppFeatureGesuchFormElternSteuerdatenComponent {
   }
 
   private createSteuerDatenSBEffects() {
-    const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
+    const isSachbearbeitungApp = this.config.app.view === 'sachbearbeiter';
 
     if (isSachbearbeitungApp) {
       effect(() => {

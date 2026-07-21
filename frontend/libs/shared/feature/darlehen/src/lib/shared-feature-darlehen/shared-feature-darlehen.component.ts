@@ -14,7 +14,7 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
-import { byBusinessAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { SharedPatternDarlehenFormComponent } from '@dv/shared/pattern/darlehen-form';
 import { SharedUiDarlehenMenuComponent } from '@dv/shared/ui/darlehen-menu';
 import { SharedUiDarlehenVerfuegungDownloadComponent } from '@dv/shared/ui/darlehen-verfuegung-download';
@@ -49,15 +49,15 @@ export class SharedFeatureDarlehenComponent {
     effect(() => {
       const darlehenId = this.darlehenIdSig();
       if (darlehenId) {
-        byBusinessAppType(this.config.appType, {
-          'gesuch-app': () =>
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
             this.darlehenStore.getDarlehenGs$({
               darlehenId,
               onFailure: () => {
                 this.router.navigate(['/darlehen']);
               },
             }),
-          'sachbearbeitung-app': () =>
+          sachbearbeiter: () =>
             this.darlehenStore.getDarlehenSb$({
               darlehenId,
               onFailure: () => {

@@ -10,7 +10,7 @@ import {
   Berechnungsresultat,
   GesuchService,
 } from '@dv/shared/model/gesuch';
-import { byBusinessAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { TranchenBerechnungsresultatView } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
@@ -139,8 +139,8 @@ export class BerechnungStore extends signalStore(
         }));
       }),
       exhaustMap(({ gesuchId, latestVerfuegungId, verfuegungId }) =>
-        byBusinessAppType(this.config.appType, {
-          'sachbearbeitung-app': () => {
+        byAppConfig(this.config.app, {
+          sachbearbeiter: () => {
             if (verfuegungId) {
               // case mit verfuegungId => versionierte Berechnung für Verfuegung
               return this.gesuchService.getBerechnungForVerfuegung$({
@@ -149,7 +149,7 @@ export class BerechnungStore extends signalStore(
             }
             return this.gesuchService.getBerechnungForGesuchSb$({ gesuchId });
           },
-          'gesuch-app': () => {
+          gesuchsteller: () => {
             if (latestVerfuegungId) {
               return this.gesuchService.getBerechnungForVerfuegung$({
                 verfuegungId: latestVerfuegungId,

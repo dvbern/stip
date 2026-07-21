@@ -4,7 +4,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
 import {
-  EMPTY,
   catchError,
   combineLatestWith,
   concatMap,
@@ -12,7 +11,6 @@ import {
   map,
   switchMap,
   tap,
-  throwError,
   withLatestFrom,
 } from 'rxjs';
 
@@ -32,7 +30,7 @@ import { SharedEventGesuchFormPartner } from '@dv/shared/event/gesuch-form-partn
 import { SharedEventGesuchFormPerson } from '@dv/shared/event/gesuch-form-person';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { AppType } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 import {
   GesuchFormular,
   GesuchFormularType,
@@ -42,6 +40,7 @@ import {
   GesuchUrlType,
 } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { ifPropsAreDefined, isDefined } from '@dv/shared/model/type-util';
 import { SharedUtilGesuchFormStepManagerService } from '@dv/shared/util/gesuch-form-step-manager';
 import {
@@ -131,14 +130,11 @@ export const loadGesuch = createEffect(
       ),
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       switchMap(
-        ([
-          [, [id, trancheTyp, trancheId, revision]],
-          { compileTimeConfig },
-        ]) => {
+        ([[, [id, trancheTyp, trancheId, revision]], { appConfig }]) => {
           if (!id) {
             throw new Error(ROUTE_ID_MISSING);
           }
-          if (!trancheTyp || !trancheId || !compileTimeConfig) {
+          if (!trancheTyp || !trancheId || !appConfig) {
             throw new Error(
               'Missing trancheTyp, trancheId or compileTimeConfig',
             );
@@ -170,27 +166,25 @@ export const loadGesuch = createEffect(
           };
 
           // Call the correct service based on the app type
-          const aenderungServices$ = {
-            'gesuch-app': (aenderungId: string) =>
+          const aenderungService$ = byAppConfig(appConfig, {
+            gesuchsteller: () => (aenderungId: string) =>
               gesuchService.getAenderungChangesGs$(
-                { aenderungId, revision },
+                { aenderungId },
                 undefined,
                 undefined,
                 handle404And401,
               ),
-            'sachbearbeitung-app': (aenderungId: string) =>
+            sachbearbeiter: () => (aenderungId: string) =>
               gesuchService.getAenderungChangesSb$(
                 { aenderungId, revision },
                 undefined,
                 undefined,
                 handle404And401,
               ),
-            'demo-data-app': () =>
-              throwError(() => new Error('Not implemented for this AppType')),
-          } satisfies Record<AppType, unknown>;
+          });
 
-          const trancheServices$ = {
-            'gesuch-app': (gesuchTrancheId: string) =>
+          const trancheService$ = byAppConfig(appConfig, {
+            gesuchsteller: () => (gesuchTrancheId: string) =>
               gesuchService.getGesuchGS$(
                 {
                   gesuchTrancheId,
@@ -199,7 +193,7 @@ export const loadGesuch = createEffect(
                 undefined,
                 handle404And401,
               ),
-            'sachbearbeitung-app': (gesuchTrancheId: string) =>
+            sachbearbeiter: () => (gesuchTrancheId: string) =>
               gesuchService.getGesuchSB$(
                 {
                   gesuchTrancheId,
@@ -208,9 +202,7 @@ export const loadGesuch = createEffect(
                 undefined,
                 handle404And401,
               ),
-            'demo-data-app': () =>
-              throwError(() => new Error('Not implemented for this AppType')),
-          } satisfies Record<AppType, unknown>;
+          });
 
           const eingereichtTrancheService$ = (gesuchTrancheId: string) =>
             gesuchService.getEingereichtTranche$(
@@ -234,15 +226,13 @@ export const loadGesuch = createEffect(
 
           // Different services for different types of tranches
           const services$ = {
-            AENDERUNG: (appType: AppType) => aenderungServices$[appType],
-            TRANCHE: (appType: AppType) => trancheServices$[appType],
+            AENDERUNG: () => aenderungService$,
+            TRANCHE: () => trancheService$,
             EINGEREICHT: () => eingereichtTrancheService$,
             INITIAL: () => initialTrancheService$,
           } satisfies Record<GesuchUrlType, unknown>;
 
-          return services$[trancheTyp](compileTimeConfig.appType)(
-            trancheId,
-          ).pipe(
+          return services$[trancheTyp]()(trancheId).pipe(
             map((gesuch) =>
               SharedDataAccessGesuchEvents.gesuchLoadedSuccess({
                 gesuch,
@@ -263,24 +253,24 @@ export const loadGesuch = createEffect(
 );
 
 const getUpdateGesuchServiceCalls = (
+  appConfig: AppConfig,
   gesuchService: GesuchService,
   gesuchId: string,
   trancheId: string,
   gesuchFormular: Partial<GesuchFormular> | Partial<GesuchFormularUpdate>,
 ) => {
-  return {
-    'gesuch-app': () =>
+  return byAppConfig(appConfig, {
+    gesuchsteller: () =>
       gesuchService.updateGesuchGS$({
         gesuchId,
         gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
       }),
-    'sachbearbeitung-app': () =>
+    sachbearbeiter: () =>
       gesuchService.updateGesuchSB$({
         gesuchId,
         gesuchUpdate: prepareFormularData(trancheId, gesuchFormular),
       }),
-    'demo-data-app': () => EMPTY,
-  } satisfies Record<AppType, unknown>;
+  });
 };
 
 export const updateGesuch = createEffect(
@@ -299,33 +289,29 @@ export const updateGesuch = createEffect(
       ),
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       concatMap(
-        ([
-          { gesuchId, trancheId, gesuchFormular, origin },
-          { compileTimeConfig },
-        ]) => {
-          if (!trancheId || !compileTimeConfig) {
+        ([{ gesuchId, trancheId, gesuchFormular, origin }, { appConfig }]) => {
+          if (!trancheId || !appConfig) {
             throw new Error('Missing trancheId or compileTimeConfig');
           }
           return getUpdateGesuchServiceCalls(
+            appConfig,
             gesuchService,
             gesuchId,
             trancheId,
             gesuchFormular,
-          )
-            [compileTimeConfig.appType]()
-            .pipe(
-              map(() =>
-                SharedDataAccessGesuchEvents.gesuchUpdatedSuccess({
-                  id: gesuchId,
-                  origin,
-                }),
-              ),
-              catchError((error) => [
-                SharedDataAccessGesuchEvents.gesuchUpdatedFailure({
-                  error: sharedUtilFnErrorTransformer(error),
-                }),
-              ]),
-            );
+          ).pipe(
+            map(() =>
+              SharedDataAccessGesuchEvents.gesuchUpdatedSuccess({
+                id: gesuchId,
+                origin,
+              }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchUpdatedFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
         },
       ),
     );
@@ -348,33 +334,29 @@ export const updateGesuchSubform = createEffect(
       ),
       withLatestFrom(store.select(selectSharedDataAccessConfigsView)),
       concatMap(
-        ([
-          { gesuchId, trancheId, gesuchFormular, origin },
-          { compileTimeConfig },
-        ]) => {
-          if (!trancheId || !compileTimeConfig) {
+        ([{ gesuchId, trancheId, gesuchFormular, origin }, { appConfig }]) => {
+          if (!trancheId || !appConfig) {
             throw new Error('Missing trancheId or compileTimeConfig');
           }
           return getUpdateGesuchServiceCalls(
+            appConfig,
             gesuchService,
             gesuchId,
             trancheId,
             gesuchFormular,
-          )
-            [compileTimeConfig.appType]()
-            .pipe(
-              map(() =>
-                SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess({
-                  id: gesuchId,
-                  origin,
-                }),
-              ),
-              catchError((error) => [
-                SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure({
-                  error: sharedUtilFnErrorTransformer(error),
-                }),
-              ]),
-            );
+          ).pipe(
+            map(() =>
+              SharedDataAccessGesuchEvents.gesuchUpdatedSubformSuccess({
+                id: gesuchId,
+                origin,
+              }),
+            ),
+            catchError((error) => [
+              SharedDataAccessGesuchEvents.gesuchUpdatedSubformFailure({
+                error: sharedUtilFnErrorTransformer(error),
+              }),
+            ]),
+          );
         },
       ),
     );

@@ -23,7 +23,7 @@ import { preparePermissions } from '@dv/shared/model/permission-state';
   providedIn: 'root',
 })
 export class SharedUtilGesuchFormStepManagerService {
-  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private appConfig = inject(SharedModelCompileTimeConfig).app;
 
   /**
    * Returns the progress of the current step compared to the total steps
@@ -65,7 +65,7 @@ export class SharedUtilGesuchFormStepManagerService {
     const { permissions } = preparePermissions(
       trancheTyp,
       gesuch,
-      this.appType,
+      this.appConfig,
       rolesMap,
     );
     return steps.map((step, index) => ({
@@ -74,7 +74,7 @@ export class SharedUtilGesuchFormStepManagerService {
       status: isStepValid(
         step,
         gesuchFormular,
-        this.appType,
+        this.appConfig,
         steuerdaten,
         invalidProps,
       ),
@@ -102,7 +102,7 @@ export class SharedUtilGesuchFormStepManagerService {
     const { permissions } = preparePermissions(
       trancheTyp,
       gesuch,
-      this.appType,
+      this.appConfig,
       rolesMap,
     );
 

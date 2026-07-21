@@ -25,14 +25,14 @@ import {
   SharedUiRejectDokumentComponent,
 } from '@dv/shared/ui/reject-dokument';
 import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-pipe';
-import { SharedUiReplaceAppTypePipe } from '@dv/shared/ui/replace-app-type';
+import { SharedUiReplaceAppConfigPipe } from '@dv/shared/ui/replace-app-type';
 import { isInitial } from '@dv/shared/util/remote-data';
 
 @Component({
   selector: 'dv-shared-pattern-document-upload-approval',
   imports: [
     SharedUiIconBadgeComponent,
-    SharedUiReplaceAppTypePipe,
+    SharedUiReplaceAppConfigPipe,
     SharedUiRdIsPendingWithoutCachePipe,
     SharedUiLoadingComponent,
     TranslocoPipe,

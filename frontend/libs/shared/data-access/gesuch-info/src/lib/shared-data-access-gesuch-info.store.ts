@@ -5,7 +5,7 @@ import { exhaustMap, pipe, tap } from 'rxjs';
 
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchInfo, GesuchService } from '@dv/shared/model/gesuch';
-import { byBusinessAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -44,9 +44,10 @@ export class GesuchInfoStore extends signalStore(
         }));
       }),
       exhaustMap(({ gesuchId }) =>
-        byBusinessAppType(this.config.appType, {
-          'gesuch-app': () => this.gesuchService.getGesuchInfoGs$({ gesuchId }),
-          'sachbearbeitung-app': () =>
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.gesuchService.getGesuchInfoGs$({ gesuchId }),
+          sachbearbeiter: () =>
             this.gesuchService.getGesuchInfoSb$({ gesuchId }),
         }).pipe(
           handleApiResponse((gesuchInfo) => patchState(this, { gesuchInfo })),

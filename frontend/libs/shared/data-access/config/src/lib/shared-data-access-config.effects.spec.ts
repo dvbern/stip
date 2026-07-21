@@ -13,9 +13,10 @@ it('loads actors effect - success', () => {
   // example of test using real time and done (use TestScheduler instead)
   const actionsMock$ = of(
     SharedDataAccessConfigEvents.appInit({
-      compileTimeConfig: {
-        appType: 'gesuch-app',
-        authClientId: 'stip-gesuch-app',
+      appConfig: {
+        type: 'gesuch-app',
+        view: 'gesuchsteller',
+        keyPrefix: 'gesuch-app',
       },
     }),
   );

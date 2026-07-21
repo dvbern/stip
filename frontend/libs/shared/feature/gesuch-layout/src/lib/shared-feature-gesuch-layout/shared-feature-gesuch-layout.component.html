@@ -7,7 +7,7 @@
     <!-- Gesuch Info -->
     <div dvGesuchStatusIndication class="tw:flex tw:items-center">
       @if (gesuchInfoDataSig(); as infoData) {
-        @let appKey = config.isSachbearbeitungApp ? 'sachbearbeitung-app' : 'gesuch-app';
+        @let appKey = businessAppConfig.keyPrefix;
         <div class="tw:ml-4">
           <ng-container *dvIfGesuchsteller>
             <span>{{ t('shared.header.ausbildungsjahr', { yearRange: infoData.ausbildungsjahr }) }}</span>
@@ -150,7 +150,7 @@
       }
     </nav>
 
-    @defer (when config.isSachbearbeitungApp) {
+    @defer (when config.app.view === 'sachbearbeiter') {
       <dv-shared-pattern-info-bar-actions></dv-shared-pattern-info-bar-actions>
     }
   </div>

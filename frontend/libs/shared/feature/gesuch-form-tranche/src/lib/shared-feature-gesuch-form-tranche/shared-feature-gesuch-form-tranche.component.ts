@@ -77,7 +77,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
   );
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  isSbApp = inject(SharedModelCompileTimeConfig).isSachbearbeitungApp;
+  isSbApp = inject(SharedModelCompileTimeConfig).app.view === 'sachbearbeiter';
   einreichenStore = inject(EinreichenStore);
   gesuchHeaderStore = inject(GesuchHeaderStore);
   gesuchInfoStore = inject(GesuchInfoStore, {
@@ -129,7 +129,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
         fallNummer,
         periode,
         sachbearbeiter,
-        appType,
+        appConfig,
       } = this.viewSig();
 
       // Also used to react to language change
@@ -144,7 +144,7 @@ export class SharedFeatureGesuchFormTrancheComponent {
       const pia = tranche.gesuchFormular?.personInAusbildung;
       const status = isEditingAenderung ? tranche.status : gesuch.gesuchStatus;
       const type = isEditingAenderung ? 'tranche' : 'contract';
-      const appPrefix = type === 'contract' ? appType : 'shared';
+      const appPrefix = type === 'contract' ? appConfig?.keyPrefix : 'shared';
       const overridenStatus = gesuch.hasPendingAusbildungUnterbruchAntrag
         ? this.translate.translate('shared.gesuch.status.unterbruchAnfrage')
         : null;

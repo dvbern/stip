@@ -19,7 +19,7 @@ import {
   GesuchTrancheTyp,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
-import { byBusinessAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   RemoteData,
@@ -73,16 +73,16 @@ export class DokumentsStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
   private config = inject(SharedModelCompileTimeConfig);
 
-  private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
-    return byBusinessAppType(this.config.appType, {
-      'gesuch-app': () =>
+  private getGesuchDokumenteByAppConfig$(gesuchTrancheId: string) {
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
     });
   }
 
-  private getGesuchDokumentByAppType$({
+  private getGesuchDokumentByAppConfig$({
     trancheId,
     dokumentTyp,
     entryId,
@@ -91,14 +91,14 @@ export class DokumentsStore extends signalStore(
     dokumentTyp: DokumentTyp;
     entryId: string | undefined;
   }) {
-    return byBusinessAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.getGesuchDokumentForTypGS$({
           gesuchTrancheId: trancheId,
           entryId,
           dokumentTyp,
         }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
           entryId,
@@ -107,11 +107,11 @@ export class DokumentsStore extends signalStore(
     });
   }
 
-  private getDocumentsToUploadByAppType$(gesuchTrancheId: string) {
-    return byBusinessAppType(this.config.appType, {
-      'gesuch-app': () =>
+  private getDocumentsToUploadByAppConfig$(gesuchTrancheId: string) {
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
     });
   }
@@ -288,13 +288,13 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, entryId, dokumentTyp }) => {
-        return this.getGesuchDokumentByAppType$({
+      switchMap(({ trancheId, entryId, dokumentTyp }) =>
+        this.getGesuchDokumentByAppConfig$({
           trancheId,
           entryId,
           dokumentTyp,
-        });
-      }),
+        }),
+      ),
       handleApiResponse((res) => {
         patchState(this, () => ({
           // Response is NullableGesuchDokument, so we extract the value
@@ -322,8 +322,8 @@ export class DokumentsStore extends signalStore(
       }),
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
-          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
-          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+          this.getGesuchDokumenteByAppConfig$(gesuchTrancheId),
+          this.getDocumentsToUploadByAppConfig$(gesuchTrancheId),
         ]),
       ),
       tapResponse({
@@ -391,7 +391,7 @@ export class DokumentsStore extends signalStore(
           this.dokumentService.getUnterschriftenblaetterForGesuch$({
             gesuchId,
           }),
-          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+          this.getDocumentsToUploadByAppConfig$(gesuchTrancheId),
         ]).pipe(
           tapResponse({
             next: ([additionalDokumente, documentsToUpload]) => {
@@ -432,7 +432,7 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
-        this.getDocumentsToUploadByAppType$(gesuchTrancheId).pipe(
+        this.getDocumentsToUploadByAppConfig$(gesuchTrancheId).pipe(
           handleApiResponse((documentsToUpload) =>
             patchState(this, { documentsToUpload }),
           ),
@@ -452,10 +452,10 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((req) => {
-        const service$ = byBusinessAppType(this.config.appType, {
-          'gesuch-app': () =>
+        const service$ = byAppConfig(this.config.app, {
+          gesuchsteller: () =>
             this.dokumentService.getGesuchDokumentKommentareGS$(req),
-          'sachbearbeitung-app': () =>
+          sachbearbeiter: () =>
             this.dokumentService.getGesuchDokumentKommentareSB$(req),
         });
         return service$.pipe(
@@ -626,7 +626,7 @@ export class DokumentsStore extends signalStore(
               dokuments: cachedPending(state.dokuments),
             }));
           }),
-          switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
+          switchMap(() => this.getGesuchDokumenteByAppConfig$(trancheId)),
           tapResponse({
             next: ({ dokuments, entrys }) => {
               patchState(this, {
@@ -703,7 +703,7 @@ export class DokumentsStore extends signalStore(
         return serviceMap$[tranchenTyp]().pipe(
           tapResponse({
             next: (res) => {
-              this.getDocumentsToUploadByAppType$(trancheId);
+              this.getDocumentsToUploadByAppConfig$(trancheId);
               onSuccess(res.fallId);
             },
             error: (error) => {

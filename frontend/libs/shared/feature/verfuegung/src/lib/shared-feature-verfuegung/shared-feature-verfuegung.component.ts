@@ -89,11 +89,7 @@ export class SharedFeatureVerfuegungComponent
     if (!gesuchStatus) {
       return {};
     }
-    return getGesuchPermissions(
-      { gesuchStatus },
-      this.config.appType,
-      rolesMap,
-    );
+    return getGesuchPermissions({ gesuchStatus }, this.config.app, rolesMap);
   });
   isLoadingSig = computed(() => {
     return isPending(this.gesuchInfoStore.gesuchInfo());

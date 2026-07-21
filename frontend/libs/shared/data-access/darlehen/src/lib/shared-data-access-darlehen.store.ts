@@ -19,7 +19,7 @@ import {
   FreiwilligDarlehenGsResponse,
   PaginatedSbFreiwilligDarlehenDashboard,
 } from '@dv/shared/model/gesuch';
-import { byBusinessAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   cachedPending,
@@ -70,8 +70,8 @@ export class DarlehenStore extends signalStore(
   });
 
   darlehenListViewSig = computed(() => {
-    return byBusinessAppType(this.config.appType, {
-      'gesuch-app': () => {
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () => {
         const data = fromCachedDataSig(this.darlehenGs);
 
         return {
@@ -80,7 +80,7 @@ export class DarlehenStore extends signalStore(
           loading: isPending(this.darlehenGs()),
         };
       },
-      'sachbearbeitung-app': () => ({
+      sachbearbeiter: () => ({
         list: fromCachedDataSig(this.darlehenList) ?? [],
         canCreateDarlehen: false,
         loading: isPending(this.darlehenList()),
@@ -287,10 +287,10 @@ export class DarlehenStore extends signalStore(
         }));
       }),
       switchMap((req) =>
-        byBusinessAppType(this.config.appType, {
-          'sachbearbeitung-app': () =>
+        byAppConfig(this.config.app, {
+          sachbearbeiter: () =>
             this.darlehenService.getAllFreiwilligDarlehenSb$(req),
-          'gesuch-app': () =>
+          gesuchsteller: () =>
             this.darlehenService
               .getAllFreiwilligDarlehenGs$(req)
               .pipe(map((d) => d.darlehenList)),

@@ -38,7 +38,7 @@ import {
   sharedDataAccessLanguageFeature,
 } from '@dv/shared/data-access/language';
 import {
-  CompileTimeConfig,
+  AppConfig,
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 import { provideSharedPatternAppInitialization } from '@dv/shared/pattern/app-initialization';
@@ -56,13 +56,13 @@ export const metaReducers = [];
 
 export function provideSharedPatternCore(
   appRoutes: Route[],
-  compileTimeConfig: CompileTimeConfig,
+  appConfig: AppConfig,
 ): ApplicationConfig['providers'] {
   return [
     // providers
     provideOAuthClient(),
     provideSharedPatternAppInitialization(),
-    provideSharedAppSettings(compileTimeConfig.appType),
+    provideSharedAppSettings(appConfig),
     provideAnimations(),
     provideHttpClient(
       withInterceptors([
@@ -133,18 +133,14 @@ export function provideSharedPatternCore(
     importProvidersFrom([]),
     {
       provide: SharedModelCompileTimeConfig,
-      useFactory: () => new SharedModelCompileTimeConfig(compileTimeConfig),
+      useFactory: () => new SharedModelCompileTimeConfig(appConfig),
     },
 
-    // init (has to be last, order matters)
     provideEnvironmentInitializer(() => {
       inject(SharedUtilRouteHistoryService);
       const store = inject(Store);
-      // rework to ngrxOnEffectsInit once available for functional effects
-      // https://twitter.com/MarkoStDev/status/1661094873116581901
-      store.dispatch(
-        SharedDataAccessConfigEvents.appInit({ compileTimeConfig }),
-      );
+      // rework to signal store once all old stores are replaced
+      store.dispatch(SharedDataAccessConfigEvents.appInit({ appConfig }));
       store.dispatch(SharedDataAccessLanguageEvents.appInit());
     }),
   ];

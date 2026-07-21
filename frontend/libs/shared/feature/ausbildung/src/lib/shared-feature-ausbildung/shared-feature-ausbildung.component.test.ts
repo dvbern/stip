@@ -65,8 +65,9 @@ async function setup() {
       }),
       provideMaterialDefaultOptions(),
       provideSharedPatternVitestTestSetup({
-        appType: 'sachbearbeitung-app',
-        authClientId: 'stip-sachbearbeitung-app',
+        type: 'sachbearbeitung-app',
+        view: 'sachbearbeiter',
+        keyPrefix: 'sachbearbeitung-app',
       }),
       provideSharedPatternVitestTestAusbildungstaetten(),
       AusbildungsstaetteStore,

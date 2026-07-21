@@ -142,7 +142,7 @@ export class SharedPatternInfoBarActionsComponent {
 
     const { permissions } = getGesuchPermissions(
       { gesuchStatus },
-      this.config.appType,
+      this.config.app,
       rolesMap,
     );
 
@@ -364,7 +364,11 @@ export class SharedPatternInfoBarActionsComponent {
     gesuchId?: string,
     gesuchTrancheId?: string,
   ) {
-    if (!gesuchId || !gesuchTrancheId || !this.config.isSachbearbeitungApp) {
+    if (
+      !gesuchId ||
+      !gesuchTrancheId ||
+      this.config.app.view !== 'sachbearbeiter'
+    ) {
       return;
     }
 

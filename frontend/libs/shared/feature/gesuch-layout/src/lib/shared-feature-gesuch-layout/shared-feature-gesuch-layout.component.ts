@@ -29,7 +29,10 @@ import {
   selectSharedDataAccessGesuchCache,
 } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
-import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
+import {
+  SharedModelCompileTimeConfig,
+  onlyBusinessAppConfig,
+} from '@dv/shared/model/config';
 import { FreiwilligDarlehen, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import {
@@ -86,6 +89,7 @@ export class SharedFeatureGesuchLayoutComponent {
   private einreichenStore = inject(EinreichenStore);
 
   config = inject(SharedModelCompileTimeConfig);
+  businessAppConfig = onlyBusinessAppConfig(this.config.app);
   darlehenStore = inject(DarlehenStore);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   trancheIdSig = this.store.selectSignal(selectRouteTrancheId);
@@ -185,11 +189,12 @@ export class SharedFeatureGesuchLayoutComponent {
       key: 'formular' as const,
     };
 
-    const appTypeBasedQueryParams = this.config.isGesuchApp
-      ? {
-          latestVerfuegungId,
-        }
-      : {};
+    const appTypeBasedQueryParams =
+      this.config.app.view === 'gesuchsteller'
+        ? {
+            latestVerfuegungId,
+          }
+        : {};
 
     const verfuegungTab = {
       active: activePath?.includes('/verfuegung'),

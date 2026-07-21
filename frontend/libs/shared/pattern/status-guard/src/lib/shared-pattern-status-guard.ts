@@ -11,7 +11,7 @@ import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { GesuchService } from '@dv/shared/model/gesuch';
 import {
   Permission,
-  byBusinessAppType,
+  byAppConfig,
   getGesuchPermissions,
 } from '@dv/shared/model/permission-state';
 import { capitalized, isDefined } from '@dv/shared/model/type-util';
@@ -31,13 +31,12 @@ export const isAllowedTo =
           return [false];
         }
 
-        return byBusinessAppType(config.appType, {
-          'gesuch-app': () => gesuchService.getGesuchInfoGs$({ gesuchId }),
-          'sachbearbeitung-app': () =>
-            gesuchService.getGesuchInfoSb$({ gesuchId }),
+        return byAppConfig(config.app, {
+          gesuchsteller: () => gesuchService.getGesuchInfoGs$({ gesuchId }),
+          sachbearbeiter: () => gesuchService.getGesuchInfoSb$({ gesuchId }),
         }).pipe(
           map(({ state: { gesuchStatus } }) =>
-            getGesuchPermissions({ gesuchStatus }, config.appType, {
+            getGesuchPermissions({ gesuchStatus }, config.app, {
               V0_Gesuchsteller: true,
             }).permissions[`can${capitalized(permission)}`]
               ? true

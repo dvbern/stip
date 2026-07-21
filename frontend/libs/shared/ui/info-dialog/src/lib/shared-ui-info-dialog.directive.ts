@@ -85,7 +85,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     if (isColumnar) {
       const anchor: HTMLElement = this.containerRef.element.nativeElement;
       const anchorRect = anchor.getBoundingClientRect();
-      const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
+      const isSachbearbeitungApp = this.config.app.view === 'sachbearbeiter';
 
       dialogConfig = {
         ...dialogConfig,

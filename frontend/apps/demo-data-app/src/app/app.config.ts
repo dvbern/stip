@@ -14,8 +14,9 @@ import { appRoutes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideSharedPatternCore(appRoutes, {
-      authClientId: 'stip-demo-data-app',
-      appType: 'demo-data-app',
+      type: 'demo-data-app',
+      view: 'demo',
+      keyPrefix: 'demo-data-app',
     }),
     provideState(sharedDataAccessGesuchsFeature),
     provideEffects(sharedDataAccessGesuchEffects),
