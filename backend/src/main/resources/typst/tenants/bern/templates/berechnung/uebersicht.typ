@@ -118,6 +118,7 @@
       table.sub-entry(
         t("berechnung.uebersicht.total.ohneKuerzung"),
         format.chf(vorKuerzungUndTeilung),
+        font-size: "normal",
       ),
     )
   }
@@ -129,6 +130,7 @@
       table.sub-entry(
         table.with-note(t("berechnung.uebersicht.total.kuerzung"), identifier),
         format.chf(kuerzung, prefix: "negative"),
+        font-size: "normal",
       ),
     )
     noteCells += (
@@ -153,6 +155,7 @@
           identifier,
         ),
         format.chf(unterbruch, prefix: "negative"),
+        font-size: "normal",
       ),
     )
     noteCells += (

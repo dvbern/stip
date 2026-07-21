@@ -10,10 +10,18 @@
   dim: dim,
 )
 
-#let sub-entry(label, amount) = (
-  label: label,
-  amount: amount,
-)
+#let sub-entry(label, amount, font-size: "small") = {
+  assert(
+    font-size in ("small", "normal"),
+    message: "font-size must be: \"small\" or \"normal\"",
+  )
+
+  (
+    label: label,
+    amount: amount,
+    font-size: font-size,
+  )
+}
 
 #let entry(
   label,
@@ -97,15 +105,19 @@
       let is-last = idx == item.sub-table.len() - 1
       let bottom-inset = if is-last { cell-inset } else { cell-inset / 2 }
 
+      let current-size = if se.at("font-size", default: "small") == "normal" {
+        font.base
+      } else { font.small }
+
       cells += (
         table.cell(inset: (top: 0pt, bottom: bottom-inset))[
-          #text(size: font.small, fill: font.dim)[#eval(
+          #text(size: current-size, fill: font.dim)[#eval(
             se.label,
             mode: "markup",
           )]
         ],
         table.cell(inset: (top: 0pt, bottom: bottom-inset), align: right)[
-          #text(size: font.small, fill: font.dim)[#se.amount]
+          #text(size: current-size, fill: font.dim)[#se.amount]
         ],
       )
     }
