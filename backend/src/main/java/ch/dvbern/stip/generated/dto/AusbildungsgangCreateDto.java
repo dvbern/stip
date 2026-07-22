@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsgangCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangCreateDto  implements Serializable {
   private @Valid UUID abschlussId;
   private @Valid UUID ausbildungsstaetteId;
+
+  protected AusbildungsgangCreateDto(AusbildungsgangCreateDtoBuilder<?, ?> b) {
+    this.abschlussId = b.abschlussId;
+    this.ausbildungsstaetteId = b.ausbildungsstaetteId;
+  }
+
+  public AusbildungsgangCreateDto() {
+  }
 
   /**
    **/
@@ -103,5 +111,38 @@ public class AusbildungsgangCreateDto  implements Serializable {
   }
 
 
+  public static AusbildungsgangCreateDtoBuilder<?, ?> builder() {
+    return new AusbildungsgangCreateDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsgangCreateDtoBuilderImpl extends AusbildungsgangCreateDtoBuilder<AusbildungsgangCreateDto, AusbildungsgangCreateDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsgangCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsgangCreateDto build() {
+      return new AusbildungsgangCreateDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsgangCreateDtoBuilder<C extends AusbildungsgangCreateDto, B extends AusbildungsgangCreateDtoBuilder<C, B>>  {
+    private UUID abschlussId;
+    private UUID ausbildungsstaetteId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B abschlussId(UUID abschlussId) {
+      this.abschlussId = abschlussId;
+      return self();
+    }
+    public B ausbildungsstaetteId(UUID ausbildungsstaetteId) {
+      this.ausbildungsstaetteId = ausbildungsstaetteId;
+      return self();
+    }
+  }
 }
 

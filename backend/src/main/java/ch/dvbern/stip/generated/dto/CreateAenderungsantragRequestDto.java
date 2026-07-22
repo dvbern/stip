@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CreateAenderungsantragRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CreateAenderungsantragRequestDto  implements Serializable {
   private @Valid LocalDate start;
   private @Valid String comment;
   private @Valid LocalDate end;
+
+  protected CreateAenderungsantragRequestDto(CreateAenderungsantragRequestDtoBuilder<?, ?> b) {
+    this.start = b.start;
+    this.comment = b.comment;
+    this.end = b.end;
+  }
+
+  public CreateAenderungsantragRequestDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class CreateAenderungsantragRequestDto  implements Serializable {
   }
 
 
+  public static CreateAenderungsantragRequestDtoBuilder<?, ?> builder() {
+    return new CreateAenderungsantragRequestDtoBuilderImpl();
+  }
+
+  private static final class CreateAenderungsantragRequestDtoBuilderImpl extends CreateAenderungsantragRequestDtoBuilder<CreateAenderungsantragRequestDto, CreateAenderungsantragRequestDtoBuilderImpl> {
+
+    @Override
+    protected CreateAenderungsantragRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public CreateAenderungsantragRequestDto build() {
+      return new CreateAenderungsantragRequestDto(this);
+    }
+  }
+
+  public static abstract class CreateAenderungsantragRequestDtoBuilder<C extends CreateAenderungsantragRequestDto, B extends CreateAenderungsantragRequestDtoBuilder<C, B>>  {
+    private LocalDate start;
+    private String comment;
+    private LocalDate end;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B start(LocalDate start) {
+      this.start = start;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+    public B end(LocalDate end) {
+      this.end = end;
+      return self();
+    }
+  }
 }
 

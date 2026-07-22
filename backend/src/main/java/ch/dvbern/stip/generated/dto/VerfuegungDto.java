@@ -19,14 +19,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Verfuegung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungDto  implements Serializable {
   private @Valid UUID id;
   private @Valid List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
   private @Valid String timestampErstellt;
+
+  protected VerfuegungDto(VerfuegungDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.dokumente = b.dokumente;
+    this.timestampErstellt = b.timestampErstellt;
+  }
+
+  public VerfuegungDto() {
+  }
 
   /**
    **/
@@ -144,5 +153,43 @@ public class VerfuegungDto  implements Serializable {
   }
 
 
+  public static VerfuegungDtoBuilder<?, ?> builder() {
+    return new VerfuegungDtoBuilderImpl();
+  }
+
+  private static final class VerfuegungDtoBuilderImpl extends VerfuegungDtoBuilder<VerfuegungDto, VerfuegungDtoBuilderImpl> {
+
+    @Override
+    protected VerfuegungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public VerfuegungDto build() {
+      return new VerfuegungDto(this);
+    }
+  }
+
+  public static abstract class VerfuegungDtoBuilder<C extends VerfuegungDto, B extends VerfuegungDtoBuilder<C, B>>  {
+    private UUID id;
+    private List<VerfuegungDokumentDto> dokumente = new ArrayList<>();
+    private String timestampErstellt;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B dokumente(List<VerfuegungDokumentDto> dokumente) {
+      this.dokumente = dokumente;
+      return self();
+    }
+    public B timestampErstellt(String timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+  }
 }
 

@@ -27,7 +27,8 @@ import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.dto.BudgetsResult;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.dto.FamilienBudgetInput;
-import ch.dvbern.stip.berechnung.domain.util.InputUtils;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -41,12 +42,12 @@ public class BudgetsCalculator {
         final Gesuchsperiode gesuchsperiode,
         final int gesuchsjahr
     ) {
-        final var anzahlKinderDerElternInAusbildung = Math.toIntExact(
+        final int anzahlKinderDerElternInAusbildung = Math.toIntExact(
             gesuchFormular.getGeschwisters()
                 .stream()
                 .filter(geschwister -> geschwister.getAusbildungssituation() == Ausbildungssituation.IN_AUSBILDUNG)
                 .count()
-        ) + InputUtils.PIA_COUNT;
+        ) + BernCalculatorUtil.PIA_COUNT;
         final boolean halbierungElternbeitrag = BernCalculatorUtil.getHalbierungElternbeitrag(
             gesuchFormular.getPersonInAusbildung().getGeburtsdatum(),
             gesuchsDateRange,
@@ -54,7 +55,7 @@ public class BudgetsCalculator {
             gesuchsperiode
         );
 
-        final var familienBudgetresultats = familienBudgetInputs.stream()
+        final List<FamilienBudgetresultatDto> familienBudgetresultats = familienBudgetInputs.stream()
             .map(
                 familienBudgetInput -> FamilienBudgetCalculator.calculateFamilienBudget(
                     familienBudgetInput.elterns(),
@@ -69,15 +70,16 @@ public class BudgetsCalculator {
             )
             .toList();
 
-        final var persoenlichesBudgetresultat = PersoenlichesBudgetCalculator.calculatePersoenlichesBudget(
-            gesuchFormular,
-            familienBudgetresultats,
-            kindsImPiaHaushalt,
-            anzahlMonateGueltigkeit,
-            gesuchsDateRange,
-            gesuchsperiode,
-            gesuchsjahr
-        );
+        final PersoenlichesBudgetresultatDto persoenlichesBudgetresultat =
+            PersoenlichesBudgetCalculator.calculatePersoenlichesBudget(
+                gesuchFormular,
+                familienBudgetresultats,
+                kindsImPiaHaushalt,
+                anzahlMonateGueltigkeit,
+                gesuchsDateRange,
+                gesuchsperiode,
+                gesuchsjahr
+            );
 
         return new BudgetsResult(
             persoenlichesBudgetresultat.getTotal(),

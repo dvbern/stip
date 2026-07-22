@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallAuszahlung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallAuszahlungDto  implements Serializable {
   private @Valid Boolean isDelegated;
   private @Valid AuszahlungUpdateDto auszahlung;
+
+  protected FallAuszahlungDto(FallAuszahlungDtoBuilder<?, ?> b) {
+    this.isDelegated = b.isDelegated;
+    this.auszahlung = b.auszahlung;
+  }
+
+  public FallAuszahlungDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class FallAuszahlungDto  implements Serializable {
   }
 
 
+  public static FallAuszahlungDtoBuilder<?, ?> builder() {
+    return new FallAuszahlungDtoBuilderImpl();
+  }
+
+  private static final class FallAuszahlungDtoBuilderImpl extends FallAuszahlungDtoBuilder<FallAuszahlungDto, FallAuszahlungDtoBuilderImpl> {
+
+    @Override
+    protected FallAuszahlungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallAuszahlungDto build() {
+      return new FallAuszahlungDto(this);
+    }
+  }
+
+  public static abstract class FallAuszahlungDtoBuilder<C extends FallAuszahlungDto, B extends FallAuszahlungDtoBuilder<C, B>>  {
+    private Boolean isDelegated;
+    private AuszahlungUpdateDto auszahlung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B isDelegated(Boolean isDelegated) {
+      this.isDelegated = isDelegated;
+      return self();
+    }
+    public B auszahlung(AuszahlungUpdateDto auszahlung) {
+      this.auszahlung = auszahlung;
+      return self();
+    }
+  }
 }
 

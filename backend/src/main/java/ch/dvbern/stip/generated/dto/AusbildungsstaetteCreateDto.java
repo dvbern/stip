@@ -14,15 +14,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsstaetteCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteCreateDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
   private @Valid String nummer;
+
+  protected AusbildungsstaetteCreateDto(AusbildungsstaetteCreateDtoBuilder<?, ?> b) {
+    this.nameDe = b.nameDe;
+    this.nameFr = b.nameFr;
+    this.nummerTyp = b.nummerTyp;
+    this.nummer = b.nummer;
+  }
+
+  public AusbildungsstaetteCreateDto() {
+  }
 
   /**
    **/
@@ -145,5 +155,48 @@ public class AusbildungsstaetteCreateDto  implements Serializable {
   }
 
 
+  public static AusbildungsstaetteCreateDtoBuilder<?, ?> builder() {
+    return new AusbildungsstaetteCreateDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsstaetteCreateDtoBuilderImpl extends AusbildungsstaetteCreateDtoBuilder<AusbildungsstaetteCreateDto, AusbildungsstaetteCreateDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsstaetteCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsstaetteCreateDto build() {
+      return new AusbildungsstaetteCreateDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsstaetteCreateDtoBuilder<C extends AusbildungsstaetteCreateDto, B extends AusbildungsstaetteCreateDtoBuilder<C, B>>  {
+    private String nameDe;
+    private String nameFr;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
+    private String nummer;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nameDe(String nameDe) {
+      this.nameDe = nameDe;
+      return self();
+    }
+    public B nameFr(String nameFr) {
+      this.nameFr = nameFr;
+      return self();
+    }
+    public B nummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+      this.nummerTyp = nummerTyp;
+      return self();
+    }
+    public B nummer(String nummer) {
+      this.nummer = nummer;
+      return self();
+    }
+  }
 }
 

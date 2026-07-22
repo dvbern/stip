@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchsperiodeSelectError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeSelectErrorDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type;
   private @Valid LocalDate context;
+
+  protected GesuchsperiodeSelectErrorDto(GesuchsperiodeSelectErrorDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.context = b.context;
+  }
+
+  public GesuchsperiodeSelectErrorDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class GesuchsperiodeSelectErrorDto  implements Serializable {
   }
 
 
+  public static GesuchsperiodeSelectErrorDtoBuilder<?, ?> builder() {
+    return new GesuchsperiodeSelectErrorDtoBuilderImpl();
+  }
+
+  private static final class GesuchsperiodeSelectErrorDtoBuilderImpl extends GesuchsperiodeSelectErrorDtoBuilder<GesuchsperiodeSelectErrorDto, GesuchsperiodeSelectErrorDtoBuilderImpl> {
+
+    @Override
+    protected GesuchsperiodeSelectErrorDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchsperiodeSelectErrorDto build() {
+      return new GesuchsperiodeSelectErrorDto(this);
+    }
+  }
+
+  public static abstract class GesuchsperiodeSelectErrorDtoBuilder<C extends GesuchsperiodeSelectErrorDto, B extends GesuchsperiodeSelectErrorDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type;
+    private LocalDate context;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(ch.dvbern.stip.api.common.type.GesuchsperiodeSelectErrorType type) {
+      this.type = type;
+      return self();
+    }
+    public B context(LocalDate context) {
+      this.context = context;
+      return self();
+    }
+  }
 }
 

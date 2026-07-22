@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GeschwisterUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GeschwisterUpdateDto  implements Serializable {
   private @Valid UUID entryId;
@@ -33,6 +33,23 @@ public class GeschwisterUpdateDto  implements Serializable {
   private @Valid BigDecimal wohnsitzAnteilVater;
   private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid Boolean hidden;
+
+  protected GeschwisterUpdateDto(GeschwisterUpdateDtoBuilder<?, ?> b) {
+    this.entryId = b.entryId;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.wohnsitz = b.wohnsitz;
+    this.ausbildungssituation = b.ausbildungssituation;
+    this.nachname = b.nachname;
+    this.id = b.id;
+    this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
+    this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
+    this.geschwisterTyp = b.geschwisterTyp;
+    this.hidden = b.hidden;
+  }
+
+  public GeschwisterUpdateDto() {
+  }
 
   /**
    **/
@@ -301,5 +318,83 @@ public class GeschwisterUpdateDto  implements Serializable {
   }
 
 
+  public static GeschwisterUpdateDtoBuilder<?, ?> builder() {
+    return new GeschwisterUpdateDtoBuilderImpl();
+  }
+
+  private static final class GeschwisterUpdateDtoBuilderImpl extends GeschwisterUpdateDtoBuilder<GeschwisterUpdateDto, GeschwisterUpdateDtoBuilderImpl> {
+
+    @Override
+    protected GeschwisterUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GeschwisterUpdateDto build() {
+      return new GeschwisterUpdateDto(this);
+    }
+  }
+
+  public static abstract class GeschwisterUpdateDtoBuilder<C extends GeschwisterUpdateDto, B extends GeschwisterUpdateDtoBuilder<C, B>>  {
+    private UUID entryId;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
+    private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+    private String nachname;
+    private UUID id;
+    private BigDecimal wohnsitzAnteilMutter;
+    private BigDecimal wohnsitzAnteilVater;
+    private ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
+    private Boolean hidden;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B entryId(UUID entryId) {
+      this.entryId = entryId;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B ausbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
+      this.ausbildungssituation = ausbildungssituation;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B wohnsitzAnteilMutter(BigDecimal wohnsitzAnteilMutter) {
+      this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+      return self();
+    }
+    public B wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
+      this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+      return self();
+    }
+    public B geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+      this.geschwisterTyp = geschwisterTyp;
+      return self();
+    }
+    public B hidden(Boolean hidden) {
+      this.hidden = hidden;
+      return self();
+    }
+  }
 }
 

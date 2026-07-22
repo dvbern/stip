@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BeschwerdeVerlaufEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BeschwerdeVerlaufEntryDto  implements Serializable {
   private @Valid String kommentar;
@@ -25,6 +25,17 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid String userErstellt;
   private @Valid BeschwerdeEntscheidDto beschwerdeEntscheid;
+
+  protected BeschwerdeVerlaufEntryDto(BeschwerdeVerlaufEntryDtoBuilder<?, ?> b) {
+    this.kommentar = b.kommentar;
+    this.beschwerdeSetTo = b.beschwerdeSetTo;
+    this.timestampErstellt = b.timestampErstellt;
+    this.userErstellt = b.userErstellt;
+    this.beschwerdeEntscheid = b.beschwerdeEntscheid;
+  }
+
+  public BeschwerdeVerlaufEntryDto() {
+  }
 
   /**
    **/
@@ -168,5 +179,53 @@ public class BeschwerdeVerlaufEntryDto  implements Serializable {
   }
 
 
+  public static BeschwerdeVerlaufEntryDtoBuilder<?, ?> builder() {
+    return new BeschwerdeVerlaufEntryDtoBuilderImpl();
+  }
+
+  private static final class BeschwerdeVerlaufEntryDtoBuilderImpl extends BeschwerdeVerlaufEntryDtoBuilder<BeschwerdeVerlaufEntryDto, BeschwerdeVerlaufEntryDtoBuilderImpl> {
+
+    @Override
+    protected BeschwerdeVerlaufEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BeschwerdeVerlaufEntryDto build() {
+      return new BeschwerdeVerlaufEntryDto(this);
+    }
+  }
+
+  public static abstract class BeschwerdeVerlaufEntryDtoBuilder<C extends BeschwerdeVerlaufEntryDto, B extends BeschwerdeVerlaufEntryDtoBuilder<C, B>>  {
+    private String kommentar;
+    private Boolean beschwerdeSetTo;
+    private java.time.LocalDateTime timestampErstellt;
+    private String userErstellt;
+    private BeschwerdeEntscheidDto beschwerdeEntscheid;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B beschwerdeSetTo(Boolean beschwerdeSetTo) {
+      this.beschwerdeSetTo = beschwerdeSetTo;
+      return self();
+    }
+    public B timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B beschwerdeEntscheid(BeschwerdeEntscheidDto beschwerdeEntscheid) {
+      this.beschwerdeEntscheid = beschwerdeEntscheid;
+      return self();
+    }
+  }
 }
 

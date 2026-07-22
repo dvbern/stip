@@ -19,10 +19,14 @@ package ch.dvbern.stip.berechnung.adapter.bern.v1_0.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.util.DateRange;
+import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
@@ -39,45 +43,17 @@ public class TranchenBerechnungsresultatCalculator {
         final int gesuchsjahr,
         final BerechnungsStammdatenMapper berechnungsStammdatenMapper
     ) {
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
-        final var hasTeilzeitKinderDerEltern =
-            !BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular).isEmpty();
+        final GesuchFormular gesuchFormular = gesuchTranche.getGesuchFormular();
 
-        List<SteuerdatenTyp> steuerdatenTypsToPrioritize = new ArrayList<>();
+        List<SteuerdatenTyp> steuerdatenTypsToPrioritize = getSteuerdatenTypsToPrioritize(gesuchFormular);
 
-        if (gesuchFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
-            steuerdatenTypsToPrioritize.add(SteuerdatenTyp.FAMILIE);
-        } else {
-            if (hasTeilzeitKinderDerEltern) {
-                steuerdatenTypsToPrioritize.addAll(
-                    gesuchFormular.getSteuerdaten().stream().map(Steuerdaten::getSteuerdatenTyp).toList()
-                );
-            } else {
-                steuerdatenTypsToPrioritize.add(null);
-            }
-        }
-
-        final var hasTeilzeitKinderDerPia =
-            !gesuchFormular.getKinds()
-                .stream()
-                .filter(
-                    kind -> kind.getWohnsitzAnteilPia() > 0
-                    && kind.getWohnsitzAnteilPia() < 100
-                )
-                .toList()
-                .isEmpty();
-
-        final List<Boolean> teilzeitKinderBeiPiaAnrechnenVals = new ArrayList<>();
-        if (hasTeilzeitKinderDerPia) {
-            teilzeitKinderBeiPiaAnrechnenVals.addAll(List.of(Boolean.TRUE, Boolean.FALSE));
-        } else {
-            teilzeitKinderBeiPiaAnrechnenVals.add(null);
-        }
+        final List<Boolean> teilzeitKinderBeiPiaAnrechnenVals =
+            getTeilzeitKinderBeiPiaAnrechnenVals(gesuchFormular.getKinds());
 
         List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
-        for (final var teilzeitKinderBeiPiaAnrechnen : teilzeitKinderBeiPiaAnrechnenVals) {
-            for (final var steuerdatenTypToPrioritize : steuerdatenTypsToPrioritize) {
+        for (final Boolean teilzeitKinderBeiPiaAnrechnen : teilzeitKinderBeiPiaAnrechnenVals) {
+            for (final SteuerdatenTyp steuerdatenTypToPrioritize : steuerdatenTypsToPrioritize) {
                 berechnungsresultatDtoList.add(
                     TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
                         gesuchTranche,
@@ -92,6 +68,66 @@ public class TranchenBerechnungsresultatCalculator {
             }
         }
         return berechnungsresultatDtoList;
+    }
+
+    private List<Boolean> getTeilzeitKinderBeiPiaAnrechnenVals(
+        final Set<Kind> kinds
+    ) {
+        final boolean hasTeilzeitKinderDerPia = hasTeilzeitKinderDePia(kinds);
+
+        final List<Boolean> teilzeitKinderBeiPiaAnrechnenVals = new ArrayList<>();
+        if (hasTeilzeitKinderDerPia) {
+            teilzeitKinderBeiPiaAnrechnenVals.addAll(List.of(Boolean.TRUE, Boolean.FALSE));
+        } else {
+            teilzeitKinderBeiPiaAnrechnenVals.add(null);
+        }
+        return teilzeitKinderBeiPiaAnrechnenVals;
+    }
+
+    private boolean hasTeilzeitKinderDePia(
+        final Set<Kind> kinds
+    ) {
+        return !kinds
+            .stream()
+            .filter(
+                kind -> kind.getWohnsitzAnteilPia() > 0
+                && kind.getWohnsitzAnteilPia() < 100
+            )
+            .toList()
+            .isEmpty();
+    }
+
+    private List<SteuerdatenTyp> getSteuerdatenTypsToPrioritize(
+        final GesuchFormular gesuchFormular
+    ) {
+        final boolean hasTeilzeitKinderDerEltern =
+            !BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular).isEmpty();
+
+        List<SteuerdatenTyp> steuerdatenTypsToPrioritize = new ArrayList<>();
+
+        if (gesuchFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
+            steuerdatenTypsToPrioritize.add(SteuerdatenTyp.FAMILIE);
+        } else {
+            if (hasTeilzeitKinderDerEltern) {
+                steuerdatenTypsToPrioritize.addAll(
+                    gesuchFormular.getSteuerdaten().stream().map(Steuerdaten::getSteuerdatenTyp).toList()
+                );
+                if (gesuchFormular.getFamiliensituation().getGerichtlicheAlimentenregelung()) {
+                    if (gesuchFormular.getFamiliensituation().getWerZahltAlimente() != Elternschaftsteilung.GEMEINSAM) {
+                        steuerdatenTypsToPrioritize.add(
+                            switch (gesuchFormular.getFamiliensituation().getWerZahltAlimente()) {
+                                case MUTTER -> SteuerdatenTyp.MUTTER;
+                                case VATER -> SteuerdatenTyp.VATER;
+                                case null, default -> throw new IllegalStateException("Unreachable");
+                            }
+                        );
+                    }
+                }
+            } else {
+                steuerdatenTypsToPrioritize.add(null);
+            }
+        }
+        return steuerdatenTypsToPrioritize;
     }
 
 }

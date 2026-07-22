@@ -17,13 +17,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersonenHaushaltGruppe")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersonenHaushaltGruppeDto  implements Serializable {
   private @Valid ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ;
   private @Valid List<String> names = new ArrayList<>();
+
+  protected PersonenHaushaltGruppeDto(PersonenHaushaltGruppeDtoBuilder<?, ?> b) {
+    this.typ = b.typ;
+    this.names = b.names;
+  }
+
+  public PersonenHaushaltGruppeDto() {
+  }
 
   /**
    **/
@@ -121,5 +129,38 @@ public class PersonenHaushaltGruppeDto  implements Serializable {
   }
 
 
+  public static PersonenHaushaltGruppeDtoBuilder<?, ?> builder() {
+    return new PersonenHaushaltGruppeDtoBuilderImpl();
+  }
+
+  private static final class PersonenHaushaltGruppeDtoBuilderImpl extends PersonenHaushaltGruppeDtoBuilder<PersonenHaushaltGruppeDto, PersonenHaushaltGruppeDtoBuilderImpl> {
+
+    @Override
+    protected PersonenHaushaltGruppeDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersonenHaushaltGruppeDto build() {
+      return new PersonenHaushaltGruppeDto(this);
+    }
+  }
+
+  public static abstract class PersonenHaushaltGruppeDtoBuilder<C extends PersonenHaushaltGruppeDto, B extends PersonenHaushaltGruppeDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ;
+    private List<String> names = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B typ(ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B names(List<String> names) {
+      this.names = names;
+      return self();
+    }
+  }
 }
 

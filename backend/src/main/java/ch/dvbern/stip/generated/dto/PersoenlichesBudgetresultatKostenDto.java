@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("PersoenlichesBudgetresultatKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer total;
@@ -40,6 +40,27 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   private @Valid Integer anteilLebenshaltungskosten;
   private @Valid Integer fahrkostenPartner;
   private @Valid Integer verpflegungPartner;
+
+  protected PersoenlichesBudgetresultatKostenDto(PersoenlichesBudgetresultatKostenDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.ausbildungskosten = b.ausbildungskosten;
+    this.ausbildungskostenTotal = b.ausbildungskostenTotal;
+    this.fahrkosten = b.fahrkosten;
+    this.fahrkostenTotal = b.fahrkostenTotal;
+    this.verpflegungskosten = b.verpflegungskosten;
+    this.grundbedarf = b.grundbedarf;
+    this.wohnkosten = b.wohnkosten;
+    this.medizinischeGrundversorgung = b.medizinischeGrundversorgung;
+    this.medizinischeGrundversorgungTotal = b.medizinischeGrundversorgungTotal;
+    this.betreuungskostenKinder = b.betreuungskostenKinder;
+    this.steuern = b.steuern;
+    this.anteilLebenshaltungskosten = b.anteilLebenshaltungskosten;
+    this.fahrkostenPartner = b.fahrkostenPartner;
+    this.verpflegungPartner = b.verpflegungPartner;
+  }
+
+  public PersoenlichesBudgetresultatKostenDto() {
+  }
 
   /**
    **/
@@ -408,5 +429,103 @@ public class PersoenlichesBudgetresultatKostenDto  implements Serializable {
   }
 
 
+  public static PersoenlichesBudgetresultatKostenDtoBuilder<?, ?> builder() {
+    return new PersoenlichesBudgetresultatKostenDtoBuilderImpl();
+  }
+
+  private static final class PersoenlichesBudgetresultatKostenDtoBuilderImpl extends PersoenlichesBudgetresultatKostenDtoBuilder<PersoenlichesBudgetresultatKostenDto, PersoenlichesBudgetresultatKostenDtoBuilderImpl> {
+
+    @Override
+    protected PersoenlichesBudgetresultatKostenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersoenlichesBudgetresultatKostenDto build() {
+      return new PersoenlichesBudgetresultatKostenDto(this);
+    }
+  }
+
+  public static abstract class PersoenlichesBudgetresultatKostenDtoBuilder<C extends PersoenlichesBudgetresultatKostenDto, B extends PersoenlichesBudgetresultatKostenDtoBuilder<C, B>>  {
+    private Integer total;
+    private Integer ausbildungskosten;
+    private Integer ausbildungskostenTotal;
+    private Integer fahrkosten;
+    private Integer fahrkostenTotal;
+    private Integer verpflegungskosten;
+    private Integer grundbedarf;
+    private Integer wohnkosten;
+    private List<PersonValueItemDto> medizinischeGrundversorgung = new ArrayList<>();
+    private Integer medizinischeGrundversorgungTotal;
+    private Integer betreuungskostenKinder;
+    private Integer steuern;
+    private Integer anteilLebenshaltungskosten;
+    private Integer fahrkostenPartner;
+    private Integer verpflegungPartner;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B ausbildungskosten(Integer ausbildungskosten) {
+      this.ausbildungskosten = ausbildungskosten;
+      return self();
+    }
+    public B ausbildungskostenTotal(Integer ausbildungskostenTotal) {
+      this.ausbildungskostenTotal = ausbildungskostenTotal;
+      return self();
+    }
+    public B fahrkosten(Integer fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B fahrkostenTotal(Integer fahrkostenTotal) {
+      this.fahrkostenTotal = fahrkostenTotal;
+      return self();
+    }
+    public B verpflegungskosten(Integer verpflegungskosten) {
+      this.verpflegungskosten = verpflegungskosten;
+      return self();
+    }
+    public B grundbedarf(Integer grundbedarf) {
+      this.grundbedarf = grundbedarf;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B medizinischeGrundversorgung(List<PersonValueItemDto> medizinischeGrundversorgung) {
+      this.medizinischeGrundversorgung = medizinischeGrundversorgung;
+      return self();
+    }
+    public B medizinischeGrundversorgungTotal(Integer medizinischeGrundversorgungTotal) {
+      this.medizinischeGrundversorgungTotal = medizinischeGrundversorgungTotal;
+      return self();
+    }
+    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
+      this.betreuungskostenKinder = betreuungskostenKinder;
+      return self();
+    }
+    public B steuern(Integer steuern) {
+      this.steuern = steuern;
+      return self();
+    }
+    public B anteilLebenshaltungskosten(Integer anteilLebenshaltungskosten) {
+      this.anteilLebenshaltungskosten = anteilLebenshaltungskosten;
+      return self();
+    }
+    public B fahrkostenPartner(Integer fahrkostenPartner) {
+      this.fahrkostenPartner = fahrkostenPartner;
+      return self();
+    }
+    public B verpflegungPartner(Integer verpflegungPartner) {
+      this.verpflegungPartner = verpflegungPartner;
+      return self();
+    }
+  }
 }
 

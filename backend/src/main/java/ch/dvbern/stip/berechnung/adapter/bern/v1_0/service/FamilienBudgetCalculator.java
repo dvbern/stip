@@ -29,13 +29,17 @@ import ch.dvbern.stip.api.eltern.entity.Eltern;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
 import ch.dvbern.stip.berechnung.domain.dto.PersonValueList;
 import ch.dvbern.stip.berechnung.domain.util.InputUtils;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDtoBuilder;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatEinnahmenDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatEinnahmenDtoBuilder;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDto;
+import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDtoBuilder;
 import lombok.experimental.UtilityClass;
 
 import static ch.dvbern.stip.berechnung.domain.util.InputUtils.toJahresWert;
@@ -52,14 +56,13 @@ public class FamilienBudgetCalculator {
         // THIS IS WEIRD, for some reason in some of the calculations (Integrationsbeitrag) ALL the geschwisters are
         // used even if they dont live here. For others only the ones in this haushalt are relevant. Weird but true.
         // This number is ALL the Geschwisters + PiA.
-        // TODO: Verify again that each time this is used it should be used
         final int anzahlKinderInAusbildung,
         final boolean halbierungElternbeitrag,
         final int gesuchsjahr
     ) {
-        final var steuerdatenTyp = steuerdaten.getSteuerdatenTyp();
+        final SteuerdatenTyp steuerdatenTyp = steuerdaten.getSteuerdatenTyp();
 
-        var anzahlPersonenImHaushalt = 0;
+        int anzahlPersonenImHaushalt = 0;
         final List<String> haushaltNames = new ArrayList<>();
 
         String vorname = null;
@@ -71,26 +74,26 @@ public class FamilienBudgetCalculator {
         String sozialversicherungsnummerPartner = null;
         LocalDate geburtsdatumPartner = null;
 
-        for (final Eltern eltern : elterns) {
+        for (final Eltern elternTeil : elterns) {
             anzahlPersonenImHaushalt += 1;
-            haushaltNames.add(eltern.getFullName());
+            haushaltNames.add(elternTeil.getFullName());
 
-            if (elterns.getFirst().equals(eltern)) {
-                vorname = eltern.getVorname();
-                nachname = eltern.getNachname();
-                sozialversicherungsnummer = eltern.getSozialversicherungsnummer();
-                geburtsdatum = eltern.getGeburtsdatum();
+            if (elterns.getFirst().equals(elternTeil)) {
+                vorname = elternTeil.getVorname();
+                nachname = elternTeil.getNachname();
+                sozialversicherungsnummer = elternTeil.getSozialversicherungsnummer();
+                geburtsdatum = elternTeil.getGeburtsdatum();
             } else {
-                vornamePartner = eltern.getVorname();
-                nachnamePartner = eltern.getNachname();
-                sozialversicherungsnummerPartner = eltern.getSozialversicherungsnummer();
-                geburtsdatumPartner = eltern.getGeburtsdatum();
+                vornamePartner = elternTeil.getVorname();
+                nachnamePartner = elternTeil.getNachname();
+                sozialversicherungsnummerPartner = elternTeil.getSozialversicherungsnummer();
+                geburtsdatumPartner = elternTeil.getGeburtsdatum();
             }
 
             // If the Elterns are separated there can! only be one eltern in elterns
-            if (Objects.requireNonNullElse(eltern.getWiederverheiratet(), false)) {
+            if (Objects.requireNonNullElse(elternTeil.getWiederverheiratet(), false)) {
                 anzahlPersonenImHaushalt += 1;
-                haushaltNames.add(BernCalculatorUtil.getElternPartnerName(eltern.getElternTyp()));
+                haushaltNames.add(BernCalculatorUtil.getElternPartnerName(elternTeil.getElternTyp()));
             }
         }
 
@@ -99,12 +102,12 @@ public class FamilienBudgetCalculator {
             haushaltNames.add(kind.getFullName());
         }
 
-        final var einnahmen = calculateEinnahmen(
+        final FamilienBudgetresultatEinnahmenDto einnahmen = calculateEinnahmen(
             steuerdaten,
             steuererklaerung,
             gesuchsperiode
         );
-        final var kosten = calculateKosten(
+        final FamilienBudgetresultatKostenDto kosten = calculateKosten(
             elterns,
             steuerdaten,
             gesuchsperiode,
@@ -114,17 +117,17 @@ public class FamilienBudgetCalculator {
             gesuchsjahr
         );
 
-        final var einnahmenMinusKosten =
+        final BigDecimal einnahmenMinusKosten =
             BigDecimal.valueOf(einnahmen.getTotal()).subtract(BigDecimal.valueOf(kosten.getTotal()));
-        var total = einnahmenMinusKosten;
+        BigDecimal total = einnahmenMinusKosten;
 
-        var einnahmeUeberschuss = BigDecimal.ZERO;
-        var proKopfTeilungKinderInAusbildung = 0;
-        var anrechenbareElterlicheLeistung = BigDecimal.ZERO;
-        var halbierungsReduktion = BigDecimal.ZERO;
-        var fehlbetrag = BigDecimal.ZERO;
-        var proKopfTeilung = 0;
-        var ungedeckterAnteilLebenshaltungskosten = BigDecimal.ZERO;
+        BigDecimal einnahmeUeberschuss = BigDecimal.ZERO;
+        int proKopfTeilungKinderInAusbildung = 0;
+        BigDecimal anrechenbareElterlicheLeistung = BigDecimal.ZERO;
+        BigDecimal halbierungsReduktion = BigDecimal.ZERO;
+        BigDecimal fehlbetrag = BigDecimal.ZERO;
+        int proKopfTeilung = 0;
+        BigDecimal ungedeckterAnteilLebenshaltungskosten = BigDecimal.ZERO;
 
         final boolean antragsstellerWohntInDiesemHaushalt = kinderImHaushalt.stream()
             .anyMatch(
@@ -158,7 +161,7 @@ public class FamilienBudgetCalculator {
             }
         }
 
-        final var teilzeitKinderProzente = kinderImHaushalt.stream()
+        final int teilzeitKinderProzente = kinderImHaushalt.stream()
             .filter(
                 abstractFamilieEntity -> abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTyp).intValue() > 0
                 && abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTyp).intValue() < 100
@@ -166,20 +169,16 @@ public class FamilienBudgetCalculator {
             .mapToInt(abstractFamilieEntity -> abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTyp).intValue())
             .sum();
 
-        final var steuerjahr = steuerdaten.getSteuerjahr();
-        final var veranlagungscode = steuerdaten.getVeranlagungsStatus();
+        final Integer steuerjahr = steuerdaten.getSteuerjahr();
+        final String veranlagungscode = steuerdaten.getVeranlagungsStatus();
 
-        return new FamilienBudgetresultatDto()
-            .steuerdatenTyp(steuerdatenTyp)
+        return FamilienBudgetresultatDtoBuilder.familienBudgetresultatDto()
             .haushaltNames(haushaltNames)
+            .steuerdatenTyp(steuerdatenTyp)
             .vorname(vorname)
             .nachname(nachname)
             .sozialversicherungsnummer(sozialversicherungsnummer)
             .geburtsdatum(geburtsdatum)
-            .vornamePartner(vornamePartner)
-            .nachnamePartner(nachnamePartner)
-            .sozialversicherungsnummerPartner(sozialversicherungsnummerPartner)
-            .geburtsdatumPartner(geburtsdatumPartner)
             .steuerjahr(steuerjahr)
             .veranlagungscode(veranlagungscode)
             .total(total.intValue())
@@ -195,7 +194,12 @@ public class FamilienBudgetCalculator {
             .ungedeckterAnteilLebenshaltungskosten(ungedeckterAnteilLebenshaltungskosten.intValue())
             .teilzeitKinderProzente(teilzeitKinderProzente)
             .einnahmen(einnahmen)
-            .kosten(kosten);
+            .kosten(kosten)
+            .vornamePartner(vornamePartner)
+            .nachnamePartner(nachnamePartner)
+            .sozialversicherungsnummerPartner(sozialversicherungsnummerPartner)
+            .geburtsdatumPartner(geburtsdatumPartner)
+            .build();
     }
 
     private FamilienBudgetresultatEinnahmenDto calculateEinnahmen(
@@ -203,20 +207,20 @@ public class FamilienBudgetCalculator {
         final Steuererklaerung steuererklaerung,
         final Gesuchsperiode gesuchsperiode
     ) {
-        final var totalEinkuenfte = Objects.requireNonNullElse(steuerdaten.getTotalEinkuenfte(), 0);
-        final var ergaenzungsleistungen = Objects.requireNonNullElse(steuererklaerung.getErgaenzungsleistungen(), 0);
-        final var einnahmenBGSA = Objects.requireNonNullElse(steuererklaerung.getEinnahmenBGSA(), 0);
-        final var andereEinnahmen = Objects.requireNonNullElse(steuererklaerung.getAndereEinnahmen(), 0);
+        final int totalEinkuenfte = BernCalculatorUtil.intOrZero(steuerdaten.getTotalEinkuenfte());
+        final int ergaenzungsleistungen = BernCalculatorUtil.intOrZero(steuererklaerung.getErgaenzungsleistungen());
+        final int einnahmenBGSA = BernCalculatorUtil.intOrZero(steuererklaerung.getEinnahmenBGSA());
+        final int andereEinnahmen = BernCalculatorUtil.intOrZero(steuererklaerung.getAndereEinnahmen());
 
-        final var eigenmietwert = Objects.requireNonNullElse(steuerdaten.getEigenmietwert(), 0);
-        final var unterhaltsbeitraege =
-            toJahresWert(Objects.requireNonNullElse(steuererklaerung.getUnterhaltsbeitraege(), 0));
-        final var saeule3a = BernCalculatorUtil.getSaeule3a(steuerdaten, gesuchsperiode);
-        final var saeule2 = BernCalculatorUtil.getSaeule2(steuerdaten);
+        final int eigenmietwert = BernCalculatorUtil.intOrZero(steuerdaten.getEigenmietwert());
+        final int unterhaltsbeitraege =
+            toJahresWert(BernCalculatorUtil.intOrZero(steuererklaerung.getUnterhaltsbeitraege()));
+        final int saeule3a = BernCalculatorUtil.getSaeule3a(steuerdaten, gesuchsperiode);
+        final int saeule2 = BernCalculatorUtil.getSaeule2(steuerdaten);
 
-        final var renten = Objects.requireNonNullElse(steuererklaerung.getRenten(), 0);
+        final int renten = BernCalculatorUtil.intOrZero(steuererklaerung.getRenten());
 
-        final var einnahmenBeforeVermoegen = max(
+        final int einnahmenBeforeVermoegen = max(
             totalEinkuenfte
             + InputUtils.sumNullables(
                 ergaenzungsleistungen,
@@ -234,18 +238,18 @@ public class FamilienBudgetCalculator {
             0
         );
 
-        final var steuerbaresVermoegen = steuerdaten.getVermoegen();
+        final Integer steuerbaresVermoegen = steuerdaten.getVermoegen();
 
-        final var anrechenbaresVermoegen = BernCalculatorUtil.getAnrechenbaresVermoegen(
+        final int anrechenbaresVermoegen = BernCalculatorUtil.getAnrechenbaresVermoegen(
             steuerbaresVermoegen,
             steuerdaten.getIsArbeitsverhaeltnisSelbstaendig(),
             gesuchsperiode
         );
 
-        final var einnahmen = einnahmenBeforeVermoegen + anrechenbaresVermoegen;
+        final int einnahmen = einnahmenBeforeVermoegen + anrechenbaresVermoegen;
 
         // Set calculated values on dto
-        return new FamilienBudgetresultatEinnahmenDto()
+        return FamilienBudgetresultatEinnahmenDtoBuilder.familienBudgetresultatEinnahmenDto()
             .total(einnahmen)
             .totalEinkuenfte(totalEinkuenfte)
             .einnahmenBGSA(einnahmenBGSA)
@@ -259,7 +263,8 @@ public class FamilienBudgetCalculator {
             .einkommensfreibetrag(gesuchsperiode.getEinkommensfreibetrag())
             .zwischentotal(einnahmenBeforeVermoegen)
             .anrechenbaresVermoegen(anrechenbaresVermoegen)
-            .steuerbaresVermoegen(steuerbaresVermoegen);
+            .steuerbaresVermoegen(steuerbaresVermoegen)
+            .build();
     }
 
     private FamilienBudgetresultatKostenDto calculateKosten(
@@ -272,48 +277,48 @@ public class FamilienBudgetCalculator {
         final int gesuchsjahr
     ) {
 
-        final var grundbedarf = BernCalculatorUtil.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false);
-        final var effektiveWohnkosten = BernCalculatorUtil.getEffektiveWohnkostenFamilie(
+        final int grundbedarf = BernCalculatorUtil.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false);
+        final int effektiveWohnkosten = BernCalculatorUtil.getEffektiveWohnkostenFamilie(
             InputUtils.toJahresWert(elterns.getFirst().getWohnkosten()),
             gesuchsperiode,
             anzahlPersonenImHaushalt
         );
-        final var kantonsGemeindesteuern = Objects.requireNonNullElse(steuerdaten.getSteuernKantonGemeinde(), 0);
-        final var bundessteuern = Objects.requireNonNullElse(steuerdaten.getSteuernBund(), 0);
+        final int kantonsGemeindesteuern = BernCalculatorUtil.intOrZero(steuerdaten.getSteuernKantonGemeinde());
+        final int bundessteuern = BernCalculatorUtil.intOrZero(steuerdaten.getSteuernBund());
 
-        final var integrationszulage = gesuchsperiode.getIntegrationszulage();
-        final var integrationszulageTotal = Integer.min(
+        final Integer integrationszulage = gesuchsperiode.getIntegrationszulage();
+        final int integrationszulageTotal = Integer.min(
             gesuchsperiode.getIntegrationszulage() * anzahlKinderInAusbildung,
             gesuchsperiode.getLimiteEkFreibetragIntegrationszulage() - gesuchsperiode.getEinkommensfreibetrag()
         );
 
-        final var verpflegungskostens = new PersonValueList();
-        final var fahrkostens = new PersonValueList();
+        final PersonValueList verpflegungskostens = new PersonValueList();
+        final PersonValueList fahrkostens = new PersonValueList();
 
         int medizinischeGrundversorgung = 0;
-        for (final Eltern eltern : elterns) {
-            if (elterns.indexOf(eltern) == 0) {
-                verpflegungskostens.setPersonValue(eltern.getVorname(), steuerdaten.getVerpflegung());
-                fahrkostens.setPersonValue(eltern.getVorname(), steuerdaten.getFahrkosten());
+        for (final Eltern elternTeil : elterns) {
+            if (elterns.indexOf(elternTeil) == 0) {
+                verpflegungskostens.setPersonValue(elternTeil.getVorname(), steuerdaten.getVerpflegung());
+                fahrkostens.setPersonValue(elternTeil.getVorname(), steuerdaten.getFahrkosten());
             } else {
-                verpflegungskostens.setPartnerValue(eltern.getVorname(), steuerdaten.getVerpflegungPartner());
-                fahrkostens.setPartnerValue(eltern.getVorname(), steuerdaten.getFahrkostenPartner());
+                verpflegungskostens.setPartnerValue(elternTeil.getVorname(), steuerdaten.getVerpflegungPartner());
+                fahrkostens.setPartnerValue(elternTeil.getVorname(), steuerdaten.getFahrkostenPartner());
             }
 
             medizinischeGrundversorgung += BernCalculatorUtil.getMedizinischeGrundversorgung(
-                eltern.getGeburtsdatum(),
+                elternTeil.getGeburtsdatum(),
                 gesuchsjahr,
                 gesuchsperiode
             );
 
             // If the Elterns are separated there can! only be one eltern in elterns
-            if (Objects.requireNonNullElse(eltern.getWiederverheiratet(), false)) {
+            if (Objects.requireNonNullElse(elternTeil.getWiederverheiratet(), false)) {
                 verpflegungskostens.setPersonValue(
-                    BernCalculatorUtil.getElternPartnerName(eltern.getElternTyp()),
+                    BernCalculatorUtil.getElternPartnerName(elternTeil.getElternTyp()),
                     steuerdaten.getVerpflegungPartner()
                 );
                 fahrkostens.setPersonValue(
-                    BernCalculatorUtil.getElternPartnerName(eltern.getElternTyp()),
+                    BernCalculatorUtil.getElternPartnerName(elternTeil.getElternTyp()),
                     steuerdaten.getFahrkostenPartner()
                 );
                 medizinischeGrundversorgung += gesuchsperiode.getErwachsene2599();
@@ -328,10 +333,10 @@ public class FamilienBudgetCalculator {
             );
         }
 
-        final var fahrkostenTotal = InputUtils.sumValues(fahrkostens.toList());
-        final var verpflegungskostenTotal = InputUtils.sumValues(verpflegungskostens.toList());
+        final int fahrkostenTotal = InputUtils.sumValues(fahrkostens.toList());
+        final int verpflegungskostenTotal = InputUtils.sumValues(verpflegungskostens.toList());
 
-        final var ausgaben =
+        final int ausgaben =
             grundbedarf
             + InputUtils.sumNullables(
                 effektiveWohnkosten,
@@ -344,7 +349,7 @@ public class FamilienBudgetCalculator {
             );
 
         // Set calculated values on dto
-        return new FamilienBudgetresultatKostenDto()
+        return FamilienBudgetresultatKostenDtoBuilder.familienBudgetresultatKostenDto()
             .total(ausgaben)
             .grundbedarf(grundbedarf)
             .wohnkosten(effektiveWohnkosten)
@@ -357,6 +362,7 @@ public class FamilienBudgetCalculator {
             .fahrkosten(fahrkostens.toList())
             .fahrkostenTotal(fahrkostenTotal)
             .verpflegung(verpflegungskostens.toList())
-            .verpflegungTotal(verpflegungskostenTotal);
+            .verpflegungTotal(verpflegungskostenTotal)
+            .build();
     }
 }

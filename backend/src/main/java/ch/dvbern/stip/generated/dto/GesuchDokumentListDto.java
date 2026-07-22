@@ -19,13 +19,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokumentList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentListDto  implements Serializable {
   private @Valid List<GesuchDokumentEntryDto> entrys = new ArrayList<>();
   private @Valid List<GesuchDokumentDto> dokuments = new ArrayList<>();
+
+  protected GesuchDokumentListDto(GesuchDokumentListDtoBuilder<?, ?> b) {
+    this.entrys = b.entrys;
+    this.dokuments = b.dokuments;
+  }
+
+  public GesuchDokumentListDto() {
+  }
 
   /**
    **/
@@ -139,5 +147,38 @@ public class GesuchDokumentListDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentListDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentListDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentListDtoBuilderImpl extends GesuchDokumentListDtoBuilder<GesuchDokumentListDto, GesuchDokumentListDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentListDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentListDto build() {
+      return new GesuchDokumentListDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentListDtoBuilder<C extends GesuchDokumentListDto, B extends GesuchDokumentListDtoBuilder<C, B>>  {
+    private List<GesuchDokumentEntryDto> entrys = new ArrayList<>();
+    private List<GesuchDokumentDto> dokuments = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B entrys(List<GesuchDokumentEntryDto> entrys) {
+      this.entrys = entrys;
+      return self();
+    }
+    public B dokuments(List<GesuchDokumentDto> dokuments) {
+      this.dokuments = dokuments;
+      return self();
+    }
+  }
 }
 

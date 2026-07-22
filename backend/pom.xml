@@ -780,12 +780,14 @@
                     <interfaceOnly>true</interfaceOnly>
                     <returnResponse>false</returnResponse>
                     <additionalModelTypeAnnotations>
-                      @lombok.NoArgsConstructor
+<!--                      @lombok.NoArgsConstructor-->
                       @lombok.AllArgsConstructor
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                      @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
                     </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
+                    <generateBuilders>true</generateBuilders>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoAusbildungDto  implements Serializable {
   private @Valid String ausbildungsstaette;
@@ -30,6 +30,22 @@ public class DemoAusbildungDto  implements Serializable {
   private @Valid LocalDate ausbildungEnd;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
   private @Valid Boolean ausbildungNichtGefunden;
+
+  protected DemoAusbildungDto(DemoAusbildungDtoBuilder<?, ?> b) {
+    this.ausbildungsstaette = b.ausbildungsstaette;
+    this.ausbildungsgang = b.ausbildungsgang;
+    this.berufsbezeichnungFachrichtung = b.berufsbezeichnungFachrichtung;
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.isAusbildungAusland = b.isAusbildungAusland;
+    this.ausbildungBeginn = b.ausbildungBeginn;
+    this.ausbildungEnd = b.ausbildungEnd;
+    this.pensum = b.pensum;
+    this.ausbildungNichtGefunden = b.ausbildungNichtGefunden;
+  }
+
+  public DemoAusbildungDto() {
+  }
 
   /**
    **/
@@ -278,5 +294,78 @@ public class DemoAusbildungDto  implements Serializable {
   }
 
 
+  public static DemoAusbildungDtoBuilder<?, ?> builder() {
+    return new DemoAusbildungDtoBuilderImpl();
+  }
+
+  private static final class DemoAusbildungDtoBuilderImpl extends DemoAusbildungDtoBuilder<DemoAusbildungDto, DemoAusbildungDtoBuilderImpl> {
+
+    @Override
+    protected DemoAusbildungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoAusbildungDto build() {
+      return new DemoAusbildungDto(this);
+    }
+  }
+
+  public static abstract class DemoAusbildungDtoBuilder<C extends DemoAusbildungDto, B extends DemoAusbildungDtoBuilder<C, B>>  {
+    private String ausbildungsstaette;
+    private String ausbildungsgang;
+    private String berufsbezeichnungFachrichtung;
+    private String plz;
+    private String ort;
+    private Boolean isAusbildungAusland;
+    private LocalDate ausbildungBeginn;
+    private LocalDate ausbildungEnd;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+    private Boolean ausbildungNichtGefunden;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildungsstaette(String ausbildungsstaette) {
+      this.ausbildungsstaette = ausbildungsstaette;
+      return self();
+    }
+    public B ausbildungsgang(String ausbildungsgang) {
+      this.ausbildungsgang = ausbildungsgang;
+      return self();
+    }
+    public B berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+      this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
+      return self();
+    }
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B isAusbildungAusland(Boolean isAusbildungAusland) {
+      this.isAusbildungAusland = isAusbildungAusland;
+      return self();
+    }
+    public B ausbildungBeginn(LocalDate ausbildungBeginn) {
+      this.ausbildungBeginn = ausbildungBeginn;
+      return self();
+    }
+    public B ausbildungEnd(LocalDate ausbildungEnd) {
+      this.ausbildungEnd = ausbildungEnd;
+      return self();
+    }
+    public B pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
+      this.pensum = pensum;
+      return self();
+    }
+    public B ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+      this.ausbildungNichtGefunden = ausbildungNichtGefunden;
+      return self();
+    }
+  }
 }
 

@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Sachbearbeiter")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterDto  implements Serializable {
   private @Valid String vorname;
@@ -35,6 +35,23 @@ public class SachbearbeiterDto  implements Serializable {
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid String redirectUri;
+
+  protected SachbearbeiterDto(SachbearbeiterDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.telefonnummer = b.telefonnummer;
+    this.email = b.email;
+    this.funktionDe = b.funktionDe;
+    this.funktionFr = b.funktionFr;
+    this.sachbearbeiterRollen = b.sachbearbeiterRollen;
+    this.id = b.id;
+    this.benutzereinstellungen = b.benutzereinstellungen;
+    this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
+    this.redirectUri = b.redirectUri;
+  }
+
+  public SachbearbeiterDto() {
+  }
 
   /**
    **/
@@ -318,5 +335,83 @@ public class SachbearbeiterDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterDtoBuilderImpl extends SachbearbeiterDtoBuilder<SachbearbeiterDto, SachbearbeiterDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterDto build() {
+      return new SachbearbeiterDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterDtoBuilder<C extends SachbearbeiterDto, B extends SachbearbeiterDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String telefonnummer;
+    private String email;
+    private String funktionDe;
+    private String funktionFr;
+    private List<String> sachbearbeiterRollen = new ArrayList<>();
+    private UUID id;
+    private BenutzereinstellungenUpdateDto benutzereinstellungen;
+    private Boolean nutzungsbedingungenAkzeptiert;
+    private String redirectUri;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B telefonnummer(String telefonnummer) {
+      this.telefonnummer = telefonnummer;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B funktionDe(String funktionDe) {
+      this.funktionDe = funktionDe;
+      return self();
+    }
+    public B funktionFr(String funktionFr) {
+      this.funktionFr = funktionFr;
+      return self();
+    }
+    public B sachbearbeiterRollen(List<String> sachbearbeiterRollen) {
+      this.sachbearbeiterRollen = sachbearbeiterRollen;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+      this.benutzereinstellungen = benutzereinstellungen;
+      return self();
+    }
+    public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+      this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+      return self();
+    }
+    public B redirectUri(String redirectUri) {
+      this.redirectUri = redirectUri;
+      return self();
+    }
+  }
 }
 

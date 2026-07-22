@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchHeaderDto  implements Serializable {
   private @Valid List<VerfuegtGesuchDto> versions = new ArrayList<>();
@@ -32,6 +32,17 @@ public class GesuchHeaderDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
   private @Valid GesuchInfoDto gesuchInfo;
   private @Valid InitialGesuchsDto initial;
+
+  protected GesuchHeaderDto(GesuchHeaderDtoBuilder<?, ?> b) {
+    this.versions = b.versions;
+    this.aenderungs = b.aenderungs;
+    this.currentTranches = b.currentTranches;
+    this.gesuchInfo = b.gesuchInfo;
+    this.initial = b.initial;
+  }
+
+  public GesuchHeaderDto() {
+  }
 
   /**
    **/
@@ -207,5 +218,53 @@ public class GesuchHeaderDto  implements Serializable {
   }
 
 
+  public static GesuchHeaderDtoBuilder<?, ?> builder() {
+    return new GesuchHeaderDtoBuilderImpl();
+  }
+
+  private static final class GesuchHeaderDtoBuilderImpl extends GesuchHeaderDtoBuilder<GesuchHeaderDto, GesuchHeaderDtoBuilderImpl> {
+
+    @Override
+    protected GesuchHeaderDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchHeaderDto build() {
+      return new GesuchHeaderDto(this);
+    }
+  }
+
+  public static abstract class GesuchHeaderDtoBuilder<C extends GesuchHeaderDto, B extends GesuchHeaderDtoBuilder<C, B>>  {
+    private List<VerfuegtGesuchDto> versions = new ArrayList<>();
+    private GesuchAenderungsDto aenderungs;
+    private List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
+    private GesuchInfoDto gesuchInfo;
+    private InitialGesuchsDto initial;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B versions(List<VerfuegtGesuchDto> versions) {
+      this.versions = versions;
+      return self();
+    }
+    public B aenderungs(GesuchAenderungsDto aenderungs) {
+      this.aenderungs = aenderungs;
+      return self();
+    }
+    public B currentTranches(List<GesuchTrancheSlimDto> currentTranches) {
+      this.currentTranches = currentTranches;
+      return self();
+    }
+    public B gesuchInfo(GesuchInfoDto gesuchInfo) {
+      this.gesuchInfo = gesuchInfo;
+      return self();
+    }
+    public B initial(InitialGesuchsDto initial) {
+      this.initial = initial;
+      return self();
+    }
+  }
 }
 

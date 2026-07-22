@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataErrorDto  implements Serializable {
   private @Valid String internalMessage;
   private @Valid String errorClass;
   private @Valid String cause;
   private @Valid List<ValidationMessageDto> validationErrors;
+
+  protected DemoDataErrorDto(DemoDataErrorDtoBuilder<?, ?> b) {
+    this.internalMessage = b.internalMessage;
+    this.errorClass = b.errorClass;
+    this.cause = b.cause;
+    this.validationErrors = b.validationErrors;
+  }
+
+  public DemoDataErrorDto() {
+  }
 
   /**
    **/
@@ -164,5 +174,48 @@ public class DemoDataErrorDto  implements Serializable {
   }
 
 
+  public static DemoDataErrorDtoBuilder<?, ?> builder() {
+    return new DemoDataErrorDtoBuilderImpl();
+  }
+
+  private static final class DemoDataErrorDtoBuilderImpl extends DemoDataErrorDtoBuilder<DemoDataErrorDto, DemoDataErrorDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataErrorDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataErrorDto build() {
+      return new DemoDataErrorDto(this);
+    }
+  }
+
+  public static abstract class DemoDataErrorDtoBuilder<C extends DemoDataErrorDto, B extends DemoDataErrorDtoBuilder<C, B>>  {
+    private String internalMessage;
+    private String errorClass;
+    private String cause;
+    private List<ValidationMessageDto> validationErrors;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B internalMessage(String internalMessage) {
+      this.internalMessage = internalMessage;
+      return self();
+    }
+    public B errorClass(String errorClass) {
+      this.errorClass = errorClass;
+      return self();
+    }
+    public B cause(String cause) {
+      this.cause = cause;
+      return self();
+    }
+    public B validationErrors(List<ValidationMessageDto> validationErrors) {
+      this.validationErrors = validationErrors;
+      return self();
+    }
+  }
 }
 

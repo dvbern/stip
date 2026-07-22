@@ -38,7 +38,7 @@ public class WohnsitzAnteilRequiredConstraintValidator
         if (
             abstractFamilieEntity instanceof Geschwister
             && ((Geschwister) abstractFamilieEntity).getGeschwisterTyp() != GeschwisterTyp.LEIBLICH
-            && abstractFamilieEntity.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
+            && !abstractFamilieEntity.getWohnsitz().isEigenerHaushalt()
         ) {
             return Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilVater())
             ^ Objects.nonNull(abstractFamilieEntity.getWohnsitzAnteilMutter());

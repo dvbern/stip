@@ -22,32 +22,38 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import static ch.dvbern.stip.berechnung.domain.util.MathUtil.roundHalfUp;
 import static java.lang.Math.max;
 
 @UtilityClass
 public class BernCalculatorUtil {
-    public static final int PIA_COUNT = 1;
+    public final int PIA_COUNT = 1;
 
     public String getElternPartnerName(final ElternTyp elternTyp) {
         return String.format("Partner %s", StringUtils.capitalize(elternTyp.name().toLowerCase()));
@@ -57,10 +63,10 @@ public class BernCalculatorUtil {
         final Steuerdaten steuerdaten,
         final Gesuchsperiode gesuchsperiode
     ) {
-        var saeule3a = 0;
+        int saeule3a = 0;
         if (steuerdaten.getIsArbeitsverhaeltnisSelbstaendig()) {
             saeule3a =
-                max(Objects.requireNonNullElse(steuerdaten.getSaeule3a(), 0) - gesuchsperiode.getMaxSaeule3a(), 0);
+                max(intOrZero(steuerdaten.getSaeule3a()) - gesuchsperiode.getMaxSaeule3a(), 0);
         }
         return saeule3a;
     }
@@ -68,9 +74,9 @@ public class BernCalculatorUtil {
     public int getSaeule2(
         final Steuerdaten steuerdaten
     ) {
-        var saeule2 = 0;
+        int saeule2 = 0;
         if (steuerdaten.getIsArbeitsverhaeltnisSelbstaendig()) {
-            saeule2 = Objects.requireNonNullElse(steuerdaten.getSaeule2(), 0);
+            saeule2 = intOrZero(steuerdaten.getSaeule2());
         }
         return saeule2;
     }
@@ -80,7 +86,7 @@ public class BernCalculatorUtil {
         final boolean isArbeitsverhaeltnisSelbstaendig,
         final Gesuchsperiode gesuchsperiode
     ) {
-        var anrechenbaresVermoegen = BigDecimal.valueOf(vermoegen);
+        BigDecimal anrechenbaresVermoegen = BigDecimal.valueOf(vermoegen);
         if (isArbeitsverhaeltnisSelbstaendig) {
             // steuerbaresVermoegen - freibetragVermoegen
             anrechenbaresVermoegen =
@@ -99,13 +105,13 @@ public class BernCalculatorUtil {
         );
     }
 
-    public static boolean getHalbierungElternbeitrag(
+    public boolean getHalbierungElternbeitrag(
         final LocalDate geburtsdatumPia,
         final DateRange gesuchsDateRange,
         final Set<LebenslaufItem> lebenslaufItemSet,
         final Gesuchsperiode gesuchsperiode
     ) {
-        final var abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
+        final Optional<LebenslaufItem> abgeschlosseneErstausbildungLebenslaufItem = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.isAusbildung()
                 && Objects.nonNull(lebenslaufItem.getAbschluss())
@@ -122,18 +128,29 @@ public class BernCalculatorUtil {
                 abgeschlosseneErstausbildungLebenslaufItem.get().getVon().isBefore(gesuchsDateRange.getGueltigAb());
         }
 
-        var alterAtEndOfAusbildungsjahr =
+        final int alterAtEndOfAusbildungsjahr =
             DateUtil.getAgeInYearsAtDate(geburtsdatumPia, gesuchsDateRange.getGueltigBis());
 
         final boolean halbierungAbgeschlosseneErstausbildung =
             erstAusbildungWasCompletedBeforeAusbildungsjahr
             && (alterAtEndOfAusbildungsjahr >= gesuchsperiode
                 .getLimiteAlterAntragsstellerHalbierungElternbeitrag());
-        final var beruftaetigkeiten = Set.of(
+        final Stream<LebenslaufItem> berufstaetigeItems = getLebenslaufItemStream(lebenslaufItemSet);
+        final int monthsBerufstaetig = berufstaetigeItems
+            .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
+            .sum()
+        / 30;
+        final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
+
+        return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
+    }
+
+    private @NonNull Stream<LebenslaufItem> getLebenslaufItemStream(Set<LebenslaufItem> lebenslaufItemSet) {
+        final Set<Taetigkeitsart> beruftaetigkeiten = Set.of(
             Taetigkeitsart.ERWERBSTAETIGKEIT,
             Taetigkeitsart.BETREUUNG_FAMILIENMITGLIEDER_EIGENER_HAUSHALT
         );
-        final var berufstaetigeItems = lebenslaufItemSet.stream()
+        final Stream<LebenslaufItem> berufstaetigeItems = lebenslaufItemSet.stream()
             .filter(
                 lebenslaufItem -> lebenslaufItem.getTaetigkeitsart() != null
             )
@@ -142,13 +159,7 @@ public class BernCalculatorUtil {
                     lebenslaufItem.getTaetigkeitsart()
                 )
             );
-        final int monthsBerufstaetig = berufstaetigeItems
-            .mapToInt(lebenslaufItem -> (int) ChronoUnit.DAYS.between(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
-            .sum()
-        / 30;
-        final boolean halbierungBerufstaetig = monthsBerufstaetig >= 72;
-
-        return halbierungAbgeschlosseneErstausbildung || halbierungBerufstaetig;
+        return berufstaetigeItems;
     }
 
     public BigDecimal calculateAnteilLebenshaltungskosten(
@@ -211,7 +222,7 @@ public class BernCalculatorUtil {
         return Integer.min(wohnkostenJahreswert, maxWohnkosten);
     }
 
-    public static int getEffektiveWohnkostenPersoenlich(
+    public int getEffektiveWohnkostenPersoenlich(
         final int eingegebeneWohnkosten,
         final Gesuchsperiode gesuchsperiode,
         int anzahlPersonenImHaushalt
@@ -227,12 +238,12 @@ public class BernCalculatorUtil {
         return Integer.min(eingegebeneWohnkosten, maxWohnkosten);
     }
 
-    static int getAlterForMedizinischeGrundversorgung(
+    private int getAlterForMedizinischeGrundversorgung(
         final LocalDate geburtsdatum,
         final int gesuchsjahr,
         final Gesuchsperiode gesuchsperiode
     ) {
-        final var stichtag =
+        final LocalDate stichtag =
             gesuchsperiode.getStichtagVolljaehrigkeitMedizinischeGrundversorgung().withYear(gesuchsjahr);
         return DateUtil.getAgeInYearsAtDate(
             geburtsdatum,
@@ -245,7 +256,7 @@ public class BernCalculatorUtil {
         final int gesuchsjahr,
         final Gesuchsperiode gesuchsperiode
     ) {
-        int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
+        final int alterForMedizinischeGrundversorgung = getAlterForMedizinischeGrundversorgung(
             geburtsdatum,
             gesuchsjahr,
             gesuchsperiode
@@ -269,12 +280,12 @@ public class BernCalculatorUtil {
     ) {
         if (bildungskategorie.isTertiaerstufe()) {
             return Integer.min(
-                Objects.requireNonNullElse(ausbildungskosten, 0),
+                intOrZero(ausbildungskosten),
                 gesuchsperiode.getAusbKostenTertiaer()
             );
         }
         return Integer.min(
-            Objects.requireNonNullElse(ausbildungskosten, 0),
+            intOrZero(ausbildungskosten),
             gesuchsperiode.getAusbKostenSekII()
         );
     }
@@ -285,23 +296,27 @@ public class BernCalculatorUtil {
         final Gesuchsperiode gesuchsperiode,
         final DateRange gesuchsDateRange
     ) {
-        final var elternbeitrag = new HashMap<>();
-
-        familienBudgetresultats.forEach(
-            familienBudgetresultat -> elternbeitrag.put(
-                familienBudgetresultat.getVorname(),
-                BernCalculatorUtil.calculateElternbeitragTotal(
-                    familienBudgetresultat.getEinnahmeUeberschuss(),
-                    familienBudgetresultat.getAnzahlKinderInAusbildung(),
-                    BernCalculatorUtil.getHalbierungElternbeitrag(
-                        gesuchFormular.getPersonInAusbildung().getGeburtsdatum(),
-                        gesuchsDateRange,
-                        gesuchFormular.getLebenslaufItems(),
-                        gesuchsperiode
+        final Map<String, Integer> elternbeitrag = familienBudgetresultats.stream()
+            .collect(
+                Collectors.toMap(
+                    familienBudgetresultatDto -> String.format(
+                        "%s, %s",
+                        familienBudgetresultatDto.getVorname(),
+                        familienBudgetresultatDto.getSteuerdatenTyp().toString()
+                    ),
+                    familienBudgetresultat -> BernCalculatorUtil.calculateElternbeitragTotal(
+                        familienBudgetresultat.getEinnahmeUeberschuss(),
+                        familienBudgetresultat.getAnzahlKinderInAusbildung(),
+                        BernCalculatorUtil.getHalbierungElternbeitrag(
+                            gesuchFormular.getPersonInAusbildung().getGeburtsdatum(),
+                            gesuchsDateRange,
+                            gesuchFormular.getLebenslaufItems(),
+                            gesuchsperiode
+                        )
                     )
                 )
-            )
-        );
+            );
+
         return elternbeitrag.values()
             .stream()
             .mapToInt(
@@ -319,7 +334,7 @@ public class BernCalculatorUtil {
             return 0;
         }
 
-        final var fractionalValue = BigDecimal.valueOf(einnahmeUeberschuss)
+        final BigDecimal fractionalValue = BigDecimal.valueOf(einnahmeUeberschuss)
             .divide(BigDecimal.valueOf(anzahlGeschwisterInAusbildung), RoundingMode.HALF_UP);
         if (isHalbierungElternbeitrag) {
             return fractionalValue.divide(BigDecimal.TWO, RoundingMode.HALF_UP).intValue();
@@ -328,20 +343,19 @@ public class BernCalculatorUtil {
     }
 
     public List<AbstractFamilieEntity> getKindsDerElternInHaushalten(final GesuchFormular gesuchFormular) {
-        List<AbstractFamilieEntity> kinderDerElternInHaushalten = new ArrayList<>(
+        List<AbstractFamilieEntity> kindsDerElternInHaushalten = new ArrayList<>(
             gesuchFormular.getGeschwisters()
                 .stream()
                 .filter(
-                    geschwister -> geschwister.getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT
+                    geschwister -> !geschwister.getWohnsitz().isEigenerHaushalt()
                 )
-                .map(AbstractFamilieEntity.class::cast)
                 .toList()
         );
 
-        if (gesuchFormular.getPersonInAusbildung().getWohnsitz() != Wohnsitz.EIGENER_HAUSHALT) {
-            kinderDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
+        if (!gesuchFormular.getPersonInAusbildung().getWohnsitz().isEigenerHaushalt()) {
+            kindsDerElternInHaushalten.add(gesuchFormular.getPersonInAusbildung());
         }
-        return kinderDerElternInHaushalten;
+        return kindsDerElternInHaushalten;
     }
 
     public List<AbstractFamilieEntity> getTeilzeitKindsDerElternInHaushalten(
@@ -349,13 +363,107 @@ public class BernCalculatorUtil {
     ) {
         List<AbstractFamilieEntity> kindsDerElternInHaushalten = getKindsDerElternInHaushalten(gesuchFormular);
 
-        final var teilzeitKinderDerElternInHaushalten = kindsDerElternInHaushalten.stream()
+        final List<AbstractFamilieEntity> teilzeitKindsDerElternInHaushalten = kindsDerElternInHaushalten.stream()
             .filter(
-                geschwister -> Objects.requireNonNullElse(geschwister.getWohnsitzAnteilVater(), BigDecimal.ZERO)
-                    .intValue() > 0
-                && Objects.requireNonNullElse(geschwister.getWohnsitzAnteilMutter(), BigDecimal.ZERO).intValue() > 0
+                abstractFamilieEntity -> intOrZero(abstractFamilieEntity.getWohnsitzAnteilVater()) > 0
+                && intOrZero(abstractFamilieEntity.getWohnsitzAnteilMutter()) > 0
             )
             .toList();
-        return teilzeitKinderDerElternInHaushalten;
+        return teilzeitKindsDerElternInHaushalten;
     }
+
+    public int intOrZero(final Integer value) {
+        return Objects.requireNonNullElse(value, 0);
+    }
+
+    public int intOrZero(final BigDecimal value) {
+        return Objects.requireNonNullElse(value, BigDecimal.ZERO).intValue();
+    }
+
+    @Nullable
+    public BigDecimal getBerechnugsAnteilKindsDerEltern(
+        final GesuchFormular gesuchFormular,
+        final SteuerdatenTyp steuerdatenTypToPrioritize
+    ) {
+        BigDecimal berechnungsanteilKindsDerEltern = null;
+        if (
+            Objects.nonNull(steuerdatenTypToPrioritize)
+            && List.of(SteuerdatenTyp.VATER, SteuerdatenTyp.MUTTER).contains(steuerdatenTypToPrioritize)
+        ) {
+            final List<AbstractFamilieEntity> teilzeitKindsDerElternInHaushalten =
+                BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular);
+            final int anzahlTeilzeitKindsDerElternInHaushalten = teilzeitKindsDerElternInHaushalten.size();
+            assert anzahlTeilzeitKindsDerElternInHaushalten > 0;
+
+            final BigDecimal kinderDerElternProzente = BigDecimal.valueOf(
+                teilzeitKindsDerElternInHaushalten.stream()
+                    .mapToInt(
+                        abstractFamilieEntity -> abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTypToPrioritize)
+                            .intValue()
+                    )
+                    .sum()
+            );
+
+            berechnungsanteilKindsDerEltern = kinderDerElternProzente.divide(
+                BigDecimal.valueOf(anzahlTeilzeitKindsDerElternInHaushalten),
+                2,
+                RoundingMode.HALF_UP
+            );
+        }
+        return berechnungsanteilKindsDerEltern;
+    }
+
+    public Integer calculateTotalBerechnungsAnteilKinds(
+        final Integer total,
+        final @Nullable BigDecimal berechnungsanteilKinds
+    ) {
+        if (Objects.isNull(berechnungsanteilKinds)) {
+            return total;
+        }
+
+        // Calculate the total stipendien amount based on the respective amounts and their relative kid
+        // percentages.
+        return berechnungsanteilKinds.multiply(
+            BigDecimal.valueOf(total)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+        ).intValue();
+        // return Math.min(0, totalByBerechnungsAnteilKinderDerEltern);
+    }
+
+    @Nullable
+    public BigDecimal getBerechnugsAnteilKindsPia(
+        final GesuchFormular gesuchFormular,
+        final List<Kind> kindsImPiaHaushalt,
+        final Boolean teilzeitKindsBeiPiaAnrechnen
+    ) {
+        BigDecimal berechnungsanteilKindsPia = null;
+
+        if (Objects.nonNull(teilzeitKindsBeiPiaAnrechnen)) {
+            final List<Kind> teilzeitKinderDerPia = gesuchFormular.getKinds()
+                .stream()
+                .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
+                .toList();
+
+            BigDecimal teilzeitKindsDerPiaProzenteThisBerechnung =
+                BigDecimal.valueOf(
+                    kindsImPiaHaushalt.stream()
+                        .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
+                        .mapToInt(Kind::getWohnsitzAnteilPia)
+                        .sum()
+                );
+
+            berechnungsanteilKindsPia = teilzeitKindsDerPiaProzenteThisBerechnung.divide(
+                BigDecimal.valueOf(teilzeitKinderDerPia.size()),
+                2,
+                RoundingMode.HALF_UP
+            );
+
+            if (!teilzeitKindsBeiPiaAnrechnen) {
+                berechnungsanteilKindsPia = BigDecimal.valueOf(100).subtract(berechnungsanteilKindsPia);
+            }
+
+        }
+        return berechnungsanteilKindsPia;
+    }
+
 }

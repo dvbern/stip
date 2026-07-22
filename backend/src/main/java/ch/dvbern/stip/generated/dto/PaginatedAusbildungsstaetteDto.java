@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedAusbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedAusbildungsstaetteDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<AusbildungsstaetteDto> entries;
+
+  protected PaginatedAusbildungsstaetteDto(PaginatedAusbildungsstaetteDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedAusbildungsstaetteDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedAusbildungsstaetteDto  implements Serializable {
   }
 
 
+  public static PaginatedAusbildungsstaetteDtoBuilder<?, ?> builder() {
+    return new PaginatedAusbildungsstaetteDtoBuilderImpl();
+  }
+
+  private static final class PaginatedAusbildungsstaetteDtoBuilderImpl extends PaginatedAusbildungsstaetteDtoBuilder<PaginatedAusbildungsstaetteDto, PaginatedAusbildungsstaetteDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedAusbildungsstaetteDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedAusbildungsstaetteDto build() {
+      return new PaginatedAusbildungsstaetteDto(this);
+    }
+  }
+
+  public static abstract class PaginatedAusbildungsstaetteDtoBuilder<C extends PaginatedAusbildungsstaetteDto, B extends PaginatedAusbildungsstaetteDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<AusbildungsstaetteDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<AusbildungsstaetteDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

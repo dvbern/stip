@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BuchhaltungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BuchhaltungEntryDto  implements Serializable {
   private @Valid String userErstellt;
@@ -40,6 +40,27 @@ public class BuchhaltungEntryDto  implements Serializable {
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
   private @Valid List<SapDeliveryDto> sapDeliverys;
+
+  protected BuchhaltungEntryDto(BuchhaltungEntryDtoBuilder<?, ?> b) {
+    this.userErstellt = b.userErstellt;
+    this.timestampErstellt = b.timestampErstellt;
+    this.buchhaltungType = b.buchhaltungType;
+    this.saldoAenderung = b.saldoAenderung;
+    this.saldo = b.saldo;
+    this.comment = b.comment;
+    this.stipendienBetrag = b.stipendienBetrag;
+    this.auszahlung = b.auszahlung;
+    this.rueckforderung = b.rueckforderung;
+    this.businessPartnerId = b.businessPartnerId;
+    this.verfuegungId = b.verfuegungId;
+    this.gesuchId = b.gesuchId;
+    this.zahlungsverbindung = b.zahlungsverbindung;
+    this.sapStatus = b.sapStatus;
+    this.sapDeliverys = b.sapDeliverys;
+  }
+
+  public BuchhaltungEntryDto() {
+  }
 
   /**
    **/
@@ -401,5 +422,103 @@ public class BuchhaltungEntryDto  implements Serializable {
   }
 
 
+  public static BuchhaltungEntryDtoBuilder<?, ?> builder() {
+    return new BuchhaltungEntryDtoBuilderImpl();
+  }
+
+  private static final class BuchhaltungEntryDtoBuilderImpl extends BuchhaltungEntryDtoBuilder<BuchhaltungEntryDto, BuchhaltungEntryDtoBuilderImpl> {
+
+    @Override
+    protected BuchhaltungEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BuchhaltungEntryDto build() {
+      return new BuchhaltungEntryDto(this);
+    }
+  }
+
+  public static abstract class BuchhaltungEntryDtoBuilder<C extends BuchhaltungEntryDto, B extends BuchhaltungEntryDtoBuilder<C, B>>  {
+    private String userErstellt;
+    private java.time.LocalDateTime timestampErstellt;
+    private ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType;
+    private Integer saldoAenderung;
+    private Integer saldo;
+    private String comment;
+    private Integer stipendienBetrag;
+    private Integer auszahlung;
+    private Integer rueckforderung;
+    private Integer businessPartnerId;
+    private UUID verfuegungId;
+    private UUID gesuchId;
+    private ZahlungsverbindungDto zahlungsverbindung;
+    private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+    private List<SapDeliveryDto> sapDeliverys;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B buchhaltungType(ch.dvbern.stip.api.buchhaltung.type.BuchhaltungType buchhaltungType) {
+      this.buchhaltungType = buchhaltungType;
+      return self();
+    }
+    public B saldoAenderung(Integer saldoAenderung) {
+      this.saldoAenderung = saldoAenderung;
+      return self();
+    }
+    public B saldo(Integer saldo) {
+      this.saldo = saldo;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+    public B stipendienBetrag(Integer stipendienBetrag) {
+      this.stipendienBetrag = stipendienBetrag;
+      return self();
+    }
+    public B auszahlung(Integer auszahlung) {
+      this.auszahlung = auszahlung;
+      return self();
+    }
+    public B rueckforderung(Integer rueckforderung) {
+      this.rueckforderung = rueckforderung;
+      return self();
+    }
+    public B businessPartnerId(Integer businessPartnerId) {
+      this.businessPartnerId = businessPartnerId;
+      return self();
+    }
+    public B verfuegungId(UUID verfuegungId) {
+      this.verfuegungId = verfuegungId;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+      this.zahlungsverbindung = zahlungsverbindung;
+      return self();
+    }
+    public B sapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
+      this.sapStatus = sapStatus;
+      return self();
+    }
+    public B sapDeliverys(List<SapDeliveryDto> sapDeliverys) {
+      this.sapDeliverys = sapDeliverys;
+      return self();
+    }
+  }
 }
 

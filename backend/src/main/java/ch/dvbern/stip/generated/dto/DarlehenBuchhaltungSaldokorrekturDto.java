@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenBuchhaltungSaldokorrektur")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
   private @Valid Integer betrag;
   private @Valid String comment;
+
+  protected DarlehenBuchhaltungSaldokorrekturDto(DarlehenBuchhaltungSaldokorrekturDtoBuilder<?, ?> b) {
+    this.betrag = b.betrag;
+    this.comment = b.comment;
+  }
+
+  public DarlehenBuchhaltungSaldokorrekturDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class DarlehenBuchhaltungSaldokorrekturDto  implements Serializable {
   }
 
 
+  public static DarlehenBuchhaltungSaldokorrekturDtoBuilder<?, ?> builder() {
+    return new DarlehenBuchhaltungSaldokorrekturDtoBuilderImpl();
+  }
+
+  private static final class DarlehenBuchhaltungSaldokorrekturDtoBuilderImpl extends DarlehenBuchhaltungSaldokorrekturDtoBuilder<DarlehenBuchhaltungSaldokorrekturDto, DarlehenBuchhaltungSaldokorrekturDtoBuilderImpl> {
+
+    @Override
+    protected DarlehenBuchhaltungSaldokorrekturDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DarlehenBuchhaltungSaldokorrekturDto build() {
+      return new DarlehenBuchhaltungSaldokorrekturDto(this);
+    }
+  }
+
+  public static abstract class DarlehenBuchhaltungSaldokorrekturDtoBuilder<C extends DarlehenBuchhaltungSaldokorrekturDto, B extends DarlehenBuchhaltungSaldokorrekturDtoBuilder<C, B>>  {
+    private Integer betrag;
+    private String comment;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B betrag(Integer betrag) {
+      this.betrag = betrag;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+  }
 }
 

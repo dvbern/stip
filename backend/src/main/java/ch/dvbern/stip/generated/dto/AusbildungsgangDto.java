@@ -17,15 +17,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Ausbildungsgang")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangDto  implements Serializable {
   private @Valid UUID id;
   private @Valid AbschlussDto abschluss;
   private @Valid AusbildungsstaetteDto ausbildungsstaette;
   private @Valid Boolean aktiv;
+
+  protected AusbildungsgangDto(AusbildungsgangDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.abschluss = b.abschluss;
+    this.ausbildungsstaette = b.ausbildungsstaette;
+    this.aktiv = b.aktiv;
+  }
+
+  public AusbildungsgangDto() {
+  }
 
   /**
    **/
@@ -149,5 +159,48 @@ public class AusbildungsgangDto  implements Serializable {
   }
 
 
+  public static AusbildungsgangDtoBuilder<?, ?> builder() {
+    return new AusbildungsgangDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsgangDtoBuilderImpl extends AusbildungsgangDtoBuilder<AusbildungsgangDto, AusbildungsgangDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsgangDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsgangDto build() {
+      return new AusbildungsgangDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsgangDtoBuilder<C extends AusbildungsgangDto, B extends AusbildungsgangDtoBuilder<C, B>>  {
+    private UUID id;
+    private AbschlussDto abschluss;
+    private AusbildungsstaetteDto ausbildungsstaette;
+    private Boolean aktiv;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B abschluss(AbschlussDto abschluss) {
+      this.abschluss = abschluss;
+      return self();
+    }
+    public B ausbildungsstaette(AusbildungsstaetteDto ausbildungsstaette) {
+      this.ausbildungsstaette = ausbildungsstaette;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+  }
 }
 

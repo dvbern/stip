@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchAenderungs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
@@ -29,6 +29,18 @@ public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
+
+  protected GesuchAenderungsDto(GesuchAenderungsDtoBuilder<?, ?> b) {
+    this.manuell = b.manuell;
+    this.akzeptiert = b.akzeptiert;
+    this.abgelehnt = b.abgelehnt;
+    this.fehlendeDokumente = b.fehlendeDokumente;
+    this.canAenderungEinreichen = b.canAenderungEinreichen;
+    this.offen = b.offen;
+  }
+
+  public GesuchAenderungsDto() {
+  }
 
   /**
    **/
@@ -257,5 +269,58 @@ public class GesuchAenderungsDto  implements Serializable {
   }
 
 
+  public static GesuchAenderungsDtoBuilder<?, ?> builder() {
+    return new GesuchAenderungsDtoBuilderImpl();
+  }
+
+  private static final class GesuchAenderungsDtoBuilderImpl extends GesuchAenderungsDtoBuilder<GesuchAenderungsDto, GesuchAenderungsDtoBuilderImpl> {
+
+    @Override
+    protected GesuchAenderungsDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchAenderungsDto build() {
+      return new GesuchAenderungsDto(this);
+    }
+  }
+
+  public static abstract class GesuchAenderungsDtoBuilder<C extends GesuchAenderungsDto, B extends GesuchAenderungsDtoBuilder<C, B>>  {
+    private List<GesuchTrancheSlimDto> manuell = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> akzeptiert = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> abgelehnt = new ArrayList<>();
+    private List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
+    private Boolean canAenderungEinreichen;
+    private GesuchTrancheSlimDto offen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B manuell(List<GesuchTrancheSlimDto> manuell) {
+      this.manuell = manuell;
+      return self();
+    }
+    public B akzeptiert(List<GesuchTrancheSlimDto> akzeptiert) {
+      this.akzeptiert = akzeptiert;
+      return self();
+    }
+    public B abgelehnt(List<GesuchTrancheSlimDto> abgelehnt) {
+      this.abgelehnt = abgelehnt;
+      return self();
+    }
+    public B fehlendeDokumente(List<GesuchTrancheSlimDto> fehlendeDokumente) {
+      this.fehlendeDokumente = fehlendeDokumente;
+      return self();
+    }
+    public B canAenderungEinreichen(Boolean canAenderungEinreichen) {
+      this.canAenderungEinreichen = canAenderungEinreichen;
+      return self();
+    }
+    public B offen(GesuchTrancheSlimDto offen) {
+      this.offen = offen;
+      return self();
+    }
+  }
 }
 

@@ -18,9 +18,9 @@
 package ch.dvbern.stip.berechnung.adapter.bern.v1_0.service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -32,11 +32,16 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.kind.entity.Kind;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
+import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
+import ch.dvbern.stip.berechnung.adapter.bern.v1_0.dto.BudgetsResult;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.dto.FamilienBudgetInput;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
+import ch.dvbern.stip.generated.dto.BerechnungsStammdatenDto;
+import ch.dvbern.stip.generated.dto.PersonenHaushaltGruppeDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDtoBuilder;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -50,27 +55,20 @@ public class TranchenSubBerechnungsresultatCalculator {
         final int gesuchsjahr,
         final BerechnungsStammdatenMapper berechnungsStammdatenMapper
     ) {
-        final var gesuchFormular = gesuchTranche.getGesuchFormular();
+        final GesuchFormular gesuchFormular = gesuchTranche.getGesuchFormular();
 
         final List<Kind> kindsImPiaHaushalt =
-            gesuchFormular.getKinds()
-                .stream()
-                .filter(
-                    kind -> kind.getWohnsitzAnteilPia() > 0
-                    && (kind.getWohnsitzAnteilPia() == 100
-                    || Objects.requireNonNullElse(teilzeitKinderBeiPiaAnrechnen, false))
-                )
-                .toList();
+            getKindsImPiaHaushalt(gesuchFormular.getKinds(), teilzeitKinderBeiPiaAnrechnen);
 
-        final var familienBudgetInputs =
+        final List<FamilienBudgetInput> familienBudgetInputs =
             getFamilienBudgetInputs(gesuchFormular, gesuchsperiode, steuerdatenTypToPrioritize);
 
-        final var anzahlMonateGueltigkeit = DateUtil.getMonthsBetween(
+        final int anzahlMonateGueltigkeit = DateUtil.getMonthsBetween(
             gesuchTranche.getGueltigkeit().getGueltigAb(),
             gesuchTranche.getGueltigkeit().getGueltigBis()
         );
 
-        final var budgetResults = BudgetsCalculator.calculateStipendien(
+        final BudgetsResult budgetResults = BudgetsCalculator.calculateStipendien(
             gesuchFormular,
             kindsImPiaHaushalt,
             familienBudgetInputs,
@@ -80,90 +78,95 @@ public class TranchenSubBerechnungsresultatCalculator {
             gesuchsjahr
         );
 
-        final var yearRange = "%s/%s".formatted(
+        final String yearRange = "%s/%s".formatted(
             gesuchsperiode.getGesuchsperiodeStart().getYear(),
             gesuchsperiode.getGesuchsperiodeStopp().getYear()
         );
 
-        final var berechnungsStammdaten = berechnungsStammdatenMapper.toDto(gesuchsperiode, anzahlMonateGueltigkeit);
-        final var personenHaushaltGroups = BerechnungUtil.getPersonenHaushaltGroups(
+        final BerechnungsStammdatenDto berechnungsStammdaten =
+            berechnungsStammdatenMapper.toDto(gesuchsperiode, anzahlMonateGueltigkeit);
+        final List<PersonenHaushaltGruppeDto> personenHaushaltGroups = BerechnungUtil.getPersonenHaushaltGroups(
             budgetResults.persoenlichesBudgetresultat(),
             budgetResults.familienBudgetresultate()
         );
 
-        var total = budgetResults.stipendien();
+        Integer total = budgetResults.stipendien();
 
-        BigDecimal berechnungsanteilKinder = null;
+        final BigDecimal berechnungsanteilKindsDerEltern =
+            BernCalculatorUtil.getBerechnugsAnteilKindsDerEltern(gesuchFormular, steuerdatenTypToPrioritize);
 
-        if (
-            Objects.nonNull(steuerdatenTypToPrioritize)
-            && List.of(SteuerdatenTyp.VATER, SteuerdatenTyp.MUTTER).contains(steuerdatenTypToPrioritize)
-        ) {
-            final var noTeilzeitKindsDerElternInHaushalten =
-                BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular).size();
-            assert noTeilzeitKindsDerElternInHaushalten > 0;
+        total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilKindsDerEltern);
 
-            final var relevantFamilienBudgetResult = budgetResults.familienBudgetresultate()
-                .stream()
-                .filter(
-                    familienBudgetresultatDto -> familienBudgetresultatDto
-                        .getSteuerdatenTyp() == steuerdatenTypToPrioritize
-                )
-                .findFirst()
-                .get();
+        // if (
+        // Objects.nonNull(steuerdatenTypToPrioritize)
+        // && List.of(SteuerdatenTyp.VATER, SteuerdatenTyp.MUTTER).contains(steuerdatenTypToPrioritize)
+        // ) {
+        // final List<AbstractFamilieEntity> teilzeitKindsDerElternInHaushalten =
+        // BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular);
+        // final int anzahlTeilzeitKindsDerElternInHaushalten = teilzeitKindsDerElternInHaushalten.size();
+        // assert anzahlTeilzeitKindsDerElternInHaushalten > 0;
+        //
+        // final BigDecimal kinderDerElternProzente =
+        // BigDecimal.valueOf(teilzeitKindsDerElternInHaushalten.stream().mapToInt(
+        // abstractFamilieEntity -> abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTypToPrioritize).intValue()
+        // ).sum());
+        //
+        // berechnungsanteilKinderDerEltern = kinderDerElternProzente.divide(
+        // BigDecimal.valueOf(anzahlTeilzeitKindsDerElternInHaushalten),
+        // 2,
+        // RoundingMode.HALF_UP
+        // );
+        //
+        // // Calculate the total stipendien amount based on the respective amounts and their relative kid
+        // // percentages.
+        // total = berechnungsanteilKinderDerEltern.multiply(
+        // BigDecimal.valueOf(total)
+        // .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+        // ).intValue();
+        // total = Math.min(0, total);
+        // }
 
-            BigDecimal kinderDerElternProzente =
-                BigDecimal.valueOf(relevantFamilienBudgetResult.getTeilzeitKinderProzente());
+        final BigDecimal berechnungsanteilKindsPia = BernCalculatorUtil.getBerechnugsAnteilKindsPia(
+            gesuchFormular,
+            kindsImPiaHaushalt,
+            teilzeitKinderBeiPiaAnrechnen
+        );
 
-            berechnungsanteilKinder = kinderDerElternProzente.divide(
-                BigDecimal.valueOf(noTeilzeitKindsDerElternInHaushalten),
-                2,
-                RoundingMode.HALF_UP
-            );
+        total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilKindsPia);
+        //
+        //
+        // if (Objects.nonNull(teilzeitKinderBeiPiaAnrechnen)) {
+        // final List<Kind> teilzeitKinderDerPia = gesuchFormular.getKinds()
+        // .stream()
+        // .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
+        // .toList();
+        //
+        // BigDecimal teilzeitKinderDerPiaProzenteThisBerechnung =
+        // BigDecimal.valueOf(
+        // kindsImPiaHaushalt.stream()
+        // .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
+        // .mapToInt(Kind::getWohnsitzAnteilPia)
+        // .sum()
+        // );
+        //
+        // berechnungsanteilKinderPia = teilzeitKinderDerPiaProzenteThisBerechnung.divide(
+        // BigDecimal.valueOf(teilzeitKinderDerPia.size()),
+        // 2,
+        // RoundingMode.HALF_UP
+        // );
+        //
+        // if (!teilzeitKinderBeiPiaAnrechnen) {
+        // berechnungsanteilKinderPia = BigDecimal.valueOf(100).subtract(berechnungsanteilKinderPia);
+        // }
+        // // Calculate the total stipendien amount based on the respective amounts and their relative kid
+        // // percentages.
+        // total = berechnungsanteilKinderPia.multiply(
+        // BigDecimal.valueOf(total)
+        // .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
+        // ).intValue();
+        // }
 
-            // Calculate the total stipendien amount based on the respective amounts and their relative kid
-            // percentages.
-            total = berechnungsanteilKinder.multiply(
-                BigDecimal.valueOf(total)
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-            ).intValue();
-            total = Math.min(0, total);
-        }
-
-        BigDecimal berechnungsanteilKinderPia = null;
-
-        if (Objects.nonNull(teilzeitKinderBeiPiaAnrechnen)) {
-            final var teilzeitKinderDerPia = gesuchFormular.getKinds()
-                .stream()
-                .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
-                .toList();
-
-            BigDecimal teilzeitKinderDerPiaProzenteThisBerechnung =
-                BigDecimal.valueOf(
-                    kindsImPiaHaushalt.stream()
-                        .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
-                        .mapToInt(Kind::getWohnsitzAnteilPia)
-                        .sum()
-                );
-
-            berechnungsanteilKinderPia = teilzeitKinderDerPiaProzenteThisBerechnung.divide(
-                BigDecimal.valueOf(teilzeitKinderDerPia.size()),
-                2,
-                RoundingMode.HALF_UP
-            );
-
-            if (!teilzeitKinderBeiPiaAnrechnen) {
-                berechnungsanteilKinderPia = BigDecimal.valueOf(100).subtract(berechnungsanteilKinderPia);
-            }
-            // Calculate the total stipendien amount based on the respective amounts and their relative kid
-            // percentages.
-            total = berechnungsanteilKinderPia.multiply(
-                BigDecimal.valueOf(total)
-                    .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-            ).intValue();
-        }
-
-        return new TranchenBerechnungsresultatDto()
+        return TranchenBerechnungsresultatDtoBuilder.tranchenBerechnungsresultatDto()
             .total(total)
             .ungekuerztTotal(budgetResults.stipendien())
             .gueltigAb(gesuchTranche.getGueltigkeit().getGueltigAb())
@@ -172,13 +175,14 @@ public class TranchenSubBerechnungsresultatCalculator {
             .ausbildungBis(DateUtil.formatDate(gesuchTranche.getGesuch().getAusbildung().getAusbildungEnd()))
             .yearRange(yearRange)
             .gesuchTrancheId(gesuchTranche.getId())
-            .teilzeitKinderBeiPiaAnrechnen(teilzeitKinderBeiPiaAnrechnen)
             .berechnungsStammdaten(berechnungsStammdaten)
             .persoenlichesBudgetresultat(budgetResults.persoenlichesBudgetresultat())
             .familienBudgetresultate(budgetResults.familienBudgetresultate())
             .personenHaushaltGroups(personenHaushaltGroups)
-            .berechnungsanteilKinder(berechnungsanteilKinder)
-            .berechnungsanteilKinderPia(berechnungsanteilKinderPia);
+            .berechnungsanteilKinderDerEltern(berechnungsanteilKindsDerEltern)
+            .teilzeitKinderBeiPiaAnrechnen(teilzeitKinderBeiPiaAnrechnen)
+            .berechnungsanteilKinderPia(berechnungsanteilKindsPia)
+            .build();
     }
 
     private List<FamilienBudgetInput> getFamilienBudgetInputs(
@@ -202,14 +206,14 @@ public class TranchenSubBerechnungsresultatCalculator {
                             .toList();
                     };
 
-                    final var steuererklaerungOfSteuerdaten = gesuchFormular.getSteuererklaerung()
+                    final Steuererklaerung steuererklaerungOfSteuerdaten = gesuchFormular.getSteuererklaerung()
                         .stream()
                         .filter(
                             steuererklaerung -> steuererklaerung.getSteuerdatenTyp() == steuerdaten.getSteuerdatenTyp()
                         )
                         .findFirst()
                         .get();
-                    final var allKinderDerElternInHaushalten =
+                    final List<AbstractFamilieEntity> allKinderDerElternInHaushalten =
                         BernCalculatorUtil.getKindsDerElternInHaushalten(gesuchFormular);
 
                     final List<AbstractFamilieEntity> kinderImHaushalt = allKinderDerElternInHaushalten.stream()
@@ -231,6 +235,20 @@ public class TranchenSubBerechnungsresultatCalculator {
                         kinderImHaushalt
                     );
                 }
+            )
+            .toList();
+    }
+
+    private static List<Kind> getKindsImPiaHaushalt(
+        final Set<Kind> kinds,
+        final Boolean teilzeitKinderBeiPiaAnrechnen
+    ) {
+        return kinds
+            .stream()
+            .filter(
+                kind -> kind.getWohnsitzAnteilPia() > 0
+                && (kind.getWohnsitzAnteilPia() == 100
+                || Objects.requireNonNullElse(teilzeitKinderBeiPiaAnrechnen, false))
             )
             .toList();
     }

@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BrueckenangebotCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BrueckenangebotCreateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
+
+  protected BrueckenangebotCreateDto(BrueckenangebotCreateDtoBuilder<?, ?> b) {
+    this.bildungsrichtung = b.bildungsrichtung;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+  }
+
+  public BrueckenangebotCreateDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class BrueckenangebotCreateDto  implements Serializable {
   }
 
 
+  public static BrueckenangebotCreateDtoBuilder<?, ?> builder() {
+    return new BrueckenangebotCreateDtoBuilderImpl();
+  }
+
+  private static final class BrueckenangebotCreateDtoBuilderImpl extends BrueckenangebotCreateDtoBuilder<BrueckenangebotCreateDto, BrueckenangebotCreateDtoBuilderImpl> {
+
+    @Override
+    protected BrueckenangebotCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BrueckenangebotCreateDto build() {
+      return new BrueckenangebotCreateDto(this);
+    }
+  }
+
+  public static abstract class BrueckenangebotCreateDtoBuilder<C extends BrueckenangebotCreateDto, B extends BrueckenangebotCreateDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
+      this.bildungsrichtung = bildungsrichtung;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+  }
 }
 

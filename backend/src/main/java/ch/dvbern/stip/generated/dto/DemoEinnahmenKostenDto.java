@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoEinnahmenKosten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoEinnahmenKostenDto  implements Serializable {
   private @Valid Integer nettoerwerbseinkommen;
@@ -39,6 +39,32 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   private @Valid Integer wohnkosten;
   private @Valid Boolean wgWohnend;
   private @Valid Boolean alternativeWohnformWohnend;
+
+  protected DemoEinnahmenKostenDto(DemoEinnahmenKostenDtoBuilder<?, ?> b) {
+    this.nettoerwerbseinkommen = b.nettoerwerbseinkommen;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.zulagen = b.zulagen;
+    this.renten = b.renten;
+    this.eoLeistungen = b.eoLeistungen;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.beitraege = b.beitraege;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.taggelderAHVIV = b.taggelderAHVIV;
+    this.andereEinnahmen = b.andereEinnahmen;
+    this.fahrkosten = b.fahrkosten;
+    this.vermoegen = b.vermoegen;
+    this.steuernKantonGemeinde = b.steuernKantonGemeinde;
+    this.ausbildungskosten = b.ausbildungskosten;
+    this.betreuungskostenKinder = b.betreuungskostenKinder;
+    this.verpflegungskosten = b.verpflegungskosten;
+    this.auswaertigeMittagessenProWoche = b.auswaertigeMittagessenProWoche;
+    this.wohnkosten = b.wohnkosten;
+    this.wgWohnend = b.wgWohnend;
+    this.alternativeWohnformWohnend = b.alternativeWohnformWohnend;
+  }
+
+  public DemoEinnahmenKostenDto() {
+  }
 
   /**
    **/
@@ -491,5 +517,128 @@ public class DemoEinnahmenKostenDto  implements Serializable {
   }
 
 
+  public static DemoEinnahmenKostenDtoBuilder<?, ?> builder() {
+    return new DemoEinnahmenKostenDtoBuilderImpl();
+  }
+
+  private static final class DemoEinnahmenKostenDtoBuilderImpl extends DemoEinnahmenKostenDtoBuilder<DemoEinnahmenKostenDto, DemoEinnahmenKostenDtoBuilderImpl> {
+
+    @Override
+    protected DemoEinnahmenKostenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoEinnahmenKostenDto build() {
+      return new DemoEinnahmenKostenDto(this);
+    }
+  }
+
+  public static abstract class DemoEinnahmenKostenDtoBuilder<C extends DemoEinnahmenKostenDto, B extends DemoEinnahmenKostenDtoBuilder<C, B>>  {
+    private Integer nettoerwerbseinkommen;
+    private Integer unterhaltsbeitraege;
+    private Integer zulagen;
+    private Integer renten;
+    private Integer eoLeistungen;
+    private Integer ergaenzungsleistungen;
+    private Integer beitraege;
+    private Integer einnahmenBGSA;
+    private Integer taggelderAHVIV;
+    private Integer andereEinnahmen;
+    private Integer fahrkosten;
+    private Integer vermoegen;
+    private Integer steuernKantonGemeinde;
+    private Integer ausbildungskosten;
+    private Integer betreuungskostenKinder;
+    private Integer verpflegungskosten;
+    private Integer auswaertigeMittagessenProWoche;
+    private Integer wohnkosten;
+    private Boolean wgWohnend;
+    private Boolean alternativeWohnformWohnend;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nettoerwerbseinkommen(Integer nettoerwerbseinkommen) {
+      this.nettoerwerbseinkommen = nettoerwerbseinkommen;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B zulagen(Integer zulagen) {
+      this.zulagen = zulagen;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B eoLeistungen(Integer eoLeistungen) {
+      this.eoLeistungen = eoLeistungen;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B beitraege(Integer beitraege) {
+      this.beitraege = beitraege;
+      return self();
+    }
+    public B einnahmenBGSA(Integer einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B taggelderAHVIV(Integer taggelderAHVIV) {
+      this.taggelderAHVIV = taggelderAHVIV;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+    public B fahrkosten(Integer fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B vermoegen(Integer vermoegen) {
+      this.vermoegen = vermoegen;
+      return self();
+    }
+    public B steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+      this.steuernKantonGemeinde = steuernKantonGemeinde;
+      return self();
+    }
+    public B ausbildungskosten(Integer ausbildungskosten) {
+      this.ausbildungskosten = ausbildungskosten;
+      return self();
+    }
+    public B betreuungskostenKinder(Integer betreuungskostenKinder) {
+      this.betreuungskostenKinder = betreuungskostenKinder;
+      return self();
+    }
+    public B verpflegungskosten(Integer verpflegungskosten) {
+      this.verpflegungskosten = verpflegungskosten;
+      return self();
+    }
+    public B auswaertigeMittagessenProWoche(Integer auswaertigeMittagessenProWoche) {
+      this.auswaertigeMittagessenProWoche = auswaertigeMittagessenProWoche;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B wgWohnend(Boolean wgWohnend) {
+      this.wgWohnend = wgWohnend;
+      return self();
+    }
+    public B alternativeWohnformWohnend(Boolean alternativeWohnformWohnend) {
+      this.alternativeWohnformWohnend = alternativeWohnformWohnend;
+      return self();
+    }
+  }
 }
 

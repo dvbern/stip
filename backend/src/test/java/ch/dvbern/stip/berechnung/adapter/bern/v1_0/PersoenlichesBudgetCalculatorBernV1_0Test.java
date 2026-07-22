@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.kind.entity.Kind;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import ch.dvbern.stip.api.util.TestUtil;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.service.PersoenlichesBudgetCalculator;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
@@ -48,12 +49,14 @@ public class PersoenlichesBudgetCalculatorBernV1_0Test {
                 .anrechenbareElterlicheLeistung(400)
                 .einnahmeUeberschuss(0)
                 .anzahlKinderInAusbildung(1)
+                .steuerdatenTyp(SteuerdatenTyp.VATER)
         );
         familienBudgetresultats.add(
             new FamilienBudgetresultatDto().vorname("b")
                 .anrechenbareElterlicheLeistung(1000)
                 .einnahmeUeberschuss(0)
                 .anzahlKinderInAusbildung(1)
+                .steuerdatenTyp(SteuerdatenTyp.MUTTER)
         );
         final List<Kind> kindsImHaushalt = gesuchFormular.getKinds().stream().toList();
         final int anzahlMonateGueltigkeit = 10;

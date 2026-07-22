@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUnterbruchAntragGS")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid UUID id;
@@ -30,6 +30,17 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
   private @Valid Boolean canEdit;
   private @Valid LocalDate unterbruchLatestEndDate;
   private @Valid LocalDate unterbruchEarliestStartDate;
+
+  protected AusbildungUnterbruchAntragGSDto(AusbildungUnterbruchAntragGSDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.dokuments = b.dokuments;
+    this.canEdit = b.canEdit;
+    this.unterbruchLatestEndDate = b.unterbruchLatestEndDate;
+    this.unterbruchEarliestStartDate = b.unterbruchEarliestStartDate;
+  }
+
+  public AusbildungUnterbruchAntragGSDto() {
+  }
 
   /**
    **/
@@ -190,5 +201,53 @@ public class AusbildungUnterbruchAntragGSDto  implements Serializable {
   }
 
 
+  public static AusbildungUnterbruchAntragGSDtoBuilder<?, ?> builder() {
+    return new AusbildungUnterbruchAntragGSDtoBuilderImpl();
+  }
+
+  private static final class AusbildungUnterbruchAntragGSDtoBuilderImpl extends AusbildungUnterbruchAntragGSDtoBuilder<AusbildungUnterbruchAntragGSDto, AusbildungUnterbruchAntragGSDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungUnterbruchAntragGSDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungUnterbruchAntragGSDto build() {
+      return new AusbildungUnterbruchAntragGSDto(this);
+    }
+  }
+
+  public static abstract class AusbildungUnterbruchAntragGSDtoBuilder<C extends AusbildungUnterbruchAntragGSDto, B extends AusbildungUnterbruchAntragGSDtoBuilder<C, B>>  {
+    private UUID id;
+    private List<DokumentDto> dokuments = new ArrayList<>();
+    private Boolean canEdit;
+    private LocalDate unterbruchLatestEndDate;
+    private LocalDate unterbruchEarliestStartDate;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B dokuments(List<DokumentDto> dokuments) {
+      this.dokuments = dokuments;
+      return self();
+    }
+    public B canEdit(Boolean canEdit) {
+      this.canEdit = canEdit;
+      return self();
+    }
+    public B unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+      this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+      return self();
+    }
+    public B unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+      this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+      return self();
+    }
+  }
 }
 

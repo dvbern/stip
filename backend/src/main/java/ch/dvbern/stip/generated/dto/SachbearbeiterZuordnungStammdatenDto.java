@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterZuordnungStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
   private @Valid String buchstabenDe;
   private @Valid String buchstabenFr;
+
+  protected SachbearbeiterZuordnungStammdatenDto(SachbearbeiterZuordnungStammdatenDtoBuilder<?, ?> b) {
+    this.buchstabenDe = b.buchstabenDe;
+    this.buchstabenFr = b.buchstabenFr;
+  }
+
+  public SachbearbeiterZuordnungStammdatenDto() {
+  }
 
   /**
    **/
@@ -100,5 +108,38 @@ public class SachbearbeiterZuordnungStammdatenDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterZuordnungStammdatenDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterZuordnungStammdatenDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterZuordnungStammdatenDtoBuilderImpl extends SachbearbeiterZuordnungStammdatenDtoBuilder<SachbearbeiterZuordnungStammdatenDto, SachbearbeiterZuordnungStammdatenDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterZuordnungStammdatenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterZuordnungStammdatenDto build() {
+      return new SachbearbeiterZuordnungStammdatenDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterZuordnungStammdatenDtoBuilder<C extends SachbearbeiterZuordnungStammdatenDto, B extends SachbearbeiterZuordnungStammdatenDtoBuilder<C, B>>  {
+    private String buchstabenDe;
+    private String buchstabenFr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B buchstabenDe(String buchstabenDe) {
+      this.buchstabenDe = buchstabenDe;
+      return self();
+    }
+    public B buchstabenFr(String buchstabenFr) {
+      this.buchstabenFr = buchstabenFr;
+      return self();
+    }
+  }
 }
 

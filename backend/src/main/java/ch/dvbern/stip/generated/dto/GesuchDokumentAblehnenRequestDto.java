@@ -17,12 +17,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("GesuchDokumentAblehnenRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentAblehnenRequestDto  implements Serializable {
   private @Valid GesuchDokumentKommentarDto kommentar;
+
+  protected GesuchDokumentAblehnenRequestDto(GesuchDokumentAblehnenRequestDtoBuilder<?, ?> b) {
+    this.kommentar = b.kommentar;
+  }
+
+  public GesuchDokumentAblehnenRequestDto() {
+  }
 
   /**
    **/
@@ -82,5 +89,33 @@ public class GesuchDokumentAblehnenRequestDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentAblehnenRequestDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentAblehnenRequestDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentAblehnenRequestDtoBuilderImpl extends GesuchDokumentAblehnenRequestDtoBuilder<GesuchDokumentAblehnenRequestDto, GesuchDokumentAblehnenRequestDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentAblehnenRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentAblehnenRequestDto build() {
+      return new GesuchDokumentAblehnenRequestDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentAblehnenRequestDtoBuilder<C extends GesuchDokumentAblehnenRequestDto, B extends GesuchDokumentAblehnenRequestDtoBuilder<C, B>>  {
+    private GesuchDokumentKommentarDto kommentar;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B kommentar(GesuchDokumentKommentarDto kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+  }
 }
 

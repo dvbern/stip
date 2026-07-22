@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantFeature")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantFeatureDto  implements Serializable {
   private @Valid Boolean enabled;
   private @Valid ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
+
+  protected TenantFeatureDto(TenantFeatureDtoBuilder<?, ?> b) {
+    this.enabled = b.enabled;
+    this.adapterType = b.adapterType;
+  }
+
+  public TenantFeatureDto() {
+  }
 
   /**
    **/
@@ -101,5 +109,38 @@ public class TenantFeatureDto  implements Serializable {
   }
 
 
+  public static TenantFeatureDtoBuilder<?, ?> builder() {
+    return new TenantFeatureDtoBuilderImpl();
+  }
+
+  private static final class TenantFeatureDtoBuilderImpl extends TenantFeatureDtoBuilder<TenantFeatureDto, TenantFeatureDtoBuilderImpl> {
+
+    @Override
+    protected TenantFeatureDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public TenantFeatureDto build() {
+      return new TenantFeatureDto(this);
+    }
+  }
+
+  public static abstract class TenantFeatureDtoBuilder<C extends TenantFeatureDto, B extends TenantFeatureDtoBuilder<C, B>>  {
+    private Boolean enabled;
+    private ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B enabled(Boolean enabled) {
+      this.enabled = enabled;
+      return self();
+    }
+    public B adapterType(ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType adapterType) {
+      this.adapterType = adapterType;
+      return self();
+    }
+  }
 }
 

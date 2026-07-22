@@ -25,20 +25,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(config = MappingConfig.class)
 public interface BerechnungsStammdatenMapper {
-    @Mapping(source = "gesuchsperiode.maxSaeule3a", target = "maxSaeule3a")
-    @Mapping(source = "gesuchsperiode.einkommensfreibetrag", target = "einkommensfreibetrag")
     @Mapping(source = "gesuchsperiode.limiteEkFreibetragIntegrationszulage", target = "abzugslimite")
-    @Mapping(source = "gesuchsperiode.freibetragErwerbseinkommen", target = "freibetragErwerbseinkommen")
-    @Mapping(source = "gesuchsperiode.freibetragVermoegen", target = "freibetragVermoegen")
-    @Mapping(source = "gesuchsperiode.vermoegensanteilInProzent", target = "vermoegensanteilInProzent")
-    @Mapping(source = "gesuchsperiode.anzahlWochenLehre", target = "anzahlWochenLehre")
-    @Mapping(source = "gesuchsperiode.preisProMahlzeit", target = "preisProMahlzeit")
-    @Mapping(source = "gesuchsperiode.stipLimiteMinimalstipendium", target = "stipLimiteMinimalstipendium")
-    @Mapping(
-        source = "gesuchsperiode.limiteAlterAntragsstellerHalbierungElternbeitrag",
-        target = "limiteAlterAntragsstellerHalbierungElternbeitrag"
-    )
-    @Mapping(source = "anzahlMonate", target = "anzahlMonate")
     BerechnungsStammdatenDto toDto(
         final Gesuchsperiode gesuchsperiode,
         final Integer anzahlMonate

@@ -45,7 +45,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_AUSBILDUNG_BIS,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_YEAR_RANGE,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_GESUCH_TRANCHE_ID,
-  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER,
+  TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_PIA,
   TranchenBerechnungsresultatDtoSpec.JSON_PROPERTY_BERECHNUNGS_STAMMDATEN,
@@ -80,8 +80,8 @@ public class TranchenBerechnungsresultatDtoSpec {
   public static final String JSON_PROPERTY_GESUCH_TRANCHE_ID = "gesuchTrancheId";
   private UUID gesuchTrancheId;
 
-  public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER = "berechnungsanteilKinder";
-  private BigDecimal berechnungsanteilKinder;
+  public static final String JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN = "berechnungsanteilKinderDerEltern";
+  private BigDecimal berechnungsanteilKinderDerEltern;
 
   public static final String JSON_PROPERTY_TEILZEIT_KINDER_BEI_PIA_ANRECHNEN = "teilzeitKinderBeiPiaAnrechnen";
   private Boolean teilzeitKinderBeiPiaAnrechnen;
@@ -312,29 +312,29 @@ public class TranchenBerechnungsresultatDtoSpec {
   }
 
 
-  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
+  public TranchenBerechnungsresultatDtoSpec berechnungsanteilKinderDerEltern(BigDecimal berechnungsanteilKinderDerEltern) {
     
-    this.berechnungsanteilKinder = berechnungsanteilKinder;
+    this.berechnungsanteilKinderDerEltern = berechnungsanteilKinderDerEltern;
     return this;
   }
 
    /**
    * Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche nur eine Berechnung haben ist dieser Wert null.
-   * @return berechnungsanteilKinder
+   * @return berechnungsanteilKinderDerEltern
   **/
   @jakarta.annotation.Nullable
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public BigDecimal getBerechnungsanteilKinder() {
-    return berechnungsanteilKinder;
+  public BigDecimal getBerechnungsanteilKinderDerEltern() {
+    return berechnungsanteilKinderDerEltern;
   }
 
 
-  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER)
+  @JsonProperty(JSON_PROPERTY_BERECHNUNGSANTEIL_KINDER_DER_ELTERN)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setBerechnungsanteilKinder(BigDecimal berechnungsanteilKinder) {
-    this.berechnungsanteilKinder = berechnungsanteilKinder;
+  public void setBerechnungsanteilKinderDerEltern(BigDecimal berechnungsanteilKinderDerEltern) {
+    this.berechnungsanteilKinderDerEltern = berechnungsanteilKinderDerEltern;
   }
 
 
@@ -526,7 +526,7 @@ public class TranchenBerechnungsresultatDtoSpec {
         Objects.equals(this.ausbildungBis, tranchenBerechnungsresultat.ausbildungBis) &&
         Objects.equals(this.yearRange, tranchenBerechnungsresultat.yearRange) &&
         Objects.equals(this.gesuchTrancheId, tranchenBerechnungsresultat.gesuchTrancheId) &&
-        Objects.equals(this.berechnungsanteilKinder, tranchenBerechnungsresultat.berechnungsanteilKinder) &&
+        Objects.equals(this.berechnungsanteilKinderDerEltern, tranchenBerechnungsresultat.berechnungsanteilKinderDerEltern) &&
         Objects.equals(this.teilzeitKinderBeiPiaAnrechnen, tranchenBerechnungsresultat.teilzeitKinderBeiPiaAnrechnen) &&
         Objects.equals(this.berechnungsanteilKinderPia, tranchenBerechnungsresultat.berechnungsanteilKinderPia) &&
         Objects.equals(this.berechnungsStammdaten, tranchenBerechnungsresultat.berechnungsStammdaten) &&
@@ -537,7 +537,7 @@ public class TranchenBerechnungsresultatDtoSpec {
 
   @Override
   public int hashCode() {
-    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinder, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups);
+    return Objects.hash(total, ungekuerztTotal, gueltigAb, gueltigBis, ausbildungAb, ausbildungBis, yearRange, gesuchTrancheId, berechnungsanteilKinderDerEltern, teilzeitKinderBeiPiaAnrechnen, berechnungsanteilKinderPia, berechnungsStammdaten, persoenlichesBudgetresultat, familienBudgetresultate, personenHaushaltGroups);
   }
 
   @Override
@@ -552,7 +552,7 @@ public class TranchenBerechnungsresultatDtoSpec {
     sb.append("    ausbildungBis: ").append(toIndentedString(ausbildungBis)).append("\n");
     sb.append("    yearRange: ").append(toIndentedString(yearRange)).append("\n");
     sb.append("    gesuchTrancheId: ").append(toIndentedString(gesuchTrancheId)).append("\n");
-    sb.append("    berechnungsanteilKinder: ").append(toIndentedString(berechnungsanteilKinder)).append("\n");
+    sb.append("    berechnungsanteilKinderDerEltern: ").append(toIndentedString(berechnungsanteilKinderDerEltern)).append("\n");
     sb.append("    teilzeitKinderBeiPiaAnrechnen: ").append(toIndentedString(teilzeitKinderBeiPiaAnrechnen)).append("\n");
     sb.append("    berechnungsanteilKinderPia: ").append(toIndentedString(berechnungsanteilKinderPia)).append("\n");
     sb.append("    berechnungsStammdaten: ").append(toIndentedString(berechnungsStammdaten)).append("\n");

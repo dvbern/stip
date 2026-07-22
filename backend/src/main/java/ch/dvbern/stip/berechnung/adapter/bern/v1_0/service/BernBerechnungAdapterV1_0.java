@@ -19,21 +19,26 @@ package ch.dvbern.stip.berechnung.adapter.bern.v1_0.service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 
+import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.AusbildungUnterbruchAntrag;
 import ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus;
 import ch.dvbern.stip.api.common.util.DateRange;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
+import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.berechnung.domain.port.BerechnungPort;
 import ch.dvbern.stip.berechnung.domain.qualifier.BerechnungQualifier;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungsStammdatenMapper;
 import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoBuilder;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import jakarta.enterprise.context.RequestScoped;
 import lombok.RequiredArgsConstructor;
@@ -52,17 +57,13 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
 
     @Override
     public BerechnungsresultatDto getBerechnungsresultat(Gesuch gesuch) {
-        if (Objects.isNull(gesuch.getEinreichedatum())) {
-            throw new IllegalStateException("Berechnen of a Gesuch which has no Einreichedatum is not allowed");
-        }
-
         final DateRange gesuchsDateRange = DateUtil.getGesuchDateRange(gesuch);
         final Gesuchsperiode gesuchsperiode = gesuch.getGesuchsperiode();
         final int gesuchsjahr = gesuch.getGesuchGueltigkeitAb().getYear();
 
-        final var gesuchTranchen = gesuch.getTranchenTranchen().toList();
+        final List<GesuchTranche> gesuchTranchen = gesuch.getTranchenTranchen().toList();
 
-        final var berechnungsresultate = gesuchTranchen.stream()
+        final List<TranchenBerechnungsresultatDto> berechnungsresultate = gesuchTranchen.stream()
             .flatMap(
                 gesuchTranche -> TranchenBerechnungsresultatCalculator.getTranchenBerechnungsresultat(
                     gesuchTranche,
@@ -79,16 +80,16 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
         if (berechnungVorKuerzungUndTeilung < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
             berechnungVorKuerzungUndTeilung = 0;
         }
-        final var monateMitDarlehen = getMonateMitDarlehen(gesuch);
+        final int monateMitDarlehen = getMonateMitDarlehen(gesuch);
         final Integer ungekuerztDarlehen = getDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
         final int ungekuerztStipendien =
             BerechnungUtil.subtractGesezlichesDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
 
-        final var monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
+        final int monateUebrigNachEinreichefrist = DateUtil.wasEingereichtAfterDueDate(gesuch)
             ? DateUtil.getStipendiumDurationRoundDown(gesuch)
             : 12;
 
-        final var totalNachKuerzungNachEinreichefrist =
+        final Integer totalNachKuerzungNachEinreichefrist =
             monateUebrigNachEinreichefrist < 12
                 ? BigDecimal.valueOf(berechnungVorKuerzungUndTeilung)
                     .multiply(BigDecimal.valueOf(monateUebrigNachEinreichefrist))
@@ -96,10 +97,10 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
                     .intValue()
                 : null;
 
-        final var totalVorKuerzungUnterbruch =
+        final Integer totalVorKuerzungUnterbruch =
             Objects.requireNonNullElse(totalNachKuerzungNachEinreichefrist, berechnungVorKuerzungUndTeilung);
 
-        final var anzahlMonateUnterbruch = gesuch.getAusbildung()
+        final Integer anzahlMonateUnterbruch = gesuch.getAusbildung()
             .getAusbildungUnterbruchAntrags()
             .stream()
             .sorted(Comparator.comparing(AusbildungUnterbruchAntrag::getTimestampErstellt))
@@ -115,7 +116,7 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
             .findFirst()
             .orElse(0);
 
-        final var totalNachKuerzungUnterbruch =
+        final Integer totalNachKuerzungUnterbruch =
             anzahlMonateUnterbruch > 0
                 ? BigDecimal.valueOf(totalVorKuerzungUnterbruch)
                     .multiply(BigDecimal.valueOf(12 - anzahlMonateUnterbruch))
@@ -126,25 +127,25 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
         final int berechnungVorTeilungDarlehen =
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
 
-        final var berechnungDarlehen = getDarlehen(berechnungVorTeilungDarlehen, monateMitDarlehen);
-        final var berechnungStipendium =
+        final Integer berechnungDarlehen = getDarlehen(berechnungVorTeilungDarlehen, monateMitDarlehen);
+        final int berechnungStipendium =
             BerechnungUtil.subtractGesezlichesDarlehen(berechnungVorTeilungDarlehen, monateMitDarlehen);
 
-        return new BerechnungsresultatDto(
-            gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr(),
-            berechnungVorKuerzungUndTeilung,
-            berechnungVorTeilungDarlehen,
-            berechnungStipendium,
-            berechnungsresultate,
-            monateMitDarlehen,
-            ungekuerztStipendien,
-            ungekuerztDarlehen,
-            totalNachKuerzungNachEinreichefrist,
-            12 - monateUebrigNachEinreichefrist,
-            totalNachKuerzungUnterbruch,
-            anzahlMonateUnterbruch,
-            berechnungDarlehen
-        );
+        return BerechnungsresultatDtoBuilder.berechnungsresultatDto()
+            .year(gesuch.getGesuchsperiode().getGesuchsjahr().getTechnischesJahr())
+            .berechnungVorKuerzungUndTeilung(berechnungVorKuerzungUndTeilung)
+            .berechnungVorTeilungDarlehen(berechnungVorTeilungDarlehen)
+            .berechnungStipendium(berechnungStipendium)
+            .tranchenBerechnungsresultate(berechnungsresultate)
+            .monateMitDarlehen(monateMitDarlehen)
+            .ungekuerztStipendien(ungekuerztStipendien)
+            .ungekuerztDarlehen(ungekuerztDarlehen)
+            .totalNachKuerzungNachEinreichefrist(totalNachKuerzungNachEinreichefrist)
+            .anzahlMonateEinreichefrist(12 - monateUebrigNachEinreichefrist)
+            .totalNachKuerzungUnterbruch(totalNachKuerzungUnterbruch)
+            .anzahlMonateUnterbruch(anzahlMonateUnterbruch)
+            .berechnungDarlehen(berechnungDarlehen)
+            .build();
     }
 
     private static Integer getDarlehen(final int stipendium, final int monateMitDarlehen) {
@@ -152,7 +153,7 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
             return null;
         }
 
-        final var darlehenFuer12MonateMitDarlehen = BerechnungUtil.calculateGesetzlichesDarlehen(stipendium);
+        final int darlehenFuer12MonateMitDarlehen = BerechnungUtil.calculateGesetzlichesDarlehen(stipendium);
 
         if (monateMitDarlehen == 12) {
             return darlehenFuer12MonateMitDarlehen;
@@ -161,38 +162,38 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
     }
 
     public static int getMonateMitDarlehen(Gesuch gesuch) {
-        final var ausbildung = gesuch.getAusbildung();
+        final Ausbildung ausbildung = gesuch.getAusbildung();
 
         if (!ausbildung.getAusbildungsgang().getAbschluss().getBildungskategorie().isTertiaerstufe()) {
             return 0;
         }
 
-        int monateTertiaerstufeLebenslauf = 0;
-
-        for (var item : gesuch.getLatestGesuchTranche().getGesuchFormular().getLebenslaufItems()) {
-            if (
-                item.isAusbildung()
+        final int monateTertiaerstufeLebenslauf = gesuch.getLatestGesuchTranche()
+            .getGesuchFormular()
+            .getLebenslaufItems()
+            .stream()
+            .filter(
+                item -> item.isAusbildung()
                 && item.getAbschluss().getBildungskategorie().isTertiaerstufe()
-            ) {
-                monateTertiaerstufeLebenslauf += DateUtil.getMonthsBetween(item.getVon(), item.getBis());
-            }
-        }
+            )
+            .mapToInt(item -> DateUtil.getMonthsBetween(item.getVon(), item.getBis()))
+            .sum();
 
-        final var gesuchStartDate = gesuch.getEarliestGesuchTranche().getGueltigkeit().getGueltigAb();
+        final LocalDate gesuchStartDate = gesuch.getEarliestGesuchTranche().getGueltigkeit().getGueltigAb();
 
-        final var monateTertiaerstufeBisGesuchStart = monateTertiaerstufeLebenslauf + DateUtil.getMonthsBetween(
+        final int monateTertiaerstufeBisGesuchStart = monateTertiaerstufeLebenslauf + DateUtil.getMonthsBetween(
             ausbildung.getAusbildungBegin(),
             gesuchStartDate.atStartOfDay().toLocalDate()
         );
 
-        final var monateTertiaerStufeBisGesuchEnde = monateTertiaerstufeBisGesuchStart + 12;
+        final int monateTertiaerStufeBisGesuchEnde = monateTertiaerstufeBisGesuchStart + 12;
 
         if (monateTertiaerStufeBisGesuchEnde < BerechnungUtil.MONTH_LIMIT_AUSBILDUNG_TERTIAERSTUFE) {
             return 0;
         }
 
         if (monateTertiaerstufeBisGesuchStart < BerechnungUtil.MONTH_LIMIT_AUSBILDUNG_TERTIAERSTUFE) {
-            final var monateMitDarlehen =
+            final int monateMitDarlehen =
                 monateTertiaerStufeBisGesuchEnde - BerechnungUtil.MONTH_LIMIT_AUSBILDUNG_TERTIAERSTUFE;
             return monateMitDarlehen;
         }

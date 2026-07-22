@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("FamilienBudgetresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid List<String> haushaltNames = new ArrayList<>();
@@ -53,6 +53,38 @@ public class FamilienBudgetresultatDto  implements Serializable {
   private @Valid String nachnamePartner;
   private @Valid String sozialversicherungsnummerPartner;
   private @Valid LocalDate geburtsdatumPartner;
+
+  protected FamilienBudgetresultatDto(FamilienBudgetresultatDtoBuilder<?, ?> b) {
+    this.haushaltNames = b.haushaltNames;
+    this.steuerdatenTyp = b.steuerdatenTyp;
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.geburtsdatum = b.geburtsdatum;
+    this.steuerjahr = b.steuerjahr;
+    this.veranlagungscode = b.veranlagungscode;
+    this.total = b.total;
+    this.einnahmenMinusKosten = b.einnahmenMinusKosten;
+    this.anzahlPersonenImHaushalt = b.anzahlPersonenImHaushalt;
+    this.anzahlKinderInAusbildung = b.anzahlKinderInAusbildung;
+    this.einnahmeUeberschuss = b.einnahmeUeberschuss;
+    this.proKopfTeilungKinderInAusbildung = b.proKopfTeilungKinderInAusbildung;
+    this.anrechenbareElterlicheLeistung = b.anrechenbareElterlicheLeistung;
+    this.halbierungsReduktion = b.halbierungsReduktion;
+    this.fehlbetrag = b.fehlbetrag;
+    this.proKopfTeilung = b.proKopfTeilung;
+    this.ungedeckterAnteilLebenshaltungskosten = b.ungedeckterAnteilLebenshaltungskosten;
+    this.teilzeitKinderProzente = b.teilzeitKinderProzente;
+    this.einnahmen = b.einnahmen;
+    this.kosten = b.kosten;
+    this.vornamePartner = b.vornamePartner;
+    this.nachnamePartner = b.nachnamePartner;
+    this.sozialversicherungsnummerPartner = b.sozialversicherungsnummerPartner;
+    this.geburtsdatumPartner = b.geburtsdatumPartner;
+  }
+
+  public FamilienBudgetresultatDto() {
+  }
 
   /**
    **/
@@ -652,5 +684,158 @@ public class FamilienBudgetresultatDto  implements Serializable {
   }
 
 
+  public static FamilienBudgetresultatDtoBuilder<?, ?> builder() {
+    return new FamilienBudgetresultatDtoBuilderImpl();
+  }
+
+  private static final class FamilienBudgetresultatDtoBuilderImpl extends FamilienBudgetresultatDtoBuilder<FamilienBudgetresultatDto, FamilienBudgetresultatDtoBuilderImpl> {
+
+    @Override
+    protected FamilienBudgetresultatDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FamilienBudgetresultatDto build() {
+      return new FamilienBudgetresultatDto(this);
+    }
+  }
+
+  public static abstract class FamilienBudgetresultatDtoBuilder<C extends FamilienBudgetresultatDto, B extends FamilienBudgetresultatDtoBuilder<C, B>>  {
+    private List<String> haushaltNames = new ArrayList<>();
+    private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+    private String vorname;
+    private String nachname;
+    private String sozialversicherungsnummer;
+    private LocalDate geburtsdatum;
+    private Integer steuerjahr;
+    private String veranlagungscode;
+    private Integer total;
+    private Integer einnahmenMinusKosten;
+    private Integer anzahlPersonenImHaushalt;
+    private Integer anzahlKinderInAusbildung;
+    private Integer einnahmeUeberschuss;
+    private Integer proKopfTeilungKinderInAusbildung;
+    private Integer anrechenbareElterlicheLeistung;
+    private Integer halbierungsReduktion;
+    private Integer fehlbetrag;
+    private Integer proKopfTeilung;
+    private Integer ungedeckterAnteilLebenshaltungskosten;
+    private Integer teilzeitKinderProzente;
+    private FamilienBudgetresultatEinnahmenDto einnahmen;
+    private FamilienBudgetresultatKostenDto kosten;
+    private String vornamePartner;
+    private String nachnamePartner;
+    private String sozialversicherungsnummerPartner;
+    private LocalDate geburtsdatumPartner;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B haushaltNames(List<String> haushaltNames) {
+      this.haushaltNames = haushaltNames;
+      return self();
+    }
+    public B steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+      this.steuerdatenTyp = steuerdatenTyp;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B steuerjahr(Integer steuerjahr) {
+      this.steuerjahr = steuerjahr;
+      return self();
+    }
+    public B veranlagungscode(String veranlagungscode) {
+      this.veranlagungscode = veranlagungscode;
+      return self();
+    }
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B einnahmenMinusKosten(Integer einnahmenMinusKosten) {
+      this.einnahmenMinusKosten = einnahmenMinusKosten;
+      return self();
+    }
+    public B anzahlPersonenImHaushalt(Integer anzahlPersonenImHaushalt) {
+      this.anzahlPersonenImHaushalt = anzahlPersonenImHaushalt;
+      return self();
+    }
+    public B anzahlKinderInAusbildung(Integer anzahlKinderInAusbildung) {
+      this.anzahlKinderInAusbildung = anzahlKinderInAusbildung;
+      return self();
+    }
+    public B einnahmeUeberschuss(Integer einnahmeUeberschuss) {
+      this.einnahmeUeberschuss = einnahmeUeberschuss;
+      return self();
+    }
+    public B proKopfTeilungKinderInAusbildung(Integer proKopfTeilungKinderInAusbildung) {
+      this.proKopfTeilungKinderInAusbildung = proKopfTeilungKinderInAusbildung;
+      return self();
+    }
+    public B anrechenbareElterlicheLeistung(Integer anrechenbareElterlicheLeistung) {
+      this.anrechenbareElterlicheLeistung = anrechenbareElterlicheLeistung;
+      return self();
+    }
+    public B halbierungsReduktion(Integer halbierungsReduktion) {
+      this.halbierungsReduktion = halbierungsReduktion;
+      return self();
+    }
+    public B fehlbetrag(Integer fehlbetrag) {
+      this.fehlbetrag = fehlbetrag;
+      return self();
+    }
+    public B proKopfTeilung(Integer proKopfTeilung) {
+      this.proKopfTeilung = proKopfTeilung;
+      return self();
+    }
+    public B ungedeckterAnteilLebenshaltungskosten(Integer ungedeckterAnteilLebenshaltungskosten) {
+      this.ungedeckterAnteilLebenshaltungskosten = ungedeckterAnteilLebenshaltungskosten;
+      return self();
+    }
+    public B teilzeitKinderProzente(Integer teilzeitKinderProzente) {
+      this.teilzeitKinderProzente = teilzeitKinderProzente;
+      return self();
+    }
+    public B einnahmen(FamilienBudgetresultatEinnahmenDto einnahmen) {
+      this.einnahmen = einnahmen;
+      return self();
+    }
+    public B kosten(FamilienBudgetresultatKostenDto kosten) {
+      this.kosten = kosten;
+      return self();
+    }
+    public B vornamePartner(String vornamePartner) {
+      this.vornamePartner = vornamePartner;
+      return self();
+    }
+    public B nachnamePartner(String nachnamePartner) {
+      this.nachnamePartner = nachnamePartner;
+      return self();
+    }
+    public B sozialversicherungsnummerPartner(String sozialversicherungsnummerPartner) {
+      this.sozialversicherungsnummerPartner = sozialversicherungsnummerPartner;
+      return self();
+    }
+    public B geburtsdatumPartner(LocalDate geburtsdatumPartner) {
+      this.geburtsdatumPartner = geburtsdatumPartner;
+      return self();
+    }
+  }
 }
 

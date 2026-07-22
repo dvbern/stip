@@ -303,7 +303,6 @@ public class Gesuch extends AbstractTenantEntity {
             })
         )
             .orElseThrow(IllegalStateException::new);
-        assert relevantGesuchTranche.getGueltigkeit().getGueltigAb() != null;
         return relevantGesuchTranche.getGueltigkeit().getGueltigAb();
     }
 
@@ -315,7 +314,6 @@ public class Gesuch extends AbstractTenantEntity {
             })
         )
             .orElseThrow(IllegalStateException::new);
-        assert relevantGesuchTranche.getGueltigkeit().getGueltigBis() != null;
         return relevantGesuchTranche.getGueltigkeit().getGueltigBis();
     }
 

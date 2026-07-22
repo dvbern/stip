@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsgangData")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangDataDto  implements Serializable {
   private @Valid UUID id;
@@ -28,6 +28,20 @@ public class AusbildungsgangDataDto  implements Serializable {
   private @Valid Boolean aktiv;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
   private @Valid Boolean askForBerufsmaturitaet;
+
+  protected AusbildungsgangDataDto(AusbildungsgangDataDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.bildungskategorie = b.bildungskategorie;
+    this.bildungsrichtung = b.bildungsrichtung;
+    this.aktiv = b.aktiv;
+    this.zusatzfrage = b.zusatzfrage;
+    this.askForBerufsmaturitaet = b.askForBerufsmaturitaet;
+  }
+
+  public AusbildungsgangDataDto() {
+  }
 
   /**
    **/
@@ -233,5 +247,68 @@ public class AusbildungsgangDataDto  implements Serializable {
   }
 
 
+  public static AusbildungsgangDataDtoBuilder<?, ?> builder() {
+    return new AusbildungsgangDataDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsgangDataDtoBuilderImpl extends AusbildungsgangDataDtoBuilder<AusbildungsgangDataDto, AusbildungsgangDataDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsgangDataDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsgangDataDto build() {
+      return new AusbildungsgangDataDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsgangDataDtoBuilder<C extends AusbildungsgangDataDto, B extends AusbildungsgangDataDtoBuilder<C, B>>  {
+    private UUID id;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
+    private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+    private Boolean aktiv;
+    private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+    private Boolean askForBerufsmaturitaet;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B bildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
+      this.bildungskategorie = bildungskategorie;
+      return self();
+    }
+    public B bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
+      this.bildungsrichtung = bildungsrichtung;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+    public B zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+      this.zusatzfrage = zusatzfrage;
+      return self();
+    }
+    public B askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+      this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+      return self();
+    }
+  }
 }
 

@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("EinreichedatumAendernRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class EinreichedatumAendernRequestDto  implements Serializable {
   private @Valid LocalDate newEinreichedatum;
   private @Valid String betreff;
   private @Valid String text;
+
+  protected EinreichedatumAendernRequestDto(EinreichedatumAendernRequestDtoBuilder<?, ?> b) {
+    this.newEinreichedatum = b.newEinreichedatum;
+    this.betreff = b.betreff;
+    this.text = b.text;
+  }
+
+  public EinreichedatumAendernRequestDto() {
+  }
 
   /**
    **/
@@ -123,5 +132,43 @@ public class EinreichedatumAendernRequestDto  implements Serializable {
   }
 
 
+  public static EinreichedatumAendernRequestDtoBuilder<?, ?> builder() {
+    return new EinreichedatumAendernRequestDtoBuilderImpl();
+  }
+
+  private static final class EinreichedatumAendernRequestDtoBuilderImpl extends EinreichedatumAendernRequestDtoBuilder<EinreichedatumAendernRequestDto, EinreichedatumAendernRequestDtoBuilderImpl> {
+
+    @Override
+    protected EinreichedatumAendernRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public EinreichedatumAendernRequestDto build() {
+      return new EinreichedatumAendernRequestDto(this);
+    }
+  }
+
+  public static abstract class EinreichedatumAendernRequestDtoBuilder<C extends EinreichedatumAendernRequestDto, B extends EinreichedatumAendernRequestDtoBuilder<C, B>>  {
+    private LocalDate newEinreichedatum;
+    private String betreff;
+    private String text;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B newEinreichedatum(LocalDate newEinreichedatum) {
+      this.newEinreichedatum = newEinreichedatum;
+      return self();
+    }
+    public B betreff(String betreff) {
+      this.betreff = betreff;
+      return self();
+    }
+    public B text(String text) {
+      this.text = text;
+      return self();
+    }
+  }
 }
 

@@ -15,15 +15,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BenutzerUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BenutzerUpdateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
+
+  protected BenutzerUpdateDto(BenutzerUpdateDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.benutzereinstellungen = b.benutzereinstellungen;
+    this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
+  }
+
+  public BenutzerUpdateDto() {
+  }
 
   /**
    **/
@@ -145,5 +155,48 @@ public class BenutzerUpdateDto  implements Serializable {
   }
 
 
+  public static BenutzerUpdateDtoBuilder<?, ?> builder() {
+    return new BenutzerUpdateDtoBuilderImpl();
+  }
+
+  private static final class BenutzerUpdateDtoBuilderImpl extends BenutzerUpdateDtoBuilder<BenutzerUpdateDto, BenutzerUpdateDtoBuilderImpl> {
+
+    @Override
+    protected BenutzerUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BenutzerUpdateDto build() {
+      return new BenutzerUpdateDto(this);
+    }
+  }
+
+  public static abstract class BenutzerUpdateDtoBuilder<C extends BenutzerUpdateDto, B extends BenutzerUpdateDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private BenutzereinstellungenUpdateDto benutzereinstellungen;
+    private Boolean nutzungsbedingungenAkzeptiert;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+      this.benutzereinstellungen = benutzereinstellungen;
+      return self();
+    }
+    public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+      this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+      return self();
+    }
+  }
 }
 

@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
 import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
@@ -65,18 +64,11 @@ public class AbstractFamilieEntity extends AbstractPerson {
     @DecimalMin("0.00")
     private BigDecimal wohnsitzAnteilVater;
 
-    public BigDecimal getWohnsitzAnteil(ElternTyp elternTyp) {
-        return switch (elternTyp) {
-            case VATER -> getWohnsitzAnteilVater();
-            case MUTTER -> getWohnsitzAnteilMutter();
-        };
-    }
-
     public BigDecimal getWohnsitzAnteil(SteuerdatenTyp steuerdatenTyp) {
         if (getWohnsitz() == Wohnsitz.FAMILIE) {
             return BigDecimal.valueOf(100);
         }
-        if (getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT) {
+        if (getWohnsitz().isEigenerHaushalt()) {
             return BigDecimal.ZERO;
         }
 

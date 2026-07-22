@@ -69,7 +69,7 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
 
         assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-2940));
         assertThat(tranchenSubBerechnungsresultat.getUngekuerztTotal(), is(-9800));
-        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinder().intValue(), is(40));
+        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(40));
         assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(75));
 
         assertThat(tranchenSubBerechnungsresultat.getPersonenHaushaltGroups(), hasSize(3));
@@ -86,7 +86,7 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
 
         assertThat(tranchenSubBerechnungsresultat.getTotal(), is(-6275));
         assertThat(tranchenSubBerechnungsresultat.getUngekuerztTotal(), is(-10459));
-        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinder().intValue(), is(60));
+        assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderDerEltern().intValue(), is(60));
         assertThat(tranchenSubBerechnungsresultat.getBerechnungsanteilKinderPia().intValue(), is(100));
 
         assertThat(tranchenSubBerechnungsresultat.getPersonenHaushaltGroups(), hasSize(3));

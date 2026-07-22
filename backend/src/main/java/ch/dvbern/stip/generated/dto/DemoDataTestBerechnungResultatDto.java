@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataTestBerechnungResultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataTestBerechnungResultatDto  implements Serializable {
   private @Valid UUID demoDataId;
@@ -28,6 +28,18 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
   private @Valid String message;
   private @Valid DemoDataTestBerechnungValuesDto soll;
   private @Valid DemoDataTestBerechnungValuesDto ist;
+
+  protected DemoDataTestBerechnungResultatDto(DemoDataTestBerechnungResultatDtoBuilder<?, ?> b) {
+    this.demoDataId = b.demoDataId;
+    this.testFall = b.testFall;
+    this.valid = b.valid;
+    this.message = b.message;
+    this.soll = b.soll;
+    this.ist = b.ist;
+  }
+
+  public DemoDataTestBerechnungResultatDto() {
+  }
 
   /**
    **/
@@ -189,5 +201,58 @@ public class DemoDataTestBerechnungResultatDto  implements Serializable {
   }
 
 
+  public static DemoDataTestBerechnungResultatDtoBuilder<?, ?> builder() {
+    return new DemoDataTestBerechnungResultatDtoBuilderImpl();
+  }
+
+  private static final class DemoDataTestBerechnungResultatDtoBuilderImpl extends DemoDataTestBerechnungResultatDtoBuilder<DemoDataTestBerechnungResultatDto, DemoDataTestBerechnungResultatDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataTestBerechnungResultatDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataTestBerechnungResultatDto build() {
+      return new DemoDataTestBerechnungResultatDto(this);
+    }
+  }
+
+  public static abstract class DemoDataTestBerechnungResultatDtoBuilder<C extends DemoDataTestBerechnungResultatDto, B extends DemoDataTestBerechnungResultatDtoBuilder<C, B>>  {
+    private UUID demoDataId;
+    private String testFall;
+    private DemoDataTestBerechnungValidDto valid;
+    private String message;
+    private DemoDataTestBerechnungValuesDto soll;
+    private DemoDataTestBerechnungValuesDto ist;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B demoDataId(UUID demoDataId) {
+      this.demoDataId = demoDataId;
+      return self();
+    }
+    public B testFall(String testFall) {
+      this.testFall = testFall;
+      return self();
+    }
+    public B valid(DemoDataTestBerechnungValidDto valid) {
+      this.valid = valid;
+      return self();
+    }
+    public B message(String message) {
+      this.message = message;
+      return self();
+    }
+    public B soll(DemoDataTestBerechnungValuesDto soll) {
+      this.soll = soll;
+      return self();
+    }
+    public B ist(DemoDataTestBerechnungValuesDto ist) {
+      this.ist = ist;
+      return self();
+    }
+  }
 }
 

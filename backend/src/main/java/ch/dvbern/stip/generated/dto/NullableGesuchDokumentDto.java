@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("NullableGesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NullableGesuchDokumentDto  implements Serializable {
   private @Valid GesuchDokumentDto value;
+
+  protected NullableGesuchDokumentDto(NullableGesuchDokumentDtoBuilder<?, ?> b) {
+    this.value = b.value;
+  }
+
+  public NullableGesuchDokumentDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class NullableGesuchDokumentDto  implements Serializable {
   }
 
 
+  public static NullableGesuchDokumentDtoBuilder<?, ?> builder() {
+    return new NullableGesuchDokumentDtoBuilderImpl();
+  }
+
+  private static final class NullableGesuchDokumentDtoBuilderImpl extends NullableGesuchDokumentDtoBuilder<NullableGesuchDokumentDto, NullableGesuchDokumentDtoBuilderImpl> {
+
+    @Override
+    protected NullableGesuchDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public NullableGesuchDokumentDto build() {
+      return new NullableGesuchDokumentDto(this);
+    }
+  }
+
+  public static abstract class NullableGesuchDokumentDtoBuilder<C extends NullableGesuchDokumentDto, B extends NullableGesuchDokumentDtoBuilder<C, B>>  {
+    private GesuchDokumentDto value;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B value(GesuchDokumentDto value) {
+      this.value = value;
+      return self();
+    }
+  }
 }
 

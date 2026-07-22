@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoGeschwister")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoGeschwisterDto  implements Serializable {
   private @Valid String nachname;
@@ -28,6 +28,21 @@ public class DemoGeschwisterDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid Integer wohnsitzAnteilVater;
   private @Valid Integer wohnsitzAnteilMutter;
+
+  protected DemoGeschwisterDto(DemoGeschwisterDtoBuilder<?, ?> b) {
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.alter = b.alter;
+    this.wohnsitzBei = b.wohnsitzBei;
+    this.ausbildungssituation = b.ausbildungssituation;
+    this.geschwisterTyp = b.geschwisterTyp;
+    this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
+    this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
+  }
+
+  public DemoGeschwisterDto() {
+  }
 
   /**
    **/
@@ -254,5 +269,73 @@ public class DemoGeschwisterDto  implements Serializable {
   }
 
 
+  public static DemoGeschwisterDtoBuilder<?, ?> builder() {
+    return new DemoGeschwisterDtoBuilderImpl();
+  }
+
+  private static final class DemoGeschwisterDtoBuilderImpl extends DemoGeschwisterDtoBuilder<DemoGeschwisterDto, DemoGeschwisterDtoBuilderImpl> {
+
+    @Override
+    protected DemoGeschwisterDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoGeschwisterDto build() {
+      return new DemoGeschwisterDto(this);
+    }
+  }
+
+  public static abstract class DemoGeschwisterDtoBuilder<C extends DemoGeschwisterDto, B extends DemoGeschwisterDtoBuilder<C, B>>  {
+    private String nachname;
+    private String vorname;
+    private String geburtsdatum;
+    private Integer alter;
+    private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitzBei;
+    private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
+    private ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
+    private Integer wohnsitzAnteilVater;
+    private Integer wohnsitzAnteilMutter;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(String geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B alter(Integer alter) {
+      this.alter = alter;
+      return self();
+    }
+    public B wohnsitzBei(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitzBei) {
+      this.wohnsitzBei = wohnsitzBei;
+      return self();
+    }
+    public B ausbildungssituation(ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation) {
+      this.ausbildungssituation = ausbildungssituation;
+      return self();
+    }
+    public B geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+      this.geschwisterTyp = geschwisterTyp;
+      return self();
+    }
+    public B wohnsitzAnteilVater(Integer wohnsitzAnteilVater) {
+      this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+      return self();
+    }
+    public B wohnsitzAnteilMutter(Integer wohnsitzAnteilMutter) {
+      this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+      return self();
+    }
+  }
 }
 

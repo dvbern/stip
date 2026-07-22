@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("UpdateAusbildungUnterbruchAntragSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
@@ -25,6 +25,17 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
   private @Valid Integer monateOhneAnspruch;
+
+  protected UpdateAusbildungUnterbruchAntragSBDto(UpdateAusbildungUnterbruchAntragSBDtoBuilder<?, ?> b) {
+    this.status = b.status;
+    this.kommentarSB = b.kommentarSB;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+    this.monateOhneAnspruch = b.monateOhneAnspruch;
+  }
+
+  public UpdateAusbildungUnterbruchAntragSBDto() {
+  }
 
   /**
    **/
@@ -168,5 +179,53 @@ public class UpdateAusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
 
+  public static UpdateAusbildungUnterbruchAntragSBDtoBuilder<?, ?> builder() {
+    return new UpdateAusbildungUnterbruchAntragSBDtoBuilderImpl();
+  }
+
+  private static final class UpdateAusbildungUnterbruchAntragSBDtoBuilderImpl extends UpdateAusbildungUnterbruchAntragSBDtoBuilder<UpdateAusbildungUnterbruchAntragSBDto, UpdateAusbildungUnterbruchAntragSBDtoBuilderImpl> {
+
+    @Override
+    protected UpdateAusbildungUnterbruchAntragSBDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public UpdateAusbildungUnterbruchAntragSBDto build() {
+      return new UpdateAusbildungUnterbruchAntragSBDto(this);
+    }
+  }
+
+  public static abstract class UpdateAusbildungUnterbruchAntragSBDtoBuilder<C extends UpdateAusbildungUnterbruchAntragSBDto, B extends UpdateAusbildungUnterbruchAntragSBDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+    private String kommentarSB;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Integer monateOhneAnspruch;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B kommentarSB(String kommentarSB) {
+      this.kommentarSB = kommentarSB;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+    public B monateOhneAnspruch(Integer monateOhneAnspruch) {
+      this.monateOhneAnspruch = monateOhneAnspruch;
+      return self();
+    }
+  }
 }
 

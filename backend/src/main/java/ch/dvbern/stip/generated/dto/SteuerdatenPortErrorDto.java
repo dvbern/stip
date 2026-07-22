@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SteuerdatenPortError")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SteuerdatenPortErrorDto  implements Serializable {
   private @Valid String type;
   private @Valid String error;
   private @Valid String userMessage;
+
+  protected SteuerdatenPortErrorDto(SteuerdatenPortErrorDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.error = b.error;
+    this.userMessage = b.userMessage;
+  }
+
+  public SteuerdatenPortErrorDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class SteuerdatenPortErrorDto  implements Serializable {
   }
 
 
+  public static SteuerdatenPortErrorDtoBuilder<?, ?> builder() {
+    return new SteuerdatenPortErrorDtoBuilderImpl();
+  }
+
+  private static final class SteuerdatenPortErrorDtoBuilderImpl extends SteuerdatenPortErrorDtoBuilder<SteuerdatenPortErrorDto, SteuerdatenPortErrorDtoBuilderImpl> {
+
+    @Override
+    protected SteuerdatenPortErrorDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SteuerdatenPortErrorDto build() {
+      return new SteuerdatenPortErrorDto(this);
+    }
+  }
+
+  public static abstract class SteuerdatenPortErrorDtoBuilder<C extends SteuerdatenPortErrorDto, B extends SteuerdatenPortErrorDtoBuilder<C, B>>  {
+    private String type;
+    private String error;
+    private String userMessage;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(String type) {
+      this.type = type;
+      return self();
+    }
+    public B error(String error) {
+      this.error = error;
+      return self();
+    }
+    public B userMessage(String userMessage) {
+      this.userMessage = userMessage;
+      return self();
+    }
+  }
 }
 
