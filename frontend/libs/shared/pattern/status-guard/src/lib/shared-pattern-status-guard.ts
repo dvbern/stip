@@ -32,7 +32,7 @@ export const isAllowedTo =
 
         return gesuchService.getGesuchInfo$({ gesuchId }).pipe(
           map(({ state: { gesuchStatus } }) =>
-            getGesuchPermissions({ gesuchStatus }, config.appType, {
+            getGesuchPermissions({ gesuchStatus }, config.app, {
               V0_Gesuchsteller: true,
             }).permissions[`can${capitalized(permission)}`]
               ? true

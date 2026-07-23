@@ -10,8 +10,8 @@ import {
   GesuchService,
   GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { getRelativeTrancheRoute } from '@dv/shared/model/router';
-import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   cachedPending,
@@ -60,29 +60,22 @@ export class GesuchHeaderStore extends signalStore(
           header: cachedPending(state.header),
         }));
       }),
-      exhaustMap(({ gesuchId }) => {
-        switch (this.config.appType) {
-          case 'gesuch-app': {
-            return this.gesuchService
+      exhaustMap(({ gesuchId }) =>
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.gesuchService
               .getGesuchHeaderGs$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
-              );
-          }
-          case 'sachbearbeitung-app': {
-            return this.gesuchService
+              ),
+          sachbearbeiter: () =>
+            this.gesuchService
               .getGesuchHeaderSb$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
-              );
-          }
-          case 'demo-data-app': {
-            throw new Error('App-Type not handled');
-          }
-          default:
-            assertUnreachable(this.config.appType);
-        }
-      }),
+              ),
+        }),
+      ),
     ),
   );
 }

@@ -429,7 +429,7 @@ export class SachbearbeitungAppFeatureGesuchLayoutComponent {
 
     const { permissions } = getGesuchPermissions(
       { gesuchStatus },
-      this.config.appType,
+      this.config.app,
       rolesMap,
     );
 

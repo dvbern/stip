@@ -2,7 +2,7 @@ import { HttpEventType } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { patchState, signalState } from '@ngrx/signals';
-import { EMPTY, Subject, merge, of, throwError } from 'rxjs';
+import { EMPTY, Subject, merge, of } from 'rxjs';
 import {
   catchError,
   exhaustMap,
@@ -32,7 +32,7 @@ import {
   DokumentService,
   DokumentTyp,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { assertUnreachable, isDefined } from '@dv/shared/model/type-util';
 import { noGlobalErrorsIf, shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import { sharedUtilFnErrorTransformer } from '@dv/shared/util-fn/error-transformer';
@@ -121,35 +121,34 @@ export class UploadStore {
     } & DokumentOptions
   >();
 
-  private getRequiredGesuchDokumenteByAppType(params: {
+  private getRequiredGesuchDokumenteByAppConfig$(params: {
     dokumentTyp: DokumentTyp;
     gesuchTrancheId: string;
     entryId: string | undefined;
   }) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.getGesuchDokumentForTypGS$(params),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.getGesuchDokumentForTypSB$(params),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private getCustomGesuchDokumenteByAppType$(params: {
+  private getCustomGesuchDokumenteByAppConfig$(params: {
     customDokumentTypId: string;
   }) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.getCustomGesuchDokumentForTypGS$(params),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.getCustomGesuchDokumentForTypSB$(params),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private deleteDokumentByAppType$(dokumentId: string, ignoreErrors?: boolean) {
+  private deleteDokumentByAppConfig$(
+    dokumentId: string,
+    ignoreErrors?: boolean,
+  ) {
     const deleteCallParams = [
       { dokumentId },
       undefined,
@@ -159,23 +158,21 @@ export class UploadStore {
       },
     ] as const;
 
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.deleteDokumentGS$(...deleteCallParams),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.deleteDokumentSB$(...deleteCallParams),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private createDokumentByAppType$(
+  private createDokumentByAppConfig$(
     fileUpload: File,
     dokument: SharedModelStandardGesuchDokument,
     serviceDefaultParams: ServiceDefaultParams,
   ) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.createDokumentGS$(
           {
             fileUpload,
@@ -185,7 +182,7 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.createDokumentSB$(
           {
             fileUpload,
@@ -195,18 +192,16 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private createCustomDokumentByAppType$(
+  private createCustomDokumentByAppConfig$(
     fileUpload: File,
     dokument: SharedModelCustomGesuchDokument,
     serviceDefaultParams: ServiceDefaultParams,
   ) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.uploadCustomGesuchDokumentGS$(
           {
             fileUpload,
@@ -214,7 +209,7 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.uploadCustomGesuchDokumentSB$(
           {
             fileUpload,
@@ -222,8 +217,6 @@ export class UploadStore {
           },
           ...serviceDefaultParams,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -254,7 +247,7 @@ export class UploadStore {
                   );
               }
               case 'GESUCH_DOKUMENT': {
-                return this.getRequiredGesuchDokumenteByAppType({
+                return this.getRequiredGesuchDokumenteByAppConfig$({
                   dokumentTyp: dokument.dokumentTyp,
                   gesuchTrancheId: dokument.trancheId,
                   entryId: dokument.entryId,
@@ -273,7 +266,7 @@ export class UploadStore {
                 );
               }
               case 'CUSTOM_DOKUMENT':
-                return this.getCustomGesuchDokumenteByAppType$({
+                return this.getCustomGesuchDokumenteByAppConfig$({
                   customDokumentTypId: dokument.dokumentTyp.id,
                 }).pipe(
                   map(
@@ -374,7 +367,7 @@ export class UploadStore {
             switch (action.dokument.art) {
               case 'CUSTOM_DOKUMENT':
               case 'GESUCH_DOKUMENT':
-                return this.deleteDokumentByAppType$(
+                return this.deleteDokumentByAppConfig$(
                   action.dokumentId,
                   !!dokumentToDelete?.error,
                 );
@@ -579,13 +572,13 @@ export class UploadStore {
             ...serviceDefaultParams,
           );
         case 'GESUCH_DOKUMENT':
-          return this.createDokumentByAppType$(
+          return this.createDokumentByAppConfig$(
             fileUpload,
             dokument,
             serviceDefaultParams,
           );
         case 'CUSTOM_DOKUMENT':
-          return this.createCustomDokumentByAppType$(
+          return this.createCustomDokumentByAppConfig$(
             fileUpload,
             dokument,
             serviceDefaultParams,
