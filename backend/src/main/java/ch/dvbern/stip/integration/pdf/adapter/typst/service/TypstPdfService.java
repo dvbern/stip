@@ -182,9 +182,11 @@ public class TypstPdfService implements PdfPort {
                 command.add(typstPath + ":" + TYPST_PATH);
                 command.add("-v");
                 command.add(fontsPath + ":" + FONTS_PATH);
-                command.add(adapterConfig.dockerImage());
-            }
-            else {
+                command.add(
+                    adapterConfig.dockerImage()
+                        .orElseThrow(() -> new IllegalStateException("Docker image not configured for Typst adapter"))
+                );
+            } else {
                 command.add(adapterConfig.binary());
             }
 
@@ -207,9 +209,10 @@ public class TypstPdfService implements PdfPort {
 
             command.add("--ignore-system-fonts");
 
-            command.add(adapterConfig.dockerEnabled()
-                ? mainTemplatePath.replace(typstPath, TYPST_PATH)
-                : mainTemplatePath
+            command.add(
+                adapterConfig.dockerEnabled()
+                    ? mainTemplatePath.replace(typstPath, TYPST_PATH)
+                    : mainTemplatePath
             );
             command.add("-");
 
