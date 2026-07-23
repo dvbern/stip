@@ -298,6 +298,8 @@ quarkus:
       pdf:
         typst:
           binary: "typst"
+          docker-enabled: true
+          docker-image: "ghcr.io/typst/typst:0.15.1"
           root-path: "${user.dir}/src/main/resources/typst"
           fonts-path: "${user.dir}/src/main/resources/fonts"
 '%test':

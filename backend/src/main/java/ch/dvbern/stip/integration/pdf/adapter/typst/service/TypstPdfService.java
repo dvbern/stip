@@ -174,7 +174,20 @@ public class TypstPdfService implements PdfPort {
 
             List<String> command = new ArrayList<>();
 
-            command.add(adapterConfig.binary());
+            if (adapterConfig.dockerEnabled()) {
+                command.add("docker");
+                command.add("run");
+                command.add("--rm");
+                command.add("-v");
+                command.add(typstPath + ":" + TYPST_PATH);
+                command.add("-v");
+                command.add(fontsPath + ":" + FONTS_PATH);
+                command.add(adapterConfig.dockerImage());
+            }
+            else {
+                command.add(adapterConfig.binary());
+            }
+
             command.add("compile");
 
             command.add("--format");
@@ -184,17 +197,20 @@ public class TypstPdfService implements PdfPort {
             command.add("1");
 
             command.add("--root");
-            command.add(typstPath);
+            command.add(adapterConfig.dockerEnabled() ? TYPST_PATH : typstPath);
 
             command.add("--font-path");
-            command.add(fontsPath);
+            command.add(adapterConfig.dockerEnabled() ? FONTS_PATH : fontsPath);
 
             command.add("--input");
             command.add("data=" + jsonPayload);
 
             command.add("--ignore-system-fonts");
 
-            command.add(mainTemplatePath);
+            command.add(adapterConfig.dockerEnabled()
+                ? mainTemplatePath.replace(typstPath, TYPST_PATH)
+                : mainTemplatePath
+            );
             command.add("-");
 
             return command;

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.config.type;
 import java.util.Map;
 
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import io.smallrye.config.WithDefault;
 
 public interface GlobalAdapterConfig {
     Map<PdfAdapterType, PdfAdapter> pdf();
@@ -38,5 +39,10 @@ public interface GlobalAdapterConfig {
         String rootPath();
 
         String fontsPath();
+
+        @WithDefault("false")
+        boolean dockerEnabled();
+
+        String dockerImage();
     }
 }
