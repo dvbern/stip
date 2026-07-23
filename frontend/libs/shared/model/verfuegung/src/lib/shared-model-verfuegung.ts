@@ -1,3 +1,4 @@
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import {
   BerechnungsStammdaten,
   FamilienBudgetresultat,
@@ -48,3 +49,42 @@ export type BerechnungView = {
   familien: FamilienBudgetresultatView[];
   berechnungsStammdaten: BerechnungsStammdaten;
 };
+
+export type VerfuegungOption = {
+  route: string;
+  translationKey: SharedTranslationKey;
+  translationOptions?: Record<string, string>;
+  titleTranslationKey: SharedTranslationKey;
+  iconSymbolName: string;
+};
+
+export const VERFUEGUNG_ROUTE = 'verfuegung';
+export const OPTION_ZUSAMMENFASSUNG: VerfuegungOption = {
+  route: 'zusammenfassung',
+  translationKey: 'shared.verfuegung.option.zusammenfassung',
+  titleTranslationKey: 'shared.verfuegung.option.zusammenfassung',
+  iconSymbolName: 'equal',
+};
+
+export const BERECHNUNG_ROUTE = 'berechnung';
+export const createBerechnungOption = (
+  index: number,
+  totalBerechnungen: number,
+): VerfuegungOption => {
+  const key =
+    totalBerechnungen > 1
+      ? 'shared.verfuegung.option.berechnung.withCounter'
+      : 'shared.verfuegung.option.berechnung';
+
+  return {
+    route: `berechnung/${index + 1}`,
+    translationKey: key,
+    translationOptions: {
+      counter: (index + 1).toString(),
+    },
+    titleTranslationKey: 'shared.verfuegung.option.berechnung.title',
+    iconSymbolName: 'description',
+  };
+};
+
+export const VERFUEGUNG_OPTIONS = [OPTION_ZUSAMMENFASSUNG];

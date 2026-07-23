@@ -17,12 +17,26 @@
 
 package ch.dvbern.stip.api.verfuegung.repo;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import ch.dvbern.stip.api.common.repo.BaseRepository;
+import ch.dvbern.stip.api.verfuegung.entity.QVerfuegung;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 
 @ApplicationScoped
 @RequiredArgsConstructor
 public class VerfuegungRepository implements BaseRepository<Verfuegung> {
+    public Optional<Verfuegung> getLatestVerfuegungByGesuchId(final UUID gesuchId) {
+        final var Q_VERFUEGUNG = QVerfuegung.verfuegung;
+        return new JPAQueryFactory(getEntityManager())
+            .selectFrom(Q_VERFUEGUNG)
+            .where(Q_VERFUEGUNG.gesuch.id.eq(gesuchId))
+            .orderBy(Q_VERFUEGUNG.timestampErstellt.desc())
+            .stream()
+            .findFirst();
+    }
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { format } from 'date-fns/format';
 import { filter, map } from 'rxjs';
 
+import { translatableShared } from '@dv/shared/assets/i18n';
 import {
   FreiwilligDarlehen,
   GesuchTrancheSlim,
@@ -99,7 +100,6 @@ export function buildGesuchNavItems(
   tranchen: Pick<GesuchTrancheSlim, 'id' | 'gueltigAb'>[],
   tabRouteSegments: string[],
   trancheId: string | undefined,
-  baseKey = 'shared',
 ): NavItem[] {
   if (!gesuchId) return [];
 
@@ -108,14 +108,14 @@ export function buildGesuchNavItems(
       {
         type: 'menu',
         id: 'gesuch',
-        label: { key: `${baseKey}.header.gesuch` },
+        label: { key: 'shared.header.gesuch' },
         icon: 'description',
         active: !!gesuchId,
         children: tranchen.map((tranche) => ({
           type: 'link' as const,
           id: tranche.id,
           label: {
-            key: `${baseKey}.header.tranche.item`,
+            key: 'shared.header.tranche.item',
             context: {
               date: format(tranche.gueltigAb, 'dd.MM.yyyy'),
             },
@@ -139,7 +139,7 @@ export function buildGesuchNavItems(
       {
         type: 'link',
         id: 'gesuch',
-        label: { key: `${baseKey}.header.gesuch` },
+        label: { key: 'shared.header.gesuch' },
         icon: 'description',
         route: [
           '/gesuch',
@@ -184,14 +184,16 @@ export function buildDarlehenMenu(config: {
           type: 'separator' as const,
           id: `separator-${status}`,
           label: {
-            key: `shared.header.darlehen.complete-states.${status}`,
+            key: translatableShared(
+              `shared.header.darlehen.complete-states.${status}`,
+            ),
           },
         },
         ...list.map((dar) => ({
           type: 'link' as const,
           id: dar.id,
           label: {
-            key: 'shared.header.darlehen.item',
+            key: translatableShared('shared.header.darlehen.item'),
             context: {
               date: dar.timestampErstellt
                 ? format(dar.timestampErstellt, 'dd.MM.yyyy')

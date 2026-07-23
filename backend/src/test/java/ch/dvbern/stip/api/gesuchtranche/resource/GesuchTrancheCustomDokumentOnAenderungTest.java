@@ -48,6 +48,7 @@ import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -156,7 +157,7 @@ class GesuchTrancheCustomDokumentOnAenderungTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         TestUtil.alignSteuerdatenAndAcceptAllDokuments(
             gesuchTrancheApiSpec,

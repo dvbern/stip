@@ -109,7 +109,7 @@ export interface DarlehenServiceGetAllFreiwilligDarlehenGsRequestParams {
 }
 
 export interface DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams {
-    gesuchId: string;
+    fallId: string;
 }
 
 export interface DarlehenServiceGetDarlehenBuchhaltungEntrysRequestParams {
@@ -1701,11 +1701,11 @@ export class DarlehenService {
     }
 
     public getAllFreiwilligDarlehenSbPath = (requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams) => {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
         }
-        let path = `/api/v1/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        let path = `/api/v1/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
 
         // Query Params
         let queryParams = new URLSearchParams();
@@ -1726,9 +1726,9 @@ export class DarlehenService {
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpResponse<Array<FreiwilligDarlehen>>>;
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<HttpEvent<Array<FreiwilligDarlehen>>>;
      public getAllFreiwilligDarlehenSb$(requestParameters: DarlehenServiceGetAllFreiwilligDarlehenSbRequestParams, observe: 'body' | 'response' | 'events' = 'body', reportProgress = false, options?: {httpHeaderAccept?: 'application/json' | 'text/plain', context?: HttpContext}): Observable<any> {
-        const gesuchId = requestParameters.gesuchId;
-        if (gesuchId === null || gesuchId === undefined) {
-            throw new Error('Required parameter gesuchId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
+        const fallId = requestParameters.fallId;
+        if (fallId === null || fallId === undefined) {
+            throw new Error('Required parameter fallId was null or undefined when calling getAllFreiwilligDarlehenSb$.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -1776,7 +1776,7 @@ export class DarlehenService {
             }
         }
 
-        const localVarPath = `/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "gesuchId", value: gesuchId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const localVarPath = `/darlehen/getAllDarlehenSb/${this.configuration.encodeParam({name: "fallId", value: fallId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
         return this.httpClient.request<Array<FreiwilligDarlehen>>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

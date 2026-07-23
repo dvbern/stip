@@ -143,3 +143,9 @@ export function getDateDifference(
         end: refDate,
       });
 }
+
+export function getYearRangeFrom(start: string, end: string) {
+  return Array.from(
+    new Set([format(Date.parse(start), 'yy'), format(Date.parse(end), 'yy')]),
+  ).join('/');
+}

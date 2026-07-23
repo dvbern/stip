@@ -14,6 +14,7 @@ import { GesuchStateInfo } from './gesuchStateInfo';
 export interface GesuchInfo { 
     id: string;
     fallNummer: string;
+    fallId: string;
     gesuchNummer: string;
     startDate: string;
     endDate: string;

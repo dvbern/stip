@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.io.Serializable;
 import jakarta.validation.constraints.*;
 import jakarta.validation.Valid;
@@ -32,6 +33,8 @@ public class GesuchHeaderDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> currentTranches = new ArrayList<>();
   private @Valid GesuchInfoDto gesuchInfo;
   private @Valid InitialGesuchsDto initial;
+  private @Valid UUID latestVerfuegungId;
+  private @Valid java.time.LocalDateTime latestVerfuegtAt;
 
   /**
    **/
@@ -159,6 +162,42 @@ public class GesuchHeaderDto  implements Serializable {
     this.initial = initial;
   }
 
+  /**
+   **/
+  public GesuchHeaderDto latestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+    return this;
+  }
+
+  
+  @JsonProperty("latestVerfuegungId")
+  public UUID getLatestVerfuegungId() {
+    return latestVerfuegungId;
+  }
+
+  @JsonProperty("latestVerfuegungId")
+  public void setLatestVerfuegungId(UUID latestVerfuegungId) {
+    this.latestVerfuegungId = latestVerfuegungId;
+  }
+
+  /**
+   **/
+  public GesuchHeaderDto latestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
+    return this;
+  }
+
+  
+  @JsonProperty("latestVerfuegtAt")
+  public java.time.LocalDateTime getLatestVerfuegtAt() {
+    return latestVerfuegtAt;
+  }
+
+  @JsonProperty("latestVerfuegtAt")
+  public void setLatestVerfuegtAt(java.time.LocalDateTime latestVerfuegtAt) {
+    this.latestVerfuegtAt = latestVerfuegtAt;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -173,12 +212,14 @@ public class GesuchHeaderDto  implements Serializable {
         Objects.equals(this.aenderungs, gesuchHeader.aenderungs) &&
         Objects.equals(this.currentTranches, gesuchHeader.currentTranches) &&
         Objects.equals(this.gesuchInfo, gesuchHeader.gesuchInfo) &&
-        Objects.equals(this.initial, gesuchHeader.initial);
+        Objects.equals(this.initial, gesuchHeader.initial) &&
+        Objects.equals(this.latestVerfuegungId, gesuchHeader.latestVerfuegungId) &&
+        Objects.equals(this.latestVerfuegtAt, gesuchHeader.latestVerfuegtAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial);
+    return Objects.hash(versions, aenderungs, currentTranches, gesuchInfo, initial, latestVerfuegungId, latestVerfuegtAt);
   }
 
   @Override
@@ -191,6 +232,8 @@ public class GesuchHeaderDto  implements Serializable {
     sb.append("    currentTranches: ").append(toIndentedString(currentTranches)).append("\n");
     sb.append("    gesuchInfo: ").append(toIndentedString(gesuchInfo)).append("\n");
     sb.append("    initial: ").append(toIndentedString(initial)).append("\n");
+    sb.append("    latestVerfuegungId: ").append(toIndentedString(latestVerfuegungId)).append("\n");
+    sb.append("    latestVerfuegtAt: ").append(toIndentedString(latestVerfuegtAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

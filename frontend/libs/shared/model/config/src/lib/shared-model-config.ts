@@ -33,6 +33,11 @@ export function ensureIsBusinessAppConfig(
   }
 }
 
+export function onlyBusinessAppConfig(appConfig: AppConfig): BusinessAppConfig {
+  ensureIsBusinessAppConfig(appConfig);
+  return appConfig;
+}
+
 export class SharedModelCompileTimeConfig {
   readonly authClientId: `stip-${AppConfig['type']}`;
   readonly app: Readonly<AppConfig>;

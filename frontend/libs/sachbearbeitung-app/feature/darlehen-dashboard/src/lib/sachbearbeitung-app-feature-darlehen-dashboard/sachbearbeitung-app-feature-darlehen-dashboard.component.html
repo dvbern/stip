@@ -68,7 +68,7 @@
                   class="tw:w-32 tw:whitespace-nowrap"
                 >
                   <a
-                    [routerLink]="['/darlehen', darlehen.id, 'gesuch', darlehen.relatedGesuchId]"
+                    [routerLink]="['/darlehen', darlehen.id, 'fall', darlehen.fallId]"
                     (click)="$event.stopPropagation()"
                   >
                     {{ darlehen.fallNummer }}
@@ -348,7 +348,7 @@
                 mat-row
                 tabindex="-1"
                 *dvMatRowDef="let darlehen; dataSource: darlehenDataSourceSig(); columns: displayedColumns"
-                [routerLink]="['/darlehen', darlehen.id, 'gesuch', darlehen.relatedGesuchId]"
+                [routerLink]="['/darlehen', darlehen.id, 'fall', darlehen.fallId]"
                 class="highlightable"
               ></tr>
               <tr class="mat-mdc-row" *matNoDataRow>

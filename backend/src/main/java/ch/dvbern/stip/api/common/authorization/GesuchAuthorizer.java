@@ -138,12 +138,17 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     @Transactional
     public void canGetBerechnungOfVerfuegung(final UUID verfuegungId) {
         final var verfuegung = verfuegungService.requireById(verfuegungId);
-        gsSbOrFreigabestelleOrJuristCanRead(verfuegung.getGesuch().getId());
+        gsSbFreigabestelleOrJuristCanRead(verfuegung.getGesuch().getId());
     }
 
     @Transactional
-    public void canGetBerechnung(final UUID gesuchId) {
-        assertSBCanGetBerechnung(gesuchId);
+    public void canGetBerechnungGs(final UUID gesuchId) {
+        assertCanGetBerechnungGs(gesuchId);
+    }
+
+    @Transactional
+    public void canGetBerechnungSb(final UUID gesuchId) {
+        assertCanGetBerechnungSb(gesuchId);
     }
 
     @Transactional
@@ -157,7 +162,7 @@ public class GesuchAuthorizer extends BaseAuthorizer {
     }
 
     @Transactional
-    public void gsSbOrFreigabestelleOrJuristCanRead(final UUID gesuchId) {
+    public void gsSbFreigabestelleOrJuristCanRead(final UUID gesuchId) {
         if (isSbOrFreigabestelleOrJurist(benutzerService.getCurrentBenutzer())) {
             return;
         }
@@ -304,9 +309,17 @@ public class GesuchAuthorizer extends BaseAuthorizer {
         }
     }
 
-    public void assertSBCanGetBerechnung(final UUID gesuchId) {
+    public void assertCanGetBerechnungGs(final UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
-        if (gesuchStatusService.canGetBerechnung(gesuch)) {
+        if (gesuchStatusService.canGetBerechnungGs(gesuch)) {
+            return;
+        }
+        forbidden();
+    }
+
+    public void assertCanGetBerechnungSb(final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        if (gesuchStatusService.canGetBerechnungSb(gesuch)) {
             return;
         }
         forbidden();

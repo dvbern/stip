@@ -41,6 +41,10 @@ export class GesuchHeaderStore extends signalStore(
     const headerData = this.header().data;
     return {
       ...headerData,
+      canGetBerechnung: byAppConfig(this.config.app, {
+        gesuchsteller: () => headerData?.gesuchInfo.state.canGSGetBerechnung,
+        sachbearbeiter: () => headerData?.gesuchInfo.state.canSBGetBerechnung,
+      }),
       // The initial tranchen are also returned as version, but they are already handled with header.initial
       // so we can skip the last element as it is always the initial tranchen
       versions: headerData?.versions?.slice(0, -1),

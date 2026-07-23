@@ -168,14 +168,14 @@ export const loadGesuch = createEffect(
           // Call the correct service based on the app type
           const aenderungService$ = byAppConfig(appConfig, {
             gesuchsteller: () => (aenderungId: string) =>
-              gesuchService.getGsAenderungChangesInBearbeitung$(
+              gesuchService.getAenderungChangesGs$(
                 { aenderungId },
                 undefined,
                 undefined,
                 handle404And401,
               ),
             sachbearbeiter: () => (aenderungId: string) =>
-              gesuchService.getSbAenderungChanges$(
+              gesuchService.getAenderungChangesSb$(
                 { aenderungId, revision },
                 undefined,
                 undefined,
