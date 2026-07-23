@@ -190,16 +190,12 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
   });
   wohnsitzHelper = prepareWohnsitzForm({
     projector: (formular) =>
-      formular?.geschwisters?.find((g) => g.id === this.geschwisterSig().id),
+      formular?.geschwisters?.find(
+        (g) => g.id === untracked(this.geschwisterSig).id,
+      ),
     form: this.form.controls,
     viewSig: this.wohnsitzViewSig,
     refreshSig: this.gotReenabledSig,
-  });
-  showWohnsitzSplitterSig = computed(() => {
-    const isMutterVater = this.wohnsitzHelper.showWohnsitzSplitterSig();
-    const isNotLeiblichGeschwister = this.isNotLeiblichGeschwisterSig();
-
-    return isNotLeiblichGeschwister || isMutterVater;
   });
   ausbildungssituationSig = toSignal(
     this.form.controls.ausbildungssituation.valueChanges,
@@ -235,6 +231,8 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         ),
         ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
       });
+    });
+    effect(() => {
       this.formUtils.invalidateControlIfValidationFails(
         this.form,
         ['wohnsitz'],
