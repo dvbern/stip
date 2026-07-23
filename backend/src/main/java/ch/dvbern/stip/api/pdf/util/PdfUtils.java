@@ -46,14 +46,19 @@ import ch.dvbern.stip.api.pdf.type.Anhangs;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import com.itextpdf.io.font.FontProgram;
 import com.itextpdf.io.font.FontProgramFactory;
+import com.itextpdf.kernel.colors.DeviceGray;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.Rectangle;
 import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfPage;
 import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
+import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.kernel.pdf.xobject.PdfFormXObject;
 import com.itextpdf.kernel.utils.PdfMerger;
+import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.borders.SolidBorder;
@@ -95,11 +100,12 @@ public class PdfUtils {
     }
 
     public ByteArrayOutputStream mergePdfs(final List<ByteArrayOutputStream> pdfs) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         if (pdfs == null || pdfs.isEmpty()) {
-            return null;
+            return out;
         }
 
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
         try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
             final PdfMerger merger = new PdfMerger(targetPdf);
 
@@ -117,6 +123,68 @@ public class PdfUtils {
             }
         } catch (IOException e) {
             throw new InternalServerErrorException("Failed to merge PDFs", e);
+        }
+
+        return out;
+    }
+
+    public ByteArrayOutputStream addPageNumbers(
+        final ByteArrayOutputStream pdf
+    ) {
+
+        if (pdf == null || pdf.size() == 0) {
+            return pdf;
+        }
+
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (
+            PdfReader reader =
+                new PdfReader(new ByteArrayInputStream(pdf.toByteArray()));
+            PdfWriter writer = new PdfWriter(out);
+            PdfDocument pdfDoc = new PdfDocument(reader, writer)
+        ) {
+            final int numberOfPages = pdfDoc.getNumberOfPages();
+            final PdfFont font = createFont();
+
+            for (int i = 1; i <= numberOfPages; i++) {
+                final PdfPage page = pdfDoc.getPage(i);
+
+                final Rectangle visibleArea = page.getCropBox();
+
+                final float x =
+                    visibleArea.getLeft() + visibleArea.getWidth() / 2f;
+                final float y =
+                    visibleArea.getBottom() + 25f;
+
+                final PdfCanvas pdfCanvas = new PdfCanvas(page, true);
+
+                try (Canvas canvas = new Canvas(pdfCanvas, visibleArea)) {
+                    final Paragraph pageNumber = new Paragraph(
+                        String.format(
+                            "%d / %d",
+                            i,
+                            numberOfPages
+                        )
+                    )
+                        .setMargin(0)
+                        .setFont(font)
+                        .setFontSize(PdfConstants.FONT_SIZE_SMALL)
+                        .setFontColor(DeviceGray.BLACK);
+
+                    canvas.showTextAligned(
+                        pageNumber,
+                        x,
+                        y,
+                        TextAlignment.CENTER
+                    );
+                }
+            }
+        } catch (IOException e) {
+            throw new InternalServerErrorException(
+                "Failed to add page numbers",
+                e
+            );
         }
 
         return out;

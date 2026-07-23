@@ -46,6 +46,7 @@ import io.quarkus.runtime.ShutdownEvent;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.event.Observes;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 
 @Slf4j
 @RequestScoped
@@ -56,6 +57,7 @@ public class TypstPdfService implements PdfPort {
     private static final String FONTS_PATH = "/fonts";
     private static final String TYPST_PATH = "/typst";
     private static final String MAIN_TEMPLATE_NAME = "main.typ";
+    private static final int BUFFER_SIZE = FileUtils.ONE_KB_BI.intValueExact() * 8;
 
     private final StipConfig config;
     private final TenantService tenantService;
@@ -91,24 +93,9 @@ public class TypstPdfService implements PdfPort {
             Process finalProcess = process;
 
             CompletableFuture<ByteArrayOutputStream> stdout =
-                CompletableFuture.supplyAsync(
-                    () -> readBounded(finalProcess.getInputStream()),
-                    ioExecutor
-                ).whenComplete((ignored, error) -> {
-                    if (error != null) {
-                        kill(finalProcess);
-                    }
-                });
-
+                createStreamFuture(finalProcess.getInputStream(), finalProcess);
             CompletableFuture<ByteArrayOutputStream> stderr =
-                CompletableFuture.supplyAsync(
-                    () -> readBounded(finalProcess.getErrorStream()),
-                    ioExecutor
-                ).whenComplete((ignored, error) -> {
-                    if (error != null) {
-                        kill(finalProcess);
-                    }
-                });
+                createStreamFuture(finalProcess.getErrorStream(), finalProcess);
 
             boolean finished = process.waitFor(
                 Duration.ofSeconds(adapterConfig.compileTimeout()).toMillis(),
@@ -130,7 +117,7 @@ public class TypstPdfService implements PdfPort {
                 throw new PdfCompilationException(exitCode, diagnostics);
             }
 
-            if (!isPdf(pdfOutputStream.toByteArray())) {
+            if (!isPdf(pdfOutputStream)) {
                 throw new PdfGenerationException("Typst did not return a valid PDF");
             }
 
@@ -222,9 +209,25 @@ public class TypstPdfService implements PdfPort {
         }
     }
 
-    private boolean isPdf(byte[] bytes) {
-        return bytes.length >= 5
-        && bytes[0] == '%'
+    private CompletableFuture<ByteArrayOutputStream> createStreamFuture(
+        InputStream inputStream,
+        Process process
+    ) {
+        return CompletableFuture.supplyAsync(
+            () -> readBounded(inputStream),
+            ioExecutor
+        ).whenComplete((ignored, error) -> {
+            if (error != null) {
+                kill(process);
+            }
+        });
+    }
+
+    private boolean isPdf(ByteArrayOutputStream outputStream) {
+        if (outputStream.size() < 5)
+            return false;
+        byte[] bytes = outputStream.toByteArray();
+        return bytes[0] == '%'
         && bytes[1] == 'P'
         && bytes[2] == 'D'
         && bytes[3] == 'F'
@@ -237,16 +240,16 @@ public class TypstPdfService implements PdfPort {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-            byte[] buffer = new byte[8192];
+            byte[] buffer = new byte[BUFFER_SIZE];
             long total = 0;
-
-            if (total > adapterConfig.maxOutputBytes()) {
-                throw new PdfGenerationException("Typst output too large");
-            }
 
             int read;
             while ((read = input.read(buffer)) != -1) {
                 total += read;
+
+                if (total > adapterConfig.maxOutputBytes()) {
+                    throw new PdfGenerationException("Typst output too large");
+                }
 
                 output.write(buffer, 0, read);
             }

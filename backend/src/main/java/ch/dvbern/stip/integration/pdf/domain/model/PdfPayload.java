@@ -47,6 +47,10 @@ public class PdfPayload<T> implements Serializable {
     @JsonIgnore
     private T data;
 
+    public static <T> PdfPayloadBuilder<T> builder(T data) {
+        return new PdfPayloadBuilder<T>().data(data);
+    }
+
     public String toJson(final ObjectMapper objectMapper, final TenantAdapterConfig.PdfAdapter tenantAdapterConfig)
     throws JsonProcessingException {
         final ObjectNode node = objectMapper.createObjectNode();

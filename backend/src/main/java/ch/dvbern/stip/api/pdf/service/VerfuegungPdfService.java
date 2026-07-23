@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.pdf.service;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -55,17 +54,15 @@ import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import ch.dvbern.stip.integration.pdf.domain.model.BerechnungBlattPdfData;
-import ch.dvbern.stip.integration.pdf.domain.model.BerechnungUebersichtPdfData;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
+import ch.dvbern.stip.integration.pdf.domain.service.BerechnungCopyMapper;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfReader;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.action.PdfAction;
-import com.itextpdf.kernel.utils.PdfMerger;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Link;
@@ -95,6 +92,7 @@ public class VerfuegungPdfService {
     private final DarlehenService darlehenService;
     private final TenantService tenantService;
     private final PdfPortFactory pdfPortFactory;
+    private final BerechnungCopyMapper berechnungCopyMapper;
 
     private ByteArrayOutputStream createNegativeVerfuegungPdf(
         final Verfuegung verfuegung,
@@ -770,41 +768,37 @@ public class VerfuegungPdfService {
             final var lang = LocaleUtil.getKorrespondenzSprache(gesuch);
             final var pdfAdapter = pdfPortFactory.getPdfAdapter();
 
-            final var uebersichtPayload = PdfPayload.<BerechnungsresultatDto>builder()
+            final var stripped = berechnungCopyMapper.copy(stipendien);
+            final var uebersichtPayload = PdfPayload.builder(stripped)
                 .lang(lang)
                 .template(PdfTemplateType.BERECHNUNGSBLATT_UEBERSICHT)
-                .data(BerechnungUebersichtPdfData.from(stipendien))
                 .build();
             allBerechnungsBlaetter.add(pdfAdapter.renderPdf(uebersichtPayload));
 
             for (final TranchenBerechnungsresultatDto tranche : stipendien.getTranchenBerechnungsresultate()) {
-                final PersoenlichesBudgetresultatDto persoenlich = tranche.getPersoenlichesBudgetresultat();
-                if (persoenlich != null) {
-                    final var persoenlichPayload =
-                        PdfPayload.<BerechnungBlattPdfData<PersoenlichesBudgetresultatDto>>builder()
-                            .lang(lang)
-                            .template(PdfTemplateType.BERECHNUNGSBLATT_PIA)
-                            .data(BerechnungBlattPdfData.of(persoenlich, tranche))
-                            .build();
-
-                    final var piaBlatt = pdfAdapter.renderPdf(persoenlichPayload);
-                    piaBlaetter.add(piaBlatt);
-                    allBerechnungsBlaetter.add(piaBlatt);
-                }
-
                 for (final FamilienBudgetresultatDto familien : tranche.getFamilienBudgetresultate()) {
-                    final var familienPayload =
-                        PdfPayload.<BerechnungBlattPdfData<FamilienBudgetresultatDto>>builder()
-                            .lang(lang)
-                            .template(PdfTemplateType.BERECHNUNGSBLATT_FAMILIE)
-                            .data(BerechnungBlattPdfData.of(familien, tranche))
-                            .build();
+                    final var familienPayload = PdfPayload.builder(BerechnungBlattPdfData.of(familien, tranche))
+                        .lang(lang)
+                        .template(PdfTemplateType.BERECHNUNGSBLATT_FAMILIE)
+                        .build();
 
                     final var famBlatt = pdfAdapter.renderPdf(familienPayload);
                     familienBlaetterByTyp
                         .computeIfAbsent(familien.getSteuerdatenTyp(), k -> new ArrayList<>())
                         .add(famBlatt);
                     allBerechnungsBlaetter.add(famBlatt);
+                }
+
+                final PersoenlichesBudgetresultatDto persoenlich = tranche.getPersoenlichesBudgetresultat();
+                if (persoenlich != null) {
+                    final var persoenlichPayload = PdfPayload.builder(BerechnungBlattPdfData.of(persoenlich, tranche))
+                        .lang(lang)
+                        .template(PdfTemplateType.BERECHNUNGSBLATT_PIA)
+                        .build();
+
+                    final var piaBlatt = pdfAdapter.renderPdf(persoenlichPayload);
+                    piaBlaetter.add(piaBlatt);
+                    allBerechnungsBlaetter.add(piaBlatt);
                 }
             }
 
@@ -822,7 +816,7 @@ public class VerfuegungPdfService {
                 if (blaetter == null || blaetter.isEmpty()) {
                     continue;
                 }
-                final var merged = PdfUtils.mergePdfs(blaetter);
+                final var merged = PdfUtils.addPageNumbers(PdfUtils.mergePdfs(blaetter));
                 if (merged != null) {
                     verfuegungService.createAndStoreVerfuegungDokument(
                         verfuegung,
@@ -838,11 +832,19 @@ public class VerfuegungPdfService {
             }
 
             final ByteArrayOutputStream mergedBerechnungsBlaetter = PdfUtils.mergePdfs(allBerechnungsBlaetter);
-            final var versendeteVerfuegungOutput = createVersendeteVerfuegung(
-                verfuegungsBrief,
-                mergedBerechnungsBlaetter,
-                darlehensVerfuegung
+
+            final var versendetePdfs = new ArrayList<ByteArrayOutputStream>();
+            versendetePdfs.add(verfuegungsBrief);
+            versendetePdfs.add(mergedBerechnungsBlaetter);
+            darlehensVerfuegung.ifPresent(versendetePdfs::add);
+
+            final var versendeteVerfuegungOutput = PdfUtils.addPageNumbers(PdfUtils.mergePdfs(versendetePdfs));
+            verfuegungService.createAndStoreVerfuegungDokument(
+                verfuegung,
+                VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
+                versendeteVerfuegungOutput
             );
+
             verfuegungService.createAndStoreVerfuegungDokument(
                 verfuegung,
                 VerfuegungDokumentTyp.VERSENDETE_VERFUEGUNG,
@@ -864,48 +866,6 @@ public class VerfuegungPdfService {
             case VATER -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_VATER;
             case FAMILIE -> VerfuegungDokumentTyp.BERECHNUNGSBLATT_FAMILIE;
         };
-    }
-
-    private ByteArrayOutputStream createVersendeteVerfuegung(
-        final ByteArrayOutputStream verfuegungsbrief,
-        final ByteArrayOutputStream mergedBerechnungsblaetter,
-        final Optional<ByteArrayOutputStream> darlehenVerfuegung
-    ) {
-        final ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        try (final PdfDocument targetPdf = new PdfDocument(new PdfWriter(out))) {
-            final PdfMerger merger = new PdfMerger(targetPdf);
-
-            try (
-                final PdfDocument verfuegungPdf = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(verfuegungsbrief.toByteArray()))
-                )
-            ) {
-                merger.merge(verfuegungPdf, 1, verfuegungPdf.getNumberOfPages());
-            }
-
-            try (
-                final PdfDocument blattPdf = new PdfDocument(
-                    new PdfReader(new ByteArrayInputStream(mergedBerechnungsblaetter.toByteArray()))
-                )
-            ) {
-                merger.merge(blattPdf, 1, blattPdf.getNumberOfPages());
-            }
-
-            if (darlehenVerfuegung.isPresent()) {
-                try (
-                    final PdfDocument darlehen = new PdfDocument(
-                        new PdfReader(new ByteArrayInputStream(darlehenVerfuegung.get().toByteArray()))
-                    )
-                ) {
-                    merger.merge(darlehen, 1, darlehen.getNumberOfPages());
-                }
-            }
-        } catch (IOException e) {
-            throw new InternalServerErrorException("Failed to merge PDFs for Versendete Verfügung", e);
-        }
-
-        return out;
     }
 
     @FunctionalInterface

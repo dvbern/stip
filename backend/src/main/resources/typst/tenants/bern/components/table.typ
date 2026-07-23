@@ -89,7 +89,7 @@
     if item.info != none {
       cells += (
         table.cell(inset: (top: 0pt))[
-          #text(size: font.small, fill: font.dim)[#text(
+          #text(size: font.small)[#text(
             style: font.italic,
             eval(
               item.info,

@@ -33,7 +33,7 @@ kstip:
     pdf:
       typst:
         binary: "/usr/local/bin/typst"
-        max-output-bytes: 10000
+        max-output-bytes: 10000000
         compile-timeout: 10
         shutdown-wait-timeout: 10
         shutdown-force-timeout: 5
@@ -300,6 +300,9 @@ quarkus:
           binary: "typst"
           docker-enabled: true
           docker-image: "ghcr.io/typst/typst:0.15.1"
+
+          # https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html
+          # `user.dir` is the directory from which the jvm was started
           root-path: "${user.dir}/src/main/resources/typst"
           fonts-path: "${user.dir}/src/main/resources/fonts"
 '%test':

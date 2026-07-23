@@ -34,6 +34,7 @@ import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.integration.pdf.domain.port.PdfPortFactory;
+import ch.dvbern.stip.integration.pdf.domain.service.BerechnungCopyMapper;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkus.test.Mock;
 import jakarta.enterprise.context.RequestScoped;
@@ -42,7 +43,7 @@ import jakarta.enterprise.context.RequestScoped;
 @RequestScoped
 public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     public VerfuegungPdfServiceMock() {
-        super(null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null);
     }
 
     public VerfuegungPdfServiceMock(
@@ -51,7 +52,8 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
     VerfuegungService verfuegungService,
     DarlehenService darlehenService,
     TenantService tenantService,
-    PdfPortFactory pdfPortFactory
+    PdfPortFactory pdfPortFactory,
+    BerechnungCopyMapper berechnungCopyMapper
     ) {
         super(
             stipDecisionTextRepository,
@@ -59,7 +61,8 @@ public class VerfuegungPdfServiceMock extends VerfuegungPdfService {
             verfuegungService,
             darlehenService,
             tenantService,
-            pdfPortFactory
+            pdfPortFactory,
+            berechnungCopyMapper
         );
     }
 
