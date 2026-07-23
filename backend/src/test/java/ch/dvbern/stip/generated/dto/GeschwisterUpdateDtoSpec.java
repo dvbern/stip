@@ -328,9 +328,9 @@ public class GeschwisterUpdateDtoSpec {
    * Get geschwisterTyp
    * @return geschwisterTyp
   **/
-  @jakarta.annotation.Nullable
+  @jakarta.annotation.Nonnull
   @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
   public GeschwisterTypDtoSpec getGeschwisterTyp() {
     return geschwisterTyp;
@@ -338,7 +338,7 @@ public class GeschwisterUpdateDtoSpec {
 
 
   @JsonProperty(JSON_PROPERTY_GESCHWISTER_TYP)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
   public void setGeschwisterTyp(GeschwisterTypDtoSpec geschwisterTyp) {
     this.geschwisterTyp = geschwisterTyp;
   }

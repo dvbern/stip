@@ -11112,6 +11112,7 @@ components:
         - wohnsitz
         - vorname
         - nachname
+        - geschwisterTyp
         - geburtsdatum
         - ausbildungssituation
       type: object
