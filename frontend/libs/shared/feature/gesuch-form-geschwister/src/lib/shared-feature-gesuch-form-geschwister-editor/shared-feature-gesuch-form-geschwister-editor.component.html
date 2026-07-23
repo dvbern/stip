@@ -6,28 +6,29 @@
   novalidate
   class="tw:dv-form-grid"
   (ngSubmit)="handleSave()"
+  *dvTranslocoShared="let t"
 >
   <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-    <mat-label>{{ 'shared.form.shared.lastname.label' | transloco }}</mat-label>
+    <mat-label>{{ t('shared.form.shared.lastname.label') }}</mat-label>
     <input matInput dvMaxLength formControlName="nachname" data-testid="form-geschwister-nachname" type="text" />
     <mat-hint *dvZuvorHint="changes.nachname"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
+      {{ t('shared.form.error.required') }}
     </mat-error>
   </mat-form-field>
 
   <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-    <mat-label>{{ 'shared.form.shared.firstname.label' | transloco }}</mat-label>
+    <mat-label>{{ t('shared.form.shared.firstname.label') }}</mat-label>
     <input matInput dvMaxLength formControlName="vorname" data-testid="form-geschwister-vorname" type="text" />
     <mat-hint *dvZuvorHint="changes.vorname"></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
+      {{ t('shared.form.error.required') }}
     </mat-error>
   </mat-form-field>
 
   <!-- GEBURTSDATUM -->
   <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-    <mat-label>{{ 'shared.form.shared.birthday.label' | transloco }}</mat-label>
+    <mat-label>{{ t('shared.form.shared.birthday.label') }}</mat-label>
 
     <input
       placeholder="dd.mm.yyyy"
@@ -40,30 +41,30 @@
     <mat-hint *dvZuvorHint="changes.geburtsdatum | dvAppDate: 'dd.MM.yyyy'"></mat-hint>
 
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
+      {{ t('shared.form.error.required') }}
     </mat-error>
     <mat-error *dvSharedUiFormMessageError="'dateFormat'">
-      {{ 'shared.form.error.dateFormat' | transloco }}
+      {{ t('shared.form.error.dateFormat') }}
     </mat-error>
     <mat-error *dvSharedUiFormMessageError="'minDate'">
-      {{ 'shared.form.error.minDatePast' | transloco }}
+      {{ t('shared.form.error.minDatePast') }}
     </mat-error>
     <mat-error *dvSharedUiFormMessageError="'maxDate'">
-      {{ 'shared.form.error.maxDatePast' | transloco }}
+      {{ t('shared.form.error.maxDatePast') }}
     </mat-error>
   </mat-form-field>
 
   <!-- Wohnsitz -->
   <mat-form-field dvSharedUiFormField class="tw:dv-form-item">
-    <mat-label>{{ 'shared.form.shared.wohnsitz.label' | transloco }}</mat-label>
+    <mat-label>{{ t('shared.form.shared.wohnsitz.label') }}</mat-label>
     <mat-select
       formControlName="wohnsitz"
       data-testid="form-geschwister-wohnsitz"
-      [placeholder]="'shared.form.select.empty' | transloco"
+      [placeholder]="t('shared.form.select.empty')"
     >
       @for (a of wohnsitzHelper.wohnsitzValuesSig(); track $index) {
         <mat-option [attr.data-testid]="a" [value]="a">
-          {{ 'shared.form.shared.wohnsitz.' + a | transloco }}
+          {{ t(`shared.form.shared.wohnsitz.${a}`) }}
         </mat-option>
       }
     </mat-select>
@@ -71,12 +72,40 @@
       *dvZuvorHint="changes.wohnsitz | dvTranslateChange: 'shared.form.shared.wohnsitz.$VALUE' | async"
     ></mat-hint>
     <mat-error *dvSharedUiFormMessageError="'required'">
-      {{ 'shared.form.error.required' | transloco }}
+      {{ t('shared.form.error.required') }}
     </mat-error>
   </mat-form-field>
 
+  <!-- GeschwisterTyp -->
+  <mat-radio-group
+    formControlName="geschwisterTyp"
+    data-testid="form-geschwister-typ"
+    dvSharedUiFormField
+    class="tw:dv-form-item"
+  >
+    <label>{{ t('shared.form.geschwister.typ.label') }}</label>
+    <div class="tw:flex tw:gap-4 tw:justify-between">
+      <div class="tw:flex tw:flex-col">
+        @for (geschwisterTyp of geschwisterTyps; track $index) {
+          <mat-radio-button [attr.data-testid]="geschwisterTyp" [value]="geschwisterTyp">{{
+            t(`shared.form.geschwister.typ.${geschwisterTyp}`)
+          }}</mat-radio-button>
+        }
+        <dv-shared-ui-form-zuvor-hint
+          [changes]="changes.ausbildungssituation | dvTranslateChange: 'shared.form.geschwister.typ.$VALUE' | async"
+        ></dv-shared-ui-form-zuvor-hint>
+      </div>
+    </div>
+
+    <div class="group-errors">
+      <mat-error *dvSharedUiFormMessageError="'required'">
+        {{ t('shared.form.error.required') }}
+      </mat-error>
+    </div>
+  </mat-radio-group>
+
   <!-- WOHNSITZ AUFTEILUNG -->
-  @if (wohnsitzHelper.showWohnsitzSplitterSig()) {
+  @if (showWohnsitzSplitterSig()) {
     <div class="tw:dv-form-item">
       <dv-shared-ui-wohnsitz-splitter
         [updateValidity]="updateValidity$ | async"
@@ -85,6 +114,7 @@
           wohnsitzAnteilVater: changes.wohnsitzAnteilVater,
           wohnsitzAnteilMutter: changes.wohnsitzAnteilMutter,
         }"
+        [allowOnlyOneSig]="isNotLeiblichGeschwisterSig()"
       ></dv-shared-ui-wohnsitz-splitter>
     </div>
   }
@@ -96,12 +126,12 @@
     dvSharedUiFormField
     class="tw:dv-form-item"
   >
-    <label>{{ 'shared.form.geschwister.ausbildungssituation.label' | transloco }}</label>
+    <label>{{ t('shared.form.geschwister.ausbildungssituation.label') }}</label>
     <div class="tw:flex tw:gap-4 tw:justify-between">
       <div class="tw:flex tw:flex-col">
-        @for (a of ausbildungssituationValues; track $index) {
-          <mat-radio-button [attr.data-testid]="a" [value]="a">{{
-            'shared.form.geschwister.ausbildungssituation.select.' + a | transloco
+        @for (ausbildungssituation of ausbildungssituationValues; track $index) {
+          <mat-radio-button [attr.data-testid]="ausbildungssituation" [value]="ausbildungssituation">{{
+            t(`shared.form.geschwister.ausbildungssituation.select.${ausbildungssituation}`)
           }}</mat-radio-button>
         }
         <dv-shared-ui-form-zuvor-hint
@@ -123,25 +153,25 @@
 
     <div class="group-errors">
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.required' | transloco }}
+        {{ t('shared.form.error.required') }}
       </mat-error>
     </div>
   </mat-radio-group>
 
   <div class="tw:dv-form-item" *dvIfSachbearbeiter>
     <mat-checkbox class="tw:text-base tw:font-normal" formControlName="hidden" data-testid="form-geschwister-hidden">
-      {{ 'shared.form.geschwister.hidden' | transloco }}
+      {{ t('shared.form.geschwister.hidden') }}
     </mat-checkbox>
   </div>
 
   <!-- buttons -->
   <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
     <button type="button" class="tw:dv-button-outline" (click)="handleCancel()" data-testid="button-cancel">
-      {{ 'shared.form.cancel-and-back' | transloco }}
+      {{ t('shared.form.cancel-and-back') }}
     </button>
     @if (!viewSig().readonly) {
       <button type="submit" class="tw:dv-button-main-primary" data-testid="button-save">
-        {{ 'shared.form.save-and-back' | transloco }}
+        {{ t('shared.form.save-and-back') }}
       </button>
     }
   </dv-shared-ui-step-form-buttons>

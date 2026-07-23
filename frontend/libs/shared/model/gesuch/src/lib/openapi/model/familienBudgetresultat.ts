@@ -46,6 +46,7 @@ export interface FamilienBudgetresultat {
     fehlbetrag: number;
     proKopfTeilung: number;
     ungedeckterAnteilLebenshaltungskosten: number;
+    teilzeitKinderProzente: number;
     einnahmen: FamilienBudgetresultatEinnahmen;
     kosten: FamilienBudgetresultatKosten;
 }
