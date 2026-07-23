@@ -99,16 +99,21 @@ public class TranchenSubBerechnungsresultatCalculator {
 
         Integer total = budgetResults.stipendien();
 
-        final BigDecimal berechnungsanteilKindsDerEltern =
+        final BigDecimal berechnungsanteilLeiblichKindsDerEltern =
             BernCalculatorUtil.getBerechnugsAnteilLeiblichKindsDerEltern(gesuchFormular, steuerdatenTypToPrioritize);
 
-        total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilKindsDerEltern);
+        total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilLeiblichKindsDerEltern);
 
         final BigDecimal berechnugsAnteilStiefHalbKindsDerEltern =
             BernCalculatorUtil.getBerechnugsAnteilStiefHalbKindsDerEltern(
                 gesuchFormular,
                 teilzeitStiefHalbGeschwistersBeiElternAnrechnen
             );
+
+        final BigDecimal berechnungsanteilKindsDerEltern =
+            Objects.requireNonNullElse(berechnungsanteilLeiblichKindsDerEltern, BigDecimal.valueOf(100))
+                .multiply(Objects.requireNonNullElse(berechnugsAnteilStiefHalbKindsDerEltern, BigDecimal.valueOf(100)))
+                .divide(BigDecimal.valueOf(100));
 
         total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnugsAnteilStiefHalbKindsDerEltern);
 

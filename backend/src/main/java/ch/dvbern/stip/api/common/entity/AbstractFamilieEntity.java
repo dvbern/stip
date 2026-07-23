@@ -76,11 +76,11 @@ public class AbstractFamilieEntity extends AbstractPerson {
         }
 
         return switch (steuerdatenTyp) {
-            case FAMILIE -> getWohnsitzAnteilVater().intValue() > 0
+            case FAMILIE -> Objects.requireNonNullElse(getWohnsitzAnteilVater(), BigDecimal.ZERO).intValue() > 0
                 ? getWohnsitzAnteilVater()
                 : getWohnsitzAnteilMutter();
-            case VATER -> getWohnsitzAnteilVater();
-            case MUTTER -> getWohnsitzAnteilMutter();
+            case VATER -> Objects.requireNonNullElse(getWohnsitzAnteilVater(), BigDecimal.ZERO);
+            case MUTTER -> Objects.requireNonNullElse(getWohnsitzAnteilMutter(), BigDecimal.ZERO);
         };
     }
 }

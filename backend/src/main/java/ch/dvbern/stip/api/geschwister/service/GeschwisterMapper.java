@@ -27,20 +27,15 @@ import ch.dvbern.stip.generated.dto.GeschwisterDto;
 import ch.dvbern.stip.generated.dto.GeschwisterUpdateDto;
 import jakarta.ws.rs.NotFoundException;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface GeschwisterMapper {
 
-    // TODO: remove
-    @Mapping(target = "geschwisterTyp", constant = "LEIBLICH")
     Geschwister toEntity(GeschwisterDto geschwisterDto);
 
     GeschwisterDto toDto(Geschwister geschwister);
 
-    // TODO: remove
-    @Mapping(target = "geschwisterTyp", constant = "LEIBLICH")
     Geschwister partialUpdate(GeschwisterUpdateDto geschwisterUpdateDto, @MappingTarget Geschwister geschwister);
 
     default Set<Geschwister> map(
