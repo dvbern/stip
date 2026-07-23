@@ -99,7 +99,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
 
   // todo-KSTIP-3643: make explicit after merge of KSTIP-3676
   private fallIdByAppTypeSig = computed(() => {
-    if (this.config.appType === 'gesuch-app') {
+    if (this.config.app.view === 'gesuchsteller') {
       return this.fallStore.currentFallViewSig()?.id;
     }
 

@@ -11,7 +11,7 @@ import { OAuthService, provideOAuthClient } from 'angular-oauth2-oidc';
 import { of } from 'rxjs';
 
 import {
-  CompileTimeConfig,
+  AppConfig,
   SharedModelCompileTimeConfig,
 } from '@dv/shared/model/config';
 import {
@@ -59,20 +59,21 @@ export const mockedGesuchAppWritableGesuchState = (overrides?: {
   };
 };
 
-const defaultCompileTimeConfig: CompileTimeConfig = {
-  appType: 'gesuch-app',
-  authClientId: 'stip-gesuch-app',
+const defaultAppConfig: AppConfig = {
+  type: 'gesuch-app',
+  view: 'gesuchsteller',
+  keyPrefix: 'gesuch-app',
 };
 
 export const provideCompileTimeConfig = (
-  compileTimeConfig: CompileTimeConfig = defaultCompileTimeConfig,
+  compileTimeConfig: AppConfig = defaultAppConfig,
 ) => ({
   provide: SharedModelCompileTimeConfig,
   useFactory: () => new SharedModelCompileTimeConfig(compileTimeConfig),
 });
 
 export const mockConfigsState = (
-  compileTimeConfig: CompileTimeConfig = defaultCompileTimeConfig,
+  compileTimeConfig: AppConfig = defaultAppConfig,
 ) => ({ loading: false, error: undefined, compileTimeConfig });
 
 export function configureTestbedTranslateLanguage(language: string) {
@@ -84,11 +85,11 @@ export function configureTestbedTranslateLanguage(language: string) {
 }
 
 export function provideSharedPatternVitestTestSetup(
-  compileTimeConfig: CompileTimeConfig = defaultCompileTimeConfig,
+  appConfig: AppConfig = defaultAppConfig,
 ) {
   return [
     provideOAuthClient(),
-    provideCompileTimeConfig(compileTimeConfig),
+    provideCompileTimeConfig(appConfig),
     importProvidersFrom([RouterTestingModule, NoopAnimationsModule]),
     {
       provide: StoreUtilService,

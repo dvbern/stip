@@ -17,11 +17,10 @@ export class SharedUiIfSozialdienstDirective {
   config = inject(SharedModelCompileTimeConfig);
 
   constructor() {
-    // todo: implemented after merge of KSTIP-3676
-    // if (this.config.isSozialdienstApp) {
-    //   this.viewContainerRef.createEmbeddedView(this.templateRef);
-    // } else {
-    //   this.viewContainerRef.clear();
-    // }
+    if (this.config.app.type === 'sozialdienst-app') {
+      this.viewContainerRef.createEmbeddedView(this.templateRef);
+    } else {
+      this.viewContainerRef.clear();
+    }
   }
 }

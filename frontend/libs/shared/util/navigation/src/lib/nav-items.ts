@@ -4,14 +4,14 @@ export const sozialdienstBaseMenuItems: NavItem[] = [
   {
     type: 'link',
     id: 'antraege',
-    label: { key: 'sozialdienst-app.header.antraege' },
+    label: { key: 'shared.header.dashboard' },
     icon: 'list',
     route: ['/dashboard'],
   },
   {
     type: 'link',
     id: 'administration',
-    label: { key: 'sozialdienst-app.header.administration' },
+    label: { key: 'shared.header.administration' },
     icon: 'settings',
     route: ['/administration'],
     rolesAllowed: ['V0_Sozialdienst-Admin'],

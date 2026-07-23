@@ -29,6 +29,7 @@ public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
+  private @Valid GesuchTrancheSlimDto eingereicht;
 
   /**
    **/
@@ -207,6 +208,24 @@ public class GesuchAenderungsDto  implements Serializable {
     this.offen = offen;
   }
 
+  /**
+   **/
+  public GesuchAenderungsDto eingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+    return this;
+  }
+
+  
+  @JsonProperty("eingereicht")
+  public GesuchTrancheSlimDto getEingereicht() {
+    return eingereicht;
+  }
+
+  @JsonProperty("eingereicht")
+  public void setEingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -222,12 +241,13 @@ public class GesuchAenderungsDto  implements Serializable {
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
         Objects.equals(this.fehlendeDokumente, gesuchAenderungs.fehlendeDokumente) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
-        Objects.equals(this.offen, gesuchAenderungs.offen);
+        Objects.equals(this.offen, gesuchAenderungs.offen) &&
+        Objects.equals(this.eingereicht, gesuchAenderungs.eingereicht);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen);
+    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen, eingereicht);
   }
 
   @Override
@@ -241,6 +261,7 @@ public class GesuchAenderungsDto  implements Serializable {
     sb.append("    fehlendeDokumente: ").append(toIndentedString(fehlendeDokumente)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
+    sb.append("    eingereicht: ").append(toIndentedString(eingereicht)).append("\n");
     sb.append("}");
     return sb.toString();
   }

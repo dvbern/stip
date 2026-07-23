@@ -1,4 +1,4 @@
-import { AppType } from '@dv/shared/model/config';
+import { AppConfig } from '@dv/shared/model/config';
 import {
   DokumentTyp,
   GSFormStepProps,
@@ -323,7 +323,7 @@ export const isStepDisabled = (
 export const isStepValid = (
   step: GesuchFormStep,
   formular: GesuchFormularType | null,
-  appType: AppType,
+  appConfig: AppConfig,
   steuerdaten?: Steuerdaten[],
   invalidProps?: StepValidation,
 ): StepState | undefined => {
@@ -350,7 +350,7 @@ export const isStepValid = (
   }
 
   if (isSteuerdatenStep(field)) {
-    if (appType === 'gesuch-app') {
+    if (appConfig.view === 'gesuchsteller') {
       return undefined;
     }
 

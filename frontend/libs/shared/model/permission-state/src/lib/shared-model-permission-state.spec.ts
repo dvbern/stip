@@ -1,3 +1,4 @@
+import { AppConfig } from '@dv/shared/model/config';
 import { Gesuchstatus, SharedModelGesuch } from '@dv/shared/model/gesuch';
 
 import {
@@ -45,12 +46,23 @@ const gesuch: SharedModelGesuch = {
   verfuegt: false,
 };
 
+const gesuchAppConfig: AppConfig = {
+  type: 'gesuch-app',
+  view: 'gesuchsteller',
+  keyPrefix: 'gesuch-app',
+};
+const sachbearbeiterAppConfig: AppConfig = {
+  type: 'sachbearbeitung-app',
+  view: 'sachbearbeiter',
+  keyPrefix: 'sachbearbeitung-app',
+};
+
 describe('when App Gesuchsteller', () => {
   it('should be readonly if in bearbeitung Sachbearbeiter', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_SB;
 
     expect(
-      getGesuchPermissions(gesuch, 'gesuch-app', {
+      getGesuchPermissions(gesuch, gesuchAppConfig, {
         V0_Gesuchsteller: true,
       }).permissions.canWrite,
     ).toBe(false);
@@ -62,7 +74,7 @@ describe('when App Sachbearbeitung', () => {
     gesuch.gesuchStatus = Gesuchstatus.IN_BEARBEITUNG_GS;
 
     expect(
-      getGesuchPermissions(gesuch, 'sachbearbeitung-app', {
+      getGesuchPermissions(gesuch, sachbearbeiterAppConfig, {
         V0_Sachbearbeiter: true,
       }).permissions.canWrite,
     ).toBe(false);
@@ -70,72 +82,72 @@ describe('when App Sachbearbeitung', () => {
 });
 
 describe('isNotReadonly', () => {
-  describe('when appType is sachbearbeitung-app', () => {
+  describe('when appConfig is sachbearbeitung-app', () => {
     it('should return true if user has V0_Sachbearbeiter role', () => {
       const rolesMap = { V0_Sachbearbeiter: true } as const;
-      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+      expect(isNotReadonly(sachbearbeiterAppConfig, rolesMap, undefined)).toBe(
         true,
       );
     });
 
     it('should return true if user has V0_Jurist role', () => {
       const rolesMap = { V0_Jurist: true } as const;
-      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+      expect(isNotReadonly(sachbearbeiterAppConfig, rolesMap, undefined)).toBe(
         true,
       );
     });
 
     it('should return false if user has neither V0_Sachbearbeiter nor V0_Jurist role', () => {
       const rolesMap = { V0_Gesuchsteller: true } as const;
-      expect(isNotReadonly('sachbearbeitung-app', rolesMap, undefined)).toBe(
+      expect(isNotReadonly(sachbearbeiterAppConfig, rolesMap, undefined)).toBe(
         false,
       );
     });
   });
 
-  describe('when appType is gesuch-app', () => {
+  describe('when appConfig is gesuch-app', () => {
     it('should return true if not delegated (delegierung is undefined)', () => {
       const rolesMap = {};
-      expect(isNotReadonly('gesuch-app', rolesMap, undefined)).toBe(true);
+      expect(isNotReadonly(gesuchAppConfig, rolesMap, undefined)).toBe(true);
     });
 
     it('should return true if delegated (delegierung is boolean false)', () => {
       const rolesMap = {};
       const delegierung = false;
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(true);
+      expect(isNotReadonly(gesuchAppConfig, rolesMap, delegierung)).toBe(true);
     });
 
     it('should return false if delegated (delegierung is boolean true)', () => {
       const rolesMap = {};
       const delegierung = true;
-      expect(isNotReadonly('gesuch-app', rolesMap, delegierung)).toBe(false);
+      expect(isNotReadonly(gesuchAppConfig, rolesMap, delegierung)).toBe(false);
     });
 
     it('should return true if delegated but not angenommen', () => {
       const rolesMap = {};
       expect(
-        isNotReadonly('gesuch-app', rolesMap, { status: 'EINGEREICHT' }),
+        isNotReadonly(gesuchAppConfig, rolesMap, { status: 'EINGEREICHT' }),
       ).toBe(true);
     });
 
     it('should return true if delegated and user has V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
       expect(
-        isNotReadonly('gesuch-app', rolesMap, { status: 'AKZEPTIERT' }),
+        isNotReadonly(gesuchAppConfig, rolesMap, { status: 'AKZEPTIERT' }),
       ).toBe(true);
     });
 
     it('should return true if delegated but not angenommen and user has V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { 'V0_Sozialdienst-Mitarbeiter': true } as const;
       expect(
-        isNotReadonly('gesuch-app', rolesMap, { status: 'ABGELEHNT' }),
+        isNotReadonly(gesuchAppConfig, rolesMap, { status: 'ABGELEHNT' }),
       ).toBe(true);
     });
 
     it('should return false if delegated and user does not have V0_Sozialdienst-Mitarbeiter role', () => {
       const rolesMap = { V0_Gesuchsteller: true } as const;
       expect(
-        isNotReadonly('gesuch-app', rolesMap, { status: 'AKZEPTIERT' }),
+        isNotReadonly(gesuchAppConfig, rolesMap, { status: 'AKZEPTIERT' }),
       ).toBe(false);
     });
   });

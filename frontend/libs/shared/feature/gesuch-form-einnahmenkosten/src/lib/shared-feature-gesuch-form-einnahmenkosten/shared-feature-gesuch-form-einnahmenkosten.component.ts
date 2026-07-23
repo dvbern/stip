@@ -469,17 +469,19 @@ export class SharedFeatureGesuchFormEinnahmenkostenComponent implements OnInit {
         this.form.controls.vermoegen,
         !(isEKPartner || warErwachsenSteuerJahr),
       );
+
+      const isGesuchstellerView = this.config.app.view === 'gesuchsteller';
       this.setDisabledStateAndHide(
         this.form.controls.veranlagungsStatus,
-        this.config.isGesuchApp,
+        isGesuchstellerView,
       );
       this.setDisabledStateAndHide(
         this.form.controls.steuerjahr,
-        this.config.isGesuchApp,
+        isGesuchstellerView,
       );
       this.setDisabledStateAndHide(
         this.form.controls.steuern,
-        this.config.isGesuchApp,
+        isGesuchstellerView,
       );
       this.setDisabledStateAndHide(
         this.form.controls.ausbildungskosten,

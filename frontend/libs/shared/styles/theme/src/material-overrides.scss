@@ -225,7 +225,7 @@ $dv-all-colors: info, danger, success, warn, primary;
   }
 }
 
-dv-sachbearbeitung-app-feature-verfuegung {
+dv-shared-feature-verfuegung {
   .mat-mdc-card {
     background-color: var(--tw-color-gray-100);
     border-width: 1px;
@@ -234,25 +234,6 @@ dv-sachbearbeitung-app-feature-verfuegung {
     border-radius: var(--dv-border-radius);
     box-shadow: none;
     padding-block: 1rem;
-  }
-}
-
-dv-shared-feature-fall-dokumente-layout,
-dv-sachbearbeitung-app-feature-gesuch-layout {
-  .tw\:dv-table {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-  .mat-mdc-tab-link.btn-nav {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
-  }
-}
-
-dv-sachbearbeitung-app-feature-gesuch-form {
-  .tw\:dv-simple-table {
-    box-shadow: none;
-    border: 1px solid var(--tw-color-gray-300);
   }
 }
 

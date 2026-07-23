@@ -1,8 +1,8 @@
 import { RolesMap } from '@dv/shared/model/benutzer';
 import {
-  AppType,
-  BusinessAppType,
-  ensureIsBusinessAppType,
+  AppConfig,
+  AppView,
+  ensureIsBusinessAppConfig,
 } from '@dv/shared/model/config';
 import { DarlehenStatus, DelegierungSlim } from '@dv/shared/model/gesuch';
 import { capitalized } from '@dv/shared/model/type-util';
@@ -37,8 +37,8 @@ const hasPermission = (
   perm: keyof typeof DarlehenPermissions,
 ) => p.charAt(DarlehenPermissions[perm].index) === perm;
 
-const GS_APP = 'gesuch-app' satisfies BusinessAppType;
-const SB_APP = 'sachbearbeitung-app' satisfies BusinessAppType;
+const GS_APP = 'gesuchsteller' satisfies AppView;
+const SB_APP = 'sachbearbeiter' satisfies AppView;
 
 type MultiplePermissionFlags = [DarlehenPermissionFlags, ShortRole][];
 
@@ -87,7 +87,7 @@ const parsePermissions = (permission: DarlehenPermissionFlags) => {
 export type DarlehenPermissionMap = ReturnType<typeof parsePermissions>;
 
 // prettier-ignore
-export const darlehenPermissionTableByAppType = {
+export const darlehenPermissionTableByAppConfig = {
   IN_BEARBEITUNG_GS               : { [GS_APP]: perm('W  DE  ', ['gs', 'soz']), [SB_APP]: mPerm([[' R     ', 'sb'],
                                                                                                  [' R     ', 'fe']]) },
   EINGEGEBEN                      : { [GS_APP]: perm('       ', ['gs', 'soz']), [SB_APP]: mPerm([[' RK  F ', 'sb'],
@@ -100,16 +100,16 @@ export const darlehenPermissionTableByAppType = {
                                                                                                  [' R     ', 'fe']]) },
 } as const satisfies Record<
   DarlehenStatus,
-  Record<BusinessAppType, PermissionCheck>
+  Record<AppView, PermissionCheck>
 >;
 
 const applyDelegatedDarlehenPermissions = (
   permissions: DarlehenPermissionMap,
-  appType: AppType,
+  appConfig: AppConfig,
   rolesMap: RolesMap,
   delegierung?: DelegierungSlim | boolean | undefined,
 ): DarlehenPermissionMap => {
-  if (isNotReadonly(appType, rolesMap, delegierung)) {
+  if (isNotReadonly(appConfig, rolesMap, delegierung)) {
     return permissions;
   }
 
@@ -123,21 +123,22 @@ const applyDelegatedDarlehenPermissions = (
 
 export const getDarlehenPermissions = (
   status: DarlehenStatus | undefined,
-  appType: AppType,
+  appConfig: AppConfig,
   rolesMap: RolesMap,
   delegierung?: DelegierungSlim | boolean | undefined,
 ) => {
   if (!status) {
     return { permissions: undefined, status };
   }
-  ensureIsBusinessAppType(appType);
-  const state = darlehenPermissionTableByAppType[status][appType](rolesMap);
+  ensureIsBusinessAppConfig(appConfig);
+  const state =
+    darlehenPermissionTableByAppConfig[status][appConfig.view](rolesMap);
   const permissions = parsePermissions(state);
 
   return {
     permissions: applyDelegatedDarlehenPermissions(
       permissions,
-      appType,
+      appConfig,
       rolesMap,
       delegierung,
     ),

@@ -95,7 +95,7 @@ DokumentTyp:
     - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
     - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
     - PERSON_KESB_ERNENNUNG
-    - PERSON_MIETVERTRAG
+    - PERSON_EIGENER_HAUSHALT
     - PERSON_SOZIALHILFEBUDGET
     - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
     - PERSON_AUSWEIS
@@ -409,6 +409,8 @@ Gesuch:
       type: string
     hadDelegierungs:
       type: boolean
+    minDateEigenerWohnsitz:
+      $ref: '#/LocalDate'
     delegierung:
       $ref: '#/DelegierungSlim'
     nachfristDokumente:
@@ -426,18 +428,22 @@ GesuchStateInfo:
   required:
     - gesuchStatus
     - beschwerdeHaengig
-    - canGetBerechnung
+    - canGSGetBerechnung
+    - canSBGetBerechnung
     - canChangeGesuchsperiode
     - canTriggerManuellPruefen
     - canBearbeitungAbschliessen
     - canSBInitAenderung
+    - canFreigeben
   type: object
   properties:
     gesuchStatus:
       $ref: '#/Gesuchstatus'
     beschwerdeHaengig:
       type: boolean
-    canGetBerechnung:
+    canGSGetBerechnung:
+      type: boolean
+    canSBGetBerechnung:
       type: boolean
     canChangeGesuchsperiode:
       type: boolean
@@ -449,6 +455,8 @@ GesuchStateInfo:
       type: boolean
     inBearbeitungSbReason:
       $ref: '#/InBearbeitungSbReason'
+    canFreigeben:
+      type: boolean
 PersoenlicheAngaben:
   required:
     - anrede

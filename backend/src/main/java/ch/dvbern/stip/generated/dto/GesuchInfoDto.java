@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String fallNummer;
+  private @Valid String fallId;
   private @Valid String gesuchNummer;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
@@ -67,6 +68,25 @@ public class GesuchInfoDto  implements Serializable {
   @JsonProperty("fallNummer")
   public void setFallNummer(String fallNummer) {
     this.fallNummer = fallNummer;
+  }
+
+  /**
+   **/
+  public GesuchInfoDto fallId(String fallId) {
+    this.fallId = fallId;
+    return this;
+  }
+
+  
+  @JsonProperty("fallId")
+  @NotNull
+  public String getFallId() {
+    return fallId;
+  }
+
+  @JsonProperty("fallId")
+  public void setFallId(String fallId) {
+    this.fallId = fallId;
   }
 
   /**
@@ -193,6 +213,7 @@ public class GesuchInfoDto  implements Serializable {
     GesuchInfoDto gesuchInfo = (GesuchInfoDto) o;
     return Objects.equals(this.id, gesuchInfo.id) &&
         Objects.equals(this.fallNummer, gesuchInfo.fallNummer) &&
+        Objects.equals(this.fallId, gesuchInfo.fallId) &&
         Objects.equals(this.gesuchNummer, gesuchInfo.gesuchNummer) &&
         Objects.equals(this.startDate, gesuchInfo.startDate) &&
         Objects.equals(this.endDate, gesuchInfo.endDate) &&
@@ -203,7 +224,7 @@ public class GesuchInfoDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, fallNummer, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
+    return Objects.hash(id, fallNummer, fallId, gesuchNummer, startDate, endDate, state, piaVorname, piaNachname);
   }
 
   @Override
@@ -213,6 +234,7 @@ public class GesuchInfoDto  implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    fallNummer: ").append(toIndentedString(fallNummer)).append("\n");
+    sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    gesuchNummer: ").append(toIndentedString(gesuchNummer)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");

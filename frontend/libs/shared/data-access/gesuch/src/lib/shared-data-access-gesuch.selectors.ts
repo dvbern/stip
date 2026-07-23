@@ -24,7 +24,7 @@ import {
 } from '@dv/shared/model/gesuch-form';
 import { preparePermissions } from '@dv/shared/model/permission-state';
 import {
-  addStepsByAppType,
+  addStepsByAppConfig,
   appendSteps,
   createTrancheSetting,
   prepareTranchenChanges,
@@ -113,12 +113,7 @@ export const selectSharedDataAccessGesuchsView = createSelector(
       gesuchFormular,
       tranchenChanges,
       isEditingAenderung,
-      ...preparePermissions(
-        trancheTyp,
-        gesuch,
-        config.compileTimeConfig?.appType,
-        rolesMap,
-      ),
+      ...preparePermissions(trancheTyp, gesuch, config.appConfig, rolesMap),
       trancheId: gesuch?.gesuchTrancheToWorkWith.id,
       trancheSetting,
       gesuchId: gesuch?.id,
@@ -194,11 +189,11 @@ export const selectSharedDataAccessGesuchStepsView = createSelector(
         : []),
     ];
 
-    const steps = addStepsByAppType(
+    const steps = addStepsByAppConfig(
       appendSteps(baseFormStepsArray, appendStepsConfig),
       rolesMap,
       state.gesuchFormular?.steuerdatenTabs,
-      config?.compileTimeConfig,
+      config?.appConfig,
     );
     return {
       steps,
@@ -233,7 +228,7 @@ export const selectSharedDataAccessGesuchCacheView = createSelector(
       ...preparePermissions(
         trancheTyp,
         cache.gesuch,
-        config.compileTimeConfig?.appType,
+        config.appConfig,
         rolesMap,
       ),
     };

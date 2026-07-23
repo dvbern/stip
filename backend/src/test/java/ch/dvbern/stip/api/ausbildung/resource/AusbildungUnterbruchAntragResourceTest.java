@@ -353,7 +353,7 @@ public class AusbildungUnterbruchAntragResourceTest {
     @Order(11)
     @Test
     void berechnungReturnsAntragValues() {
-        final var berechnung = gesuchApiSpec.getBerechnungForGesuch()
+        final var berechnung = gesuchApiSpec.getBerechnungForGesuchSb()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

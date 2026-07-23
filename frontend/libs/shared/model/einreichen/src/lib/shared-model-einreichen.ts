@@ -1,7 +1,8 @@
 import {
-  AppType,
-  BusinessAppType,
-  ensureIsBusinessAppType,
+  AppConfig,
+  AppView,
+  BusinessAppConfig,
+  ensureIsBusinessAppConfig,
 } from '@dv/shared/model/config';
 import {
   GesuchTrancheStatus,
@@ -17,8 +18,8 @@ export type AbschlussPhase =
   | 'AKZETPIERT'
   | 'ABGELEHNT';
 
-const gs = 'gesuch-app' satisfies BusinessAppType;
-const sb = 'sachbearbeitung-app' satisfies BusinessAppType;
+const gs = 'gesuchsteller' satisfies AppView;
+const sb = 'sachbearbeiter' satisfies AppView;
 const ___ = null;
 const S__ = 'SUBMITTED';
 const _R_ = 'READY_TO_SEND';
@@ -59,26 +60,26 @@ const AbschlussPhaseMap = {
   TRANCHE_MANUELLE_AENDERUNG /**              */: { [gs]: S__, [sb]: S__ },
 } satisfies Record<
   `${`GESUCH_${Gesuchstatus}` | `TRANCHE_${GesuchTrancheStatus}`}`,
-  Record<BusinessAppType, AbschlussPhase | null>
+  Record<BusinessAppConfig['view'], AbschlussPhase | null>
 >;
 
 export const toAbschlussPhase = (
   gesuch: SharedModelGesuch | null,
   options: {
-    appType?: AppType;
+    appConfig?: AppConfig;
     isComplete?: boolean;
     checkAenderung?: boolean;
   },
 ): AbschlussPhase | null => {
-  const appType = options?.appType;
-  if (!gesuch || !appType) {
+  const appConfig = options?.appConfig;
+  if (!gesuch || !appConfig) {
     return 'NOT_READY';
   }
-  ensureIsBusinessAppType(appType);
+  ensureIsBusinessAppConfig(appConfig);
   const key = options.checkAenderung
     ? (`TRANCHE_${gesuch.gesuchTrancheToWorkWith.status}` as const)
     : (`GESUCH_${gesuch.gesuchStatus}` as const);
-  const phase = AbschlussPhaseMap[key]?.[appType];
+  const phase = AbschlussPhaseMap[key]?.[appConfig.view];
 
   if (!phase) return null;
 

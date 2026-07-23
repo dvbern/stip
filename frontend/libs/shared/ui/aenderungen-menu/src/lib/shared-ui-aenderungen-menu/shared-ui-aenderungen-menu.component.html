@@ -1,4 +1,4 @@
-<ng-container *transloco="let t">
+<ng-container *dvTranslocoShared="let t">
   @let gesuchId = gesuchIdSig();
   @let trancheId = trancheIdSig();
   @let aenderungen = aenderungenSig();
@@ -16,7 +16,7 @@
     >
       @if (currentAenderungSig(); as currentAenderung) {
         <span class="tw:font-semibold tw:whitespace-nowrap tw:overflow-hidden tw:text-ellipsis tw:w-full">
-          {{ t('shared.header.aenderungen.complete-states.' + (currentAenderung.completeState | lowercase)) }},
+          {{ t(`shared.header.aenderungen.complete-states.${currentAenderung.completeState}`) }},
           {{ currentAenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
           {{ currentAenderung.gueltigBis | date: 'dd.MM.yyyy' }}
         </span>
@@ -26,10 +26,11 @@
   </div>
   <mat-menu #aenderungenMenu="matMenu" class="header-menu-panel tw:col-span-12 tw:mt-2 tw:rounded-lg">
     <div class="tw:flex tw:flex-col tw:gap-2">
-      @if (aenderungen?.offen; as offeneAenderung) {
+      @let offenOrEingereichteAenderung = aenderungen?.offen ?? aenderungen?.eingereicht;
+      @if (offenOrEingereichteAenderung; as offeneAenderung) {
         <div class="tw:flex tw:items-center tw:text-dv-gray small tw:gap-2">
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
-          {{ t('shared.header.aenderungen.open') }}
+          {{ t(`shared.header.aenderungen.${aenderungen?.eingereicht ? 'eingereicht' : 'open'}`) }}
           <hr class="tw:grow tw:border-t tw:border-dv-border" />
         </div>
         <a

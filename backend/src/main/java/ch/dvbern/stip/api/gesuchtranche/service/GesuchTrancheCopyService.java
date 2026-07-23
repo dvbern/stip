@@ -129,6 +129,27 @@ public class GesuchTrancheCopyService {
         return newTranche;
     }
 
+    /**
+     * Copies an existing {@link GesuchTranche} and sets the new {@link GesuchTranche#status}
+     * to {@link GesuchTrancheStatus#UEBERPRUEFEN}
+     */
+    public GesuchTranche createAbgelehnteAenderungCopy(
+        final GesuchTranche aenderung,
+        final String comment
+    ) {
+        final var clamped = validateAndCreateClampedDateRange(aenderung.getGueltigkeit(), aenderung.getGesuch());
+        final var newTranche = copyTranche(
+            aenderung,
+            clamped,
+            comment
+        );
+
+        newTranche.setStatus(GesuchTrancheStatus.ABGELEHNT);
+        newTranche.setTyp(GesuchTrancheTyp.AENDERUNG);
+
+        return newTranche;
+    }
+
     public GesuchFormular copyGesuchFormular(final GesuchFormular original) {
         final var copy = new GesuchFormular();
         entityCopyMapper.copyFromTo(original, copy);

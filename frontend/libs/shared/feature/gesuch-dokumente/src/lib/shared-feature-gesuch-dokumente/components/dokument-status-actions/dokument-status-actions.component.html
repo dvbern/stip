@@ -58,7 +58,7 @@
               </dv-shared-ui-icon-badge>
             } @else {
               <dv-shared-ui-icon-badge [typeSig]="view.isSachbearbeitungApp ? 'warning' : 'info'" class="tw:min-w-36">
-                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppType | transloco }}
+                {{ 'shared.dokumente.dokumentStatus.AUSSTEHEND.$type' | replaceAppConfig | transloco }}
               </dv-shared-ui-icon-badge>
             }
           } @else {
