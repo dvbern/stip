@@ -3,6 +3,10 @@
     {
       "path": "./",
     },
+    {
+      "path": "./backend/src/main/resources/typst/",
+      "name": "typst",
+    },
   ],
   "extensions": {
     "recommendations": [
@@ -12,6 +16,7 @@
       "SonarSource.sonarlint-vscode",
       "bradlc.vscode-tailwindcss",
       "hyoban.tailwindcss-classname-highlight",
+      "myriad-dreamin.tinymist",
     ],
   },
   "tasks": {
@@ -51,6 +56,7 @@
     "files.exclude": {
       "backend/**": true,
     },
+    "tinymist.rootPath": "${workspaceFolder}/backend/src/main/resources/typst/",
     "typescript.tsdk": "frontend/node_modules/typescript/lib",
     "tailwindCSS.files.exclude": [
       "**/.git/**",
@@ -77,7 +83,7 @@
       "titleBar.activeBackground": "#075fa4",
       "titleBar.activeForeground": "#e7e7e7",
       "titleBar.inactiveBackground": "#075fa499",
-      "titleBar.inactiveForeground": "#e7e7e799"
+      "titleBar.inactiveForeground": "#e7e7e799",
     },
     "peacock.color": "#075fa4",
     "prettier.configPath": "frontend/.prettierrc",
