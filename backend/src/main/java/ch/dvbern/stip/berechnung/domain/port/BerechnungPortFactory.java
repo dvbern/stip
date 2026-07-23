@@ -17,8 +17,7 @@
 
 package ch.dvbern.stip.berechnung.domain.port;
 
-import ch.dvbern.stip.api.config.type.StipConfig;
-import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
+import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.berechnung.domain.qualifier.BerechnungQualifierLiteral;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
@@ -36,9 +35,15 @@ public class BerechnungPortFactory {
     @Inject
     Instance<BerechnungPort> berechnungPorts;
 
-    private final StipConfig stipConfig;
+    private final TenantService tenantService;
 
     public BerechnungPort getBerechnungPort() {
-        return berechnungPorts.select(new BerechnungQualifierLiteral(BerechnungAdapterType.BERN, 1, 0)).get();
+        final var adapterConfig = tenantService.getConfigForCurrentTenant().port().berechnung();
+        return berechnungPorts.select(
+            new BerechnungQualifierLiteral(
+                adapterConfig.adapterType(),
+                adapterConfig.majorVersion(), adapterConfig.minorVersion()
+            )
+        ).get();
     }
 }

@@ -47,24 +47,32 @@ public class TranchenBerechnungsresultatCalculator {
 
         List<SteuerdatenTyp> steuerdatenTypsToPrioritize = getSteuerdatenTypsToPrioritize(gesuchFormular);
 
+        final List<Boolean> teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals =
+            getTeilzeitStiefHalbGeschwistersBeiElternAnrechnenVals(gesuchFormular);
+
         final List<Boolean> teilzeitKinderBeiPiaAnrechnenVals =
             getTeilzeitKinderBeiPiaAnrechnenVals(gesuchFormular.getKinds());
 
         List<TranchenBerechnungsresultatDto> berechnungsresultatDtoList = new ArrayList<>();
 
         for (final Boolean teilzeitKinderBeiPiaAnrechnen : teilzeitKinderBeiPiaAnrechnenVals) {
-            for (final SteuerdatenTyp steuerdatenTypToPrioritize : steuerdatenTypsToPrioritize) {
-                berechnungsresultatDtoList.add(
-                    TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
-                        gesuchTranche,
-                        steuerdatenTypToPrioritize,
-                        teilzeitKinderBeiPiaAnrechnen,
-                        gesuchsDateRange,
-                        gesuchsperiode,
-                        gesuchsjahr,
-                        berechnungsStammdatenMapper
-                    )
-                );
+            for (
+                final Boolean teilzeitStiefHalbGeschwistersBeiElternAnrechnen : teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals
+            ) {
+                for (final SteuerdatenTyp steuerdatenTypToPrioritize : steuerdatenTypsToPrioritize) {
+                    berechnungsresultatDtoList.add(
+                        TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
+                            gesuchTranche,
+                            steuerdatenTypToPrioritize,
+                            teilzeitStiefHalbGeschwistersBeiElternAnrechnen,
+                            teilzeitKinderBeiPiaAnrechnen,
+                            gesuchsDateRange,
+                            gesuchsperiode,
+                            gesuchsjahr,
+                            berechnungsStammdatenMapper
+                        )
+                    );
+                }
             }
         }
         return berechnungsresultatDtoList;
@@ -97,18 +105,33 @@ public class TranchenBerechnungsresultatCalculator {
             .isEmpty();
     }
 
+    private List<Boolean> getTeilzeitStiefHalbGeschwistersBeiElternAnrechnenVals(
+        final GesuchFormular gesuchFormular
+    ) {
+        final var hasTeilzeitStiefHalbGeschwisterinHaushalten =
+            !BernCalculatorUtil.getStiefHalbTeilzeitKindsDerElternInHaushalten(gesuchFormular).isEmpty();
+        final List<Boolean> teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals = new ArrayList<>();
+        if (hasTeilzeitStiefHalbGeschwisterinHaushalten) {
+            teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals.addAll(List.of(Boolean.TRUE, Boolean.FALSE));
+        } else {
+            teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals.add(null);
+        }
+        return teilzeitStiefHalbGeschwistersBeiElternAnrechnenVals;
+
+    }
+
     private List<SteuerdatenTyp> getSteuerdatenTypsToPrioritize(
         final GesuchFormular gesuchFormular
     ) {
-        final boolean hasTeilzeitKinderDerEltern =
-            !BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular).isEmpty();
+        final boolean hasLeiblichTeilzeitKinderDerEltern =
+            !BernCalculatorUtil.getLeiblichTeilzeitKindsDerElternInHaushalten(gesuchFormular).isEmpty();
 
         List<SteuerdatenTyp> steuerdatenTypsToPrioritize = new ArrayList<>();
 
         if (gesuchFormular.getFamiliensituation().getElternVerheiratetZusammen()) {
             steuerdatenTypsToPrioritize.add(SteuerdatenTyp.FAMILIE);
         } else {
-            if (hasTeilzeitKinderDerEltern) {
+            if (hasLeiblichTeilzeitKinderDerEltern) {
                 steuerdatenTypsToPrioritize.addAll(
                     gesuchFormular.getSteuerdaten().stream().map(Steuerdaten::getSteuerdatenTyp).toList()
                 );

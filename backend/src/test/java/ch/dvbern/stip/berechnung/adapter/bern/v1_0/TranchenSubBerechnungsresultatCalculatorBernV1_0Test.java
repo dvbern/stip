@@ -60,6 +60,7 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
         var tranchenSubBerechnungsresultat = TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
             gesuchTranche,
             SteuerdatenTyp.VATER,
+            null,
             true,
             DateUtil.getGesuchDateRange(gesuch),
             gesuch.getGesuchsperiode(),
@@ -77,6 +78,7 @@ public class TranchenSubBerechnungsresultatCalculatorBernV1_0Test {
         tranchenSubBerechnungsresultat = TranchenSubBerechnungsresultatCalculator.getTranchenSubBerechnungsresultat(
             gesuchTranche,
             SteuerdatenTyp.MUTTER,
+            null,
             false,
             DateUtil.getGesuchDateRange(gesuch),
             gesuch.getGesuchsperiode(),

@@ -18,6 +18,7 @@
 package ch.dvbern.stip.api.common.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
@@ -66,7 +67,9 @@ public class AbstractFamilieEntity extends AbstractPerson {
 
     public BigDecimal getWohnsitzAnteil(SteuerdatenTyp steuerdatenTyp) {
         if (getWohnsitz() == Wohnsitz.FAMILIE) {
-            return BigDecimal.valueOf(100);
+            if (Objects.isNull(getWohnsitzAnteilVater()) && Objects.isNull(getWohnsitzAnteilMutter())) {
+                return BigDecimal.valueOf(100);
+            }
         }
         if (getWohnsitz().isEigenerHaushalt()) {
             return BigDecimal.ZERO;

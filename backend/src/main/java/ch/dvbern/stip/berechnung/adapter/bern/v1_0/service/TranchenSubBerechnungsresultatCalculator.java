@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import ch.dvbern.stip.api.common.entity.AbstractFamilieEntity;
 import ch.dvbern.stip.api.common.util.DateRange;
@@ -49,6 +50,7 @@ public class TranchenSubBerechnungsresultatCalculator {
     public TranchenBerechnungsresultatDto getTranchenSubBerechnungsresultat(
         final GesuchTranche gesuchTranche,
         final SteuerdatenTyp steuerdatenTypToPrioritize,
+        final Boolean teilzeitStiefHalbGeschwistersBeiElternAnrechnen,
         final Boolean teilzeitKinderBeiPiaAnrechnen,
         final DateRange gesuchsDateRange,
         final Gesuchsperiode gesuchsperiode,
@@ -61,7 +63,12 @@ public class TranchenSubBerechnungsresultatCalculator {
             getKindsImPiaHaushalt(gesuchFormular.getKinds(), teilzeitKinderBeiPiaAnrechnen);
 
         final List<FamilienBudgetInput> familienBudgetInputs =
-            getFamilienBudgetInputs(gesuchFormular, gesuchsperiode, steuerdatenTypToPrioritize);
+            getFamilienBudgetInputs(
+                gesuchFormular,
+                gesuchsperiode,
+                steuerdatenTypToPrioritize,
+                teilzeitStiefHalbGeschwistersBeiElternAnrechnen
+            );
 
         final int anzahlMonateGueltigkeit = DateUtil.getMonthsBetween(
             gesuchTranche.getGueltigkeit().getGueltigAb(),
@@ -93,38 +100,17 @@ public class TranchenSubBerechnungsresultatCalculator {
         Integer total = budgetResults.stipendien();
 
         final BigDecimal berechnungsanteilKindsDerEltern =
-            BernCalculatorUtil.getBerechnugsAnteilKindsDerEltern(gesuchFormular, steuerdatenTypToPrioritize);
+            BernCalculatorUtil.getBerechnugsAnteilLeiblichKindsDerEltern(gesuchFormular, steuerdatenTypToPrioritize);
 
         total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilKindsDerEltern);
 
-        // if (
-        // Objects.nonNull(steuerdatenTypToPrioritize)
-        // && List.of(SteuerdatenTyp.VATER, SteuerdatenTyp.MUTTER).contains(steuerdatenTypToPrioritize)
-        // ) {
-        // final List<AbstractFamilieEntity> teilzeitKindsDerElternInHaushalten =
-        // BernCalculatorUtil.getTeilzeitKindsDerElternInHaushalten(gesuchFormular);
-        // final int anzahlTeilzeitKindsDerElternInHaushalten = teilzeitKindsDerElternInHaushalten.size();
-        // assert anzahlTeilzeitKindsDerElternInHaushalten > 0;
-        //
-        // final BigDecimal kinderDerElternProzente =
-        // BigDecimal.valueOf(teilzeitKindsDerElternInHaushalten.stream().mapToInt(
-        // abstractFamilieEntity -> abstractFamilieEntity.getWohnsitzAnteil(steuerdatenTypToPrioritize).intValue()
-        // ).sum());
-        //
-        // berechnungsanteilKinderDerEltern = kinderDerElternProzente.divide(
-        // BigDecimal.valueOf(anzahlTeilzeitKindsDerElternInHaushalten),
-        // 2,
-        // RoundingMode.HALF_UP
-        // );
-        //
-        // // Calculate the total stipendien amount based on the respective amounts and their relative kid
-        // // percentages.
-        // total = berechnungsanteilKinderDerEltern.multiply(
-        // BigDecimal.valueOf(total)
-        // .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-        // ).intValue();
-        // total = Math.min(0, total);
-        // }
+        final BigDecimal berechnugsAnteilStiefHalbKindsDerEltern =
+            BernCalculatorUtil.getBerechnugsAnteilStiefHalbKindsDerEltern(
+                gesuchFormular,
+                teilzeitStiefHalbGeschwistersBeiElternAnrechnen
+            );
+
+        total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnugsAnteilStiefHalbKindsDerEltern);
 
         final BigDecimal berechnungsanteilKindsPia = BernCalculatorUtil.getBerechnugsAnteilKindsPia(
             gesuchFormular,
@@ -133,38 +119,6 @@ public class TranchenSubBerechnungsresultatCalculator {
         );
 
         total = BernCalculatorUtil.calculateTotalBerechnungsAnteilKinds(total, berechnungsanteilKindsPia);
-        //
-        //
-        // if (Objects.nonNull(teilzeitKinderBeiPiaAnrechnen)) {
-        // final List<Kind> teilzeitKinderDerPia = gesuchFormular.getKinds()
-        // .stream()
-        // .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
-        // .toList();
-        //
-        // BigDecimal teilzeitKinderDerPiaProzenteThisBerechnung =
-        // BigDecimal.valueOf(
-        // kindsImPiaHaushalt.stream()
-        // .filter(kind -> kind.getWohnsitzAnteilPia() < 100)
-        // .mapToInt(Kind::getWohnsitzAnteilPia)
-        // .sum()
-        // );
-        //
-        // berechnungsanteilKinderPia = teilzeitKinderDerPiaProzenteThisBerechnung.divide(
-        // BigDecimal.valueOf(teilzeitKinderDerPia.size()),
-        // 2,
-        // RoundingMode.HALF_UP
-        // );
-        //
-        // if (!teilzeitKinderBeiPiaAnrechnen) {
-        // berechnungsanteilKinderPia = BigDecimal.valueOf(100).subtract(berechnungsanteilKinderPia);
-        // }
-        // // Calculate the total stipendien amount based on the respective amounts and their relative kid
-        // // percentages.
-        // total = berechnungsanteilKinderPia.multiply(
-        // BigDecimal.valueOf(total)
-        // .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP)
-        // ).intValue();
-        // }
 
         return TranchenBerechnungsresultatDtoBuilder.tranchenBerechnungsresultatDto()
             .total(total)
@@ -188,7 +142,8 @@ public class TranchenSubBerechnungsresultatCalculator {
     private List<FamilienBudgetInput> getFamilienBudgetInputs(
         final GesuchFormular gesuchFormular,
         final Gesuchsperiode gesuchsperiode,
-        final SteuerdatenTyp steuerdatenTypToPrioritize
+        final SteuerdatenTyp steuerdatenTypToPrioritize,
+        final Boolean teilzeitStiefHalbGeschwisterAnrechnen
     ) {
         return gesuchFormular.getSteuerdaten()
             .stream()
@@ -213,10 +168,10 @@ public class TranchenSubBerechnungsresultatCalculator {
                         )
                         .findFirst()
                         .get();
-                    final List<AbstractFamilieEntity> allKinderDerElternInHaushalten =
-                        BernCalculatorUtil.getKindsDerElternInHaushalten(gesuchFormular);
 
-                    final List<AbstractFamilieEntity> kinderImHaushalt = allKinderDerElternInHaushalten.stream()
+                    final List<AbstractFamilieEntity> leiblichKinderDerElternImHaushalt = BernCalculatorUtil
+                        .getLeiblichKindsDerElternInHaushalten(gesuchFormular)
+                        .stream()
                         .filter(
                             abstractFamilieEntity -> abstractFamilieEntity
                                 .getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp())
@@ -224,6 +179,24 @@ public class TranchenSubBerechnungsresultatCalculator {
                             || (abstractFamilieEntity.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0
                             && steuerdaten.getSteuerdatenTyp() == steuerdatenTypToPrioritize)
                         )
+                        .toList();
+
+                    final List<AbstractFamilieEntity> stiefHalbKinderDerElternImHaushalt = BernCalculatorUtil
+                        .getStiefHalbKindsDerElternInHaushalten(
+                            gesuchFormular
+                        )
+                        .stream()
+                        .filter(
+                            abstractFamilieEntity -> abstractFamilieEntity
+                                .getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp())
+                                .intValue() == 100
+                            || (abstractFamilieEntity.getWohnsitzAnteil(steuerdaten.getSteuerdatenTyp()).intValue() > 0
+                            && teilzeitStiefHalbGeschwisterAnrechnen)
+                        )
+                        .toList();
+
+                    final List<AbstractFamilieEntity> kinderImHaushalt = Stream
+                        .concat(leiblichKinderDerElternImHaushalt.stream(), stiefHalbKinderDerElternImHaushalt.stream())
                         .toList();
 
                     return new FamilienBudgetInput(

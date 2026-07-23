@@ -28,8 +28,6 @@ public interface TenantConfig {
 
     String frontendUri();
 
-    Berechnung berechnung();
-
     WelcomeMail welcomeMail();
 
     Darlehen darlehen();
@@ -41,14 +39,6 @@ public interface TenantConfig {
     TenantPortConfig port();
 
     TenantAdapterConfig adapter();
-
-    interface Berechnung {
-        @WithDefault("1")
-        int currentMajorVersion();
-
-        @WithDefault("0")
-        int currentMinorVersion();
-    }
 
     interface WelcomeMail {
         String kcPath();
