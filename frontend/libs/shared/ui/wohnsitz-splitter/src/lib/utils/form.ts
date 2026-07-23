@@ -1,4 +1,4 @@
-import { Signal, computed, effect } from '@angular/core';
+import { Signal, computed, effect, untracked } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -75,7 +75,7 @@ export const prepareWohnsitzForm = (payload: {
   };
 
   const wohnsitzAnteileAsString = () => {
-    const formular = viewSig().gesuchFormular;
+    const formular = untracked(viewSig).gesuchFormular;
     const familiensituation = formular?.familiensituation;
     const mutterMissing = isVerstorbenUnbekannt('MUTTER', familiensituation);
     const vaterMissing = isVerstorbenUnbekannt('VATER', familiensituation);
@@ -107,8 +107,9 @@ export const prepareWohnsitzForm = (payload: {
 
   const showWohnsitzSplitterSig = computed(() => {
     return (
-      wohnsitzChangedSig() === 'MUTTER_VATER' &&
-      wohnsitzValuesSig().includes('MUTTER_VATER')
+      (wohnsitzChangedSig() === 'MUTTER_VATER' &&
+        wohnsitzValuesSig().includes('MUTTER_VATER')) ||
+      viewSig().allowOnlyOne
     );
   });
 
@@ -118,18 +119,18 @@ export const prepareWohnsitzForm = (payload: {
     const { gesuchFormular, allowOnlyOne } = viewSig();
     const { elternteilUnbekanntVerstorben } =
       viewSig().gesuchFormular?.familiensituation ?? {};
-    const wohnsitzNotMutterVater =
-      wohnsitzChangedSig() !== Wohnsitz.MUTTER_VATER;
+    const enabled =
+      wohnsitzChangedSig() === Wohnsitz.MUTTER_VATER || allowOnlyOne;
 
     updateWohnsitzControlsState(
       form,
-      wohnsitzNotMutterVater ||
+      !enabled ||
         viewSig().readonly ||
         !showWohnsitzSplitterSig() ||
         !!elternteilUnbekanntVerstorben,
     );
 
-    if (wohnsitzNotMutterVater) {
+    if (!enabled) {
       form.wohnsitzAnteilMutter.reset();
       form.wohnsitzAnteilVater.reset();
     } else if (gesuchFormular) {
