@@ -28,10 +28,10 @@ public class GeschwisterDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
   private @Valid ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
   private @Valid String nachname;
+  private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid UUID id;
   private @Valid BigDecimal wohnsitzAnteilMutter;
   private @Valid BigDecimal wohnsitzAnteilVater;
-  private @Valid ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
   private @Valid Boolean hidden;
 
   protected GeschwisterDto(GeschwisterDtoBuilder<?, ?> b) {
@@ -41,10 +41,10 @@ public class GeschwisterDto  implements Serializable {
     this.wohnsitz = b.wohnsitz;
     this.ausbildungssituation = b.ausbildungssituation;
     this.nachname = b.nachname;
+    this.geschwisterTyp = b.geschwisterTyp;
     this.id = b.id;
     this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
     this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
-    this.geschwisterTyp = b.geschwisterTyp;
     this.hidden = b.hidden;
   }
 
@@ -168,6 +168,25 @@ public class GeschwisterDto  implements Serializable {
 
   /**
    **/
+  public GeschwisterDto geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+    return this;
+  }
+
+  
+  @JsonProperty("geschwisterTyp")
+  @NotNull
+  public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
+    return geschwisterTyp;
+  }
+
+  @JsonProperty("geschwisterTyp")
+  public void setGeschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+    this.geschwisterTyp = geschwisterTyp;
+  }
+
+  /**
+   **/
   public GeschwisterDto id(UUID id) {
     this.id = id;
     return this;
@@ -224,24 +243,6 @@ public class GeschwisterDto  implements Serializable {
 
   /**
    **/
-  public GeschwisterDto geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
-    this.geschwisterTyp = geschwisterTyp;
-    return this;
-  }
-
-  
-  @JsonProperty("geschwisterTyp")
-  public ch.dvbern.stip.api.geschwister.type.GeschwisterTyp getGeschwisterTyp() {
-    return geschwisterTyp;
-  }
-
-  @JsonProperty("geschwisterTyp")
-  public void setGeschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
-    this.geschwisterTyp = geschwisterTyp;
-  }
-
-  /**
-   **/
   public GeschwisterDto hidden(Boolean hidden) {
     this.hidden = hidden;
     return this;
@@ -274,16 +275,16 @@ public class GeschwisterDto  implements Serializable {
         Objects.equals(this.wohnsitz, geschwister.wohnsitz) &&
         Objects.equals(this.ausbildungssituation, geschwister.ausbildungssituation) &&
         Objects.equals(this.nachname, geschwister.nachname) &&
+        Objects.equals(this.geschwisterTyp, geschwister.geschwisterTyp) &&
         Objects.equals(this.id, geschwister.id) &&
         Objects.equals(this.wohnsitzAnteilMutter, geschwister.wohnsitzAnteilMutter) &&
         Objects.equals(this.wohnsitzAnteilVater, geschwister.wohnsitzAnteilVater) &&
-        Objects.equals(this.geschwisterTyp, geschwister.geschwisterTyp) &&
         Objects.equals(this.hidden, geschwister.hidden);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, geschwisterTyp, hidden);
+    return Objects.hash(entryId, vorname, geburtsdatum, wohnsitz, ausbildungssituation, nachname, geschwisterTyp, id, wohnsitzAnteilMutter, wohnsitzAnteilVater, hidden);
   }
 
   @Override
@@ -297,10 +298,10 @@ public class GeschwisterDto  implements Serializable {
     sb.append("    wohnsitz: ").append(toIndentedString(wohnsitz)).append("\n");
     sb.append("    ausbildungssituation: ").append(toIndentedString(ausbildungssituation)).append("\n");
     sb.append("    nachname: ").append(toIndentedString(nachname)).append("\n");
+    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    wohnsitzAnteilMutter: ").append(toIndentedString(wohnsitzAnteilMutter)).append("\n");
     sb.append("    wohnsitzAnteilVater: ").append(toIndentedString(wohnsitzAnteilVater)).append("\n");
-    sb.append("    geschwisterTyp: ").append(toIndentedString(geschwisterTyp)).append("\n");
     sb.append("    hidden: ").append(toIndentedString(hidden)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -342,10 +343,10 @@ public class GeschwisterDto  implements Serializable {
     private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
     private ch.dvbern.stip.api.common.type.Ausbildungssituation ausbildungssituation;
     private String nachname;
+    private ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
     private UUID id;
     private BigDecimal wohnsitzAnteilMutter;
     private BigDecimal wohnsitzAnteilVater;
-    private ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp;
     private Boolean hidden;
     protected abstract B self();
 
@@ -375,6 +376,10 @@ public class GeschwisterDto  implements Serializable {
       this.nachname = nachname;
       return self();
     }
+    public B geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
+      this.geschwisterTyp = geschwisterTyp;
+      return self();
+    }
     public B id(UUID id) {
       this.id = id;
       return self();
@@ -385,10 +390,6 @@ public class GeschwisterDto  implements Serializable {
     }
     public B wohnsitzAnteilVater(BigDecimal wohnsitzAnteilVater) {
       this.wohnsitzAnteilVater = wohnsitzAnteilVater;
-      return self();
-    }
-    public B geschwisterTyp(ch.dvbern.stip.api.geschwister.type.GeschwisterTyp geschwisterTyp) {
-      this.geschwisterTyp = geschwisterTyp;
       return self();
     }
     public B hidden(Boolean hidden) {

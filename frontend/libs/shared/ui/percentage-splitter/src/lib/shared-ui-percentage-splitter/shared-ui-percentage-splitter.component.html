@@ -1,4 +1,4 @@
-<div>
+<div *dvTranslocoShared="let t">
   <!-- WOHNSITZ AUFTEILUNG -->
 
   <!-- label -->
@@ -18,10 +18,10 @@
       />
       <mat-hint><ng-content select="[dvHintA]"></ng-content></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
     </mat-form-field>
 
@@ -37,11 +37,22 @@
       />
       <mat-hint><ng-content select="[dvHintB]"></ng-content></mat-hint>
       <mat-error *dvSharedUiFormMessageError="'minlength'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
       <mat-error *dvSharedUiFormMessageError="'required'">
-        {{ 'shared.form.error.requiredShort' | transloco }}
+        {{ t('shared.form.error.requiredShort') }}
       </mat-error>
     </mat-form-field>
   </div>
+
+  @if (
+    (controlA.touched || controlB.touched) &&
+    (controlA.errors?.['atLeastOneValue'] || controlB.errors?.['atLeastOneValue'])
+  ) {
+    <div class="group-errors">
+      <mat-error>
+        {{ t('shared.form.shared.wohnsitzanteil.error.atLeastOne') }}
+      </mat-error>
+    </div>
+  }
 </div>

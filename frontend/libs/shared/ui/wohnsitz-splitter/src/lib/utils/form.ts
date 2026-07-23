@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   NonNullableFormBuilder,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 
@@ -25,7 +26,11 @@ type WohnsitzValuesGetter = (
 
 export const prepareWohnsitzForm = (payload: {
   projector: WohnsitzValuesGetter;
-  viewSig: Signal<{ gesuchFormular: GesuchFormular | null; readonly: boolean }>;
+  viewSig: Signal<{
+    gesuchFormular: GesuchFormular | null;
+    readonly: boolean;
+    allowOnlyOne?: boolean;
+  }>;
   form: WohnsitzAnteile<FormControl<string | undefined>> & {
     wohnsitz: FormControl<Wohnsitz>;
   };
@@ -107,9 +112,10 @@ export const prepareWohnsitzForm = (payload: {
     );
   });
 
+  const minOneRequiredValidator = minOneRequired(form);
   effect(() => {
     refreshSig();
-    const { gesuchFormular } = viewSig();
+    const { gesuchFormular, allowOnlyOne } = viewSig();
     const { elternteilUnbekanntVerstorben } =
       viewSig().gesuchFormular?.familiensituation ?? {};
     const wohnsitzNotMutterVater =
@@ -131,6 +137,18 @@ export const prepareWohnsitzForm = (payload: {
       form.wohnsitzAnteilMutter.patchValue(anteile.wohnsitzAnteilMutter);
       form.wohnsitzAnteilVater.patchValue(anteile.wohnsitzAnteilVater);
     }
+
+    if (allowOnlyOne) {
+      form.wohnsitzAnteilMutter.removeValidators(Validators.required);
+      form.wohnsitzAnteilVater.removeValidators(Validators.required);
+      form.wohnsitzAnteilMutter.addValidators(minOneRequiredValidator);
+      form.wohnsitzAnteilVater.addValidators(minOneRequiredValidator);
+    } else {
+      form.wohnsitzAnteilMutter.addValidators(Validators.required);
+      form.wohnsitzAnteilVater.addValidators(Validators.required);
+      form.wohnsitzAnteilMutter.removeValidators(minOneRequiredValidator);
+      form.wohnsitzAnteilVater.removeValidators(minOneRequiredValidator);
+    }
   });
 
   return {
@@ -146,11 +164,8 @@ export const addWohnsitzControls = (formBuilder: NonNullableFormBuilder) => {
     wohnsitz: formBuilder.control<Wohnsitz>('' as Wohnsitz, [
       Validators.required,
     ]),
-    wohnsitzAnteilMutter: [
-      <string | undefined>undefined,
-      [Validators.required],
-    ],
-    wohnsitzAnteilVater: [<string | undefined>undefined, [Validators.required]],
+    wohnsitzAnteilMutter: [<string | undefined>undefined],
+    wohnsitzAnteilVater: [<string | undefined>undefined],
   };
 };
 
@@ -166,3 +181,18 @@ export function updateWohnsitzControlsState(
     form.wohnsitzAnteilVater.enable();
   }
 }
+
+export const minOneRequired =
+  (controls: WohnsitzAnteile<FormControl<string | undefined>>): ValidatorFn =>
+  () => {
+    const hasNoAnteile = (['Mutter', 'Vater'] as const).every(
+      (elternteil) =>
+        !percentStringToNumber(controls[`wohnsitzAnteil${elternteil}`].value),
+    );
+
+    return hasNoAnteile
+      ? {
+          atLeastOneValue: true,
+        }
+      : {};
+  };
