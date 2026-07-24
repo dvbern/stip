@@ -106,10 +106,10 @@ export const prepareWohnsitzForm = (payload: {
   };
 
   const showWohnsitzSplitterSig = computed(() => {
+    const wohnsitz = wohnsitzChangedSig();
     return (
-      (wohnsitzChangedSig() === 'MUTTER_VATER' &&
-        wohnsitzValuesSig().includes('MUTTER_VATER')) ||
-      viewSig().allowOnlyOne
+      (wohnsitz === 'MUTTER_VATER' && wohnsitz.includes('MUTTER_VATER')) ||
+      (viewSig().allowOnlyOne && wohnsitz !== 'EIGENER_HAUSHALT')
     );
   });
 
