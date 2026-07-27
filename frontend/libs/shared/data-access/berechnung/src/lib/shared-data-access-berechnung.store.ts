@@ -1,13 +1,16 @@
 import { Injectable, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { exhaustMap, pipe, tap } from 'rxjs';
+import { EMPTY, exhaustMap, pipe, tap } from 'rxjs';
 
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import {
   BerechnungsStammdaten,
   Berechnungsresultat,
   GesuchService,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { TranchenBerechnungsresultatView } from '@dv/shared/model/verfuegung';
 import {
   CachedRemoteData,
@@ -32,6 +35,8 @@ export class BerechnungStore extends signalStore(
   withState(initialState),
 ) {
   private gesuchService = inject(GesuchService);
+  private config = inject(SharedModelCompileTimeConfig);
+  private router = inject(Router);
 
   /**
    * Transforms the raw berechnung data into a view model grouped by tranche ID.
@@ -122,8 +127,10 @@ export class BerechnungStore extends signalStore(
     };
   });
 
-  getBerechnungForGesuch$ = rxMethod<{
+  getBerechnung$ = rxMethod<{
     gesuchId: string;
+    verfuegungId: string | null;
+    latestVerfuegungId: string | null;
   }>(
     pipe(
       tap(() => {
@@ -131,31 +138,35 @@ export class BerechnungStore extends signalStore(
           berechnung: cachedPending(state.berechnung),
         }));
       }),
-      exhaustMap(({ gesuchId }) =>
-        this.gesuchService
-          .getBerechnungForGesuch$({ gesuchId })
-          .pipe(
-            handleApiResponse((berechnung) => patchState(this, { berechnung })),
-          ),
-      ),
-    ),
-  );
-
-  getBerechnungForVerfuegung$ = rxMethod<{
-    verfuegungId: string;
-  }>(
-    pipe(
-      tap(() => {
-        patchState(this, (state) => ({
-          berechnung: cachedPending(state.berechnung),
-        }));
-      }),
-      exhaustMap(({ verfuegungId }) =>
-        this.gesuchService
-          .getBerechnungForVerfuegung$({ verfuegungId })
-          .pipe(
-            handleApiResponse((berechnung) => patchState(this, { berechnung })),
-          ),
+      exhaustMap(({ gesuchId, latestVerfuegungId, verfuegungId }) =>
+        byAppConfig(this.config.app, {
+          sachbearbeiter: () => {
+            if (verfuegungId) {
+              // case mit verfuegungId => versionierte Berechnung für Verfuegung
+              return this.gesuchService.getBerechnungForVerfuegung$({
+                verfuegungId,
+              });
+            }
+            return this.gesuchService.getBerechnungForGesuchSb$({ gesuchId });
+          },
+          gesuchsteller: () => {
+            if (latestVerfuegungId) {
+              return this.gesuchService.getBerechnungForVerfuegung$({
+                verfuegungId: latestVerfuegungId,
+              });
+            } else if (verfuegungId) {
+              // case mit verfuegungId => versionierte Berechnung für Verfuegung
+              return this.gesuchService.getBerechnungForVerfuegung$({
+                verfuegungId,
+              });
+            } else {
+              this.router.navigate(['/']);
+              return EMPTY;
+            }
+          },
+        }).pipe(
+          handleApiResponse((berechnung) => patchState(this, { berechnung })),
+        ),
       ),
     ),
   );

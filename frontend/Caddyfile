@@ -9,7 +9,9 @@
         file_server
 
         log {
-          format console
+          format console {
+              level_format upper
+          }
         }
 
         respond /_health 200
@@ -32,6 +34,11 @@
                 Referrer-Policy no-referrer-when-downgrade
         }
 
+        @translations {
+          path assets/i18n/*.json
+        }
+
+        header @translations Cache-Control no-cache
 
         @assets {
           path *.js

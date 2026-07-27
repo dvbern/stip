@@ -7,13 +7,18 @@ import {
 } from '@angular/core';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
-import { TranslocoDirective } from '@jsverse/transloco';
 
 import { GesuchAenderungs } from '@dv/shared/model/gesuch';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 
 @Component({
   selector: 'dv-shared-ui-aenderungen-menu',
-  imports: [CommonModule, MatMenuModule, TranslocoDirective, RouterModule],
+  imports: [
+    CommonModule,
+    MatMenuModule,
+    SharedUiAdvTranslocoDirective,
+    RouterModule,
+  ],
   templateUrl: './shared-ui-aenderungen-menu.component.html',
   styleUrl: './shared-ui-aenderungen-menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +52,7 @@ export class SharedUiAenderungenMenuComponent {
     const trancheId = this.trancheIdSig();
     const revision = this.revisionSig() ?? null;
     const offeneAenderung = aenderungen?.offen;
+    const eingereichteAenderung = aenderungen?.eingereicht;
     const akzeptierteAenderungen = aenderungen?.akzeptiert;
     const manuelleAenderungen = aenderungen?.manuell;
     const abgelehnteAenderungen = aenderungen?.abgelehnt;
@@ -57,6 +63,12 @@ export class SharedUiAenderungenMenuComponent {
         ? [offeneAenderung].map((a) => ({
             ...a,
             completeState: 'open' as const,
+          }))
+        : []),
+      ...(eingereichteAenderung
+        ? [eingereichteAenderung].map((a) => ({
+            ...a,
+            completeState: 'eingereicht' as const,
           }))
         : []),
       ...(manuelleAenderungen?.map((a) => ({

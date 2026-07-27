@@ -141,7 +141,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
     @TestAsSachbearbeiter
     @Order(5)
     void gesuchStatus_AnspruchPruefen_shouldFail() {
-        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfoSb()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -188,7 +188,7 @@ class GesuchResourceGesuchManuellUeberpruefenTest {
     @TestAsSachbearbeiter
     @Order(7)
     void gesuchStatusTriggerManuellUeberpruefen() {
-        var gesuchInfo = gesuchApiSpec.getGesuchInfo()
+        var gesuchInfo = gesuchApiSpec.getGesuchInfoSb()
             .gesuchIdPath(gesuch.getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()

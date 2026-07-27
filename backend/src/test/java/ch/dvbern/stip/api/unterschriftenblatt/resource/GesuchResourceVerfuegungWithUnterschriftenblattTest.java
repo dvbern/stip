@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.unterschriftenblatt.resource;
 import java.util.Arrays;
 import java.util.List;
 
-import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsSuperUser;
@@ -192,7 +192,7 @@ class GesuchResourceVerfuegungWithUnterschriftenblattTest {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     @TestAsSachbearbeiter
     void toUploadStillContainsCorrectType() {
         getAndCheckDokumenteToUpload();
@@ -222,16 +222,9 @@ class GesuchResourceVerfuegungWithUnterschriftenblattTest {
 
     @Test
     @Order(10)
-    @TestAsFreigabestelleAndSachbearbeiter
-    void setupVerfuegtStatus() {
+    @TestAsSachbearbeiter
+    void changeGesuchToInFreigabe() {
         gesuchApiSpec.bearbeitungAbschliessen()
-            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-            .execute(TestUtil.PEEK_IF_ENV_SET)
-            .then()
-            .assertThat()
-            .statusCode(Status.OK.getStatusCode());
-
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
@@ -241,6 +234,18 @@ class GesuchResourceVerfuegungWithUnterschriftenblattTest {
 
     @Test
     @Order(11)
+    @TestAsFreigabestelle
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    @Test
+    @Order(12)
     @TestAsSachbearbeiter
     void changeGesuchStatusToVerfuegungDruckbereit() {
         gesuchApiSpec.changeGesuchStatusToVerfuegungDruckbereit()
@@ -253,7 +258,7 @@ class GesuchResourceVerfuegungWithUnterschriftenblattTest {
     }
 
     @Test
-    @Order(12)
+    @Order(13)
     @TestAsSachbearbeiter
     void uploadUnterschriftenblatt() {
         final var response = TestUtil.uploadUnterschriftenblatt(
@@ -267,7 +272,7 @@ class GesuchResourceVerfuegungWithUnterschriftenblattTest {
     }
 
     @Test
-    @Order(13)
+    @Order(14)
     @TestAsSachbearbeiter
     void changeGesuchStatusToVersendet() {
         gesuchApiSpec.changeGesuchStatusToVersendet()

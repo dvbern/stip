@@ -2,7 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Store } from '@ngrx/store';
-import { map, pipe, switchMap, tap, throwError, withLatestFrom } from 'rxjs';
+import { map, pipe, switchMap, tap, withLatestFrom } from 'rxjs';
 
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { DokumentsStore } from '@dv/shared/data-access/dokuments';
@@ -25,7 +25,7 @@ import {
   SPECIAL_VALIDATION_ERRORS,
   isSpecialValidationError,
 } from '@dv/shared/model/gesuch-form';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { isDefined } from '@dv/shared/model/type-util';
 import { shouldIgnoreErrorsIf } from '@dv/shared/util/http';
 import {
@@ -130,7 +130,7 @@ export class EinreichenStore extends signalStore(
     const { isFehlendeDokumente, permissions, trancheSetting } =
       this.gesuchViewSig();
     const { gesuch, trancheTyp, gesuchId } = this.cachedGesuchViewSig();
-    const { compileTimeConfig } = this.sharedDataAccessConfigSig();
+    const { appConfig } = this.sharedDataAccessConfigSig();
     const hasDokumenteToUebermitteln =
       isFehlendeDokumente &&
       !this.dokumentsStore.dokumenteCanFlagsSig().gsCanDokumenteUebermitteln;
@@ -172,7 +172,7 @@ export class EinreichenStore extends signalStore(
       isFehlendeDokumente,
       gesuchStatus: gesuch?.gesuchStatus,
       abschlussPhase: toAbschlussPhase(gesuch, {
-        appType: compileTimeConfig?.appType,
+        appConfig,
         isComplete: hasNoValidationErrors(error) && !hasDokumenteToUebermitteln,
         checkAenderung: trancheTyp === 'AENDERUNG',
       }),
@@ -249,31 +249,27 @@ export class EinreichenStore extends signalStore(
     ] as const;
 
     if (allowNullValidation) {
-      return byAppType(this.config.appType, {
-        'gesuch-app': () =>
+      return byAppConfig(this.config.app, {
+        gesuchsteller: () =>
           this.gesuchTrancheService.validateGesuchTranchePagesGS$(
             ...requestArgs,
           ),
-        'sachbearbeitung-app': () =>
+        sachbearbeiter: () =>
           this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
             ...requestArgs,
           ),
-        'demo-data-app': () =>
-          throwError(() => new Error('Not implemented for this AppType')),
       });
     }
 
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.gesuchTrancheService.gesuchTrancheEinreichenValidierenGS$(
           ...requestArgs,
         ),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.gesuchTrancheService.gesuchTrancheEinreichenValidierenSB$(
           ...requestArgs,
         ),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   };
 

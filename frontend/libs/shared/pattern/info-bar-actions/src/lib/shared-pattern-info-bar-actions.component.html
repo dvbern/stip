@@ -1,0 +1,158 @@
+@let actionMenu = actionMenuOptionsSig();
+@let gesuchId = gesuchIdSig();
+@let trancheId = trancheIdSig();
+
+<!-- Gesuch Aktionen Menu -->
+@if (isActionRouteSig()) {
+  <div *dvTranslocoShared="let t">
+    <button
+      type="button"
+      class="tw:dv-button-outline tw:font-normal tw:flex tw:items-center tw:px-4"
+      data-testid="sb-gesuch-header-aktion-menu"
+      [class.active]="aktionTrigger.menuOpen"
+      [disabled]="actionMenu.isActionMenuDisabled"
+      #aktionTrigger="matMenuTrigger"
+      [matMenuTriggerFor]="aktionMenu"
+    >
+      <span>{{ t('shared.header.aktion') }}</span>
+      <i class="material-symbols-rounded tw:ml-2">expand_more</i>
+    </button>
+    <!-- Aktion Menu -->
+    <mat-menu
+      #aktionMenu="matMenu"
+      xPosition="before"
+      class="header-menu-panel tw:mt-2 tw:rounded-lg! tw:shadow-gray-400! tw:shadow-lg!"
+    >
+      <div class="tw:flex tw:flex-col tw:gap-2">
+        @if (actionMenu.hasAenderungMenuActions) {
+          <button
+            type="button"
+            class="fw-normal tw:px-2"
+            data-testid="aenderung-reject"
+            [disabled]="isAenderungUpdatingSig()"
+            mat-menu-item
+            (click)="
+              changeAenderungState(
+                actionMenu.aenderungActions.trancheId!,
+                'ABGELEHNT',
+                actionMenu.aenderungActions.gesuchId!
+              )
+            "
+          >
+            <div class="tw:flex tw:items-center tw:gap-2">
+              <i class="material-symbols-rounded">close</i>
+              <span>{{ t('shared.form.aenderung.action.reject') }}</span>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="fw-normal tw:px-2"
+            data-testid="aenderung-accept"
+            [disabled]="actionMenu.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+            mat-menu-item
+            (click)="
+              changeAenderungState(
+                actionMenu.aenderungActions.trancheId!,
+                'AKZEPTIERT',
+                actionMenu.aenderungActions.gesuchId!
+              )
+            "
+          >
+            <div class="tw:flex tw:items-center tw:gap-2">
+              <i class="material-symbols-rounded">check_circle</i>
+              <span>{{ t('shared.form.aenderung.action.accept') }}</span>
+            </div>
+          </button>
+
+          <button
+            type="button"
+            class="fw-normal tw:px-2"
+            data-testid="aenderung-manually-change"
+            [disabled]="actionMenu.aenderungActions.hasValidationErrors || isAenderungUpdatingSig()"
+            mat-menu-item
+            (click)="
+              changeAenderungState(
+                actionMenu.aenderungActions.trancheId!,
+                'MANUELLE_AENDERUNG',
+                actionMenu.aenderungActions.gesuchId!
+              )
+            "
+          >
+            <div class="tw:flex tw:items-center tw:gap-2">
+              <i class="material-symbols-rounded">edit</i>
+              <span>{{ t('shared.form.aenderung.action.manuallyChange') }}</span>
+            </div>
+          </button>
+        }
+
+        @if (actionMenu.hasGesuchMenuActions) {
+          @switch (actionMenu.availableTrancheInteraction) {
+            @case ('CREATE_TRANCHE') {
+              <!-- Tranche erstellen -->
+              <button
+                type="button"
+                class="fw-normal tw:px-2"
+                data-testid="aktion-tranche-erstellen"
+                mat-menu-item
+                (click)="createTranche()"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">add_circle</i>
+                  <span>{{ t('shared.header.tranche.erstellen') }}</span>
+                </div>
+              </button>
+            }
+          }
+
+          @if (actionMenu.statusUebergaenge.isNotEmpty && actionMenu.availableTrancheInteraction) {
+            <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+          }
+
+          @for (uebergang of actionMenu.statusUebergaenge.list; track $index) {
+            @if (uebergang.name) {
+              <button
+                type="button"
+                class="tw:pr-auto tw:px-2"
+                [attr.data-testid]="'sb-gesuch-header-aktion-status-uebergang-' + uebergang.typ"
+                [disabled]="uebergang.disabledReason || !trancheId"
+                [matTooltip]="
+                  uebergang.disabledReason
+                    ? t(`shared.header.status-uebergang.disabled-reason.${uebergang.disabledReason}`)
+                    : null
+                "
+                mat-menu-item
+                (click)="setStatusUebergang(uebergang.typ, gesuchId, trancheId)"
+              >
+                <div class="tw:flex tw:items-center tw:gap-2">
+                  <i class="material-symbols-rounded">{{ uebergang.icon }}</i>
+                  <span>{{ t(`shared.header.status-uebergang.${uebergang.name}`) }}</span>
+                </div>
+              </button>
+            }
+          }
+        }
+
+        @if (actionMenu.canExport && actionMenu.hasWorkflowActions) {
+          <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
+        }
+
+        @if (actionMenu.canExport) {
+          <button
+            type="button"
+            class="fw-normal tw:px-2"
+            data-testid="aktion-export-tranche"
+            [disabled]="isExportingSig()"
+            mat-menu-item
+            (click)="exportTranche()"
+          >
+            <div class="tw:flex tw:items-center tw:gap-2">
+              <i class="material-symbols-rounded">download</i>
+              <span>{{ t('shared.form.tranche.export') }}</span>
+            </div>
+          </button>
+        }
+      </div>
+    </mat-menu>
+  </div>
+}

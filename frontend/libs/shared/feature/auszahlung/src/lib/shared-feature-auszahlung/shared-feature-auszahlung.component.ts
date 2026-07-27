@@ -64,7 +64,7 @@ export abstract class SharedFeatureAuszahlungComponent {
       auszahlung: auszahlung.data,
       isLoading: isPending(auszahlung),
       readonly: !isNotReadonly(
-        this.config.appType,
+        this.config.app,
         rolesMap,
         auszahlung.data?.isDelegated,
       ),

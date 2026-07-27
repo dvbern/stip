@@ -1,0 +1,16 @@
+{
+  "name": "shared-pattern-info-bar-actions",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/pattern/info-bar-actions/src",
+  "prefix": "dv",
+  "projectType": "library",
+  "tags": ["type:pattern", "scope:shared"],
+  "targets": {
+    "build": {
+      "executor": "nx:noop",
+      "options": {
+        "tsConfig": "libs/shared/pattern/info-bar-actions/tsconfig.lib.json"
+      }
+    }
+  }
+}

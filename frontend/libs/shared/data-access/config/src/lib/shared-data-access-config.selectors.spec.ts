@@ -1,3 +1,5 @@
+import { AppConfig } from '@dv/shared/model/config';
+
 import { selectSharedDataAccessConfigsView } from './shared-data-access-config.selectors';
 
 describe('selectSharedDataAccessConfigsView', () => {
@@ -5,8 +7,11 @@ describe('selectSharedDataAccessConfigsView', () => {
     const state = {
       deploymentConfig: undefined,
       compileTimeConfig: undefined,
-      isGesuchApp: false,
-      isSachbearbeitungApp: false,
+      appConfig: {
+        type: 'gesuch-app',
+        view: 'gesuchsteller',
+        keyPrefix: 'gesuch-app',
+      } satisfies AppConfig,
       loading: false,
       error: undefined,
     };

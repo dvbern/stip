@@ -1,37 +1,39 @@
-@let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.state?.beschwerdeHaengig ?? null;
-@if (beschwerdeHaengig !== null) {
-  <!-- Beschwerde Hängig -->
-  <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
-    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.title' | transloco }}
-  </h3>
+<ng-container *dvTranslocoSb="let t">
+  @let beschwerdeHaengig = gesuchInfoStore.gesuchInfo.data()?.state?.beschwerdeHaengig ?? null;
+  @if (beschwerdeHaengig !== null) {
+    <!-- Beschwerde Hängig -->
+    <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
+      {{ t('shared.infos.beschwerde.haengig.title') }}
+    </h3>
 
-  <p class="tw:my-3">
-    {{ 'sachbearbeitung-app.infos.beschwerde.haengig.text.' + beschwerdeHaengig | transloco }}
-  </p>
+    <p class="tw:my-3">
+      {{ t(`shared.infos.beschwerde.haengig.text.${beschwerdeHaengig}`) }}
+    </p>
 
-  <button
-    class="tw:dv-button-main-primary"
-    type="button"
-    data-testid="button-beschwerde-create"
-    (click)="setBeschwerdeTo(beschwerdeHaengig)"
-  >
-    {{ 'sachbearbeitung-app.infos.beschwerde.create.' + beschwerdeHaengig | transloco }}
-  </button>
+    <button
+      class="tw:dv-button-main-primary"
+      type="button"
+      data-testid="button-beschwerde-create"
+      (click)="setBeschwerdeTo(beschwerdeHaengig)"
+    >
+      {{ t(`sachbearbeitung-app.infos.beschwerde.create.${beschwerdeHaengig}`) }}
+    </button>
 
-  <!-- Beschwerde Entscheid hochladen -->
-  <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title' | transloco }}
-  </h3>
-  <p class="tw:my-3">
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text' | transloco }}
-  </p>
-  <button
-    class="tw:dv-button-main-primary"
-    type="button"
-    data-testid="button-beschwerde-entscheid-upload"
-    (click)="entscheidHochladen()"
-    [disabled]="!canCreateEntscheidSig()"
-  >
-    {{ 'sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload' | transloco }}
-  </button>
-}
+    <!-- Beschwerde Entscheid hochladen -->
+    <h3 class="tw:mb-6 tw:mt-10 tw:text-2xl tw:font-semibold">
+      {{ t('sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.title') }}
+    </h3>
+    <p class="tw:my-3">
+      {{ t('sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.text') }}
+    </p>
+    <button
+      class="tw:dv-button-main-primary"
+      type="button"
+      data-testid="button-beschwerde-entscheid-upload"
+      (click)="entscheidHochladen()"
+      [disabled]="!canCreateEntscheidSig()"
+    >
+      {{ t('sachbearbeitung-app.infos.beschwerde.entscheid-hochladen.upload') }}
+    </button>
+  }
+</ng-container>

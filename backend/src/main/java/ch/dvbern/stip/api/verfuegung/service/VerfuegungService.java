@@ -83,6 +83,10 @@ public class VerfuegungService {
             .toList();
     }
 
+    public Optional<Verfuegung> getLatestVerfuegungByGesuchId(final UUID gesuchId) {
+        return verfuegungRepository.getLatestVerfuegungByGesuchId(gesuchId);
+    }
+
     @Transactional
     public List<VerfuegungFallDto> getVerfuegungenByFallId(final UUID fallId) {
         return gesuchRepository.findAllForFall(fallId)

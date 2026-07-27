@@ -31,6 +31,7 @@ export interface Gesuch {
     gesuchTrancheToWorkWith: GesuchTranche;
     einreichedatum?: string;
     hadDelegierungs?: boolean;
+    minDateEigenerWohnsitz?: string;
     delegierung?: DelegierungSlim;
     nachfristDokumente?: string;
     verfuegt: boolean;

@@ -1378,13 +1378,13 @@ public class DarlehenApiSpec {
      * Return all darlehen for a given fallId
      * 
      *
-     * @see #gesuchIdPath  (required)
+     * @see #fallIdPath  (required)
      * return List&lt;FreiwilligDarlehenDtoSpec&gt;
      */
     public static class GetAllFreiwilligDarlehenSbOper implements Oper {
 
         public static final Method REQ_METHOD = GET;
-        public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{gesuchId}";
+        public static final String REQ_URI = "/darlehen/getAllDarlehenSb/{fallId}";
 
         private RequestSpecBuilder reqSpec;
         private ResponseSpecBuilder respSpec;
@@ -1396,7 +1396,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * GET /darlehen/getAllDarlehenSb/{fallId}
          * @param handler handler
          * @param <T> type
          * @return type
@@ -1407,7 +1407,7 @@ public class DarlehenApiSpec {
         }
 
         /**
-         * GET /darlehen/getAllDarlehenSb/{gesuchId}
+         * GET /darlehen/getAllDarlehenSb/{fallId}
          * @param handler handler
          * @return List&lt;FreiwilligDarlehenDtoSpec&gt;
          */
@@ -1416,14 +1416,14 @@ public class DarlehenApiSpec {
             return execute(handler).as(type);
         }
 
-        public static final String GESUCH_ID_PATH = "gesuchId";
+        public static final String FALL_ID_PATH = "fallId";
 
         /**
-         * @param gesuchId (UUID)  (required)
+         * @param fallId (UUID)  (required)
          * @return operation
          */
-        public GetAllFreiwilligDarlehenSbOper gesuchIdPath(Object gesuchId) {
-            reqSpec.addPathParam(GESUCH_ID_PATH, gesuchId);
+        public GetAllFreiwilligDarlehenSbOper fallIdPath(Object fallId) {
+            reqSpec.addPathParam(FALL_ID_PATH, fallId);
             return this;
         }
 

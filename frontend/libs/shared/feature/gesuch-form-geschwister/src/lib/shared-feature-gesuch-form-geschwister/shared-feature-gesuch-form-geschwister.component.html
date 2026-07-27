@@ -86,7 +86,7 @@
                             <i class="material-symbols-rounded">visibility</i>
                           </button>
                         }
-                        @if (config.isSachbearbeitungApp) {
+                        @if (config.app.view === 'sachbearbeiter') {
                           @let disabled = view.readonly || viewSig().loading;
                           <button
                             class="tw:not-disabled:cursor-pointer"

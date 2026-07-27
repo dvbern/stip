@@ -14,7 +14,7 @@ export const sozialdienstAppFeatureGesuchCockpitRoutes: Route[] = [
       {
         path: '',
         component: SozialdienstAppFeatureGesuchCockpitComponent,
-        title: 'sozialdienst-app.dashboard.title',
+        title: 'shared.dashboard.title',
       },
       // add more routes here (siblings)
       // it is also possible to add nested routes as children

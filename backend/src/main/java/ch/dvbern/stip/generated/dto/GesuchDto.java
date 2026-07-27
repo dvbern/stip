@@ -38,6 +38,7 @@ public class GesuchDto  implements Serializable {
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid Boolean hadDelegierungs;
+  private @Valid LocalDate minDateEigenerWohnsitz;
   private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
 
@@ -307,6 +308,24 @@ public class GesuchDto  implements Serializable {
 
   /**
    **/
+  public GesuchDto minDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+    return this;
+  }
+
+  
+  @JsonProperty("minDateEigenerWohnsitz")
+  public LocalDate getMinDateEigenerWohnsitz() {
+    return minDateEigenerWohnsitz;
+  }
+
+  @JsonProperty("minDateEigenerWohnsitz")
+  public void setMinDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+  }
+
+  /**
+   **/
   public GesuchDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
@@ -365,13 +384,14 @@ public class GesuchDto  implements Serializable {
         Objects.equals(this.bearbeiter, gesuch.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuch.einreichedatum) &&
         Objects.equals(this.hadDelegierungs, gesuch.hadDelegierungs) &&
+        Objects.equals(this.minDateEigenerWohnsitz, gesuch.minDateEigenerWohnsitz) &&
         Objects.equals(this.delegierung, gesuch.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuch.nachfristDokumente);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, minDateEigenerWohnsitz, delegierung, nachfristDokumente);
   }
 
   @Override
@@ -393,6 +413,7 @@ public class GesuchDto  implements Serializable {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
+    sb.append("    minDateEigenerWohnsitz: ").append(toIndentedString(minDateEigenerWohnsitz)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("}");
