@@ -1,6 +1,6 @@
 <div class="tw:md:p-6 tw:p-4" *dvTranslocoShared="let t">
   @let info = data.options.info;
-  <h1 class="tw:flex tw:items-center tw:self-start tw:mr-2 tw:pr-2">
+  <h1 class="tw:flex tw:items-center tw:self-start tw:mr-2 tw:mb-2 tw:pr-2">
     <span class="material-symbols-rounded tw:text-dv-blue upload-icon tw:rounded-full tw:mr-2 tw:p-1">upload</span>
     <div class="tw:text-xl tw:font-semibold" [innerHTML]="info.type === 'TEXT' ? info.title : t(info.title)"></div>
     <span class="tw:grow"></span>
