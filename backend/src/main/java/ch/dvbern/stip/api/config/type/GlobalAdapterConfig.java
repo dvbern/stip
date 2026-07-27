@@ -17,41 +17,33 @@
 
 package ch.dvbern.stip.api.config.type;
 
+import java.util.Map;
 import java.util.Optional;
 
-import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
-import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
-public interface TenantPortConfig {
-    Steuerdaten steuerdaten();
+public interface GlobalAdapterConfig {
+    Map<PdfAdapterType, PdfAdapter> pdf();
 
-    Berechnung berechnung();
+    interface PdfAdapter {
+        String binary();
 
-    Pdf pdf();
+        int maxOutputBytes();
 
-    interface Port {
+        int compileTimeout();
+
+        int shutdownWaitTimeout();
+
+        int shutdownForceTimeout();
+
+        String rootPath();
+
+        String fontsPath();
+
         @WithDefault("false")
-        Boolean enabled();
-    }
+        boolean dockerEnabled();
 
-    interface Steuerdaten extends Port {
-        Optional<SteuerdatenAdapterType> adapterType();
-    }
-
-    interface Pdf extends Port {
-        Optional<PdfAdapterType> adapterType();
-    }
-
-    interface Berechnung extends Port {
-        @WithDefault("bern")
-        BerechnungAdapterType adapterType();
-
-        @WithDefault("1")
-        int majorVersion();
-
-        @WithDefault("0")
-        int minorVersion();
+        Optional<String> dockerImage();
     }
 }

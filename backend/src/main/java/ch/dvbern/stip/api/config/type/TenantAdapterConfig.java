@@ -20,10 +20,14 @@ package ch.dvbern.stip.api.config.type;
 import java.util.Map;
 import java.util.Optional;
 
+import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfTemplateType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 
 public interface TenantAdapterConfig {
     Map<SteuerdatenAdapterType, SteuerdatenAdapter> steuerdaten();
+
+    Map<PdfAdapterType, PdfAdapter> pdf();
 
     interface SteuerdatenAdapter {
         Optional<String> url();
@@ -31,5 +35,11 @@ public interface TenantAdapterConfig {
         Optional<String> username();
 
         Optional<String> password();
+    }
+
+    interface PdfAdapter {
+        Optional<String> rootTemplatePath();
+
+        Map<PdfTemplateType, String> templatePath();
     }
 }

@@ -1,16 +1,24 @@
 {
   "folders": [
     {
-      "path": "./backend"
+      "path": "./backend",
     },
     {
-      "path": "./contract"
-    }
+      "path": "./contract",
+    },
+    {
+      "path": "./backend/src/main/resources/typst/",
+      "name": "typst",
+    },
   ],
+  "extensions": {
+    "recommendations": ["myriad-dreamin.tinymist"],
+  },
   "settings": {
     "files.exclude": {
-      "frontend/**": true
+      "frontend/**": true,
     },
+    "tinymist.rootPath": "${workspaceFolder}/backend/src/main/resources/typst/",
     "workbench.colorCustomizations": {
       "activityBar.activeBackground": "#fb7c35",
       "activityBar.background": "#fb7c35",
@@ -28,7 +36,7 @@
       "titleBar.activeBackground": "#f85c05",
       "titleBar.activeForeground": "#15202b",
       "titleBar.inactiveBackground": "#f85c0599",
-      "titleBar.inactiveForeground": "#15202b99"
+      "titleBar.inactiveForeground": "#15202b99",
     },
     "peacock.color": "#f85c05",
   },

@@ -15,19 +15,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.qualifier;
+package ch.dvbern.stip.integration.pdf.adapter.typst.exceptions;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+public class PdfCompilationException extends RuntimeException {
+    private final int exitCode;
+    private final String diagnostics;
 
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
-import jakarta.inject.Qualifier;
-
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PlzFetchQualifier {
-    PlzFetchAdapterType value();
+    public PdfCompilationException(int exitCode, String diagnostics) {
+        super("Typst compilation failed with exit code " + exitCode + ": " + diagnostics);
+        this.exitCode = exitCode;
+        this.diagnostics = diagnostics;
+    }
 }

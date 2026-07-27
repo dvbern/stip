@@ -15,19 +15,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.qualifier;
+package ch.dvbern.stip.integration.pdf.domain.service;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import ch.dvbern.stip.api.common.service.MappingConfig;
+import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
+import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
-import jakarta.inject.Qualifier;
+@Mapper(config = MappingConfig.class)
+public interface BerechnungCopyMapper {
 
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PlzFetchQualifier {
-    PlzFetchAdapterType value();
+    @Mapping(target = "persoenlichesBudgetresultat", ignore = true)
+    @Mapping(target = "familienBudgetresultate", ignore = true)
+    @Mapping(target = "personenHaushaltGroups", ignore = true)
+    TranchenBerechnungsresultatDto copy(TranchenBerechnungsresultatDto source);
+
+    BerechnungsresultatDto copy(BerechnungsresultatDto source);
 }

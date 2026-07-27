@@ -1,0 +1,171 @@
+common:
+  svn: SV-Nr
+  birthday: Geburtsdatum
+  ausbildungsjahr: Ausbildungsjahr
+  steuerjahr: Steuerjahr
+  veranlagungscode: Veranlagungscode
+  from: Von
+  till: Bis
+  months: Monate
+berechnung:
+  persoenlich: Persönliches Budget
+  familie: Familienbudget
+  mutter: Mutterbudget
+  vater: Vaterbudget
+  notes:
+    uebersicht:
+      kuerzung:
+        identifier: k)
+        text: Das Gesuch wurde {anzahlMonate} Monat zu spät eingereicht. Dies ergibt eine Reduktion von {betrag}.
+      unterbruch:
+        identifier: u)
+        text: Das Gesuch wurde {anzahlMonate} Monate Unterbrochen. Dies ergibt eine Reduktion von {betrag}.
+    einnahmen-kosten:
+      bgsa:
+        identifier: 1)
+        text: Einkünfte nach dem vereinfachten Abrechnungsverfahren (Bundesgesetz gegen die Schwarzarbeit)
+      hoechstwerte:
+        identifier: 2)
+        text: Die anerkannten stipendienberechtigten Höchstwerte finden Sie auf dem Beiblatt (Anhang 1) oder unter www.be.ch/ausbildungsbeitraege > Rechtliche Grundlagen > Anerkannte stipedienberechtigte Hochstwerte
+  uebersicht:
+    resultat: Resultat
+    abgelehnt: Stipendium abgelehnt
+    gewaehrt: Stipendium gewährt
+    total:
+      heading: Total
+      betrag: Total Betrag
+      ohneKuerzung: Total Betrag ohne Kürzungen
+      kuerzung: Kürzung wegen verspäteten Einreichen
+      unterbruch: Kürzung wegen Unterbruch
+      stipendium: Total Betrag Stipendium
+      darlehen: Total Betrag Darlehen
+    berechnungen:
+      heading: Berechnungen
+      tranche:
+        heading: Tranche für {anzahlMonate} Monate
+        berechnung-index: Berechnung {index}
+        percentage-von: "{percentage}% von {base}"
+  einnahmen:
+    label: Einnahmen
+    info: Total anrechenbare, jährliche Einnahmen
+    nettoerwerbseinkommen:
+      label: Nettoerwerbseinkommen
+      info: Während des Ausbildungsjahrs erzielt. Bei gesuchstellender Person mit Studium auf Tertiärstufe ist der Einkommensfreibetrag von {einkommensfreibetrag} bereits abgezogen.
+    totalEinkuenfte:
+      label: Total der Einkünfte
+      info: Siehe Steuerjahr.
+    einnahmenBGSA:
+      label: Einkünfte nach BGSA
+    kinderAusbildungszulagen:
+      label: Kinder- und Ausbildungszulagen
+    unterhaltsbeitraege:
+      label: Unterhaltsbeiträge
+    eoLeistungen:
+      label: Leistungen Erwerbsersatzordnung (EO)
+      info: Militär-, Zivildienst- und Zivilschutz.
+    taggelderAHVIV:
+      label: Taggelder
+      info: Arbeitslosentaggelder, IV-Taggelder.
+    renten:
+      label: Renten
+      info: Kinder-/Waisenrenten, IV-Renten, PK-Renten, etc.
+    ergaenzungsleistungen:
+      label: Ergänzungsleistungen
+    beitraegeGemeindeInstitutionen:
+      label: Beiträge von Gemeinden oder Institutionen
+    andereEinnahmen:
+      label: Andere Einnahmen
+      info: Schenkungen, andere Stipendien, etc.
+    anrechenbaresVermoegen:
+      label: Anrechenbares Vermögen
+      info: Es werden 15% vom Steuerbaren Vermögen von {steuerbaresVermoegen} angerechnet.
+      selbststaendigerwerbende: Selbstständigerwerbende haben einen Freibetrag von {freibetrag}.
+    elterlicheLeistung:
+      label: Anrechenbare elterliche Leistung aus Familienbudget
+    eigenmietwert:
+      label: abzüglich Eigenmietwert
+    unterhaltsbeitraegeAbzug:
+      label: abzüglich Unterhaltsbeiträge
+      info: Im Total der Einkünfte enthalten und für Person in Ausbildung.
+    sauele3:
+      label: abzüglich Säule 3a
+      info: Wird nur bei Selbständigerwerbenden berücksichtigt.
+    sauele2:
+      label: abzüglich 2. Säule
+      info: Wird nur bei Selbständigerwerbenden berücksichtigt, soweit diese Beiträge nicht in der Erfolgsrechnung enthalten sind.
+    rentenAbzug:
+      label: abzüglich Renten für Person in Ausbildung
+      info: IV-Renten, PK-Renten, etc.. Abzug sofern bereits im Total der Einkünfte enthalten.
+    einkommensfreibetragAbzug:
+      label: abzüglich Einkommensfreibetrag
+      info: Der Einkommensfreibetrag beträgt {einkommensfreibetrag}.
+    zwischentotal:
+      label: Zwischentotal anrechenbare, jährliche Einnahmen
+      info: Einnahmen nach Abzug des Einkommensfreibetrags können nicht negativ sein.
+  kosten:
+    label: Kosten
+    info: Total anrechenbare, jährliche Kosten
+    ausbildungskosten:
+      label: Ausbildungskosten der Person in Ausbildung
+      info: Die Ausbildungskosten von {ausbildungskosten} werden bei verheirateten, eingetragener Partnerschaft lebenden oder in einem stabilen Konkubinat lebenden Personen in Ausbildung mit der Anzahl Personen im Haushalt {anzahlPersonenImHaushalt} multipliziert, damit der Anteil pro Person korrekt ausgewiesen wird.
+    fahrkosten:
+      label: Fahrkosten der Person in Ausbildung
+      info: Berücksichtigt werden nur Kosten für ein Jahresabonnement. Die Fahrkosten von {fahrkosten} werden bei verheirateten, eingetragener Partnerschaft lebenden oder in einem stabilen Konkubinat lebenden Personen in Ausbildung mit der Anzahl Personen im Haushalt {anzahlPersonenImHaushalt} multipliziert, damit der Anteil pro Person korrekt ausgewiesen wird.
+    verpflegungskosten:
+      label: Verpflegung auswärts der Person in Ausbildung
+      info: Nur wenn bei Eltern wohnend.
+    grundbedarf:
+      label: Grundbedarf für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    wohnkosten:
+      label: Wohnkosten für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    medizinischeGrundversorgung:
+      label: Medizinische Grundversorgung für {anzahlPersonenImHaushalt} Personenhaushalt
+      info: Nur wenn eigener Haushalt.
+    fahrkostenPartner:
+      label: Fahrkosten der Partnerin / des Partners
+      info: Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.
+    verpflegungPartner:
+      label: Verpflegung der Partnerin / des Partners
+      info: Nur wenn erwerbstätig und nicht in anerkannter Ausbildung.
+    betreuungskostenKinder:
+      label: Betreuungskosten für eigene Kinder
+    steuern:
+      label: Steuern
+      info: Während des Ausbildungsjahres zu bezahlende Steuern.
+    anteilLebenshaltungskosten:
+      label: Ungedeckter Anteil Lebenshaltungskosten
+      info: Übertrag aus dem Familienbudget. Nur wenn bei Eltern wohnend.
+    integrationszulage:
+      label: Integrationszulage für {inAusbildungStehendeKinder} in Ausbildung stehende(s) Kind(er)
+      info: Integrationszulage und Einkommensfreibetrag dürfen pro Haushalt {abzugsLimite} nicht übersteigen.
+    kantonsGemeindesteuern:
+      label: Kantons- und Gemeindesteuern
+      info: Zu bezahlende Steuern, siehe Steuerjahr.
+    bundessteuern:
+      label: Bundessteuern
+      info: Zu bezahlende Steuern, siehe Steuerjahr.
+    fahrkostenFam:
+      label: Fahrkosten
+      info: Steuerrechtlich anerkannte Fahrkosten.
+    verpflegung:
+      label: Verpflegung auswärts
+      info:  Steuerrechtlich anerkannte Mehrkosten für auswärtige Verpflegung.
+  total:
+    anspruch:
+      label: Total Anspruch von {anzahlMonate} Monaten
+    anrechenbareElterlicheLeistung:
+      label: Anrechenbare, elterliche Leistung
+      info: Übertrag als Einnahme ins persönliche Budget
+    ungedeckterAnteilLebenshaltungskosten:
+      label: Ungedeckter Anteil Lebenshaltungskosten
+      info: Übertrag als Kosten ins persönliche Budget - nur wenn bei den Eltern wohnend
+    fehlbetrag:
+      label: Fehlbetrag
+      info: Einnahmen minus Kosten
+      proKopfTeilung: Pro Kopf Teilung bei Berechnung mit Partnerin oder Partner
+    einnahmeUeberschuss:
+      label: Einnahmeüberschuss
+      info: Einnahmen minus Kosten.
+      proKopfTeilung: Geteilt durch die Anzahl in Ausbildung stehender Kinder

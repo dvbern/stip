@@ -15,19 +15,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.qualifier;
+package ch.dvbern.stip.integration.pdf.domain.port;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.io.ByteArrayOutputStream;
 
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
-import jakarta.inject.Qualifier;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfPayload;
 
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PlzFetchQualifier {
-    PlzFetchAdapterType value();
+public interface PdfPort extends AutoCloseable {
+    ByteArrayOutputStream renderPdf(final PdfPayload<?> pdfPayload);
 }

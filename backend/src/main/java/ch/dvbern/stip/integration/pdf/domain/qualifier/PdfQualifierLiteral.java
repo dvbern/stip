@@ -15,19 +15,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ch.dvbern.stip.integration.plzfetch.domain.qualifier;
+package ch.dvbern.stip.integration.pdf.domain.qualifier;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
+import jakarta.enterprise.util.AnnotationLiteral;
+import lombok.RequiredArgsConstructor;
 
-import ch.dvbern.stip.integration.plzfetch.domain.model.PlzFetchAdapterType;
-import jakarta.inject.Qualifier;
+@RequiredArgsConstructor
+public class PdfQualifierLiteral extends AnnotationLiteral<PdfQualifier> implements PdfQualifier {
 
-@Qualifier
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PlzFetchQualifier {
-    PlzFetchAdapterType value();
+    private final PdfAdapterType value;
+
+    @Override
+    public PdfAdapterType value() {
+        return this.value;
+    }
 }
