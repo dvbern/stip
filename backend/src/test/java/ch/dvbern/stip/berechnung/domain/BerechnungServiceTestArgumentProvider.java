@@ -63,7 +63,7 @@ public class BerechnungServiceTestArgumentProvider implements ArgumentsProvider 
             .filter(path -> path.getFileName().toString().endsWith(".json"))
             .sorted(Comparator.comparing(path -> path.getFileName().toString()))
             .map(path -> readGesuchTestcase(mapper, path))
-            .map(Arguments::of);
+            .map(testcase -> Arguments.argumentSet(testcase.testFall, testcase));
     }
 
     private GesuchWithResultat readGesuchTestcase(final ObjectMapper mapper, final Path path) {
