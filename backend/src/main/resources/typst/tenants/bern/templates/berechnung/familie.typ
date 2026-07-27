@@ -272,7 +272,6 @@
           safe-get(kosten, "grundbedarf"),
           prefix: "positive",
         ),
-        info: t(prefix + "info"),
       )
     },
     {
@@ -287,7 +286,6 @@
           safe-get(kosten, "wohnkosten"),
           prefix: "positive",
         ),
-        info: t(prefix + "info"),
       )
     },
     {
@@ -305,7 +303,6 @@
           safe-get(kosten, "medizinischeGrundversorgung"),
           prefix: "positive",
         ),
-        info: t(prefix + "info"),
       )
     },
     {
