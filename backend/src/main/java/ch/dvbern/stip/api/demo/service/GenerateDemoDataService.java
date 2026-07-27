@@ -80,6 +80,7 @@ import ch.dvbern.stip.api.familiensituation.entity.FamiliensituationBuilder;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.geschwister.entity.GeschwisterBuilder;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
@@ -604,7 +605,9 @@ public class GenerateDemoDataService {
                         .ausbildungssituation(geschwisterDto.getAusbildungssituation())
                         .entryId(UUID.randomUUID())
                         .hidden(false)
-                        .geschwisterTyp(geschwisterDto.getGeschwisterTyp()),
+                        .geschwisterTyp(
+                            Objects.requireNonNullElse(geschwisterDto.getGeschwisterTyp(), GeschwisterTyp.LEIBLICH)
+                        ),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(
