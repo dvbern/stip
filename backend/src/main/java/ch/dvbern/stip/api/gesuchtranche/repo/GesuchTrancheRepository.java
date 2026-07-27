@@ -46,6 +46,22 @@ public class GesuchTrancheRepository implements BaseRepository<GesuchTranche> {
             .where(gesuchTranche.typ.eq(GesuchTrancheTyp.AENDERUNG));
     }
 
+    public Optional<GesuchTranche> findOffeneAenderungGs(final UUID gesuchId) {
+        return getFindAlleAenderungsQuery()
+            .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .where(gesuchTranche.status.eq(GesuchTrancheStatus.IN_BEARBEITUNG_GS))
+            .stream()
+            .findFirst();
+    }
+
+    public Optional<GesuchTranche> findLatestAenderungGs(final UUID gesuchId) {
+        return getFindAlleAenderungsQuery()
+            .where(gesuchTranche.gesuch.id.eq(gesuchId))
+            .orderBy(gesuchTranche.timestampMutiert.desc())
+            .stream()
+            .findFirst();
+    }
+
     public GesuchTranche requireAenderungById(final UUID aenderungId) {
         final var found = new JPAQueryFactory(em)
             .selectFrom(gesuchTranche)

@@ -17,10 +17,10 @@
 
 package ch.dvbern.stip.api.verfuegung.resource;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelleAndSachbearbeiter;
 import ch.dvbern.stip.api.benutzer.util.TestAsGesuchsteller;
 import ch.dvbern.stip.api.benutzer.util.TestAsSachbearbeiter;
@@ -38,19 +38,20 @@ import ch.dvbern.stip.generated.api.FallApiSpec;
 import ch.dvbern.stip.generated.api.GesuchApiSpec;
 import ch.dvbern.stip.generated.api.GesuchTrancheApiSpec;
 import ch.dvbern.stip.generated.api.SteuerdatenApiSpec;
+import ch.dvbern.stip.generated.api.VerfuegungApiSpec;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDtoSpec;
 import ch.dvbern.stip.generated.dto.CreateAenderungsantragRequestDtoSpec;
-import ch.dvbern.stip.generated.dto.DokumentTypDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchHeaderDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchTrancheDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchWithChangesDtoSpec;
 import ch.dvbern.stip.generated.dto.GesuchstatusDtoSpec;
-import ch.dvbern.stip.generated.dto.NullableGesuchDokumentDto;
 import ch.dvbern.stip.generated.dto.SteuerdatenTypDtoSpec;
 import ch.dvbern.stip.generated.dto.UnterschriftenblattDokumentTypDtoSpec;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDtoSpec;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.common.mapper.TypeRef;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 import lombok.RequiredArgsConstructor;
@@ -63,9 +64,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.is;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTestResource(TestDatabaseEnvironment.class)
 @QuarkusTest
@@ -83,9 +82,11 @@ public class VerfuegungResourceTest {
     private final SteuerdatenApiSpec steuerdatenApiSpec = SteuerdatenApiSpec.steuerdaten(RequestSpecUtil.quarkusSpec());
     private final FallApiSpec fallApiSpec = FallApiSpec.fall(RequestSpecUtil.quarkusSpec());
     private final AuszahlungApiSpec auszahlungApiSpec = AuszahlungApiSpec.auszahlung(RequestSpecUtil.quarkusSpec());
+    private final VerfuegungApiSpec verfuegungApiSpec = VerfuegungApiSpec.verfuegung(RequestSpecUtil.quarkusSpec());
 
     private GesuchDtoSpec gesuch;
     private UUID aenderungId;
+    private GesuchHeaderDtoSpec gesuchHeader;
 
     @Test
     @TestAsGesuchsteller
@@ -113,10 +114,10 @@ public class VerfuegungResourceTest {
             .statusCode(Response.Status.OK.getStatusCode());
     }
 
-    @TestAsFreigabestelleAndSachbearbeiter
+    @TestAsSachbearbeiter
     @Order(5)
     @Test
-    void makeGesuchVerfuegt() {
+    void changeGesuchToInFreigabe() {
         gesuchApiSpec.changeGesuchStatusToBereitFuerBearbeitung()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -137,7 +138,7 @@ public class VerfuegungResourceTest {
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
-            .statusCode(Status.INTERNAL_SERVER_ERROR.getStatusCode());
+            .statusCode(Status.FORBIDDEN.getStatusCode());
 
         final var steuerdatenUpdateDto =
             SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(SteuerdatenTypDtoSpec.FAMILIE);
@@ -149,28 +150,11 @@ public class VerfuegungResourceTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        var modifiableDokTypeList = Arrays.stream(DokumentTypDtoSpec.values()).toList();
-        modifiableDokTypeList.forEach(dokType -> {
-            var dokToAccept = dokumentApiSpec.getGesuchDokumentForTypSB()
-                .dokumentTypPath(dokType)
-                .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
-                .execute(TestUtil.PEEK_IF_ENV_SET)
-                .then()
-                .assertThat()
-                .statusCode(Status.OK.getStatusCode())
-                .extract()
-                .body()
-                .as(NullableGesuchDokumentDto.class);
-
-            if (dokToAccept.getValue() != null) {
-                dokumentApiSpec.gesuchDokumentAkzeptieren()
-                    .gesuchDokumentIdPath(dokToAccept.getValue().getId())
-                    .execute(TestUtil.PEEK_IF_ENV_SET)
-                    .then()
-                    .assertThat()
-                    .statusCode(Status.NO_CONTENT.getStatusCode());
-            }
-        });
+        TestUtil.acceptAllGesuchDokuments(
+            gesuchTrancheApiSpec,
+            dokumentApiSpec,
+            gesuch.getGesuchTrancheToWorkWith().getId()
+        );
 
         // Upload Unterschriftenblatt to "skip" Verfuegt state
         TestUtil.uploadUnterschriftenblatt(
@@ -180,12 +164,42 @@ public class VerfuegungResourceTest {
             TestUtil.getTestPng()
         ).assertThat().statusCode(Response.Status.CREATED.getStatusCode());
 
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+        gesuchApiSpec.bearbeitungAbschliessen()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(6)
+    @Test
+    void changeGesuchToVerfuegt() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+
+        final var gesuchWithChanges = gesuchApiSpec.getInitialTrancheChanges()
+            .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .extract()
+            .body()
+            .as(GesuchWithChangesDtoSpec.class);
+        assertThat(gesuchWithChanges.getChanges()).hasSize(1);
+    }
+
+    @TestAsSachbearbeiter
+    @Order(7)
+    @Test
+    void changeGesuchToVersendet() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
             .gesuchTrancheIdPath(gesuch.getGesuchTrancheToWorkWith().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
@@ -195,7 +209,7 @@ public class VerfuegungResourceTest {
     }
 
     @TestAsSachbearbeiter
-    @Order(6)
+    @Order(8)
     @Test
     void getVerfuegungs() {
         final GesuchHeaderDtoSpec header = gesuchApiSpec.getGesuchHeaderSb()
@@ -208,7 +222,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchHeaderDtoSpec.class);
 
-        assertThat(header.getVersions().size(), is(1));
+        assertThat(header.getVersions().size()).isEqualTo(1);
 
         final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
@@ -220,12 +234,12 @@ public class VerfuegungResourceTest {
             .body()
             .as(BerechnungsresultatDtoSpec.class);
 
-        assertThat(berechnung.getBerechnungStipendium(), greaterThan(500));
+        assertThat(berechnung.getBerechnungStipendium()).isGreaterThan(500);
     }
 
     @Test
     @TestAsGesuchsteller
-    @Order(7)
+    @Order(9)
     void createAenderungs() {
         aenderungId = gesuchTrancheApiSpec.createAenderungsantrag()
             .gesuchIdPath(gesuch.getId())
@@ -255,7 +269,7 @@ public class VerfuegungResourceTest {
 
     @Test
     @TestAsFreigabestelleAndSachbearbeiter
-    @Order(8)
+    @Order(10)
     void aenderungAkzeptieren() {
         gesuchTrancheApiSpec.aenderungAkzeptieren()
             .aenderungIdPath(aenderungId)
@@ -264,25 +278,47 @@ public class VerfuegungResourceTest {
             .assertThat()
             .statusCode(Status.OK.getStatusCode());
 
-        final var gesuchHeader = TestUtil.executeAndExtract(
+        gesuchHeader = TestUtil.executeAndExtract(
             GesuchHeaderDtoSpec.class,
             gesuchApiSpec.getGesuchHeaderSb().gesuchIdPath(gesuch.getId())
         );
-        gesuchApiSpec.changeGesuchStatusToVerfuegt()
-            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
+
+        gesuchApiSpec.bearbeitungAbschliessen()
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().getFirst().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
+    }
+
+    @TestAsFreigabestelle
+    @Order(11)
+    @Test
+    void gesuchFreigebenAfterAenderung() {
+        gesuchApiSpec.changeGesuchStatusToVerfuegt()
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().getFirst().getId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDtoSpec.class);
+    }
+
+    @TestAsSachbearbeiter
+    @Order(12)
+    @Test
+    void finishGesuch() {
         gesuchApiSpec.changeGesuchStatusToVersendet()
-            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().getFirst().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
             .statusCode(Response.Status.OK.getStatusCode());
 
         final var gesuchWithChanges = gesuchApiSpec.getGesuchSB()
-            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().get(0).getId())
+            .gesuchTrancheIdPath(gesuchHeader.getCurrentTranches().getFirst().getId())
             .execute(TestUtil.PEEK_IF_ENV_SET)
             .then()
             .assertThat()
@@ -291,12 +327,12 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchWithChangesDtoSpec.class);
 
-        Assertions.assertThat(gesuchWithChanges.getGesuchStatus())
+        assertThat(gesuchWithChanges.getGesuchStatus())
             .isIn(List.of(GesuchstatusDtoSpec.STIPENDIENANSPRUCH, GesuchstatusDtoSpec.KEIN_STIPENDIENANSPRUCH));
     }
 
     @TestAsSachbearbeiter
-    @Order(9)
+    @Order(13)
     @Test
     void getVerfuegungsAgain() {
         final GesuchHeaderDtoSpec header = gesuchApiSpec.getGesuchHeaderSb()
@@ -309,7 +345,7 @@ public class VerfuegungResourceTest {
             .body()
             .as(GesuchHeaderDtoSpec.class);
 
-        assertThat(header.getVersions().size(), is(2));
+        assertThat(header.getVersions().size()).isEqualTo(2);
 
         final var berechnung = gesuchApiSpec.getBerechnungForVerfuegung()
             .verfuegungIdPath(header.getVersions().getFirst().getBerechnungId())
@@ -321,7 +357,28 @@ public class VerfuegungResourceTest {
             .body()
             .as(BerechnungsresultatDtoSpec.class);
 
-        assertThat(berechnung.getBerechnungStipendium(), greaterThan(500));
+        assertThat(berechnung.getBerechnungStipendium()).isGreaterThan(500);
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(14)
+    void getVerfuegungenByFallId() {
+        final var verfuegungenByFall = verfuegungApiSpec.getVerfuegungenByFallId()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(new TypeRef<List<VerfuegungFallDtoSpec>>() {});
+
+        Assertions.assertThat(verfuegungenByFall).hasSize(2);
+        Assertions.assertThat(verfuegungenByFall).allSatisfy(verfuegung -> {
+            Assertions.assertThat(verfuegung.getYearRange()).isNotBlank();
+            Assertions.assertThat(verfuegung.getTotalbetragStipendium()).isNotNull();
+        });
     }
 
     @Test

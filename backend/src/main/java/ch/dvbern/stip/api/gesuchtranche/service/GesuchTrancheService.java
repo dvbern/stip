@@ -51,6 +51,7 @@ import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.util.GesuchMapperUtil;
+import ch.dvbern.stip.api.gesuch.util.GesuchStatusUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.service.GesuchFormularService;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
@@ -124,10 +125,7 @@ public class GesuchTrancheService {
         return gesuchTranche.getGesuch().getId();
     }
 
-    @Transactional
-    public GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
-        final var offeneAenderung =
-            gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
+    private GesuchAenderungsDto getHistorizedAenderungs(final Gesuch gesuch) {
         final var akzeptierteAenderungs = gesuch.getAenderungs()
             .filter(
                 aenderung -> aenderung.getStatus() == GesuchTrancheStatus.AKZEPTIERT
@@ -146,18 +144,41 @@ public class GesuchTrancheService {
             )
             .map(gesuchTrancheMapper::toSlimDto)
             .toList();
+        return new GesuchAenderungsDto()
+            .manuell(manuelleAenderungs)
+            .akzeptiert(akzeptierteAenderungs)
+            .fehlendeDokumente(fehlendeDokumenteAenderungs);
+    }
+
+    @Transactional
+    public GesuchAenderungsDto getHistorizedAenderungsGs(final Gesuch historizedGesuch, final UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var offeneAenderung = gesuchTrancheRepository.findOffeneAenderungGs(gesuch.getId())
+            .map(gesuchTrancheMapper::toSlimDto)
+            .orElse(null);;
+        final var eingereichteAenderung = gesuchTrancheRepository.findLatestAenderungGs(gesuch.getId())
+            .filter(_aenderung -> !GesuchStatusUtil.gsReceivesCurrentGesuch(gesuch.getGesuchStatus()))
+            .map(gesuchTrancheMapper::toSlimDto)
+            .orElse(null);
+        return getHistorizedAenderungs(historizedGesuch)
+            .offen(offeneAenderung)
+            .eingereicht(eingereichteAenderung)
+            .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
+    }
+
+    @Transactional
+    public GesuchAenderungsDto getHistorizedAenderungsSb(final Gesuch gesuch) {
+        final var offeneAenderung =
+            gesuch.getAenderungZuUeberpruefen().map(gesuchTrancheMapper::toSlimDto).orElse(null);
         final var abgelehnteAenderungs =
             gesuchTrancheHistoryRepository.getAllAbgelehnteAenderungs(gesuch.getId())
                 .stream()
                 .map(pair -> gesuchTrancheMapper.toSlimDto(pair.getLeft(), pair.getRight().getId()))
                 .toList();
-        return new GesuchAenderungsDto()
+        return getHistorizedAenderungs(gesuch)
             .offen(offeneAenderung)
-            .manuell(manuelleAenderungs)
-            .akzeptiert(akzeptierteAenderungs)
             .abgelehnt(abgelehnteAenderungs)
-            .fehlendeDokumente(fehlendeDokumenteAenderungs)
-            .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
+            .canAenderungEinreichen(false);
     }
 
     private DokumenteToUploadDto setFlagsOnDokumenteToUploadDto(

@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -9,11 +10,12 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { BerechnungStore } from '@dv/shared/data-access/berechnung';
 import { selectRouteGesuchId } from '@dv/shared/data-access/gesuch';
+import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { DokumentService, GesuchService } from '@dv/shared/model/gesuch';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
@@ -43,14 +45,18 @@ import { SharedUiRdIsPendingWithoutCachePipe } from '@dv/shared/ui/remote-data-p
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureVerfuegungZusammenfassungComponent {
+  private router = inject(Router);
+  private config = inject(SharedModelCompileTimeConfig);
   berechnungStore = inject(BerechnungStore);
   gesuchService = inject(GesuchService);
   dokumentService = inject(DokumentService);
   store = inject(Store);
   gesuchIdSig = this.store.selectSignal(selectRouteGesuchId);
   // todo-review: @scph wir haben noch eine vermischung von namen berechnungId und verfuegungId in den routes
-  // eslint-disable-next-line @angular-eslint/no-input-rename
   verfuegungIdSig = input<string | null>(null, { alias: 'berechnungId' });
+  latestVerfuegungIdSig = input<string | null>(null, {
+    alias: 'latestVerfuegungId',
+  });
 
   zusammenfassungViewSig = computed(() => {
     const zusammenfassung =
@@ -75,16 +81,16 @@ export class SharedFeatureVerfuegungZusammenfassungComponent {
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       const verfuegungId = this.verfuegungIdSig();
+      const latestVerfuegungId = this.latestVerfuegungIdSig();
 
       if (!gesuchId) {
         return;
       }
-
-      if (verfuegungId) {
-        this.berechnungStore.getBerechnungForVerfuegung$({ verfuegungId });
-      } else {
-        this.berechnungStore.getBerechnungForGesuch$({ gesuchId });
-      }
+      this.berechnungStore.getBerechnung$({
+        gesuchId,
+        verfuegungId,
+        latestVerfuegungId,
+      });
     });
   }
 }

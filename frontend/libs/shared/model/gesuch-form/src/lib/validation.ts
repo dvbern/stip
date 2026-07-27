@@ -1,3 +1,4 @@
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { ValidationError } from '@dv/shared/model/error';
 import { FormPropsExcluded } from '@dv/shared/model/gesuch';
 
@@ -13,8 +14,8 @@ export type SpecialValidationError = {
   step: GesuchFormStep;
   field: string;
   fieldErrorKey: string;
-  validationErrorKey: string;
-  linkKey: string;
+  validationErrorKey: SharedTranslationKey;
+  linkKey: SharedTranslationKey;
 };
 
 const wohnsitzFamiliensituationMap: Record<string, GesuchFormStep> = {
@@ -43,7 +44,8 @@ export const SPECIAL_VALIDATION_ERRORS: Record<
     field: 'wohnsitz',
     fieldErrorKey: `shared.form.${validationError.propertyPath}.validation.wohnsitz`,
     validationErrorKey: 'shared.gesuch.validation.wohnsitz.message',
-    linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
+    linkKey: ('shared.gesuch.validation.link.' +
+      validationError.propertyPath) as SharedTranslationKey,
   }),
   '{jakarta.validation.constraints.gesuch.ausbildung.notFound.message}': (
     validationError,
@@ -52,7 +54,8 @@ export const SPECIAL_VALIDATION_ERRORS: Record<
     field: 'ausbildungNichtGefunden',
     fieldErrorKey: `shared.form.ausbildung.validation.notFound`,
     validationErrorKey: 'shared.gesuch.validation.ausbildung.notFound.message',
-    linkKey: 'shared.gesuch.validation.link.' + validationError.propertyPath,
+    linkKey: ('shared.gesuch.validation.link.' +
+      validationError.propertyPath) as SharedTranslationKey,
   }),
 };
 

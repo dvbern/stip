@@ -120,6 +120,7 @@ module.exports = [
                 'type:dialog',
                 'type:pattern',
                 'type:data-access',
+                'type:util-data-access',
                 'type:event',
                 'type:ui',
                 'type:util',
@@ -196,6 +197,7 @@ module.exports = [
               onlyDependOnLibsWithTags: [
                 'type:assets',
                 'type:data-access',
+                'type:ui',
                 'type:util-data-access',
                 'type:util',
                 'type:util-fn',

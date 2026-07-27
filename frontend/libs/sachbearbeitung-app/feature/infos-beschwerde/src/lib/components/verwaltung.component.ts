@@ -13,13 +13,13 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 
 import { SachbearbeitungAppTranslationKey } from '@dv/sachbearbeitung-app/assets/i18n';
 import { BeschwerdeStore } from '@dv/sachbearbeitung-app/data-access/beschwerde';
 import { SachbearbeitungAppDialogBeschwaerdeEntscheidComponent } from '@dv/sachbearbeitung-app/dialog/beschwaerde-entscheid';
 import { SachbearbeitungAppDialogBeschwerdeEntryComponent } from '@dv/sachbearbeitung-app/dialog/beschwerde-entry';
+import { SachbearbeitungAppUiAdvTranslocoDirective } from '@dv/sachbearbeitung-app/ui/adv-transloco-directive';
 import { selectSharedDataAccessConfigsView } from '@dv/shared/data-access/config';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { GesuchInfoStore } from '@dv/shared/data-access/gesuch-info';
@@ -29,11 +29,11 @@ import { paginatorTranslationProvider } from '@dv/shared/util/paginator-translat
 
 @Component({
   imports: [
-    TranslocoPipe,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     MatTooltipModule,
+    SachbearbeitungAppUiAdvTranslocoDirective,
   ],
   templateUrl: './verwaltung.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

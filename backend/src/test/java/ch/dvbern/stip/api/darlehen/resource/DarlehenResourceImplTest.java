@@ -17,7 +17,6 @@
 
 package ch.dvbern.stip.api.darlehen.resource;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import ch.dvbern.stip.api.benutzer.util.TestAsFreigabestelle;
@@ -82,6 +81,7 @@ public class DarlehenResourceImplTest {
     @TestAsGesuchsteller
     @Order(1)
     void gesuchErstellen() {
+        final var gueltigkeitsRange = TestUtil.getActiveGueltigkeitsRange();
         gesuch = TestUtil.createGesuchAusbildungFall(fallApiSpec, ausbildungApiSpec, gesuchApiSpec);
         TestUtil.fillGesuchWithAuszahlung(
             gesuchApiSpec,
@@ -89,22 +89,15 @@ public class DarlehenResourceImplTest {
             auszahlungApiSpec,
             gesuch,
             (updateDtoSpec) -> {
-                final var geburtsdatum = LocalDate.now().minusYears(18);
-                updateDtoSpec
+                final var formularDto = updateDtoSpec
                     .getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
+                    .getGesuchFormular();
+                formularDto
                     .getPersonInAusbildung()
-                    .setGeburtsdatum(geburtsdatum);
-                updateDtoSpec.getGesuchTrancheToWorkWith()
-                    .getGesuchFormular()
-                    .getLebenslaufItems()
-                    .get(0)
-                    .setVon(
-                        geburtsdatum.plusYears(16)
-                            .withMonth(8)
-                            .withDayOfMonth(1)
-                            .format(DATE_TIME_FORMATTER)
-                    );
+                    .setGeburtsdatum(gueltigkeitsRange.getGueltigAb().minusYears(18));
+                formularDto.getLebenslaufItems()
+                    .getFirst()
+                    .setVon(gueltigkeitsRange.getGueltigAb().minusYears(18).format(DATE_TIME_FORMATTER));
             }
         );
     }
@@ -397,6 +390,26 @@ public class DarlehenResourceImplTest {
         assertEquals(123 + 2500, darlehenBuchhaltungOverviewDtoSpec.getTotal());
         assertEquals(2500, darlehenBuchhaltungOverviewDtoSpec.getTotalFreiwillig());
         assertEquals(2, darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().size());
+    }
+
+    @Test
+    @TestAsGesuchsteller
+    @Order(18)
+    void getDarlehenBuchhaltungOverviewByFallId() {
+        var darlehenBuchhaltungOverviewDtoSpec = darlehenApiSpec.getDarlehenBuchhaltungEntrysByFallId()
+            .fallIdPath(gesuch.getFallId())
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(DarlehenBuchhaltungOverviewDtoSpec.class);
+
+        assertEquals(123 + 2500, darlehenBuchhaltungOverviewDtoSpec.getTotal());
+        assertEquals(2500, darlehenBuchhaltungOverviewDtoSpec.getTotalFreiwillig());
+        assertEquals(2, darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().size());
+        assertNotNull(darlehenBuchhaltungOverviewDtoSpec.getDarlehenBuchhaltungEntrys().getFirst().getYearRange());
     }
 
     @Test

@@ -101,6 +101,7 @@ import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.unterschriftenblatt.service.UnterschriftenblattService;
+import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungHistoryService;
 import ch.dvbern.stip.api.verfuegung.service.VerfuegungService;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
@@ -670,8 +671,13 @@ public class GesuchService {
         return fallDashboardItemMapper.toDto(fall);
     }
 
-    public GesuchInfoDto getGesuchInfo(UUID gesuchId) {
-        return gesuchMapper.toInfoDto(gesuchRepository.requireById(gesuchId));
+    public GesuchInfoDto getGesuchInfoGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        return gesuchMapper.toInfoDtoGs(gesuch);
+    }
+
+    public GesuchInfoDto getGesuchInfoSb(UUID gesuchId) {
+        return gesuchMapper.toInfoDtoSb(gesuchRepository.requireById(gesuchId));
     }
 
     @Transactional
@@ -988,15 +994,15 @@ public class GesuchService {
         notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
-    public BerechnungsresultatDto getBerechnungsresultat(UUID gesuchId) {
+    @Transactional
+    public BerechnungsresultatDto getBerechnungsresultatSb(UUID gesuchId) {
         final var gesuch = gesuchRepository.requireById(gesuchId);
         return berechnungService.getBerechnungsresultatFromGesuch(gesuch);
     }
 
     @Transactional
-    public GesuchDto getEingereichtGesuchByTrancheId(UUID trancheId) {
-        final var tranche = gesuchTrancheHistoryService.getLatestTranche(trancheId);
-        final var gesuch = tranche.getGesuch();
+    public GesuchDto getEingereichtGesuchByTrancheId(UUID gesuchTrancheId) {
+        final var gesuch = gesuchTrancheHistoryService.getLatestTranche(gesuchTrancheId).getGesuch();
 
         final var eingereichtTranche =
             gesuchHistoryRepository.getLatestWhereStatusChangedTo(gesuch.getId(), Gesuchstatus.EINGEREICHT)
@@ -1083,7 +1089,7 @@ public class GesuchService {
     }
 
     @Transactional
-    public GesuchWithChangesDto getSbTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
+    public GesuchWithChangesDto getTrancheChangesWithRevision(final UUID aenderungId, final Integer revision) {
         final var aenderung = gesuchTrancheHistoryRepository.getByRevisionId(aenderungId, revision);
         final var gesuch = getGesuchById(aenderung.getGesuch().getId());
         final var initialRevision = gesuchTrancheHistoryRepository.getInitialRevision(aenderungId);
@@ -1481,19 +1487,36 @@ public class GesuchService {
         }).sorted(Comparator.comparing(VerfuegtGesuchDto::getTimestamp).reversed()).toList();
     }
 
-    @Transactional
-    public GesuchHeaderDto getGesuchTrancheHeader(UUID gesuchId) {
-        final var gesuch = gesuchRepository.requireById(gesuchId);
+    public GesuchHeaderDto getGesuchTrancheHeader(Gesuch gesuch) {
         final var versions = getHistorizedVerfuegtVersionsOfGesuch(gesuch);
-        final var aenderungs = gesuchTrancheService.getHistorizedAenderungs(gesuch);
         final var initialGesuch = getInitialGesuchTranches(gesuch);
+        final var latestVerfuegung = verfuegungService.getLatestVerfuegungByGesuchId(gesuch.getId());
 
         return new GesuchHeaderDto()
-            .gesuchInfo(gesuchMapper.toInfoDto(gesuch))
-            .aenderungs(aenderungs)
+            .gesuchInfo(gesuchMapper.toInfoDtoGs(gesuch))
             .currentTranches(gesuch.getTranchenTranchen().map(gesuchTrancheMapper::toSlimDto).toList())
+            .latestVerfuegungId(latestVerfuegung.map(Verfuegung::getId).orElse(null))
+            .latestVerfuegtAt(latestVerfuegung.map(Verfuegung::getTimestampErstellt).orElse(null))
             .initial(initialGesuch)
             .versions(versions);
+    }
+
+    @Transactional
+    public GesuchHeaderDto getGesuchTrancheHeaderGs(UUID gesuchId) {
+        final var gesuch = gesuchHistoryService.getCurrentOrHistoricalGesuchForGS(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsGs(gesuch, gesuchId);
+
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
+    }
+
+    @Transactional
+    public GesuchHeaderDto getGesuchTrancheHeaderSb(UUID gesuchId) {
+        final var gesuch = gesuchRepository.requireById(gesuchId);
+        final var aenderungs = gesuchTrancheService.getHistorizedAenderungsSb(gesuch);
+
+        return getGesuchTrancheHeader(gesuch)
+            .aenderungs(aenderungs);
     }
 
     public BerechnungsresultatDto getBerechnungForVerfuegung(UUID verfuegungId) {

@@ -495,9 +495,9 @@ paths:
       operationId: getAllFreiwilligDarlehenGs
       summary: Return all darlehen for a given fallId
 
-  /darlehen/getAllDarlehenSb/{gesuchId}:
+  /darlehen/getAllDarlehenSb/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: './components/common.yaml#/UUID'
         in: path
@@ -627,6 +627,30 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: createDarlehenBuchhaltungSaldokorrektur
       summary: Create a darlehen buchhaltungsentry from a saldokorrektur
+
+  /darlehen/buchhaltung/fall/{fallId}:
+    parameters:
+      - $ref: './components/parameters.yaml#/fallId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getDarlehenBuchhaltungEntrysByFallId
+      summary: Gets all darlehen buchhaltungsentrys by fallId
 
 components:
   securitySchemes:
@@ -808,6 +832,8 @@ components:
           $ref: './components/common.yaml#/Dokument'
         betrag:
           type: integer
+        yearRange:
+          type: string
         userErstellt:
           type: string
         kommentar:

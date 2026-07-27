@@ -688,9 +688,9 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /darlehen/getAllDarlehenSb/{gesuchId}:
+  /darlehen/getAllDarlehenSb/{fallId}:
     parameters:
-      - name: gesuchId
+      - name: fallId
         schema:
           $ref: '#/components/schemas/UUID'
         in: path
@@ -830,6 +830,32 @@ paths:
           $ref: '#/components/responses/ServerError'
       operationId: createDarlehenBuchhaltungSaldokorrektur
       summary: Create a darlehen buchhaltungsentry from a saldokorrektur
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /darlehen/buchhaltung/fall/{fallId}:
+    parameters:
+      - $ref: '#/components/parameters/fallId'
+    get:
+      tags:
+        - Darlehen
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DarlehenBuchhaltungOverview'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getDarlehenBuchhaltungEntrysByFallId
+      summary: Gets all darlehen buchhaltungsentrys by fallId
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -2066,6 +2092,35 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
+  /verfuegung/fall/{fallId}/verfuegungen:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VerfuegungFall'
+          description: Returns a list of all Verfuegungen for a Fall
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getVerfuegungenByFallId
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
   /verfuegung/dokument/download:
     parameters:
       - name: token
@@ -2114,7 +2169,7 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
       operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to downlaod Verfuegung
+      summary: get Token to download Verfuegung
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -4484,7 +4539,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/info:
+  /gesuch/{gesuchId}/info/gs:
     parameters:
       - name: gesuchId
         schema:
@@ -4509,7 +4564,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGesuchInfo
+      operationId: getGesuchInfoGs
+      summary: Returns the basic Gesuch info with the given Id, potentially historized
+      security:
+        - auth-uat-bern: []
+        - auth-dev-bern: []
+  /gesuch/{gesuchId}/info/sb:
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: '#/components/schemas/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      operationId: getGesuchInfoSb
       summary: Returns the basic Gesuch info with the given Id
       security:
         - auth-uat-bern: []
@@ -5423,7 +5508,7 @@ paths:
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
-  /gesuch/{gesuchId}/berechnung:
+  /gesuch/{gesuchId}/berechnung/sb:
     parameters:
       - name: gesuchId
         schema:
@@ -5450,7 +5535,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getBerechnungForGesuch
+      operationId: getBerechnungForGesuchSb
       summary: Berechnet und holt die Berechnung für ein Gesuch
       security:
         - auth-uat-bern: []
@@ -5490,6 +5575,11 @@ paths:
   /gesuch/{aenderungId}/aenderung/gs/changes:
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -5508,7 +5598,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -5538,7 +5628,7 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '500':
           $ref: '#/components/responses/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
       security:
         - auth-uat-bern: []
         - auth-dev-bern: []
@@ -7455,6 +7545,8 @@ components:
           $ref: '#/components/schemas/Dokument'
         betrag:
           type: integer
+        yearRange:
+          type: string
         userErstellt:
           type: string
         kommentar:
@@ -8974,6 +9066,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/VerfuegungDokument'
+    VerfuegungFall:
+      type: object
+      required:
+        - timestampErstellt
+        - yearRange
+        - totalbetragStipendium
+        - dokumente
+      properties:
+        timestampErstellt:
+          type: string
+        yearRange:
+          type: string
+        totalbetragStipendium:
+          type: integer
+        dokument:
+          $ref: '#/components/schemas/VerfuegungDokument'
     AusbildungBase:
       required:
         - fallId
@@ -9731,7 +9839,7 @@ components:
         - PERSON_NIEDERLASSUNGSSTATUS_NICHT_ZUGETEILT
         - PERSON_BEGRUENDUNGSSCHREIBEN_ALTER_AUSBILDUNGSBEGIN
         - PERSON_KESB_ERNENNUNG
-        - PERSON_MIETVERTRAG
+        - PERSON_EIGENER_HAUSHALT
         - PERSON_SOZIALHILFEBUDGET
         - PERSON_TRENNUNG_ODER_UNTERHALTS_BELEG
         - PERSON_AUSWEIS
@@ -10201,6 +10309,8 @@ components:
       properties:
         offen:
           $ref: '#/components/schemas/GesuchTrancheSlim'
+        eingereicht:
+          $ref: '#/components/schemas/GesuchTrancheSlim'
         manuell:
           type: array
           items:
@@ -10246,6 +10356,7 @@ components:
       required:
         - id
         - fallNummer
+        - fallId
         - gesuchNummer
         - startDate
         - endDate
@@ -10255,6 +10366,8 @@ components:
         id:
           $ref: '#/components/schemas/UUID'
         fallNummer:
+          type: string
+        fallId:
           type: string
         gesuchNummer:
           type: string
@@ -10288,6 +10401,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: '#/components/schemas/UUID'
+        latestVerfuegtAt:
+          $ref: '#/components/schemas/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:
@@ -11556,6 +11673,8 @@ components:
           type: string
         hadDelegierungs:
           type: boolean
+        minDateEigenerWohnsitz:
+          $ref: '#/components/schemas/LocalDate'
         delegierung:
           $ref: '#/components/schemas/DelegierungSlim'
         nachfristDokumente:
@@ -11584,18 +11703,22 @@ components:
       required:
         - gesuchStatus
         - beschwerdeHaengig
-        - canGetBerechnung
+        - canGSGetBerechnung
+        - canSBGetBerechnung
         - canChangeGesuchsperiode
         - canTriggerManuellPruefen
         - canBearbeitungAbschliessen
         - canSBInitAenderung
+        - canFreigeben
       type: object
       properties:
         gesuchStatus:
           $ref: '#/components/schemas/Gesuchstatus'
         beschwerdeHaengig:
           type: boolean
-        canGetBerechnung:
+        canGSGetBerechnung:
+          type: boolean
+        canSBGetBerechnung:
           type: boolean
         canChangeGesuchsperiode:
           type: boolean
@@ -11607,6 +11730,8 @@ components:
           type: boolean
         inBearbeitungSbReason:
           $ref: '#/components/schemas/InBearbeitungSbReason'
+        canFreigeben:
+          type: boolean
     GesuchTrancheSlim:
       type: object
       required:
@@ -11630,6 +11755,10 @@ components:
           $ref: '#/components/schemas/GesuchTrancheTyp'
         revision:
           type: integer
+    LocalDateTime:
+      format: date-time
+      type: string
+      example: '2022-03-10T12:00:00'
     Kanton:
       enum:
         - AG
@@ -12292,10 +12421,6 @@ components:
           type: string
         filesize:
           type: string
-    LocalDateTime:
-      format: date-time
-      type: string
-      example: '2022-03-10T12:00:00'
   responses:
     Unauthorized:
       content:

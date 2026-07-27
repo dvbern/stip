@@ -60,8 +60,8 @@
                   <div
                     dvSharedUiInfoDialog
                     [forceDialogPosition]="true"
-                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.title'"
-                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.einreichefrist.info'"
+                    [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.einreichefrist.title'"
+                    [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.einreichefrist.info'"
                     [dialogMessageParams]="{
                       anzahlMonate: zusammenfassung.anzahlMonateEinreichefrist,
                       betrag:
@@ -96,8 +96,8 @@
                   <div
                     dvSharedUiInfoDialog
                     [forceDialogPosition]="true"
-                    [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.title'"
-                    [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.unterbruch.info'"
+                    [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.unterbruch.title'"
+                    [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.unterbruch.info'"
                     [dialogMessageParams]="{
                       anzahlMonate: zusammenfassung.anzahlMonateUnterbruch,
                       betrag:
@@ -157,8 +157,8 @@
               <div
                 dvSharedUiInfoDialog
                 [forceDialogPosition]="true"
-                [dialogTitleKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.title'"
-                [dialogMessageKey]="'sachbearbeitung-app.verfuegung.berechnung.hinweis.eigenverdienst.info'"
+                [dialogTitleKeySig]="'shared.verfuegung.berechnung.hinweis.eigenverdienst.title'"
+                [dialogMessageKeySig]="'shared.verfuegung.berechnung.hinweis.eigenverdienst.info'"
                 [dialogMessageParams]="{
                   einkommensfreibetrag: zusammenfassung.stammdaten?.einkommensfreibetrag | formatChf,
                 }"
@@ -222,6 +222,7 @@
               <a
                 class="tw:font-light tw:text-dv-blue"
                 [routerLink]="['../../', group.tranche.gesuchTrancheId, 'berechnung', berechnungsIndex + 1]"
+                queryParamsHandling="merge"
               >
                 <div class="tw:flex">
                   {{ t('shared.verfuegung.zusammenfassung.item.link') }}

@@ -327,15 +327,6 @@ public class DarlehenService {
     }
 
     @Transactional
-    public List<FreiwilligDarlehenDto> getFreiwilligDarlehenAllSb(final UUID gesuchId) {
-        final var darlehenList = freiwilligDarlehenRepository.findByGesuchId(gesuchId);
-        return darlehenList.stream()
-            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
-            .map(freiwilligDarlehenMapper::toDtoGs)
-            .toList();
-    }
-
-    @Transactional
     public boolean canCreateDarlehen(UUID fallId) {
         final var fall = fallRepository.requireById(fallId);
         final var ausbildungs = fall.getAusbildungs();
@@ -381,7 +372,7 @@ public class DarlehenService {
     }
 
     @Transactional
-    public FreiwilligDarlehenGsResponseDto getFreiwilligDarlehenAllGs(final UUID fallId) {
+    public FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenOfFallGs(final UUID fallId) {
         final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
         final var darlehenDto = new FreiwilligDarlehenGsResponseDto();
         darlehenDto.setCanCreateDarlehen(canCreateDarlehen(fallId));
@@ -392,6 +383,15 @@ public class DarlehenService {
                 .toList()
         );
         return darlehenDto;
+    }
+
+    @Transactional
+    public List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenOfFallSb(final UUID fallId) {
+        final var darlehenList = freiwilligDarlehenRepository.findByFallId(fallId);
+        return darlehenList.stream()
+            .sorted(Comparator.comparing(FreiwilligDarlehen::getTimestampErstellt).reversed())
+            .map(freiwilligDarlehenMapper::toDtoGs)
+            .toList();
     }
 
     @Transactional
@@ -842,6 +842,20 @@ public class DarlehenService {
     ) {
         final Gesuch gesuch = gesuchRepository.requireById(gesuchId);
         final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByGesuchId(gesuch.getId());
+        return toDarlehenBuchhaltungOverview(darlehenBuchhaltungEntrys);
+    }
+
+    @Transactional
+    public DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntryOverviewByFallId(
+        final UUID fallId
+    ) {
+        final var darlehenBuchhaltungEntrys = darlehenBuchhaltungEntryRepository.getByFallId(fallId);
+        return toDarlehenBuchhaltungOverview(darlehenBuchhaltungEntrys);
+    }
+
+    private DarlehenBuchhaltungOverviewDto toDarlehenBuchhaltungOverview(
+        final List<DarlehenBuchhaltungEntry> darlehenBuchhaltungEntrys
+    ) {
         final DarlehenBuchhaltungOverviewDto darlehenBuchhaltungOverviewDto = new DarlehenBuchhaltungOverviewDto();
         final List<DarlehenBuchhaltungEntry> nonNullBetragEntrys = darlehenBuchhaltungEntrys.stream()
             .filter(darlehenBuchhaltungEntry -> Objects.nonNull(darlehenBuchhaltungEntry.getBetrag()))

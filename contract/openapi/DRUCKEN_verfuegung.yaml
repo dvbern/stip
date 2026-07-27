@@ -37,6 +37,32 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: getVerfuegungen
+  /verfuegung/fall/{fallId}/verfuegungen:
+    parameters:
+      - name: fallId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Verfuegung
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './components/common.yaml#/VerfuegungFall'
+          description: Returns a list of all Verfuegungen for a Fall
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getVerfuegungenByFallId
   /verfuegung/dokument/download:
     parameters:
       - name: token
@@ -81,7 +107,7 @@ paths:
         '500':
           $ref: './components/responses.yaml#/ServerError'
       operationId: getVerfuegungDokumentDownloadToken
-      summary: get Token to downlaod Verfuegung
+      summary: get Token to download Verfuegung
 components:
   securitySchemes:
     $ref: './components/security.yaml#/securitySchemes'

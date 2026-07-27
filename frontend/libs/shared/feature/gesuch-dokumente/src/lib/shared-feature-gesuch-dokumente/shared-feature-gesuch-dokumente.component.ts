@@ -107,9 +107,10 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheSetting,
       trancheId,
       readonly,
-      config: { isSachbearbeitungApp },
+      config: { appConfig },
       gesuch,
     } = this.gesuchViewSig();
+    const isSachbearbeitungApp = appConfig?.view === 'sachbearbeiter';
     const {
       dokuments,
       entrys,
@@ -152,8 +153,9 @@ export class SharedFeatureGesuchDokumenteComponent {
       trancheId,
       readonly,
       gesuch,
-      config: { isSachbearbeitungApp },
+      config: { appConfig },
     } = this.gesuchViewSig();
+    const isSachbearbeitungApp = appConfig?.view === 'sachbearbeiter';
 
     const { dokuments, requiredDocumentTypes, loading } =
       this.dokumentsStore.customDokumenteViewSig();
@@ -227,7 +229,7 @@ export class SharedFeatureGesuchDokumenteComponent {
     getLatestGesuchIdFromGesuch$(this.gesuchViewSig)
       .pipe(
         takeUntilDestroyed(),
-        filter(() => this.config.isSachbearbeitungApp),
+        filter(() => this.config.app.view === 'sachbearbeiter'),
       )
       .subscribe((gesuchId) => {
         this.dokumentsStore.getAdditionalDokumente$({

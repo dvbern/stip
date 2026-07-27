@@ -38,6 +38,7 @@ import ch.dvbern.stip.api.verfuegung.repo.VerfuegungRepository;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungDokumentTyp;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.generated.dto.VerfuegungDto;
+import ch.dvbern.stip.generated.dto.VerfuegungFallDto;
 import ch.dvbern.stip.stipdecision.repo.StipDecisionTextRepository;
 import io.quarkiverse.antivirus.runtime.Antivirus;
 import io.vertx.mutiny.core.buffer.Buffer;
@@ -79,6 +80,19 @@ public class VerfuegungService {
         return gesuch.getVerfuegungs()
             .stream()
             .map(verfuegungMapper::toDto)
+            .toList();
+    }
+
+    public Optional<Verfuegung> getLatestVerfuegungByGesuchId(final UUID gesuchId) {
+        return verfuegungRepository.getLatestVerfuegungByGesuchId(gesuchId);
+    }
+
+    @Transactional
+    public List<VerfuegungFallDto> getVerfuegungenByFallId(final UUID fallId) {
+        return gesuchRepository.findAllForFall(fallId)
+            .flatMap(gesuch -> gesuch.getVerfuegungs().stream())
+            .sorted(Comparator.comparing(Verfuegung::getTimestampErstellt).reversed())
+            .map(verfuegungMapper::toFallDto)
             .toList();
     }
 

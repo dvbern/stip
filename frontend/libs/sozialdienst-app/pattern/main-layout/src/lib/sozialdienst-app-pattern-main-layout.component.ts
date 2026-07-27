@@ -126,7 +126,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
     effect(() => {
       // Read allRouteParamsSig to re-run on every navigation
       this.allRouteParamsSig();
-      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
       const darlehenId = this.darlehenIdSig();
@@ -142,17 +142,25 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const fallNav: NavItem = {
         type: 'link',
         id: 'fall',
-        label: { key: 'sozialdienst-app.header.fall' },
+        label: { key: 'shared.header.fall' },
         icon: 'assignment_ind',
         route: ['/fall', fallId],
       };
 
-      const auszahlungNav: NavItem = {
+      const auszahlung: NavItem = {
         type: 'link',
         id: 'auszahlung',
-        label: { key: 'sozialdienst-app.header.auszahlung' },
+        label: { key: 'shared.header.auszahlung' },
         icon: 'payments',
         route: ['/auszahlung', fallId],
+      };
+
+      const fallDokumente: NavItem = {
+        type: 'link',
+        id: 'fall-dokumente',
+        label: { key: 'shared.menu.fallDokumente' },
+        icon: 'description',
+        route: ['/fall-dokumente', fallId],
       };
 
       const nachrichten: NavItem[] = [
@@ -183,7 +191,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
         this.gesuchHeaderStore.viewSig().currentTranches ?? [],
         tabSegments,
         this.trancheIdSig(),
-        'sozialdienst-app',
       );
 
       const darlehenMenu = buildDarlehenMenu({
@@ -201,7 +208,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
         fallNav,
         ...gesuchNav,
         darlehenMenu,
-        auszahlungNav,
+        fallDokumente,
+        auszahlung,
         ...nachrichten,
         ...this.baseMenuItems,
       ].filter((item) => {

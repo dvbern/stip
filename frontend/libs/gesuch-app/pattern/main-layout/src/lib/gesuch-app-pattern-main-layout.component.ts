@@ -100,7 +100,7 @@ export class GesuchAppPatternMainLayoutComponent {
     // navigation items effect
     effect(() => {
       const gesuchId = this.gesuchIdSig();
-      const darlehnen = this.darlehenStore.darlehenGsViewSig();
+      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id;
       const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
@@ -123,12 +123,20 @@ export class GesuchAppPatternMainLayoutComponent {
         this.trancheIdSig(),
       );
 
-      const auszahlungMenu: NavItem = {
+      const auszahlung: NavItem = {
         type: 'link',
         icon: 'payments',
         id: 'auszahlungen',
         label: { key: 'shared.menu.auszahlung' },
         route: ['/auszahlung', fallId],
+      };
+
+      const fallDokumente: NavItem = {
+        type: 'link',
+        id: 'fall-dokumente',
+        icon: 'description',
+        label: { key: 'shared.menu.fallDokumente' },
+        route: ['/fall-dokumente', fallId],
       };
 
       const nachrichten: NavItem = {
@@ -144,22 +152,31 @@ export class GesuchAppPatternMainLayoutComponent {
           : undefined,
       };
 
-      const darlehenMenu = buildDarlehenMenu({
-        darlehen: darlehnen.list,
-        canCreateDarlehen: darlehnen.canCreateDarlehen,
-        fallId: fallId,
-        isDarlehenRoute: !!darlehenId,
-        createDarlehen: () =>
-          this.darlehenStore.createDarlehen$({
-            fallId: fallId,
-          }),
-      });
+      const darlehenMenu = [
+        // TODO: KSTIP-3643 remove darlehen menu entirely once it is shown in the dashboard content
+        // Currently hidden on gesuch views
+        ...(!gesuchId
+          ? [
+              buildDarlehenMenu({
+                darlehen: darlehnen.list,
+                canCreateDarlehen: darlehnen.canCreateDarlehen,
+                fallId: fallId,
+                isDarlehenRoute: !!darlehenId,
+                createDarlehen: () =>
+                  this.darlehenStore.createDarlehen$({
+                    fallId: fallId,
+                  }),
+              }),
+            ]
+          : []),
+      ];
 
       const navItems: NavItem[] = [
         ...gesuchBaseMenuItems,
         ...gesuchNav,
-        darlehenMenu,
-        auszahlungMenu,
+        ...darlehenMenu,
+        fallDokumente,
+        auszahlung,
         nachrichten,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {

@@ -100,14 +100,13 @@ describe('selectSharedDataAccessGesuchsView', () => {
         },
         {
           deploymentConfig: undefined,
-          compileTimeConfig: {
-            appType: 'gesuch-app',
-            authClientId: 'stip-gesuch-app',
+          appConfig: {
+            type: 'gesuch-app',
+            view: 'gesuchsteller',
+            keyPrefix: 'gesuch-app',
           },
           loading: false,
           error: undefined,
-          isGesuchApp: true,
-          isSachbearbeitungApp: false,
         },
       );
       const hasPartnerStep = result.steps.some(
@@ -139,11 +138,9 @@ describe('selectSharedDataAccessGesuchsView', () => {
     const result = selectSharedDataAccessGesuchsView.projector(
       {
         deploymentConfig: undefined,
-        compileTimeConfig: undefined,
+        appConfig: undefined,
         loading: false,
         error: undefined,
-        isGesuchApp: true,
-        isSachbearbeitungApp: false,
       },
       {
         tranchenChanges: null,
@@ -250,14 +247,13 @@ describe('selectSharedDataAccessGesuchsView', () => {
       },
       {
         deploymentConfig: undefined,
-        compileTimeConfig: {
-          appType: 'gesuch-app',
-          authClientId: 'stip-gesuch-app',
+        appConfig: {
+          type: 'gesuch-app',
+          view: 'gesuchsteller',
+          keyPrefix: 'gesuch-app',
         },
         loading: false,
         error: undefined,
-        isGesuchApp: true,
-        isSachbearbeitungApp: false,
       },
     );
     const elternIndex = result.steps.findIndex(

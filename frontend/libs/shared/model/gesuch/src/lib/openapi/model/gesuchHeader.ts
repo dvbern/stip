@@ -20,6 +20,8 @@ export interface GesuchHeader {
     versions: Array<VerfuegtGesuch>;
     aenderungs: GesuchAenderungs;
     currentTranches: Array<GesuchTrancheSlim>;
+    latestVerfuegungId?: string;
+    latestVerfuegtAt?: string;
     gesuchInfo: GesuchInfo;
 }
 

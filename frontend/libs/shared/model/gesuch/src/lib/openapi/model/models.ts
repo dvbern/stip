@@ -295,6 +295,7 @@ export * from './verfuegtGesuch';
 export * from './verfuegung';
 export * from './verfuegungDokument';
 export * from './verfuegungDokumentTyp';
+export * from './verfuegungFall';
 export * from './verfuegungStatus';
 export * from './welcomeMail';
 export * from './wohnsitz';

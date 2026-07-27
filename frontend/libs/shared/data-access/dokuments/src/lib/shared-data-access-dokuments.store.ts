@@ -2,15 +2,7 @@ import { Injectable, computed, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import {
-  EMPTY,
-  catchError,
-  combineLatest,
-  pipe,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { EMPTY, catchError, combineLatest, pipe, switchMap, tap } from 'rxjs';
 
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
@@ -27,7 +19,7 @@ import {
   GesuchTrancheTyp,
   UnterschriftenblattDokument,
 } from '@dv/shared/model/gesuch';
-import { byAppType } from '@dv/shared/model/permission-state';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   CachedRemoteData,
   RemoteData,
@@ -81,18 +73,16 @@ export class DokumentsStore extends signalStore(
   private globalNotificationStore = inject(GlobalNotificationStore);
   private config = inject(SharedModelCompileTimeConfig);
 
-  private getGesuchDokumenteByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+  private getGesuchDokumenteByAppConfig$(gesuchTrancheId: string) {
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.trancheService.getGesuchDokumenteGS$({ gesuchTrancheId }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.trancheService.getGesuchDokumenteSB$({ gesuchTrancheId }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private getGesuchDokumentByAppType$({
+  private getGesuchDokumentByAppConfig$({
     trancheId,
     dokumentTyp,
     entryId,
@@ -101,32 +91,28 @@ export class DokumentsStore extends signalStore(
     dokumentTyp: DokumentTyp;
     entryId: string | undefined;
   }) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.dokumentService.getGesuchDokumentForTypGS$({
           gesuchTrancheId: trancheId,
           entryId,
           dokumentTyp,
         }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.dokumentService.getGesuchDokumentForTypSB$({
           gesuchTrancheId: trancheId,
           entryId,
           dokumentTyp,
         }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
-  private getDocumentsToUploadByAppType$(gesuchTrancheId: string) {
-    return byAppType(this.config.appType, {
-      'gesuch-app': () =>
+  private getDocumentsToUploadByAppConfig$(gesuchTrancheId: string) {
+    return byAppConfig(this.config.app, {
+      gesuchsteller: () =>
         this.trancheService.getDocumentsToUploadGS$({ gesuchTrancheId }),
-      'sachbearbeitung-app': () =>
+      sachbearbeiter: () =>
         this.trancheService.getDocumentsToUploadSB$({ gesuchTrancheId }),
-      'demo-data-app': () =>
-        throwError(() => new Error('Not implemented for this AppType')),
     });
   }
 
@@ -302,13 +288,13 @@ export class DokumentsStore extends signalStore(
           dokument: cachedPending(state.dokument),
         }));
       }),
-      switchMap(({ trancheId, entryId, dokumentTyp }) => {
-        return this.getGesuchDokumentByAppType$({
+      switchMap(({ trancheId, entryId, dokumentTyp }) =>
+        this.getGesuchDokumentByAppConfig$({
           trancheId,
           entryId,
           dokumentTyp,
-        });
-      }),
+        }),
+      ),
       handleApiResponse((res) => {
         patchState(this, () => ({
           // Response is NullableGesuchDokument, so we extract the value
@@ -336,8 +322,8 @@ export class DokumentsStore extends signalStore(
       }),
       switchMap(({ gesuchTrancheId }) =>
         combineLatest([
-          this.getGesuchDokumenteByAppType$(gesuchTrancheId),
-          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+          this.getGesuchDokumenteByAppConfig$(gesuchTrancheId),
+          this.getDocumentsToUploadByAppConfig$(gesuchTrancheId),
         ]),
       ),
       tapResponse({
@@ -405,7 +391,7 @@ export class DokumentsStore extends signalStore(
           this.dokumentService.getUnterschriftenblaetterForGesuch$({
             gesuchId,
           }),
-          this.getDocumentsToUploadByAppType$(gesuchTrancheId),
+          this.getDocumentsToUploadByAppConfig$(gesuchTrancheId),
         ]).pipe(
           tapResponse({
             next: ([additionalDokumente, documentsToUpload]) => {
@@ -446,7 +432,7 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap(({ gesuchTrancheId }) =>
-        this.getDocumentsToUploadByAppType$(gesuchTrancheId).pipe(
+        this.getDocumentsToUploadByAppConfig$(gesuchTrancheId).pipe(
           handleApiResponse((documentsToUpload) =>
             patchState(this, { documentsToUpload }),
           ),
@@ -466,13 +452,11 @@ export class DokumentsStore extends signalStore(
         }));
       }),
       switchMap((req) => {
-        const service$ = byAppType(this.config.appType, {
-          'gesuch-app': () =>
+        const service$ = byAppConfig(this.config.app, {
+          gesuchsteller: () =>
             this.dokumentService.getGesuchDokumentKommentareGS$(req),
-          'sachbearbeitung-app': () =>
+          sachbearbeiter: () =>
             this.dokumentService.getGesuchDokumentKommentareSB$(req),
-          'demo-data-app': () =>
-            throwError(() => new Error('Not implemented for this AppType')),
         });
         return service$.pipe(
           handleApiResponse((gesuchDokumentKommentare) =>
@@ -642,7 +626,7 @@ export class DokumentsStore extends signalStore(
               dokuments: cachedPending(state.dokuments),
             }));
           }),
-          switchMap(() => this.getGesuchDokumenteByAppType$(trancheId)),
+          switchMap(() => this.getGesuchDokumenteByAppConfig$(trancheId)),
           tapResponse({
             next: ({ dokuments, entrys }) => {
               patchState(this, {
@@ -719,7 +703,7 @@ export class DokumentsStore extends signalStore(
         return serviceMap$[tranchenTyp]().pipe(
           tapResponse({
             next: (res) => {
-              this.getDocumentsToUploadByAppType$(trancheId);
+              this.getDocumentsToUploadByAppConfig$(trancheId);
               onSuccess(res.fallId);
             },
             error: (error) => {

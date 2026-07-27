@@ -29,6 +29,7 @@ public class GesuchAenderungsDto  implements Serializable {
   private @Valid List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
   private @Valid Boolean canAenderungEinreichen;
   private @Valid GesuchTrancheSlimDto offen;
+  private @Valid GesuchTrancheSlimDto eingereicht;
 
   protected GesuchAenderungsDto(GesuchAenderungsDtoBuilder<?, ?> b) {
     this.manuell = b.manuell;
@@ -37,6 +38,7 @@ public class GesuchAenderungsDto  implements Serializable {
     this.fehlendeDokumente = b.fehlendeDokumente;
     this.canAenderungEinreichen = b.canAenderungEinreichen;
     this.offen = b.offen;
+    this.eingereicht = b.eingereicht;
   }
 
   public GesuchAenderungsDto() {
@@ -219,6 +221,24 @@ public class GesuchAenderungsDto  implements Serializable {
     this.offen = offen;
   }
 
+  /**
+   **/
+  public GesuchAenderungsDto eingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+    return this;
+  }
+
+  
+  @JsonProperty("eingereicht")
+  public GesuchTrancheSlimDto getEingereicht() {
+    return eingereicht;
+  }
+
+  @JsonProperty("eingereicht")
+  public void setEingereicht(GesuchTrancheSlimDto eingereicht) {
+    this.eingereicht = eingereicht;
+  }
+
 
   @Override
   public boolean equals(Object o) {
@@ -234,12 +254,13 @@ public class GesuchAenderungsDto  implements Serializable {
         Objects.equals(this.abgelehnt, gesuchAenderungs.abgelehnt) &&
         Objects.equals(this.fehlendeDokumente, gesuchAenderungs.fehlendeDokumente) &&
         Objects.equals(this.canAenderungEinreichen, gesuchAenderungs.canAenderungEinreichen) &&
-        Objects.equals(this.offen, gesuchAenderungs.offen);
+        Objects.equals(this.offen, gesuchAenderungs.offen) &&
+        Objects.equals(this.eingereicht, gesuchAenderungs.eingereicht);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen);
+    return Objects.hash(manuell, akzeptiert, abgelehnt, fehlendeDokumente, canAenderungEinreichen, offen, eingereicht);
   }
 
   @Override
@@ -253,6 +274,7 @@ public class GesuchAenderungsDto  implements Serializable {
     sb.append("    fehlendeDokumente: ").append(toIndentedString(fehlendeDokumente)).append("\n");
     sb.append("    canAenderungEinreichen: ").append(toIndentedString(canAenderungEinreichen)).append("\n");
     sb.append("    offen: ").append(toIndentedString(offen)).append("\n");
+    sb.append("    eingereicht: ").append(toIndentedString(eingereicht)).append("\n");
     sb.append("}");
     return sb.toString();
   }
@@ -293,6 +315,7 @@ public class GesuchAenderungsDto  implements Serializable {
     private List<GesuchTrancheSlimDto> fehlendeDokumente = new ArrayList<>();
     private Boolean canAenderungEinreichen;
     private GesuchTrancheSlimDto offen;
+    private GesuchTrancheSlimDto eingereicht;
     protected abstract B self();
 
     public abstract C build();
@@ -319,6 +342,10 @@ public class GesuchAenderungsDto  implements Serializable {
     }
     public B offen(GesuchTrancheSlimDto offen) {
       this.offen = offen;
+      return self();
+    }
+    public B eingereicht(GesuchTrancheSlimDto eingereicht) {
+      this.eingereicht = eingereicht;
       return self();
     }
   }

@@ -61,11 +61,11 @@ const allEltern = Object.values(ElternTyp);
 export class SharedFeatureGesuchFormElternComponent {
   private store = inject(Store);
   private permissionStore = inject(PermissionStore);
-  private appType = inject(SharedModelCompileTimeConfig).appType;
+  private appConfig = inject(SharedModelCompileTimeConfig).app;
   private versteckteElternStore = inject(VersteckteElternStore);
   private globalNotificationStore = inject(GlobalNotificationStore);
 
-  shouldHide = this.appType === 'gesuch-app';
+  shouldHide = this.appConfig.view === 'gesuchsteller';
   hasUnsavedChanges = false;
   languageSig = this.store.selectSignal(selectLanguage);
 
@@ -112,7 +112,7 @@ export class SharedFeatureGesuchFormElternComponent {
       const { permissions } = preparePermissions(
         trancheTyp,
         gesuch,
-        this.appType,
+        this.appConfig,
         rolesMap,
       );
       const sichtbarReadonly = this.sichtbarReadonlySig();

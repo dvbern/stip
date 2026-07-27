@@ -6,6 +6,7 @@ import {
   OnDestroy,
   ViewContainerRef,
   inject,
+  input,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -15,6 +16,7 @@ import {
 } from '@angular/material/dialog';
 import { Subscription, fromEvent, throttleTime } from 'rxjs';
 
+import { SharedTranslationKey } from '@dv/shared/assets/i18n';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { TranslocoHashMap } from '@dv/shared/model/type-util';
 import { DVBreakpoints } from '@dv/shared/model/ui-constants';
@@ -29,9 +31,9 @@ import {
   exportAs: 'dvSharedUiInfoDialog',
 })
 export class SharedUiInfoDialogDirective implements OnDestroy {
-  @Input({ required: true }) dialogTitleKey = '';
+  dialogTitleKeySig = input.required<SharedTranslationKey>();
   @Input() dialogTitleParams?: TranslocoHashMap;
-  @Input({ required: true }) dialogMessageKey = '';
+  dialogMessageKeySig = input.required<SharedTranslationKey>();
   @Input() dialogMessageParams?: TranslocoHashMap;
   @Input() forceDialogPosition = false;
 
@@ -72,9 +74,9 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
 
     let dialogConfig: MatDialogConfig<InfoDialogData> = {
       data: {
-        titleKey: this.dialogTitleKey,
+        titleKey: this.dialogTitleKeySig(),
         titleParams: this.dialogTitleParams,
-        messageKey: this.dialogMessageKey,
+        messageKey: this.dialogMessageKeySig(),
         messageParams: this.dialogMessageParams,
       },
       id: 'info-dialog',
@@ -83,7 +85,7 @@ export class SharedUiInfoDialogDirective implements OnDestroy {
     if (isColumnar) {
       const anchor: HTMLElement = this.containerRef.element.nativeElement;
       const anchorRect = anchor.getBoundingClientRect();
-      const isSachbearbeitungApp = this.config.isSachbearbeitungApp;
+      const isSachbearbeitungApp = this.config.app.view === 'sachbearbeiter';
 
       dialogConfig = {
         ...dialogConfig,

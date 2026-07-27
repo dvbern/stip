@@ -26,7 +26,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
-import { isAfter, subDays, subYears } from 'date-fns';
+import { differenceInDays, isAfter, subDays, subYears } from 'date-fns';
 import { Subject } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
@@ -244,9 +244,23 @@ export class SharedFeatureGesuchFormPersonComponent implements OnInit {
     return vormundschaft ? DokumentTyp.PERSON_KESB_ERNENNUNG : null;
   });
   wohnsitzBeiDocumentOptionsSig = this.createUploadOptionsSig(() => {
+    const geburtsdatum = parseDateForVariant(
+      this.geburtstagChangedSig(),
+      new Date(),
+      'date',
+    );
+    const minDateEigenerWohnsitz =
+      this.viewSig().gesuch?.minDateEigenerWohnsitz;
+    if (!minDateEigenerWohnsitz || !geburtsdatum) {
+      return null;
+    }
     const wohnsitzBei = this.wohnsitzBeiChangedSig();
-    return wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT
-      ? DokumentTyp.PERSON_MIETVERTRAG
+    const shouldHaveEigenerWohnsitzDokument =
+      differenceInDays(geburtsdatum, minDateEigenerWohnsitz) > 0 &&
+      wohnsitzBei === Wohnsitz.EIGENER_HAUSHALT;
+
+    return shouldHaveEigenerWohnsitzDokument
+      ? DokumentTyp.PERSON_EIGENER_HAUSHALT
       : null;
   });
   sozialhilfebeitraegeDocumentOptionsSig = this.createUploadOptionsSig(() => {

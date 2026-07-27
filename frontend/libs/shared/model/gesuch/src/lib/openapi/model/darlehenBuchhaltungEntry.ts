@@ -17,6 +17,7 @@ export interface DarlehenBuchhaltungEntry {
     kategorie: DarlehenBuchhaltungEntryKategorie;
     verfuegung?: Dokument;
     betrag: number;
+    yearRange?: string;
     userErstellt?: string;
     kommentar?: string;
 }

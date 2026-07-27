@@ -113,14 +113,19 @@ public interface DarlehenResource {
     FreiwilligDarlehenGsResponseDto getAllFreiwilligDarlehenGs(@PathParam("fallId") UUID fallId);
 
     @GET
-    @Path("/getAllDarlehenSb/{gesuchId}")
+    @Path("/getAllDarlehenSb/{fallId}")
     @Produces({ "application/json", "text/plain" })
-    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("gesuchId") UUID gesuchId);
+    List<FreiwilligDarlehenDto> getAllFreiwilligDarlehenSb(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/buchhaltung/{gesuchId}")
     @Produces({ "application/json", "text/plain" })
     DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrys(@PathParam("gesuchId") UUID gesuchId);
+
+    @GET
+    @Path("/buchhaltung/fall/{fallId}")
+    @Produces({ "application/json", "text/plain" })
+    DarlehenBuchhaltungOverviewDto getDarlehenBuchhaltungEntrysByFallId(@PathParam("fallId") UUID fallId);
 
     @GET
     @Path("/dokument/{darlehenId}/{dokumentType}")

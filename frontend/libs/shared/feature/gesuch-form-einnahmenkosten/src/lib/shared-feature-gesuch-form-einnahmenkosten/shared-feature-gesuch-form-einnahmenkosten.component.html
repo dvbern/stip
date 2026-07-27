@@ -520,7 +520,7 @@
           }
         }
 
-        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen) || config.isSachbearbeitungApp) {
+        @if (!hiddenFieldsSetSig().has(form.controls.vermoegen) || config.app.view === 'sachbearbeiter') {
           <!-- STEUERRELEVANTE DATEN -->
           <h2 class="tw:dv-form-title">
             {{ t('shared.form.einnahmenkosten.steuerrelevanteDaten.title') }}

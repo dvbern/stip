@@ -115,6 +115,8 @@ import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_MUTTER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PARTNER;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_PERSON_IN_AUSBILDUNG;
 import static ch.dvbern.stip.api.util.TestConstants.AHV_NUMMER_VALID_VATER;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_CURRENT;
+import static ch.dvbern.stip.api.util.TestConstants.GUELTIGKEIT_PERIODE_FIXED;
 import static ch.dvbern.stip.api.util.TestConstants.TEST_PNG_FILE_LOCATION;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -132,6 +134,14 @@ public class TestUtil {
 
             return response;
         };
+
+    public static DateRange getActiveGueltigkeitsRange() {
+        if (GUELTIGKEIT_PERIODE_CURRENT != null) {
+            return GUELTIGKEIT_PERIODE_CURRENT;
+        } else {
+            return GUELTIGKEIT_PERIODE_FIXED;
+        }
+    }
 
     public static void deleteGesuch(final GesuchApiSpec gesuchApiSpec, final UUID gesuchId) {
         gesuchApiSpec.deleteGesuch()
@@ -633,6 +643,65 @@ public class TestUtil {
             .then()
             .assertThat()
             .statusCode(Response.Status.CREATED.getStatusCode());
+    }
+
+    /**
+     * Aligns Steuerdaten and accepts all GesuchDokuments for each of the given Tranchen.
+     * Works for a single Tranche as well as for multiple Tranchen (varargs).
+     */
+    public static void alignSteuerdatenAndAcceptAllDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final SteuerdatenTypDtoSpec steuerdatenTyp,
+        final UUID... gesuchTrancheIds
+    ) {
+        for (final var trancheId : gesuchTrancheIds) {
+            updateSteuerdaten(steuerdatenApiSpec, trancheId, steuerdatenTyp);
+            acceptAllGesuchDokuments(gesuchTrancheApiSpec, dokumentApiSpec, trancheId);
+        }
+    }
+
+    public static void updateSteuerdaten(
+        final SteuerdatenApiSpec steuerdatenApiSpec,
+        final UUID gesuchTrancheId,
+        final SteuerdatenTypDtoSpec typDtoSpec
+    ) {
+        final var steuerdatenUpdateDto =
+            SteuerdatenUpdateTabsDtoSpecModel.steuerdatenDtoSpec(typDtoSpec);
+        steuerdatenApiSpec.updateSteuerdaten()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .body(List.of(steuerdatenUpdateDto))
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Status.OK.getStatusCode());
+    }
+
+    public static void acceptAllGesuchDokuments(
+        final GesuchTrancheApiSpec gesuchTrancheApiSpec,
+        final DokumentApiSpec dokumentApiSpec,
+        final UUID gesuchTrancheId
+    ) {
+        final var gesuchdokuments = gesuchTrancheApiSpec.getGesuchDokumenteSB()
+            .gesuchTrancheIdPath(gesuchTrancheId)
+            .execute(TestUtil.PEEK_IF_ENV_SET)
+            .then()
+            .assertThat()
+            .statusCode(Response.Status.OK.getStatusCode())
+            .extract()
+            .body()
+            .as(GesuchDokumentListDtoSpec.class)
+            .getDokuments();
+
+        for (var dokument : gesuchdokuments) {
+            dokumentApiSpec.gesuchDokumentAkzeptieren()
+                .gesuchDokumentIdPath(dokument.getId())
+                .execute(TestUtil.PEEK_IF_ENV_SET)
+                .then()
+                .assertThat()
+                .statusCode(Response.Status.NO_CONTENT.getStatusCode());
+        }
     }
 
     public static ValidatableResponse uploadUnterschriftenblatt(

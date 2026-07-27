@@ -300,30 +300,31 @@ class BerechnungServiceTest {
 
     @Test
     void testGetMonateMitDarlehen() {
-        final var referenceDate = LocalDate.now().withMonth(6).withDayOfMonth(1);
+        final var gueltigkeitsStartDate = TestUtil.getActiveGueltigkeitsRange().getGueltigAb();
 
-        final var gesuch = TestUtil.getGesuchForBerechnungWithReferenceDate(UUID.randomUUID(), referenceDate);
+        final var gesuch = TestUtil.getGesuchForBerechnungWithReferenceDate(UUID.randomUUID(), gueltigkeitsStartDate);
 
         var monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(0));
 
-        gesuch.getAusbildung().setAusbildungBegin(referenceDate.minusYears(4));
+        gesuch.getAusbildung().setAusbildungBegin(gueltigkeitsStartDate.minusYears(4));
         monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
         assertThat(monateMitDarlehen, equalTo(12));
 
-        gesuch.getAusbildung().setAusbildungBegin(referenceDate.minusYears(1));
+        final var startDelayMonths = 4;
+        gesuch.getAusbildung().setAusbildungBegin(gueltigkeitsStartDate.minusYears(1));
         gesuch.getGesuchTranchen()
             .get(0)
             .getGesuchFormular()
             .getLebenslaufItems()
             .add(
                 new LebenslaufItem()
-                    .setVon(referenceDate.minusYears(3))
-                    .setBis(referenceDate.minusYears(1))
+                    .setVon(gueltigkeitsStartDate.minusYears(3).plusMonths(startDelayMonths))
+                    .setBis(gueltigkeitsStartDate.minusYears(1))
                     .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B))
             );
         monateMitDarlehen = BernBerechnungAdapterV1_0.getMonateMitDarlehen(gesuch);
-        assertThat(monateMitDarlehen, is(7));
+        assertThat(monateMitDarlehen, is(12 - startDelayMonths));
     }
 
 }

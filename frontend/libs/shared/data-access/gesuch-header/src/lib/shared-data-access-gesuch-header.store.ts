@@ -10,8 +10,8 @@ import {
   GesuchService,
   GesuchTrancheSlim,
 } from '@dv/shared/model/gesuch';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import { getRelativeTrancheRoute } from '@dv/shared/model/router';
-import { assertUnreachable } from '@dv/shared/model/type-util';
 import {
   CachedRemoteData,
   cachedPending,
@@ -41,6 +41,10 @@ export class GesuchHeaderStore extends signalStore(
     const headerData = this.header().data;
     return {
       ...headerData,
+      canGetBerechnung: byAppConfig(this.config.app, {
+        gesuchsteller: () => headerData?.gesuchInfo.state.canGSGetBerechnung,
+        sachbearbeiter: () => headerData?.gesuchInfo.state.canSBGetBerechnung,
+      }),
       // The initial tranchen are also returned as version, but they are already handled with header.initial
       // so we can skip the last element as it is always the initial tranchen
       versions: headerData?.versions?.slice(0, -1),
@@ -60,29 +64,22 @@ export class GesuchHeaderStore extends signalStore(
           header: cachedPending(state.header),
         }));
       }),
-      exhaustMap(({ gesuchId }) => {
-        switch (this.config.appType) {
-          case 'gesuch-app': {
-            return this.gesuchService
+      exhaustMap(({ gesuchId }) =>
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.gesuchService
               .getGesuchHeaderGs$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
-              );
-          }
-          case 'sachbearbeitung-app': {
-            return this.gesuchService
+              ),
+          sachbearbeiter: () =>
+            this.gesuchService
               .getGesuchHeaderSb$({ gesuchId })
               .pipe(
                 handleApiResponse((header) => patchState(this, { header })),
-              );
-          }
-          case 'demo-data-app': {
-            throw new Error('App-Type not handled');
-          }
-          default:
-            assertUnreachable(this.config.appType);
-        }
-      }),
+              ),
+        }),
+      ),
     ),
   );
 }

@@ -1,6 +1,5 @@
 {
   "app-name": "Stipends Online",
-  "gesuch-app.dashboard.title": "Cockpit",
   "gesuch-app.dashboard.welcome.title": "Bonjour, {{name}}",
   "gesuch-app.dashboard.ausbildung.create": "Demander une bourse",
   "gesuch-app.dashboard.fall.delegated.title": "Aucune formation enregistrée",

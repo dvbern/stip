@@ -85,10 +85,7 @@ public class TranchenSubBerechnungsresultatCalculator {
             gesuchsjahr
         );
 
-        final String yearRange = "%s/%s".formatted(
-            gesuchsperiode.getGesuchsperiodeStart().getYear(),
-            gesuchsperiode.getGesuchsperiodeStopp().getYear()
-        );
+        final String yearRange = DateUtil.getGesuchsPeriodeYearRange(gesuchsperiode);
 
         final BerechnungsStammdatenDto berechnungsStammdaten =
             berechnungsStammdatenMapper.toDto(gesuchsperiode, anzahlMonateGueltigkeit);

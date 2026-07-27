@@ -41,6 +41,7 @@ public class GesuchWithChangesDto  implements Serializable {
   private @Valid String bearbeiter;
   private @Valid LocalDate einreichedatum;
   private @Valid Boolean hadDelegierungs;
+  private @Valid LocalDate minDateEigenerWohnsitz;
   private @Valid DelegierungSlimDto delegierung;
   private @Valid LocalDate nachfristDokumente;
   private @Valid List<GesuchTrancheDto> changes;
@@ -61,6 +62,7 @@ public class GesuchWithChangesDto  implements Serializable {
     this.bearbeiter = b.bearbeiter;
     this.einreichedatum = b.einreichedatum;
     this.hadDelegierungs = b.hadDelegierungs;
+    this.minDateEigenerWohnsitz = b.minDateEigenerWohnsitz;
     this.delegierung = b.delegierung;
     this.nachfristDokumente = b.nachfristDokumente;
     this.changes = b.changes;
@@ -336,6 +338,24 @@ public class GesuchWithChangesDto  implements Serializable {
 
   /**
    **/
+  public GesuchWithChangesDto minDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+    return this;
+  }
+
+  
+  @JsonProperty("minDateEigenerWohnsitz")
+  public LocalDate getMinDateEigenerWohnsitz() {
+    return minDateEigenerWohnsitz;
+  }
+
+  @JsonProperty("minDateEigenerWohnsitz")
+  public void setMinDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+    this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
+  }
+
+  /**
+   **/
   public GesuchWithChangesDto delegierung(DelegierungSlimDto delegierung) {
     this.delegierung = delegierung;
     return this;
@@ -446,6 +466,7 @@ public class GesuchWithChangesDto  implements Serializable {
         Objects.equals(this.bearbeiter, gesuchWithChanges.bearbeiter) &&
         Objects.equals(this.einreichedatum, gesuchWithChanges.einreichedatum) &&
         Objects.equals(this.hadDelegierungs, gesuchWithChanges.hadDelegierungs) &&
+        Objects.equals(this.minDateEigenerWohnsitz, gesuchWithChanges.minDateEigenerWohnsitz) &&
         Objects.equals(this.delegierung, gesuchWithChanges.delegierung) &&
         Objects.equals(this.nachfristDokumente, gesuchWithChanges.nachfristDokumente) &&
         Objects.equals(this.changes, gesuchWithChanges.changes) &&
@@ -454,7 +475,7 @@ public class GesuchWithChangesDto  implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, delegierung, nachfristDokumente, changes, isInitial);
+    return Objects.hash(fallId, fallNummer, ausbildungId, hasPendingAusbildungUnterbruchAntrag, gesuchsperiode, gesuchStatus, gesuchNummer, id, aenderungsdatum, gesuchTrancheToWorkWith, verfuegt, bearbeiter, einreichedatum, hadDelegierungs, minDateEigenerWohnsitz, delegierung, nachfristDokumente, changes, isInitial);
   }
 
   @Override
@@ -476,6 +497,7 @@ public class GesuchWithChangesDto  implements Serializable {
     sb.append("    bearbeiter: ").append(toIndentedString(bearbeiter)).append("\n");
     sb.append("    einreichedatum: ").append(toIndentedString(einreichedatum)).append("\n");
     sb.append("    hadDelegierungs: ").append(toIndentedString(hadDelegierungs)).append("\n");
+    sb.append("    minDateEigenerWohnsitz: ").append(toIndentedString(minDateEigenerWohnsitz)).append("\n");
     sb.append("    delegierung: ").append(toIndentedString(delegierung)).append("\n");
     sb.append("    nachfristDokumente: ").append(toIndentedString(nachfristDokumente)).append("\n");
     sb.append("    changes: ").append(toIndentedString(changes)).append("\n");
@@ -528,6 +550,7 @@ public class GesuchWithChangesDto  implements Serializable {
     private String bearbeiter;
     private LocalDate einreichedatum;
     private Boolean hadDelegierungs;
+    private LocalDate minDateEigenerWohnsitz;
     private DelegierungSlimDto delegierung;
     private LocalDate nachfristDokumente;
     private List<GesuchTrancheDto> changes;
@@ -590,6 +613,10 @@ public class GesuchWithChangesDto  implements Serializable {
     }
     public B hadDelegierungs(Boolean hadDelegierungs) {
       this.hadDelegierungs = hadDelegierungs;
+      return self();
+    }
+    public B minDateEigenerWohnsitz(LocalDate minDateEigenerWohnsitz) {
+      this.minDateEigenerWohnsitz = minDateEigenerWohnsitz;
       return self();
     }
     public B delegierung(DelegierungSlimDto delegierung) {

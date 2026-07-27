@@ -17,7 +17,7 @@ export class SharedUiIfSachbearbeiterDirective {
   config = inject(SharedModelCompileTimeConfig);
 
   constructor() {
-    if (this.config.isSachbearbeitungApp) {
+    if (this.config.app.view === 'sachbearbeiter') {
       this.viewContainerRef.createEmbeddedView(this.templateRef);
     } else {
       this.viewContainerRef.clear();

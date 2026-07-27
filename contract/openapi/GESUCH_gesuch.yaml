@@ -230,7 +230,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getGesuchSB
       summary: Returns the Gesuch with the given Id
-  '/gesuch/{gesuchId}/info':
+  '/gesuch/{gesuchId}/info/gs':
     parameters:
       - name: gesuchId
         schema:
@@ -255,7 +255,34 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getGesuchInfo
+      operationId: getGesuchInfoGs
+      summary: Returns the basic Gesuch info with the given Id, potentially historized
+  '/gesuch/{gesuchId}/info/sb':
+    parameters:
+      - name: gesuchId
+        schema:
+          $ref: './components/common.yaml#/UUID'
+        in: path
+        required: true
+    get:
+      tags:
+        - Gesuch
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GesuchInfo'
+          description: OK
+        '401':
+          $ref: './components/responses.yaml#/Unauthorized'
+        '403':
+          $ref: './components/responses.yaml#/Forbidden'
+        '404':
+          $ref: './components/responses.yaml#/NotFound'
+        '500':
+          $ref: './components/responses.yaml#/ServerError'
+      operationId: getGesuchInfoSb
       summary: Returns the basic Gesuch info with the given Id
   '/gesuch/gs/header/{gesuchId}':
     parameters:
@@ -1074,7 +1101,7 @@ paths:
           $ref: './components/responses.yaml#/ServerError'
       operationId: getBerechnungForVerfuegung
       summary: Holt die Berechnung für die angegebene Verfügung
-  '/gesuch/{gesuchId}/berechnung':
+  '/gesuch/{gesuchId}/berechnung/sb':
     parameters:
       - name: gesuchId
         schema:
@@ -1101,7 +1128,7 @@ paths:
           $ref: './components/responses.yaml#/NotFound'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getBerechnungForGesuch
+      operationId: getBerechnungForGesuchSb
       summary: Berechnet und holt die Berechnung für ein Gesuch
   '/gesuch/{gesuchId}/berechnungsblatt/token':
     parameters:
@@ -1135,6 +1162,11 @@ paths:
   '/gesuch/{aenderungId}/aenderung/gs/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
+      - in: query
+        name: revision
+        schema:
+          type: integer
+        required: false
     get:
       tags:
         - Gesuch
@@ -1153,7 +1185,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getGsAenderungChangesInBearbeitung
+      operationId: getAenderungChangesGs
   '/gesuch/{aenderungId}/aenderung/sb/changes':
     parameters:
       - $ref: '#/components/parameters/aenderungId'
@@ -1180,7 +1212,7 @@ paths:
           $ref: './components/responses.yaml#/Forbidden'
         '500':
           $ref: './components/responses.yaml#/ServerError'
-      operationId: getSbAenderungChanges
+      operationId: getAenderungChangesSb
 
 components:
   securitySchemes:
@@ -1483,6 +1515,8 @@ components:
       properties:
         offen:
           $ref: './components/common.yaml#/GesuchTrancheSlim'
+        eingereicht:
+          $ref: './components/common.yaml#/GesuchTrancheSlim'
         manuell:
           type: array
           items:
@@ -1528,6 +1562,7 @@ components:
       required:
         - id
         - fallNummer
+        - fallId
         - gesuchNummer
         - startDate
         - endDate
@@ -1537,6 +1572,8 @@ components:
         id:
           $ref: './components/common.yaml#/UUID'
         fallNummer:
+          type: string
+        fallId:
           type: string
         gesuchNummer:
           type: string
@@ -1570,6 +1607,10 @@ components:
           type: array
           items:
             $ref: './components/common.yaml#/GesuchTrancheSlim'
+        latestVerfuegungId:
+          $ref: './components/common.yaml#/UUID'
+        latestVerfuegtAt:
+          $ref: './components/common.yaml#/LocalDateTime'
         gesuchInfo:
           $ref: '#/components/schemas/GesuchInfo'
     NachfristAendernRequest:

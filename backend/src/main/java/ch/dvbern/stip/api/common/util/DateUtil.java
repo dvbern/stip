@@ -19,22 +19,21 @@ package ch.dvbern.stip.api.common.util;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
+import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
+import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import lombok.experimental.UtilityClass;
 
+import static ch.dvbern.stip.api.common.util.BusinessDateConstants.VERSPAETET_EINGEREICHT_STICHTAG;
 import static java.time.temporal.TemporalAdjusters.firstDayOfMonth;
 import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @UtilityClass
 public class DateUtil {
-    public final ZoneId ZUERICH_ZONE = ZoneId.of("Europe/Zurich");
-    public final int VERSPAETET_EINGEREICHT_STICHTAG = 15;
-
     /**
      * Clamps the given {@param date} to be no less than {@param min} and no more that {@param max},
      * if the given value is already between the two dates it returns it.
@@ -184,5 +183,33 @@ public class DateUtil {
         final var startDatum = gesuch.getGesuchGueltigkeitAb();
         final var endDatum = gesuch.getGesuchGueltigkeitBis();
         return new DateRange(startDatum, endDatum);
+    }
+
+    public LocalDate getEigenerWohnsitzStichtagDate(final GesuchFormular gesuchFormular) {
+        final var gesuchTranche = gesuchFormular.getTranche();
+
+        return switch (gesuchTranche.getTyp()) {
+            case TRANCHE -> gesuchTranche.getGesuch()
+                .getAusbildung()
+                .getAusbildungBegin()
+                .withYear(gesuchTranche.getGesuch().getGesuchsperiode().getGesuchsperiodeStart().getYear());
+            case AENDERUNG -> gesuchTranche.getGueltigkeit().getGueltigAb();
+        };
+    }
+
+    public int getPiaAgeDifferenceToEigenerWohnsitzStichtagDate(final GesuchFormular gesuchFormular) {
+        final var pia = gesuchFormular.getPersonInAusbildung();
+        return DateUtil.getAgeInYearsAtDate(pia.getGeburtsdatum(), getEigenerWohnsitzStichtagDate(gesuchFormular));
+    }
+
+    public String getGesuchsPeriodeYearRange(final Gesuchsperiode gesuchsperiode) {
+        if (gesuchsperiode == null) {
+            return null;
+        }
+
+        return "%s/%s".formatted(
+            gesuchsperiode.getGesuchsperiodeStart().getYear(),
+            gesuchsperiode.getGesuchsperiodeStopp().getYear()
+        );
     }
 }
