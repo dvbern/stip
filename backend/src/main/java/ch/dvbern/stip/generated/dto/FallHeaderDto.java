@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallHeader")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallHeaderDto  implements Serializable {
   private @Valid UUID fallId;
   private @Valid Integer unreadNotificationsCount;
+
+  protected FallHeaderDto(FallHeaderDtoBuilder<?, ?> b) {
+    this.fallId = b.fallId;
+    this.unreadNotificationsCount = b.unreadNotificationsCount;
+  }
+
+  public FallHeaderDto() {
+  }
 
   /**
    **/
@@ -103,5 +111,38 @@ public class FallHeaderDto  implements Serializable {
   }
 
 
+  public static FallHeaderDtoBuilder<?, ?> builder() {
+    return new FallHeaderDtoBuilderImpl();
+  }
+
+  private static final class FallHeaderDtoBuilderImpl extends FallHeaderDtoBuilder<FallHeaderDto, FallHeaderDtoBuilderImpl> {
+
+    @Override
+    protected FallHeaderDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallHeaderDto build() {
+      return new FallHeaderDto(this);
+    }
+  }
+
+  public static abstract class FallHeaderDtoBuilder<C extends FallHeaderDto, B extends FallHeaderDtoBuilder<C, B>>  {
+    private UUID fallId;
+    private Integer unreadNotificationsCount;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B unreadNotificationsCount(Integer unreadNotificationsCount) {
+      this.unreadNotificationsCount = unreadNotificationsCount;
+      return self();
+    }
+  }
 }
 

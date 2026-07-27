@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedSbGesucheDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedSbGesucheDashboardDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<SbDashboardGesuchDto> entries;
+
+  protected PaginatedSbGesucheDashboardDto(PaginatedSbGesucheDashboardDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedSbGesucheDashboardDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedSbGesucheDashboardDto  implements Serializable {
   }
 
 
+  public static PaginatedSbGesucheDashboardDtoBuilder<?, ?> builder() {
+    return new PaginatedSbGesucheDashboardDtoBuilderImpl();
+  }
+
+  private static final class PaginatedSbGesucheDashboardDtoBuilderImpl extends PaginatedSbGesucheDashboardDtoBuilder<PaginatedSbGesucheDashboardDto, PaginatedSbGesucheDashboardDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedSbGesucheDashboardDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedSbGesucheDashboardDto build() {
+      return new PaginatedSbGesucheDashboardDto(this);
+    }
+  }
+
+  public static abstract class PaginatedSbGesucheDashboardDtoBuilder<C extends PaginatedSbGesucheDashboardDto, B extends PaginatedSbGesucheDashboardDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<SbDashboardGesuchDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<SbDashboardGesuchDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

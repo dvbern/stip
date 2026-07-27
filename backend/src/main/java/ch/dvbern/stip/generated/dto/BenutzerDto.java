@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Benutzer")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BenutzerDto  implements Serializable {
   private @Valid String vorname;
@@ -28,6 +28,18 @@ public class BenutzerDto  implements Serializable {
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
+
+  protected BenutzerDto(BenutzerDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.id = b.id;
+    this.benutzereinstellungen = b.benutzereinstellungen;
+    this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
+    this.sachbearbeiterZuordnungStammdaten = b.sachbearbeiterZuordnungStammdaten;
+  }
+
+  public BenutzerDto() {
+  }
 
   /**
    **/
@@ -190,5 +202,58 @@ public class BenutzerDto  implements Serializable {
   }
 
 
+  public static BenutzerDtoBuilder<?, ?> builder() {
+    return new BenutzerDtoBuilderImpl();
+  }
+
+  private static final class BenutzerDtoBuilderImpl extends BenutzerDtoBuilder<BenutzerDto, BenutzerDtoBuilderImpl> {
+
+    @Override
+    protected BenutzerDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BenutzerDto build() {
+      return new BenutzerDto(this);
+    }
+  }
+
+  public static abstract class BenutzerDtoBuilder<C extends BenutzerDto, B extends BenutzerDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private UUID id;
+    private BenutzereinstellungenUpdateDto benutzereinstellungen;
+    private Boolean nutzungsbedingungenAkzeptiert;
+    private SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+      this.benutzereinstellungen = benutzereinstellungen;
+      return self();
+    }
+    public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+      this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+      return self();
+    }
+    public B sachbearbeiterZuordnungStammdaten(SachbearbeiterZuordnungStammdatenDto sachbearbeiterZuordnungStammdaten) {
+      this.sachbearbeiterZuordnungStammdaten = sachbearbeiterZuordnungStammdaten;
+      return self();
+    }
+  }
 }
 

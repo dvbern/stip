@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SapDelivery")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SapDeliveryDto  implements Serializable {
   private @Valid String sapId;
   private @Valid java.time.LocalDateTime timestampErstellt;
   private @Valid ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+
+  protected SapDeliveryDto(SapDeliveryDtoBuilder<?, ?> b) {
+    this.sapId = b.sapId;
+    this.timestampErstellt = b.timestampErstellt;
+    this.sapStatus = b.sapStatus;
+  }
+
+  public SapDeliveryDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class SapDeliveryDto  implements Serializable {
   }
 
 
+  public static SapDeliveryDtoBuilder<?, ?> builder() {
+    return new SapDeliveryDtoBuilderImpl();
+  }
+
+  private static final class SapDeliveryDtoBuilderImpl extends SapDeliveryDtoBuilder<SapDeliveryDto, SapDeliveryDtoBuilderImpl> {
+
+    @Override
+    protected SapDeliveryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SapDeliveryDto build() {
+      return new SapDeliveryDto(this);
+    }
+  }
+
+  public static abstract class SapDeliveryDtoBuilder<C extends SapDeliveryDto, B extends SapDeliveryDtoBuilder<C, B>>  {
+    private String sapId;
+    private java.time.LocalDateTime timestampErstellt;
+    private ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B sapId(String sapId) {
+      this.sapId = sapId;
+      return self();
+    }
+    public B timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B sapStatus(ch.dvbern.stip.api.buchhaltung.type.SapStatus sapStatus) {
+      this.sapStatus = sapStatus;
+      return self();
+    }
+  }
 }
 

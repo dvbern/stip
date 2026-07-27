@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchZurueckweisenResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchZurueckweisenResponseDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid UUID gesuchTrancheId;
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp;
+
+  protected GesuchZurueckweisenResponseDto(GesuchZurueckweisenResponseDtoBuilder<?, ?> b) {
+    this.gesuchId = b.gesuchId;
+    this.gesuchTrancheId = b.gesuchTrancheId;
+    this.gesuchTrancheTyp = b.gesuchTrancheTyp;
+  }
+
+  public GesuchZurueckweisenResponseDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class GesuchZurueckweisenResponseDto  implements Serializable {
   }
 
 
+  public static GesuchZurueckweisenResponseDtoBuilder<?, ?> builder() {
+    return new GesuchZurueckweisenResponseDtoBuilderImpl();
+  }
+
+  private static final class GesuchZurueckweisenResponseDtoBuilderImpl extends GesuchZurueckweisenResponseDtoBuilder<GesuchZurueckweisenResponseDto, GesuchZurueckweisenResponseDtoBuilderImpl> {
+
+    @Override
+    protected GesuchZurueckweisenResponseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchZurueckweisenResponseDto build() {
+      return new GesuchZurueckweisenResponseDto(this);
+    }
+  }
+
+  public static abstract class GesuchZurueckweisenResponseDtoBuilder<C extends GesuchZurueckweisenResponseDto, B extends GesuchZurueckweisenResponseDtoBuilder<C, B>>  {
+    private UUID gesuchId;
+    private UUID gesuchTrancheId;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+    public B gesuchTrancheTyp(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp gesuchTrancheTyp) {
+      this.gesuchTrancheTyp = gesuchTrancheTyp;
+      return self();
+    }
+  }
 }
 

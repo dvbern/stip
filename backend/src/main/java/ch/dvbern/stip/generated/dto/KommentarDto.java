@@ -14,12 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Kommentar")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class KommentarDto  implements Serializable {
   private @Valid String text;
+
+  protected KommentarDto(KommentarDtoBuilder<?, ?> b) {
+    this.text = b.text;
+  }
+
+  public KommentarDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class KommentarDto  implements Serializable {
   }
 
 
+  public static KommentarDtoBuilder<?, ?> builder() {
+    return new KommentarDtoBuilderImpl();
+  }
+
+  private static final class KommentarDtoBuilderImpl extends KommentarDtoBuilder<KommentarDto, KommentarDtoBuilderImpl> {
+
+    @Override
+    protected KommentarDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public KommentarDto build() {
+      return new KommentarDto(this);
+    }
+  }
+
+  public static abstract class KommentarDtoBuilder<C extends KommentarDto, B extends KommentarDtoBuilder<C, B>>  {
+    private String text;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B text(String text) {
+      this.text = text;
+      return self();
+    }
+  }
 }
 

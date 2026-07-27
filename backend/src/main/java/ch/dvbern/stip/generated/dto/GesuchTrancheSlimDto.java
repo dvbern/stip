@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchTrancheSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid UUID id;
@@ -28,6 +28,19 @@ public class GesuchTrancheSlimDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
   private @Valid String comment;
   private @Valid Integer revision;
+
+  protected GesuchTrancheSlimDto(GesuchTrancheSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.gueltigAb = b.gueltigAb;
+    this.gueltigBis = b.gueltigBis;
+    this.status = b.status;
+    this.typ = b.typ;
+    this.comment = b.comment;
+    this.revision = b.revision;
+  }
+
+  public GesuchTrancheSlimDto() {
+  }
 
   /**
    **/
@@ -212,5 +225,63 @@ public class GesuchTrancheSlimDto  implements Serializable {
   }
 
 
+  public static GesuchTrancheSlimDtoBuilder<?, ?> builder() {
+    return new GesuchTrancheSlimDtoBuilderImpl();
+  }
+
+  private static final class GesuchTrancheSlimDtoBuilderImpl extends GesuchTrancheSlimDtoBuilder<GesuchTrancheSlimDto, GesuchTrancheSlimDtoBuilderImpl> {
+
+    @Override
+    protected GesuchTrancheSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchTrancheSlimDto build() {
+      return new GesuchTrancheSlimDto(this);
+    }
+  }
+
+  public static abstract class GesuchTrancheSlimDtoBuilder<C extends GesuchTrancheSlimDto, B extends GesuchTrancheSlimDtoBuilder<C, B>>  {
+    private UUID id;
+    private LocalDate gueltigAb;
+    private LocalDate gueltigBis;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+    private String comment;
+    private Integer revision;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B gueltigAb(LocalDate gueltigAb) {
+      this.gueltigAb = gueltigAb;
+      return self();
+    }
+    public B gueltigBis(LocalDate gueltigBis) {
+      this.gueltigBis = gueltigBis;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+    public B revision(Integer revision) {
+      this.revision = revision;
+      return self();
+    }
+  }
 }
 

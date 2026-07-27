@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("RenameAbschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class RenameAbschlussDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
+
+  protected RenameAbschlussDto(RenameAbschlussDtoBuilder<?, ?> b) {
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+  }
+
+  public RenameAbschlussDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class RenameAbschlussDto  implements Serializable {
   }
 
 
+  public static RenameAbschlussDtoBuilder<?, ?> builder() {
+    return new RenameAbschlussDtoBuilderImpl();
+  }
+
+  private static final class RenameAbschlussDtoBuilderImpl extends RenameAbschlussDtoBuilder<RenameAbschlussDto, RenameAbschlussDtoBuilderImpl> {
+
+    @Override
+    protected RenameAbschlussDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public RenameAbschlussDto build() {
+      return new RenameAbschlussDto(this);
+    }
+  }
+
+  public static abstract class RenameAbschlussDtoBuilder<C extends RenameAbschlussDto, B extends RenameAbschlussDtoBuilder<C, B>>  {
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+  }
 }
 

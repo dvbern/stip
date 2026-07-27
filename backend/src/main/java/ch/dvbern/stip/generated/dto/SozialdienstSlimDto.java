@@ -16,15 +16,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String name;
   private @Valid Boolean aktiv;
   private @Valid ZahlungsverbindungSlimDto zahlungsverbindung;
+
+  protected SozialdienstSlimDto(SozialdienstSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.name = b.name;
+    this.aktiv = b.aktiv;
+    this.zahlungsverbindung = b.zahlungsverbindung;
+  }
+
+  public SozialdienstSlimDto() {
+  }
 
   /**
    **/
@@ -148,5 +158,48 @@ public class SozialdienstSlimDto  implements Serializable {
   }
 
 
+  public static SozialdienstSlimDtoBuilder<?, ?> builder() {
+    return new SozialdienstSlimDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstSlimDtoBuilderImpl extends SozialdienstSlimDtoBuilder<SozialdienstSlimDto, SozialdienstSlimDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstSlimDto build() {
+      return new SozialdienstSlimDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstSlimDtoBuilder<C extends SozialdienstSlimDto, B extends SozialdienstSlimDtoBuilder<C, B>>  {
+    private UUID id;
+    private String name;
+    private Boolean aktiv;
+    private ZahlungsverbindungSlimDto zahlungsverbindung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+    public B zahlungsverbindung(ZahlungsverbindungSlimDto zahlungsverbindung) {
+      this.zahlungsverbindung = zahlungsverbindung;
+      return self();
+    }
+  }
 }
 

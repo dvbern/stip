@@ -130,6 +130,7 @@ export * from './freiwilligDarlehenDashboard';
 export * from './freiwilligDarlehenGsResponse';
 export * from './freiwilligDarlehenUpdateGs';
 export * from './geschwister';
+export * from './geschwisterTyp';
 export * from './geschwisterUpdate';
 export * from './gesuch';
 export * from './gesuchAenderungs';

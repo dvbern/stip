@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("StatusprotokollEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class StatusprotokollEntryDto  implements Serializable {
   private @Valid java.time.LocalDateTime timestamp;
@@ -27,6 +27,18 @@ public class StatusprotokollEntryDto  implements Serializable {
   private @Valid String benutzer;
   private @Valid String kommentar;
   private @Valid String statusFrom;
+
+  protected StatusprotokollEntryDto(StatusprotokollEntryDtoBuilder<?, ?> b) {
+    this.timestamp = b.timestamp;
+    this.statusTo = b.statusTo;
+    this.typ = b.typ;
+    this.benutzer = b.benutzer;
+    this.kommentar = b.kommentar;
+    this.statusFrom = b.statusFrom;
+  }
+
+  public StatusprotokollEntryDto() {
+  }
 
   /**
    * Datum und Zeit vom wechsel zu status, ISO 8601 formatiert
@@ -194,5 +206,58 @@ public class StatusprotokollEntryDto  implements Serializable {
   }
 
 
+  public static StatusprotokollEntryDtoBuilder<?, ?> builder() {
+    return new StatusprotokollEntryDtoBuilderImpl();
+  }
+
+  private static final class StatusprotokollEntryDtoBuilderImpl extends StatusprotokollEntryDtoBuilder<StatusprotokollEntryDto, StatusprotokollEntryDtoBuilderImpl> {
+
+    @Override
+    protected StatusprotokollEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public StatusprotokollEntryDto build() {
+      return new StatusprotokollEntryDto(this);
+    }
+  }
+
+  public static abstract class StatusprotokollEntryDtoBuilder<C extends StatusprotokollEntryDto, B extends StatusprotokollEntryDtoBuilder<C, B>>  {
+    private java.time.LocalDateTime timestamp;
+    private String statusTo;
+    private ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ;
+    private String benutzer;
+    private String kommentar;
+    private String statusFrom;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B timestamp(java.time.LocalDateTime timestamp) {
+      this.timestamp = timestamp;
+      return self();
+    }
+    public B statusTo(String statusTo) {
+      this.statusTo = statusTo;
+      return self();
+    }
+    public B typ(ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B benutzer(String benutzer) {
+      this.benutzer = benutzer;
+      return self();
+    }
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B statusFrom(String statusFrom) {
+      this.statusFrom = statusFrom;
+      return self();
+    }
+  }
 }
 

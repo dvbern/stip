@@ -75,7 +75,7 @@ public class ParseDemoDataService {
     private final Iterator<Row> rowIterator;
     private final int amountOfCells;
 
-    private ParseDemoDataService(Iterator<Row> rowIterator, int amountOfCells) {
+    public ParseDemoDataService(Iterator<Row> rowIterator, int amountOfCells) {
         this.rowIterator = rowIterator;
         this.amountOfCells = amountOfCells;
     }
@@ -93,7 +93,7 @@ public class ParseDemoDataService {
         }
     }
 
-    private List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
+    public List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
         skipRows(UNUSED_START_LINES);
         final var demoDataList = prepareInfo();
         final var ausbildungen = prepareAusbildung();

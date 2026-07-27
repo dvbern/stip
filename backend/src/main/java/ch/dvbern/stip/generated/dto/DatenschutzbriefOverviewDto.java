@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DatenschutzbriefOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DatenschutzbriefOverviewDto  implements Serializable {
   private @Valid UUID id;
@@ -31,6 +31,21 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   private @Valid LocalDate timestampErstellt;
   private @Valid DokumentDto dokument;
   private @Valid UUID massendruckJobId;
+
+  protected DatenschutzbriefOverviewDto(DatenschutzbriefOverviewDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.userErstellt = b.userErstellt;
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.elternTyp = b.elternTyp;
+    this.timestampErstellt = b.timestampErstellt;
+    this.dokument = b.dokument;
+    this.massendruckJobId = b.massendruckJobId;
+  }
+
+  public DatenschutzbriefOverviewDto() {
+  }
 
   /**
    **/
@@ -256,5 +271,73 @@ public class DatenschutzbriefOverviewDto  implements Serializable {
   }
 
 
+  public static DatenschutzbriefOverviewDtoBuilder<?, ?> builder() {
+    return new DatenschutzbriefOverviewDtoBuilderImpl();
+  }
+
+  private static final class DatenschutzbriefOverviewDtoBuilderImpl extends DatenschutzbriefOverviewDtoBuilder<DatenschutzbriefOverviewDto, DatenschutzbriefOverviewDtoBuilderImpl> {
+
+    @Override
+    protected DatenschutzbriefOverviewDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DatenschutzbriefOverviewDto build() {
+      return new DatenschutzbriefOverviewDto(this);
+    }
+  }
+
+  public static abstract class DatenschutzbriefOverviewDtoBuilder<C extends DatenschutzbriefOverviewDto, B extends DatenschutzbriefOverviewDtoBuilder<C, B>>  {
+    private UUID id;
+    private String userErstellt;
+    private String sozialversicherungsnummer;
+    private String nachname;
+    private String vorname;
+    private ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+    private LocalDate timestampErstellt;
+    private DokumentDto dokument;
+    private UUID massendruckJobId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B elternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
+      this.elternTyp = elternTyp;
+      return self();
+    }
+    public B timestampErstellt(LocalDate timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B dokument(DokumentDto dokument) {
+      this.dokument = dokument;
+      return self();
+    }
+    public B massendruckJobId(UUID massendruckJobId) {
+      this.massendruckJobId = massendruckJobId;
+      return self();
+    }
+  }
 }
 

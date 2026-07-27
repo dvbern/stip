@@ -19,14 +19,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
+
+  protected DarlehenDokumentDto(DarlehenDokumentDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.dokumentType = b.dokumentType;
+    this.dokumente = b.dokumente;
+  }
+
+  public DarlehenDokumentDto() {
+  }
 
   /**
    **/
@@ -145,5 +154,43 @@ public class DarlehenDokumentDto  implements Serializable {
   }
 
 
+  public static DarlehenDokumentDtoBuilder<?, ?> builder() {
+    return new DarlehenDokumentDtoBuilderImpl();
+  }
+
+  private static final class DarlehenDokumentDtoBuilderImpl extends DarlehenDokumentDtoBuilder<DarlehenDokumentDto, DarlehenDokumentDtoBuilderImpl> {
+
+    @Override
+    protected DarlehenDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DarlehenDokumentDto build() {
+      return new DarlehenDokumentDto(this);
+    }
+  }
+
+  public static abstract class DarlehenDokumentDtoBuilder<C extends DarlehenDokumentDto, B extends DarlehenDokumentDtoBuilder<C, B>>  {
+    private UUID id;
+    private ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType;
+    private List<DokumentDto> dokumente = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B dokumentType(ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType dokumentType) {
+      this.dokumentType = dokumentType;
+      return self();
+    }
+    public B dokumente(List<DokumentDto> dokumente) {
+      this.dokumente = dokumente;
+      return self();
+    }
+  }
 }
 

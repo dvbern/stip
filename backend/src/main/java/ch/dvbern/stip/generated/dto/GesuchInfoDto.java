@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchInfoDto  implements Serializable {
   private @Valid UUID id;
@@ -31,6 +31,21 @@ public class GesuchInfoDto  implements Serializable {
   private @Valid GesuchStateInfoDto state;
   private @Valid String piaVorname;
   private @Valid String piaNachname;
+
+  protected GesuchInfoDto(GesuchInfoDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.fallNummer = b.fallNummer;
+    this.fallId = b.fallId;
+    this.gesuchNummer = b.gesuchNummer;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+    this.state = b.state;
+    this.piaVorname = b.piaVorname;
+    this.piaNachname = b.piaNachname;
+  }
+
+  public GesuchInfoDto() {
+  }
 
   /**
    **/
@@ -257,5 +272,73 @@ public class GesuchInfoDto  implements Serializable {
   }
 
 
+  public static GesuchInfoDtoBuilder<?, ?> builder() {
+    return new GesuchInfoDtoBuilderImpl();
+  }
+
+  private static final class GesuchInfoDtoBuilderImpl extends GesuchInfoDtoBuilder<GesuchInfoDto, GesuchInfoDtoBuilderImpl> {
+
+    @Override
+    protected GesuchInfoDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchInfoDto build() {
+      return new GesuchInfoDto(this);
+    }
+  }
+
+  public static abstract class GesuchInfoDtoBuilder<C extends GesuchInfoDto, B extends GesuchInfoDtoBuilder<C, B>>  {
+    private UUID id;
+    private String fallNummer;
+    private String fallId;
+    private String gesuchNummer;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private GesuchStateInfoDto state;
+    private String piaVorname;
+    private String piaNachname;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B fallId(String fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B gesuchNummer(String gesuchNummer) {
+      this.gesuchNummer = gesuchNummer;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+    public B state(GesuchStateInfoDto state) {
+      this.state = state;
+      return self();
+    }
+    public B piaVorname(String piaVorname) {
+      this.piaVorname = piaVorname;
+      return self();
+    }
+    public B piaNachname(String piaNachname) {
+      this.piaNachname = piaNachname;
+      return self();
+    }
+  }
 }
 

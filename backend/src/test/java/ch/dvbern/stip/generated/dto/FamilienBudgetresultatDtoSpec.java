@@ -57,6 +57,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_FEHLBETRAG,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_PRO_KOPF_TEILUNG,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_UNGEDECKTER_ANTEIL_LEBENSHALTUNGSKOSTEN,
+  FamilienBudgetresultatDtoSpec.JSON_PROPERTY_TEILZEIT_KINDER_PROZENTE,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_EINNAHMEN,
   FamilienBudgetresultatDtoSpec.JSON_PROPERTY_KOSTEN
 })
@@ -131,6 +132,9 @@ public class FamilienBudgetresultatDtoSpec {
 
   public static final String JSON_PROPERTY_UNGEDECKTER_ANTEIL_LEBENSHALTUNGSKOSTEN = "ungedeckterAnteilLebenshaltungskosten";
   private Integer ungedeckterAnteilLebenshaltungskosten;
+
+  public static final String JSON_PROPERTY_TEILZEIT_KINDER_PROZENTE = "teilzeitKinderProzente";
+  private Integer teilzeitKinderProzente;
 
   public static final String JSON_PROPERTY_EINNAHMEN = "einnahmen";
   private FamilienBudgetresultatEinnahmenDtoSpec einnahmen;
@@ -747,6 +751,32 @@ public class FamilienBudgetresultatDtoSpec {
   }
 
 
+  public FamilienBudgetresultatDtoSpec teilzeitKinderProzente(Integer teilzeitKinderProzente) {
+    
+    this.teilzeitKinderProzente = teilzeitKinderProzente;
+    return this;
+  }
+
+   /**
+   * Get teilzeitKinderProzente
+   * @return teilzeitKinderProzente
+  **/
+  @jakarta.annotation.Nonnull
+  @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_PROZENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+
+  public Integer getTeilzeitKinderProzente() {
+    return teilzeitKinderProzente;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_TEILZEIT_KINDER_PROZENTE)
+  @JsonInclude(value = JsonInclude.Include.ALWAYS)
+  public void setTeilzeitKinderProzente(Integer teilzeitKinderProzente) {
+    this.teilzeitKinderProzente = teilzeitKinderProzente;
+  }
+
+
   public FamilienBudgetresultatDtoSpec einnahmen(FamilienBudgetresultatEinnahmenDtoSpec einnahmen) {
     
     this.einnahmen = einnahmen;
@@ -830,13 +860,14 @@ public class FamilienBudgetresultatDtoSpec {
         Objects.equals(this.fehlbetrag, familienBudgetresultat.fehlbetrag) &&
         Objects.equals(this.proKopfTeilung, familienBudgetresultat.proKopfTeilung) &&
         Objects.equals(this.ungedeckterAnteilLebenshaltungskosten, familienBudgetresultat.ungedeckterAnteilLebenshaltungskosten) &&
+        Objects.equals(this.teilzeitKinderProzente, familienBudgetresultat.teilzeitKinderProzente) &&
         Objects.equals(this.einnahmen, familienBudgetresultat.einnahmen) &&
         Objects.equals(this.kosten, familienBudgetresultat.kosten);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(haushaltNames, steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, sozialversicherungsnummerPartner, geburtsdatum, geburtsdatumPartner, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, einnahmen, kosten);
+    return Objects.hash(haushaltNames, steuerdatenTyp, vorname, nachname, vornamePartner, nachnamePartner, sozialversicherungsnummer, sozialversicherungsnummerPartner, geburtsdatum, geburtsdatumPartner, steuerjahr, veranlagungscode, total, einnahmenMinusKosten, anzahlPersonenImHaushalt, anzahlKinderInAusbildung, einnahmeUeberschuss, proKopfTeilungKinderInAusbildung, anrechenbareElterlicheLeistung, halbierungsReduktion, fehlbetrag, proKopfTeilung, ungedeckterAnteilLebenshaltungskosten, teilzeitKinderProzente, einnahmen, kosten);
   }
 
   @Override
@@ -866,6 +897,7 @@ public class FamilienBudgetresultatDtoSpec {
     sb.append("    fehlbetrag: ").append(toIndentedString(fehlbetrag)).append("\n");
     sb.append("    proKopfTeilung: ").append(toIndentedString(proKopfTeilung)).append("\n");
     sb.append("    ungedeckterAnteilLebenshaltungskosten: ").append(toIndentedString(ungedeckterAnteilLebenshaltungskosten)).append("\n");
+    sb.append("    teilzeitKinderProzente: ").append(toIndentedString(teilzeitKinderProzente)).append("\n");
     sb.append("    einnahmen: ").append(toIndentedString(einnahmen)).append("\n");
     sb.append("    kosten: ").append(toIndentedString(kosten)).append("\n");
     sb.append("}");

@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("StipDecisionText")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class StipDecisionTextDto  implements Serializable {
   private @Valid UUID id;
@@ -25,6 +25,17 @@ public class StipDecisionTextDto  implements Serializable {
   private @Valid String titleDe;
   private @Valid String textDe;
   private @Valid String textFr;
+
+  protected StipDecisionTextDto(StipDecisionTextDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.stipDecision = b.stipDecision;
+    this.titleDe = b.titleDe;
+    this.textDe = b.textDe;
+    this.textFr = b.textFr;
+  }
+
+  public StipDecisionTextDto() {
+  }
 
   /**
    **/
@@ -169,5 +180,53 @@ public class StipDecisionTextDto  implements Serializable {
   }
 
 
+  public static StipDecisionTextDtoBuilder<?, ?> builder() {
+    return new StipDecisionTextDtoBuilderImpl();
+  }
+
+  private static final class StipDecisionTextDtoBuilderImpl extends StipDecisionTextDtoBuilder<StipDecisionTextDto, StipDecisionTextDtoBuilderImpl> {
+
+    @Override
+    protected StipDecisionTextDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public StipDecisionTextDto build() {
+      return new StipDecisionTextDto(this);
+    }
+  }
+
+  public static abstract class StipDecisionTextDtoBuilder<C extends StipDecisionTextDto, B extends StipDecisionTextDtoBuilder<C, B>>  {
+    private UUID id;
+    private ch.dvbern.stip.api.common.type.StipDecision stipDecision;
+    private String titleDe;
+    private String textDe;
+    private String textFr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B stipDecision(ch.dvbern.stip.api.common.type.StipDecision stipDecision) {
+      this.stipDecision = stipDecision;
+      return self();
+    }
+    public B titleDe(String titleDe) {
+      this.titleDe = titleDe;
+      return self();
+    }
+    public B textDe(String textDe) {
+      this.textDe = textDe;
+      return self();
+    }
+    public B textFr(String textFr) {
+      this.textFr = textFr;
+      return self();
+    }
+  }
 }
 

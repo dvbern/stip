@@ -21,9 +21,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid UUID fallId;
@@ -48,6 +48,34 @@ public class AusbildungDashboardItemDto  implements Serializable {
   private @Valid LocalDate earliestActiveGesuchPeriodeStart;
   private @Valid List<GesuchDashboardItemDto> gesuchs;
   private @Valid UUID openAusbildungUnterbruchAntragId;
+
+  protected AusbildungDashboardItemDto(AusbildungDashboardItemDtoBuilder<?, ?> b) {
+    this.fallId = b.fallId;
+    this.ausbildungBegin = b.ausbildungBegin;
+    this.ausbildungEnd = b.ausbildungEnd;
+    this.pensum = b.pensum;
+    this.status = b.status;
+    this.editable = b.editable;
+    this.canCreateAusbildungUnterbruchAntrag = b.canCreateAusbildungUnterbruchAntrag;
+    this.hasPendingAusbildungUnterbruchAntrag = b.hasPendingAusbildungUnterbruchAntrag;
+    this.id = b.id;
+    this.fachrichtungBerufsbezeichnung = b.fachrichtungBerufsbezeichnung;
+    this.ausbildungNichtGefunden = b.ausbildungNichtGefunden;
+    this.besuchtBMS = b.besuchtBMS;
+    this.alternativeAusbildungsstaette = b.alternativeAusbildungsstaette;
+    this.alternativeAusbildungsgang = b.alternativeAusbildungsgang;
+    this.ausbildungsortPLZ = b.ausbildungsortPLZ;
+    this.ausbildungsort = b.ausbildungsort;
+    this.isAusbildungAusland = b.isAusbildungAusland;
+    this.landId = b.landId;
+    this.ausbildungsgang = b.ausbildungsgang;
+    this.earliestActiveGesuchPeriodeStart = b.earliestActiveGesuchPeriodeStart;
+    this.gesuchs = b.gesuchs;
+    this.openAusbildungUnterbruchAntragId = b.openAusbildungUnterbruchAntragId;
+  }
+
+  public AusbildungDashboardItemDto() {
+  }
 
   /**
    **/
@@ -558,5 +586,138 @@ public class AusbildungDashboardItemDto  implements Serializable {
   }
 
 
+  public static AusbildungDashboardItemDtoBuilder<?, ?> builder() {
+    return new AusbildungDashboardItemDtoBuilderImpl();
+  }
+
+  private static final class AusbildungDashboardItemDtoBuilderImpl extends AusbildungDashboardItemDtoBuilder<AusbildungDashboardItemDto, AusbildungDashboardItemDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungDashboardItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungDashboardItemDto build() {
+      return new AusbildungDashboardItemDto(this);
+    }
+  }
+
+  public static abstract class AusbildungDashboardItemDtoBuilder<C extends AusbildungDashboardItemDto, B extends AusbildungDashboardItemDtoBuilder<C, B>>  {
+    private UUID fallId;
+    private String ausbildungBegin;
+    private String ausbildungEnd;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status;
+    private Boolean editable;
+    private Boolean canCreateAusbildungUnterbruchAntrag;
+    private Boolean hasPendingAusbildungUnterbruchAntrag;
+    private UUID id;
+    private String fachrichtungBerufsbezeichnung;
+    private Boolean ausbildungNichtGefunden;
+    private Boolean besuchtBMS;
+    private String alternativeAusbildungsstaette;
+    private String alternativeAusbildungsgang;
+    private String ausbildungsortPLZ;
+    private String ausbildungsort;
+    private Boolean isAusbildungAusland;
+    private UUID landId;
+    private AusbildungsgangDto ausbildungsgang;
+    private LocalDate earliestActiveGesuchPeriodeStart;
+    private List<GesuchDashboardItemDto> gesuchs;
+    private UUID openAusbildungUnterbruchAntragId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B ausbildungBegin(String ausbildungBegin) {
+      this.ausbildungBegin = ausbildungBegin;
+      return self();
+    }
+    public B ausbildungEnd(String ausbildungEnd) {
+      this.ausbildungEnd = ausbildungEnd;
+      return self();
+    }
+    public B pensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum pensum) {
+      this.pensum = pensum;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.ausbildung.type.AusbildungsStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B editable(Boolean editable) {
+      this.editable = editable;
+      return self();
+    }
+    public B canCreateAusbildungUnterbruchAntrag(Boolean canCreateAusbildungUnterbruchAntrag) {
+      this.canCreateAusbildungUnterbruchAntrag = canCreateAusbildungUnterbruchAntrag;
+      return self();
+    }
+    public B hasPendingAusbildungUnterbruchAntrag(Boolean hasPendingAusbildungUnterbruchAntrag) {
+      this.hasPendingAusbildungUnterbruchAntrag = hasPendingAusbildungUnterbruchAntrag;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+      this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+      return self();
+    }
+    public B ausbildungNichtGefunden(Boolean ausbildungNichtGefunden) {
+      this.ausbildungNichtGefunden = ausbildungNichtGefunden;
+      return self();
+    }
+    public B besuchtBMS(Boolean besuchtBMS) {
+      this.besuchtBMS = besuchtBMS;
+      return self();
+    }
+    public B alternativeAusbildungsstaette(String alternativeAusbildungsstaette) {
+      this.alternativeAusbildungsstaette = alternativeAusbildungsstaette;
+      return self();
+    }
+    public B alternativeAusbildungsgang(String alternativeAusbildungsgang) {
+      this.alternativeAusbildungsgang = alternativeAusbildungsgang;
+      return self();
+    }
+    public B ausbildungsortPLZ(String ausbildungsortPLZ) {
+      this.ausbildungsortPLZ = ausbildungsortPLZ;
+      return self();
+    }
+    public B ausbildungsort(String ausbildungsort) {
+      this.ausbildungsort = ausbildungsort;
+      return self();
+    }
+    public B isAusbildungAusland(Boolean isAusbildungAusland) {
+      this.isAusbildungAusland = isAusbildungAusland;
+      return self();
+    }
+    public B landId(UUID landId) {
+      this.landId = landId;
+      return self();
+    }
+    public B ausbildungsgang(AusbildungsgangDto ausbildungsgang) {
+      this.ausbildungsgang = ausbildungsgang;
+      return self();
+    }
+    public B earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+      this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+      return self();
+    }
+    public B gesuchs(List<GesuchDashboardItemDto> gesuchs) {
+      this.gesuchs = gesuchs;
+      return self();
+    }
+    public B openAusbildungUnterbruchAntragId(UUID openAusbildungUnterbruchAntragId) {
+      this.openAusbildungUnterbruchAntragId = openAusbildungUnterbruchAntragId;
+      return self();
+    }
+  }
 }
 

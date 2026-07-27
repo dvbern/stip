@@ -38,8 +38,8 @@ public class GesuchsjahrService {
     private final GesuchsjahrRepository gesuchsjahrRepository;
 
     public GesuchsjahrDto getGesuchsjahr(final UUID gesuchsjahrId) {
-        final var gesuchsperiode = gesuchsjahrRepository.requireById(gesuchsjahrId);
-        return gesuchsjahrMapper.toDto(gesuchsperiode);
+        final var gesuchsjahr = gesuchsjahrRepository.requireById(gesuchsjahrId);
+        return gesuchsjahrMapper.toDto(gesuchsjahr);
     }
 
     public List<GesuchsjahrDto> getGesuchsjahre() {

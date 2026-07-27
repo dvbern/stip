@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchStateInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchStateInfoDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
@@ -29,6 +29,22 @@ public class GesuchStateInfoDto  implements Serializable {
   private @Valid Boolean canSBInitAenderung;
   private @Valid Boolean canFreigeben;
   private @Valid ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
+
+  protected GesuchStateInfoDto(GesuchStateInfoDtoBuilder<?, ?> b) {
+    this.gesuchStatus = b.gesuchStatus;
+    this.beschwerdeHaengig = b.beschwerdeHaengig;
+    this.canGSGetBerechnung = b.canGSGetBerechnung;
+    this.canSBGetBerechnung = b.canSBGetBerechnung;
+    this.canChangeGesuchsperiode = b.canChangeGesuchsperiode;
+    this.canTriggerManuellPruefen = b.canTriggerManuellPruefen;
+    this.canBearbeitungAbschliessen = b.canBearbeitungAbschliessen;
+    this.canSBInitAenderung = b.canSBInitAenderung;
+    this.canFreigeben = b.canFreigeben;
+    this.inBearbeitungSbReason = b.inBearbeitungSbReason;
+  }
+
+  public GesuchStateInfoDto() {
+  }
 
   /**
    **/
@@ -277,5 +293,78 @@ public class GesuchStateInfoDto  implements Serializable {
   }
 
 
+  public static GesuchStateInfoDtoBuilder<?, ?> builder() {
+    return new GesuchStateInfoDtoBuilderImpl();
+  }
+
+  private static final class GesuchStateInfoDtoBuilderImpl extends GesuchStateInfoDtoBuilder<GesuchStateInfoDto, GesuchStateInfoDtoBuilderImpl> {
+
+    @Override
+    protected GesuchStateInfoDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchStateInfoDto build() {
+      return new GesuchStateInfoDto(this);
+    }
+  }
+
+  public static abstract class GesuchStateInfoDtoBuilder<C extends GesuchStateInfoDto, B extends GesuchStateInfoDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+    private Boolean beschwerdeHaengig;
+    private Boolean canGSGetBerechnung;
+    private Boolean canSBGetBerechnung;
+    private Boolean canChangeGesuchsperiode;
+    private Boolean canTriggerManuellPruefen;
+    private Boolean canBearbeitungAbschliessen;
+    private Boolean canSBInitAenderung;
+    private Boolean canFreigeben;
+    private ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+      this.gesuchStatus = gesuchStatus;
+      return self();
+    }
+    public B beschwerdeHaengig(Boolean beschwerdeHaengig) {
+      this.beschwerdeHaengig = beschwerdeHaengig;
+      return self();
+    }
+    public B canGSGetBerechnung(Boolean canGSGetBerechnung) {
+      this.canGSGetBerechnung = canGSGetBerechnung;
+      return self();
+    }
+    public B canSBGetBerechnung(Boolean canSBGetBerechnung) {
+      this.canSBGetBerechnung = canSBGetBerechnung;
+      return self();
+    }
+    public B canChangeGesuchsperiode(Boolean canChangeGesuchsperiode) {
+      this.canChangeGesuchsperiode = canChangeGesuchsperiode;
+      return self();
+    }
+    public B canTriggerManuellPruefen(Boolean canTriggerManuellPruefen) {
+      this.canTriggerManuellPruefen = canTriggerManuellPruefen;
+      return self();
+    }
+    public B canBearbeitungAbschliessen(Boolean canBearbeitungAbschliessen) {
+      this.canBearbeitungAbschliessen = canBearbeitungAbschliessen;
+      return self();
+    }
+    public B canSBInitAenderung(Boolean canSBInitAenderung) {
+      this.canSBInitAenderung = canSBInitAenderung;
+      return self();
+    }
+    public B canFreigeben(Boolean canFreigeben) {
+      this.canFreigeben = canFreigeben;
+      return self();
+    }
+    public B inBearbeitungSbReason(ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason inBearbeitungSbReason) {
+      this.inBearbeitungSbReason = inBearbeitungSbReason;
+      return self();
+    }
+  }
 }
 

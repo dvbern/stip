@@ -91,7 +91,7 @@ public class BerechnungBlattPdfData<T> implements Serializable {
             .gesuchTrancheId(tranche.getGesuchTrancheId())
             .teilzeitKinderBeiPiaAnrechnen(tranche.getTeilzeitKinderBeiPiaAnrechnen())
             .berechnungsStammdaten(tranche.getBerechnungsStammdaten())
-            .berechnungsanteilKinder(tranche.getBerechnungsanteilKinder())
+            .berechnungsanteilKinder(tranche.getBerechnungsanteilKinderDerEltern())
             .berechnungsanteilKinderPia(tranche.getBerechnungsanteilKinderPia())
             .build();
     }

@@ -753,6 +753,7 @@ components:
         - alter
         - wohnsitzBei
         - ausbildungssituation
+        - geschwisterTyp
       type: object
       properties:
         nachname:
@@ -772,6 +773,8 @@ components:
           type: integer
         ausbildungssituation:
           $ref: './components/gesuch-formular.yaml#/Ausbildungssituation'
+        geschwisterTyp:
+          $ref: './components/gesuch-formular.yaml#/GeschwisterTyp'
     DemoAuszahlung:
       required:
         - nachname

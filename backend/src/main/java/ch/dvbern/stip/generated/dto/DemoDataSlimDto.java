@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataSlimDto  implements Serializable {
   private @Valid String id;
@@ -24,6 +24,17 @@ public class DemoDataSlimDto  implements Serializable {
   private @Valid String testFall;
   private @Valid String name;
   private @Valid String description;
+
+  protected DemoDataSlimDto(DemoDataSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.typ = b.typ;
+    this.testFall = b.testFall;
+    this.name = b.name;
+    this.description = b.description;
+  }
+
+  public DemoDataSlimDto() {
+  }
 
   /**
    **/
@@ -168,5 +179,53 @@ public class DemoDataSlimDto  implements Serializable {
   }
 
 
+  public static DemoDataSlimDtoBuilder<?, ?> builder() {
+    return new DemoDataSlimDtoBuilderImpl();
+  }
+
+  private static final class DemoDataSlimDtoBuilderImpl extends DemoDataSlimDtoBuilder<DemoDataSlimDto, DemoDataSlimDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataSlimDto build() {
+      return new DemoDataSlimDto(this);
+    }
+  }
+
+  public static abstract class DemoDataSlimDtoBuilder<C extends DemoDataSlimDto, B extends DemoDataSlimDtoBuilder<C, B>>  {
+    private String id;
+    private ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ;
+    private String testFall;
+    private String name;
+    private String description;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(String id) {
+      this.id = id;
+      return self();
+    }
+    public B typ(ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B testFall(String testFall) {
+      this.testFall = testFall;
+      return self();
+    }
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B description(String description) {
+      this.description = description;
+      return self();
+    }
+  }
 }
 

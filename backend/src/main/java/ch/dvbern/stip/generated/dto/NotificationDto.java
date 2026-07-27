@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("Notification")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NotificationDto  implements Serializable {
   private @Valid UUID id;
@@ -32,6 +32,21 @@ public class NotificationDto  implements Serializable {
   private @Valid Boolean read;
   private @Valid String notificationText;
   private @Valid UUID contextId;
+
+  protected NotificationDto(NotificationDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.notificationType = b.notificationType;
+    this.fallId = b.fallId;
+    this.userErstellt = b.userErstellt;
+    this.timestampErstellt = b.timestampErstellt;
+    this.absender = b.absender;
+    this.read = b.read;
+    this.notificationText = b.notificationText;
+    this.contextId = b.contextId;
+  }
+
+  public NotificationDto() {
+  }
 
   /**
    **/
@@ -258,5 +273,73 @@ public class NotificationDto  implements Serializable {
   }
 
 
+  public static NotificationDtoBuilder<?, ?> builder() {
+    return new NotificationDtoBuilderImpl();
+  }
+
+  private static final class NotificationDtoBuilderImpl extends NotificationDtoBuilder<NotificationDto, NotificationDtoBuilderImpl> {
+
+    @Override
+    protected NotificationDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public NotificationDto build() {
+      return new NotificationDto(this);
+    }
+  }
+
+  public static abstract class NotificationDtoBuilder<C extends NotificationDto, B extends NotificationDtoBuilder<C, B>>  {
+    private UUID id;
+    private ch.dvbern.stip.api.notification.type.NotificationType notificationType;
+    private UUID fallId;
+    private String userErstellt;
+    private LocalDate timestampErstellt;
+    private String absender;
+    private Boolean read;
+    private String notificationText;
+    private UUID contextId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B notificationType(ch.dvbern.stip.api.notification.type.NotificationType notificationType) {
+      this.notificationType = notificationType;
+      return self();
+    }
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B timestampErstellt(LocalDate timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B absender(String absender) {
+      this.absender = absender;
+      return self();
+    }
+    public B read(Boolean read) {
+      this.read = read;
+      return self();
+    }
+    public B notificationText(String notificationText) {
+      this.notificationText = notificationText;
+      return self();
+    }
+    public B contextId(UUID contextId) {
+      this.contextId = contextId;
+      return self();
+    }
+  }
 }
 

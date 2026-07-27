@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierungSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungSlimDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
   private @Valid SozialdienstSlimDto sozialdienst;
+
+  protected DelegierungSlimDto(DelegierungSlimDtoBuilder<?, ?> b) {
+    this.status = b.status;
+    this.sozialdienst = b.sozialdienst;
+  }
+
+  public DelegierungSlimDto() {
+  }
 
   /**
    **/
@@ -103,5 +111,38 @@ public class DelegierungSlimDto  implements Serializable {
   }
 
 
+  public static DelegierungSlimDtoBuilder<?, ?> builder() {
+    return new DelegierungSlimDtoBuilderImpl();
+  }
+
+  private static final class DelegierungSlimDtoBuilderImpl extends DelegierungSlimDtoBuilder<DelegierungSlimDto, DelegierungSlimDtoBuilderImpl> {
+
+    @Override
+    protected DelegierungSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DelegierungSlimDto build() {
+      return new DelegierungSlimDto(this);
+    }
+  }
+
+  public static abstract class DelegierungSlimDtoBuilder<C extends DelegierungSlimDto, B extends DelegierungSlimDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+    private SozialdienstSlimDto sozialdienst;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B sozialdienst(SozialdienstSlimDto sozialdienst) {
+      this.sozialdienst = sozialdienst;
+      return self();
+    }
+  }
 }
 

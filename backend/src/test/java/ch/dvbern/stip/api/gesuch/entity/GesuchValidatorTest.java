@@ -43,6 +43,7 @@ import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
 import ch.dvbern.stip.api.generator.depricated.entities.service.LandGenerator;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchformular.validation.GesuchEinreichenValidationGroup;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
@@ -410,6 +411,7 @@ class GesuchValidatorTest {
         // beim Wohnsitz != MUTTER_VATER muessen die Anteil Mutter und Vater Feldern null sein
         geschwister.setWohnsitz(Wohnsitz.FAMILIE);
         geschwister.setWohnsitzAnteilMutter(BigDecimal.TEN);
+        geschwister.setGeschwisterTyp(GeschwisterTyp.LEIBLICH);
         Set<Geschwister> geschwisterSet = new HashSet<>();
         geschwisterSet.add(geschwister);
         Gesuch gesuch = prepareDummyGesuch();
@@ -515,6 +517,7 @@ class GesuchValidatorTest {
         PersonInAusbildung personInAusbildung = new PersonInAusbildung();
         personInAusbildung.setGeburtsdatum(LocalDate.of(2000, 5, 12));
         personInAusbildung.setZivilstand(Zivilstand.LEDIG);
+        personInAusbildung.setWohnsitz(Wohnsitz.MUTTER_VATER);
         getGesuchTrancheFromGesuch(gesuch).getGesuchFormular().setPersonInAusbildung(personInAusbildung);
         Adresse adresse = new Adresse();
         Land land = new Land();

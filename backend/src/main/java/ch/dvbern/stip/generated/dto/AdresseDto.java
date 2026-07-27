@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Adresse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AdresseDto  implements Serializable {
   private @Valid UUID landId;
@@ -27,6 +27,19 @@ public class AdresseDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String coAdresse;
   private @Valid String hausnummer;
+
+  protected AdresseDto(AdresseDtoBuilder<?, ?> b) {
+    this.landId = b.landId;
+    this.strasse = b.strasse;
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.id = b.id;
+    this.coAdresse = b.coAdresse;
+    this.hausnummer = b.hausnummer;
+  }
+
+  public AdresseDto() {
+  }
 
   /**
    **/
@@ -210,5 +223,63 @@ public class AdresseDto  implements Serializable {
   }
 
 
+  public static AdresseDtoBuilder<?, ?> builder() {
+    return new AdresseDtoBuilderImpl();
+  }
+
+  private static final class AdresseDtoBuilderImpl extends AdresseDtoBuilder<AdresseDto, AdresseDtoBuilderImpl> {
+
+    @Override
+    protected AdresseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AdresseDto build() {
+      return new AdresseDto(this);
+    }
+  }
+
+  public static abstract class AdresseDtoBuilder<C extends AdresseDto, B extends AdresseDtoBuilder<C, B>>  {
+    private UUID landId;
+    private String strasse;
+    private String plz;
+    private String ort;
+    private UUID id;
+    private String coAdresse;
+    private String hausnummer;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B landId(UUID landId) {
+      this.landId = landId;
+      return self();
+    }
+    public B strasse(String strasse) {
+      this.strasse = strasse;
+      return self();
+    }
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B coAdresse(String coAdresse) {
+      this.coAdresse = coAdresse;
+      return self();
+    }
+    public B hausnummer(String hausnummer) {
+      this.hausnummer = hausnummer;
+      return self();
+    }
+  }
 }
 

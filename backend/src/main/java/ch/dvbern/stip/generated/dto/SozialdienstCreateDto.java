@@ -16,14 +16,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstCreateDto  implements Serializable {
   private @Valid String name;
   private @Valid ZahlungsverbindungDto zahlungsverbindung;
   private @Valid SozialdienstAdminDto sozialdienstAdmin;
+
+  protected SozialdienstCreateDto(SozialdienstCreateDtoBuilder<?, ?> b) {
+    this.name = b.name;
+    this.zahlungsverbindung = b.zahlungsverbindung;
+    this.sozialdienstAdmin = b.sozialdienstAdmin;
+  }
+
+  public SozialdienstCreateDto() {
+  }
 
   /**
    **/
@@ -126,5 +135,43 @@ public class SozialdienstCreateDto  implements Serializable {
   }
 
 
+  public static SozialdienstCreateDtoBuilder<?, ?> builder() {
+    return new SozialdienstCreateDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstCreateDtoBuilderImpl extends SozialdienstCreateDtoBuilder<SozialdienstCreateDto, SozialdienstCreateDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstCreateDto build() {
+      return new SozialdienstCreateDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstCreateDtoBuilder<C extends SozialdienstCreateDto, B extends SozialdienstCreateDtoBuilder<C, B>>  {
+    private String name;
+    private ZahlungsverbindungDto zahlungsverbindung;
+    private SozialdienstAdminDto sozialdienstAdmin;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B zahlungsverbindung(ZahlungsverbindungDto zahlungsverbindung) {
+      this.zahlungsverbindung = zahlungsverbindung;
+      return self();
+    }
+    public B sozialdienstAdmin(SozialdienstAdminDto sozialdienstAdmin) {
+      this.sozialdienstAdmin = sozialdienstAdmin;
+      return self();
+    }
+  }
 }
 

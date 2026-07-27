@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Gesuchsperiode")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeDto  implements Serializable {
   private @Valid UUID id;
@@ -36,6 +36,25 @@ public class GesuchsperiodeDto  implements Serializable {
   private @Valid Integer ausbKostenSekII;
   private @Valid Integer ausbKostenTertiaer;
   private @Valid Integer fristNachreichenDokumente;
+
+  protected GesuchsperiodeDto(GesuchsperiodeDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.gueltigkeitStatus = b.gueltigkeitStatus;
+    this.gesuchsperiodeStart = b.gesuchsperiodeStart;
+    this.gesuchsperiodeStopp = b.gesuchsperiodeStopp;
+    this.aufschaltterminStart = b.aufschaltterminStart;
+    this.einreichefristNormal = b.einreichefristNormal;
+    this.einreichefristReduziert = b.einreichefristReduziert;
+    this.gesuchsjahr = b.gesuchsjahr;
+    this.ausbKostenSekII = b.ausbKostenSekII;
+    this.ausbKostenTertiaer = b.ausbKostenTertiaer;
+    this.fristNachreichenDokumente = b.fristNachreichenDokumente;
+  }
+
+  public GesuchsperiodeDto() {
+  }
 
   /**
    **/
@@ -348,5 +367,93 @@ public class GesuchsperiodeDto  implements Serializable {
   }
 
 
+  public static GesuchsperiodeDtoBuilder<?, ?> builder() {
+    return new GesuchsperiodeDtoBuilderImpl();
+  }
+
+  private static final class GesuchsperiodeDtoBuilderImpl extends GesuchsperiodeDtoBuilder<GesuchsperiodeDto, GesuchsperiodeDtoBuilderImpl> {
+
+    @Override
+    protected GesuchsperiodeDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchsperiodeDto build() {
+      return new GesuchsperiodeDto(this);
+    }
+  }
+
+  public static abstract class GesuchsperiodeDtoBuilder<C extends GesuchsperiodeDto, B extends GesuchsperiodeDtoBuilder<C, B>>  {
+    private UUID id;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private GueltigkeitStatusDto gueltigkeitStatus;
+    private LocalDate gesuchsperiodeStart;
+    private LocalDate gesuchsperiodeStopp;
+    private LocalDate aufschaltterminStart;
+    private LocalDate einreichefristNormal;
+    private LocalDate einreichefristReduziert;
+    private GesuchsjahrDto gesuchsjahr;
+    private Integer ausbKostenSekII;
+    private Integer ausbKostenTertiaer;
+    private Integer fristNachreichenDokumente;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+      this.gueltigkeitStatus = gueltigkeitStatus;
+      return self();
+    }
+    public B gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+      this.gesuchsperiodeStart = gesuchsperiodeStart;
+      return self();
+    }
+    public B gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+      this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+      return self();
+    }
+    public B aufschaltterminStart(LocalDate aufschaltterminStart) {
+      this.aufschaltterminStart = aufschaltterminStart;
+      return self();
+    }
+    public B einreichefristNormal(LocalDate einreichefristNormal) {
+      this.einreichefristNormal = einreichefristNormal;
+      return self();
+    }
+    public B einreichefristReduziert(LocalDate einreichefristReduziert) {
+      this.einreichefristReduziert = einreichefristReduziert;
+      return self();
+    }
+    public B gesuchsjahr(GesuchsjahrDto gesuchsjahr) {
+      this.gesuchsjahr = gesuchsjahr;
+      return self();
+    }
+    public B ausbKostenSekII(Integer ausbKostenSekII) {
+      this.ausbKostenSekII = ausbKostenSekII;
+      return self();
+    }
+    public B ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+      this.ausbKostenTertiaer = ausbKostenTertiaer;
+      return self();
+    }
+    public B fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+      this.fristNachreichenDokumente = fristNachreichenDokumente;
+      return self();
+    }
+  }
 }
 

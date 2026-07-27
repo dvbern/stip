@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Benutzereinstellungen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BenutzereinstellungenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid Boolean digitaleKommunikation;
+
+  protected BenutzereinstellungenDto(BenutzereinstellungenDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.digitaleKommunikation = b.digitaleKommunikation;
+  }
+
+  public BenutzereinstellungenDto() {
+  }
 
   /**
    **/
@@ -101,5 +109,38 @@ public class BenutzereinstellungenDto  implements Serializable {
   }
 
 
+  public static BenutzereinstellungenDtoBuilder<?, ?> builder() {
+    return new BenutzereinstellungenDtoBuilderImpl();
+  }
+
+  private static final class BenutzereinstellungenDtoBuilderImpl extends BenutzereinstellungenDtoBuilder<BenutzereinstellungenDto, BenutzereinstellungenDtoBuilderImpl> {
+
+    @Override
+    protected BenutzereinstellungenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BenutzereinstellungenDto build() {
+      return new BenutzereinstellungenDto(this);
+    }
+  }
+
+  public static abstract class BenutzereinstellungenDtoBuilder<C extends BenutzereinstellungenDto, B extends BenutzereinstellungenDtoBuilder<C, B>>  {
+    private UUID id;
+    private Boolean digitaleKommunikation;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B digitaleKommunikation(Boolean digitaleKommunikation) {
+      this.digitaleKommunikation = digitaleKommunikation;
+      return self();
+    }
+  }
 }
 

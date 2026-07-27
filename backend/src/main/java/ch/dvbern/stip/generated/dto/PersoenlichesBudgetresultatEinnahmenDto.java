@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersoenlichesBudgetresultatEinnahmen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlichesBudgetresultatEinnahmenDto  implements Serializable {
   private @Valid Integer total;
@@ -46,6 +46,35 @@ public class PersoenlichesBudgetresultatEinnahmenDto  implements Serializable {
   private @Valid Integer anrechenbaresVermoegen;
   private @Valid Integer steuerbaresVermoegen;
   private @Valid Integer elterlicheLeistung;
+
+  protected PersoenlichesBudgetresultatEinnahmenDto(PersoenlichesBudgetresultatEinnahmenDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.nettoerwerbseinkommen = b.nettoerwerbseinkommen;
+    this.nettoerwerbseinkommenTotal = b.nettoerwerbseinkommenTotal;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.einnahmenBGSATotal = b.einnahmenBGSATotal;
+    this.kinderAusbildungszulagen = b.kinderAusbildungszulagen;
+    this.kinderAusbildungszulagenTotal = b.kinderAusbildungszulagenTotal;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.unterhaltsbeitraegeTotal = b.unterhaltsbeitraegeTotal;
+    this.eoLeistungen = b.eoLeistungen;
+    this.eoLeistungenTotal = b.eoLeistungenTotal;
+    this.taggelderAHVIV = b.taggelderAHVIV;
+    this.taggelderAHVIVTotal = b.taggelderAHVIVTotal;
+    this.renten = b.renten;
+    this.rentenTotal = b.rentenTotal;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.ergaenzungsleistungenTotal = b.ergaenzungsleistungenTotal;
+    this.beitraegeGemeindeInstitutionen = b.beitraegeGemeindeInstitutionen;
+    this.andereEinnahmen = b.andereEinnahmen;
+    this.andereEinnahmenTotal = b.andereEinnahmenTotal;
+    this.anrechenbaresVermoegen = b.anrechenbaresVermoegen;
+    this.steuerbaresVermoegen = b.steuerbaresVermoegen;
+    this.elterlicheLeistung = b.elterlicheLeistung;
+  }
+
+  public PersoenlichesBudgetresultatEinnahmenDto() {
+  }
 
   /**
    **/
@@ -712,5 +741,143 @@ public class PersoenlichesBudgetresultatEinnahmenDto  implements Serializable {
   }
 
 
+  public static PersoenlichesBudgetresultatEinnahmenDtoBuilder<?, ?> builder() {
+    return new PersoenlichesBudgetresultatEinnahmenDtoBuilderImpl();
+  }
+
+  private static final class PersoenlichesBudgetresultatEinnahmenDtoBuilderImpl extends PersoenlichesBudgetresultatEinnahmenDtoBuilder<PersoenlichesBudgetresultatEinnahmenDto, PersoenlichesBudgetresultatEinnahmenDtoBuilderImpl> {
+
+    @Override
+    protected PersoenlichesBudgetresultatEinnahmenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersoenlichesBudgetresultatEinnahmenDto build() {
+      return new PersoenlichesBudgetresultatEinnahmenDto(this);
+    }
+  }
+
+  public static abstract class PersoenlichesBudgetresultatEinnahmenDtoBuilder<C extends PersoenlichesBudgetresultatEinnahmenDto, B extends PersoenlichesBudgetresultatEinnahmenDtoBuilder<C, B>>  {
+    private Integer total;
+    private List<PersonValueItemDto> nettoerwerbseinkommen = new ArrayList<>();
+    private Integer nettoerwerbseinkommenTotal;
+    private List<PersonValueItemDto> einnahmenBGSA = new ArrayList<>();
+    private Integer einnahmenBGSATotal;
+    private List<PersonValueItemDto> kinderAusbildungszulagen = new ArrayList<>();
+    private Integer kinderAusbildungszulagenTotal;
+    private List<PersonValueItemDto> unterhaltsbeitraege = new ArrayList<>();
+    private Integer unterhaltsbeitraegeTotal;
+    private List<PersonValueItemDto> eoLeistungen = new ArrayList<>();
+    private Integer eoLeistungenTotal;
+    private List<PersonValueItemDto> taggelderAHVIV = new ArrayList<>();
+    private Integer taggelderAHVIVTotal;
+    private List<PersonValueItemDto> renten = new ArrayList<>();
+    private Integer rentenTotal;
+    private List<PersonValueItemDto> ergaenzungsleistungen = new ArrayList<>();
+    private Integer ergaenzungsleistungenTotal;
+    private Integer beitraegeGemeindeInstitutionen;
+    private List<PersonValueItemDto> andereEinnahmen = new ArrayList<>();
+    private Integer andereEinnahmenTotal;
+    private Integer anrechenbaresVermoegen;
+    private Integer steuerbaresVermoegen;
+    private Integer elterlicheLeistung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B nettoerwerbseinkommen(List<PersonValueItemDto> nettoerwerbseinkommen) {
+      this.nettoerwerbseinkommen = nettoerwerbseinkommen;
+      return self();
+    }
+    public B nettoerwerbseinkommenTotal(Integer nettoerwerbseinkommenTotal) {
+      this.nettoerwerbseinkommenTotal = nettoerwerbseinkommenTotal;
+      return self();
+    }
+    public B einnahmenBGSA(List<PersonValueItemDto> einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B einnahmenBGSATotal(Integer einnahmenBGSATotal) {
+      this.einnahmenBGSATotal = einnahmenBGSATotal;
+      return self();
+    }
+    public B kinderAusbildungszulagen(List<PersonValueItemDto> kinderAusbildungszulagen) {
+      this.kinderAusbildungszulagen = kinderAusbildungszulagen;
+      return self();
+    }
+    public B kinderAusbildungszulagenTotal(Integer kinderAusbildungszulagenTotal) {
+      this.kinderAusbildungszulagenTotal = kinderAusbildungszulagenTotal;
+      return self();
+    }
+    public B unterhaltsbeitraege(List<PersonValueItemDto> unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B unterhaltsbeitraegeTotal(Integer unterhaltsbeitraegeTotal) {
+      this.unterhaltsbeitraegeTotal = unterhaltsbeitraegeTotal;
+      return self();
+    }
+    public B eoLeistungen(List<PersonValueItemDto> eoLeistungen) {
+      this.eoLeistungen = eoLeistungen;
+      return self();
+    }
+    public B eoLeistungenTotal(Integer eoLeistungenTotal) {
+      this.eoLeistungenTotal = eoLeistungenTotal;
+      return self();
+    }
+    public B taggelderAHVIV(List<PersonValueItemDto> taggelderAHVIV) {
+      this.taggelderAHVIV = taggelderAHVIV;
+      return self();
+    }
+    public B taggelderAHVIVTotal(Integer taggelderAHVIVTotal) {
+      this.taggelderAHVIVTotal = taggelderAHVIVTotal;
+      return self();
+    }
+    public B renten(List<PersonValueItemDto> renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B rentenTotal(Integer rentenTotal) {
+      this.rentenTotal = rentenTotal;
+      return self();
+    }
+    public B ergaenzungsleistungen(List<PersonValueItemDto> ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B ergaenzungsleistungenTotal(Integer ergaenzungsleistungenTotal) {
+      this.ergaenzungsleistungenTotal = ergaenzungsleistungenTotal;
+      return self();
+    }
+    public B beitraegeGemeindeInstitutionen(Integer beitraegeGemeindeInstitutionen) {
+      this.beitraegeGemeindeInstitutionen = beitraegeGemeindeInstitutionen;
+      return self();
+    }
+    public B andereEinnahmen(List<PersonValueItemDto> andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+    public B andereEinnahmenTotal(Integer andereEinnahmenTotal) {
+      this.andereEinnahmenTotal = andereEinnahmenTotal;
+      return self();
+    }
+    public B anrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
+      this.anrechenbaresVermoegen = anrechenbaresVermoegen;
+      return self();
+    }
+    public B steuerbaresVermoegen(Integer steuerbaresVermoegen) {
+      this.steuerbaresVermoegen = steuerbaresVermoegen;
+      return self();
+    }
+    public B elterlicheLeistung(Integer elterlicheLeistung) {
+      this.elterlicheLeistung = elterlicheLeistung;
+      return self();
+    }
+  }
 }
 

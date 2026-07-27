@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckDatenschutzbrief")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckDatenschutzbriefDto  implements Serializable {
   private @Valid UUID id;
@@ -28,6 +28,20 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid UUID gesuchTrancheId;
   private @Valid ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+
+  protected MassendruckDatenschutzbriefDto(MassendruckDatenschutzbriefDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.isVersendet = b.isVersendet;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.gesuchNummer = b.gesuchNummer;
+    this.gesuchId = b.gesuchId;
+    this.gesuchTrancheId = b.gesuchTrancheId;
+    this.elternTyp = b.elternTyp;
+  }
+
+  public MassendruckDatenschutzbriefDto() {
+  }
 
   /**
    **/
@@ -235,5 +249,68 @@ public class MassendruckDatenschutzbriefDto  implements Serializable {
   }
 
 
+  public static MassendruckDatenschutzbriefDtoBuilder<?, ?> builder() {
+    return new MassendruckDatenschutzbriefDtoBuilderImpl();
+  }
+
+  private static final class MassendruckDatenschutzbriefDtoBuilderImpl extends MassendruckDatenschutzbriefDtoBuilder<MassendruckDatenschutzbriefDto, MassendruckDatenschutzbriefDtoBuilderImpl> {
+
+    @Override
+    protected MassendruckDatenschutzbriefDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public MassendruckDatenschutzbriefDto build() {
+      return new MassendruckDatenschutzbriefDto(this);
+    }
+  }
+
+  public static abstract class MassendruckDatenschutzbriefDtoBuilder<C extends MassendruckDatenschutzbriefDto, B extends MassendruckDatenschutzbriefDtoBuilder<C, B>>  {
+    private UUID id;
+    private Boolean isVersendet;
+    private String nachname;
+    private String vorname;
+    private String gesuchNummer;
+    private UUID gesuchId;
+    private UUID gesuchTrancheId;
+    private ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B isVersendet(Boolean isVersendet) {
+      this.isVersendet = isVersendet;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B gesuchNummer(String gesuchNummer) {
+      this.gesuchNummer = gesuchNummer;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+    public B elternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
+      this.elternTyp = elternTyp;
+      return self();
+    }
+  }
 }
 

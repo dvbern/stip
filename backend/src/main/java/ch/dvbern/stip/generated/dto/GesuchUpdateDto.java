@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchUpdateDto  implements Serializable {
   private @Valid GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
   private @Valid String nachfristDokumente;
+
+  protected GesuchUpdateDto(GesuchUpdateDtoBuilder<?, ?> b) {
+    this.gesuchTrancheToWorkWith = b.gesuchTrancheToWorkWith;
+    this.nachfristDokumente = b.nachfristDokumente;
+  }
+
+  public GesuchUpdateDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class GesuchUpdateDto  implements Serializable {
   }
 
 
+  public static GesuchUpdateDtoBuilder<?, ?> builder() {
+    return new GesuchUpdateDtoBuilderImpl();
+  }
+
+  private static final class GesuchUpdateDtoBuilderImpl extends GesuchUpdateDtoBuilder<GesuchUpdateDto, GesuchUpdateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchUpdateDto build() {
+      return new GesuchUpdateDto(this);
+    }
+  }
+
+  public static abstract class GesuchUpdateDtoBuilder<C extends GesuchUpdateDto, B extends GesuchUpdateDtoBuilder<C, B>>  {
+    private GesuchTrancheUpdateDto gesuchTrancheToWorkWith;
+    private String nachfristDokumente;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchTrancheToWorkWith(GesuchTrancheUpdateDto gesuchTrancheToWorkWith) {
+      this.gesuchTrancheToWorkWith = gesuchTrancheToWorkWith;
+      return self();
+    }
+    public B nachfristDokumente(String nachfristDokumente) {
+      this.nachfristDokumente = nachfristDokumente;
+      return self();
+    }
+  }
 }
 

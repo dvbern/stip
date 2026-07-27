@@ -45,7 +45,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 
     @Test
     void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNotNullShouldNotBeValid() {
-        Zivilstand.getZivilstandsNoPartnerschaft().forEach(zivilstand -> {
+        Zivilstand.ZIVILSTANDS_NO_PARTNERSCHAFT.forEach(zivilstand -> {
             GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
             assertThat(validator.isValid(gesuchFormular, null), is(false));
         });
@@ -53,7 +53,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 
     @Test
     void personInAusbildungLedigGeschiedenAufgeloestOrVerwittwetAndPartnerNullShouldBeValid() {
-        Zivilstand.getZivilstandsNoPartnerschaft().forEach(zivilstand -> {
+        Zivilstand.ZIVILSTANDS_NO_PARTNERSCHAFT.forEach(zivilstand -> {
             GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
             assertThat(validator.isValid(gesuchFormular, null), is(true));
         });
@@ -61,7 +61,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 
     @Test
     void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNullShouldNotBeValid() {
-        Zivilstand.getZivilstandsWithPartnerschaft().forEach(zivilstand -> {
+        Zivilstand.ZIVILSTANDS_PARTNERSCHAFT.forEach(zivilstand -> {
             GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, null);
             assertThat(validator.isValid(gesuchFormular, TestUtil.initValidatorContext()), is(false));
         });
@@ -69,7 +69,7 @@ class PartnerNullRequiredWhenAllinstehendConstraintValidatorTest {
 
     @Test
     void personInAusbildungVerheiratetKonkubinatPartnerschaftAndPartnerNotNullShouldBeValid() {
-        Zivilstand.getZivilstandsWithPartnerschaft().forEach(zivilstand -> {
+        Zivilstand.ZIVILSTANDS_PARTNERSCHAFT.forEach(zivilstand -> {
             GesuchFormular gesuchFormular = preapreGesuchFormularWithZivilstand(zivilstand, new Partner());
             assertThat(validator.isValid(gesuchFormular, null), is(true));
         });

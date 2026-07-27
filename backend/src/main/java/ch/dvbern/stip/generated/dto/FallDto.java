@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Fall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String fallNummer;
   private @Valid String tenant;
+
+  protected FallDto(FallDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.fallNummer = b.fallNummer;
+    this.tenant = b.tenant;
+  }
+
+  public FallDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class FallDto  implements Serializable {
   }
 
 
+  public static FallDtoBuilder<?, ?> builder() {
+    return new FallDtoBuilderImpl();
+  }
+
+  private static final class FallDtoBuilderImpl extends FallDtoBuilder<FallDto, FallDtoBuilderImpl> {
+
+    @Override
+    protected FallDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallDto build() {
+      return new FallDto(this);
+    }
+  }
+
+  public static abstract class FallDtoBuilder<C extends FallDto, B extends FallDtoBuilder<C, B>>  {
+    private UUID id;
+    private String fallNummer;
+    private String tenant;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B tenant(String tenant) {
+      this.tenant = tenant;
+      return self();
+    }
+  }
 }
 

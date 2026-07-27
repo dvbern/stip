@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterUpdateDto  implements Serializable {
   private @Valid String vorname;
@@ -33,6 +33,22 @@ public class SachbearbeiterUpdateDto  implements Serializable {
   private @Valid BenutzereinstellungenUpdateDto benutzereinstellungen;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
   private @Valid String redirectUri;
+
+  protected SachbearbeiterUpdateDto(SachbearbeiterUpdateDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.telefonnummer = b.telefonnummer;
+    this.email = b.email;
+    this.funktionDe = b.funktionDe;
+    this.funktionFr = b.funktionFr;
+    this.sachbearbeiterRollen = b.sachbearbeiterRollen;
+    this.benutzereinstellungen = b.benutzereinstellungen;
+    this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
+    this.redirectUri = b.redirectUri;
+  }
+
+  public SachbearbeiterUpdateDto() {
+  }
 
   /**
    **/
@@ -295,5 +311,78 @@ public class SachbearbeiterUpdateDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterUpdateDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterUpdateDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterUpdateDtoBuilderImpl extends SachbearbeiterUpdateDtoBuilder<SachbearbeiterUpdateDto, SachbearbeiterUpdateDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterUpdateDto build() {
+      return new SachbearbeiterUpdateDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterUpdateDtoBuilder<C extends SachbearbeiterUpdateDto, B extends SachbearbeiterUpdateDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String telefonnummer;
+    private String email;
+    private String funktionDe;
+    private String funktionFr;
+    private List<String> sachbearbeiterRollen = new ArrayList<>();
+    private BenutzereinstellungenUpdateDto benutzereinstellungen;
+    private Boolean nutzungsbedingungenAkzeptiert;
+    private String redirectUri;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B telefonnummer(String telefonnummer) {
+      this.telefonnummer = telefonnummer;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B funktionDe(String funktionDe) {
+      this.funktionDe = funktionDe;
+      return self();
+    }
+    public B funktionFr(String funktionFr) {
+      this.funktionFr = funktionFr;
+      return self();
+    }
+    public B sachbearbeiterRollen(List<String> sachbearbeiterRollen) {
+      this.sachbearbeiterRollen = sachbearbeiterRollen;
+      return self();
+    }
+    public B benutzereinstellungen(BenutzereinstellungenUpdateDto benutzereinstellungen) {
+      this.benutzereinstellungen = benutzereinstellungen;
+      return self();
+    }
+    public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+      this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+      return self();
+    }
+    public B redirectUri(String redirectUri) {
+      this.redirectUri = redirectUri;
+      return self();
+    }
+  }
 }
 

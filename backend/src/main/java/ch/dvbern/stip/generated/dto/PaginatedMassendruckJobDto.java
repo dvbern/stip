@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedMassendruckJob")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedMassendruckJobDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<MassendruckJobDto> entries;
+
+  protected PaginatedMassendruckJobDto(PaginatedMassendruckJobDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedMassendruckJobDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedMassendruckJobDto  implements Serializable {
   }
 
 
+  public static PaginatedMassendruckJobDtoBuilder<?, ?> builder() {
+    return new PaginatedMassendruckJobDtoBuilderImpl();
+  }
+
+  private static final class PaginatedMassendruckJobDtoBuilderImpl extends PaginatedMassendruckJobDtoBuilder<PaginatedMassendruckJobDto, PaginatedMassendruckJobDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedMassendruckJobDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedMassendruckJobDto build() {
+      return new PaginatedMassendruckJobDto(this);
+    }
+  }
+
+  public static abstract class PaginatedMassendruckJobDtoBuilder<C extends PaginatedMassendruckJobDto, B extends PaginatedMassendruckJobDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<MassendruckJobDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<MassendruckJobDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

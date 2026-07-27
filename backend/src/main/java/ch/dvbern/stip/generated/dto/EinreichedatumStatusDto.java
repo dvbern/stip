@@ -14,12 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("EinreichedatumStatus")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class EinreichedatumStatusDto  implements Serializable {
   private @Valid Boolean canAendern;
+
+  protected EinreichedatumStatusDto(EinreichedatumStatusDtoBuilder<?, ?> b) {
+    this.canAendern = b.canAendern;
+  }
+
+  public EinreichedatumStatusDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class EinreichedatumStatusDto  implements Serializable {
   }
 
 
+  public static EinreichedatumStatusDtoBuilder<?, ?> builder() {
+    return new EinreichedatumStatusDtoBuilderImpl();
+  }
+
+  private static final class EinreichedatumStatusDtoBuilderImpl extends EinreichedatumStatusDtoBuilder<EinreichedatumStatusDto, EinreichedatumStatusDtoBuilderImpl> {
+
+    @Override
+    protected EinreichedatumStatusDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public EinreichedatumStatusDto build() {
+      return new EinreichedatumStatusDto(this);
+    }
+  }
+
+  public static abstract class EinreichedatumStatusDtoBuilder<C extends EinreichedatumStatusDto, B extends EinreichedatumStatusDtoBuilder<C, B>>  {
+    private Boolean canAendern;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B canAendern(Boolean canAendern) {
+      this.canAendern = canAendern;
+      return self();
+    }
+  }
 }
 

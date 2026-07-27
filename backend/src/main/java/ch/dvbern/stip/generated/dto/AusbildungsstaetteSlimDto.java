@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsstaetteSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteSlimDto  implements Serializable {
   private @Valid UUID id;
@@ -29,6 +29,17 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   private @Valid String nameFr;
   private @Valid List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
   private @Valid Boolean aktiv;
+
+  protected AusbildungsstaetteSlimDto(AusbildungsstaetteSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.nameDe = b.nameDe;
+    this.nameFr = b.nameFr;
+    this.ausbildungsgaenge = b.ausbildungsgaenge;
+    this.aktiv = b.aktiv;
+  }
+
+  public AusbildungsstaetteSlimDto() {
+  }
 
   /**
    **/
@@ -189,5 +200,53 @@ public class AusbildungsstaetteSlimDto  implements Serializable {
   }
 
 
+  public static AusbildungsstaetteSlimDtoBuilder<?, ?> builder() {
+    return new AusbildungsstaetteSlimDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsstaetteSlimDtoBuilderImpl extends AusbildungsstaetteSlimDtoBuilder<AusbildungsstaetteSlimDto, AusbildungsstaetteSlimDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsstaetteSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsstaetteSlimDto build() {
+      return new AusbildungsstaetteSlimDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsstaetteSlimDtoBuilder<C extends AusbildungsstaetteSlimDto, B extends AusbildungsstaetteSlimDtoBuilder<C, B>>  {
+    private UUID id;
+    private String nameDe;
+    private String nameFr;
+    private List<AusbildungsgangDataDto> ausbildungsgaenge = new ArrayList<>();
+    private Boolean aktiv;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B nameDe(String nameDe) {
+      this.nameDe = nameDe;
+      return self();
+    }
+    public B nameFr(String nameFr) {
+      this.nameFr = nameFr;
+      return self();
+    }
+    public B ausbildungsgaenge(List<AusbildungsgangDataDto> ausbildungsgaenge) {
+      this.ausbildungsgaenge = ausbildungsgaenge;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+  }
 }
 

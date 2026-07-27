@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersonValueItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersonValueItemDto  implements Serializable {
   private @Valid String vorname;
   private @Valid Integer value;
+
+  protected PersonValueItemDto(PersonValueItemDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.value = b.value;
+  }
+
+  public PersonValueItemDto() {
+  }
 
   /**
    **/
@@ -100,5 +108,38 @@ public class PersonValueItemDto  implements Serializable {
   }
 
 
+  public static PersonValueItemDtoBuilder<?, ?> builder() {
+    return new PersonValueItemDtoBuilderImpl();
+  }
+
+  private static final class PersonValueItemDtoBuilderImpl extends PersonValueItemDtoBuilder<PersonValueItemDto, PersonValueItemDtoBuilderImpl> {
+
+    @Override
+    protected PersonValueItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersonValueItemDto build() {
+      return new PersonValueItemDto(this);
+    }
+  }
+
+  public static abstract class PersonValueItemDtoBuilder<C extends PersonValueItemDto, B extends PersonValueItemDtoBuilder<C, B>>  {
+    private String vorname;
+    private Integer value;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B value(Integer value) {
+      this.value = value;
+      return self();
+    }
+  }
 }
 

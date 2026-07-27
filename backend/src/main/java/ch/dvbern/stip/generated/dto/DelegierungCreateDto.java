@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierungCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungCreateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.Anrede anrede;
@@ -29,6 +29,20 @@ public class DelegierungCreateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
   private @Valid AdresseDto adresse;
   private @Valid Boolean nutzungsbedingungenAkzeptiert;
+
+  protected DelegierungCreateDto(DelegierungCreateDtoBuilder<?, ?> b) {
+    this.anrede = b.anrede;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.email = b.email;
+    this.sprache = b.sprache;
+    this.adresse = b.adresse;
+    this.nutzungsbedingungenAkzeptiert = b.nutzungsbedingungenAkzeptiert;
+  }
+
+  public DelegierungCreateDto() {
+  }
 
   /**
    **/
@@ -236,5 +250,68 @@ public class DelegierungCreateDto  implements Serializable {
   }
 
 
+  public static DelegierungCreateDtoBuilder<?, ?> builder() {
+    return new DelegierungCreateDtoBuilderImpl();
+  }
+
+  private static final class DelegierungCreateDtoBuilderImpl extends DelegierungCreateDtoBuilder<DelegierungCreateDto, DelegierungCreateDtoBuilderImpl> {
+
+    @Override
+    protected DelegierungCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DelegierungCreateDto build() {
+      return new DelegierungCreateDto(this);
+    }
+  }
+
+  public static abstract class DelegierungCreateDtoBuilder<C extends DelegierungCreateDto, B extends DelegierungCreateDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.common.type.Anrede anrede;
+    private String nachname;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private String email;
+    private ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
+    private AdresseDto adresse;
+    private Boolean nutzungsbedingungenAkzeptiert;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B anrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
+      this.anrede = anrede;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B sprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
+      this.sprache = sprache;
+      return self();
+    }
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B nutzungsbedingungenAkzeptiert(Boolean nutzungsbedingungenAkzeptiert) {
+      this.nutzungsbedingungenAkzeptiert = nutzungsbedingungenAkzeptiert;
+      return self();
+    }
+  }
 }
 

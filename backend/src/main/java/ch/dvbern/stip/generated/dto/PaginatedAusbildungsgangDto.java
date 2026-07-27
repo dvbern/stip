@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedAusbildungsgang")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedAusbildungsgangDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<AusbildungsgangDto> entries;
+
+  protected PaginatedAusbildungsgangDto(PaginatedAusbildungsgangDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedAusbildungsgangDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedAusbildungsgangDto  implements Serializable {
   }
 
 
+  public static PaginatedAusbildungsgangDtoBuilder<?, ?> builder() {
+    return new PaginatedAusbildungsgangDtoBuilderImpl();
+  }
+
+  private static final class PaginatedAusbildungsgangDtoBuilderImpl extends PaginatedAusbildungsgangDtoBuilder<PaginatedAusbildungsgangDto, PaginatedAusbildungsgangDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedAusbildungsgangDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedAusbildungsgangDto build() {
+      return new PaginatedAusbildungsgangDto(this);
+    }
+  }
+
+  public static abstract class PaginatedAusbildungsgangDtoBuilder<C extends PaginatedAusbildungsgangDto, B extends PaginatedAusbildungsgangDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<AusbildungsgangDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<AusbildungsgangDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

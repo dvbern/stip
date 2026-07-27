@@ -19,12 +19,15 @@ package ch.dvbern.stip.api.config.type;
 
 import java.util.Optional;
 
+import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.integration.pdf.domain.model.PdfAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
 public interface TenantPortConfig {
     Steuerdaten steuerdaten();
+
+    Berechnung berechnung();
 
     Pdf pdf();
 
@@ -39,5 +42,16 @@ public interface TenantPortConfig {
 
     interface Pdf extends Port {
         Optional<PdfAdapterType> adapterType();
+    }
+
+    interface Berechnung extends Port {
+        @WithDefault("bern")
+        BerechnungAdapterType adapterType();
+
+        @WithDefault("1")
+        int majorVersion();
+
+        @WithDefault("0")
+        int minorVersion();
     }
 }

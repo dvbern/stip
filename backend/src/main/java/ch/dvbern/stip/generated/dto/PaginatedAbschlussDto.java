@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedAbschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedAbschlussDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
   private @Valid List<AbschlussDto> entries;
+
+  protected PaginatedAbschlussDto(PaginatedAbschlussDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+    this.entries = b.entries;
+  }
+
+  public PaginatedAbschlussDto() {
+  }
 
   /**
    **/
@@ -162,5 +172,48 @@ public class PaginatedAbschlussDto  implements Serializable {
   }
 
 
+  public static PaginatedAbschlussDtoBuilder<?, ?> builder() {
+    return new PaginatedAbschlussDtoBuilderImpl();
+  }
+
+  private static final class PaginatedAbschlussDtoBuilderImpl extends PaginatedAbschlussDtoBuilder<PaginatedAbschlussDto, PaginatedAbschlussDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedAbschlussDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedAbschlussDto build() {
+      return new PaginatedAbschlussDto(this);
+    }
+  }
+
+  public static abstract class PaginatedAbschlussDtoBuilder<C extends PaginatedAbschlussDto, B extends PaginatedAbschlussDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    private List<AbschlussDto> entries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+    public B entries(List<AbschlussDto> entries) {
+      this.entries = entries;
+      return self();
+    }
+  }
 }
 

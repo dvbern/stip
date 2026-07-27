@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantFeatures")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantFeaturesDto  implements Serializable {
   private @Valid TenantFeatureDto steuerdaten;
+
+  protected TenantFeaturesDto(TenantFeaturesDtoBuilder<?, ?> b) {
+    this.steuerdaten = b.steuerdaten;
+  }
+
+  public TenantFeaturesDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class TenantFeaturesDto  implements Serializable {
   }
 
 
+  public static TenantFeaturesDtoBuilder<?, ?> builder() {
+    return new TenantFeaturesDtoBuilderImpl();
+  }
+
+  private static final class TenantFeaturesDtoBuilderImpl extends TenantFeaturesDtoBuilder<TenantFeaturesDto, TenantFeaturesDtoBuilderImpl> {
+
+    @Override
+    protected TenantFeaturesDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public TenantFeaturesDto build() {
+      return new TenantFeaturesDto(this);
+    }
+  }
+
+  public static abstract class TenantFeaturesDtoBuilder<C extends TenantFeaturesDto, B extends TenantFeaturesDtoBuilder<C, B>>  {
+    private TenantFeatureDto steuerdaten;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B steuerdaten(TenantFeatureDto steuerdaten) {
+      this.steuerdaten = steuerdaten;
+      return self();
+    }
+  }
 }
 

@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterGesuchDokumentCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterGesuchDokumentCreateDto  implements Serializable {
   private @Valid String type;
   private @Valid String description;
+
+  protected SachbearbeiterGesuchDokumentCreateDto(SachbearbeiterGesuchDokumentCreateDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.description = b.description;
+  }
+
+  public SachbearbeiterGesuchDokumentCreateDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class SachbearbeiterGesuchDokumentCreateDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterGesuchDokumentCreateDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterGesuchDokumentCreateDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterGesuchDokumentCreateDtoBuilderImpl extends SachbearbeiterGesuchDokumentCreateDtoBuilder<SachbearbeiterGesuchDokumentCreateDto, SachbearbeiterGesuchDokumentCreateDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterGesuchDokumentCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterGesuchDokumentCreateDto build() {
+      return new SachbearbeiterGesuchDokumentCreateDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterGesuchDokumentCreateDtoBuilder<C extends SachbearbeiterGesuchDokumentCreateDto, B extends SachbearbeiterGesuchDokumentCreateDtoBuilder<C, B>>  {
+    private String type;
+    private String description;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(String type) {
+      this.type = type;
+      return self();
+    }
+    public B description(String description) {
+      this.description = description;
+      return self();
+    }
+  }
 }
 

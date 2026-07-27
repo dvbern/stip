@@ -251,6 +251,7 @@ GeschwisterUpdate:
     - wohnsitz
     - vorname
     - nachname
+    - geschwisterTyp
     - geburtsdatum
     - ausbildungssituation
   type: object
@@ -278,9 +279,10 @@ GeschwisterUpdate:
       type: number
     nachname:
       type: string
+    geschwisterTyp:
+      $ref: '#/GeschwisterTyp'
     hidden:
       type: boolean
-
 LebenslaufItem:
   title: Root Type for Lebenslauf
   type: object
@@ -470,6 +472,12 @@ SteuererklaerungUpdate:
     andereEinnahmen:
       type: integer
 
+GeschwisterTyp:
+  enum:
+    - LEIBLICH
+    - STIEF
+    - HALB
+  type: string
 Niederlassungsstatus:
   enum:
     - SAISONARBEITEND_A

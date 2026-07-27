@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DokumenteToUpload")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DokumenteToUploadDto  implements Serializable {
   private @Valid List<CustomDokumentTypDto> customDokumentTyps;
@@ -31,6 +31,19 @@ public class DokumenteToUploadDto  implements Serializable {
   private @Valid Boolean sbCanFehlendeDokumenteUebermitteln;
   private @Valid Boolean gsCanDokumenteUebermitteln;
   private @Valid Boolean sbCanUploadUnterschriftenblatt;
+
+  protected DokumenteToUploadDto(DokumenteToUploadDtoBuilder<?, ?> b) {
+    this.customDokumentTyps = b.customDokumentTyps;
+    this.required = b.required;
+    this.requiredRefs = b.requiredRefs;
+    this.unterschriftenblaetter = b.unterschriftenblaetter;
+    this.sbCanFehlendeDokumenteUebermitteln = b.sbCanFehlendeDokumenteUebermitteln;
+    this.gsCanDokumenteUebermitteln = b.gsCanDokumenteUebermitteln;
+    this.sbCanUploadUnterschriftenblatt = b.sbCanUploadUnterschriftenblatt;
+  }
+
+  public DokumenteToUploadDto() {
+  }
 
   /**
    **/
@@ -274,5 +287,63 @@ public class DokumenteToUploadDto  implements Serializable {
   }
 
 
+  public static DokumenteToUploadDtoBuilder<?, ?> builder() {
+    return new DokumenteToUploadDtoBuilderImpl();
+  }
+
+  private static final class DokumenteToUploadDtoBuilderImpl extends DokumenteToUploadDtoBuilder<DokumenteToUploadDto, DokumenteToUploadDtoBuilderImpl> {
+
+    @Override
+    protected DokumenteToUploadDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DokumenteToUploadDto build() {
+      return new DokumenteToUploadDto(this);
+    }
+  }
+
+  public static abstract class DokumenteToUploadDtoBuilder<C extends DokumenteToUploadDto, B extends DokumenteToUploadDtoBuilder<C, B>>  {
+    private List<CustomDokumentTypDto> customDokumentTyps;
+    private List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required;
+    private List<GesuchDokumentRefDto> requiredRefs;
+    private List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter;
+    private Boolean sbCanFehlendeDokumenteUebermitteln;
+    private Boolean gsCanDokumenteUebermitteln;
+    private Boolean sbCanUploadUnterschriftenblatt;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B customDokumentTyps(List<CustomDokumentTypDto> customDokumentTyps) {
+      this.customDokumentTyps = customDokumentTyps;
+      return self();
+    }
+    public B required(List<ch.dvbern.stip.api.dokument.type.DokumentTyp> required) {
+      this.required = required;
+      return self();
+    }
+    public B requiredRefs(List<GesuchDokumentRefDto> requiredRefs) {
+      this.requiredRefs = requiredRefs;
+      return self();
+    }
+    public B unterschriftenblaetter(List<ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp> unterschriftenblaetter) {
+      this.unterschriftenblaetter = unterschriftenblaetter;
+      return self();
+    }
+    public B sbCanFehlendeDokumenteUebermitteln(Boolean sbCanFehlendeDokumenteUebermitteln) {
+      this.sbCanFehlendeDokumenteUebermitteln = sbCanFehlendeDokumenteUebermitteln;
+      return self();
+    }
+    public B gsCanDokumenteUebermitteln(Boolean gsCanDokumenteUebermitteln) {
+      this.gsCanDokumenteUebermitteln = gsCanDokumenteUebermitteln;
+      return self();
+    }
+    public B sbCanUploadUnterschriftenblatt(Boolean sbCanUploadUnterschriftenblatt) {
+      this.sbCanUploadUnterschriftenblatt = sbCanUploadUnterschriftenblatt;
+      return self();
+    }
+  }
 }
 
