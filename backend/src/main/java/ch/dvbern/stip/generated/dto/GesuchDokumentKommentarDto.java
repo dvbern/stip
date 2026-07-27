@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("GesuchDokumentKommentar")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid UUID gesuchTrancheId;
@@ -28,6 +28,17 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid String userErstellt;
   private @Valid LocalDate timestampErstellt;
+
+  protected GesuchDokumentKommentarDto(GesuchDokumentKommentarDtoBuilder<?, ?> b) {
+    this.gesuchTrancheId = b.gesuchTrancheId;
+    this.gesuchDokumentId = b.gesuchDokumentId;
+    this.kommentar = b.kommentar;
+    this.userErstellt = b.userErstellt;
+    this.timestampErstellt = b.timestampErstellt;
+  }
+
+  public GesuchDokumentKommentarDto() {
+  }
 
   /**
    **/
@@ -169,5 +180,53 @@ public class GesuchDokumentKommentarDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentKommentarDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentKommentarDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentKommentarDtoBuilderImpl extends GesuchDokumentKommentarDtoBuilder<GesuchDokumentKommentarDto, GesuchDokumentKommentarDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentKommentarDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentKommentarDto build() {
+      return new GesuchDokumentKommentarDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentKommentarDtoBuilder<C extends GesuchDokumentKommentarDto, B extends GesuchDokumentKommentarDtoBuilder<C, B>>  {
+    private UUID gesuchTrancheId;
+    private UUID gesuchDokumentId;
+    private String kommentar;
+    private String userErstellt;
+    private LocalDate timestampErstellt;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+    public B gesuchDokumentId(UUID gesuchDokumentId) {
+      this.gesuchDokumentId = gesuchDokumentId;
+      return self();
+    }
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B timestampErstellt(LocalDate timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+  }
 }
 

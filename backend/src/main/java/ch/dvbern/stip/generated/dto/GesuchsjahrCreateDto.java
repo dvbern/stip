@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchsjahrCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsjahrCreateDto  implements Serializable {
   private @Valid String bezeichnungDe;
   private @Valid String bezeichnungFr;
   private @Valid Integer technischesJahr;
+
+  protected GesuchsjahrCreateDto(GesuchsjahrCreateDtoBuilder<?, ?> b) {
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.technischesJahr = b.technischesJahr;
+  }
+
+  public GesuchsjahrCreateDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class GesuchsjahrCreateDto  implements Serializable {
   }
 
 
+  public static GesuchsjahrCreateDtoBuilder<?, ?> builder() {
+    return new GesuchsjahrCreateDtoBuilderImpl();
+  }
+
+  private static final class GesuchsjahrCreateDtoBuilderImpl extends GesuchsjahrCreateDtoBuilder<GesuchsjahrCreateDto, GesuchsjahrCreateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchsjahrCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchsjahrCreateDto build() {
+      return new GesuchsjahrCreateDto(this);
+    }
+  }
+
+  public static abstract class GesuchsjahrCreateDtoBuilder<C extends GesuchsjahrCreateDto, B extends GesuchsjahrCreateDtoBuilder<C, B>>  {
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private Integer technischesJahr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B technischesJahr(Integer technischesJahr) {
+      this.technischesJahr = technischesJahr;
+      return self();
+    }
+  }
 }
 

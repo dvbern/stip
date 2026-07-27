@@ -725,6 +725,7 @@
   "shared.form.shared.wohnsitzanteil.label": "Habite chez qui et combien?",
   "shared.form.shared.wohnsitzanteil.mutter": "Chez la mère",
   "shared.form.shared.wohnsitzanteil.vater": "Chez le père",
+  "shared.form.shared.wohnsitzanteil.error.atLeastOne": "Au moins un des champs est obligatoire",
 
   "shared.export.shared.sozialversicherungsnummer": "Numéro AVS",
   "shared.export.lebenslauf.ausbildungen": "Formations",
@@ -1075,6 +1076,10 @@
   "shared.form.geschwister.name": "Nom",
   "shared.form.geschwister.geburtsdatum.label": "Date de naissance",
   "shared.form.geschwister.wohnsitz.label": "Habite chez",
+  "shared.form.geschwister.typ.label": "Lien de parenté",
+  "shared.form.geschwister.typ.LEIBLICH": "Frères et sœurs",
+  "shared.form.geschwister.typ.STIEF": "Frères et sœurs par alliance",
+  "shared.form.geschwister.typ.HALB": "Demi-frères et demi-sœurs",
   "shared.form.geschwister.ausbildungssituation.label": "Situation de la formation",
   "shared.form.geschwister.ausbildungssituation.select.IN_AUSBILDUNG": "En formation post-obligatoire",
   "shared.form.geschwister.ausbildungssituation.select.KEINE": "Aucune des options",

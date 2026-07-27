@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { GeschwisterTyp } from './geschwisterTyp';
 import { Ausbildungssituation } from './ausbildungssituation';
 import { Wohnsitz } from './wohnsitz';
 
@@ -21,6 +22,7 @@ export interface DemoGeschwister {
     wohnsitzAnteilVater?: number;
     wohnsitzAnteilMutter?: number;
     ausbildungssituation: Ausbildungssituation;
+    geschwisterTyp: GeschwisterTyp;
 }
 
 

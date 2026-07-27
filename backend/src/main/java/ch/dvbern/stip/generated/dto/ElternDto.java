@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Eltern")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ElternDto  implements Serializable {
   private @Valid String vorname;
@@ -37,6 +37,27 @@ public class ElternDto  implements Serializable {
   private @Valid UUID id;
   private @Valid Integer wohnkosten;
   private @Valid Boolean wiederverheiratet;
+
+  protected ElternDto(ElternDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.adresse = b.adresse;
+    this.identischerZivilrechtlicherWohnsitz = b.identischerZivilrechtlicherWohnsitz;
+    this.telefonnummer = b.telefonnummer;
+    this.geburtsdatum = b.geburtsdatum;
+    this.ausweisbFluechtling = b.ausweisbFluechtling;
+    this.elternTyp = b.elternTyp;
+    this.nachname = b.nachname;
+    this.sozialhilfebeitraege = b.sozialhilfebeitraege;
+    this.identischerZivilrechtlicherWohnsitzOrt = b.identischerZivilrechtlicherWohnsitzOrt;
+    this.identischerZivilrechtlicherWohnsitzPLZ = b.identischerZivilrechtlicherWohnsitzPLZ;
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.id = b.id;
+    this.wohnkosten = b.wohnkosten;
+    this.wiederverheiratet = b.wiederverheiratet;
+  }
+
+  public ElternDto() {
+  }
 
   /**
    **/
@@ -389,5 +410,103 @@ public class ElternDto  implements Serializable {
   }
 
 
+  public static ElternDtoBuilder<?, ?> builder() {
+    return new ElternDtoBuilderImpl();
+  }
+
+  private static final class ElternDtoBuilderImpl extends ElternDtoBuilder<ElternDto, ElternDtoBuilderImpl> {
+
+    @Override
+    protected ElternDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ElternDto build() {
+      return new ElternDto(this);
+    }
+  }
+
+  public static abstract class ElternDtoBuilder<C extends ElternDto, B extends ElternDtoBuilder<C, B>>  {
+    private String vorname;
+    private AdresseDto adresse;
+    private Boolean identischerZivilrechtlicherWohnsitz;
+    private String telefonnummer;
+    private LocalDate geburtsdatum;
+    private Boolean ausweisbFluechtling;
+    private ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp;
+    private String nachname;
+    private Boolean sozialhilfebeitraege;
+    private String identischerZivilrechtlicherWohnsitzOrt;
+    private String identischerZivilrechtlicherWohnsitzPLZ;
+    private String sozialversicherungsnummer;
+    private UUID id;
+    private Integer wohnkosten;
+    private Boolean wiederverheiratet;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+      this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
+      return self();
+    }
+    public B telefonnummer(String telefonnummer) {
+      this.telefonnummer = telefonnummer;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B ausweisbFluechtling(Boolean ausweisbFluechtling) {
+      this.ausweisbFluechtling = ausweisbFluechtling;
+      return self();
+    }
+    public B elternTyp(ch.dvbern.stip.api.eltern.type.ElternTyp elternTyp) {
+      this.elternTyp = elternTyp;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+      this.sozialhilfebeitraege = sozialhilfebeitraege;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+      this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+      this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
+      return self();
+    }
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B wohnkosten(Integer wohnkosten) {
+      this.wohnkosten = wohnkosten;
+      return self();
+    }
+    public B wiederverheiratet(Boolean wiederverheiratet) {
+      this.wiederverheiratet = wiederverheiratet;
+      return self();
+    }
+  }
 }
 

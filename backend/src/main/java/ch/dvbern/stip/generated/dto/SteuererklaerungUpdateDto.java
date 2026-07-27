@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SteuererklaerungUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SteuererklaerungUpdateDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
@@ -26,6 +26,19 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   private @Valid Integer renten;
   private @Valid Integer einnahmenBGSA;
   private @Valid Integer andereEinnahmen;
+
+  protected SteuererklaerungUpdateDto(SteuererklaerungUpdateDtoBuilder<?, ?> b) {
+    this.steuerdatenTyp = b.steuerdatenTyp;
+    this.steuererklaerungInBern = b.steuererklaerungInBern;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.renten = b.renten;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.andereEinnahmen = b.andereEinnahmen;
+  }
+
+  public SteuererklaerungUpdateDto() {
+  }
 
   /**
    **/
@@ -207,5 +220,63 @@ public class SteuererklaerungUpdateDto  implements Serializable {
   }
 
 
+  public static SteuererklaerungUpdateDtoBuilder<?, ?> builder() {
+    return new SteuererklaerungUpdateDtoBuilderImpl();
+  }
+
+  private static final class SteuererklaerungUpdateDtoBuilderImpl extends SteuererklaerungUpdateDtoBuilder<SteuererklaerungUpdateDto, SteuererklaerungUpdateDtoBuilderImpl> {
+
+    @Override
+    protected SteuererklaerungUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SteuererklaerungUpdateDto build() {
+      return new SteuererklaerungUpdateDto(this);
+    }
+  }
+
+  public static abstract class SteuererklaerungUpdateDtoBuilder<C extends SteuererklaerungUpdateDto, B extends SteuererklaerungUpdateDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+    private Boolean steuererklaerungInBern;
+    private Integer ergaenzungsleistungen;
+    private Integer unterhaltsbeitraege;
+    private Integer renten;
+    private Integer einnahmenBGSA;
+    private Integer andereEinnahmen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+      this.steuerdatenTyp = steuerdatenTyp;
+      return self();
+    }
+    public B steuererklaerungInBern(Boolean steuererklaerungInBern) {
+      this.steuererklaerungInBern = steuererklaerungInBern;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B einnahmenBGSA(Integer einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+  }
 }
 

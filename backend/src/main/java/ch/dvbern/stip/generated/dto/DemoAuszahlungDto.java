@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoAuszahlung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoAuszahlungDto  implements Serializable {
   private @Valid String nachname;
@@ -28,6 +28,21 @@ public class DemoAuszahlungDto  implements Serializable {
   private @Valid String land;
   private @Valid String iban;
   private @Valid String coAdresse;
+
+  protected DemoAuszahlungDto(DemoAuszahlungDtoBuilder<?, ?> b) {
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.strasse = b.strasse;
+    this.hausnummer = b.hausnummer;
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.land = b.land;
+    this.iban = b.iban;
+    this.coAdresse = b.coAdresse;
+  }
+
+  public DemoAuszahlungDto() {
+  }
 
   /**
    **/
@@ -255,5 +270,73 @@ public class DemoAuszahlungDto  implements Serializable {
   }
 
 
+  public static DemoAuszahlungDtoBuilder<?, ?> builder() {
+    return new DemoAuszahlungDtoBuilderImpl();
+  }
+
+  private static final class DemoAuszahlungDtoBuilderImpl extends DemoAuszahlungDtoBuilder<DemoAuszahlungDto, DemoAuszahlungDtoBuilderImpl> {
+
+    @Override
+    protected DemoAuszahlungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoAuszahlungDto build() {
+      return new DemoAuszahlungDto(this);
+    }
+  }
+
+  public static abstract class DemoAuszahlungDtoBuilder<C extends DemoAuszahlungDto, B extends DemoAuszahlungDtoBuilder<C, B>>  {
+    private String nachname;
+    private String vorname;
+    private String strasse;
+    private String hausnummer;
+    private String plz;
+    private String ort;
+    private String land;
+    private String iban;
+    private String coAdresse;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B strasse(String strasse) {
+      this.strasse = strasse;
+      return self();
+    }
+    public B hausnummer(String hausnummer) {
+      this.hausnummer = hausnummer;
+      return self();
+    }
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B land(String land) {
+      this.land = land;
+      return self();
+    }
+    public B iban(String iban) {
+      this.iban = iban;
+      return self();
+    }
+    public B coAdresse(String coAdresse) {
+      this.coAdresse = coAdresse;
+      return self();
+    }
+  }
 }
 

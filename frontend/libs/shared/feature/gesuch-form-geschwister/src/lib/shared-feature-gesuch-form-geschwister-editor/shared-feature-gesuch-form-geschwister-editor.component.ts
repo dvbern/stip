@@ -23,10 +23,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 
 import { EinreichenStore } from '@dv/shared/data-access/einreichen';
 import { selectSharedDataAccessGesuchsView } from '@dv/shared/data-access/gesuch';
@@ -34,6 +33,7 @@ import { selectLanguage } from '@dv/shared/data-access/language';
 import {
   Ausbildungssituation,
   DokumentTyp,
+  GeschwisterTyp,
   GeschwisterUpdate,
   Wohnsitz,
 } from '@dv/shared/model/gesuch';
@@ -41,6 +41,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiAppDatePipe } from '@dv/shared/ui/app-date-pipe';
 import {
   SharedUiFormFieldDirective,
@@ -58,7 +59,10 @@ import {
   addWohnsitzControls,
   prepareWohnsitzForm,
 } from '@dv/shared/ui/wohnsitz-splitter';
-import { SharedUtilFormService } from '@dv/shared/util/form';
+import {
+  SharedUtilFormService,
+  convertTempFormToRealValues,
+} from '@dv/shared/util/form';
 import { observeUnsavedChanges } from '@dv/shared/util/unsaved-changes';
 import {
   maxDateValidatorForLocale,
@@ -79,7 +83,6 @@ const MEDIUM_AGE = 20;
     CommonModule,
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
-    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -96,6 +99,7 @@ const MEDIUM_AGE = 20;
     SharedUiMaxLengthDirective,
     SharedUiAppDatePipe,
     SharedUiIfSachbearbeiterDirective,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-feature-gesuch-form-geschwister-editor.component.html',
   styleUrls: ['./shared-feature-gesuch-form-geschwister-editor.component.scss'],
@@ -128,6 +132,7 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
 
   protected readonly ausbildungssituationValues =
     Object.values(Ausbildungssituation);
+  protected readonly geschwisterTyps = Object.values(GeschwisterTyp);
   languageSig = this.store.selectSignal(selectLanguage);
   viewSig = this.store.selectSignal(selectSharedDataAccessGesuchsView);
   gotReenabled$ = new Subject<object>();
@@ -164,14 +169,32 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       '' as Ausbildungssituation,
       [Validators.required],
     ),
+    geschwisterTyp: [<GeschwisterTyp | null>null, Validators.required],
     hidden: [false, [Validators.required]],
   });
 
+  isNotLeiblichGeschwisterSig = toSignal(
+    this.form.controls.geschwisterTyp.valueChanges.pipe(
+      map((geschwisterTyp) => geschwisterTyp != 'LEIBLICH'),
+    ),
+    { initialValue: false },
+  );
+  wohnsitzViewSig = computed(() => {
+    const view = this.viewSig();
+    const isNotLeiblichGeschwister = this.isNotLeiblichGeschwisterSig();
+
+    return {
+      ...view,
+      allowOnlyOne: isNotLeiblichGeschwister,
+    };
+  });
   wohnsitzHelper = prepareWohnsitzForm({
     projector: (formular) =>
-      formular?.geschwisters?.find((g) => g.id === this.geschwisterSig().id),
+      formular?.geschwisters?.find(
+        (g) => g.id === untracked(this.geschwisterSig).id,
+      ),
     form: this.form.controls,
-    viewSig: this.viewSig,
+    viewSig: this.wohnsitzViewSig,
     refreshSig: this.gotReenabledSig,
   });
   ausbildungssituationSig = toSignal(
@@ -208,6 +231,8 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
         ),
         ...this.wohnsitzHelper.wohnsitzAnteileAsString(),
       });
+    });
+    effect(() => {
       this.formUtils.invalidateControlIfValidationFails(
         this.form,
         ['wohnsitz'],
@@ -233,14 +258,17 @@ export class SharedFeatureGesuchFormGeschwisterEditorComponent {
       subYears(new Date(), MEDIUM_AGE),
     );
     if (this.form.valid && geburtsdatum) {
+      const formValue = convertTempFormToRealValues(this.form, [
+        'geschwisterTyp',
+      ]);
       this.saveTriggered.emit({
-        ...this.form.getRawValue(),
+        ...formValue,
         id: this.geschwisterSig().id,
         entryId: this.entryIdSig(),
         geburtsdatum,
-        wohnsitz: this.form.getRawValue().wohnsitz as Wohnsitz,
+        wohnsitz: formValue.wohnsitz as Wohnsitz,
         ...this.wohnsitzHelper.wohnsitzAnteileFromNumber(),
-        hidden: this.form.getRawValue().hidden,
+        hidden: formValue.hidden,
       });
       this.form.markAsPristine();
     }

@@ -14,12 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FileDownloadToken")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FileDownloadTokenDto  implements Serializable {
   private @Valid String token;
+
+  protected FileDownloadTokenDto(FileDownloadTokenDtoBuilder<?, ?> b) {
+    this.token = b.token;
+  }
+
+  public FileDownloadTokenDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class FileDownloadTokenDto  implements Serializable {
   }
 
 
+  public static FileDownloadTokenDtoBuilder<?, ?> builder() {
+    return new FileDownloadTokenDtoBuilderImpl();
+  }
+
+  private static final class FileDownloadTokenDtoBuilderImpl extends FileDownloadTokenDtoBuilder<FileDownloadTokenDto, FileDownloadTokenDtoBuilderImpl> {
+
+    @Override
+    protected FileDownloadTokenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FileDownloadTokenDto build() {
+      return new FileDownloadTokenDto(this);
+    }
+  }
+
+  public static abstract class FileDownloadTokenDtoBuilder<C extends FileDownloadTokenDto, B extends FileDownloadTokenDtoBuilder<C, B>>  {
+    private String token;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B token(String token) {
+      this.token = token;
+      return self();
+    }
+  }
 }
 

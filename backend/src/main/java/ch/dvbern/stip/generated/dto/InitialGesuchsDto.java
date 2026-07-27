@@ -16,13 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("InitialGesuchs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class InitialGesuchsDto  implements Serializable {
   private @Valid GesuchTrancheSlimDto eingereichtGesuch;
   private @Valid VerfuegtGesuchDto verfuegtGesuch;
+
+  protected InitialGesuchsDto(InitialGesuchsDtoBuilder<?, ?> b) {
+    this.eingereichtGesuch = b.eingereichtGesuch;
+    this.verfuegtGesuch = b.verfuegtGesuch;
+  }
+
+  public InitialGesuchsDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class InitialGesuchsDto  implements Serializable {
   }
 
 
+  public static InitialGesuchsDtoBuilder<?, ?> builder() {
+    return new InitialGesuchsDtoBuilderImpl();
+  }
+
+  private static final class InitialGesuchsDtoBuilderImpl extends InitialGesuchsDtoBuilder<InitialGesuchsDto, InitialGesuchsDtoBuilderImpl> {
+
+    @Override
+    protected InitialGesuchsDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public InitialGesuchsDto build() {
+      return new InitialGesuchsDto(this);
+    }
+  }
+
+  public static abstract class InitialGesuchsDtoBuilder<C extends InitialGesuchsDto, B extends InitialGesuchsDtoBuilder<C, B>>  {
+    private GesuchTrancheSlimDto eingereichtGesuch;
+    private VerfuegtGesuchDto verfuegtGesuch;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B eingereichtGesuch(GesuchTrancheSlimDto eingereichtGesuch) {
+      this.eingereichtGesuch = eingereichtGesuch;
+      return self();
+    }
+    public B verfuegtGesuch(VerfuegtGesuchDto verfuegtGesuch) {
+      this.verfuegtGesuch = verfuegtGesuch;
+      return self();
+    }
+  }
 }
 

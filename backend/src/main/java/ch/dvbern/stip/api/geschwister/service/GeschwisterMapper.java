@@ -31,6 +31,7 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(config = MappingConfig.class)
 public interface GeschwisterMapper {
+
     Geschwister toEntity(GeschwisterDto geschwisterDto);
 
     GeschwisterDto toDto(Geschwister geschwister);

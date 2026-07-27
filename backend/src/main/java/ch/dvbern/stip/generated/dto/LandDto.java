@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Land")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class LandDto  implements Serializable {
   private @Valid String laendercodeBfs;
@@ -30,6 +30,22 @@ public class LandDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String iso2code;
   private @Valid String iso3code;
+
+  protected LandDto(LandDtoBuilder<?, ?> b) {
+    this.laendercodeBfs = b.laendercodeBfs;
+    this.isEuEfta = b.isEuEfta;
+    this.eintragGueltig = b.eintragGueltig;
+    this.deKurzform = b.deKurzform;
+    this.frKurzform = b.frKurzform;
+    this.itKurzform = b.itKurzform;
+    this.enKurzform = b.enKurzform;
+    this.id = b.id;
+    this.iso2code = b.iso2code;
+    this.iso3code = b.iso3code;
+  }
+
+  public LandDto() {
+  }
 
   /**
    **/
@@ -276,5 +292,78 @@ public class LandDto  implements Serializable {
   }
 
 
+  public static LandDtoBuilder<?, ?> builder() {
+    return new LandDtoBuilderImpl();
+  }
+
+  private static final class LandDtoBuilderImpl extends LandDtoBuilder<LandDto, LandDtoBuilderImpl> {
+
+    @Override
+    protected LandDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public LandDto build() {
+      return new LandDto(this);
+    }
+  }
+
+  public static abstract class LandDtoBuilder<C extends LandDto, B extends LandDtoBuilder<C, B>>  {
+    private String laendercodeBfs;
+    private Boolean isEuEfta;
+    private Boolean eintragGueltig;
+    private String deKurzform;
+    private String frKurzform;
+    private String itKurzform;
+    private String enKurzform;
+    private UUID id;
+    private String iso2code;
+    private String iso3code;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B laendercodeBfs(String laendercodeBfs) {
+      this.laendercodeBfs = laendercodeBfs;
+      return self();
+    }
+    public B isEuEfta(Boolean isEuEfta) {
+      this.isEuEfta = isEuEfta;
+      return self();
+    }
+    public B eintragGueltig(Boolean eintragGueltig) {
+      this.eintragGueltig = eintragGueltig;
+      return self();
+    }
+    public B deKurzform(String deKurzform) {
+      this.deKurzform = deKurzform;
+      return self();
+    }
+    public B frKurzform(String frKurzform) {
+      this.frKurzform = frKurzform;
+      return self();
+    }
+    public B itKurzform(String itKurzform) {
+      this.itKurzform = itKurzform;
+      return self();
+    }
+    public B enKurzform(String enKurzform) {
+      this.enKurzform = enKurzform;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B iso2code(String iso2code) {
+      this.iso2code = iso2code;
+      return self();
+    }
+    public B iso3code(String iso3code) {
+      this.iso3code = iso3code;
+      return self();
+    }
+  }
 }
 

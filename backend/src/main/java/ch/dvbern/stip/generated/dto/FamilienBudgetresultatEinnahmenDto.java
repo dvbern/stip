@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FamilienBudgetresultatEinnahmen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   private @Valid Integer total;
@@ -33,6 +33,26 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   private @Valid Integer zwischentotal;
   private @Valid Integer anrechenbaresVermoegen;
   private @Valid Integer steuerbaresVermoegen;
+
+  protected FamilienBudgetresultatEinnahmenDto(FamilienBudgetresultatEinnahmenDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.totalEinkuenfte = b.totalEinkuenfte;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.andereEinnahmen = b.andereEinnahmen;
+    this.eigenmietwert = b.eigenmietwert;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.sauele3 = b.sauele3;
+    this.sauele2 = b.sauele2;
+    this.renten = b.renten;
+    this.einkommensfreibetrag = b.einkommensfreibetrag;
+    this.zwischentotal = b.zwischentotal;
+    this.anrechenbaresVermoegen = b.anrechenbaresVermoegen;
+    this.steuerbaresVermoegen = b.steuerbaresVermoegen;
+  }
+
+  public FamilienBudgetresultatEinnahmenDto() {
+  }
 
   /**
    **/
@@ -366,5 +386,98 @@ public class FamilienBudgetresultatEinnahmenDto  implements Serializable {
   }
 
 
+  public static FamilienBudgetresultatEinnahmenDtoBuilder<?, ?> builder() {
+    return new FamilienBudgetresultatEinnahmenDtoBuilderImpl();
+  }
+
+  private static final class FamilienBudgetresultatEinnahmenDtoBuilderImpl extends FamilienBudgetresultatEinnahmenDtoBuilder<FamilienBudgetresultatEinnahmenDto, FamilienBudgetresultatEinnahmenDtoBuilderImpl> {
+
+    @Override
+    protected FamilienBudgetresultatEinnahmenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FamilienBudgetresultatEinnahmenDto build() {
+      return new FamilienBudgetresultatEinnahmenDto(this);
+    }
+  }
+
+  public static abstract class FamilienBudgetresultatEinnahmenDtoBuilder<C extends FamilienBudgetresultatEinnahmenDto, B extends FamilienBudgetresultatEinnahmenDtoBuilder<C, B>>  {
+    private Integer total;
+    private Integer totalEinkuenfte;
+    private Integer einnahmenBGSA;
+    private Integer ergaenzungsleistungen;
+    private Integer andereEinnahmen;
+    private Integer eigenmietwert;
+    private Integer unterhaltsbeitraege;
+    private Integer sauele3;
+    private Integer sauele2;
+    private Integer renten;
+    private Integer einkommensfreibetrag;
+    private Integer zwischentotal;
+    private Integer anrechenbaresVermoegen;
+    private Integer steuerbaresVermoegen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B totalEinkuenfte(Integer totalEinkuenfte) {
+      this.totalEinkuenfte = totalEinkuenfte;
+      return self();
+    }
+    public B einnahmenBGSA(Integer einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+    public B eigenmietwert(Integer eigenmietwert) {
+      this.eigenmietwert = eigenmietwert;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B sauele3(Integer sauele3) {
+      this.sauele3 = sauele3;
+      return self();
+    }
+    public B sauele2(Integer sauele2) {
+      this.sauele2 = sauele2;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B einkommensfreibetrag(Integer einkommensfreibetrag) {
+      this.einkommensfreibetrag = einkommensfreibetrag;
+      return self();
+    }
+    public B zwischentotal(Integer zwischentotal) {
+      this.zwischentotal = zwischentotal;
+      return self();
+    }
+    public B anrechenbaresVermoegen(Integer anrechenbaresVermoegen) {
+      this.anrechenbaresVermoegen = anrechenbaresVermoegen;
+      return self();
+    }
+    public B steuerbaresVermoegen(Integer steuerbaresVermoegen) {
+      this.steuerbaresVermoegen = steuerbaresVermoegen;
+      return self();
+    }
+  }
 }
 

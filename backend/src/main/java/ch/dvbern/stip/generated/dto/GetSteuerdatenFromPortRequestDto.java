@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GetSteuerdatenFromPortRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GetSteuerdatenFromPortRequestDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
   private @Valid Integer steuerjahr;
+
+  protected GetSteuerdatenFromPortRequestDto(GetSteuerdatenFromPortRequestDtoBuilder<?, ?> b) {
+    this.steuerdatenTyp = b.steuerdatenTyp;
+    this.steuerjahr = b.steuerjahr;
+  }
+
+  public GetSteuerdatenFromPortRequestDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class GetSteuerdatenFromPortRequestDto  implements Serializable {
   }
 
 
+  public static GetSteuerdatenFromPortRequestDtoBuilder<?, ?> builder() {
+    return new GetSteuerdatenFromPortRequestDtoBuilderImpl();
+  }
+
+  private static final class GetSteuerdatenFromPortRequestDtoBuilderImpl extends GetSteuerdatenFromPortRequestDtoBuilder<GetSteuerdatenFromPortRequestDto, GetSteuerdatenFromPortRequestDtoBuilderImpl> {
+
+    @Override
+    protected GetSteuerdatenFromPortRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GetSteuerdatenFromPortRequestDto build() {
+      return new GetSteuerdatenFromPortRequestDto(this);
+    }
+  }
+
+  public static abstract class GetSteuerdatenFromPortRequestDtoBuilder<C extends GetSteuerdatenFromPortRequestDto, B extends GetSteuerdatenFromPortRequestDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp;
+    private Integer steuerjahr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B steuerdatenTyp(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp steuerdatenTyp) {
+      this.steuerdatenTyp = steuerdatenTyp;
+      return self();
+    }
+    public B steuerjahr(Integer steuerjahr) {
+      this.steuerjahr = steuerjahr;
+      return self();
+    }
+  }
 }
 

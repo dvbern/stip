@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoSteuererklaerung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoSteuererklaerungDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
@@ -26,6 +26,19 @@ public class DemoSteuererklaerungDto  implements Serializable {
   private @Valid Integer ergaenzungsleistungen;
   private @Valid Integer einnahmenBGSA;
   private @Valid Integer andereEinnahmen;
+
+  protected DemoSteuererklaerungDto(DemoSteuererklaerungDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.steuererklaerungInBern = b.steuererklaerungInBern;
+    this.unterhaltsbeitraege = b.unterhaltsbeitraege;
+    this.renten = b.renten;
+    this.ergaenzungsleistungen = b.ergaenzungsleistungen;
+    this.einnahmenBGSA = b.einnahmenBGSA;
+    this.andereEinnahmen = b.andereEinnahmen;
+  }
+
+  public DemoSteuererklaerungDto() {
+  }
 
   /**
    **/
@@ -212,5 +225,63 @@ public class DemoSteuererklaerungDto  implements Serializable {
   }
 
 
+  public static DemoSteuererklaerungDtoBuilder<?, ?> builder() {
+    return new DemoSteuererklaerungDtoBuilderImpl();
+  }
+
+  private static final class DemoSteuererklaerungDtoBuilderImpl extends DemoSteuererklaerungDtoBuilder<DemoSteuererklaerungDto, DemoSteuererklaerungDtoBuilderImpl> {
+
+    @Override
+    protected DemoSteuererklaerungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoSteuererklaerungDto build() {
+      return new DemoSteuererklaerungDto(this);
+    }
+  }
+
+  public static abstract class DemoSteuererklaerungDtoBuilder<C extends DemoSteuererklaerungDto, B extends DemoSteuererklaerungDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
+    private Boolean steuererklaerungInBern;
+    private Integer unterhaltsbeitraege;
+    private Integer renten;
+    private Integer ergaenzungsleistungen;
+    private Integer einnahmenBGSA;
+    private Integer andereEinnahmen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
+      this.type = type;
+      return self();
+    }
+    public B steuererklaerungInBern(Boolean steuererklaerungInBern) {
+      this.steuererklaerungInBern = steuererklaerungInBern;
+      return self();
+    }
+    public B unterhaltsbeitraege(Integer unterhaltsbeitraege) {
+      this.unterhaltsbeitraege = unterhaltsbeitraege;
+      return self();
+    }
+    public B renten(Integer renten) {
+      this.renten = renten;
+      return self();
+    }
+    public B ergaenzungsleistungen(Integer ergaenzungsleistungen) {
+      this.ergaenzungsleistungen = ergaenzungsleistungen;
+      return self();
+    }
+    public B einnahmenBGSA(Integer einnahmenBGSA) {
+      this.einnahmenBGSA = einnahmenBGSA;
+      return self();
+    }
+    public B andereEinnahmen(Integer andereEinnahmen) {
+      this.andereEinnahmen = andereEinnahmen;
+      return self();
+    }
+  }
 }
 

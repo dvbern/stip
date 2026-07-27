@@ -16,14 +16,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("plz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PlzDto  implements Serializable {
   private @Valid String plz;
   private @Valid String ort;
   private @Valid String kantonskuerzel;
+
+  protected PlzDto(PlzDtoBuilder<?, ?> b) {
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.kantonskuerzel = b.kantonskuerzel;
+  }
+
+  public PlzDto() {
+  }
 
   /**
    **/
@@ -126,5 +135,43 @@ public class PlzDto  implements Serializable {
   }
 
 
+  public static PlzDtoBuilder<?, ?> builder() {
+    return new PlzDtoBuilderImpl();
+  }
+
+  private static final class PlzDtoBuilderImpl extends PlzDtoBuilder<PlzDto, PlzDtoBuilderImpl> {
+
+    @Override
+    protected PlzDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PlzDto build() {
+      return new PlzDto(this);
+    }
+  }
+
+  public static abstract class PlzDtoBuilder<C extends PlzDto, B extends PlzDtoBuilder<C, B>>  {
+    private String plz;
+    private String ort;
+    private String kantonskuerzel;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B kantonskuerzel(String kantonskuerzel) {
+      this.kantonskuerzel = kantonskuerzel;
+      return self();
+    }
+  }
 }
 

@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungsgangSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsgangSlimDto  implements Serializable {
   private @Valid UUID id;
   private @Valid UUID abschlussId;
   private @Valid UUID ausbildungsstaetteId;
+
+  protected AusbildungsgangSlimDto(AusbildungsgangSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.abschlussId = b.abschlussId;
+    this.ausbildungsstaetteId = b.ausbildungsstaetteId;
+  }
+
+  public AusbildungsgangSlimDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class AusbildungsgangSlimDto  implements Serializable {
   }
 
 
+  public static AusbildungsgangSlimDtoBuilder<?, ?> builder() {
+    return new AusbildungsgangSlimDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsgangSlimDtoBuilderImpl extends AusbildungsgangSlimDtoBuilder<AusbildungsgangSlimDto, AusbildungsgangSlimDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsgangSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsgangSlimDto build() {
+      return new AusbildungsgangSlimDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsgangSlimDtoBuilder<C extends AusbildungsgangSlimDto, B extends AusbildungsgangSlimDtoBuilder<C, B>>  {
+    private UUID id;
+    private UUID abschlussId;
+    private UUID ausbildungsstaetteId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B abschlussId(UUID abschlussId) {
+      this.abschlussId = abschlussId;
+      return self();
+    }
+    public B ausbildungsstaetteId(UUID ausbildungsstaetteId) {
+      this.ausbildungsstaetteId = ausbildungsstaetteId;
+      return self();
+    }
+  }
 }
 

@@ -6,15 +6,16 @@ import {
   OnInit,
   effect,
   inject,
+  input,
   runInInjectionContext,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -31,7 +32,7 @@ import { maskitoPercent } from '@dv/shared/util/maskito-util';
     ReactiveFormsModule,
     SharedUiFormFieldDirective,
     SharedUiFormMessageErrorDirective,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl: './shared-ui-percentage-splitter.component.html',
   styleUrls: ['./shared-ui-percentage-splitter.component.scss'],
@@ -45,31 +46,37 @@ export class SharedUiPercentageSplitterComponent implements OnInit {
   @Input({ required: true })
   controlB!: FormControl<string | undefined>;
 
+  allowOnlyOneSig = input<boolean>(false);
+
   private injector = inject(Injector);
 
   public ngOnInit(): void {
     runInInjectionContext(this.injector, () => {
-      const controlAChangedSig = toSignal(this.controlA.valueChanges, {
-        initialValue: undefined,
-      });
-      const controlBChangedSig = toSignal(this.controlB.valueChanges, {
-        initialValue: undefined,
-      });
+      [
+        [this.controlA, this.controlB],
+        [this.controlB, this.controlA],
+      ].forEach(([control, secondaryControl]) => {
+        const controlChangedSig = toSignal(control.valueChanges, {
+          initialValue: undefined,
+        });
 
-      effect(() => {
-        const anteilA = percentStringToNumber(controlAChangedSig());
-        if (anteilA !== undefined && anteilA !== null) {
-          this.controlB.setValue((100 - anteilA)?.toString());
-          this.controlB.setErrors(null);
-        }
-      });
+        effect(() => {
+          const anteil = percentStringToNumber(controlChangedSig());
+          const allowOnlyOne = this.allowOnlyOneSig();
+          if (anteil !== undefined && anteil !== null && !allowOnlyOne) {
+            secondaryControl.setValue((100 - anteil)?.toString());
+            secondaryControl.setErrors(null);
+          }
+        });
 
-      effect(() => {
-        const anteilB = percentStringToNumber(controlBChangedSig());
-        if (anteilB !== undefined && anteilB !== null) {
-          this.controlA.setValue((100 - anteilB)?.toString());
-          this.controlA.setErrors(null);
-        }
+        effect(() => {
+          const anteil = percentStringToNumber(controlChangedSig());
+          const allowOnlyOne = this.allowOnlyOneSig();
+          if (anteil !== undefined && allowOnlyOne) {
+            secondaryControl.setValue(undefined);
+            secondaryControl.setErrors(null);
+          }
+        });
       });
     });
   }

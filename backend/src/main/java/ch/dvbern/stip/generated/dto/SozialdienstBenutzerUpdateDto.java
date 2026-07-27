@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstBenutzerUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstBenutzerUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String vorname;
   private @Valid String nachname;
+
+  protected SozialdienstBenutzerUpdateDto(SozialdienstBenutzerUpdateDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+  }
+
+  public SozialdienstBenutzerUpdateDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class SozialdienstBenutzerUpdateDto  implements Serializable {
   }
 
 
+  public static SozialdienstBenutzerUpdateDtoBuilder<?, ?> builder() {
+    return new SozialdienstBenutzerUpdateDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstBenutzerUpdateDtoBuilderImpl extends SozialdienstBenutzerUpdateDtoBuilder<SozialdienstBenutzerUpdateDto, SozialdienstBenutzerUpdateDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstBenutzerUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstBenutzerUpdateDto build() {
+      return new SozialdienstBenutzerUpdateDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstBenutzerUpdateDtoBuilder<C extends SozialdienstBenutzerUpdateDto, B extends SozialdienstBenutzerUpdateDtoBuilder<C, B>>  {
+    private UUID id;
+    private String vorname;
+    private String nachname;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+  }
 }
 

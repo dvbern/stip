@@ -19,14 +19,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("UnterschriftenblattDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class UnterschriftenblattDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp dokumentTyp;
   private @Valid List<DokumentDto> dokumente = new ArrayList<>();
+
+  protected UnterschriftenblattDokumentDto(UnterschriftenblattDokumentDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.dokumentTyp = b.dokumentTyp;
+    this.dokumente = b.dokumente;
+  }
+
+  public UnterschriftenblattDokumentDto() {
+  }
 
   /**
    **/
@@ -145,5 +154,43 @@ public class UnterschriftenblattDokumentDto  implements Serializable {
   }
 
 
+  public static UnterschriftenblattDokumentDtoBuilder<?, ?> builder() {
+    return new UnterschriftenblattDokumentDtoBuilderImpl();
+  }
+
+  private static final class UnterschriftenblattDokumentDtoBuilderImpl extends UnterschriftenblattDokumentDtoBuilder<UnterschriftenblattDokumentDto, UnterschriftenblattDokumentDtoBuilderImpl> {
+
+    @Override
+    protected UnterschriftenblattDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public UnterschriftenblattDokumentDto build() {
+      return new UnterschriftenblattDokumentDto(this);
+    }
+  }
+
+  public static abstract class UnterschriftenblattDokumentDtoBuilder<C extends UnterschriftenblattDokumentDto, B extends UnterschriftenblattDokumentDtoBuilder<C, B>>  {
+    private UUID id;
+    private ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp dokumentTyp;
+    private List<DokumentDto> dokumente = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B dokumentTyp(ch.dvbern.stip.api.unterschriftenblatt.type.UnterschriftenblattDokumentTyp dokumentTyp) {
+      this.dokumentTyp = dokumentTyp;
+      return self();
+    }
+    public B dokumente(List<DokumentDto> dokumente) {
+      this.dokumente = dokumente;
+      return self();
+    }
+  }
 }
 

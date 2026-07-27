@@ -22,7 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.DateUtil;
 import ch.dvbern.stip.api.common.validation.RequiredDokumentsProducer;
 import ch.dvbern.stip.api.dokument.type.DokumentTyp;
@@ -113,7 +112,7 @@ public class PersonInAusbildungRequiredDokumentsProducer implements RequiredDoku
         }
 
         if (
-            pia.getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT
+            pia.getWohnsitz().isEigenerHaushalt()
             && DateUtil.getPiaAgeDifferenceToEigenerWohnsitzStichtagDate(formular) < MIN_AGE_EIGENER_WOHNSITZ
         ) {
             requiredDocs.add(DokumentTyp.PERSON_EIGENER_HAUSHALT);

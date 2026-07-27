@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("BerechnungsStammdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BerechnungsStammdatenDto  implements Serializable {
   private @Valid Integer maxSaeule3a;
@@ -33,6 +33,24 @@ public class BerechnungsStammdatenDto  implements Serializable {
   private @Valid Integer stipLimiteMinimalstipendium;
   private @Valid Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
   private @Valid Integer anzahlMonate;
+
+  protected BerechnungsStammdatenDto(BerechnungsStammdatenDtoBuilder<?, ?> b) {
+    this.maxSaeule3a = b.maxSaeule3a;
+    this.einkommensfreibetrag = b.einkommensfreibetrag;
+    this.abzugslimite = b.abzugslimite;
+    this.freibetragErwerbseinkommen = b.freibetragErwerbseinkommen;
+    this.freibetragVermoegen = b.freibetragVermoegen;
+    this.vermoegensanteilInProzent = b.vermoegensanteilInProzent;
+    this.anzahlWochenLehre = b.anzahlWochenLehre;
+    this.anzahlWochenSchule = b.anzahlWochenSchule;
+    this.preisProMahlzeit = b.preisProMahlzeit;
+    this.stipLimiteMinimalstipendium = b.stipLimiteMinimalstipendium;
+    this.limiteAlterAntragsstellerHalbierungElternbeitrag = b.limiteAlterAntragsstellerHalbierungElternbeitrag;
+    this.anzahlMonate = b.anzahlMonate;
+  }
+
+  public BerechnungsStammdatenDto() {
+  }
 
   /**
    **/
@@ -324,5 +342,88 @@ public class BerechnungsStammdatenDto  implements Serializable {
   }
 
 
+  public static BerechnungsStammdatenDtoBuilder<?, ?> builder() {
+    return new BerechnungsStammdatenDtoBuilderImpl();
+  }
+
+  private static final class BerechnungsStammdatenDtoBuilderImpl extends BerechnungsStammdatenDtoBuilder<BerechnungsStammdatenDto, BerechnungsStammdatenDtoBuilderImpl> {
+
+    @Override
+    protected BerechnungsStammdatenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BerechnungsStammdatenDto build() {
+      return new BerechnungsStammdatenDto(this);
+    }
+  }
+
+  public static abstract class BerechnungsStammdatenDtoBuilder<C extends BerechnungsStammdatenDto, B extends BerechnungsStammdatenDtoBuilder<C, B>>  {
+    private Integer maxSaeule3a;
+    private Integer einkommensfreibetrag;
+    private Integer abzugslimite;
+    private Integer freibetragErwerbseinkommen;
+    private Integer freibetragVermoegen;
+    private Integer vermoegensanteilInProzent;
+    private Integer anzahlWochenLehre;
+    private Integer anzahlWochenSchule;
+    private Integer preisProMahlzeit;
+    private Integer stipLimiteMinimalstipendium;
+    private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+    private Integer anzahlMonate;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B maxSaeule3a(Integer maxSaeule3a) {
+      this.maxSaeule3a = maxSaeule3a;
+      return self();
+    }
+    public B einkommensfreibetrag(Integer einkommensfreibetrag) {
+      this.einkommensfreibetrag = einkommensfreibetrag;
+      return self();
+    }
+    public B abzugslimite(Integer abzugslimite) {
+      this.abzugslimite = abzugslimite;
+      return self();
+    }
+    public B freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+      this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
+      return self();
+    }
+    public B freibetragVermoegen(Integer freibetragVermoegen) {
+      this.freibetragVermoegen = freibetragVermoegen;
+      return self();
+    }
+    public B vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+      this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+      return self();
+    }
+    public B anzahlWochenLehre(Integer anzahlWochenLehre) {
+      this.anzahlWochenLehre = anzahlWochenLehre;
+      return self();
+    }
+    public B anzahlWochenSchule(Integer anzahlWochenSchule) {
+      this.anzahlWochenSchule = anzahlWochenSchule;
+      return self();
+    }
+    public B preisProMahlzeit(Integer preisProMahlzeit) {
+      this.preisProMahlzeit = preisProMahlzeit;
+      return self();
+    }
+    public B stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+      this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
+      return self();
+    }
+    public B limiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+      this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
+      return self();
+    }
+    public B anzahlMonate(Integer anzahlMonate) {
+      this.anzahlMonate = anzahlMonate;
+      return self();
+    }
+  }
 }
 

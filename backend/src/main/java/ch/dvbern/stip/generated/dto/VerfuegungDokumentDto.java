@@ -16,14 +16,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegungDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungDokumentDto  implements Serializable {
   private @Valid UUID id;
   private @Valid VerfuegungDokumentTypDto typ;
   private @Valid String filename;
+
+  protected VerfuegungDokumentDto(VerfuegungDokumentDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.typ = b.typ;
+    this.filename = b.filename;
+  }
+
+  public VerfuegungDokumentDto() {
+  }
 
   /**
    **/
@@ -126,5 +135,43 @@ public class VerfuegungDokumentDto  implements Serializable {
   }
 
 
+  public static VerfuegungDokumentDtoBuilder<?, ?> builder() {
+    return new VerfuegungDokumentDtoBuilderImpl();
+  }
+
+  private static final class VerfuegungDokumentDtoBuilderImpl extends VerfuegungDokumentDtoBuilder<VerfuegungDokumentDto, VerfuegungDokumentDtoBuilderImpl> {
+
+    @Override
+    protected VerfuegungDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public VerfuegungDokumentDto build() {
+      return new VerfuegungDokumentDto(this);
+    }
+  }
+
+  public static abstract class VerfuegungDokumentDtoBuilder<C extends VerfuegungDokumentDto, B extends VerfuegungDokumentDtoBuilder<C, B>>  {
+    private UUID id;
+    private VerfuegungDokumentTypDto typ;
+    private String filename;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B typ(VerfuegungDokumentTypDto typ) {
+      this.typ = typ;
+      return self();
+    }
+    public B filename(String filename) {
+      this.filename = filename;
+      return self();
+    }
+  }
 }
 

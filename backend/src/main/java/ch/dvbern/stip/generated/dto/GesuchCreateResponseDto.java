@@ -16,13 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchCreateResponse")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchCreateResponseDto  implements Serializable {
   private @Valid UUID gesuch;
   private @Valid GesuchsperiodeSelectErrorDto error;
+
+  protected GesuchCreateResponseDto(GesuchCreateResponseDtoBuilder<?, ?> b) {
+    this.gesuch = b.gesuch;
+    this.error = b.error;
+  }
+
+  public GesuchCreateResponseDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class GesuchCreateResponseDto  implements Serializable {
   }
 
 
+  public static GesuchCreateResponseDtoBuilder<?, ?> builder() {
+    return new GesuchCreateResponseDtoBuilderImpl();
+  }
+
+  private static final class GesuchCreateResponseDtoBuilderImpl extends GesuchCreateResponseDtoBuilder<GesuchCreateResponseDto, GesuchCreateResponseDtoBuilderImpl> {
+
+    @Override
+    protected GesuchCreateResponseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchCreateResponseDto build() {
+      return new GesuchCreateResponseDto(this);
+    }
+  }
+
+  public static abstract class GesuchCreateResponseDtoBuilder<C extends GesuchCreateResponseDto, B extends GesuchCreateResponseDtoBuilder<C, B>>  {
+    private UUID gesuch;
+    private GesuchsperiodeSelectErrorDto error;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuch(UUID gesuch) {
+      this.gesuch = gesuch;
+      return self();
+    }
+    public B error(GesuchsperiodeSelectErrorDto error) {
+      this.error = error;
+      return self();
+    }
+  }
 }
 

@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("CustomDokumentTypCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class CustomDokumentTypCreateDto  implements Serializable {
   private @Valid String type;
   private @Valid String description;
   private @Valid UUID trancheId;
+
+  protected CustomDokumentTypCreateDto(CustomDokumentTypCreateDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.description = b.description;
+    this.trancheId = b.trancheId;
+  }
+
+  public CustomDokumentTypCreateDto() {
+  }
 
   /**
    **/
@@ -125,5 +134,43 @@ public class CustomDokumentTypCreateDto  implements Serializable {
   }
 
 
+  public static CustomDokumentTypCreateDtoBuilder<?, ?> builder() {
+    return new CustomDokumentTypCreateDtoBuilderImpl();
+  }
+
+  private static final class CustomDokumentTypCreateDtoBuilderImpl extends CustomDokumentTypCreateDtoBuilder<CustomDokumentTypCreateDto, CustomDokumentTypCreateDtoBuilderImpl> {
+
+    @Override
+    protected CustomDokumentTypCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public CustomDokumentTypCreateDto build() {
+      return new CustomDokumentTypCreateDto(this);
+    }
+  }
+
+  public static abstract class CustomDokumentTypCreateDtoBuilder<C extends CustomDokumentTypCreateDto, B extends CustomDokumentTypCreateDtoBuilder<C, B>>  {
+    private String type;
+    private String description;
+    private UUID trancheId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(String type) {
+      this.type = type;
+      return self();
+    }
+    public B description(String description) {
+      this.description = description;
+      return self();
+    }
+    public B trancheId(UUID trancheId) {
+      this.trancheId = trancheId;
+      return self();
+    }
+  }
 }
 

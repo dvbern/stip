@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoPersonInAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoPersonInAusbildungDto  implements Serializable {
   private @Valid String sozialversicherungsnummer;
@@ -49,6 +49,41 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   private @Valid Boolean vormundschaft;
   private @Valid ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
   private @Valid Boolean sozialhilfebeitraege;
+
+  protected DemoPersonInAusbildungDto(DemoPersonInAusbildungDtoBuilder<?, ?> b) {
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.anrede = b.anrede;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.strasse = b.strasse;
+    this.hausnummer = b.hausnummer;
+    this.plz = b.plz;
+    this.ort = b.ort;
+    this.land = b.land;
+    this.identischerZivilrechtlicherWohnsitz = b.identischerZivilrechtlicherWohnsitz;
+    this.email = b.email;
+    this.telefonnummer = b.telefonnummer;
+    this.geburtsdatum = b.geburtsdatum;
+    this.alter = b.alter;
+    this.zivilstand = b.zivilstand;
+    this.nationalitaet = b.nationalitaet;
+    this.niederlassungsstatus = b.niederlassungsstatus;
+    this.einreisedatum = b.einreisedatum;
+    this.heimatort = b.heimatort;
+    this.coAdresse = b.coAdresse;
+    this.identischerZivilrechtlicherWohnsitzPLZ = b.identischerZivilrechtlicherWohnsitzPLZ;
+    this.identischerZivilrechtlicherWohnsitzOrt = b.identischerZivilrechtlicherWohnsitzOrt;
+    this.heimatortPLZ = b.heimatortPLZ;
+    this.wohnsitz = b.wohnsitz;
+    this.wohnsitzAnteilVater = b.wohnsitzAnteilVater;
+    this.wohnsitzAnteilMutter = b.wohnsitzAnteilMutter;
+    this.vormundschaft = b.vormundschaft;
+    this.zustaendigeKESB = b.zustaendigeKESB;
+    this.sozialhilfebeitraege = b.sozialhilfebeitraege;
+  }
+
+  public DemoPersonInAusbildungDto() {
+  }
 
   /**
    **/
@@ -687,5 +722,173 @@ public class DemoPersonInAusbildungDto  implements Serializable {
   }
 
 
+  public static DemoPersonInAusbildungDtoBuilder<?, ?> builder() {
+    return new DemoPersonInAusbildungDtoBuilderImpl();
+  }
+
+  private static final class DemoPersonInAusbildungDtoBuilderImpl extends DemoPersonInAusbildungDtoBuilder<DemoPersonInAusbildungDto, DemoPersonInAusbildungDtoBuilderImpl> {
+
+    @Override
+    protected DemoPersonInAusbildungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoPersonInAusbildungDto build() {
+      return new DemoPersonInAusbildungDto(this);
+    }
+  }
+
+  public static abstract class DemoPersonInAusbildungDtoBuilder<C extends DemoPersonInAusbildungDto, B extends DemoPersonInAusbildungDtoBuilder<C, B>>  {
+    private String sozialversicherungsnummer;
+    private ch.dvbern.stip.api.common.type.Anrede anrede;
+    private String nachname;
+    private String vorname;
+    private String strasse;
+    private String hausnummer;
+    private String plz;
+    private String ort;
+    private String land;
+    private Boolean identischerZivilrechtlicherWohnsitz;
+    private String email;
+    private String telefonnummer;
+    private String geburtsdatum;
+    private Integer alter;
+    private ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand;
+    private String nationalitaet;
+    private ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus;
+    private LocalDate einreisedatum;
+    private String heimatort;
+    private String coAdresse;
+    private String identischerZivilrechtlicherWohnsitzPLZ;
+    private String identischerZivilrechtlicherWohnsitzOrt;
+    private String heimatortPLZ;
+    private ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz;
+    private Integer wohnsitzAnteilVater;
+    private Integer wohnsitzAnteilMutter;
+    private Boolean vormundschaft;
+    private ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB;
+    private Boolean sozialhilfebeitraege;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B anrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
+      this.anrede = anrede;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B strasse(String strasse) {
+      this.strasse = strasse;
+      return self();
+    }
+    public B hausnummer(String hausnummer) {
+      this.hausnummer = hausnummer;
+      return self();
+    }
+    public B plz(String plz) {
+      this.plz = plz;
+      return self();
+    }
+    public B ort(String ort) {
+      this.ort = ort;
+      return self();
+    }
+    public B land(String land) {
+      this.land = land;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitz(Boolean identischerZivilrechtlicherWohnsitz) {
+      this.identischerZivilrechtlicherWohnsitz = identischerZivilrechtlicherWohnsitz;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B telefonnummer(String telefonnummer) {
+      this.telefonnummer = telefonnummer;
+      return self();
+    }
+    public B geburtsdatum(String geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B alter(Integer alter) {
+      this.alter = alter;
+      return self();
+    }
+    public B zivilstand(ch.dvbern.stip.api.personinausbildung.type.Zivilstand zivilstand) {
+      this.zivilstand = zivilstand;
+      return self();
+    }
+    public B nationalitaet(String nationalitaet) {
+      this.nationalitaet = nationalitaet;
+      return self();
+    }
+    public B niederlassungsstatus(ch.dvbern.stip.api.personinausbildung.type.Niederlassungsstatus niederlassungsstatus) {
+      this.niederlassungsstatus = niederlassungsstatus;
+      return self();
+    }
+    public B einreisedatum(LocalDate einreisedatum) {
+      this.einreisedatum = einreisedatum;
+      return self();
+    }
+    public B heimatort(String heimatort) {
+      this.heimatort = heimatort;
+      return self();
+    }
+    public B coAdresse(String coAdresse) {
+      this.coAdresse = coAdresse;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzPLZ(String identischerZivilrechtlicherWohnsitzPLZ) {
+      this.identischerZivilrechtlicherWohnsitzPLZ = identischerZivilrechtlicherWohnsitzPLZ;
+      return self();
+    }
+    public B identischerZivilrechtlicherWohnsitzOrt(String identischerZivilrechtlicherWohnsitzOrt) {
+      this.identischerZivilrechtlicherWohnsitzOrt = identischerZivilrechtlicherWohnsitzOrt;
+      return self();
+    }
+    public B heimatortPLZ(String heimatortPLZ) {
+      this.heimatortPLZ = heimatortPLZ;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.common.type.Wohnsitz wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B wohnsitzAnteilVater(Integer wohnsitzAnteilVater) {
+      this.wohnsitzAnteilVater = wohnsitzAnteilVater;
+      return self();
+    }
+    public B wohnsitzAnteilMutter(Integer wohnsitzAnteilMutter) {
+      this.wohnsitzAnteilMutter = wohnsitzAnteilMutter;
+      return self();
+    }
+    public B vormundschaft(Boolean vormundschaft) {
+      this.vormundschaft = vormundschaft;
+      return self();
+    }
+    public B zustaendigeKESB(ch.dvbern.stip.api.personinausbildung.entity.ZustaendigeKESB zustaendigeKESB) {
+      this.zustaendigeKESB = zustaendigeKESB;
+      return self();
+    }
+    public B sozialhilfebeitraege(Boolean sozialhilfebeitraege) {
+      this.sozialhilfebeitraege = sozialhilfebeitraege;
+      return self();
+    }
+  }
 }
 

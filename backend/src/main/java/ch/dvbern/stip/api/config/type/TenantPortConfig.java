@@ -19,11 +19,14 @@ package ch.dvbern.stip.api.config.type;
 
 import java.util.Optional;
 
+import ch.dvbern.stip.berechnung.domain.model.BerechnungAdapterType;
 import ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType;
 import io.smallrye.config.WithDefault;
 
 public interface TenantPortConfig {
     Steuerdaten steuerdaten();
+
+    Berechnung berechnung();
 
     interface Port {
         @WithDefault("false")
@@ -32,5 +35,16 @@ public interface TenantPortConfig {
 
     interface Steuerdaten extends Port {
         Optional<SteuerdatenAdapterType> adapterType();
+    }
+
+    interface Berechnung extends Port {
+        @WithDefault("bern")
+        BerechnungAdapterType adapterType();
+
+        @WithDefault("1")
+        int majorVersion();
+
+        @WithDefault("0")
+        int minorVersion();
     }
 }

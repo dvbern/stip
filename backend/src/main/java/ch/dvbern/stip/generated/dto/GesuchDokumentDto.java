@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID id;
@@ -31,6 +31,18 @@ public class GesuchDokumentDto  implements Serializable {
   private @Valid UUID entryId;
   private @Valid ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
   private @Valid CustomDokumentTypDto customDokumentTyp;
+
+  protected GesuchDokumentDto(GesuchDokumentDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.dokumente = b.dokumente;
+    this.status = b.status;
+    this.entryId = b.entryId;
+    this.dokumentTyp = b.dokumentTyp;
+    this.customDokumentTyp = b.customDokumentTyp;
+  }
+
+  public GesuchDokumentDto() {
+  }
 
   /**
    **/
@@ -209,5 +221,58 @@ public class GesuchDokumentDto  implements Serializable {
   }
 
 
+  public static GesuchDokumentDtoBuilder<?, ?> builder() {
+    return new GesuchDokumentDtoBuilderImpl();
+  }
+
+  private static final class GesuchDokumentDtoBuilderImpl extends GesuchDokumentDtoBuilder<GesuchDokumentDto, GesuchDokumentDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDokumentDto build() {
+      return new GesuchDokumentDto(this);
+    }
+  }
+
+  public static abstract class GesuchDokumentDtoBuilder<C extends GesuchDokumentDto, B extends GesuchDokumentDtoBuilder<C, B>>  {
+    private UUID id;
+    private List<DokumentDto> dokumente = new ArrayList<>();
+    private ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status;
+    private UUID entryId;
+    private ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp;
+    private CustomDokumentTypDto customDokumentTyp;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B dokumente(List<DokumentDto> dokumente) {
+      this.dokumente = dokumente;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.dokument.type.GesuchDokumentStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B entryId(UUID entryId) {
+      this.entryId = entryId;
+      return self();
+    }
+    public B dokumentTyp(ch.dvbern.stip.api.dokument.type.DokumentTyp dokumentTyp) {
+      this.dokumentTyp = dokumentTyp;
+      return self();
+    }
+    public B customDokumentTyp(CustomDokumentTypDto customDokumentTyp) {
+      this.customDokumentTyp = customDokumentTyp;
+      return self();
+    }
+  }
 }
 

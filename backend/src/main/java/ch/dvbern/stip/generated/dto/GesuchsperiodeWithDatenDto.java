@@ -17,9 +17,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchsperiodeWithDaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid String bezeichnungDe;
@@ -77,6 +77,67 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid UUID id;
   private @Valid GueltigkeitStatusDto gueltigkeitStatus;
   private @Valid LocalDate einreichfrist;
+
+  protected GesuchsperiodeWithDatenDto(GesuchsperiodeWithDatenDtoBuilder<?, ?> b) {
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.fiskaljahr = b.fiskaljahr;
+    this.gesuchsjahrId = b.gesuchsjahrId;
+    this.gesuchsperiodeStart = b.gesuchsperiodeStart;
+    this.gesuchsperiodeStopp = b.gesuchsperiodeStopp;
+    this.aufschaltterminStart = b.aufschaltterminStart;
+    this.einreichefristNormal = b.einreichefristNormal;
+    this.einreichefristReduziert = b.einreichefristReduziert;
+    this.ausbKostenSekII = b.ausbKostenSekII;
+    this.ausbKostenTertiaer = b.ausbKostenTertiaer;
+    this.freibetragVermoegen = b.freibetragVermoegen;
+    this.freibetragErwerbseinkommen = b.freibetragErwerbseinkommen;
+    this.einkommensfreibetrag = b.einkommensfreibetrag;
+    this.elternbeteiligungssatz = b.elternbeteiligungssatz;
+    this.vermogenSatzAngerechnet = b.vermogenSatzAngerechnet;
+    this.integrationszulage = b.integrationszulage;
+    this.limiteEkFreibetragIntegrationszulage = b.limiteEkFreibetragIntegrationszulage;
+    this.stipLimiteMinimalstipendium = b.stipLimiteMinimalstipendium;
+    this.person1 = b.person1;
+    this.personen2 = b.personen2;
+    this.personen3 = b.personen3;
+    this.personen4 = b.personen4;
+    this.personen5 = b.personen5;
+    this.personen6 = b.personen6;
+    this.personen7 = b.personen7;
+    this.proWeiterePerson = b.proWeiterePerson;
+    this.kinder0017 = b.kinder0017;
+    this.jugendlicheErwachsene1824 = b.jugendlicheErwachsene1824;
+    this.erwachsene2599 = b.erwachsene2599;
+    this.wohnkostenFam1pers = b.wohnkostenFam1pers;
+    this.wohnkostenFam2pers = b.wohnkostenFam2pers;
+    this.wohnkostenFam3pers = b.wohnkostenFam3pers;
+    this.wohnkostenFam4pers = b.wohnkostenFam4pers;
+    this.wohnkostenFam5pluspers = b.wohnkostenFam5pluspers;
+    this.wohnkostenPersoenlich1pers = b.wohnkostenPersoenlich1pers;
+    this.wohnkostenPersoenlich2pers = b.wohnkostenPersoenlich2pers;
+    this.wohnkostenPersoenlich3pers = b.wohnkostenPersoenlich3pers;
+    this.wohnkostenPersoenlich4pers = b.wohnkostenPersoenlich4pers;
+    this.wohnkostenPersoenlich5pluspers = b.wohnkostenPersoenlich5pluspers;
+    this.preisProMahlzeit = b.preisProMahlzeit;
+    this.maxSaeule3a = b.maxSaeule3a;
+    this.anzahlWochenLehre = b.anzahlWochenLehre;
+    this.anzahlWochenSchule = b.anzahlWochenSchule;
+    this.vermoegensanteilInProzent = b.vermoegensanteilInProzent;
+    this.reduzierungDesGrundbedarfs = b.reduzierungDesGrundbedarfs;
+    this.limiteAlterAntragsstellerHalbierungElternbeitrag = b.limiteAlterAntragsstellerHalbierungElternbeitrag;
+    this.zweiterAuszahlungsterminMonat = b.zweiterAuszahlungsterminMonat;
+    this.zweiterAuszahlungsterminTag = b.zweiterAuszahlungsterminTag;
+    this.fristNachreichenDokumente = b.fristNachreichenDokumente;
+    this.fristUploadUnterschriftenblatt = b.fristUploadUnterschriftenblatt;
+    this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = b.stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+    this.id = b.id;
+    this.gueltigkeitStatus = b.gueltigkeitStatus;
+    this.einreichfrist = b.einreichfrist;
+  }
+
+  public GesuchsperiodeWithDatenDto() {
+  }
 
   /**
    **/
@@ -1276,5 +1337,303 @@ public class GesuchsperiodeWithDatenDto  implements Serializable {
   }
 
 
+  public static GesuchsperiodeWithDatenDtoBuilder<?, ?> builder() {
+    return new GesuchsperiodeWithDatenDtoBuilderImpl();
+  }
+
+  private static final class GesuchsperiodeWithDatenDtoBuilderImpl extends GesuchsperiodeWithDatenDtoBuilder<GesuchsperiodeWithDatenDto, GesuchsperiodeWithDatenDtoBuilderImpl> {
+
+    @Override
+    protected GesuchsperiodeWithDatenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchsperiodeWithDatenDto build() {
+      return new GesuchsperiodeWithDatenDto(this);
+    }
+  }
+
+  public static abstract class GesuchsperiodeWithDatenDtoBuilder<C extends GesuchsperiodeWithDatenDto, B extends GesuchsperiodeWithDatenDtoBuilder<C, B>>  {
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private Integer fiskaljahr;
+    private UUID gesuchsjahrId;
+    private LocalDate gesuchsperiodeStart;
+    private LocalDate gesuchsperiodeStopp;
+    private LocalDate aufschaltterminStart;
+    private LocalDate einreichefristNormal;
+    private LocalDate einreichefristReduziert;
+    private Integer ausbKostenSekII;
+    private Integer ausbKostenTertiaer;
+    private Integer freibetragVermoegen;
+    private Integer freibetragErwerbseinkommen;
+    private Integer einkommensfreibetrag;
+    private Integer elternbeteiligungssatz;
+    private Integer vermogenSatzAngerechnet;
+    private Integer integrationszulage;
+    private Integer limiteEkFreibetragIntegrationszulage;
+    private Integer stipLimiteMinimalstipendium;
+    private Integer person1;
+    private Integer personen2;
+    private Integer personen3;
+    private Integer personen4;
+    private Integer personen5;
+    private Integer personen6;
+    private Integer personen7;
+    private Integer proWeiterePerson;
+    private Integer kinder0017;
+    private Integer jugendlicheErwachsene1824;
+    private Integer erwachsene2599;
+    private Integer wohnkostenFam1pers;
+    private Integer wohnkostenFam2pers;
+    private Integer wohnkostenFam3pers;
+    private Integer wohnkostenFam4pers;
+    private Integer wohnkostenFam5pluspers;
+    private Integer wohnkostenPersoenlich1pers;
+    private Integer wohnkostenPersoenlich2pers;
+    private Integer wohnkostenPersoenlich3pers;
+    private Integer wohnkostenPersoenlich4pers;
+    private Integer wohnkostenPersoenlich5pluspers;
+    private Integer preisProMahlzeit;
+    private Integer maxSaeule3a;
+    private Integer anzahlWochenLehre;
+    private Integer anzahlWochenSchule;
+    private Integer vermoegensanteilInProzent;
+    private Integer reduzierungDesGrundbedarfs;
+    private Integer limiteAlterAntragsstellerHalbierungElternbeitrag;
+    private Integer zweiterAuszahlungsterminMonat;
+    private Integer zweiterAuszahlungsterminTag;
+    private Integer fristNachreichenDokumente;
+    private Integer fristUploadUnterschriftenblatt;
+    private LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+    private UUID id;
+    private GueltigkeitStatusDto gueltigkeitStatus;
+    private LocalDate einreichfrist;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B fiskaljahr(Integer fiskaljahr) {
+      this.fiskaljahr = fiskaljahr;
+      return self();
+    }
+    public B gesuchsjahrId(UUID gesuchsjahrId) {
+      this.gesuchsjahrId = gesuchsjahrId;
+      return self();
+    }
+    public B gesuchsperiodeStart(LocalDate gesuchsperiodeStart) {
+      this.gesuchsperiodeStart = gesuchsperiodeStart;
+      return self();
+    }
+    public B gesuchsperiodeStopp(LocalDate gesuchsperiodeStopp) {
+      this.gesuchsperiodeStopp = gesuchsperiodeStopp;
+      return self();
+    }
+    public B aufschaltterminStart(LocalDate aufschaltterminStart) {
+      this.aufschaltterminStart = aufschaltterminStart;
+      return self();
+    }
+    public B einreichefristNormal(LocalDate einreichefristNormal) {
+      this.einreichefristNormal = einreichefristNormal;
+      return self();
+    }
+    public B einreichefristReduziert(LocalDate einreichefristReduziert) {
+      this.einreichefristReduziert = einreichefristReduziert;
+      return self();
+    }
+    public B ausbKostenSekII(Integer ausbKostenSekII) {
+      this.ausbKostenSekII = ausbKostenSekII;
+      return self();
+    }
+    public B ausbKostenTertiaer(Integer ausbKostenTertiaer) {
+      this.ausbKostenTertiaer = ausbKostenTertiaer;
+      return self();
+    }
+    public B freibetragVermoegen(Integer freibetragVermoegen) {
+      this.freibetragVermoegen = freibetragVermoegen;
+      return self();
+    }
+    public B freibetragErwerbseinkommen(Integer freibetragErwerbseinkommen) {
+      this.freibetragErwerbseinkommen = freibetragErwerbseinkommen;
+      return self();
+    }
+    public B einkommensfreibetrag(Integer einkommensfreibetrag) {
+      this.einkommensfreibetrag = einkommensfreibetrag;
+      return self();
+    }
+    public B elternbeteiligungssatz(Integer elternbeteiligungssatz) {
+      this.elternbeteiligungssatz = elternbeteiligungssatz;
+      return self();
+    }
+    public B vermogenSatzAngerechnet(Integer vermogenSatzAngerechnet) {
+      this.vermogenSatzAngerechnet = vermogenSatzAngerechnet;
+      return self();
+    }
+    public B integrationszulage(Integer integrationszulage) {
+      this.integrationszulage = integrationszulage;
+      return self();
+    }
+    public B limiteEkFreibetragIntegrationszulage(Integer limiteEkFreibetragIntegrationszulage) {
+      this.limiteEkFreibetragIntegrationszulage = limiteEkFreibetragIntegrationszulage;
+      return self();
+    }
+    public B stipLimiteMinimalstipendium(Integer stipLimiteMinimalstipendium) {
+      this.stipLimiteMinimalstipendium = stipLimiteMinimalstipendium;
+      return self();
+    }
+    public B person1(Integer person1) {
+      this.person1 = person1;
+      return self();
+    }
+    public B personen2(Integer personen2) {
+      this.personen2 = personen2;
+      return self();
+    }
+    public B personen3(Integer personen3) {
+      this.personen3 = personen3;
+      return self();
+    }
+    public B personen4(Integer personen4) {
+      this.personen4 = personen4;
+      return self();
+    }
+    public B personen5(Integer personen5) {
+      this.personen5 = personen5;
+      return self();
+    }
+    public B personen6(Integer personen6) {
+      this.personen6 = personen6;
+      return self();
+    }
+    public B personen7(Integer personen7) {
+      this.personen7 = personen7;
+      return self();
+    }
+    public B proWeiterePerson(Integer proWeiterePerson) {
+      this.proWeiterePerson = proWeiterePerson;
+      return self();
+    }
+    public B kinder0017(Integer kinder0017) {
+      this.kinder0017 = kinder0017;
+      return self();
+    }
+    public B jugendlicheErwachsene1824(Integer jugendlicheErwachsene1824) {
+      this.jugendlicheErwachsene1824 = jugendlicheErwachsene1824;
+      return self();
+    }
+    public B erwachsene2599(Integer erwachsene2599) {
+      this.erwachsene2599 = erwachsene2599;
+      return self();
+    }
+    public B wohnkostenFam1pers(Integer wohnkostenFam1pers) {
+      this.wohnkostenFam1pers = wohnkostenFam1pers;
+      return self();
+    }
+    public B wohnkostenFam2pers(Integer wohnkostenFam2pers) {
+      this.wohnkostenFam2pers = wohnkostenFam2pers;
+      return self();
+    }
+    public B wohnkostenFam3pers(Integer wohnkostenFam3pers) {
+      this.wohnkostenFam3pers = wohnkostenFam3pers;
+      return self();
+    }
+    public B wohnkostenFam4pers(Integer wohnkostenFam4pers) {
+      this.wohnkostenFam4pers = wohnkostenFam4pers;
+      return self();
+    }
+    public B wohnkostenFam5pluspers(Integer wohnkostenFam5pluspers) {
+      this.wohnkostenFam5pluspers = wohnkostenFam5pluspers;
+      return self();
+    }
+    public B wohnkostenPersoenlich1pers(Integer wohnkostenPersoenlich1pers) {
+      this.wohnkostenPersoenlich1pers = wohnkostenPersoenlich1pers;
+      return self();
+    }
+    public B wohnkostenPersoenlich2pers(Integer wohnkostenPersoenlich2pers) {
+      this.wohnkostenPersoenlich2pers = wohnkostenPersoenlich2pers;
+      return self();
+    }
+    public B wohnkostenPersoenlich3pers(Integer wohnkostenPersoenlich3pers) {
+      this.wohnkostenPersoenlich3pers = wohnkostenPersoenlich3pers;
+      return self();
+    }
+    public B wohnkostenPersoenlich4pers(Integer wohnkostenPersoenlich4pers) {
+      this.wohnkostenPersoenlich4pers = wohnkostenPersoenlich4pers;
+      return self();
+    }
+    public B wohnkostenPersoenlich5pluspers(Integer wohnkostenPersoenlich5pluspers) {
+      this.wohnkostenPersoenlich5pluspers = wohnkostenPersoenlich5pluspers;
+      return self();
+    }
+    public B preisProMahlzeit(Integer preisProMahlzeit) {
+      this.preisProMahlzeit = preisProMahlzeit;
+      return self();
+    }
+    public B maxSaeule3a(Integer maxSaeule3a) {
+      this.maxSaeule3a = maxSaeule3a;
+      return self();
+    }
+    public B anzahlWochenLehre(Integer anzahlWochenLehre) {
+      this.anzahlWochenLehre = anzahlWochenLehre;
+      return self();
+    }
+    public B anzahlWochenSchule(Integer anzahlWochenSchule) {
+      this.anzahlWochenSchule = anzahlWochenSchule;
+      return self();
+    }
+    public B vermoegensanteilInProzent(Integer vermoegensanteilInProzent) {
+      this.vermoegensanteilInProzent = vermoegensanteilInProzent;
+      return self();
+    }
+    public B reduzierungDesGrundbedarfs(Integer reduzierungDesGrundbedarfs) {
+      this.reduzierungDesGrundbedarfs = reduzierungDesGrundbedarfs;
+      return self();
+    }
+    public B limiteAlterAntragsstellerHalbierungElternbeitrag(Integer limiteAlterAntragsstellerHalbierungElternbeitrag) {
+      this.limiteAlterAntragsstellerHalbierungElternbeitrag = limiteAlterAntragsstellerHalbierungElternbeitrag;
+      return self();
+    }
+    public B zweiterAuszahlungsterminMonat(Integer zweiterAuszahlungsterminMonat) {
+      this.zweiterAuszahlungsterminMonat = zweiterAuszahlungsterminMonat;
+      return self();
+    }
+    public B zweiterAuszahlungsterminTag(Integer zweiterAuszahlungsterminTag) {
+      this.zweiterAuszahlungsterminTag = zweiterAuszahlungsterminTag;
+      return self();
+    }
+    public B fristNachreichenDokumente(Integer fristNachreichenDokumente) {
+      this.fristNachreichenDokumente = fristNachreichenDokumente;
+      return self();
+    }
+    public B fristUploadUnterschriftenblatt(Integer fristUploadUnterschriftenblatt) {
+      this.fristUploadUnterschriftenblatt = fristUploadUnterschriftenblatt;
+      return self();
+    }
+    public B stichtagVolljaehrigkeitMedizinischeGrundversorgung(LocalDate stichtagVolljaehrigkeitMedizinischeGrundversorgung) {
+      this.stichtagVolljaehrigkeitMedizinischeGrundversorgung = stichtagVolljaehrigkeitMedizinischeGrundversorgung;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B gueltigkeitStatus(GueltigkeitStatusDto gueltigkeitStatus) {
+      this.gueltigkeitStatus = gueltigkeitStatus;
+      return self();
+    }
+    public B einreichfrist(LocalDate einreichfrist) {
+      this.einreichfrist = einreichfrist;
+      return self();
+    }
+  }
 }
 

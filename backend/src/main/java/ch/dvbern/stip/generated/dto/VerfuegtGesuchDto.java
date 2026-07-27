@@ -20,14 +20,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegtGesuch")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegtGesuchDto  implements Serializable {
   private @Valid LocalDate timestamp;
   private @Valid List<GesuchTrancheSlimDto> tranchen = new ArrayList<>();
   private @Valid UUID berechnungId;
+
+  protected VerfuegtGesuchDto(VerfuegtGesuchDtoBuilder<?, ?> b) {
+    this.timestamp = b.timestamp;
+    this.tranchen = b.tranchen;
+    this.berechnungId = b.berechnungId;
+  }
+
+  public VerfuegtGesuchDto() {
+  }
 
   /**
    **/
@@ -146,5 +155,43 @@ public class VerfuegtGesuchDto  implements Serializable {
   }
 
 
+  public static VerfuegtGesuchDtoBuilder<?, ?> builder() {
+    return new VerfuegtGesuchDtoBuilderImpl();
+  }
+
+  private static final class VerfuegtGesuchDtoBuilderImpl extends VerfuegtGesuchDtoBuilder<VerfuegtGesuchDto, VerfuegtGesuchDtoBuilderImpl> {
+
+    @Override
+    protected VerfuegtGesuchDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public VerfuegtGesuchDto build() {
+      return new VerfuegtGesuchDto(this);
+    }
+  }
+
+  public static abstract class VerfuegtGesuchDtoBuilder<C extends VerfuegtGesuchDto, B extends VerfuegtGesuchDtoBuilder<C, B>>  {
+    private LocalDate timestamp;
+    private List<GesuchTrancheSlimDto> tranchen = new ArrayList<>();
+    private UUID berechnungId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B timestamp(LocalDate timestamp) {
+      this.timestamp = timestamp;
+      return self();
+    }
+    public B tranchen(List<GesuchTrancheSlimDto> tranchen) {
+      this.tranchen = tranchen;
+      return self();
+    }
+    public B berechnungId(UUID berechnungId) {
+      this.berechnungId = berechnungId;
+      return self();
+    }
+  }
 }
 

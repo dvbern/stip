@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("NachfristAendernRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NachfristAendernRequestDto  implements Serializable {
   private @Valid LocalDate newNachfrist;
+
+  protected NachfristAendernRequestDto(NachfristAendernRequestDtoBuilder<?, ?> b) {
+    this.newNachfrist = b.newNachfrist;
+  }
+
+  public NachfristAendernRequestDto() {
+  }
 
   /**
    **/
@@ -81,5 +88,33 @@ public class NachfristAendernRequestDto  implements Serializable {
   }
 
 
+  public static NachfristAendernRequestDtoBuilder<?, ?> builder() {
+    return new NachfristAendernRequestDtoBuilderImpl();
+  }
+
+  private static final class NachfristAendernRequestDtoBuilderImpl extends NachfristAendernRequestDtoBuilder<NachfristAendernRequestDto, NachfristAendernRequestDtoBuilderImpl> {
+
+    @Override
+    protected NachfristAendernRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public NachfristAendernRequestDto build() {
+      return new NachfristAendernRequestDto(this);
+    }
+  }
+
+  public static abstract class NachfristAendernRequestDtoBuilder<C extends NachfristAendernRequestDto, B extends NachfristAendernRequestDtoBuilder<C, B>>  {
+    private LocalDate newNachfrist;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B newNachfrist(LocalDate newNachfrist) {
+      this.newNachfrist = newNachfrist;
+      return self();
+    }
+  }
 }
 

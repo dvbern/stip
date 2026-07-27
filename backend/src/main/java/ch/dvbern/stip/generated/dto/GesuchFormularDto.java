@@ -27,9 +27,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchFormular")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchFormularDto  implements Serializable {
   private @Valid AusbildungDto ausbildung;
@@ -45,6 +45,25 @@ public class GesuchFormularDto  implements Serializable {
   private @Valid EinnahmenKostenDto einnahmenKostenPartner;
   private @Valid List<SteuererklaerungUpdateDto> steuererklaerung;
   private @Valid List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
+
+  protected GesuchFormularDto(GesuchFormularDtoBuilder<?, ?> b) {
+    this.ausbildung = b.ausbildung;
+    this.personInAusbildung = b.personInAusbildung;
+    this.familiensituation = b.familiensituation;
+    this.partner = b.partner;
+    this.versteckteEltern = b.versteckteEltern;
+    this.elterns = b.elterns;
+    this.geschwisters = b.geschwisters;
+    this.lebenslaufItems = b.lebenslaufItems;
+    this.kinds = b.kinds;
+    this.einnahmenKosten = b.einnahmenKosten;
+    this.einnahmenKostenPartner = b.einnahmenKostenPartner;
+    this.steuererklaerung = b.steuererklaerung;
+    this.steuerdatenTabs = b.steuerdatenTabs;
+  }
+
+  public GesuchFormularDto() {
+  }
 
   /**
    **/
@@ -457,5 +476,93 @@ public class GesuchFormularDto  implements Serializable {
   }
 
 
+  public static GesuchFormularDtoBuilder<?, ?> builder() {
+    return new GesuchFormularDtoBuilderImpl();
+  }
+
+  private static final class GesuchFormularDtoBuilderImpl extends GesuchFormularDtoBuilder<GesuchFormularDto, GesuchFormularDtoBuilderImpl> {
+
+    @Override
+    protected GesuchFormularDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchFormularDto build() {
+      return new GesuchFormularDto(this);
+    }
+  }
+
+  public static abstract class GesuchFormularDtoBuilder<C extends GesuchFormularDto, B extends GesuchFormularDtoBuilder<C, B>>  {
+    private AusbildungDto ausbildung;
+    private PersonInAusbildungDto personInAusbildung;
+    private FamiliensituationDto familiensituation;
+    private PartnerDto partner;
+    private List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern;
+    private List<ElternDto> elterns;
+    private List<GeschwisterDto> geschwisters;
+    private List<LebenslaufItemDto> lebenslaufItems;
+    private List<KindDto> kinds;
+    private EinnahmenKostenDto einnahmenKosten;
+    private EinnahmenKostenDto einnahmenKostenPartner;
+    private List<SteuererklaerungUpdateDto> steuererklaerung;
+    private List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildung(AusbildungDto ausbildung) {
+      this.ausbildung = ausbildung;
+      return self();
+    }
+    public B personInAusbildung(PersonInAusbildungDto personInAusbildung) {
+      this.personInAusbildung = personInAusbildung;
+      return self();
+    }
+    public B familiensituation(FamiliensituationDto familiensituation) {
+      this.familiensituation = familiensituation;
+      return self();
+    }
+    public B partner(PartnerDto partner) {
+      this.partner = partner;
+      return self();
+    }
+    public B versteckteEltern(List<ch.dvbern.stip.api.eltern.type.ElternTyp> versteckteEltern) {
+      this.versteckteEltern = versteckteEltern;
+      return self();
+    }
+    public B elterns(List<ElternDto> elterns) {
+      this.elterns = elterns;
+      return self();
+    }
+    public B geschwisters(List<GeschwisterDto> geschwisters) {
+      this.geschwisters = geschwisters;
+      return self();
+    }
+    public B lebenslaufItems(List<LebenslaufItemDto> lebenslaufItems) {
+      this.lebenslaufItems = lebenslaufItems;
+      return self();
+    }
+    public B kinds(List<KindDto> kinds) {
+      this.kinds = kinds;
+      return self();
+    }
+    public B einnahmenKosten(EinnahmenKostenDto einnahmenKosten) {
+      this.einnahmenKosten = einnahmenKosten;
+      return self();
+    }
+    public B einnahmenKostenPartner(EinnahmenKostenDto einnahmenKostenPartner) {
+      this.einnahmenKostenPartner = einnahmenKostenPartner;
+      return self();
+    }
+    public B steuererklaerung(List<SteuererklaerungUpdateDto> steuererklaerung) {
+      this.steuererklaerung = steuererklaerung;
+      return self();
+    }
+    public B steuerdatenTabs(List<ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp> steuerdatenTabs) {
+      this.steuerdatenTabs = steuerdatenTabs;
+      return self();
+    }
+  }
 }
 

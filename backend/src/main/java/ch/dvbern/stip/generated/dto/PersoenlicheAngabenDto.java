@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PersoenlicheAngaben")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PersoenlicheAngabenDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.common.type.Anrede anrede;
@@ -28,6 +28,19 @@ public class PersoenlicheAngabenDto  implements Serializable {
   private @Valid String email;
   private @Valid ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
   private @Valid AdresseDto adresse;
+
+  protected PersoenlicheAngabenDto(PersoenlicheAngabenDtoBuilder<?, ?> b) {
+    this.anrede = b.anrede;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.email = b.email;
+    this.sprache = b.sprache;
+    this.adresse = b.adresse;
+  }
+
+  public PersoenlicheAngabenDto() {
+  }
 
   /**
    **/
@@ -214,5 +227,63 @@ public class PersoenlicheAngabenDto  implements Serializable {
   }
 
 
+  public static PersoenlicheAngabenDtoBuilder<?, ?> builder() {
+    return new PersoenlicheAngabenDtoBuilderImpl();
+  }
+
+  private static final class PersoenlicheAngabenDtoBuilderImpl extends PersoenlicheAngabenDtoBuilder<PersoenlicheAngabenDto, PersoenlicheAngabenDtoBuilderImpl> {
+
+    @Override
+    protected PersoenlicheAngabenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PersoenlicheAngabenDto build() {
+      return new PersoenlicheAngabenDto(this);
+    }
+  }
+
+  public static abstract class PersoenlicheAngabenDtoBuilder<C extends PersoenlicheAngabenDto, B extends PersoenlicheAngabenDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.common.type.Anrede anrede;
+    private String nachname;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private String email;
+    private ch.dvbern.stip.api.personinausbildung.type.Sprache sprache;
+    private AdresseDto adresse;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B anrede(ch.dvbern.stip.api.common.type.Anrede anrede) {
+      this.anrede = anrede;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B sprache(ch.dvbern.stip.api.personinausbildung.type.Sprache sprache) {
+      this.sprache = sprache;
+      return self();
+    }
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+  }
 }
 

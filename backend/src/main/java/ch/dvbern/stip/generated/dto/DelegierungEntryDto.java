@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierungEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungEntryDto  implements Serializable {
   private @Valid UUID id;
@@ -34,6 +34,22 @@ public class DelegierungEntryDto  implements Serializable {
   private @Valid LocalDate endDate;
   private @Valid UUID fallId;
   private @Valid String fallNummer;
+
+  protected DelegierungEntryDto(DelegierungEntryDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.sozialdienst = b.sozialdienst;
+    this.persoenlicheAngaben = b.persoenlicheAngaben;
+    this.status = b.status;
+    this.tenant = b.tenant;
+    this.delegierterMitarbeiter = b.delegierterMitarbeiter;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+    this.fallId = b.fallId;
+    this.fallNummer = b.fallNummer;
+  }
+
+  public DelegierungEntryDto() {
+  }
 
   /**
    **/
@@ -278,5 +294,78 @@ public class DelegierungEntryDto  implements Serializable {
   }
 
 
+  public static DelegierungEntryDtoBuilder<?, ?> builder() {
+    return new DelegierungEntryDtoBuilderImpl();
+  }
+
+  private static final class DelegierungEntryDtoBuilderImpl extends DelegierungEntryDtoBuilder<DelegierungEntryDto, DelegierungEntryDtoBuilderImpl> {
+
+    @Override
+    protected DelegierungEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DelegierungEntryDto build() {
+      return new DelegierungEntryDto(this);
+    }
+  }
+
+  public static abstract class DelegierungEntryDtoBuilder<C extends DelegierungEntryDto, B extends DelegierungEntryDtoBuilder<C, B>>  {
+    private UUID id;
+    private SozialdienstSlimDto sozialdienst;
+    private PersoenlicheAngabenDto persoenlicheAngaben;
+    private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+    private String tenant;
+    private SozialdienstBenutzerDto delegierterMitarbeiter;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private UUID fallId;
+    private String fallNummer;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B sozialdienst(SozialdienstSlimDto sozialdienst) {
+      this.sozialdienst = sozialdienst;
+      return self();
+    }
+    public B persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+      this.persoenlicheAngaben = persoenlicheAngaben;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B tenant(String tenant) {
+      this.tenant = tenant;
+      return self();
+    }
+    public B delegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
+      this.delegierterMitarbeiter = delegierterMitarbeiter;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+  }
 }
 

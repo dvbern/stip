@@ -18,15 +18,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DarlehenBuchhaltungOverview")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DarlehenBuchhaltungOverviewDto  implements Serializable {
   private @Valid Integer total;
   private @Valid Integer totalFreiwillig;
   private @Valid Integer totalGesetzlich;
   private @Valid List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys = new ArrayList<>();
+
+  protected DarlehenBuchhaltungOverviewDto(DarlehenBuchhaltungOverviewDtoBuilder<?, ?> b) {
+    this.total = b.total;
+    this.totalFreiwillig = b.totalFreiwillig;
+    this.totalGesetzlich = b.totalGesetzlich;
+    this.darlehenBuchhaltungEntrys = b.darlehenBuchhaltungEntrys;
+  }
+
+  public DarlehenBuchhaltungOverviewDto() {
+  }
 
   /**
    **/
@@ -166,5 +176,48 @@ public class DarlehenBuchhaltungOverviewDto  implements Serializable {
   }
 
 
+  public static DarlehenBuchhaltungOverviewDtoBuilder<?, ?> builder() {
+    return new DarlehenBuchhaltungOverviewDtoBuilderImpl();
+  }
+
+  private static final class DarlehenBuchhaltungOverviewDtoBuilderImpl extends DarlehenBuchhaltungOverviewDtoBuilder<DarlehenBuchhaltungOverviewDto, DarlehenBuchhaltungOverviewDtoBuilderImpl> {
+
+    @Override
+    protected DarlehenBuchhaltungOverviewDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DarlehenBuchhaltungOverviewDto build() {
+      return new DarlehenBuchhaltungOverviewDto(this);
+    }
+  }
+
+  public static abstract class DarlehenBuchhaltungOverviewDtoBuilder<C extends DarlehenBuchhaltungOverviewDto, B extends DarlehenBuchhaltungOverviewDtoBuilder<C, B>>  {
+    private Integer total;
+    private Integer totalFreiwillig;
+    private Integer totalGesetzlich;
+    private List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B total(Integer total) {
+      this.total = total;
+      return self();
+    }
+    public B totalFreiwillig(Integer totalFreiwillig) {
+      this.totalFreiwillig = totalFreiwillig;
+      return self();
+    }
+    public B totalGesetzlich(Integer totalGesetzlich) {
+      this.totalGesetzlich = totalGesetzlich;
+      return self();
+    }
+    public B darlehenBuchhaltungEntrys(List<DarlehenBuchhaltungEntryDto> darlehenBuchhaltungEntrys) {
+      this.darlehenBuchhaltungEntrys = darlehenBuchhaltungEntrys;
+      return self();
+    }
+  }
 }
 

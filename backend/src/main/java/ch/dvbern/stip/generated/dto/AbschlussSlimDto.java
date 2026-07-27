@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AbschlussSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AbschlussSlimDto  implements Serializable {
   private @Valid UUID id;
@@ -27,6 +27,19 @@ public class AbschlussSlimDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
   private @Valid Boolean aktiv;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+
+  protected AbschlussSlimDto(AbschlussSlimDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.ausbildungskategorie = b.ausbildungskategorie;
+    this.bildungsrichtung = b.bildungsrichtung;
+    this.aktiv = b.aktiv;
+    this.zusatzfrage = b.zusatzfrage;
+  }
+
+  public AbschlussSlimDto() {
+  }
 
   /**
    **/
@@ -212,5 +225,63 @@ public class AbschlussSlimDto  implements Serializable {
   }
 
 
+  public static AbschlussSlimDtoBuilder<?, ?> builder() {
+    return new AbschlussSlimDtoBuilderImpl();
+  }
+
+  private static final class AbschlussSlimDtoBuilderImpl extends AbschlussSlimDtoBuilder<AbschlussSlimDto, AbschlussSlimDtoBuilderImpl> {
+
+    @Override
+    protected AbschlussSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AbschlussSlimDto build() {
+      return new AbschlussSlimDto(this);
+    }
+  }
+
+  public static abstract class AbschlussSlimDtoBuilder<C extends AbschlussSlimDto, B extends AbschlussSlimDtoBuilder<C, B>>  {
+    private UUID id;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
+    private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+    private Boolean aktiv;
+    private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B ausbildungskategorie(ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie) {
+      this.ausbildungskategorie = ausbildungskategorie;
+      return self();
+    }
+    public B bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
+      this.bildungsrichtung = bildungsrichtung;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+    public B zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+      this.zusatzfrage = zusatzfrage;
+      return self();
+    }
+  }
 }
 

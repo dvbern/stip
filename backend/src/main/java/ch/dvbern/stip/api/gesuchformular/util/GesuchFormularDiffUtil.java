@@ -19,7 +19,6 @@ package ch.dvbern.stip.api.gesuchformular.util;
 
 import java.util.Objects;
 
-import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.common.util.NullDiffUtil;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.generated.dto.GesuchFormularUpdateDto;
@@ -60,7 +59,7 @@ public final class GesuchFormularDiffUtil {
             return false;
         }
 
-        return update.getPersonInAusbildung().getWohnsitz() == Wohnsitz.EIGENER_HAUSHALT;
+        return update.getPersonInAusbildung().getWohnsitz().isEigenerHaushalt();
     }
 
     public boolean hasWerZahltAlimenteChanged(GesuchFormularUpdateDto newFormular, GesuchFormular toUpdate) {

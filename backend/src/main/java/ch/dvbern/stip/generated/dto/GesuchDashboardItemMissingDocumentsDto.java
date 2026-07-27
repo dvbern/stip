@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDashboardItem_missingDocuments")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   private @Valid UUID trancheId;
   private @Valid Integer count;
+
+  protected GesuchDashboardItemMissingDocumentsDto(GesuchDashboardItemMissingDocumentsDtoBuilder<?, ?> b) {
+    this.trancheId = b.trancheId;
+    this.count = b.count;
+  }
+
+  public GesuchDashboardItemMissingDocumentsDto() {
+  }
 
   /**
    **/
@@ -103,5 +111,38 @@ public class GesuchDashboardItemMissingDocumentsDto  implements Serializable {
   }
 
 
+  public static GesuchDashboardItemMissingDocumentsDtoBuilder<?, ?> builder() {
+    return new GesuchDashboardItemMissingDocumentsDtoBuilderImpl();
+  }
+
+  private static final class GesuchDashboardItemMissingDocumentsDtoBuilderImpl extends GesuchDashboardItemMissingDocumentsDtoBuilder<GesuchDashboardItemMissingDocumentsDto, GesuchDashboardItemMissingDocumentsDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDashboardItemMissingDocumentsDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDashboardItemMissingDocumentsDto build() {
+      return new GesuchDashboardItemMissingDocumentsDto(this);
+    }
+  }
+
+  public static abstract class GesuchDashboardItemMissingDocumentsDtoBuilder<C extends GesuchDashboardItemMissingDocumentsDto, B extends GesuchDashboardItemMissingDocumentsDtoBuilder<C, B>>  {
+    private UUID trancheId;
+    private Integer count;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B trancheId(UUID trancheId) {
+      this.trancheId = trancheId;
+      return self();
+    }
+    public B count(Integer count) {
+      this.count = count;
+      return self();
+    }
+  }
 }
 

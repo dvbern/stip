@@ -15,13 +15,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BenutzereinstellungenUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BenutzereinstellungenUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid Boolean digitaleKommunikation;
+
+  protected BenutzereinstellungenUpdateDto(BenutzereinstellungenUpdateDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.digitaleKommunikation = b.digitaleKommunikation;
+  }
+
+  public BenutzereinstellungenUpdateDto() {
+  }
 
   /**
    **/
@@ -101,5 +109,38 @@ public class BenutzereinstellungenUpdateDto  implements Serializable {
   }
 
 
+  public static BenutzereinstellungenUpdateDtoBuilder<?, ?> builder() {
+    return new BenutzereinstellungenUpdateDtoBuilderImpl();
+  }
+
+  private static final class BenutzereinstellungenUpdateDtoBuilderImpl extends BenutzereinstellungenUpdateDtoBuilder<BenutzereinstellungenUpdateDto, BenutzereinstellungenUpdateDtoBuilderImpl> {
+
+    @Override
+    protected BenutzereinstellungenUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BenutzereinstellungenUpdateDto build() {
+      return new BenutzereinstellungenUpdateDto(this);
+    }
+  }
+
+  public static abstract class BenutzereinstellungenUpdateDtoBuilder<C extends BenutzereinstellungenUpdateDto, B extends BenutzereinstellungenUpdateDtoBuilder<C, B>>  {
+    private UUID id;
+    private Boolean digitaleKommunikation;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B digitaleKommunikation(Boolean digitaleKommunikation) {
+      this.digitaleKommunikation = digitaleKommunikation;
+      return self();
+    }
+  }
 }
 

@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("AusbildungUnterbruchAntragSB")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
@@ -39,6 +39,26 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   private @Valid LocalDate unterbruchLatestEndDate;
   private @Valid LocalDate unterbruchEarliestStartDate;
   private @Valid Integer monateOhneAnspruch;
+
+  protected AusbildungUnterbruchAntragSBDto(AusbildungUnterbruchAntragSBDtoBuilder<?, ?> b) {
+    this.status = b.status;
+    this.kommentarSB = b.kommentarSB;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+    this.id = b.id;
+    this.timestampErstellt = b.timestampErstellt;
+    this.userErstellt = b.userErstellt;
+    this.kommentarGS = b.kommentarGS;
+    this.canAntragAkzeptieren = b.canAntragAkzeptieren;
+    this.dokuments = b.dokuments;
+    this.gesuchId = b.gesuchId;
+    this.unterbruchLatestEndDate = b.unterbruchLatestEndDate;
+    this.unterbruchEarliestStartDate = b.unterbruchEarliestStartDate;
+    this.monateOhneAnspruch = b.monateOhneAnspruch;
+  }
+
+  public AusbildungUnterbruchAntragSBDto() {
+  }
 
   /**
    **/
@@ -387,5 +407,98 @@ public class AusbildungUnterbruchAntragSBDto  implements Serializable {
   }
 
 
+  public static AusbildungUnterbruchAntragSBDtoBuilder<?, ?> builder() {
+    return new AusbildungUnterbruchAntragSBDtoBuilderImpl();
+  }
+
+  private static final class AusbildungUnterbruchAntragSBDtoBuilderImpl extends AusbildungUnterbruchAntragSBDtoBuilder<AusbildungUnterbruchAntragSBDto, AusbildungUnterbruchAntragSBDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungUnterbruchAntragSBDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungUnterbruchAntragSBDto build() {
+      return new AusbildungUnterbruchAntragSBDto(this);
+    }
+  }
+
+  public static abstract class AusbildungUnterbruchAntragSBDtoBuilder<C extends AusbildungUnterbruchAntragSBDto, B extends AusbildungUnterbruchAntragSBDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status;
+    private String kommentarSB;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private UUID id;
+    private java.time.LocalDateTime timestampErstellt;
+    private String userErstellt;
+    private String kommentarGS;
+    private Boolean canAntragAkzeptieren;
+    private List<DokumentDto> dokuments = new ArrayList<>();
+    private UUID gesuchId;
+    private LocalDate unterbruchLatestEndDate;
+    private LocalDate unterbruchEarliestStartDate;
+    private Integer monateOhneAnspruch;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B status(ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B kommentarSB(String kommentarSB) {
+      this.kommentarSB = kommentarSB;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B timestampErstellt(java.time.LocalDateTime timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B kommentarGS(String kommentarGS) {
+      this.kommentarGS = kommentarGS;
+      return self();
+    }
+    public B canAntragAkzeptieren(Boolean canAntragAkzeptieren) {
+      this.canAntragAkzeptieren = canAntragAkzeptieren;
+      return self();
+    }
+    public B dokuments(List<DokumentDto> dokuments) {
+      this.dokuments = dokuments;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B unterbruchLatestEndDate(LocalDate unterbruchLatestEndDate) {
+      this.unterbruchLatestEndDate = unterbruchLatestEndDate;
+      return self();
+    }
+    public B unterbruchEarliestStartDate(LocalDate unterbruchEarliestStartDate) {
+      this.unterbruchEarliestStartDate = unterbruchEarliestStartDate;
+      return self();
+    }
+    public B monateOhneAnspruch(Integer monateOhneAnspruch) {
+      this.monateOhneAnspruch = monateOhneAnspruch;
+      return self();
+    }
+  }
 }
 

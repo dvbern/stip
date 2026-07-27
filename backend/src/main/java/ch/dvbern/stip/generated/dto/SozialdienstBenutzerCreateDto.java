@@ -14,15 +14,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstBenutzerCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstBenutzerCreateDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
   private @Valid String redirectUri;
+
+  protected SozialdienstBenutzerCreateDto(SozialdienstBenutzerCreateDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.email = b.email;
+    this.redirectUri = b.redirectUri;
+  }
+
+  public SozialdienstBenutzerCreateDto() {
+  }
 
   /**
    **/
@@ -146,5 +156,48 @@ public class SozialdienstBenutzerCreateDto  implements Serializable {
   }
 
 
+  public static SozialdienstBenutzerCreateDtoBuilder<?, ?> builder() {
+    return new SozialdienstBenutzerCreateDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstBenutzerCreateDtoBuilderImpl extends SozialdienstBenutzerCreateDtoBuilder<SozialdienstBenutzerCreateDto, SozialdienstBenutzerCreateDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstBenutzerCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstBenutzerCreateDto build() {
+      return new SozialdienstBenutzerCreateDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstBenutzerCreateDtoBuilder<C extends SozialdienstBenutzerCreateDto, B extends SozialdienstBenutzerCreateDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String email;
+    private String redirectUri;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B redirectUri(String redirectUri) {
+      this.redirectUri = redirectUri;
+      return self();
+    }
+  }
 }
 

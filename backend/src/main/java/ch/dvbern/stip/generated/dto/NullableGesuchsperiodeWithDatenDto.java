@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("NullableGesuchsperiodeWithDaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NullableGesuchsperiodeWithDatenDto  implements Serializable {
   private @Valid GesuchsperiodeWithDatenDto value;
+
+  protected NullableGesuchsperiodeWithDatenDto(NullableGesuchsperiodeWithDatenDtoBuilder<?, ?> b) {
+    this.value = b.value;
+  }
+
+  public NullableGesuchsperiodeWithDatenDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class NullableGesuchsperiodeWithDatenDto  implements Serializable {
   }
 
 
+  public static NullableGesuchsperiodeWithDatenDtoBuilder<?, ?> builder() {
+    return new NullableGesuchsperiodeWithDatenDtoBuilderImpl();
+  }
+
+  private static final class NullableGesuchsperiodeWithDatenDtoBuilderImpl extends NullableGesuchsperiodeWithDatenDtoBuilder<NullableGesuchsperiodeWithDatenDto, NullableGesuchsperiodeWithDatenDtoBuilderImpl> {
+
+    @Override
+    protected NullableGesuchsperiodeWithDatenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public NullableGesuchsperiodeWithDatenDto build() {
+      return new NullableGesuchsperiodeWithDatenDto(this);
+    }
+  }
+
+  public static abstract class NullableGesuchsperiodeWithDatenDtoBuilder<C extends NullableGesuchsperiodeWithDatenDto, B extends NullableGesuchsperiodeWithDatenDtoBuilder<C, B>>  {
+    private GesuchsperiodeWithDatenDto value;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B value(GesuchsperiodeWithDatenDto value) {
+      this.value = value;
+      return self();
+    }
+  }
 }
 

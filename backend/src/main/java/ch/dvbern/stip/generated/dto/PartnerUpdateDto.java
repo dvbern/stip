@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PartnerUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PartnerUpdateDto  implements Serializable {
   private @Valid AdresseDto adresse;
@@ -28,6 +28,19 @@ public class PartnerUpdateDto  implements Serializable {
   private @Valid String nachname;
   private @Valid Boolean inAusbildung;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum ausbildungspensum;
+
+  protected PartnerUpdateDto(PartnerUpdateDtoBuilder<?, ?> b) {
+    this.adresse = b.adresse;
+    this.vorname = b.vorname;
+    this.geburtsdatum = b.geburtsdatum;
+    this.sozialversicherungsnummer = b.sozialversicherungsnummer;
+    this.nachname = b.nachname;
+    this.inAusbildung = b.inAusbildung;
+    this.ausbildungspensum = b.ausbildungspensum;
+  }
+
+  public PartnerUpdateDto() {
+  }
 
   /**
    **/
@@ -212,5 +225,63 @@ public class PartnerUpdateDto  implements Serializable {
   }
 
 
+  public static PartnerUpdateDtoBuilder<?, ?> builder() {
+    return new PartnerUpdateDtoBuilderImpl();
+  }
+
+  private static final class PartnerUpdateDtoBuilderImpl extends PartnerUpdateDtoBuilder<PartnerUpdateDto, PartnerUpdateDtoBuilderImpl> {
+
+    @Override
+    protected PartnerUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PartnerUpdateDto build() {
+      return new PartnerUpdateDto(this);
+    }
+  }
+
+  public static abstract class PartnerUpdateDtoBuilder<C extends PartnerUpdateDto, B extends PartnerUpdateDtoBuilder<C, B>>  {
+    private AdresseDto adresse;
+    private String vorname;
+    private LocalDate geburtsdatum;
+    private String sozialversicherungsnummer;
+    private String nachname;
+    private Boolean inAusbildung;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum ausbildungspensum;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B geburtsdatum(LocalDate geburtsdatum) {
+      this.geburtsdatum = geburtsdatum;
+      return self();
+    }
+    public B sozialversicherungsnummer(String sozialversicherungsnummer) {
+      this.sozialversicherungsnummer = sozialversicherungsnummer;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B inAusbildung(Boolean inAusbildung) {
+      this.inAusbildung = inAusbildung;
+      return self();
+    }
+    public B ausbildungspensum(ch.dvbern.stip.api.ausbildung.type.AusbildungsPensum ausbildungspensum) {
+      this.ausbildungspensum = ausbildungspensum;
+      return self();
+    }
+  }
 }
 

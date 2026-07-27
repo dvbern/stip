@@ -51,6 +51,11 @@ kstip:
         steuerdaten:
           enabled: true
           adapter-type: nesko
+        berechnung:
+          enabled: true
+          adapter-type: bern
+          major-version: 1
+          minor-version: 0
       adapter:
         steuerdaten:
           nesko:
@@ -68,6 +73,11 @@ kstip:
       port:
         steuerdaten:
           enabled: false
+        berechnung:
+          enabled: true
+          adapter-type: bern
+          major-version: 1
+          minor-version: 0
   seeding:
     seed-on-profile:
       - 'prod'

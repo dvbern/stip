@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("PaginatedResult")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class PaginatedResultDto  implements Serializable {
   private @Valid Integer page;
   private @Valid Integer pageSize;
   private @Valid Integer totalEntries;
+
+  protected PaginatedResultDto(PaginatedResultDtoBuilder<?, ?> b) {
+    this.page = b.page;
+    this.pageSize = b.pageSize;
+    this.totalEntries = b.totalEntries;
+  }
+
+  public PaginatedResultDto() {
+  }
 
   /**
    **/
@@ -121,5 +130,43 @@ public class PaginatedResultDto  implements Serializable {
   }
 
 
+  public static PaginatedResultDtoBuilder<?, ?> builder() {
+    return new PaginatedResultDtoBuilderImpl();
+  }
+
+  private static final class PaginatedResultDtoBuilderImpl extends PaginatedResultDtoBuilder<PaginatedResultDto, PaginatedResultDtoBuilderImpl> {
+
+    @Override
+    protected PaginatedResultDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public PaginatedResultDto build() {
+      return new PaginatedResultDto(this);
+    }
+  }
+
+  public static abstract class PaginatedResultDtoBuilder<C extends PaginatedResultDto, B extends PaginatedResultDtoBuilder<C, B>>  {
+    private Integer page;
+    private Integer pageSize;
+    private Integer totalEntries;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B page(Integer page) {
+      this.page = page;
+      return self();
+    }
+    public B pageSize(Integer pageSize) {
+      this.pageSize = pageSize;
+      return self();
+    }
+    public B totalEntries(Integer totalEntries) {
+      this.totalEntries = totalEntries;
+      return self();
+    }
+  }
 }
 
