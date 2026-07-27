@@ -33,15 +33,4 @@ public class InputUtils {
     public static int sumNullables(Integer... values) {
         return Arrays.stream(values).filter(Objects::nonNull).mapToInt(value -> value).sum();
     }
-
-    public static int toJahresWert(final int monatsWert) {
-        return monatsWert * 12;
-    }
-
-    public static Integer toJahresWert(final Integer monatsWert) {
-        if (Objects.isNull(monatsWert)) {
-            return null;
-        }
-        return monatsWert * 12;
-    }
 }

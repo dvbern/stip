@@ -73,7 +73,7 @@ public class PersoenlichesBudgetCalculatorBernV1_0Test {
                 gesuchsjahr
             );
 
-        assertThat(persoenlichesBudgetresultatDto.getTotal(), is(-8716));
+        assertThat(persoenlichesBudgetresultatDto.getTotal(), is(-10459));
         assertThat(persoenlichesBudgetresultatDto.getEinnahmenMinusKosten(), is(-20918));
         assertThat(persoenlichesBudgetresultatDto.getAnzahlPersonenImHaushalt(), is(2));
         assertThat(persoenlichesBudgetresultatDto.getProKopfTeilung(), is(2));

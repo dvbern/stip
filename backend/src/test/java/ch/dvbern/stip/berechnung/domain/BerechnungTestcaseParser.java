@@ -56,12 +56,14 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ArgumentsSource;
 import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 public class BerechnungTestcaseParser {
-    static final String OUTPUT_DIR = "testcase/serialized-testcases-2";
+    static final String OUTPUT_DIR = "testcase/serialized-testcases";
 
     LandRepository landRepository = Mockito.mock(LandRepository.class);
 
@@ -105,8 +107,8 @@ public class BerechnungTestcaseParser {
         )
     );
 
-    // @ParameterizedTest
-    // @ArgumentsSource(BerechnungTestcaseParserArgumentProvider.class)
+     @ParameterizedTest
+     @ArgumentsSource(BerechnungTestcaseParserArgumentProvider.class)
     void parseAndSafeTestcases(final DemoData demoData) {
         Mockito.when(landRepository.getByIso2code(ArgumentMatchers.any())).thenReturn(Optional.of(new Land()));
         Mockito.when(demoDataAusbildungsgangRepository.requireAusbildungsgangByDemoData(ArgumentMatchers.any()))

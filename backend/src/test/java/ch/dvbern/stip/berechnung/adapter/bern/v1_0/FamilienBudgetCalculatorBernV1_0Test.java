@@ -45,7 +45,7 @@ public class FamilienBudgetCalculatorBernV1_0Test {
 
         final List<Eltern> eltern =
             gesuchFormular.getElterns().stream().filter(eltern1 -> eltern1.getElternTyp() == ElternTyp.VATER).toList();
-        eltern.getFirst().setWohnkosten(1500);
+        eltern.getFirst().setWohnkosten(18000);
         final Steuerdaten steuerdaten = gesuchFormular.getSteuerdaten()
             .stream()
             .filter(steuerdaten1 -> steuerdaten1.getSteuerdatenTyp() == SteuerdatenTyp.VATER)
@@ -65,7 +65,7 @@ public class FamilienBudgetCalculatorBernV1_0Test {
         steuererklaerung.setErgaenzungsleistungen(500);
         steuererklaerung.setEinnahmenBGSA(500);
         steuererklaerung.setAndereEinnahmen(500);
-        steuererklaerung.setUnterhaltsbeitraege(500);
+        steuererklaerung.setUnterhaltsbeitraege(6000);
         steuererklaerung.setRenten(500);
 
         final List<AbstractFamilieEntity> kinderImHaushalt = gesuchFormular.getGeschwisters()
