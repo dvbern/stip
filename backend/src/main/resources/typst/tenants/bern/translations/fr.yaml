@@ -1,7 +1,7 @@
 common:
   svNr: N° AVS
   birthday: Date de naissance
-  education-year: Année de formation
+  educationYear: Année de formation
   from: Du
   till: Au
   months: Mois

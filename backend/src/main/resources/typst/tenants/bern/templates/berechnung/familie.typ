@@ -31,7 +31,7 @@
           budget,
           "nachname",
         )]),
-      badge.badge(t("common.svNr"), value: safe-get(
+      badge.badge(t("common.svn"), value: safe-get(
         budget,
         "sozialversicherungsnummer",
       )),
@@ -48,7 +48,7 @@
           budget,
           "nachnamePartner",
         )]),
-      badge.badge(t("common.svNr"), value: safe-get(
+      badge.badge(t("common.svn"), value: safe-get(
         budget,
         "sozialversicherungsnummerPartner",
       )),
@@ -60,9 +60,13 @@
   }
 
   badge-rows.push((
-    badge.badge(t("common.education-year"), value: safe-get(
-      payload,
-      "yearRange",
+    badge.badge(t("common.steuerjahr"), value: safe-get(
+      budget,
+      "steuerjahr",
+    )),
+    badge.badge(t("common.veranlagungscode"), value: safe-get(
+      budget,
+      "veranlagungscode",
     )),
     badge.badge(t("common.from"), value: display-date(
       safe-get(
@@ -138,7 +142,6 @@
       table.entry(
         t(prefix + "label"),
         format.chf(safe-get(einnahmen, "andereEinnahmen"), prefix: "positive"),
-        info: t(prefix + "info"),
       )
     },
     {
@@ -197,10 +200,10 @@
           safe-get(einnahmen, "einkommensfreibetrag"),
           prefix: "negative",
         ),
-        info: t(prefix + "info", einkommensfreibetrag: safe-get(
+        info: t(prefix + "info", einkommensfreibetrag: format.chf(safe-get(
           stammdaten,
           "einkommensfreibetrag",
-        )),
+        ))),
         line: constants.colors.border-dominant,
       )
     },
@@ -222,10 +225,14 @@
           safe-get(einnahmen, "anrechenbaresVermoegen"),
           prefix: "positive",
         ),
-        info: t(prefix + "info", steuerbaresVermoegen: safe-get(
+        info: t(prefix + "info", steuerbaresVermoegen: format.chf(safe-get(
           einnahmen,
           "steuerbaresVermoegen",
-        )),
+        )))
+          + " "
+          + t(prefix + "selbststaendigerwerbende", freibetrag: format.chf(
+            safe-get(stammdaten, "freibetragVermoegen"),
+          )),
       )
     },
     table.entry(

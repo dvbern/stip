@@ -1,7 +1,9 @@
 common:
-  svNr: SV-Nr
+  svn: SV-Nr
   birthday: Geburtsdatum
-  education-year: Aubdildungsjahr
+  ausbildungsjahr: Ausbildungsjahr
+  steuerjahr: Steuerjahr
+  veranlagungscode: Veranlagungscode
   from: Von
   till: Bis
   months: Monate
@@ -14,10 +16,10 @@ berechnung:
     uebersicht:
       kuerzung:
         identifier: k)
-        text: Das Gesuch wurde {anzahlMonate} Monat zu spät eingereicht. Dies ergibt eine Reduktion von CHF {betrag}.
+        text: Das Gesuch wurde {anzahlMonate} Monat zu spät eingereicht. Dies ergibt eine Reduktion von {betrag}.
       unterbruch:
         identifier: u)
-        text: Das Gesuch wurde {anzahlMonate} Monate Unterbrochen. Dies ergibt eine Reduktion von CHF {betrag}.
+        text: Das Gesuch wurde {anzahlMonate} Monate Unterbrochen. Dies ergibt eine Reduktion von {betrag}.
     einnahmen-kosten:
       bgsa:
         identifier: 1)
@@ -48,7 +50,7 @@ berechnung:
     info: Total anrechenbare, jährliche Einnahmen
     nettoerwerbseinkommen:
       label: Nettoerwerbseinkommen
-      info: Während des Ausbildungsjahrs erzielt. Bei gesuchstellender Person mit Studium auf Tertiärstufe ist der Einkommensfreibetrag von CHF {einkommensfreibetrag} bereits abgezogen.
+      info: Während des Ausbildungsjahrs erzielt. Bei gesuchstellender Person mit Studium auf Tertiärstufe ist der Einkommensfreibetrag von {einkommensfreibetrag} bereits abgezogen.
     totalEinkuenfte:
       label: Total der Einkünfte
       info: Siehe Steuerjahr.
@@ -76,7 +78,8 @@ berechnung:
       info: Schenkungen, andere Stipendien, etc.
     anrechenbaresVermoegen:
       label: Anrechenbares Vermögen
-      info: Es werden 15% vom Steuerbaren Vermögen von CHF {steuerbaresVermoegen} angerechnet.
+      info: Es werden 15% vom Steuerbaren Vermögen von {steuerbaresVermoegen} angerechnet.
+      selbststaendigerwerbende: Selbstständigerwerbende haben einen Freibetrag von {freibetrag}.
     elterlicheLeistung:
       label: Anrechenbare elterliche Leistung aus Familienbudget
     eigenmietwert:
@@ -95,7 +98,7 @@ berechnung:
       info: IV-Renten, PK-Renten, etc.. Abzug sofern bereits im Total der Einkünfte enthalten.
     einkommensfreibetragAbzug:
       label: abzüglich Einkommensfreibetrag
-      info: Der Einkommensfreibetrag beträgt CHF {einkommensfreibetrag}.
+      info: Der Einkommensfreibetrag beträgt {einkommensfreibetrag}.
     zwischentotal:
       label: Zwischentotal anrechenbare, jährliche Einnahmen
       info: Einnahmen nach Abzug des Einkommensfreibetrags können nicht negativ sein.

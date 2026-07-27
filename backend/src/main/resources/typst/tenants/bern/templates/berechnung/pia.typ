@@ -29,7 +29,7 @@
           budget,
           "nachname",
         )]),
-      badge.badge(t("common.svNr"), value: safe-get(
+      badge.badge(t("common.svn"), value: safe-get(
         budget,
         "sozialversicherungsnummer",
       )),
@@ -39,7 +39,7 @@
       ))),
     ),
     (
-      badge.badge(t("common.education-year"), value: safe-get(
+      badge.badge(t("common.ausbildungsjahr"), value: safe-get(
         payload,
         "yearRange",
       )),
@@ -90,7 +90,10 @@
         ),
         info: t(
           prefix + "info",
-          einkommensfreibetrag: safe-get(stammdaten, "einkommensfreibetrag"),
+          einkommensfreibetrag: format.chf(safe-get(
+            stammdaten,
+            "einkommensfreibetrag",
+          )),
         ),
         sub-table: (
           safe-get(einnahmen, "nettoerwerbseinkommen", default: ()).map(
@@ -115,16 +118,6 @@
         format.chf(
           safe-get(einnahmen, "einnahmenBGSATotal"),
           prefix: "positive",
-        ),
-        sub-table: (
-          safe-get(einnahmen, "einnahmenBGSA", default: ()).map(
-            person => table.sub-entry(safe-get(person, "vorname"), format.chf(
-              safe-get(
-                person,
-                "value",
-              ),
-            )),
-          )
         ),
       )
     },
@@ -296,10 +289,10 @@
           safe-get(einnahmen, "anrechenbaresVermoegen"),
           prefix: "positive",
         ),
-        info: t(prefix + "info", steuerbaresVermoegen: safe-get(
+        info: t(prefix + "info", steuerbaresVermoegen: format.chf(safe-get(
           einnahmen,
           "steuerbaresVermoegen",
-        )),
+        ))),
       )
     },
     {

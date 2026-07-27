@@ -29,5 +29,5 @@
   }
 
   let space = "\u{00A0}"
-  sign + space + out + space + "CHF"
+  sign + space + out
 }
