@@ -1,7 +1,9 @@
 common:
-  svNr: N° AVS
+  svn: N° AVS
   birthday: Date de naissance
-  educationYear: Année de formation
+  ausbildungsjahr: Année de formation
+  steuerjahr: Année fiscale
+  veranlagungscode: Code de taxation
   from: Du
   till: Au
   months: Mois
@@ -14,10 +16,10 @@ berechnung:
     uebersicht:
       kuerzung:
         identifier: k)
-        text: La demande a été déposée avec {anzahlMonate} mois de retard. Il en résulte une réduction de CHF {betrag}.
+        text: La demande a été déposée avec {anzahlMonate} mois de retard. Il en résulte une réduction de {betrag}.
       unterbruch:
         identifier: u)
-        text: La demande a été interrompue pendant {anzahlMonate} mois. Il en résulte une réduction de CHF {betrag}.
+        text: La demande a été interrompue pendant {anzahlMonate} mois. Il en résulte une réduction de {betrag}.
     einnahmen-kosten:
       bgsa:
         identifier: 1)
@@ -48,7 +50,7 @@ berechnung:
     info: Total des revenus annuels pris en compte
     nettoerwerbseinkommen:
       label: Revenu net d’activité lucrative
-      info: Réalisé pendant l’année de formation. Pour une personne requérante suivant des études de niveau tertiaire, la franchise sur le revenu de CHF {einkommensfreibetrag} est déjà déduite.
+      info: Réalisé pendant l’année de formation. Pour une personne requérante suivant des études de niveau tertiaire, la franchise sur le revenu de {einkommensfreibetrag} est déjà déduite.
     totalEinkuenfte:
       label: Total des revenus
       info: Voir année fiscale.
@@ -76,7 +78,8 @@ berechnung:
       info: Dons, autres bourses, etc.
     anrechenbaresVermoegen:
       label: Fortune prise en compte
-      info: 15% de la fortune imposable de CHF {steuerbaresVermoegen} sont pris en compte.
+      info: 15% de la fortune imposable de {steuerbaresVermoegen} sont pris en compte.
+      selbststaendigerwerbende: Les travailleurs indépendants bénéficient d’un abattement de {freibetrag}.
     elterlicheLeistung:
       label: Contribution parentale prise en compte selon le budget familial
     eigenmietwert:
@@ -95,7 +98,7 @@ berechnung:
       info: Rentes AI, rentes de caisse de pension, etc. Déduction si elles sont déjà incluses dans le total des revenus.
     einkommensfreibetragAbzug:
       label: déduction de la franchise sur le revenu
-      info: La franchise sur le revenu s’élève à CHF {einkommensfreibetrag}.
+      info: La franchise sur le revenu s’élève à {einkommensfreibetrag}.
     zwischentotal:
       label: Sous-total des revenus annuels pris en compte
       info: Les revenus après déduction de la franchise sur le revenu ne peuvent pas être négatifs.
