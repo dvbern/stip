@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("LebenslaufItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class LebenslaufItemDto  implements Serializable {
   private @Valid String von;
@@ -30,6 +30,22 @@ public class LebenslaufItemDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
   private @Valid String taetigkeitsBeschreibung;
   private @Valid Boolean invalid;
+
+  protected LebenslaufItemDto(LebenslaufItemDtoBuilder<?, ?> b) {
+    this.von = b.von;
+    this.bis = b.bis;
+    this.wohnsitz = b.wohnsitz;
+    this.id = b.id;
+    this.abschlussId = b.abschlussId;
+    this.ausbildungAbgeschlossen = b.ausbildungAbgeschlossen;
+    this.fachrichtungBerufsbezeichnung = b.fachrichtungBerufsbezeichnung;
+    this.taetigkeitsart = b.taetigkeitsart;
+    this.taetigkeitsBeschreibung = b.taetigkeitsBeschreibung;
+    this.invalid = b.invalid;
+  }
+
+  public LebenslaufItemDto() {
+  }
 
   /**
    * Datum im Format mm.YYYY
@@ -277,5 +293,78 @@ public class LebenslaufItemDto  implements Serializable {
   }
 
 
+  public static LebenslaufItemDtoBuilder<?, ?> builder() {
+    return new LebenslaufItemDtoBuilderImpl();
+  }
+
+  private static final class LebenslaufItemDtoBuilderImpl extends LebenslaufItemDtoBuilder<LebenslaufItemDto, LebenslaufItemDtoBuilderImpl> {
+
+    @Override
+    protected LebenslaufItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public LebenslaufItemDto build() {
+      return new LebenslaufItemDto(this);
+    }
+  }
+
+  public static abstract class LebenslaufItemDtoBuilder<C extends LebenslaufItemDto, B extends LebenslaufItemDtoBuilder<C, B>>  {
+    private String von;
+    private String bis;
+    private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+    private UUID id;
+    private UUID abschlussId;
+    private Boolean ausbildungAbgeschlossen;
+    private String fachrichtungBerufsbezeichnung;
+    private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
+    private String taetigkeitsBeschreibung;
+    private Boolean invalid;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B von(String von) {
+      this.von = von;
+      return self();
+    }
+    public B bis(String bis) {
+      this.bis = bis;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B abschlussId(UUID abschlussId) {
+      this.abschlussId = abschlussId;
+      return self();
+    }
+    public B ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+      this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
+      return self();
+    }
+    public B fachrichtungBerufsbezeichnung(String fachrichtungBerufsbezeichnung) {
+      this.fachrichtungBerufsbezeichnung = fachrichtungBerufsbezeichnung;
+      return self();
+    }
+    public B taetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
+      this.taetigkeitsart = taetigkeitsart;
+      return self();
+    }
+    public B taetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+      this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
+      return self();
+    }
+    public B invalid(Boolean invalid) {
+      this.invalid = invalid;
+      return self();
+    }
+  }
 }
 

@@ -21,15 +21,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FallDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FallDashboardItemDto  implements Serializable {
   private @Valid FallDto fall;
   private @Valid List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
   private @Valid DelegierungSlimDto currentDelegierung;
   private @Valid LocalDate earliestActiveGesuchPeriodeStart;
+
+  protected FallDashboardItemDto(FallDashboardItemDtoBuilder<?, ?> b) {
+    this.fall = b.fall;
+    this.ausbildungDashboardItems = b.ausbildungDashboardItems;
+    this.currentDelegierung = b.currentDelegierung;
+    this.earliestActiveGesuchPeriodeStart = b.earliestActiveGesuchPeriodeStart;
+  }
+
+  public FallDashboardItemDto() {
+  }
 
   /**
    **/
@@ -167,5 +177,48 @@ public class FallDashboardItemDto  implements Serializable {
   }
 
 
+  public static FallDashboardItemDtoBuilder<?, ?> builder() {
+    return new FallDashboardItemDtoBuilderImpl();
+  }
+
+  private static final class FallDashboardItemDtoBuilderImpl extends FallDashboardItemDtoBuilder<FallDashboardItemDto, FallDashboardItemDtoBuilderImpl> {
+
+    @Override
+    protected FallDashboardItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FallDashboardItemDto build() {
+      return new FallDashboardItemDto(this);
+    }
+  }
+
+  public static abstract class FallDashboardItemDtoBuilder<C extends FallDashboardItemDto, B extends FallDashboardItemDtoBuilder<C, B>>  {
+    private FallDto fall;
+    private List<AusbildungDashboardItemDto> ausbildungDashboardItems = new ArrayList<>();
+    private DelegierungSlimDto currentDelegierung;
+    private LocalDate earliestActiveGesuchPeriodeStart;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fall(FallDto fall) {
+      this.fall = fall;
+      return self();
+    }
+    public B ausbildungDashboardItems(List<AusbildungDashboardItemDto> ausbildungDashboardItems) {
+      this.ausbildungDashboardItems = ausbildungDashboardItems;
+      return self();
+    }
+    public B currentDelegierung(DelegierungSlimDto currentDelegierung) {
+      this.currentDelegierung = currentDelegierung;
+      return self();
+    }
+    public B earliestActiveGesuchPeriodeStart(LocalDate earliestActiveGesuchPeriodeStart) {
+      this.earliestActiveGesuchPeriodeStart = earliestActiveGesuchPeriodeStart;
+      return self();
+    }
+  }
 }
 

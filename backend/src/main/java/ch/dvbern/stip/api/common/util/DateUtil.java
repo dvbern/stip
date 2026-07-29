@@ -21,14 +21,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
-import java.util.List;
 
 import ch.dvbern.stip.api.common.exception.AppErrorException;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchformular.entity.GesuchFormular;
 import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
-import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import lombok.experimental.UtilityClass;
 
 import static ch.dvbern.stip.api.common.util.BusinessDateConstants.VERSPAETET_EINGEREICHT_STICHTAG;
@@ -165,6 +162,7 @@ public class DateUtil {
         return left.isBefore(date) && right.isAfter(date);
     }
 
+    // TODO: Move the next three to Gesuch, this should not be about entitys i think
     public int getStipendiumDurationRoundDown(final Gesuch gesuch) {
         final var roundedEingereicht = roundToStartOrEnd(
             gesuch.getEinreichedatum(),
@@ -182,16 +180,8 @@ public class DateUtil {
     }
 
     public static DateRange getGesuchDateRange(Gesuch gesuch) {
-        final List<DateRange> tranchenGueltigkeiten =
-            gesuch.getTranchenTranchen().map(GesuchTranche::getGueltigkeit).toList();
-        final var startDatum = tranchenGueltigkeiten.stream()
-            .min(Comparator.comparing(DateRange::getGueltigAb))
-            .map(DateRange::getGueltigAb)
-            .orElseThrow(IllegalStateException::new);
-        final var endDatum = tranchenGueltigkeiten.stream()
-            .max(Comparator.comparing(DateRange::getGueltigBis))
-            .map(DateRange::getGueltigBis)
-            .orElseThrow(IllegalStateException::new);
+        final var startDatum = gesuch.getGesuchGueltigkeitAb();
+        final var endDatum = gesuch.getGesuchGueltigkeitBis();
         return new DateRange(startDatum, endDatum);
     }
 

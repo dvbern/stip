@@ -15,14 +15,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BaseTrancheRequest")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BaseTrancheRequestDto  implements Serializable {
   private @Valid LocalDate start;
   private @Valid LocalDate end;
   private @Valid String comment;
+
+  protected BaseTrancheRequestDto(BaseTrancheRequestDtoBuilder<?, ?> b) {
+    this.start = b.start;
+    this.end = b.end;
+    this.comment = b.comment;
+  }
+
+  public BaseTrancheRequestDto() {
+  }
 
   /**
    **/
@@ -122,5 +131,43 @@ public class BaseTrancheRequestDto  implements Serializable {
   }
 
 
+  public static BaseTrancheRequestDtoBuilder<?, ?> builder() {
+    return new BaseTrancheRequestDtoBuilderImpl();
+  }
+
+  private static final class BaseTrancheRequestDtoBuilderImpl extends BaseTrancheRequestDtoBuilder<BaseTrancheRequestDto, BaseTrancheRequestDtoBuilderImpl> {
+
+    @Override
+    protected BaseTrancheRequestDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BaseTrancheRequestDto build() {
+      return new BaseTrancheRequestDto(this);
+    }
+  }
+
+  public static abstract class BaseTrancheRequestDtoBuilder<C extends BaseTrancheRequestDto, B extends BaseTrancheRequestDtoBuilder<C, B>>  {
+    private LocalDate start;
+    private LocalDate end;
+    private String comment;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B start(LocalDate start) {
+      this.start = start;
+      return self();
+    }
+    public B end(LocalDate end) {
+      this.end = end;
+      return self();
+    }
+    public B comment(String comment) {
+      this.comment = comment;
+      return self();
+    }
+  }
 }
 

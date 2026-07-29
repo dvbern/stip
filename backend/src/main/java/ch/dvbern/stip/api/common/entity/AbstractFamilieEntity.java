@@ -18,10 +18,11 @@
 package ch.dvbern.stip.api.common.entity;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 import ch.dvbern.stip.api.common.service.NullableUnlessGenerated;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
-import ch.dvbern.stip.api.eltern.type.ElternTyp;
+import ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -64,10 +65,22 @@ public class AbstractFamilieEntity extends AbstractPerson {
     @DecimalMin("0.00")
     private BigDecimal wohnsitzAnteilVater;
 
-    public BigDecimal getWohnsitzAnteil(ElternTyp elternTyp) {
-        return switch (elternTyp) {
-            case VATER -> this.getWohnsitzAnteilVater();
-            case MUTTER -> this.getWohnsitzAnteilMutter();
+    public BigDecimal getWohnsitzAnteil(SteuerdatenTyp steuerdatenTyp) {
+        if (getWohnsitz() == Wohnsitz.FAMILIE) {
+            if (Objects.isNull(getWohnsitzAnteilVater()) && Objects.isNull(getWohnsitzAnteilMutter())) {
+                return BigDecimal.valueOf(100);
+            }
+        }
+        if (getWohnsitz().isEigenerHaushalt()) {
+            return BigDecimal.ZERO;
+        }
+
+        return switch (steuerdatenTyp) {
+            case FAMILIE -> Objects.requireNonNullElse(getWohnsitzAnteilVater(), BigDecimal.ZERO).intValue() > 0
+                ? getWohnsitzAnteilVater()
+                : getWohnsitzAnteilMutter();
+            case VATER -> Objects.requireNonNullElse(getWohnsitzAnteilVater(), BigDecimal.ZERO);
+            case MUTTER -> Objects.requireNonNullElse(getWohnsitzAnteilMutter(), BigDecimal.ZERO);
         };
     }
 }

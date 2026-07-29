@@ -16,13 +16,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SachbearbeiterZuordnungStammdatenList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
   private @Valid UUID sachbearbeiter;
   private @Valid SachbearbeiterZuordnungStammdatenDto zuordnung;
+
+  protected SachbearbeiterZuordnungStammdatenListDto(SachbearbeiterZuordnungStammdatenListDtoBuilder<?, ?> b) {
+    this.sachbearbeiter = b.sachbearbeiter;
+    this.zuordnung = b.zuordnung;
+  }
+
+  public SachbearbeiterZuordnungStammdatenListDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class SachbearbeiterZuordnungStammdatenListDto  implements Serializable {
   }
 
 
+  public static SachbearbeiterZuordnungStammdatenListDtoBuilder<?, ?> builder() {
+    return new SachbearbeiterZuordnungStammdatenListDtoBuilderImpl();
+  }
+
+  private static final class SachbearbeiterZuordnungStammdatenListDtoBuilderImpl extends SachbearbeiterZuordnungStammdatenListDtoBuilder<SachbearbeiterZuordnungStammdatenListDto, SachbearbeiterZuordnungStammdatenListDtoBuilderImpl> {
+
+    @Override
+    protected SachbearbeiterZuordnungStammdatenListDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SachbearbeiterZuordnungStammdatenListDto build() {
+      return new SachbearbeiterZuordnungStammdatenListDto(this);
+    }
+  }
+
+  public static abstract class SachbearbeiterZuordnungStammdatenListDtoBuilder<C extends SachbearbeiterZuordnungStammdatenListDto, B extends SachbearbeiterZuordnungStammdatenListDtoBuilder<C, B>>  {
+    private UUID sachbearbeiter;
+    private SachbearbeiterZuordnungStammdatenDto zuordnung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B sachbearbeiter(UUID sachbearbeiter) {
+      this.sachbearbeiter = sachbearbeiter;
+      return self();
+    }
+    public B zuordnung(SachbearbeiterZuordnungStammdatenDto zuordnung) {
+      this.zuordnung = zuordnung;
+      return self();
+    }
+  }
 }
 

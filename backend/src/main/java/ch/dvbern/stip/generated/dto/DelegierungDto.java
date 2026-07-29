@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Delegierung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierungDto  implements Serializable {
   private @Valid UUID id;
@@ -31,6 +31,19 @@ public class DelegierungDto  implements Serializable {
   private @Valid SozialdienstBenutzerDto delegierterMitarbeiter;
   private @Valid LocalDate startDate;
   private @Valid LocalDate endDate;
+
+  protected DelegierungDto(DelegierungDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.sozialdienst = b.sozialdienst;
+    this.persoenlicheAngaben = b.persoenlicheAngaben;
+    this.status = b.status;
+    this.delegierterMitarbeiter = b.delegierterMitarbeiter;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+  }
+
+  public DelegierungDto() {
+  }
 
   /**
    **/
@@ -214,5 +227,63 @@ public class DelegierungDto  implements Serializable {
   }
 
 
+  public static DelegierungDtoBuilder<?, ?> builder() {
+    return new DelegierungDtoBuilderImpl();
+  }
+
+  private static final class DelegierungDtoBuilderImpl extends DelegierungDtoBuilder<DelegierungDto, DelegierungDtoBuilderImpl> {
+
+    @Override
+    protected DelegierungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DelegierungDto build() {
+      return new DelegierungDto(this);
+    }
+  }
+
+  public static abstract class DelegierungDtoBuilder<C extends DelegierungDto, B extends DelegierungDtoBuilder<C, B>>  {
+    private UUID id;
+    private SozialdienstSlimDto sozialdienst;
+    private PersoenlicheAngabenDto persoenlicheAngaben;
+    private ch.dvbern.stip.api.delegieren.type.DelegierungStatus status;
+    private SozialdienstBenutzerDto delegierterMitarbeiter;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B sozialdienst(SozialdienstSlimDto sozialdienst) {
+      this.sozialdienst = sozialdienst;
+      return self();
+    }
+    public B persoenlicheAngaben(PersoenlicheAngabenDto persoenlicheAngaben) {
+      this.persoenlicheAngaben = persoenlicheAngaben;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.delegieren.type.DelegierungStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B delegierterMitarbeiter(SozialdienstBenutzerDto delegierterMitarbeiter) {
+      this.delegierterMitarbeiter = delegierterMitarbeiter;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+  }
 }
 

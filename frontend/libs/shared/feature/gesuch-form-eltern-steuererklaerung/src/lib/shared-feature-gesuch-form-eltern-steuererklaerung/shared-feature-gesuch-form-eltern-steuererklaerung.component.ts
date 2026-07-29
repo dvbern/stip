@@ -18,7 +18,6 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { MaskitoDirective } from '@maskito/angular';
 import { Store } from '@ngrx/store';
 
@@ -35,6 +34,7 @@ import {
   SharedPatternDocumentUploadComponent,
   createUploadOptionsFactory,
 } from '@dv/shared/pattern/document-upload';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
   SharedUiFormFieldDirective,
   SharedUiFormMessageErrorDirective,
@@ -63,7 +63,6 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
     ReactiveFormsModule,
     MaskitoDirective,
     SharedUiInfoDialogDirective,
-    TranslocoPipe,
     MatFormFieldModule,
     SharedUiZuvorHintDirective,
     MatInputModule,
@@ -76,6 +75,7 @@ import { selectSharedFeatureGesuchFormSteuererklaerungView } from './shared-feat
     SharedUiFormZuvorHintComponent,
     SharedUiTranslateChangePipe,
     SharedPatternDocumentUploadComponent,
+    SharedUiAdvTranslocoDirective,
   ],
   templateUrl:
     './shared-feature-gesuch-form-eltern-steuererklaerung.component.html',

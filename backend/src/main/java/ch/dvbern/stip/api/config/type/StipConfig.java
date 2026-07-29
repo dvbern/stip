@@ -61,6 +61,8 @@ public interface StipConfig {
 
     GlobalPorts globalPorts();
 
+    GlobalAdapterConfig globalAdapter();
+
     Map<TenantIdentifier, TenantConfig> tenant();
 
     interface OIDC {

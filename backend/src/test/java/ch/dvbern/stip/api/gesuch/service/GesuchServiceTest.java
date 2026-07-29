@@ -100,7 +100,7 @@ import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zuordnung.entity.Zuordnung;
 import ch.dvbern.stip.api.zuordnung.service.ZuordnungService;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.FamiliensituationUpdateDto;
 import ch.dvbern.stip.generated.dto.GesuchTrancheUpdateDto;
@@ -1032,7 +1032,7 @@ class GesuchServiceTest {
         berechnungsResultatDto.setBerechnungStipendium(0);
         berechnungsResultatDto.setBerechnungDarlehen(0);
         berechnungsResultatDto.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsResultatDto);
 
         assertDoesNotThrow(() -> gesuchService.gesuchStatusCheckUnterschriftenblatt(gesuch.getId()));
@@ -1073,7 +1073,7 @@ class GesuchServiceTest {
         final var berechnungsresultat = new BerechnungsresultatDto();
         berechnungsresultat.setBerechnungStipendium(0);
         berechnungsresultat.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsresultat);
 
         var verfuegung = new Verfuegung();
@@ -1788,7 +1788,7 @@ class GesuchServiceTest {
         final var berechnungsresultat = new BerechnungsresultatDto();
         berechnungsresultat.setBerechnungStipendium(0);
         berechnungsresultat.setYear(Year.now().getValue());
-        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch, 1, 0))
+        when(berechnungService.getBerechnungsresultatFromGesuch(gesuch))
             .thenReturn(berechnungsresultat);
 
         gesuchFormular

@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DelegierterMitarbeiterAendern")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DelegierterMitarbeiterAendernDto  implements Serializable {
   private @Valid UUID mitarbeiterId;
+
+  protected DelegierterMitarbeiterAendernDto(DelegierterMitarbeiterAendernDtoBuilder<?, ?> b) {
+    this.mitarbeiterId = b.mitarbeiterId;
+  }
+
+  public DelegierterMitarbeiterAendernDto() {
+  }
 
   /**
    **/
@@ -81,5 +88,33 @@ public class DelegierterMitarbeiterAendernDto  implements Serializable {
   }
 
 
+  public static DelegierterMitarbeiterAendernDtoBuilder<?, ?> builder() {
+    return new DelegierterMitarbeiterAendernDtoBuilderImpl();
+  }
+
+  private static final class DelegierterMitarbeiterAendernDtoBuilderImpl extends DelegierterMitarbeiterAendernDtoBuilder<DelegierterMitarbeiterAendernDto, DelegierterMitarbeiterAendernDtoBuilderImpl> {
+
+    @Override
+    protected DelegierterMitarbeiterAendernDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DelegierterMitarbeiterAendernDto build() {
+      return new DelegierterMitarbeiterAendernDto(this);
+    }
+  }
+
+  public static abstract class DelegierterMitarbeiterAendernDtoBuilder<C extends DelegierterMitarbeiterAendernDto, B extends DelegierterMitarbeiterAendernDtoBuilder<C, B>>  {
+    private UUID mitarbeiterId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B mitarbeiterId(UUID mitarbeiterId) {
+      this.mitarbeiterId = mitarbeiterId;
+      return self();
+    }
+  }
 }
 

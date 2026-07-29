@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoSteuerdaten")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoSteuerdatenDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
@@ -34,6 +34,27 @@ public class DemoSteuerdatenDto  implements Serializable {
   private @Valid Integer verpflegungPartner;
   private @Valid Integer steuerjahr;
   private @Valid String veranlagungsStatus;
+
+  protected DemoSteuerdatenDto(DemoSteuerdatenDtoBuilder<?, ?> b) {
+    this.type = b.type;
+    this.totalEinkuenfte = b.totalEinkuenfte;
+    this.eigenmietwert = b.eigenmietwert;
+    this.isArbeitsverhaeltnisSelbstaendig = b.isArbeitsverhaeltnisSelbstaendig;
+    this.saeule3a = b.saeule3a;
+    this.saeule2 = b.saeule2;
+    this.vermoegen = b.vermoegen;
+    this.steuernKantonGemeinde = b.steuernKantonGemeinde;
+    this.steuernBund = b.steuernBund;
+    this.fahrkosten = b.fahrkosten;
+    this.fahrkostenPartner = b.fahrkostenPartner;
+    this.verpflegung = b.verpflegung;
+    this.verpflegungPartner = b.verpflegungPartner;
+    this.steuerjahr = b.steuerjahr;
+    this.veranlagungsStatus = b.veranlagungsStatus;
+  }
+
+  public DemoSteuerdatenDto() {
+  }
 
   /**
    **/
@@ -388,5 +409,103 @@ public class DemoSteuerdatenDto  implements Serializable {
   }
 
 
+  public static DemoSteuerdatenDtoBuilder<?, ?> builder() {
+    return new DemoSteuerdatenDtoBuilderImpl();
+  }
+
+  private static final class DemoSteuerdatenDtoBuilderImpl extends DemoSteuerdatenDtoBuilder<DemoSteuerdatenDto, DemoSteuerdatenDtoBuilderImpl> {
+
+    @Override
+    protected DemoSteuerdatenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoSteuerdatenDto build() {
+      return new DemoSteuerdatenDto(this);
+    }
+  }
+
+  public static abstract class DemoSteuerdatenDtoBuilder<C extends DemoSteuerdatenDto, B extends DemoSteuerdatenDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type;
+    private Integer totalEinkuenfte;
+    private Integer eigenmietwert;
+    private Boolean isArbeitsverhaeltnisSelbstaendig;
+    private Integer saeule3a;
+    private Integer saeule2;
+    private Integer vermoegen;
+    private Integer steuernKantonGemeinde;
+    private Integer steuernBund;
+    private Integer fahrkosten;
+    private Integer fahrkostenPartner;
+    private Integer verpflegung;
+    private Integer verpflegungPartner;
+    private Integer steuerjahr;
+    private String veranlagungsStatus;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B type(ch.dvbern.stip.api.steuerdaten.type.SteuerdatenTyp type) {
+      this.type = type;
+      return self();
+    }
+    public B totalEinkuenfte(Integer totalEinkuenfte) {
+      this.totalEinkuenfte = totalEinkuenfte;
+      return self();
+    }
+    public B eigenmietwert(Integer eigenmietwert) {
+      this.eigenmietwert = eigenmietwert;
+      return self();
+    }
+    public B isArbeitsverhaeltnisSelbstaendig(Boolean isArbeitsverhaeltnisSelbstaendig) {
+      this.isArbeitsverhaeltnisSelbstaendig = isArbeitsverhaeltnisSelbstaendig;
+      return self();
+    }
+    public B saeule3a(Integer saeule3a) {
+      this.saeule3a = saeule3a;
+      return self();
+    }
+    public B saeule2(Integer saeule2) {
+      this.saeule2 = saeule2;
+      return self();
+    }
+    public B vermoegen(Integer vermoegen) {
+      this.vermoegen = vermoegen;
+      return self();
+    }
+    public B steuernKantonGemeinde(Integer steuernKantonGemeinde) {
+      this.steuernKantonGemeinde = steuernKantonGemeinde;
+      return self();
+    }
+    public B steuernBund(Integer steuernBund) {
+      this.steuernBund = steuernBund;
+      return self();
+    }
+    public B fahrkosten(Integer fahrkosten) {
+      this.fahrkosten = fahrkosten;
+      return self();
+    }
+    public B fahrkostenPartner(Integer fahrkostenPartner) {
+      this.fahrkostenPartner = fahrkostenPartner;
+      return self();
+    }
+    public B verpflegung(Integer verpflegung) {
+      this.verpflegung = verpflegung;
+      return self();
+    }
+    public B verpflegungPartner(Integer verpflegungPartner) {
+      this.verpflegungPartner = verpflegungPartner;
+      return self();
+    }
+    public B steuerjahr(Integer steuerjahr) {
+      this.steuerjahr = steuerjahr;
+      return self();
+    }
+    public B veranlagungsStatus(String veranlagungsStatus) {
+      this.veranlagungsStatus = veranlagungsStatus;
+      return self();
+    }
+  }
 }
 

@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslaufTaetigkeit")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
@@ -25,6 +25,17 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   private @Valid LocalDate von;
   private @Valid LocalDate bis;
   private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+
+  protected DemoLebenslaufTaetigkeitDto(DemoLebenslaufTaetigkeitDtoBuilder<?, ?> b) {
+    this.taetigkeitsart = b.taetigkeitsart;
+    this.taetigkeitsBeschreibung = b.taetigkeitsBeschreibung;
+    this.von = b.von;
+    this.bis = b.bis;
+    this.wohnsitz = b.wohnsitz;
+  }
+
+  public DemoLebenslaufTaetigkeitDto() {
+  }
 
   /**
    **/
@@ -169,5 +180,53 @@ public class DemoLebenslaufTaetigkeitDto  implements Serializable {
   }
 
 
+  public static DemoLebenslaufTaetigkeitDtoBuilder<?, ?> builder() {
+    return new DemoLebenslaufTaetigkeitDtoBuilderImpl();
+  }
+
+  private static final class DemoLebenslaufTaetigkeitDtoBuilderImpl extends DemoLebenslaufTaetigkeitDtoBuilder<DemoLebenslaufTaetigkeitDto, DemoLebenslaufTaetigkeitDtoBuilderImpl> {
+
+    @Override
+    protected DemoLebenslaufTaetigkeitDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoLebenslaufTaetigkeitDto build() {
+      return new DemoLebenslaufTaetigkeitDto(this);
+    }
+  }
+
+  public static abstract class DemoLebenslaufTaetigkeitDtoBuilder<C extends DemoLebenslaufTaetigkeitDto, B extends DemoLebenslaufTaetigkeitDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart;
+    private String taetigkeitsBeschreibung;
+    private LocalDate von;
+    private LocalDate bis;
+    private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B taetigkeitsart(ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart taetigkeitsart) {
+      this.taetigkeitsart = taetigkeitsart;
+      return self();
+    }
+    public B taetigkeitsBeschreibung(String taetigkeitsBeschreibung) {
+      this.taetigkeitsBeschreibung = taetigkeitsBeschreibung;
+      return self();
+    }
+    public B von(LocalDate von) {
+      this.von = von;
+      return self();
+    }
+    public B bis(LocalDate bis) {
+      this.bis = bis;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+  }
 }
 

@@ -18,14 +18,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ValidationReport")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ValidationReportDto  implements Serializable {
   private @Valid List<ValidationMessageDto> validationErrors = new ArrayList<>();
   private @Valid List<ValidationMessageDto> validationWarnings = new ArrayList<>();
   private @Valid Boolean hasDocuments;
+
+  protected ValidationReportDto(ValidationReportDtoBuilder<?, ?> b) {
+    this.validationErrors = b.validationErrors;
+    this.validationWarnings = b.validationWarnings;
+    this.hasDocuments = b.hasDocuments;
+  }
+
+  public ValidationReportDto() {
+  }
 
   /**
    **/
@@ -160,5 +169,43 @@ public class ValidationReportDto  implements Serializable {
   }
 
 
+  public static ValidationReportDtoBuilder<?, ?> builder() {
+    return new ValidationReportDtoBuilderImpl();
+  }
+
+  private static final class ValidationReportDtoBuilderImpl extends ValidationReportDtoBuilder<ValidationReportDto, ValidationReportDtoBuilderImpl> {
+
+    @Override
+    protected ValidationReportDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ValidationReportDto build() {
+      return new ValidationReportDto(this);
+    }
+  }
+
+  public static abstract class ValidationReportDtoBuilder<C extends ValidationReportDto, B extends ValidationReportDtoBuilder<C, B>>  {
+    private List<ValidationMessageDto> validationErrors = new ArrayList<>();
+    private List<ValidationMessageDto> validationWarnings = new ArrayList<>();
+    private Boolean hasDocuments;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B validationErrors(List<ValidationMessageDto> validationErrors) {
+      this.validationErrors = validationErrors;
+      return self();
+    }
+    public B validationWarnings(List<ValidationMessageDto> validationWarnings) {
+      this.validationWarnings = validationWarnings;
+      return self();
+    }
+    public B hasDocuments(Boolean hasDocuments) {
+      this.hasDocuments = hasDocuments;
+      return self();
+    }
+  }
 }
 

@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstBenutzerBase")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstBenutzerBaseDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
+
+  protected SozialdienstBenutzerBaseDto(SozialdienstBenutzerBaseDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.email = b.email;
+  }
+
+  public SozialdienstBenutzerBaseDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class SozialdienstBenutzerBaseDto  implements Serializable {
   }
 
 
+  public static SozialdienstBenutzerBaseDtoBuilder<?, ?> builder() {
+    return new SozialdienstBenutzerBaseDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstBenutzerBaseDtoBuilderImpl extends SozialdienstBenutzerBaseDtoBuilder<SozialdienstBenutzerBaseDto, SozialdienstBenutzerBaseDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstBenutzerBaseDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstBenutzerBaseDto build() {
+      return new SozialdienstBenutzerBaseDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstBenutzerBaseDtoBuilder<C extends SozialdienstBenutzerBaseDto, B extends SozialdienstBenutzerBaseDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String email;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+  }
 }
 

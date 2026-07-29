@@ -8522,6 +8522,7 @@ components:
         - alter
         - wohnsitzBei
         - ausbildungssituation
+        - geschwisterTyp
       type: object
       properties:
         nachname:
@@ -8541,6 +8542,8 @@ components:
           type: integer
         ausbildungssituation:
           $ref: '#/components/schemas/Ausbildungssituation'
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
     DemoAuszahlung:
       required:
         - nachname
@@ -8871,6 +8874,12 @@ components:
         - FAMILIE
         - VATER
         - MUTTER
+      type: string
+    GeschwisterTyp:
+      enum:
+        - LEIBLICH
+        - STIEF
+        - HALB
       type: string
     DatenschutzbriefCreate:
       required:
@@ -10533,7 +10542,6 @@ components:
         - ausbildungBis
         - yearRange
         - gesuchTrancheId
-        - teilzeitKinderBeiPiaAnrechnen
         - berechnungsStammdaten
         - persoenlichesBudgetresultat
         - familienBudgetresultate
@@ -10566,7 +10574,7 @@ components:
             resultate mit der gleichen ID sind die berechnungen für getrennte
             eltern mit Kindern die eine Obhutsteilung haben
           $ref: '#/components/schemas/UUID'
-        berechnungsanteilKinder:
+        berechnungsanteilKinderDerEltern:
           description: >-
             Anteil dieser Berechnung am Berechnungstotal. Für Tranchen welche
             nur eine Berechnung haben ist dieser Wert null.
@@ -10863,6 +10871,7 @@ components:
         - fehlbetrag
         - proKopfTeilung
         - ungedeckterAnteilLebenshaltungskosten
+        - teilzeitKinderProzente
         - einnahmen
         - kosten
       properties:
@@ -10917,6 +10926,8 @@ components:
         proKopfTeilung:
           type: integer
         ungedeckterAnteilLebenshaltungskosten:
+          type: integer
+        teilzeitKinderProzente:
           type: integer
         einnahmen:
           description: Einnahmen des familien Budgets
@@ -11218,6 +11229,7 @@ components:
         - wohnsitz
         - vorname
         - nachname
+        - geschwisterTyp
         - geburtsdatum
         - ausbildungssituation
       type: object
@@ -11245,6 +11257,8 @@ components:
           type: number
         nachname:
           type: string
+        geschwisterTyp:
+          $ref: '#/components/schemas/GeschwisterTyp'
         hidden:
           type: boolean
     LebenslaufItemUpdate:

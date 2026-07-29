@@ -15,15 +15,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotizUpdate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizUpdateDto  implements Serializable {
   private @Valid UUID id;
   private @Valid String betreff;
   private @Valid String text;
   private @Valid Boolean pendenzAbgeschlossen;
+
+  protected GesuchNotizUpdateDto(GesuchNotizUpdateDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.betreff = b.betreff;
+    this.text = b.text;
+    this.pendenzAbgeschlossen = b.pendenzAbgeschlossen;
+  }
+
+  public GesuchNotizUpdateDto() {
+  }
 
   /**
    **/
@@ -146,5 +156,48 @@ public class GesuchNotizUpdateDto  implements Serializable {
   }
 
 
+  public static GesuchNotizUpdateDtoBuilder<?, ?> builder() {
+    return new GesuchNotizUpdateDtoBuilderImpl();
+  }
+
+  private static final class GesuchNotizUpdateDtoBuilderImpl extends GesuchNotizUpdateDtoBuilder<GesuchNotizUpdateDto, GesuchNotizUpdateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchNotizUpdateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchNotizUpdateDto build() {
+      return new GesuchNotizUpdateDto(this);
+    }
+  }
+
+  public static abstract class GesuchNotizUpdateDtoBuilder<C extends GesuchNotizUpdateDto, B extends GesuchNotizUpdateDtoBuilder<C, B>>  {
+    private UUID id;
+    private String betreff;
+    private String text;
+    private Boolean pendenzAbgeschlossen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B betreff(String betreff) {
+      this.betreff = betreff;
+      return self();
+    }
+    public B text(String text) {
+      this.text = text;
+      return self();
+    }
+    public B pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+      this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+      return self();
+    }
+  }
 }
 

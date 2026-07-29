@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslaufAusbildung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufAusbildungDto  implements Serializable {
   private @Valid String abschluss;
@@ -26,6 +26,18 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
   private @Valid Boolean ausbildungAbgeschlossen;
   private @Valid String berufsbezeichnungFachrichtung;
+
+  protected DemoLebenslaufAusbildungDto(DemoLebenslaufAusbildungDtoBuilder<?, ?> b) {
+    this.abschluss = b.abschluss;
+    this.von = b.von;
+    this.bis = b.bis;
+    this.wohnsitz = b.wohnsitz;
+    this.ausbildungAbgeschlossen = b.ausbildungAbgeschlossen;
+    this.berufsbezeichnungFachrichtung = b.berufsbezeichnungFachrichtung;
+  }
+
+  public DemoLebenslaufAusbildungDto() {
+  }
 
   /**
    **/
@@ -190,5 +202,58 @@ public class DemoLebenslaufAusbildungDto  implements Serializable {
   }
 
 
+  public static DemoLebenslaufAusbildungDtoBuilder<?, ?> builder() {
+    return new DemoLebenslaufAusbildungDtoBuilderImpl();
+  }
+
+  private static final class DemoLebenslaufAusbildungDtoBuilderImpl extends DemoLebenslaufAusbildungDtoBuilder<DemoLebenslaufAusbildungDto, DemoLebenslaufAusbildungDtoBuilderImpl> {
+
+    @Override
+    protected DemoLebenslaufAusbildungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoLebenslaufAusbildungDto build() {
+      return new DemoLebenslaufAusbildungDto(this);
+    }
+  }
+
+  public static abstract class DemoLebenslaufAusbildungDtoBuilder<C extends DemoLebenslaufAusbildungDto, B extends DemoLebenslaufAusbildungDtoBuilder<C, B>>  {
+    private String abschluss;
+    private LocalDate von;
+    private LocalDate bis;
+    private ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz;
+    private Boolean ausbildungAbgeschlossen;
+    private String berufsbezeichnungFachrichtung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B abschluss(String abschluss) {
+      this.abschluss = abschluss;
+      return self();
+    }
+    public B von(LocalDate von) {
+      this.von = von;
+      return self();
+    }
+    public B bis(LocalDate bis) {
+      this.bis = bis;
+      return self();
+    }
+    public B wohnsitz(ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton wohnsitz) {
+      this.wohnsitz = wohnsitz;
+      return self();
+    }
+    public B ausbildungAbgeschlossen(Boolean ausbildungAbgeschlossen) {
+      this.ausbildungAbgeschlossen = ausbildungAbgeschlossen;
+      return self();
+    }
+    public B berufsbezeichnungFachrichtung(String berufsbezeichnungFachrichtung) {
+      this.berufsbezeichnungFachrichtung = berufsbezeichnungFachrichtung;
+      return self();
+    }
+  }
 }
 

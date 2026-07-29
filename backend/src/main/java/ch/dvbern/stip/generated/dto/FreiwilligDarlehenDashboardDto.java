@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenDashboard")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenDashboardDto  implements Serializable {
   private @Valid UUID id;
@@ -31,6 +31,22 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
   private @Valid String bearbeiter;
   private @Valid LocalDate letzteAktivitaet;
+
+  protected FreiwilligDarlehenDashboardDto(FreiwilligDarlehenDashboardDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.fallId = b.fallId;
+    this.relatedGesuchId = b.relatedGesuchId;
+    this.fallNummer = b.fallNummer;
+    this.piaVorname = b.piaVorname;
+    this.piaNachname = b.piaNachname;
+    this.piaGeburtsdatum = b.piaGeburtsdatum;
+    this.status = b.status;
+    this.bearbeiter = b.bearbeiter;
+    this.letzteAktivitaet = b.letzteAktivitaet;
+  }
+
+  public FreiwilligDarlehenDashboardDto() {
+  }
 
   /**
    **/
@@ -280,5 +296,78 @@ public class FreiwilligDarlehenDashboardDto  implements Serializable {
   }
 
 
+  public static FreiwilligDarlehenDashboardDtoBuilder<?, ?> builder() {
+    return new FreiwilligDarlehenDashboardDtoBuilderImpl();
+  }
+
+  private static final class FreiwilligDarlehenDashboardDtoBuilderImpl extends FreiwilligDarlehenDashboardDtoBuilder<FreiwilligDarlehenDashboardDto, FreiwilligDarlehenDashboardDtoBuilderImpl> {
+
+    @Override
+    protected FreiwilligDarlehenDashboardDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FreiwilligDarlehenDashboardDto build() {
+      return new FreiwilligDarlehenDashboardDto(this);
+    }
+  }
+
+  public static abstract class FreiwilligDarlehenDashboardDtoBuilder<C extends FreiwilligDarlehenDashboardDto, B extends FreiwilligDarlehenDashboardDtoBuilder<C, B>>  {
+    private UUID id;
+    private UUID fallId;
+    private UUID relatedGesuchId;
+    private String fallNummer;
+    private String piaVorname;
+    private String piaNachname;
+    private String piaGeburtsdatum;
+    private ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+    private String bearbeiter;
+    private LocalDate letzteAktivitaet;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B relatedGesuchId(UUID relatedGesuchId) {
+      this.relatedGesuchId = relatedGesuchId;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B piaVorname(String piaVorname) {
+      this.piaVorname = piaVorname;
+      return self();
+    }
+    public B piaNachname(String piaNachname) {
+      this.piaNachname = piaNachname;
+      return self();
+    }
+    public B piaGeburtsdatum(String piaGeburtsdatum) {
+      this.piaGeburtsdatum = piaGeburtsdatum;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B bearbeiter(String bearbeiter) {
+      this.bearbeiter = bearbeiter;
+      return self();
+    }
+    public B letzteAktivitaet(LocalDate letzteAktivitaet) {
+      this.letzteAktivitaet = letzteAktivitaet;
+      return self();
+    }
+  }
 }
 

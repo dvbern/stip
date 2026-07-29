@@ -15,15 +15,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotizCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizCreateDto  implements Serializable {
   private @Valid UUID gesuchId;
   private @Valid String betreff;
   private @Valid String text;
   private @Valid ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+
+  protected GesuchNotizCreateDto(GesuchNotizCreateDtoBuilder<?, ?> b) {
+    this.gesuchId = b.gesuchId;
+    this.betreff = b.betreff;
+    this.text = b.text;
+    this.notizTyp = b.notizTyp;
+  }
+
+  public GesuchNotizCreateDto() {
+  }
 
   /**
    **/
@@ -147,5 +157,48 @@ public class GesuchNotizCreateDto  implements Serializable {
   }
 
 
+  public static GesuchNotizCreateDtoBuilder<?, ?> builder() {
+    return new GesuchNotizCreateDtoBuilderImpl();
+  }
+
+  private static final class GesuchNotizCreateDtoBuilderImpl extends GesuchNotizCreateDtoBuilder<GesuchNotizCreateDto, GesuchNotizCreateDtoBuilderImpl> {
+
+    @Override
+    protected GesuchNotizCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchNotizCreateDto build() {
+      return new GesuchNotizCreateDto(this);
+    }
+  }
+
+  public static abstract class GesuchNotizCreateDtoBuilder<C extends GesuchNotizCreateDto, B extends GesuchNotizCreateDtoBuilder<C, B>>  {
+    private UUID gesuchId;
+    private String betreff;
+    private String text;
+    private ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B betreff(String betreff) {
+      this.betreff = betreff;
+      return self();
+    }
+    public B text(String text) {
+      this.text = text;
+      return self();
+    }
+    public B notizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
+      this.notizTyp = notizTyp;
+      return self();
+    }
+  }
 }
 

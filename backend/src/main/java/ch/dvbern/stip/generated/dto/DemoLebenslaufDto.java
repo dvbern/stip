@@ -19,13 +19,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoLebenslauf")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoLebenslaufDto  implements Serializable {
   private @Valid List<DemoLebenslaufAusbildungDto> ausbildung = new ArrayList<>();
   private @Valid List<DemoLebenslaufTaetigkeitDto> taetigkeiten = new ArrayList<>();
+
+  protected DemoLebenslaufDto(DemoLebenslaufDtoBuilder<?, ?> b) {
+    this.ausbildung = b.ausbildung;
+    this.taetigkeiten = b.taetigkeiten;
+  }
+
+  public DemoLebenslaufDto() {
+  }
 
   /**
    **/
@@ -139,5 +147,38 @@ public class DemoLebenslaufDto  implements Serializable {
   }
 
 
+  public static DemoLebenslaufDtoBuilder<?, ?> builder() {
+    return new DemoLebenslaufDtoBuilderImpl();
+  }
+
+  private static final class DemoLebenslaufDtoBuilderImpl extends DemoLebenslaufDtoBuilder<DemoLebenslaufDto, DemoLebenslaufDtoBuilderImpl> {
+
+    @Override
+    protected DemoLebenslaufDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoLebenslaufDto build() {
+      return new DemoLebenslaufDto(this);
+    }
+  }
+
+  public static abstract class DemoLebenslaufDtoBuilder<C extends DemoLebenslaufDto, B extends DemoLebenslaufDtoBuilder<C, B>>  {
+    private List<DemoLebenslaufAusbildungDto> ausbildung = new ArrayList<>();
+    private List<DemoLebenslaufTaetigkeitDto> taetigkeiten = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B ausbildung(List<DemoLebenslaufAusbildungDto> ausbildung) {
+      this.ausbildung = ausbildung;
+      return self();
+    }
+    public B taetigkeiten(List<DemoLebenslaufTaetigkeitDto> taetigkeiten) {
+      this.taetigkeiten = taetigkeiten;
+      return self();
+    }
+  }
 }
 

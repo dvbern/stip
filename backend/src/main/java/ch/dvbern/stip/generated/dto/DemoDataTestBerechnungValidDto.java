@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataTestBerechnungValid")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataTestBerechnungValidDto  implements Serializable {
   private @Valid Boolean status;
@@ -24,6 +24,17 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
   private @Valid Boolean ungekuerztDarlehen;
   private @Valid Boolean stipendien;
   private @Valid Boolean darlehen;
+
+  protected DemoDataTestBerechnungValidDto(DemoDataTestBerechnungValidDtoBuilder<?, ?> b) {
+    this.status = b.status;
+    this.ungekuerztStipendien = b.ungekuerztStipendien;
+    this.ungekuerztDarlehen = b.ungekuerztDarlehen;
+    this.stipendien = b.stipendien;
+    this.darlehen = b.darlehen;
+  }
+
+  public DemoDataTestBerechnungValidDto() {
+  }
 
   /**
    **/
@@ -163,5 +174,53 @@ public class DemoDataTestBerechnungValidDto  implements Serializable {
   }
 
 
+  public static DemoDataTestBerechnungValidDtoBuilder<?, ?> builder() {
+    return new DemoDataTestBerechnungValidDtoBuilderImpl();
+  }
+
+  private static final class DemoDataTestBerechnungValidDtoBuilderImpl extends DemoDataTestBerechnungValidDtoBuilder<DemoDataTestBerechnungValidDto, DemoDataTestBerechnungValidDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataTestBerechnungValidDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataTestBerechnungValidDto build() {
+      return new DemoDataTestBerechnungValidDto(this);
+    }
+  }
+
+  public static abstract class DemoDataTestBerechnungValidDtoBuilder<C extends DemoDataTestBerechnungValidDto, B extends DemoDataTestBerechnungValidDtoBuilder<C, B>>  {
+    private Boolean status;
+    private Boolean ungekuerztStipendien;
+    private Boolean ungekuerztDarlehen;
+    private Boolean stipendien;
+    private Boolean darlehen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B status(Boolean status) {
+      this.status = status;
+      return self();
+    }
+    public B ungekuerztStipendien(Boolean ungekuerztStipendien) {
+      this.ungekuerztStipendien = ungekuerztStipendien;
+      return self();
+    }
+    public B ungekuerztDarlehen(Boolean ungekuerztDarlehen) {
+      this.ungekuerztDarlehen = ungekuerztDarlehen;
+      return self();
+    }
+    public B stipendien(Boolean stipendien) {
+      this.stipendien = stipendien;
+      return self();
+    }
+    public B darlehen(Boolean darlehen) {
+      this.darlehen = darlehen;
+      return self();
+    }
+  }
 }
 

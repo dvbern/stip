@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataTestBerechnungValues")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataTestBerechnungValuesDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status;
@@ -24,6 +24,17 @@ public class DemoDataTestBerechnungValuesDto  implements Serializable {
   private @Valid Integer ungekuerztDarlehen;
   private @Valid Integer stipendien;
   private @Valid Integer darlehen;
+
+  protected DemoDataTestBerechnungValuesDto(DemoDataTestBerechnungValuesDtoBuilder<?, ?> b) {
+    this.status = b.status;
+    this.ungekuerztStipendien = b.ungekuerztStipendien;
+    this.ungekuerztDarlehen = b.ungekuerztDarlehen;
+    this.stipendien = b.stipendien;
+    this.darlehen = b.darlehen;
+  }
+
+  public DemoDataTestBerechnungValuesDto() {
+  }
 
   /**
    **/
@@ -163,5 +174,53 @@ public class DemoDataTestBerechnungValuesDto  implements Serializable {
   }
 
 
+  public static DemoDataTestBerechnungValuesDtoBuilder<?, ?> builder() {
+    return new DemoDataTestBerechnungValuesDtoBuilderImpl();
+  }
+
+  private static final class DemoDataTestBerechnungValuesDtoBuilderImpl extends DemoDataTestBerechnungValuesDtoBuilder<DemoDataTestBerechnungValuesDto, DemoDataTestBerechnungValuesDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataTestBerechnungValuesDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataTestBerechnungValuesDto build() {
+      return new DemoDataTestBerechnungValuesDto(this);
+    }
+  }
+
+  public static abstract class DemoDataTestBerechnungValuesDtoBuilder<C extends DemoDataTestBerechnungValuesDto, B extends DemoDataTestBerechnungValuesDtoBuilder<C, B>>  {
+    private ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status;
+    private Integer ungekuerztStipendien;
+    private Integer ungekuerztDarlehen;
+    private Integer stipendien;
+    private Integer darlehen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B status(ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B ungekuerztStipendien(Integer ungekuerztStipendien) {
+      this.ungekuerztStipendien = ungekuerztStipendien;
+      return self();
+    }
+    public B ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+      this.ungekuerztDarlehen = ungekuerztDarlehen;
+      return self();
+    }
+    public B stipendien(Integer stipendien) {
+      this.stipendien = stipendien;
+      return self();
+    }
+    public B darlehen(Integer darlehen) {
+      this.darlehen = darlehen;
+      return self();
+    }
+  }
 }
 

@@ -16,9 +16,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchNotiz")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchNotizDto  implements Serializable {
   private @Valid UUID id;
@@ -32,6 +32,23 @@ public class GesuchNotizDto  implements Serializable {
   private @Valid String userMutiert;
   private @Valid LocalDate timestampMutiert;
   private @Valid String antwort;
+
+  protected GesuchNotizDto(GesuchNotizDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.betreff = b.betreff;
+    this.text = b.text;
+    this.userErstellt = b.userErstellt;
+    this.timestampErstellt = b.timestampErstellt;
+    this.notizTyp = b.notizTyp;
+    this.gesuchNummer = b.gesuchNummer;
+    this.pendenzAbgeschlossen = b.pendenzAbgeschlossen;
+    this.userMutiert = b.userMutiert;
+    this.timestampMutiert = b.timestampMutiert;
+    this.antwort = b.antwort;
+  }
+
+  public GesuchNotizDto() {
+  }
 
   /**
    **/
@@ -298,5 +315,83 @@ public class GesuchNotizDto  implements Serializable {
   }
 
 
+  public static GesuchNotizDtoBuilder<?, ?> builder() {
+    return new GesuchNotizDtoBuilderImpl();
+  }
+
+  private static final class GesuchNotizDtoBuilderImpl extends GesuchNotizDtoBuilder<GesuchNotizDto, GesuchNotizDtoBuilderImpl> {
+
+    @Override
+    protected GesuchNotizDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchNotizDto build() {
+      return new GesuchNotizDto(this);
+    }
+  }
+
+  public static abstract class GesuchNotizDtoBuilder<C extends GesuchNotizDto, B extends GesuchNotizDtoBuilder<C, B>>  {
+    private UUID id;
+    private String betreff;
+    private String text;
+    private String userErstellt;
+    private LocalDate timestampErstellt;
+    private ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp;
+    private String gesuchNummer;
+    private Boolean pendenzAbgeschlossen;
+    private String userMutiert;
+    private LocalDate timestampMutiert;
+    private String antwort;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B betreff(String betreff) {
+      this.betreff = betreff;
+      return self();
+    }
+    public B text(String text) {
+      this.text = text;
+      return self();
+    }
+    public B userErstellt(String userErstellt) {
+      this.userErstellt = userErstellt;
+      return self();
+    }
+    public B timestampErstellt(LocalDate timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B notizTyp(ch.dvbern.stip.api.notiz.type.GesuchNotizTyp notizTyp) {
+      this.notizTyp = notizTyp;
+      return self();
+    }
+    public B gesuchNummer(String gesuchNummer) {
+      this.gesuchNummer = gesuchNummer;
+      return self();
+    }
+    public B pendenzAbgeschlossen(Boolean pendenzAbgeschlossen) {
+      this.pendenzAbgeschlossen = pendenzAbgeschlossen;
+      return self();
+    }
+    public B userMutiert(String userMutiert) {
+      this.userMutiert = userMutiert;
+      return self();
+    }
+    public B timestampMutiert(LocalDate timestampMutiert) {
+      this.timestampMutiert = timestampMutiert;
+      return self();
+    }
+    public B antwort(String antwort) {
+      this.antwort = antwort;
+      return self();
+    }
+  }
 }
 

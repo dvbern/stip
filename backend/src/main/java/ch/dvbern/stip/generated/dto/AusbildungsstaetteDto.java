@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Ausbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AusbildungsstaetteDto  implements Serializable {
   private @Valid UUID id;
@@ -26,6 +26,18 @@ public class AusbildungsstaetteDto  implements Serializable {
   private @Valid ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
   private @Valid Boolean aktiv;
   private @Valid String nummer;
+
+  protected AusbildungsstaetteDto(AusbildungsstaetteDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.nameDe = b.nameDe;
+    this.nameFr = b.nameFr;
+    this.nummerTyp = b.nummerTyp;
+    this.aktiv = b.aktiv;
+    this.nummer = b.nummer;
+  }
+
+  public AusbildungsstaetteDto() {
+  }
 
   /**
    **/
@@ -190,5 +202,58 @@ public class AusbildungsstaetteDto  implements Serializable {
   }
 
 
+  public static AusbildungsstaetteDtoBuilder<?, ?> builder() {
+    return new AusbildungsstaetteDtoBuilderImpl();
+  }
+
+  private static final class AusbildungsstaetteDtoBuilderImpl extends AusbildungsstaetteDtoBuilder<AusbildungsstaetteDto, AusbildungsstaetteDtoBuilderImpl> {
+
+    @Override
+    protected AusbildungsstaetteDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AusbildungsstaetteDto build() {
+      return new AusbildungsstaetteDto(this);
+    }
+  }
+
+  public static abstract class AusbildungsstaetteDtoBuilder<C extends AusbildungsstaetteDto, B extends AusbildungsstaetteDtoBuilder<C, B>>  {
+    private UUID id;
+    private String nameDe;
+    private String nameFr;
+    private ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp;
+    private Boolean aktiv;
+    private String nummer;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B nameDe(String nameDe) {
+      this.nameDe = nameDe;
+      return self();
+    }
+    public B nameFr(String nameFr) {
+      this.nameFr = nameFr;
+      return self();
+    }
+    public B nummerTyp(ch.dvbern.stip.api.ausbildung.type.AusbildungsstaetteNummerTyp nummerTyp) {
+      this.nummerTyp = nummerTyp;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+    public B nummer(String nummer) {
+      this.nummer = nummer;
+      return self();
+    }
+  }
 }
 

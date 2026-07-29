@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  input,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 
@@ -31,4 +36,6 @@ export class SharedUiWohnsitzSplitterComponent {
     wohnsitzAnteilVater: number;
     wohnsitzAnteilMutter: number;
   }>;
+
+  allowOnlyOneSig = input<boolean>(false);
 }

@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehen")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid UUID id;
@@ -39,6 +39,27 @@ public class FreiwilligDarlehenDto  implements Serializable {
   private @Valid Boolean isDelegiert;
   private @Valid String timestampErstellt;
   private @Valid DokumentDto verfuegung;
+
+  protected FreiwilligDarlehenDto(FreiwilligDarlehenDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.fallId = b.fallId;
+    this.relatedGesuchId = b.relatedGesuchId;
+    this.status = b.status;
+    this.gewaehren = b.gewaehren;
+    this.negativeVerfuegung = b.negativeVerfuegung;
+    this.betrag = b.betrag;
+    this.kommentar = b.kommentar;
+    this.betragGewuenscht = b.betragGewuenscht;
+    this.schulden = b.schulden;
+    this.anzahlBetreibungen = b.anzahlBetreibungen;
+    this.gruende = b.gruende;
+    this.isDelegiert = b.isDelegiert;
+    this.timestampErstellt = b.timestampErstellt;
+    this.verfuegung = b.verfuegung;
+  }
+
+  public FreiwilligDarlehenDto() {
+  }
 
   /**
    **/
@@ -399,5 +420,103 @@ public class FreiwilligDarlehenDto  implements Serializable {
   }
 
 
+  public static FreiwilligDarlehenDtoBuilder<?, ?> builder() {
+    return new FreiwilligDarlehenDtoBuilderImpl();
+  }
+
+  private static final class FreiwilligDarlehenDtoBuilderImpl extends FreiwilligDarlehenDtoBuilder<FreiwilligDarlehenDto, FreiwilligDarlehenDtoBuilderImpl> {
+
+    @Override
+    protected FreiwilligDarlehenDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FreiwilligDarlehenDto build() {
+      return new FreiwilligDarlehenDto(this);
+    }
+  }
+
+  public static abstract class FreiwilligDarlehenDtoBuilder<C extends FreiwilligDarlehenDto, B extends FreiwilligDarlehenDtoBuilder<C, B>>  {
+    private UUID id;
+    private UUID fallId;
+    private UUID relatedGesuchId;
+    private ch.dvbern.stip.api.darlehen.type.DarlehenStatus status;
+    private Boolean gewaehren;
+    private DokumentDto negativeVerfuegung;
+    private Integer betrag;
+    private String kommentar;
+    private Integer betragGewuenscht;
+    private Integer schulden;
+    private Integer anzahlBetreibungen;
+    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+    private Boolean isDelegiert;
+    private String timestampErstellt;
+    private DokumentDto verfuegung;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B relatedGesuchId(UUID relatedGesuchId) {
+      this.relatedGesuchId = relatedGesuchId;
+      return self();
+    }
+    public B status(ch.dvbern.stip.api.darlehen.type.DarlehenStatus status) {
+      this.status = status;
+      return self();
+    }
+    public B gewaehren(Boolean gewaehren) {
+      this.gewaehren = gewaehren;
+      return self();
+    }
+    public B negativeVerfuegung(DokumentDto negativeVerfuegung) {
+      this.negativeVerfuegung = negativeVerfuegung;
+      return self();
+    }
+    public B betrag(Integer betrag) {
+      this.betrag = betrag;
+      return self();
+    }
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B betragGewuenscht(Integer betragGewuenscht) {
+      this.betragGewuenscht = betragGewuenscht;
+      return self();
+    }
+    public B schulden(Integer schulden) {
+      this.schulden = schulden;
+      return self();
+    }
+    public B anzahlBetreibungen(Integer anzahlBetreibungen) {
+      this.anzahlBetreibungen = anzahlBetreibungen;
+      return self();
+    }
+    public B gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+      this.gruende = gruende;
+      return self();
+    }
+    public B isDelegiert(Boolean isDelegiert) {
+      this.isDelegiert = isDelegiert;
+      return self();
+    }
+    public B timestampErstellt(String timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B verfuegung(DokumentDto verfuegung) {
+      this.verfuegung = verfuegung;
+      return self();
+    }
+  }
 }
 

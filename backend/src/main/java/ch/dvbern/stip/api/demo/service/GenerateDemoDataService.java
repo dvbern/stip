@@ -80,6 +80,7 @@ import ch.dvbern.stip.api.familiensituation.entity.FamiliensituationBuilder;
 import ch.dvbern.stip.api.familiensituation.type.ElternAbwesenheitsGrund;
 import ch.dvbern.stip.api.geschwister.entity.Geschwister;
 import ch.dvbern.stip.api.geschwister.entity.GeschwisterBuilder;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuch.repo.GesuchRepository;
 import ch.dvbern.stip.api.gesuch.service.GesuchNummerService;
@@ -105,13 +106,12 @@ import ch.dvbern.stip.api.steuerdaten.entity.Steuerdaten;
 import ch.dvbern.stip.api.steuerdaten.entity.SteuerdatenBuilder;
 import ch.dvbern.stip.api.steuererklaerung.entity.Steuererklaerung;
 import ch.dvbern.stip.api.steuererklaerung.entity.SteuererklaerungBuilder;
-import ch.dvbern.stip.api.tenancy.service.TenantService;
 import ch.dvbern.stip.api.verfuegung.type.VerfuegungStatus;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.Zahlungsverbindung;
 import ch.dvbern.stip.api.zahlungsverbindung.entity.ZahlungsverbindungBuilder;
-import ch.dvbern.stip.berechnung.dto.InputUtils;
-import ch.dvbern.stip.berechnung.service.BerechnungService;
-import ch.dvbern.stip.berechnung.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.domain.service.BerechnungService;
+import ch.dvbern.stip.berechnung.domain.util.BerechnungUtil;
+import ch.dvbern.stip.berechnung.domain.util.InputUtils;
 import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import ch.dvbern.stip.generated.dto.DemoDataDto;
@@ -145,7 +145,6 @@ public class GenerateDemoDataService {
     private final S3AsyncClient s3;
     private final EntityCopyMapper copyMapper;
     private final StipConfig config;
-    private final TenantService tenantService;
 
     private final Instance<RequiredDokumentsProducer> requiredDokumentProducers;
     private final Instance<RequiredRefDokumentsProducer> requiredRefDokumentProducers;
@@ -605,7 +604,10 @@ public class GenerateDemoDataService {
                     GeschwisterBuilder.geschwister()
                         .ausbildungssituation(geschwisterDto.getAusbildungssituation())
                         .entryId(UUID.randomUUID())
-                        .hidden(false),
+                        .hidden(false)
+                        .geschwisterTyp(
+                            Objects.requireNonNullElse(geschwisterDto.getGeschwisterTyp(), GeschwisterTyp.LEIBLICH)
+                        ),
                     AbstractFamilieEntityBuilder.abstractFamilieEntity()
                         .wohnsitz(geschwisterDto.getWohnsitzBei())
                         .wohnsitzAnteilMutter(
@@ -716,14 +718,12 @@ public class GenerateDemoDataService {
         final var berechnungResultatSoll = demoData.parseDemoDataDto().getBerechnungValues();
         var berechnungsResultat = new BerechnungsresultatDto();
         var berechnungsResultatIst = new DemoDataTestBerechnungValuesDto();
-        final var tenantConfig = tenantService.getConfigForCurrentTenant();
+
         String message = null;
         VerfuegungStatus statusIst;
         try {
             berechnungsResultat = berechnungService.getBerechnungsresultatFromGesuch(
-                gesuch,
-                tenantConfig.berechnung().currentMajorVersion(),
-                tenantConfig.berechnung().currentMinorVersion()
+                gesuch
             );
             statusIst = InputUtils.sumNullables(
                 berechnungsResultat.getBerechnungStipendium(),

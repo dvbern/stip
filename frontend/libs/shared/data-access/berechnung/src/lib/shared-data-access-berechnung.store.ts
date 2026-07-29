@@ -104,7 +104,7 @@ export class BerechnungStore extends signalStore(
           acc.berechnungsresultate[curr.gesuchTrancheId].berechnungen.push({
             ...curr,
             berechnungsanteilTotal: roundToTwo(
-              ((curr.berechnungsanteilKinder ?? 100) *
+              ((curr.berechnungsanteilKinderDerEltern ?? 100) *
                 (curr.berechnungsanteilKinderPia ?? 100)) /
                 100,
             ),

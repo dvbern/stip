@@ -15,15 +15,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ZahlungsverbindungSlim")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ZahlungsverbindungSlimDto  implements Serializable {
   private @Valid AdresseDto adresse;
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String institution;
+
+  protected ZahlungsverbindungSlimDto(ZahlungsverbindungSlimDtoBuilder<?, ?> b) {
+    this.adresse = b.adresse;
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.institution = b.institution;
+  }
+
+  public ZahlungsverbindungSlimDto() {
+  }
 
   /**
    **/
@@ -144,5 +154,48 @@ public class ZahlungsverbindungSlimDto  implements Serializable {
   }
 
 
+  public static ZahlungsverbindungSlimDtoBuilder<?, ?> builder() {
+    return new ZahlungsverbindungSlimDtoBuilderImpl();
+  }
+
+  private static final class ZahlungsverbindungSlimDtoBuilderImpl extends ZahlungsverbindungSlimDtoBuilder<ZahlungsverbindungSlimDto, ZahlungsverbindungSlimDtoBuilderImpl> {
+
+    @Override
+    protected ZahlungsverbindungSlimDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ZahlungsverbindungSlimDto build() {
+      return new ZahlungsverbindungSlimDto(this);
+    }
+  }
+
+  public static abstract class ZahlungsverbindungSlimDtoBuilder<C extends ZahlungsverbindungSlimDto, B extends ZahlungsverbindungSlimDtoBuilder<C, B>>  {
+    private AdresseDto adresse;
+    private String vorname;
+    private String nachname;
+    private String institution;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B institution(String institution) {
+      this.institution = institution;
+      return self();
+    }
+  }
 }
 

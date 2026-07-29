@@ -19,9 +19,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("GesuchDashboardItem")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class GesuchDashboardItemDto  implements Serializable {
   private @Valid GesuchsperiodeDto gesuchsperiode;
@@ -34,6 +34,22 @@ public class GesuchDashboardItemDto  implements Serializable {
   private @Valid LocalDate nachfristDokumente;
   private @Valid GesuchTrancheSlimDto offeneAenderung;
   private @Valid GesuchDashboardItemMissingDocumentsDto missingDocuments;
+
+  protected GesuchDashboardItemDto(GesuchDashboardItemDtoBuilder<?, ?> b) {
+    this.gesuchsperiode = b.gesuchsperiode;
+    this.gesuchStatus = b.gesuchStatus;
+    this.id = b.id;
+    this.currentTrancheId = b.currentTrancheId;
+    this.startDate = b.startDate;
+    this.endDate = b.endDate;
+    this.canCreateAenderung = b.canCreateAenderung;
+    this.nachfristDokumente = b.nachfristDokumente;
+    this.offeneAenderung = b.offeneAenderung;
+    this.missingDocuments = b.missingDocuments;
+  }
+
+  public GesuchDashboardItemDto() {
+  }
 
   /**
    **/
@@ -280,5 +296,78 @@ public class GesuchDashboardItemDto  implements Serializable {
   }
 
 
+  public static GesuchDashboardItemDtoBuilder<?, ?> builder() {
+    return new GesuchDashboardItemDtoBuilderImpl();
+  }
+
+  private static final class GesuchDashboardItemDtoBuilderImpl extends GesuchDashboardItemDtoBuilder<GesuchDashboardItemDto, GesuchDashboardItemDtoBuilderImpl> {
+
+    @Override
+    protected GesuchDashboardItemDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public GesuchDashboardItemDto build() {
+      return new GesuchDashboardItemDto(this);
+    }
+  }
+
+  public static abstract class GesuchDashboardItemDtoBuilder<C extends GesuchDashboardItemDto, B extends GesuchDashboardItemDtoBuilder<C, B>>  {
+    private GesuchsperiodeDto gesuchsperiode;
+    private ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus;
+    private UUID id;
+    private UUID currentTrancheId;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Boolean canCreateAenderung;
+    private LocalDate nachfristDokumente;
+    private GesuchTrancheSlimDto offeneAenderung;
+    private GesuchDashboardItemMissingDocumentsDto missingDocuments;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B gesuchsperiode(GesuchsperiodeDto gesuchsperiode) {
+      this.gesuchsperiode = gesuchsperiode;
+      return self();
+    }
+    public B gesuchStatus(ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus gesuchStatus) {
+      this.gesuchStatus = gesuchStatus;
+      return self();
+    }
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B currentTrancheId(UUID currentTrancheId) {
+      this.currentTrancheId = currentTrancheId;
+      return self();
+    }
+    public B startDate(LocalDate startDate) {
+      this.startDate = startDate;
+      return self();
+    }
+    public B endDate(LocalDate endDate) {
+      this.endDate = endDate;
+      return self();
+    }
+    public B canCreateAenderung(Boolean canCreateAenderung) {
+      this.canCreateAenderung = canCreateAenderung;
+      return self();
+    }
+    public B nachfristDokumente(LocalDate nachfristDokumente) {
+      this.nachfristDokumente = nachfristDokumente;
+      return self();
+    }
+    public B offeneAenderung(GesuchTrancheSlimDto offeneAenderung) {
+      this.offeneAenderung = offeneAenderung;
+      return self();
+    }
+    public B missingDocuments(GesuchDashboardItemMissingDocumentsDto missingDocuments) {
+      this.missingDocuments = missingDocuments;
+      return self();
+    }
+  }
 }
 

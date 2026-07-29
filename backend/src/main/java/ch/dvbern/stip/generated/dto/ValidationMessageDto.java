@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("ValidationMessage")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ValidationMessageDto  implements Serializable {
   private @Valid String messageTemplate;
   private @Valid String message;
   private @Valid String propertyPath;
+
+  protected ValidationMessageDto(ValidationMessageDtoBuilder<?, ?> b) {
+    this.messageTemplate = b.messageTemplate;
+    this.message = b.message;
+    this.propertyPath = b.propertyPath;
+  }
+
+  public ValidationMessageDto() {
+  }
 
   /**
    **/
@@ -123,5 +132,43 @@ public class ValidationMessageDto  implements Serializable {
   }
 
 
+  public static ValidationMessageDtoBuilder<?, ?> builder() {
+    return new ValidationMessageDtoBuilderImpl();
+  }
+
+  private static final class ValidationMessageDtoBuilderImpl extends ValidationMessageDtoBuilder<ValidationMessageDto, ValidationMessageDtoBuilderImpl> {
+
+    @Override
+    protected ValidationMessageDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ValidationMessageDto build() {
+      return new ValidationMessageDto(this);
+    }
+  }
+
+  public static abstract class ValidationMessageDtoBuilder<C extends ValidationMessageDto, B extends ValidationMessageDtoBuilder<C, B>>  {
+    private String messageTemplate;
+    private String message;
+    private String propertyPath;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B messageTemplate(String messageTemplate) {
+      this.messageTemplate = messageTemplate;
+      return self();
+    }
+    public B message(String message) {
+      this.message = message;
+      return self();
+    }
+    public B propertyPath(String propertyPath) {
+      this.propertyPath = propertyPath;
+      return self();
+    }
+  }
 }
 

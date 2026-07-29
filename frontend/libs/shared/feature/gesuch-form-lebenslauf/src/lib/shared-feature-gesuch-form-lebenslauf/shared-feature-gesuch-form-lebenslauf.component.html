@@ -19,14 +19,17 @@
       <div class="tw:dv-form-grid">
         <!-- Infobox -->
         @if (!viewSig().readonly) {
-          <span class="tw:dv-form-item">{{
-            'shared.form.lebenslauf.top.info'
-              | transloco
-                : {
-                    von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
-                    bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
-                  }
-          }}</span>
+          <span
+            class="tw:dv-form-item"
+            [innerHTML]="
+              'shared.form.lebenslauf.top.info'
+                | transloco
+                  : {
+                      von: minDatesSig() ? printDateAsMonthYear(minDatesSig()!.required) : '?',
+                      bis: maxDateSig() ? printDateAsMonthYear(maxDateSig()!) : '?',
+                    }
+            "
+          ></span>
 
           <!-- ADD -->
           <div class="add-buttons tw:dv-form-item tw:flex tw:gap-4">

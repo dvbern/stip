@@ -14,14 +14,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("SozialdienstAdmin")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class SozialdienstAdminDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String email;
+
+  protected SozialdienstAdminDto(SozialdienstAdminDtoBuilder<?, ?> b) {
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.email = b.email;
+  }
+
+  public SozialdienstAdminDto() {
+  }
 
   /**
    **/
@@ -124,5 +133,43 @@ public class SozialdienstAdminDto  implements Serializable {
   }
 
 
+  public static SozialdienstAdminDtoBuilder<?, ?> builder() {
+    return new SozialdienstAdminDtoBuilderImpl();
+  }
+
+  private static final class SozialdienstAdminDtoBuilderImpl extends SozialdienstAdminDtoBuilder<SozialdienstAdminDto, SozialdienstAdminDtoBuilderImpl> {
+
+    @Override
+    protected SozialdienstAdminDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public SozialdienstAdminDto build() {
+      return new SozialdienstAdminDto(this);
+    }
+  }
+
+  public static abstract class SozialdienstAdminDtoBuilder<C extends SozialdienstAdminDto, B extends SozialdienstAdminDtoBuilder<C, B>>  {
+    private String vorname;
+    private String nachname;
+    private String email;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+  }
 }
 

@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("BeschwerdeVerlaufEntryCreate")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
   private @Valid String kommentar;
   private @Valid Boolean beschwerdeSetTo;
+
+  protected BeschwerdeVerlaufEntryCreateDto(BeschwerdeVerlaufEntryCreateDtoBuilder<?, ?> b) {
+    this.kommentar = b.kommentar;
+    this.beschwerdeSetTo = b.beschwerdeSetTo;
+  }
+
+  public BeschwerdeVerlaufEntryCreateDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class BeschwerdeVerlaufEntryCreateDto  implements Serializable {
   }
 
 
+  public static BeschwerdeVerlaufEntryCreateDtoBuilder<?, ?> builder() {
+    return new BeschwerdeVerlaufEntryCreateDtoBuilderImpl();
+  }
+
+  private static final class BeschwerdeVerlaufEntryCreateDtoBuilderImpl extends BeschwerdeVerlaufEntryCreateDtoBuilder<BeschwerdeVerlaufEntryCreateDto, BeschwerdeVerlaufEntryCreateDtoBuilderImpl> {
+
+    @Override
+    protected BeschwerdeVerlaufEntryCreateDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BeschwerdeVerlaufEntryCreateDto build() {
+      return new BeschwerdeVerlaufEntryCreateDto(this);
+    }
+  }
+
+  public static abstract class BeschwerdeVerlaufEntryCreateDtoBuilder<C extends BeschwerdeVerlaufEntryCreateDto, B extends BeschwerdeVerlaufEntryCreateDtoBuilder<C, B>>  {
+    private String kommentar;
+    private Boolean beschwerdeSetTo;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B beschwerdeSetTo(Boolean beschwerdeSetTo) {
+      this.beschwerdeSetTo = beschwerdeSetTo;
+      return self();
+    }
+  }
 }
 

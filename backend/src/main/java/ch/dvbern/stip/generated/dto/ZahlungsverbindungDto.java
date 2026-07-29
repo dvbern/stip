@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Zahlungsverbindung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class ZahlungsverbindungDto  implements Serializable {
   private @Valid AdresseDto adresse;
@@ -25,6 +25,17 @@ public class ZahlungsverbindungDto  implements Serializable {
   private @Valid String vorname;
   private @Valid String nachname;
   private @Valid String institution;
+
+  protected ZahlungsverbindungDto(ZahlungsverbindungDtoBuilder<?, ?> b) {
+    this.adresse = b.adresse;
+    this.iban = b.iban;
+    this.vorname = b.vorname;
+    this.nachname = b.nachname;
+    this.institution = b.institution;
+  }
+
+  public ZahlungsverbindungDto() {
+  }
 
   /**
    **/
@@ -166,5 +177,53 @@ public class ZahlungsverbindungDto  implements Serializable {
   }
 
 
+  public static ZahlungsverbindungDtoBuilder<?, ?> builder() {
+    return new ZahlungsverbindungDtoBuilderImpl();
+  }
+
+  private static final class ZahlungsverbindungDtoBuilderImpl extends ZahlungsverbindungDtoBuilder<ZahlungsverbindungDto, ZahlungsverbindungDtoBuilderImpl> {
+
+    @Override
+    protected ZahlungsverbindungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public ZahlungsverbindungDto build() {
+      return new ZahlungsverbindungDto(this);
+    }
+  }
+
+  public static abstract class ZahlungsverbindungDtoBuilder<C extends ZahlungsverbindungDto, B extends ZahlungsverbindungDtoBuilder<C, B>>  {
+    private AdresseDto adresse;
+    private String iban;
+    private String vorname;
+    private String nachname;
+    private String institution;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B adresse(AdresseDto adresse) {
+      this.adresse = adresse;
+      return self();
+    }
+    public B iban(String iban) {
+      this.iban = iban;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B institution(String institution) {
+      this.institution = institution;
+      return self();
+    }
+  }
 }
 

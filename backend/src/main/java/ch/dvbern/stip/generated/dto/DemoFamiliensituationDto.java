@@ -14,9 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoFamiliensituation")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoFamiliensituationDto  implements Serializable {
   private @Valid Boolean elternVerheiratetZusammen;
@@ -31,6 +31,24 @@ public class DemoFamiliensituationDto  implements Serializable {
   private @Valid Boolean vaterUnbekannt;
   private @Valid ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
   private @Valid Boolean vaterKeineOptionen;
+
+  protected DemoFamiliensituationDto(DemoFamiliensituationDtoBuilder<?, ?> b) {
+    this.elternVerheiratetZusammen = b.elternVerheiratetZusammen;
+    this.gerichtlicheAlimentenregelung = b.gerichtlicheAlimentenregelung;
+    this.werZahltAlimente = b.werZahltAlimente;
+    this.elternteilUnbekanntVerstorben = b.elternteilUnbekanntVerstorben;
+    this.mutterVerstorben = b.mutterVerstorben;
+    this.mutterUnbekannt = b.mutterUnbekannt;
+    this.mutterUnbekanntGrund = b.mutterUnbekanntGrund;
+    this.mutterKeineOptionen = b.mutterKeineOptionen;
+    this.vaterVerstorben = b.vaterVerstorben;
+    this.vaterUnbekannt = b.vaterUnbekannt;
+    this.vaterUnbekanntGrund = b.vaterUnbekanntGrund;
+    this.vaterKeineOptionen = b.vaterKeineOptionen;
+  }
+
+  public DemoFamiliensituationDto() {
+  }
 
   /**
    **/
@@ -311,5 +329,88 @@ public class DemoFamiliensituationDto  implements Serializable {
   }
 
 
+  public static DemoFamiliensituationDtoBuilder<?, ?> builder() {
+    return new DemoFamiliensituationDtoBuilderImpl();
+  }
+
+  private static final class DemoFamiliensituationDtoBuilderImpl extends DemoFamiliensituationDtoBuilder<DemoFamiliensituationDto, DemoFamiliensituationDtoBuilderImpl> {
+
+    @Override
+    protected DemoFamiliensituationDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoFamiliensituationDto build() {
+      return new DemoFamiliensituationDto(this);
+    }
+  }
+
+  public static abstract class DemoFamiliensituationDtoBuilder<C extends DemoFamiliensituationDto, B extends DemoFamiliensituationDtoBuilder<C, B>>  {
+    private Boolean elternVerheiratetZusammen;
+    private Boolean gerichtlicheAlimentenregelung;
+    private ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente;
+    private Boolean elternteilUnbekanntVerstorben;
+    private Boolean mutterVerstorben;
+    private Boolean mutterUnbekannt;
+    private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund;
+    private Boolean mutterKeineOptionen;
+    private Boolean vaterVerstorben;
+    private Boolean vaterUnbekannt;
+    private ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund;
+    private Boolean vaterKeineOptionen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B elternVerheiratetZusammen(Boolean elternVerheiratetZusammen) {
+      this.elternVerheiratetZusammen = elternVerheiratetZusammen;
+      return self();
+    }
+    public B gerichtlicheAlimentenregelung(Boolean gerichtlicheAlimentenregelung) {
+      this.gerichtlicheAlimentenregelung = gerichtlicheAlimentenregelung;
+      return self();
+    }
+    public B werZahltAlimente(ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung werZahltAlimente) {
+      this.werZahltAlimente = werZahltAlimente;
+      return self();
+    }
+    public B elternteilUnbekanntVerstorben(Boolean elternteilUnbekanntVerstorben) {
+      this.elternteilUnbekanntVerstorben = elternteilUnbekanntVerstorben;
+      return self();
+    }
+    public B mutterVerstorben(Boolean mutterVerstorben) {
+      this.mutterVerstorben = mutterVerstorben;
+      return self();
+    }
+    public B mutterUnbekannt(Boolean mutterUnbekannt) {
+      this.mutterUnbekannt = mutterUnbekannt;
+      return self();
+    }
+    public B mutterUnbekanntGrund(ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund mutterUnbekanntGrund) {
+      this.mutterUnbekanntGrund = mutterUnbekanntGrund;
+      return self();
+    }
+    public B mutterKeineOptionen(Boolean mutterKeineOptionen) {
+      this.mutterKeineOptionen = mutterKeineOptionen;
+      return self();
+    }
+    public B vaterVerstorben(Boolean vaterVerstorben) {
+      this.vaterVerstorben = vaterVerstorben;
+      return self();
+    }
+    public B vaterUnbekannt(Boolean vaterUnbekannt) {
+      this.vaterUnbekannt = vaterUnbekannt;
+      return self();
+    }
+    public B vaterUnbekanntGrund(ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund vaterUnbekanntGrund) {
+      this.vaterUnbekanntGrund = vaterUnbekanntGrund;
+      return self();
+    }
+    public B vaterKeineOptionen(Boolean vaterKeineOptionen) {
+      this.vaterKeineOptionen = vaterKeineOptionen;
+      return self();
+    }
+  }
 }
 

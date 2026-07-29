@@ -14,15 +14,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("WelcomeMail")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class WelcomeMailDto  implements Serializable {
   private @Valid String name;
   private @Valid String vorname;
   private @Valid String email;
   private @Valid String redirectUri;
+
+  protected WelcomeMailDto(WelcomeMailDtoBuilder<?, ?> b) {
+    this.name = b.name;
+    this.vorname = b.vorname;
+    this.email = b.email;
+    this.redirectUri = b.redirectUri;
+  }
+
+  public WelcomeMailDto() {
+  }
 
   /**
    **/
@@ -146,5 +156,48 @@ public class WelcomeMailDto  implements Serializable {
   }
 
 
+  public static WelcomeMailDtoBuilder<?, ?> builder() {
+    return new WelcomeMailDtoBuilderImpl();
+  }
+
+  private static final class WelcomeMailDtoBuilderImpl extends WelcomeMailDtoBuilder<WelcomeMailDto, WelcomeMailDtoBuilderImpl> {
+
+    @Override
+    protected WelcomeMailDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public WelcomeMailDto build() {
+      return new WelcomeMailDto(this);
+    }
+  }
+
+  public static abstract class WelcomeMailDtoBuilder<C extends WelcomeMailDto, B extends WelcomeMailDtoBuilder<C, B>>  {
+    private String name;
+    private String vorname;
+    private String email;
+    private String redirectUri;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B email(String email) {
+      this.email = email;
+      return self();
+    }
+    public B redirectUri(String redirectUri) {
+      this.redirectUri = redirectUri;
+      return self();
+    }
+  }
 }
 

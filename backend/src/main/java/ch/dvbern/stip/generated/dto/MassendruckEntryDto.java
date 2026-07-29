@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("MassendruckEntry")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class MassendruckEntryDto  implements Serializable {
   private @Valid UUID id;
@@ -27,6 +27,19 @@ public class MassendruckEntryDto  implements Serializable {
   private @Valid String gesuchNummer;
   private @Valid UUID gesuchId;
   private @Valid UUID gesuchTrancheId;
+
+  protected MassendruckEntryDto(MassendruckEntryDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.isVersendet = b.isVersendet;
+    this.nachname = b.nachname;
+    this.vorname = b.vorname;
+    this.gesuchNummer = b.gesuchNummer;
+    this.gesuchId = b.gesuchId;
+    this.gesuchTrancheId = b.gesuchTrancheId;
+  }
+
+  public MassendruckEntryDto() {
+  }
 
   /**
    **/
@@ -213,5 +226,63 @@ public class MassendruckEntryDto  implements Serializable {
   }
 
 
+  public static MassendruckEntryDtoBuilder<?, ?> builder() {
+    return new MassendruckEntryDtoBuilderImpl();
+  }
+
+  private static final class MassendruckEntryDtoBuilderImpl extends MassendruckEntryDtoBuilder<MassendruckEntryDto, MassendruckEntryDtoBuilderImpl> {
+
+    @Override
+    protected MassendruckEntryDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public MassendruckEntryDto build() {
+      return new MassendruckEntryDto(this);
+    }
+  }
+
+  public static abstract class MassendruckEntryDtoBuilder<C extends MassendruckEntryDto, B extends MassendruckEntryDtoBuilder<C, B>>  {
+    private UUID id;
+    private Boolean isVersendet;
+    private String nachname;
+    private String vorname;
+    private String gesuchNummer;
+    private UUID gesuchId;
+    private UUID gesuchTrancheId;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B isVersendet(Boolean isVersendet) {
+      this.isVersendet = isVersendet;
+      return self();
+    }
+    public B nachname(String nachname) {
+      this.nachname = nachname;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B gesuchNummer(String gesuchNummer) {
+      this.gesuchNummer = gesuchNummer;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchTrancheId(UUID gesuchTrancheId) {
+      this.gesuchTrancheId = gesuchTrancheId;
+      return self();
+    }
+  }
 }
 

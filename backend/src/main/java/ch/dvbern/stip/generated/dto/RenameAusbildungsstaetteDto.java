@@ -14,13 +14,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("RenameAusbildungsstaette")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class RenameAusbildungsstaetteDto  implements Serializable {
   private @Valid String nameDe;
   private @Valid String nameFr;
+
+  protected RenameAusbildungsstaetteDto(RenameAusbildungsstaetteDtoBuilder<?, ?> b) {
+    this.nameDe = b.nameDe;
+    this.nameFr = b.nameFr;
+  }
+
+  public RenameAusbildungsstaetteDto() {
+  }
 
   /**
    **/
@@ -102,5 +110,38 @@ public class RenameAusbildungsstaetteDto  implements Serializable {
   }
 
 
+  public static RenameAusbildungsstaetteDtoBuilder<?, ?> builder() {
+    return new RenameAusbildungsstaetteDtoBuilderImpl();
+  }
+
+  private static final class RenameAusbildungsstaetteDtoBuilderImpl extends RenameAusbildungsstaetteDtoBuilder<RenameAusbildungsstaetteDto, RenameAusbildungsstaetteDtoBuilderImpl> {
+
+    @Override
+    protected RenameAusbildungsstaetteDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public RenameAusbildungsstaetteDto build() {
+      return new RenameAusbildungsstaetteDto(this);
+    }
+  }
+
+  public static abstract class RenameAusbildungsstaetteDtoBuilder<C extends RenameAusbildungsstaetteDto, B extends RenameAusbildungsstaetteDtoBuilder<C, B>>  {
+    private String nameDe;
+    private String nameFr;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B nameDe(String nameDe) {
+      this.nameDe = nameDe;
+      return self();
+    }
+    public B nameFr(String nameFr) {
+      this.nameFr = nameFr;
+      return self();
+    }
+  }
 }
 

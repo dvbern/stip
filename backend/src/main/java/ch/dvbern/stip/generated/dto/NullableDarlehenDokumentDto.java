@@ -15,12 +15,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("NullableDarlehenDokument")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class NullableDarlehenDokumentDto  implements Serializable {
   private @Valid DarlehenDokumentDto value;
+
+  protected NullableDarlehenDokumentDto(NullableDarlehenDokumentDtoBuilder<?, ?> b) {
+    this.value = b.value;
+  }
+
+  public NullableDarlehenDokumentDto() {
+  }
 
   /**
    **/
@@ -80,5 +87,33 @@ public class NullableDarlehenDokumentDto  implements Serializable {
   }
 
 
+  public static NullableDarlehenDokumentDtoBuilder<?, ?> builder() {
+    return new NullableDarlehenDokumentDtoBuilderImpl();
+  }
+
+  private static final class NullableDarlehenDokumentDtoBuilderImpl extends NullableDarlehenDokumentDtoBuilder<NullableDarlehenDokumentDto, NullableDarlehenDokumentDtoBuilderImpl> {
+
+    @Override
+    protected NullableDarlehenDokumentDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public NullableDarlehenDokumentDto build() {
+      return new NullableDarlehenDokumentDto(this);
+    }
+  }
+
+  public static abstract class NullableDarlehenDokumentDtoBuilder<C extends NullableDarlehenDokumentDto, B extends NullableDarlehenDokumentDtoBuilder<C, B>>  {
+    private DarlehenDokumentDto value;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B value(DarlehenDokumentDto value) {
+      this.value = value;
+      return self();
+    }
+  }
 }
 

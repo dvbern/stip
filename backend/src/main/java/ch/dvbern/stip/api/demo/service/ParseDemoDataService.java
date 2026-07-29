@@ -75,7 +75,7 @@ public class ParseDemoDataService {
     private final Iterator<Row> rowIterator;
     private final int amountOfCells;
 
-    private ParseDemoDataService(Iterator<Row> rowIterator, int amountOfCells) {
+    public ParseDemoDataService(Iterator<Row> rowIterator, int amountOfCells) {
         this.rowIterator = rowIterator;
         this.amountOfCells = amountOfCells;
     }
@@ -93,7 +93,7 @@ public class ParseDemoDataService {
         }
     }
 
-    private List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
+    public List<DemoData> parseAll(final Boolean ignoreBerechnungErrors) {
         skipRows(UNUSED_START_LINES);
         final var demoDataList = prepareInfo();
         final var ausbildungen = prepareAusbildung();
@@ -732,6 +732,7 @@ public class ParseDemoDataService {
             updateList(geschwisters, "bei Vater.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilVater(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "bei Mutter.*", 2, (c, o) -> o.get(index).ifPresent(d -> d.setWohnsitzAnteilMutter(ParseDemoDataUtil.parsePercentageNullable(c.getCell()))));
             updateList(geschwisters, "Ausbildungssituation", 1, (c, o) -> o.get(index).ifPresent(d -> d.ausbildungssituation(ParseDemoEnumUtil.parseAusbildungssituation(c.getCell()))));
+            // updateList(geschwisters, "GeschwisterTyp", 1, (c, o) -> o.get(index).ifPresent(d -> d.geschwisterTyp(ParseDemoEnumUtil.parseGeschwisterTyp(c.getCell()))));
             // spotless:on
         }
 

@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  **/
 
 @JsonTypeName("Berechnungsresultat")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer year;
@@ -38,6 +38,25 @@ public class BerechnungsresultatDto  implements Serializable {
   private @Valid Integer totalNachKuerzungUnterbruch;
   private @Valid Integer anzahlMonateUnterbruch;
   private @Valid Integer berechnungDarlehen;
+
+  protected BerechnungsresultatDto(BerechnungsresultatDtoBuilder<?, ?> b) {
+    this.year = b.year;
+    this.berechnungVorKuerzungUndTeilung = b.berechnungVorKuerzungUndTeilung;
+    this.berechnungVorTeilungDarlehen = b.berechnungVorTeilungDarlehen;
+    this.berechnungStipendium = b.berechnungStipendium;
+    this.tranchenBerechnungsresultate = b.tranchenBerechnungsresultate;
+    this.monateMitDarlehen = b.monateMitDarlehen;
+    this.ungekuerztStipendien = b.ungekuerztStipendien;
+    this.ungekuerztDarlehen = b.ungekuerztDarlehen;
+    this.totalNachKuerzungNachEinreichefrist = b.totalNachKuerzungNachEinreichefrist;
+    this.anzahlMonateEinreichefrist = b.anzahlMonateEinreichefrist;
+    this.totalNachKuerzungUnterbruch = b.totalNachKuerzungUnterbruch;
+    this.anzahlMonateUnterbruch = b.anzahlMonateUnterbruch;
+    this.berechnungDarlehen = b.berechnungDarlehen;
+  }
+
+  public BerechnungsresultatDto() {
+  }
 
   /**
    **/
@@ -371,5 +390,93 @@ public class BerechnungsresultatDto  implements Serializable {
   }
 
 
+  public static BerechnungsresultatDtoBuilder<?, ?> builder() {
+    return new BerechnungsresultatDtoBuilderImpl();
+  }
+
+  private static final class BerechnungsresultatDtoBuilderImpl extends BerechnungsresultatDtoBuilder<BerechnungsresultatDto, BerechnungsresultatDtoBuilderImpl> {
+
+    @Override
+    protected BerechnungsresultatDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public BerechnungsresultatDto build() {
+      return new BerechnungsresultatDto(this);
+    }
+  }
+
+  public static abstract class BerechnungsresultatDtoBuilder<C extends BerechnungsresultatDto, B extends BerechnungsresultatDtoBuilder<C, B>>  {
+    private Integer year;
+    private Integer berechnungVorKuerzungUndTeilung;
+    private Integer berechnungVorTeilungDarlehen;
+    private Integer berechnungStipendium;
+    private List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate = new ArrayList<>();
+    private Integer monateMitDarlehen;
+    private Integer ungekuerztStipendien;
+    private Integer ungekuerztDarlehen;
+    private Integer totalNachKuerzungNachEinreichefrist;
+    private Integer anzahlMonateEinreichefrist;
+    private Integer totalNachKuerzungUnterbruch;
+    private Integer anzahlMonateUnterbruch;
+    private Integer berechnungDarlehen;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B year(Integer year) {
+      this.year = year;
+      return self();
+    }
+    public B berechnungVorKuerzungUndTeilung(Integer berechnungVorKuerzungUndTeilung) {
+      this.berechnungVorKuerzungUndTeilung = berechnungVorKuerzungUndTeilung;
+      return self();
+    }
+    public B berechnungVorTeilungDarlehen(Integer berechnungVorTeilungDarlehen) {
+      this.berechnungVorTeilungDarlehen = berechnungVorTeilungDarlehen;
+      return self();
+    }
+    public B berechnungStipendium(Integer berechnungStipendium) {
+      this.berechnungStipendium = berechnungStipendium;
+      return self();
+    }
+    public B tranchenBerechnungsresultate(List<TranchenBerechnungsresultatDto> tranchenBerechnungsresultate) {
+      this.tranchenBerechnungsresultate = tranchenBerechnungsresultate;
+      return self();
+    }
+    public B monateMitDarlehen(Integer monateMitDarlehen) {
+      this.monateMitDarlehen = monateMitDarlehen;
+      return self();
+    }
+    public B ungekuerztStipendien(Integer ungekuerztStipendien) {
+      this.ungekuerztStipendien = ungekuerztStipendien;
+      return self();
+    }
+    public B ungekuerztDarlehen(Integer ungekuerztDarlehen) {
+      this.ungekuerztDarlehen = ungekuerztDarlehen;
+      return self();
+    }
+    public B totalNachKuerzungNachEinreichefrist(Integer totalNachKuerzungNachEinreichefrist) {
+      this.totalNachKuerzungNachEinreichefrist = totalNachKuerzungNachEinreichefrist;
+      return self();
+    }
+    public B anzahlMonateEinreichefrist(Integer anzahlMonateEinreichefrist) {
+      this.anzahlMonateEinreichefrist = anzahlMonateEinreichefrist;
+      return self();
+    }
+    public B totalNachKuerzungUnterbruch(Integer totalNachKuerzungUnterbruch) {
+      this.totalNachKuerzungUnterbruch = totalNachKuerzungUnterbruch;
+      return self();
+    }
+    public B anzahlMonateUnterbruch(Integer anzahlMonateUnterbruch) {
+      this.anzahlMonateUnterbruch = anzahlMonateUnterbruch;
+      return self();
+    }
+    public B berechnungDarlehen(Integer berechnungDarlehen) {
+      this.berechnungDarlehen = berechnungDarlehen;
+      return self();
+    }
+  }
 }
 

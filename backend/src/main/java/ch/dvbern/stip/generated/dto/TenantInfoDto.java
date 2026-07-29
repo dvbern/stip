@@ -16,14 +16,23 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("TenantInfo")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class TenantInfoDto  implements Serializable {
   private @Valid TenantAuthConfigDto clientAuth;
   private @Valid TenantFeaturesDto features;
   private @Valid String identifier;
+
+  protected TenantInfoDto(TenantInfoDtoBuilder<?, ?> b) {
+    this.clientAuth = b.clientAuth;
+    this.features = b.features;
+    this.identifier = b.identifier;
+  }
+
+  public TenantInfoDto() {
+  }
 
   /**
    **/
@@ -126,5 +135,43 @@ public class TenantInfoDto  implements Serializable {
   }
 
 
+  public static TenantInfoDtoBuilder<?, ?> builder() {
+    return new TenantInfoDtoBuilderImpl();
+  }
+
+  private static final class TenantInfoDtoBuilderImpl extends TenantInfoDtoBuilder<TenantInfoDto, TenantInfoDtoBuilderImpl> {
+
+    @Override
+    protected TenantInfoDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public TenantInfoDto build() {
+      return new TenantInfoDto(this);
+    }
+  }
+
+  public static abstract class TenantInfoDtoBuilder<C extends TenantInfoDto, B extends TenantInfoDtoBuilder<C, B>>  {
+    private TenantAuthConfigDto clientAuth;
+    private TenantFeaturesDto features;
+    private String identifier;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B clientAuth(TenantAuthConfigDto clientAuth) {
+      this.clientAuth = clientAuth;
+      return self();
+    }
+    public B features(TenantFeaturesDto features) {
+      this.features = features;
+      return self();
+    }
+    public B identifier(String identifier) {
+      this.identifier = identifier;
+      return self();
+    }
+  }
 }
 

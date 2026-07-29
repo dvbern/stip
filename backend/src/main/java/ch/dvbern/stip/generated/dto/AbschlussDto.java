@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("Abschluss")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class AbschlussDto  implements Serializable {
   private @Valid UUID id;
@@ -32,6 +32,24 @@ public class AbschlussDto  implements Serializable {
   private @Valid Boolean askForBerufsmaturitaet;
   private @Valid Boolean aktiv;
   private @Valid ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+
+  protected AbschlussDto(AbschlussDtoBuilder<?, ?> b) {
+    this.id = b.id;
+    this.ausbildungskategorie = b.ausbildungskategorie;
+    this.bildungskategorie = b.bildungskategorie;
+    this.bildungsrichtung = b.bildungsrichtung;
+    this.bfsKategorie = b.bfsKategorie;
+    this.berufsbefaehigenderAbschluss = b.berufsbefaehigenderAbschluss;
+    this.ferien = b.ferien;
+    this.bezeichnungDe = b.bezeichnungDe;
+    this.bezeichnungFr = b.bezeichnungFr;
+    this.askForBerufsmaturitaet = b.askForBerufsmaturitaet;
+    this.aktiv = b.aktiv;
+    this.zusatzfrage = b.zusatzfrage;
+  }
+
+  public AbschlussDto() {
+  }
 
   /**
    **/
@@ -322,5 +340,88 @@ public class AbschlussDto  implements Serializable {
   }
 
 
+  public static AbschlussDtoBuilder<?, ?> builder() {
+    return new AbschlussDtoBuilderImpl();
+  }
+
+  private static final class AbschlussDtoBuilderImpl extends AbschlussDtoBuilder<AbschlussDto, AbschlussDtoBuilderImpl> {
+
+    @Override
+    protected AbschlussDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public AbschlussDto build() {
+      return new AbschlussDto(this);
+    }
+  }
+
+  public static abstract class AbschlussDtoBuilder<C extends AbschlussDto, B extends AbschlussDtoBuilder<C, B>>  {
+    private UUID id;
+    private ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie;
+    private ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie;
+    private ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung;
+    private Integer bfsKategorie;
+    private Boolean berufsbefaehigenderAbschluss;
+    private ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien;
+    private String bezeichnungDe;
+    private String bezeichnungFr;
+    private Boolean askForBerufsmaturitaet;
+    private Boolean aktiv;
+    private ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B id(UUID id) {
+      this.id = id;
+      return self();
+    }
+    public B ausbildungskategorie(ch.dvbern.stip.api.ausbildung.type.Ausbildungskategorie ausbildungskategorie) {
+      this.ausbildungskategorie = ausbildungskategorie;
+      return self();
+    }
+    public B bildungskategorie(ch.dvbern.stip.api.ausbildung.type.Bildungskategorie bildungskategorie) {
+      this.bildungskategorie = bildungskategorie;
+      return self();
+    }
+    public B bildungsrichtung(ch.dvbern.stip.api.ausbildung.type.Bildungsrichtung bildungsrichtung) {
+      this.bildungsrichtung = bildungsrichtung;
+      return self();
+    }
+    public B bfsKategorie(Integer bfsKategorie) {
+      this.bfsKategorie = bfsKategorie;
+      return self();
+    }
+    public B berufsbefaehigenderAbschluss(Boolean berufsbefaehigenderAbschluss) {
+      this.berufsbefaehigenderAbschluss = berufsbefaehigenderAbschluss;
+      return self();
+    }
+    public B ferien(ch.dvbern.stip.api.ausbildung.type.FerienTyp ferien) {
+      this.ferien = ferien;
+      return self();
+    }
+    public B bezeichnungDe(String bezeichnungDe) {
+      this.bezeichnungDe = bezeichnungDe;
+      return self();
+    }
+    public B bezeichnungFr(String bezeichnungFr) {
+      this.bezeichnungFr = bezeichnungFr;
+      return self();
+    }
+    public B askForBerufsmaturitaet(Boolean askForBerufsmaturitaet) {
+      this.askForBerufsmaturitaet = askForBerufsmaturitaet;
+      return self();
+    }
+    public B aktiv(Boolean aktiv) {
+      this.aktiv = aktiv;
+      return self();
+    }
+    public B zusatzfrage(ch.dvbern.stip.api.ausbildung.type.AbschlussZusatzfrage zusatzfrage) {
+      this.zusatzfrage = zusatzfrage;
+      return self();
+    }
+  }
 }
 

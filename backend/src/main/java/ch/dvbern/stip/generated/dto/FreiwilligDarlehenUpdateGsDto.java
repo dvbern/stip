@@ -17,15 +17,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FreiwilligDarlehenUpdateGs")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
   private @Valid Integer betragGewuenscht;
   private @Valid Integer schulden;
   private @Valid Integer anzahlBetreibungen;
   private @Valid List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+
+  protected FreiwilligDarlehenUpdateGsDto(FreiwilligDarlehenUpdateGsDtoBuilder<?, ?> b) {
+    this.betragGewuenscht = b.betragGewuenscht;
+    this.schulden = b.schulden;
+    this.anzahlBetreibungen = b.anzahlBetreibungen;
+    this.gruende = b.gruende;
+  }
+
+  public FreiwilligDarlehenUpdateGsDto() {
+  }
 
   /**
    * minimum: 0
@@ -164,5 +174,48 @@ public class FreiwilligDarlehenUpdateGsDto  implements Serializable {
   }
 
 
+  public static FreiwilligDarlehenUpdateGsDtoBuilder<?, ?> builder() {
+    return new FreiwilligDarlehenUpdateGsDtoBuilderImpl();
+  }
+
+  private static final class FreiwilligDarlehenUpdateGsDtoBuilderImpl extends FreiwilligDarlehenUpdateGsDtoBuilder<FreiwilligDarlehenUpdateGsDto, FreiwilligDarlehenUpdateGsDtoBuilderImpl> {
+
+    @Override
+    protected FreiwilligDarlehenUpdateGsDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FreiwilligDarlehenUpdateGsDto build() {
+      return new FreiwilligDarlehenUpdateGsDto(this);
+    }
+  }
+
+  public static abstract class FreiwilligDarlehenUpdateGsDtoBuilder<C extends FreiwilligDarlehenUpdateGsDto, B extends FreiwilligDarlehenUpdateGsDtoBuilder<C, B>>  {
+    private Integer betragGewuenscht;
+    private Integer schulden;
+    private Integer anzahlBetreibungen;
+    private List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B betragGewuenscht(Integer betragGewuenscht) {
+      this.betragGewuenscht = betragGewuenscht;
+      return self();
+    }
+    public B schulden(Integer schulden) {
+      this.schulden = schulden;
+      return self();
+    }
+    public B anzahlBetreibungen(Integer anzahlBetreibungen) {
+      this.anzahlBetreibungen = anzahlBetreibungen;
+      return self();
+    }
+    public B gruende(List<ch.dvbern.stip.api.darlehen.type.DarlehenGrund> gruende) {
+      this.gruende = gruende;
+      return self();
+    }
+  }
 }
 

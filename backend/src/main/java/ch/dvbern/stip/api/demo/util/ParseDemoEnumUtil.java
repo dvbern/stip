@@ -26,6 +26,7 @@ import ch.dvbern.stip.api.common.type.Ausbildungssituation;
 import ch.dvbern.stip.api.common.type.Wohnsitz;
 import ch.dvbern.stip.api.familiensituation.type.ElternUnbekanntheitsGrund;
 import ch.dvbern.stip.api.familiensituation.type.Elternschaftsteilung;
+import ch.dvbern.stip.api.geschwister.type.GeschwisterTyp;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.lebenslauf.type.Taetigkeitsart;
 import ch.dvbern.stip.api.lebenslauf.type.WohnsitzKanton;
@@ -180,6 +181,21 @@ public class ParseDemoEnumUtil {
                 case SCHULPFLICHTIG -> List.of("Schulpflichtig");
                 case IN_AUSBILDUNG -> List.of("in nachobligatorischer Ausbildung");
                 case KEINE -> List.of("keine der Optionen");
+            }
+        ).orElseThrow(() -> invalidValue(cell));
+    }
+
+    public GeschwisterTyp parseGeschwisterTyp(Cell cell) {
+        if (ParseDemoDataUtil.isBlank(cell)) {
+            return null;
+        }
+        return FindEnum.findEnumValue(
+            cell.asString(),
+            GeschwisterTyp.class,
+            (geschwisterTyp) -> switch (geschwisterTyp) {
+                case LEIBLICH -> List.of("Leiblich");
+                case HALB -> List.of("Halb");
+                case STIEF -> List.of("Stief");
             }
         ).orElseThrow(() -> invalidValue(cell));
     }

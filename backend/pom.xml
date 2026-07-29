@@ -715,7 +715,7 @@
                     DarlehenDokumentType=ch.dvbern.stip.api.darlehen.type.DarlehenDokumentType,
                     DarlehenGrund=ch.dvbern.stip.api.darlehen.type.DarlehenGrund,
                     DarlehenStatus=ch.dvbern.stip.api.darlehen.type.DarlehenStatus,
-                    
+
                     SbFreiwilligDarlehenDashboardColumn=ch.dvbern.stip.api.darlehen.type.SbFreiwilligDarlehenDashboardColumn,
                     Gesuchstatus=ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus,
                     Anrede=ch.dvbern.stip.api.common.type.Anrede,
@@ -773,8 +773,9 @@
                     AusbildungUnterbruchAntragStatus=ch.dvbern.stip.api.ausbildung.type.AusbildungUnterbruchAntragStatus,
                     InBearbeitungSbReason=ch.dvbern.stip.api.gesuch.type.InBearbeitungSbReason,
                     DelegierungStatus=ch.dvbern.stip.api.delegieren.type.DelegierungStatus,
-                    PersonenHaushalt=ch.dvbern.stip.berechnung.type.PersonenHaushalt,
-                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType
+                    PersonenHaushalt=ch.dvbern.stip.berechnung.domain.type.PersonenHaushalt,
+                    SteuerdatenAdapterType=ch.dvbern.stip.integration.steuerdaten.domain.model.SteuerdatenAdapterType,
+                    GeschwisterTyp=ch.dvbern.stip.api.geschwister.type.GeschwisterTyp
                   </schemaMappings>
                   <addCompileSourceRoot>true</addCompileSourceRoot>
                   <templateDirectory>${project.basedir}/templates</templateDirectory>
@@ -791,12 +792,14 @@
                     <interfaceOnly>true</interfaceOnly>
                     <returnResponse>false</returnResponse>
                     <additionalModelTypeAnnotations>
-                      @lombok.NoArgsConstructor
+<!--                      @lombok.NoArgsConstructor-->
                       @lombok.AllArgsConstructor
                       @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+                      @org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
                     </additionalModelTypeAnnotations>
                     <hideGenerationTimestamp>true</hideGenerationTimestamp>
                     <useTags>true</useTags>
+                    <generateBuilders>true</generateBuilders>
                   </configOptions>
                   <typeMappings>
                     <typeMapping>DateTime=java.time.LocalDateTime</typeMapping>

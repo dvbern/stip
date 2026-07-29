@@ -137,7 +137,7 @@ public class GesuchsperiodeSeeding extends Seeder {
             .setGueltigkeitStatus(GueltigkeitStatus.PUBLIZIERT);
     }
 
-    Gesuchsperiode getPeriodeForSeeding(
+    public Gesuchsperiode getPeriodeForSeeding(
         final String prefixDe,
         final String prefixFr,
         final Gesuchsjahr jahr,
@@ -227,7 +227,7 @@ public class GesuchsperiodeSeeding extends Seeder {
         return 7258;
     }
 
-    private enum Season {
+    public enum Season {
         SPRING,
         FALL
     }

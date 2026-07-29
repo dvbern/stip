@@ -18,9 +18,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("DemoDataList")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class DemoDataListDto  implements Serializable {
   private @Valid String importiertVon;
@@ -31,6 +31,20 @@ public class DemoDataListDto  implements Serializable {
   private @Valid String filepath;
   private @Valid Integer filesize;
   private @Valid List<DemoDataSlimDto> demoDatas = new ArrayList<>();
+
+  protected DemoDataListDto(DemoDataListDtoBuilder<?, ?> b) {
+    this.importiertVon = b.importiertVon;
+    this.letzteAktivitaet = b.letzteAktivitaet;
+    this.kommentar = b.kommentar;
+    this.documentId = b.documentId;
+    this.filename = b.filename;
+    this.filepath = b.filepath;
+    this.filesize = b.filesize;
+    this.demoDatas = b.demoDatas;
+  }
+
+  public DemoDataListDto() {
+  }
 
   /**
    **/
@@ -254,5 +268,68 @@ public class DemoDataListDto  implements Serializable {
   }
 
 
+  public static DemoDataListDtoBuilder<?, ?> builder() {
+    return new DemoDataListDtoBuilderImpl();
+  }
+
+  private static final class DemoDataListDtoBuilderImpl extends DemoDataListDtoBuilder<DemoDataListDto, DemoDataListDtoBuilderImpl> {
+
+    @Override
+    protected DemoDataListDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public DemoDataListDto build() {
+      return new DemoDataListDto(this);
+    }
+  }
+
+  public static abstract class DemoDataListDtoBuilder<C extends DemoDataListDto, B extends DemoDataListDtoBuilder<C, B>>  {
+    private String importiertVon;
+    private java.time.LocalDateTime letzteAktivitaet;
+    private String kommentar;
+    private String documentId;
+    private String filename;
+    private String filepath;
+    private Integer filesize;
+    private List<DemoDataSlimDto> demoDatas = new ArrayList<>();
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B importiertVon(String importiertVon) {
+      this.importiertVon = importiertVon;
+      return self();
+    }
+    public B letzteAktivitaet(java.time.LocalDateTime letzteAktivitaet) {
+      this.letzteAktivitaet = letzteAktivitaet;
+      return self();
+    }
+    public B kommentar(String kommentar) {
+      this.kommentar = kommentar;
+      return self();
+    }
+    public B documentId(String documentId) {
+      this.documentId = documentId;
+      return self();
+    }
+    public B filename(String filename) {
+      this.filename = filename;
+      return self();
+    }
+    public B filepath(String filepath) {
+      this.filepath = filepath;
+      return self();
+    }
+    public B filesize(Integer filesize) {
+      this.filesize = filesize;
+      return self();
+    }
+    public B demoDatas(List<DemoDataSlimDto> demoDatas) {
+      this.demoDatas = demoDatas;
+      return self();
+    }
+  }
 }
 

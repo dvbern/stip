@@ -15,15 +15,25 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("VerfuegungFall")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class VerfuegungFallDto  implements Serializable {
   private @Valid String timestampErstellt;
   private @Valid String yearRange;
   private @Valid Integer totalbetragStipendium;
   private @Valid VerfuegungDokumentDto dokument;
+
+  protected VerfuegungFallDto(VerfuegungFallDtoBuilder<?, ?> b) {
+    this.timestampErstellt = b.timestampErstellt;
+    this.yearRange = b.yearRange;
+    this.totalbetragStipendium = b.totalbetragStipendium;
+    this.dokument = b.dokument;
+  }
+
+  public VerfuegungFallDto() {
+  }
 
   /**
    **/
@@ -146,5 +156,48 @@ public class VerfuegungFallDto  implements Serializable {
   }
 
 
+  public static VerfuegungFallDtoBuilder<?, ?> builder() {
+    return new VerfuegungFallDtoBuilderImpl();
+  }
+
+  private static final class VerfuegungFallDtoBuilderImpl extends VerfuegungFallDtoBuilder<VerfuegungFallDto, VerfuegungFallDtoBuilderImpl> {
+
+    @Override
+    protected VerfuegungFallDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public VerfuegungFallDto build() {
+      return new VerfuegungFallDto(this);
+    }
+  }
+
+  public static abstract class VerfuegungFallDtoBuilder<C extends VerfuegungFallDto, B extends VerfuegungFallDtoBuilder<C, B>>  {
+    private String timestampErstellt;
+    private String yearRange;
+    private Integer totalbetragStipendium;
+    private VerfuegungDokumentDto dokument;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B timestampErstellt(String timestampErstellt) {
+      this.timestampErstellt = timestampErstellt;
+      return self();
+    }
+    public B yearRange(String yearRange) {
+      this.yearRange = yearRange;
+      return self();
+    }
+    public B totalbetragStipendium(Integer totalbetragStipendium) {
+      this.totalbetragStipendium = totalbetragStipendium;
+      return self();
+    }
+    public B dokument(VerfuegungDokumentDto dokument) {
+      this.dokument = dokument;
+      return self();
+    }
+  }
 }
 

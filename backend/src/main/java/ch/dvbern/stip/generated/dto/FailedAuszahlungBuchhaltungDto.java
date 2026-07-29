@@ -15,9 +15,9 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 
 
 @JsonTypeName("FailedAuszahlungBuchhaltung")
-@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.NoArgsConstructor
-@lombok.AllArgsConstructor
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaJAXRSSpecServerCodegen")@lombok.AllArgsConstructor
 @org.eclipse.microprofile.openapi.annotations.media.Schema(hidden=true)
+@org.jilt.Builder(style = org.jilt.BuilderStyle.STAGED)
 
 public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   private @Valid UUID fallId;
@@ -27,6 +27,19 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   private @Valid String name;
   private @Valid String vorname;
   private @Valid java.time.LocalDateTime lastTryDate;
+
+  protected FailedAuszahlungBuchhaltungDto(FailedAuszahlungBuchhaltungDtoBuilder<?, ?> b) {
+    this.fallId = b.fallId;
+    this.fallNummer = b.fallNummer;
+    this.gesuchId = b.gesuchId;
+    this.gesuchNummer = b.gesuchNummer;
+    this.name = b.name;
+    this.vorname = b.vorname;
+    this.lastTryDate = b.lastTryDate;
+  }
+
+  public FailedAuszahlungBuchhaltungDto() {
+  }
 
   /**
    **/
@@ -213,5 +226,63 @@ public class FailedAuszahlungBuchhaltungDto  implements Serializable {
   }
 
 
+  public static FailedAuszahlungBuchhaltungDtoBuilder<?, ?> builder() {
+    return new FailedAuszahlungBuchhaltungDtoBuilderImpl();
+  }
+
+  private static final class FailedAuszahlungBuchhaltungDtoBuilderImpl extends FailedAuszahlungBuchhaltungDtoBuilder<FailedAuszahlungBuchhaltungDto, FailedAuszahlungBuchhaltungDtoBuilderImpl> {
+
+    @Override
+    protected FailedAuszahlungBuchhaltungDtoBuilderImpl self() {
+      return this;
+    }
+
+    @Override
+    public FailedAuszahlungBuchhaltungDto build() {
+      return new FailedAuszahlungBuchhaltungDto(this);
+    }
+  }
+
+  public static abstract class FailedAuszahlungBuchhaltungDtoBuilder<C extends FailedAuszahlungBuchhaltungDto, B extends FailedAuszahlungBuchhaltungDtoBuilder<C, B>>  {
+    private UUID fallId;
+    private String fallNummer;
+    private UUID gesuchId;
+    private String gesuchNummer;
+    private String name;
+    private String vorname;
+    private java.time.LocalDateTime lastTryDate;
+    protected abstract B self();
+
+    public abstract C build();
+
+    public B fallId(UUID fallId) {
+      this.fallId = fallId;
+      return self();
+    }
+    public B fallNummer(String fallNummer) {
+      this.fallNummer = fallNummer;
+      return self();
+    }
+    public B gesuchId(UUID gesuchId) {
+      this.gesuchId = gesuchId;
+      return self();
+    }
+    public B gesuchNummer(String gesuchNummer) {
+      this.gesuchNummer = gesuchNummer;
+      return self();
+    }
+    public B name(String name) {
+      this.name = name;
+      return self();
+    }
+    public B vorname(String vorname) {
+      this.vorname = vorname;
+      return self();
+    }
+    public B lastTryDate(java.time.LocalDateTime lastTryDate) {
+      this.lastTryDate = lastTryDate;
+      return self();
+    }
+  }
 }
 

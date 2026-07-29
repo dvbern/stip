@@ -27,7 +27,7 @@ import jakarta.inject.Qualifier;
 
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
+@Target({ ElementType.TYPE, ElementType.FIELD })
 public @interface GemeindeLookupQualifier {
     GemeindeLookupAdapterType value();
 }
