@@ -475,6 +475,11 @@ public class BernCalculatorUtil {
                 2,
                 RoundingMode.HALF_UP
             );
+
+            if (!teilzeitStiefHalbGeschwistersBeiElternAnrechnen) {
+                berechnungsanteilStiefHalbKindsDerEltern =
+                    BigDecimal.valueOf(100).subtract(berechnungsanteilStiefHalbKindsDerEltern);
+            }
         }
         return berechnungsanteilStiefHalbKindsDerEltern;
 
