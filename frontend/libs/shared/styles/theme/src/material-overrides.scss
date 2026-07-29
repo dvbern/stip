@@ -26,6 +26,7 @@ html {
     )
   );
   @include mat.system-classes();
+  --mat-sys-background: var(--dv-light-border-subtle);
 
   .mat-mdc-form-field {
     .mat-mdc-text-field-wrapper {
@@ -238,14 +239,13 @@ dv-shared-feature-verfuegung {
 }
 
 .mat-mdc-slide-toggle {
+  height: 40px;
   --mat-slide-toggle-selected-track-color: var(--tw-color-dv-red);
   --mat-slide-toggle-selected-focus-track-color: var(--tw-color-dv-red-hover);
   --mat-slide-toggle-selected-pressed-track-color: var(--tw-color-dv-red-hover);
   --mat-slide-toggle-selected-hover-track-color: var(--tw-color-dv-red-hover);
-  --mat-slide-toggle-unselected-track-color: var(--tw-color-dv-gray-light);
-  --mat-slide-toggle-unselected-focus-track-color: var(
-    --tw-color-dv-gray-light
-  );
+  --mat-slide-toggle-unselected-track-color: var(--tw-color-dv-gray-dark);
+  --mat-slide-toggle-unselected-focus-track-color: var(--tw-color-dv-gray-dark);
   --mat-slide-toggle-unselected-pressed-track-color: var(--tw-color-dv-gray);
   --mat-slide-toggle-unselected-hover-track-color: var(--tw-color-dv-gray);
   --mat-slide-toggle-unselected-handle-color: var(--tw-color-white);

@@ -22,11 +22,12 @@ import {
   GesuchService,
 } from '@dv/shared/model/gesuch';
 import {
-  byAppConfig,
+  byAppConfigKey,
   getGesuchPermissions,
   getTranchePermissions,
   isNotReadonly,
 } from '@dv/shared/model/permission-state';
+import { getGesuchState } from '@dv/shared/util/gesuch';
 import {
   CachedRemoteData,
   cachedPending,
@@ -136,15 +137,11 @@ export class DashboardStore extends signalStore(
     };
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   loadDashboard$(params: { fallId: string }) {
-    return byAppConfig(this.config.app, {
-      gesuchsteller: () => this.loadDashboardGS$(), //todo-KSTIP-3643: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
+    return byAppConfigKey(this.config.app, 'type', {
+      'gesuch-app': () => this.loadDashboardGS$(), //todo-KSTIP-3643: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
       // todo-KSTIP-3643: add after merge of KSTIP-3676
-      // 'sozialdienst-app': () => this.loadDashboardSoz$(params),
-      sachbearbeiter: () => {
-        throw new Error('Not implemented for this AppType');
-      },
+      'sozialdienst-app': () => this.loadDashboardSoz$(params),
     });
   }
 
@@ -204,8 +201,9 @@ const toGesuchDashboardItemView =
       hasMoreThanOneGesuche,
     } = data;
     const isErstgesuch = index === gesuchs.length - 1;
-    const isLastGesuch = index === 0;
-    const einreichefristAbgelaufen = isAfter(
+    const isLatestGesuch = index === 0;
+    const isActive = isAusbildungActive && isLatestGesuch;
+    const isEinreichefristAbgelaufen = isAfter(
       new Date(),
       endOfDay(new Date(gesuch.gesuchsperiode.einreichefristReduziert)),
     );
@@ -247,7 +245,8 @@ const toGesuchDashboardItemView =
     return {
       ...gesuch,
       fallId: fallItem.fall.id,
-      isActive: isAusbildungActive && isLastGesuch,
+      state: getGesuchState(gesuch, { isActive, isEinreichefristAbgelaufen }),
+      isActive,
       isErstgesuch,
       canEdit,
       canDelete: canEdit && hasMoreThanOneGesuche && canCurrentlyEditGesuch,
@@ -255,7 +254,7 @@ const toGesuchDashboardItemView =
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
       canCreateAenderung: gesuch.canCreateAenderung && canCurrentlyEditGesuch,
       hasPendingAusbildungUnterbruchAntrag,
-      einreichefristAbgelaufen,
+      einreichefristAbgelaufen: true,
       reduzierterBeitrag,
       einreichefristDays,
       yearRange,

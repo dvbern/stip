@@ -10,16 +10,10 @@ import { RouterLink } from '@angular/router';
 
 import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
-import { SharedUiAenderungsEntryComponent } from '@dv/shared/ui/aenderungs-entry';
 
 @Component({
   selector: 'dv-shared-ui-dashboard-gesuch',
-  imports: [
-    CommonModule,
-    RouterLink,
-    SharedUiAdvTranslocoDirective,
-    SharedUiAenderungsEntryComponent,
-  ],
+  imports: [CommonModule, RouterLink, SharedUiAdvTranslocoDirective],
   templateUrl: './shared-ui-dashboard-gesuch.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,5 +23,5 @@ export class SharedUiDashboardGesuchComponent {
   deleteAenderung = output<string>();
   aenderungMelden = output<void>();
   @HostBinding('class') defaultClasses =
-    'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:px-6 tw:pt-4 tw:pb-6';
+    'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:p-6';
 }

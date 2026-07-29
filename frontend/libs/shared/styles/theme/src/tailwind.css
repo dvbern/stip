@@ -7,9 +7,11 @@
   --color-dv-yellow: #ffc107;
   --color-dv-yellow-subtle: #fff3cd;
   --color-dv-yellow-dark: #503d04;
+  --color-dv-orange: #fff3de;
   --color-dv-yellow-light: #fffbf0;
   --color-dv-blue: #298bef;
   --color-dv-blue-subtle: #d4e8fc;
+  --color-dv-blue-light: #eaf4fe;
   --color-dv-blue-dark: #004784;
   --color-dv-green: #2eb85c;
   --color-dv-green-subtle: #eff7e0;
@@ -17,7 +19,7 @@
   --color-dv-green-hover: #1e783c;
   --color-dv-gray: #777777;
   --color-dv-gray-subtle: #eeeeee;
-  --color-dv-gray-light: #929292;
+  --color-dv-gray-light: #f9f9f9;
   --color-dv-gray-dark: #4e4e4e;
   --color-dv-gray-darker: color-mix(
     in srgb,
@@ -25,7 +27,7 @@
     black
   );
   --color-dv-red: #fe5454;
-  --color-dv-red-subtle: #ffdddd;
+  --color-dv-red-subtle: #ffe7e7;
   --color-dv-red-dark: #930016;
   --color-dv-red-hover: rgb(215.9, 71.4, 71.4);
   --color-dv-warning: var(--tw-color-dv-yellow);
@@ -80,7 +82,7 @@
     --dv-yellow: var(--tw-color-dv-yellow);
     --dv-yellow-subtle: var(--tw-color-dv-yellow-subtle);
     --dv-gray: var(--tw-color-dv-gray);
-    --dv-gray-subtle: var(--tw-color-dv-gray-dark);
+    --dv-gray-dark: var(--tw-color-dv-gray-dark);
 
     --dv-secondary-color: var(--dv-gray);
     --dv-light-bg-subtle: #fff;

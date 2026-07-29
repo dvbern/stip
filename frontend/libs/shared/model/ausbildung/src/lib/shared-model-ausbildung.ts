@@ -2,6 +2,7 @@ import {
   AusbildungDashboardItem,
   AusbildungsStatus,
   FallDashboardItem,
+  GesuchState,
 } from '@dv/shared/model/gesuch';
 import { Modify } from '@dv/shared/model/type-util';
 
@@ -9,6 +10,7 @@ export type SharedModelGsGesuchView = Modify<
   Exclude<AusbildungDashboardItem['gesuchs'], undefined>[number],
   {
     fallId: string;
+    state: GesuchState;
     isActive: boolean;
     isErstgesuch: boolean;
     hasPendingAusbildungUnterbruchAntrag: boolean;
