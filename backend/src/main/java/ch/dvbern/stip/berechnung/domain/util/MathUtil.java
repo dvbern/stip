@@ -28,4 +28,13 @@ public final class MathUtil {
     public static int roundHalfUp(BigDecimal value) {
         return value.setScale(0, RoundingMode.HALF_UP).intValue();
     }
+
+    public static BigDecimal divideByTrancheDuration(BigDecimal value, int trancheDurationMonths) {
+        if (trancheDurationMonths == 12) {
+            return value;
+        }
+        return value.multiply(BigDecimal.valueOf(trancheDurationMonths))
+            .divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
+    }
+
 }

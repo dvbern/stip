@@ -35,6 +35,7 @@ import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.berechnung.adapter.bern.util.BernCalculatorUtil;
 import ch.dvbern.stip.berechnung.domain.dto.PersonValueList;
 import ch.dvbern.stip.berechnung.domain.util.InputUtils;
+import ch.dvbern.stip.berechnung.domain.util.MathUtil;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDto;
 import ch.dvbern.stip.generated.dto.PersoenlichesBudgetresultatDtoBuilder;
@@ -114,6 +115,9 @@ public class PersoenlichesBudgetCalculator {
                 total = total
                     .divide(BigDecimal.valueOf(proKopfTeilung), RoundingMode.HALF_UP);;
                 totalNachProKopfTeilung = total;
+            }
+            if (anzahlMonateGueltigkeit != 12) {
+                total = MathUtil.divideByTrancheDuration(total, anzahlMonateGueltigkeit);
             }
         }
 
