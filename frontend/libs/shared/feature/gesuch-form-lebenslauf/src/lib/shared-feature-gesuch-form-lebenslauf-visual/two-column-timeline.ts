@@ -250,6 +250,20 @@ export class TwoColumnTimeline {
       }
     }
 
+    // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
+    output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
+
+    const endDate = addMonths(output[output.length - 1].bis, 1);
+    if (isBefore(endDate, plannedAusbildung.von)) {
+      output.push({
+        col: 'BOTH',
+        von: endDate,
+        bis: subMonths(plannedAusbildung.von, 1),
+        positionStartRow: startRow++,
+        positionRowSpan: 1,
+      } as TimelineGapBlock);
+    }
+
     // Spaltenpositionen
     for (const item of output) {
       const currentCols = item.col === 'LEFT' ? leftCols : rightCols;
@@ -258,8 +272,6 @@ export class TwoColumnTimeline {
         item.col === 'BOTH' ? leftCols + rightCols : currentCols;
     }
 
-    // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
-    output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
     output.push({
       ...plannedAusbildung,
       children: [plannedAusbildung],
