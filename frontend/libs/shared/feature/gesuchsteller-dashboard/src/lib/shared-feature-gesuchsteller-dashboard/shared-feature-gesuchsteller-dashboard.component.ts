@@ -38,10 +38,7 @@ import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
 import { assertUnreachable } from '@dv/shared/model/type-util';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
-import {
-  SharedUiDashboardAusbildungComponent,
-  SharedUiDashboardCompactAusbildungComponent,
-} from '@dv/shared/ui/dashboard';
+import { SharedUiDashboardAusbildungComponent } from '@dv/shared/ui/dashboard';
 import { SharedUiIconChipComponent } from '@dv/shared/ui/icon-chip';
 import { SharedUiVersionTextComponent } from '@dv/shared/ui/version-text';
 import { isPending } from '@dv/shared/util/remote-data';
@@ -55,7 +52,6 @@ import { selectSharedFeatureGesuchstellerDashboardView } from './shared-feature-
     SharedUiIconChipComponent,
     SharedUiVersionTextComponent,
     SharedUiDashboardAusbildungComponent,
-    SharedUiDashboardCompactAusbildungComponent,
     SharedUiAdvTranslocoDirective,
     MatMenuModule,
   ],

@@ -3,7 +3,13 @@
   <div class="tw:grid tw:grid-cols-[1fr_auto]">
     <div>
       <h2 class="tw:mb-4 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-bold">
-        <dv-shared-ui-icon-chip class="tw:text-[#81be06e0] tw:text-base">
+        <dv-shared-ui-icon-chip
+          class="tw:text-base"
+          [ngClass]="{
+            'tw:text-[#81be06e0]': ausbildung.status === 'AKTIV',
+            'tw:text-dv-gray': ausbildung.status !== 'AKTIV',
+          }"
+        >
           <i class="material-symbols-rounded tw:text-2xl">school</i>
         </dv-shared-ui-icon-chip>
         {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
@@ -36,32 +42,35 @@
       </div>
     </div>
 
-    <div class="tw:flex tw:flex-col tw:gap-2">
-      @if (ausbildung.canDelete) {
-        <button
-          type="button"
-          class="tw:dv-button-outline tw:ml-3 tw:h-min"
-          (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
-        >
-          {{ t('shared.dashboard.ausbildung.delete') }}
-        </button>
-      }
-      @if (
-        ausbildung.id && (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
-      ) {
-        <button
-          type="button"
-          class="tw:dv-button-main-primary tw:ml-3 tw:h-min"
-          (click)="output.emit({ typ: 'ausbildung unterbrechen', id: ausbildung.id })"
-        >
-          @if (!ausbildung.openAusbildungUnterbruchAntragId) {
-            {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
-          } @else {
-            {{ t('shared.dashboard.ausbildung.unterbruch.edit') }}
-          }
-        </button>
-      }
-    </div>
+    @if (ausbildung.status === 'AKTIV') {
+      <div class="tw:flex tw:flex-col tw:gap-2">
+        @if (ausbildung.canDelete) {
+          <button
+            type="button"
+            class="tw:dv-button-outline tw:ml-3 tw:h-min"
+            (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
+          >
+            {{ t('shared.dashboard.ausbildung.delete') }}
+          </button>
+        }
+        @if (
+          ausbildung.id &&
+          (ausbildung.canCreateAusbildungUnterbruchAntrag || ausbildung.openAusbildungUnterbruchAntragId)
+        ) {
+          <button
+            type="button"
+            class="tw:dv-button-main-primary tw:ml-3 tw:h-min"
+            (click)="output.emit({ typ: 'ausbildung unterbrechen', id: ausbildung.id })"
+          >
+            @if (!ausbildung.openAusbildungUnterbruchAntragId) {
+              {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
+            } @else {
+              {{ t('shared.dashboard.ausbildung.unterbruch.edit') }}
+            }
+          </button>
+        }
+      </div>
+    }
   </div>
 
   <div class="tw:flex tw:flex-col tw:gap-6">

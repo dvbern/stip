@@ -17,8 +17,8 @@
         class="tw:flex tw:flex-col tw:gap-8 tw:max-w-250 tw:m-auto"
         [class.busy]="isUnterbruchOrAenderungPendingSig()"
       >
-        @if (dashboard.activeAusbildungen.length > 0) {
-          @for (ausbildung of dashboard.activeAusbildungen; track ausbildung.id) {
+        @if (dashboard.ausbildungen.length > 0) {
+          @for (ausbildung of dashboard.ausbildungen; track ausbildung.id) {
             <dv-shared-ui-dashboard-ausbildung
               class="tw:shadow-lg"
               [ausbildungSig]="ausbildung"
@@ -51,13 +51,6 @@
               {{ t('shared.dashboard.fall.delegated.message') }}
             </p>
           </div>
-        }
-        @for (ausbildung of dashboard.inactiveAusbildungen; track ausbildung.id) {
-          <dv-shared-ui-dashboard-compact-ausbildung
-            class="tw:shadow"
-            [ausbildungSig]="ausbildung"
-            (output)="handleOutput($event)"
-          ></dv-shared-ui-dashboard-compact-ausbildung>
         }
       </div>
     }

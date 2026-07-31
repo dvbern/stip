@@ -43,10 +43,8 @@ export type SharedModelGsDashboardView = Omit<
   FallDashboardItem,
   'ausbildungDashboardItems'
 > & {
-  hasActiveAusbildungen: boolean;
   canCreateAusbildung: boolean;
-  activeAusbildungen: SharedModelGsAusbildungView[];
-  inactiveAusbildungen: SharedModelGsAusbildungView[];
+  ausbildungen: SharedModelGsAusbildungView[];
 };
 
 export type StatusType = 'ACTIVE' | 'INACTIVE' | undefined;

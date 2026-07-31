@@ -62,8 +62,7 @@ export class DashboardStore extends signalStore(
     if (!fallDashboardItem) {
       return undefined;
     }
-    const activeAusbildungen: SharedModelGsAusbildungView[] = [];
-    const inactiveAusbildungen: SharedModelGsAusbildungView[] = [];
+    const ausbildungen: SharedModelGsAusbildungView[] = [];
     const rolesMap = this.permissionStore.rolesMapSig();
 
     fallDashboardItem.ausbildungDashboardItems?.forEach(
@@ -103,10 +102,7 @@ export class DashboardStore extends signalStore(
           return `${name} - ${bezeichnung}`;
         };
 
-        (ausbildung.status !== 'AKTIV'
-          ? inactiveAusbildungen
-          : activeAusbildungen
-        ).push({
+        ausbildungen.push({
           ...ausbildung,
           bezeichnungDe: ausbildung.ausbildungNichtGefunden
             ? alternativeBezeichnung
@@ -132,9 +128,7 @@ export class DashboardStore extends signalStore(
         rolesMap,
         fallDashboardItem.currentDelegierung,
       ),
-      hasActiveAusbildungen: activeAusbildungen.length > 0,
-      activeAusbildungen,
-      inactiveAusbildungen,
+      ausbildungen,
     };
   });
 
