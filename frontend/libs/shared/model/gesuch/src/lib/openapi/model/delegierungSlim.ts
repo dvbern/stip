@@ -10,11 +10,13 @@
  * Do not edit the class manually.
  */
 import { SozialdienstSlim } from './sozialdienstSlim';
+import { PersoenlicheAngaben } from './persoenlicheAngaben';
 import { DelegierungStatus } from './delegierungStatus';
 
 export interface DelegierungSlim { 
     status: DelegierungStatus;
     sozialdienst: SozialdienstSlim;
+    persoenlicheAngaben: PersoenlicheAngaben;
 }
 
 

@@ -43,13 +43,6 @@ export const appRoutes: Route[] = [
           ),
       },
       {
-        path: 'darlehen',
-        loadChildren: () =>
-          import('@dv/shared/feature/darlehen-form').then(
-            (m) => m.sharedFeatureDarlehenFeatureRoutes,
-          ),
-      },
-      {
         path: 'fall-dokumente',
         loadChildren: () =>
           import('@dv/shared/feature/fall-dokumente-layout').then(

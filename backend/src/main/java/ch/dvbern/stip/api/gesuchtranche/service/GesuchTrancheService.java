@@ -160,15 +160,9 @@ public class GesuchTrancheService {
             .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.UEBERPRUEFEN)
             .map(gesuchTrancheMapper::toSlimDto)
             .orElse(null);
-        final var fehlendeDokumenteAenderung = latestAenderung
-            .filter(aenderung -> aenderung.getStatus() == GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
-            .map(gesuchTrancheMapper::toSlimDto)
-            .map(List::of)
-            .orElse(null);
         return getHistorizedAenderungs(historizedGesuch)
             .offen(offeneAenderung)
             .eingereicht(eingereichteAenderung)
-            .fehlendeDokumente(fehlendeDokumenteAenderung)
             .canAenderungEinreichen(GesuchUtil.canGsAendererungEinreichen(gesuch));
     }
 

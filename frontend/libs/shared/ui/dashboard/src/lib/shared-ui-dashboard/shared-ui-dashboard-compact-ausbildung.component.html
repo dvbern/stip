@@ -52,9 +52,7 @@
         [gesuchSig]="gesuch"
         [class.bg-tertiary]="ausbildung.status !== 'AKTIV'"
         [class.bg-success-subtle]="ausbildung.status === 'AKTIV'"
-        (deleteGesuch)="deleteGesuch.emit($event)"
-        (aenderungMelden)="aenderungMelden.emit({ gesuch })"
-        (deleteAenderung)="deleteAenderung.emit($event)"
+        (output)="output.emit($event)"
       ></dv-shared-ui-dashboard-gesuch>
     }
   </div>

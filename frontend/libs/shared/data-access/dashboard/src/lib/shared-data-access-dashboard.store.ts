@@ -18,6 +18,7 @@ import {
 import {
   Ausbildungsgang,
   FallDashboardItem,
+  FreiwilligDarlehen,
   GesuchDashboardItem,
   GesuchService,
 } from '@dv/shared/model/gesuch';
@@ -139,8 +140,7 @@ export class DashboardStore extends signalStore(
 
   loadDashboard$(params: { fallId: string }) {
     return byAppConfigKey(this.config.app, 'type', {
-      'gesuch-app': () => this.loadDashboardGS$(), //todo-KSTIP-3643: after merge of KSTIP-3676 consider changing backend to allways use fallid instead of logged in current user?
-      // todo-KSTIP-3643: add after merge of KSTIP-3676
+      'gesuch-app': () => this.loadDashboardGS$(),
       'sozialdienst-app': () => this.loadDashboardSoz$(params),
     });
   }
@@ -253,6 +253,9 @@ const toGesuchDashboardItemView =
       canDeleteAenderung:
         !!aenderungPermission?.permissions.canWrite && canCurrentlyEditGesuch,
       canCreateAenderung: gesuch.canCreateAenderung && canCurrentlyEditGesuch,
+      freiwilligeDarlehenList: gesuch.freiwilligeDarlehenList.filter(
+        isDarlehenInitialized,
+      ),
       hasPendingAusbildungUnterbruchAntrag,
       einreichefristAbgelaufen: true,
       reduzierterBeitrag,
@@ -260,3 +263,9 @@ const toGesuchDashboardItemView =
       yearRange,
     };
   };
+
+const isDarlehenInitialized = (
+  darlehen: FreiwilligDarlehen,
+): darlehen is Required<FreiwilligDarlehen> => {
+  return !!darlehen.status;
+};

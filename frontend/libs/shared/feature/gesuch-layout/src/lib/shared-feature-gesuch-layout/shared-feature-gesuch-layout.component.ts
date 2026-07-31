@@ -35,6 +35,7 @@ import {
 } from '@dv/shared/model/config';
 import { FreiwilligDarlehen, getTrancheRoute } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
+import { byAppConfig } from '@dv/shared/model/permission-state';
 import {
   createUrlChecksSig,
   urlAfterNavigationEnd,
@@ -284,9 +285,6 @@ export class SharedFeatureGesuchLayoutComponent {
 
     return orderedDarlehen.length > 0 ? orderedDarlehen[0].id : undefined;
   });
-  private gesuchCacheSig = this.store.selectSignal(
-    selectSharedDataAccessGesuchCache,
-  );
 
   constructor() {
     effect(() => {
@@ -300,10 +298,15 @@ export class SharedFeatureGesuchLayoutComponent {
     });
 
     effect(() => {
-      const fallId = this.headerViewSig().gesuchInfo?.fallId;
-
-      if (fallId) {
-        this.darlehenStore.getAllDarlehen$({ fallId });
+      const { gesuchInfo } = this.headerViewSig();
+      this.gesuchUpdatedSig();
+      if (gesuchInfo?.fallId) {
+        byAppConfig(this.config.app, {
+          gesuchsteller: () =>
+            this.darlehenStore.getAllDarlehenGs$({ fallId: gesuchInfo.fallId }),
+          sachbearbeiter: () =>
+            this.darlehenStore.getAllDarlehen$({ fallId: gesuchInfo.fallId }),
+        });
       }
     });
   }

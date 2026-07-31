@@ -368,7 +368,11 @@
           data-testid="button-save"
           [disabled]="form.invalid || (ausbildungStore.ausbildung() | rdIsPending: { ignoreInitial: true })"
         >
-          {{ t('shared.form.save') }}
+          @if (isDialog) {
+            {{ t('shared.form.save') }}
+          } @else {
+            {{ t('shared.form.save-and-continue') }}
+          }
         </button>
       </dv-shared-ui-step-form-buttons>
     }

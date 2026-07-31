@@ -15,6 +15,7 @@ package ch.dvbern.stip.generated.dto;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ch.dvbern.stip.generated.dto.DelegierungSlimDtoSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -29,7 +30,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  */
 @JsonPropertyOrder({
   FallHeaderDtoSpec.JSON_PROPERTY_FALL_ID,
-  FallHeaderDtoSpec.JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT
+  FallHeaderDtoSpec.JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT,
+  FallHeaderDtoSpec.JSON_PROPERTY_CURRENT_DELEGIERUNG
 })
 @JsonTypeName("FallHeader")
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
@@ -39,6 +41,9 @@ public class FallHeaderDtoSpec {
 
   public static final String JSON_PROPERTY_UNREAD_NOTIFICATIONS_COUNT = "unreadNotificationsCount";
   private Integer unreadNotificationsCount;
+
+  public static final String JSON_PROPERTY_CURRENT_DELEGIERUNG = "currentDelegierung";
+  private DelegierungSlimDtoSpec currentDelegierung;
 
   public FallHeaderDtoSpec() {
   }
@@ -94,6 +99,32 @@ public class FallHeaderDtoSpec {
     this.unreadNotificationsCount = unreadNotificationsCount;
   }
 
+
+  public FallHeaderDtoSpec currentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+    
+    this.currentDelegierung = currentDelegierung;
+    return this;
+  }
+
+   /**
+   * Get currentDelegierung
+   * @return currentDelegierung
+  **/
+  @jakarta.annotation.Nullable
+  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public DelegierungSlimDtoSpec getCurrentDelegierung() {
+    return currentDelegierung;
+  }
+
+
+  @JsonProperty(JSON_PROPERTY_CURRENT_DELEGIERUNG)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCurrentDelegierung(DelegierungSlimDtoSpec currentDelegierung) {
+    this.currentDelegierung = currentDelegierung;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -104,12 +135,13 @@ public class FallHeaderDtoSpec {
     }
     FallHeaderDtoSpec fallHeader = (FallHeaderDtoSpec) o;
     return Objects.equals(this.fallId, fallHeader.fallId) &&
-        Objects.equals(this.unreadNotificationsCount, fallHeader.unreadNotificationsCount);
+        Objects.equals(this.unreadNotificationsCount, fallHeader.unreadNotificationsCount) &&
+        Objects.equals(this.currentDelegierung, fallHeader.currentDelegierung);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(fallId, unreadNotificationsCount);
+    return Objects.hash(fallId, unreadNotificationsCount, currentDelegierung);
   }
 
   @Override
@@ -118,6 +150,7 @@ public class FallHeaderDtoSpec {
     sb.append("class FallHeaderDtoSpec {\n");
     sb.append("    fallId: ").append(toIndentedString(fallId)).append("\n");
     sb.append("    unreadNotificationsCount: ").append(toIndentedString(unreadNotificationsCount)).append("\n");
+    sb.append("    currentDelegierung: ").append(toIndentedString(currentDelegierung)).append("\n");
     sb.append("}");
     return sb.toString();
   }

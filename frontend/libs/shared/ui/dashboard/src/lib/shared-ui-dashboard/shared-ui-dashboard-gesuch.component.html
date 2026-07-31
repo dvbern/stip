@@ -82,7 +82,7 @@
                 type="button"
                 class="tw:dv-button-outline"
                 data-testid="shared.dashboard.gesuch.delete"
-                (click)="deleteGesuch.emit(gesuch.id)"
+                (click)="output.emit({ typ: 'delete gesuch', id: gesuch.id })"
               >
                 <span>{{ t('shared.dashboard.gesuch.delete') }}</span>
               </button>
@@ -119,11 +119,22 @@
               type="button"
               class="tw:dv-button-outline"
               data-testid="cockpit-gesuch-aenderung-create"
-              (click)="aenderungMelden.emit()"
+              (click)="output.emit({ typ: 'create aenderung', melden: { gesuch } })"
             >
               {{ t('shared.dashboard.aenderung.create') }}
             </button>
           }
+        }
+
+        @if (gesuch.canCreateDarlehen) {
+          <button
+            type="button"
+            class="tw:dv-button-outline"
+            data-testid="cockpit-gesuch-darlehen-create"
+            (click)="output.emit({ typ: 'create darlehen', gesuchId: gesuch.id, fallId: gesuch.fallId })"
+          >
+            {{ t('shared.dashboard.darlehen.create') }}
+          </button>
         }
       }
     </div>

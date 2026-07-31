@@ -1,6 +1,5 @@
 <ng-container *transloco="let t">
   @for (item of navMenuItemsSig(); track item.id) {
-    <!-- todo-KSTIP-3643 hier gibt es etwas viel duplication mit ui-nav-items, ev. fndest du eine bessere lösung, sonst auch ok -->
     @switch (item.type) {
       @case ('link') {
         <a

@@ -18,6 +18,7 @@ import {
   SharedDataAccessBenutzerApiEvents,
   selectSharedDataAccessBenutzer,
 } from '@dv/shared/data-access/benutzer';
+import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { DashboardStore } from '@dv/shared/data-access/dashboard';
 import { FallStore } from '@dv/shared/data-access/fall';
 import {
@@ -31,9 +32,10 @@ import { SharedDialogCreateAusbildungComponent } from '@dv/shared/dialog/create-
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche-erstellen';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
-import { SharedModelGsAusbildungView } from '@dv/shared/model/ausbildung';
+import { GsDashboardActions } from '@dv/shared/model/ausbildung';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { AenderungMelden, Gesuchsperiode } from '@dv/shared/model/gesuch';
+import { assertUnreachable } from '@dv/shared/model/type-util';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import { SharedUiConfirmDialogComponent } from '@dv/shared/ui/confirm-dialog';
 import {
@@ -68,8 +70,8 @@ export class SharedFeatureGesuchstellerDashboardComponent {
   private router = inject(Router);
   private ausbildungStore = inject(AusbildungStore);
   private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
-  private config = inject(SharedModelCompileTimeConfig);
 
+  config = inject(SharedModelCompileTimeConfig);
   route = inject(ActivatedRoute);
 
   navigationStore = inject(NavigationStore);
@@ -86,6 +88,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
     const benutzer = this.benutzerSig();
     return `${benutzer?.vorname} ${benutzer?.nachname}`;
   });
+  darlehenStore = inject(DarlehenStore);
 
   isUnterbruchOrAenderungPendingSig = computed(() => {
     const ausbildungUnterbruchPending = isPending(
@@ -95,15 +98,26 @@ export class SharedFeatureGesuchstellerDashboardComponent {
     return ausbildungUnterbruchPending || aenderungPending;
   });
 
+  piaNameSig = computed(() => {
+    const pia =
+      this.dashboardStore.dashboardViewSig()?.currentDelegierung
+        ?.persoenlicheAngaben;
+    if (!pia) {
+      return null;
+    }
+    return `${pia.vorname} ${pia.nachname}`;
+  });
+
   private gesuchUpdatedSig = this.store.selectSignal(selectLastUpdate);
 
-  // todo-KSTIP-3643: make explicit after merge of KSTIP-3676
   private fallIdByAppTypeSig = computed(() => {
-    if (this.config.app.view === 'gesuchsteller') {
-      return this.fallStore.currentFallViewSig()?.id;
+    switch (this.config.app.type) {
+      case 'gesuch-app':
+        return this.fallStore.currentFallViewSig()?.id;
+      case 'sozialdienst-app':
+        return this.fallIdSig();
     }
-
-    return this.fallIdSig();
+    return undefined;
   });
 
   constructor() {
@@ -154,8 +168,17 @@ export class SharedFeatureGesuchstellerDashboardComponent {
         minAusbildungEnd,
       )
         .afterClosed()
-        .subscribe(() => {
-          this.dashboardStore.loadDashboard$({ fallId });
+        .subscribe((result) => {
+          const { gesuchId, gesuchTrancheId } = result ?? {};
+          if (gesuchId && gesuchTrancheId) {
+            this.router.navigate([
+              '/gesuch',
+              'ausbildung',
+              gesuchId,
+              'tranche',
+              gesuchTrancheId,
+            ]);
+          }
         });
     }
   }
@@ -167,7 +190,28 @@ export class SharedFeatureGesuchstellerDashboardComponent {
     return periode.id + periode.gesuchLoading;
   }
 
-  aenderungMelden(melden: AenderungMelden) {
+  handleOutput(output: GsDashboardActions) {
+    switch (output.typ) {
+      case 'delete ausbildung':
+        return this.deleteAusbildung(output.id);
+      case 'delete gesuch':
+        return this.deleteGesuch(output.id);
+      case 'delete aenderung':
+        return this.deleteAenderung(output.id);
+      case 'delete darlehen':
+        return this.deleteDarlehen(output.id);
+      case 'ausbildung unterbrechen':
+        return this.ausbildungUnterbrechen(output.id);
+      case 'create aenderung':
+        return this.aenderungMelden(output.melden);
+      case 'create darlehen':
+        return this.createDarlehen(output.gesuchId, output.fallId);
+      default:
+        assertUnreachable(output);
+    }
+  }
+
+  private aenderungMelden(melden: AenderungMelden) {
     const {
       gesuch: { id, startDate, endDate },
     } = melden;
@@ -181,7 +225,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
       .subscribe();
   }
 
-  deleteAusbildung(ausbildung: SharedModelGsAusbildungView) {
+  private deleteAusbildung(gesuchId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.dashboard.ausbildung.delete.dialog.title',
       message: 'shared.dashboard.ausbildung.delete.dialog.message',
@@ -193,7 +237,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
         if (result) {
           this.store.dispatch(
             SharedDataAccessGesuchEvents.deleteGesuch({
-              gesuchId: ausbildung.gesuchs[0].id,
+              gesuchId,
             }),
           );
           this.store.dispatch(SharedDataAccessGesuchEvents.reset());
@@ -201,7 +245,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
       });
   }
 
-  ausbildungUnterbrechen(
+  private ausbildungUnterbrechen(
     ausbildungId: string,
     openAusbildungUnterbruchAntragId?: string,
   ) {
@@ -238,7 +282,7 @@ export class SharedFeatureGesuchstellerDashboardComponent {
       });
   }
 
-  deleteAenderung(aenderungId: string) {
+  private deleteAenderung(aenderungId: string) {
     SharedUiConfirmDialogComponent.open(this.dialog, {
       title: 'shared.dashboard.aenderung.delete.dialog.title',
       message: 'shared.dashboard.aenderung.delete.dialog.message',
@@ -251,6 +295,39 @@ export class SharedFeatureGesuchstellerDashboardComponent {
           this.gesuchAenderungStore.deleteGesuchAenderung$({
             aenderungId,
             onSuccess: () => {
+              const fallId = this.fallIdByAppTypeSig();
+              if (fallId) {
+                this.dashboardStore.loadDashboard$({ fallId });
+              }
+            },
+          });
+        }
+      });
+  }
+
+  private createDarlehen(gesuchId: string, fallId: string) {
+    this.darlehenStore.createDarlehen$({
+      gesuchId,
+      fallId,
+    });
+  }
+
+  private deleteDarlehen(darlehenId: string) {
+    SharedUiConfirmDialogComponent.open(this.dialog, {
+      title: 'shared.form.darlehen.delete.dialog.title',
+      message: 'shared.form.darlehen.delete.dialog.message',
+      cancelText: 'shared.cancel',
+      confirmText: 'shared.form.darlehen.delete',
+    })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.darlehenStore.darlehenDeleteGs$({
+            data: { darlehenId },
+            onSuccess: () => {
+              this.globalNotificationStore.createSuccessNotification({
+                messageKey: 'shared.dashboard.darlehen.deleteSuccess',
+              });
               const fallId = this.fallIdByAppTypeSig();
               if (fallId) {
                 this.dashboardStore.loadDashboard$({ fallId });

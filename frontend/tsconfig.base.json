@@ -135,7 +135,6 @@
       "@dv/shared/feature/ausbildung": ["libs/shared/feature/ausbildung/src/index.ts"],
       "@dv/shared/feature/ausbildung-unterbrechung": ["libs/shared/feature/ausbildung-unterbrechung/src/index.ts"],
       "@dv/shared/feature/auszahlung": ["libs/shared/feature/auszahlung/src/index.ts"],
-      "@dv/shared/feature/darlehen": ["libs/shared/feature/darlehen/src/index.ts"],
       "@dv/shared/feature/darlehen-form": ["libs/shared/feature/darlehen-form/src/index.ts"],
       "@dv/shared/feature/fall-dokumente-layout": ["libs/shared/feature/fall-dokumente-layout/src/index.ts"],
       "@dv/shared/feature/gesuch-dokumente": ["libs/shared/feature/gesuch-dokumente/src/index.ts"],

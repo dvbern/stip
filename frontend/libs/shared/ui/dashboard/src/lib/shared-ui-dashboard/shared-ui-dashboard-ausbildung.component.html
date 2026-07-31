@@ -38,7 +38,11 @@
 
     <div class="tw:flex tw:flex-col tw:gap-2">
       @if (ausbildung.canDelete) {
-        <button type="button" class="tw:dv-button-outline tw:ml-3 tw:h-min" (click)="deleteAusbildung.emit(ausbildung)">
+        <button
+          type="button"
+          class="tw:dv-button-outline tw:ml-3 tw:h-min"
+          (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
+        >
           {{ t('shared.dashboard.ausbildung.delete') }}
         </button>
       }
@@ -48,7 +52,7 @@
         <button
           type="button"
           class="tw:dv-button-main-primary tw:ml-3 tw:h-min"
-          (click)="ausbildungUnterbrechen.emit(ausbildung.id)"
+          (click)="output.emit({ typ: 'ausbildung unterbrechen', id: ausbildung.id })"
         >
           @if (!ausbildung.openAusbildungUnterbruchAntragId) {
             {{ t('shared.dashboard.ausbildung.unterbruch.create') }}
@@ -72,9 +76,7 @@
             'tw:bg-dv-main-danger-subtle': gesuch.state === 'expired',
             'tw:bg-dv-orange': gesuch.state === 'in-bearbeitung',
           }"
-          (deleteGesuch)="deleteGesuch.emit($event)"
-          (aenderungMelden)="aenderungMelden.emit({ gesuch })"
-          (deleteAenderung)="deleteAenderung.emit($event)"
+          (output)="output.emit($event)"
         ></dv-shared-ui-dashboard-gesuch>
 
         @if (gesuch.isActive) {
@@ -117,7 +119,7 @@
                     type="button"
                     class="tw:dv-button-outline"
                     data-testid="shared.dashboard.aenderung.delete"
-                    (click)="deleteAenderung.emit(aenderung.id)"
+                    (click)="output.emit({ typ: 'delete aenderung', id: aenderung.id })"
                   >
                     <span>{{ t('shared.dashboard.aenderung.delete') }}</span>
                   </button>
@@ -125,6 +127,58 @@
               </div>
             </dv-shared-ui-dashboard-gesuch-subitem>
           }
+        }
+        @for (darlehen of gesuch.freiwilligeDarlehenList; track darlehen.id) {
+          <dv-shared-ui-dashboard-gesuch-subitem
+            class="tw:bg-dv-blue-light tw:ml-10"
+            [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
+            [ngClass]="{
+              'tw:bg-dv-orange': darlehen.status === 'IN_BEARBEITUNG_GS',
+              'tw:bg-dv-gray-light': darlehen.status === 'AKZEPTIERT' || darlehen.status === 'ABGELEHNT',
+            }"
+          >
+            <div dvItemInfo>
+              <dl class="tw:flex tw:flex-col">
+                <dt class="tw:font-bold tw:text-xl">
+                  {{ t('shared.dashboard.darlehen.title') }}
+                </dt>
+                <dd class="tw:mt-1">
+                  @if (darlehen.gruende.length) {
+                    {{
+                      t('shared.dashboard.darlehen.timestampErstellt', {
+                        date: darlehen.timestampErstellt | date: 'dd.MM.yyyy',
+                      })
+                    }}
+                  }
+                </dd>
+              </dl>
+            </div>
+            <div dvItemActions class="tw:flex tw:gap-4">
+              <a
+                class="tw:flex tw:grow tw:dv-button-main-primary"
+                data-testid="cockpit-gesuch-edit"
+                [routerLink]="['/gesuch', darlehen.relatedGesuchId, 'darlehen', darlehen.id, 'fall', ausbildung.fallId]"
+              >
+                {{
+                  t(
+                    darlehen.status === 'IN_BEARBEITUNG_GS'
+                      ? 'shared.dashboard.darlehen.edit'
+                      : 'shared.dashboard.darlehen.open'
+                  )
+                }}
+              </a>
+              @if (darlehen.status === 'IN_BEARBEITUNG_GS') {
+                <button
+                  type="button"
+                  class="tw:dv-button-outline"
+                  data-testid="shared.dashboard.aenderung.delete"
+                  (click)="output.emit({ typ: 'delete darlehen', id: darlehen.id })"
+                >
+                  <span>{{ t('shared.dashboard.darlehen.delete') }}</span>
+                </button>
+              }
+            </div>
+          </dv-shared-ui-dashboard-gesuch-subitem>
         }
       </div>
     }

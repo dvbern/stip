@@ -22,11 +22,11 @@ import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-he
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
   NavItem,
-  buildDarlehenMenu,
   buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
   getQueryParamValueSig,
+  sozialdienstAdminMenuItems,
   sozialdienstBaseMenuItems,
 } from '@dv/shared/util/navigation';
 
@@ -87,11 +87,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-  private darlehenIdSig = createParamsIdSig(
-    'darlehenId',
-    this.allRouteParamsSig,
-  );
-
   private originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
@@ -117,7 +112,6 @@ export class SozialdienstAppPatternMainLayoutComponent {
       this.allRouteParamsSig();
       const fallId = this.fallIdSig();
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.fallHeaderStore.loadFallHeader$({ fallId });
       }
     });
@@ -126,16 +120,17 @@ export class SozialdienstAppPatternMainLayoutComponent {
     effect(() => {
       // Read allRouteParamsSig to re-run on every navigation
       this.allRouteParamsSig();
-      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallIdSig();
       const gesuchId = this.gesuchIdSig();
-      const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
-        this.navigationStore.setNavigationItems(sozialdienstBaseMenuItems);
+        this.navigationStore.setNavigationItems([
+          ...sozialdienstBaseMenuItems,
+          ...sozialdienstAdminMenuItems,
+        ]);
         return;
       }
 
@@ -193,25 +188,13 @@ export class SozialdienstAppPatternMainLayoutComponent {
         this.trancheIdSig(),
       );
 
-      const darlehenMenu = buildDarlehenMenu({
-        darlehen: darlehnen.list,
-        canCreateDarlehen: darlehnen.canCreateDarlehen,
-        fallId: fallId,
-        isDarlehenRoute: !!darlehenId,
-        createDarlehen: () =>
-          this.darlehenStore.createDarlehen$({
-            fallId: fallId,
-          }),
-      });
-
       const navItems: NavItem[] = [
         fallNav,
         ...gesuchNav,
-        darlehenMenu,
         fallDokumente,
         auszahlung,
         ...nachrichten,
-        ...this.baseMenuItems,
+        ...sozialdienstBaseMenuItems,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;

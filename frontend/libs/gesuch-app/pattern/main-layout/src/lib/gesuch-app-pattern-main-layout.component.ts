@@ -9,7 +9,6 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { TranslocoPipe } from '@jsverse/transloco';
 
 import { GesuchAppDialogDelegierenComponent } from '@dv/gesuch-app/dialog/delegieren';
 import { DarlehenStore } from '@dv/shared/data-access/darlehen';
@@ -20,17 +19,16 @@ import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { SozialdienstSlim } from '@dv/shared/model/gesuch';
 import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import {
   SharedPatternGlobalHeaderComponent,
   SharedPatternGlobalHeaderPartsDirective,
 } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
+import { SharedUiTruncateTooltipDirective } from '@dv/shared/ui/truncate-tooltip';
 import {
   NavItem,
-  NavMenuItem,
-  buildDarlehenMenu,
   buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
@@ -49,10 +47,10 @@ import {
     SharedPatternMobileSidenavComponent,
     SharedPatternGlobalHeaderComponent,
     SharedPatternGlobalHeaderPartsDirective,
-    TranslocoPipe,
+    SharedUiAdvTranslocoDirective,
+    SharedUiTruncateTooltipDirective,
   ],
-  providers: [SozialdienstStore],
-  template: `<mat-sidenav-container>
+  template: `<mat-sidenav-container *dvTranslocoShared="let t">
     <mat-sidenav #sidenav mode="over" position="end">
       <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
       </dv-shared-pattern-mobile-sidenav>
@@ -63,9 +61,16 @@ import {
         (closeSidenav)="sidenav.close()"
         (openSidenav)="sidenav.open()"
       >
-        <div dvGlobalHeaderRight>
-          <!-- todo-KSTIP-3643: use dv-badge -->
-          <span>{{ 'shared.header.gesuch.istDelegiert' | transloco }}</span>
+        <div dvGlobalHeaderRight class="tw:min-w-0">
+          @if (aktiveDelegierungSig(); as delegierung) {
+            <div
+              class="tw:dv-chip-info tw:ml-8"
+              [dvTruncateTooltip]="delegierung.sozialdienst.name"
+            >
+              {{ t('shared.header.gesuch.istDelegiert') }}:
+              {{ delegierung.sozialdienst.name }}
+            </div>
+          }
         </div>
       </dv-shared-pattern-global-header>
 
@@ -96,34 +101,21 @@ export class GesuchAppPatternMainLayoutComponent {
 
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-  private darlehenIdSig = createParamsIdSig(
-    'darlehenId',
-    this.allRouteParamsSig,
-  );
-
   private originStepSig = getQueryParamValueSig(this.route, 'originStep');
 
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
 
   private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
-  // todo-KSTIP-3643 : if delegiert, only show delegierung, not menu, impl after dto change
   private availableSozialdiensteSig = computed(() => {
     const sozialdienste = this.sozialdienstStore.availableSozialdienste()?.data;
 
     return sozialdienste?.filter((sozialdienst) => sozialdienst.aktiv);
   });
 
-  // todo-KSTIP-3643: use new property CurrentDelegierung
-  isDelegiertSozialDienstSig = computed(() => {
-    // const sozialdienste = this.availableSozialdiensteSig() ?? [];
-    // const delegierterSozialdienst =
-    //   this.fallHeaderStore.fallHeaderViewSig()?.currentDelegierung?.sozialdienst;
-
-    // return delegierterSozialdienst
-
-    return true;
-  });
+  aktiveDelegierungSig = computed(() =>
+    this.fallHeaderStore.aktiveDelegierungSig(),
+  );
 
   constructor() {
     this.fallStore.loadCurrentFall$();
@@ -132,7 +124,6 @@ export class GesuchAppPatternMainLayoutComponent {
       const fallId = this.fallStore.currentFallViewSig()?.id;
 
       if (fallId) {
-        this.darlehenStore.getAllDarlehenGs$({ fallId });
         this.fallHeaderStore.loadFallHeader$({ fallId });
         this.sozialdienstStore.loadAvailableSozialdienste$();
       }
@@ -141,13 +132,14 @@ export class GesuchAppPatternMainLayoutComponent {
     // navigationItems items effect
     effect(() => {
       const gesuchId = this.gesuchIdSig();
-      const darlehnen = this.darlehenStore.darlehenListViewSig();
       const fallId = this.fallStore.currentFallViewSig()?.id;
-      const darlehenId = this.darlehenIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
       const originStep = this.originStepSig();
       const gesuchHeader = this.gesuchHeaderStore.viewSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
+      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
+      const currentDelegierung =
+        this.fallHeaderStore.cachedFallHeader().data?.currentDelegierung;
 
       if (!fallId) {
         this.navigationStore.setNavigationItems(gesuchBaseMenuItems);
@@ -180,6 +172,16 @@ export class GesuchAppPatternMainLayoutComponent {
         route: ['/fall-dokumente', fallId],
       };
 
+      const sozialdienstMenu: NavItem | undefined =
+        availableSozialdienste.length && !currentDelegierung
+          ? {
+              type: 'action',
+              id: 'sozialdienst-delegieren',
+              label: { key: 'shared.menu.delegieren' },
+              action: () => this.delegiereSozialdienst(fallId),
+            }
+          : undefined;
+
       const nachrichten: NavItem = {
         type: 'link',
         id: 'nachrichten',
@@ -193,29 +195,10 @@ export class GesuchAppPatternMainLayoutComponent {
           : undefined,
       };
 
-      const darlehenMenu = [
-        // TODO: KSTIP-3643 remove darlehen menu entirely once it is shown in the dashboard content
-        // Currently hidden on gesuch views
-        ...(!gesuchId
-          ? [
-              buildDarlehenMenu({
-                darlehen: darlehnen.list,
-                canCreateDarlehen: darlehnen.canCreateDarlehen,
-                fallId: fallId,
-                isDarlehenRoute: !!darlehenId,
-                createDarlehen: () =>
-                  this.darlehenStore.createDarlehen$({
-                    fallId: fallId,
-                  }),
-              }),
-            ]
-          : []),
-      ];
-
       const navItems: NavItem[] = [
         ...gesuchBaseMenuItems,
         ...gesuchNav,
-        ...darlehenMenu,
+        ...(sozialdienstMenu ? [sozialdienstMenu] : []),
         fallDokumente,
         auszahlung,
         nachrichten,
@@ -230,44 +213,6 @@ export class GesuchAppPatternMainLayoutComponent {
       this.navigationStore.setNavigationItems(navItems);
     });
 
-    // menuItems items effect
-    effect(() => {
-      const availableSozialdienste = this.availableSozialdiensteSig() ?? [];
-      const fallId = this.fallStore.currentFallViewSig()?.id;
-      const rolesMap = this.permissionStore.rolesMapSig();
-
-      if (!fallId) {
-        return;
-      }
-
-      // todo-KSTIP-3643: dieses Menu ausblenden, wenn delegiert!
-      const sozialdienstMenu: NavMenuItem | undefined =
-        availableSozialdienste.length
-          ? {
-              type: 'action',
-              id: 'sozialdienst-delegieren',
-              label: { key: 'shared.dashboard.gesuch.delegieren' },
-              // todo: KSTIP-3643: use GesuchAppDialogSozialdiestSelectComponent
-              // action: () => this.delegiereSozialdienst(fallId, sozialdienst),
-              action: () => {
-                console.log('delegiereSozialdienst');
-              },
-            }
-          : undefined;
-
-      const navItems: NavMenuItem[] = [
-        ...(sozialdienstMenu ? [sozialdienstMenu] : []),
-      ].filter((item) => {
-        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
-          return true;
-        }
-
-        return item.rolesAllowed.some((role) => rolesMap[role]);
-      });
-
-      this.navigationStore.setMenuItems(navItems);
-    });
-
     effect(() => {
       const gesuchId = this.gesuchIdSig();
       if (gesuchId) {
@@ -276,19 +221,16 @@ export class GesuchAppPatternMainLayoutComponent {
     });
   }
 
-  private delegiereSozialdienst(
-    fallId: string,
-    sozialdienst: SozialdienstSlim,
-  ) {
+  private delegiereSozialdienst(fallId: string) {
     GesuchAppDialogDelegierenComponent.open(this.dialog)
       .afterClosed()
       .subscribe((result) => {
         if (result) {
           this.sozialdienstStore.fallDelegieren$({
             req: {
-              sozialdienstId: sozialdienst.id,
+              sozialdienstId: result.sozialdienstId,
               fallId,
-              delegierungCreate: result,
+              delegierungCreate: result.persoenlicheAngaben,
             },
             onSuccess: () => {
               this.globalNotificationStore.createSuccessNotification({

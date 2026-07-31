@@ -8,7 +8,10 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { SharedModelGsGesuchView } from '@dv/shared/model/ausbildung';
+import {
+  GsDashboardActions,
+  SharedModelGsGesuchView,
+} from '@dv/shared/model/ausbildung';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 
 @Component({
@@ -19,9 +22,7 @@ import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-direc
 })
 export class SharedUiDashboardGesuchComponent {
   gesuchSig = input.required<SharedModelGsGesuchView>();
-  deleteGesuch = output<string>();
-  deleteAenderung = output<string>();
-  aenderungMelden = output<void>();
+  output = output<GsDashboardActions>();
   @HostBinding('class') defaultClasses =
     'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:p-6';
 }

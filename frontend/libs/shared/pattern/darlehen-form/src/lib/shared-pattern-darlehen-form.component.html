@@ -1,6 +1,6 @@
 <ng-container *dvTranslocoShared="let t">
   @if (darlehenStore.darlehenViewSig().loading) {
-    <dv-shared-ui-loading data-testid="form-darlehen-loading"></dv-shared-ui-loading>
+    <dv-shared-ui-loading class="tw:md:w-1/2 tw:mt-8" data-testid="form-darlehen-loading"></dv-shared-ui-loading>
   } @else {
     <!-- sachbearbeiter form -->
     @if (darlehenPermissionsSig()?.canReadSbForm) {

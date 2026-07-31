@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
 import {
   NonNullableFormBuilder,
   ReactiveFormsModule,
@@ -10,11 +15,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { TranslocoPipe } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { subYears } from 'date-fns';
 
+import { GesuchAppUiAdvTranslocoDirective } from '@dv/gesuch-app/ui/adv-transloco-directive';
 import { selectLanguage } from '@dv/shared/data-access/language';
+import { SozialdienstStore } from '@dv/shared/data-access/sozialdienst';
 import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import {
   Anrede,
@@ -43,12 +49,14 @@ import {
   parseableDateValidatorForLocale,
 } from '@dv/shared/util/validator-date';
 
-export type DelegierenDialogResult = DelegierungCreate;
+export type DelegierenDialogResult = {
+  sozialdienstId: string;
+  persoenlicheAngaben: DelegierungCreate;
+};
 
 @Component({
   selector: 'dv-gesuch-app-dialog-delegieren',
   imports: [
-    TranslocoPipe,
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
@@ -59,6 +67,7 @@ export type DelegierenDialogResult = DelegierungCreate;
     SharedUiMaxLengthDirective,
     ReactiveFormsModule,
     SharedUiFormAddressComponent,
+    GesuchAppUiAdvTranslocoDirective,
   ],
   templateUrl: './gesuch-app-dialog-delegieren.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,11 +85,16 @@ export class GesuchAppDialogDelegierenComponent {
     >(MatDialogRef);
   private formBuilder = inject(NonNullableFormBuilder);
   private store = inject(Store);
+  private sozialdienstStore = inject(SozialdienstStore);
 
   readonly anredeValues = Object.values(Anrede);
   readonly spracheValues = Object.values(Sprache);
 
   languageSig = this.store.selectSignal(selectLanguage);
+
+  availableSozialdiensteSig = computed(() => {
+    return this.sozialdienstStore.availableSozialdienste()?.data;
+  });
 
   static open(
     dialog: MatDialog,
@@ -92,6 +106,7 @@ export class GesuchAppDialogDelegierenComponent {
   }
 
   form = this.formBuilder.group({
+    sozialdienstId: [<string | undefined>undefined, Validators.required],
     anrede: this.formBuilder.control<Anrede>('' as Anrede, {
       validators: Validators.required,
     }),
@@ -134,7 +149,9 @@ export class GesuchAppDialogDelegierenComponent {
   confirm() {
     this.form.markAllAsTouched();
     if (this.form.valid) {
-      const values = convertTempFormToRealValues(this.form);
+      const { sozialdienstId, ...values } = convertTempFormToRealValues(
+        this.form,
+      );
       const adresseValues = SharedUiFormAddressComponent.getRealValues(
         this.form.controls.adresse,
       );
@@ -149,10 +166,13 @@ export class GesuchAppDialogDelegierenComponent {
       }
 
       this.dialogRef.close({
-        ...values,
-        geburtsdatum,
-        adresse: {
-          ...adresseValues,
+        sozialdienstId,
+        persoenlicheAngaben: {
+          ...values,
+          geburtsdatum,
+          adresse: {
+            ...adresseValues,
+          },
         },
       });
     }

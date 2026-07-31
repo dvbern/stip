@@ -1,8 +1,11 @@
 <ng-container *dvTranslocoShared="let t">
   <div class="tw:relative tw:justify-between tw:p-6">
-    <!-- todo-KSTIP-3643: after merge KSTIP-3676: change title for soz app -->
     <h1 class="tw:mb-6 tw:dv-page-title">
-      {{ t('shared.dashboard.welcome.title', { name: benutzerNameSig() }) }}
+      @if (config.app.type === 'sozialdienst-app') {
+        {{ t('shared.dashboard.welcome.secondaryTitle', { name: piaNameSig() }) }}
+      } @else {
+        {{ t('shared.dashboard.welcome.title', { name: benutzerNameSig() }) }}
+      }
     </h1>
 
     @let dashboard = dashboardStore.dashboardViewSig();
@@ -19,25 +22,23 @@
             <dv-shared-ui-dashboard-ausbildung
               class="tw:shadow-lg"
               [ausbildungSig]="ausbildung"
-              (deleteAusbildung)="deleteAusbildung($event)"
-              (deleteGesuch)="deleteGesuch($event)"
-              (aenderungMelden)="aenderungMelden($event)"
-              (deleteAenderung)="deleteAenderung($event)"
-              (ausbildungUnterbrechen)="ausbildungUnterbrechen($event, ausbildung.openAusbildungUnterbruchAntragId)"
+              (output)="handleOutput($event)"
             ></dv-shared-ui-dashboard-ausbildung>
           }
         } @else if (dashboard.canCreateAusbildung) {
-          <button
-            data-testid="cockpit-create-ausbildung"
-            type="button"
-            (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
-            class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
-          >
-            <dv-shared-ui-icon-chip>
-              <i class="material-symbols-rounded">add</i>
-            </dv-shared-ui-icon-chip>
-            {{ t('shared.dashboard.ausbildung.create') }}
-          </button>
+          <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6 tw:shadow-lg">
+            <button
+              data-testid="cockpit-create-ausbildung"
+              type="button"
+              (click)="createAusbildung(fall.id, dashboard.earliestActiveGesuchPeriodeStart)"
+              class="tw:dv-button-main-danger tw:flex tw:items-center tw:w-max"
+            >
+              <dv-shared-ui-icon-chip>
+                <i class="material-symbols-rounded">add</i>
+              </dv-shared-ui-icon-chip>
+              {{ t('shared.dashboard.ausbildung.create') }}
+            </button>
+          </div>
         } @else {
           <div class="tw tw:block tw:rounded-lg tw:bg-white tw:p-6">
             <h3 class="tw:mb-3 tw:flex tw:items-center tw:gap-4 tw:text-3xl tw:font-semibold">
@@ -55,6 +56,7 @@
           <dv-shared-ui-dashboard-compact-ausbildung
             class="tw:shadow"
             [ausbildungSig]="ausbildung"
+            (output)="handleOutput($event)"
           ></dv-shared-ui-dashboard-compact-ausbildung>
         }
       </div>
