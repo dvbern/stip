@@ -75,11 +75,9 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
             )
             .toList();
 
-        int berechnungVorKuerzungUndTeilung =
+        final int berechnungVorKuerzungUndTeilung =
             -berechnungsresultate.stream().mapToInt(TranchenBerechnungsresultatDto::getTotal).sum();
-        if (berechnungVorKuerzungUndTeilung < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
-            berechnungVorKuerzungUndTeilung = 0;
-        }
+
         final int monateMitDarlehen = getMonateMitDarlehen(gesuch);
         final Integer ungekuerztDarlehen = getDarlehen(berechnungVorKuerzungUndTeilung, monateMitDarlehen);
         final int ungekuerztStipendien =
@@ -124,8 +122,12 @@ public class BernBerechnungAdapterV1_0 implements BerechnungPort {
                     .intValue()
                 : null;
 
-        final int berechnungVorTeilungDarlehen =
+        int berechnungVorTeilungDarlehen =
             Objects.requireNonNullElse(totalNachKuerzungUnterbruch, totalVorKuerzungUnterbruch);
+
+        if (berechnungVorTeilungDarlehen < gesuch.getGesuchsperiode().getStipLimiteMinimalstipendium()) {
+            berechnungVorTeilungDarlehen = 0;
+        }
 
         final Integer berechnungDarlehen = getDarlehen(berechnungVorTeilungDarlehen, monateMitDarlehen);
         final int berechnungStipendium =
