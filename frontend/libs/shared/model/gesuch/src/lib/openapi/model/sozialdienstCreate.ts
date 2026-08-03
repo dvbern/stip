@@ -16,5 +16,6 @@ export interface SozialdienstCreate {
     name: string;
     zahlungsverbindung: Zahlungsverbindung;
     sozialdienstAdmin: SozialdienstAdmin;
+    redirectUri: string;
 }
 

@@ -20,6 +20,7 @@ package ch.dvbern.stip.api.sozialdienst.service;
 import java.util.List;
 import java.util.UUID;
 
+import ch.dvbern.stip.api.communication.mail.service.MailService;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -31,6 +32,7 @@ import ch.dvbern.stip.generated.dto.SozialdienstCreateDto;
 import ch.dvbern.stip.generated.dto.SozialdienstDto;
 import ch.dvbern.stip.generated.dto.SozialdienstSlimDto;
 import ch.dvbern.stip.generated.dto.SozialdienstUpdateDto;
+import ch.dvbern.stip.generated.dto.WelcomeMailDto;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -43,6 +45,7 @@ public class SozialdienstService {
     private final SozialdienstMapper sozialdienstMapper;
     private final SozialdienstBenutzerService sozialdienstBenutzerService;
     private final ZahlungsverbindungService zahlungsverbindungService;
+    private final MailService mailService;
 
     public Sozialdienst getSozialdienstOfCurrentSozialdienstBenutzer() {
         final var sozialdienstBenutzer =
@@ -54,6 +57,14 @@ public class SozialdienstService {
     public SozialdienstDto createSozialdienst(SozialdienstCreateDto dto) {
         var sozialdienst = sozialdienstMapper.toEntity(dto);
         final var admin = sozialdienstBenutzerService.createSozialdienstAdminBenutzer(dto.getSozialdienstAdmin());
+        mailService.sendBenutzerWelcomeEmail(
+            new WelcomeMailDto(
+                admin.getNachname(),
+                admin.getVorname(),
+                admin.getEmail(),
+                dto.getRedirectUri()
+            )
+        );
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
         sozialdienst.getSozialdienstBenutzers().add(admin);
 
