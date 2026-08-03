@@ -30,7 +30,9 @@ import com.github.oxo42.stateless4j.StateMachine;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequestScoped
 @RequiredArgsConstructor
 public class GesuchTrancheStatusService {
@@ -45,7 +47,10 @@ public class GesuchTrancheStatusService {
             try {
                 triggerStateMachineEvent(gesuchTranche, event);
             } catch (ValidationsException ignored) {
-                // ignored
+                LOG.warn(
+                    "ValidationsException ignored for GesuchTranche {}, state transition not executed",
+                    gesuchTranche.getId()
+                );
             }
         }
     }
@@ -82,7 +87,7 @@ public class GesuchTrancheStatusService {
 
         StateMachineUtil.addExit(
             config,
-            transition -> validatorService.validateGesuchTrancheForStatus(gesuchTranche, transition.getDestination()),
+            transition -> validatorService.validateGesuchTrancheForStatus(gesuchTranche, transition),
             GesuchTrancheStatus.values()
         );
 
