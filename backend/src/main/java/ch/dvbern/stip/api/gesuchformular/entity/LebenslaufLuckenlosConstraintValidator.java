@@ -84,9 +84,13 @@ public class LebenslaufLuckenlosConstraintValidator
             LOG.warn("Lebenslauf Lücke found between {} and {}", firstRange, start);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-        final var lastRange = dateRanges.getLast().getGueltigBis().plusDays(1);
-        if (lastRange.isBefore(stop)) {
+        final var lastRange = dateRanges.getLast().getGueltigBis();
+        if (lastRange.plusDays(1).isBefore(stop)) {
             LOG.warn("Lebenslauf Lücke found between {} and {}", lastRange, stop);
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        }
+        if (lastRange.isAfter(stop)) {
+            LOG.warn("Lebenslauf nach Ausbildung start found {} and {}", lastRange, stop);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
 
