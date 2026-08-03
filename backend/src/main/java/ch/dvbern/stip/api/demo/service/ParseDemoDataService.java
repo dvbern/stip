@@ -458,7 +458,7 @@ public class ParseDemoDataService {
         }
         updateList(list, ".*Mittagessen pro Woche", 1, (c, d) -> d.setAuswaertigeMittagessenProWoche(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
         if (type == EinnahmenKostenType.PERSON_IN_AUSBILDUNG) {
-            updateList(list, "monatliche Wohnkosten", 1, (c, d) -> d.setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
+            updateList(list, "jährliche Wohnkosten", 1, (c, d) -> d.setWohnkosten(ParseDemoDataUtil.parseIntegerNullable(c.getCell())));
             updateList(list, "In WG wohnend", 1, (c, d) -> d.setWgWohnend(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
             updateList(list, ".*anderen Wohnform", 1, (c, d) -> d.setAlternativeWohnformWohnend(ParseDemoDataUtil.parseBooleanNullable(c.getCell())));
         }

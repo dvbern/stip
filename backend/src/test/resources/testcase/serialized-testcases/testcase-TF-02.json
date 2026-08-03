@@ -392,7 +392,7 @@
             "wgWohnend": false,
             "wgAnzahlPersonen": null,
             "alternativeWohnformWohnend": false,
-            "unterhaltsbeitraege": 625,
+            "unterhaltsbeitraege": 7500,
             "zulagen": 0,
             "renten": 6600,
             "eoLeistungen": 0,
@@ -516,7 +516,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 1350,
+              "wohnkosten": 16200,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             }
@@ -564,7 +564,7 @@
               "steuerdatenTyp": "MUTTER",
               "steuererklaerungInBern": true,
               "ergaenzungsleistungen": null,
-              "unterhaltsbeitraege": 625,
+              "unterhaltsbeitraege": 7500,
               "renten": null,
               "einnahmenBGSA": 4567,
               "andereEinnahmen": null
@@ -892,7 +892,7 @@
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
-          "unterhaltsbeitraege": 625,
+          "unterhaltsbeitraege": 7500,
           "zulagen": 0,
           "renten": 6600,
           "eoLeistungen": 0,
@@ -1016,7 +1016,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1350,
+            "wohnkosten": 16200,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1064,7 +1064,7 @@
             "steuerdatenTyp": "MUTTER",
             "steuererklaerungInBern": true,
             "ergaenzungsleistungen": null,
-            "unterhaltsbeitraege": 625,
+            "unterhaltsbeitraege": 7500,
             "renten": null,
             "einnahmenBGSA": 4567,
             "andereEinnahmen": null
@@ -1376,7 +1376,7 @@
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
-          "unterhaltsbeitraege": 625,
+          "unterhaltsbeitraege": 7500,
           "zulagen": 0,
           "renten": 6600,
           "eoLeistungen": 0,
@@ -1500,7 +1500,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1350,
+            "wohnkosten": 16200,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1548,7 +1548,7 @@
             "steuerdatenTyp": "MUTTER",
             "steuererklaerungInBern": true,
             "ergaenzungsleistungen": null,
-            "unterhaltsbeitraege": 625,
+            "unterhaltsbeitraege": 7500,
             "renten": null,
             "einnahmenBGSA": 4567,
             "andereEinnahmen": null
@@ -1863,7 +1863,7 @@
         "wgWohnend": false,
         "wgAnzahlPersonen": null,
         "alternativeWohnformWohnend": false,
-        "unterhaltsbeitraege": 625,
+        "unterhaltsbeitraege": 7500,
         "zulagen": 0,
         "renten": 6600,
         "eoLeistungen": 0,
@@ -1987,7 +1987,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 1350,
+          "wohnkosten": 16200,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         }
@@ -2035,7 +2035,7 @@
           "steuerdatenTyp": "MUTTER",
           "steuererklaerungInBern": true,
           "ergaenzungsleistungen": null,
-          "unterhaltsbeitraege": 625,
+          "unterhaltsbeitraege": 7500,
           "renten": null,
           "einnahmenBGSA": 4567,
           "andereEinnahmen": null
@@ -2333,7 +2333,7 @@
       "wgWohnend": false,
       "wgAnzahlPersonen": null,
       "alternativeWohnformWohnend": false,
-      "unterhaltsbeitraege": 625,
+      "unterhaltsbeitraege": 7500,
       "zulagen": 0,
       "renten": 6600,
       "eoLeistungen": 0,
@@ -2457,7 +2457,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 1350,
+        "wohnkosten": 16200,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       }
@@ -2505,7 +2505,7 @@
         "steuerdatenTyp": "MUTTER",
         "steuererklaerungInBern": true,
         "ergaenzungsleistungen": null,
-        "unterhaltsbeitraege": 625,
+        "unterhaltsbeitraege": 7500,
         "renten": null,
         "einnahmenBGSA": 4567,
         "andereEinnahmen": null
@@ -3059,7 +3059,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 1350,
+      "wohnkosten": 16200,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     }
@@ -3126,7 +3126,7 @@
     "wgWohnend": false,
     "wgAnzahlPersonen": null,
     "alternativeWohnformWohnend": false,
-    "unterhaltsbeitraege": 625,
+    "unterhaltsbeitraege": 7500,
     "zulagen": 0,
     "renten": 6600,
     "eoLeistungen": 0,
@@ -3161,7 +3161,7 @@
       "steuerdatenTyp": "MUTTER",
       "steuererklaerungInBern": true,
       "ergaenzungsleistungen": null,
-      "unterhaltsbeitraege": 625,
+      "unterhaltsbeitraege": 7500,
       "renten": null,
       "einnahmenBGSA": 4567,
       "andereEinnahmen": null
