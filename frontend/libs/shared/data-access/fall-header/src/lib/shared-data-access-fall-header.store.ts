@@ -35,15 +35,6 @@ export class FallHeaderStore extends signalStore(
     return fromCachedDataSig(this.cachedFallHeader);
   });
 
-  aktiveDelegierungSig = computed(() => {
-    const delegierung = this.fallHeaderViewSig()?.currentDelegierung;
-    if (!delegierung || delegierung.status !== 'AKZEPTIERT') {
-      return null;
-    }
-
-    return delegierung;
-  });
-
   loadFallHeader$ = rxMethod<FallHeaderServiceGetFallHeaderRequestParams>(
     pipe(
       tap(() => {

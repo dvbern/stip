@@ -7,25 +7,21 @@ import {
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 
-import { DarlehenStore } from '@dv/shared/data-access/darlehen';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
 import { PermissionStore } from '@dv/shared/global/permission';
-import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
 import {
   NavItem,
-  buildGesuchNavItems,
   createAllRouteParamsSig,
   createParamsIdSig,
-  getQueryParamValueSig,
   sozialdienstAdminMenuItems,
   sozialdienstBaseMenuItems,
 } from '@dv/shared/util/navigation';
@@ -64,10 +60,8 @@ import {
 })
 export class SozialdienstAppPatternMainLayoutComponent {
   private fallStore = inject(FallStore);
-  private darlehenStore = inject(DarlehenStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
@@ -87,11 +81,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
 
   private allRouteParamsSig = createAllRouteParamsSig(this.router);
 
-  private originStepSig = getQueryParamValueSig(this.route, 'originStep');
-
   private gesuchIdSig = createParamsIdSig('gesuchId', this.allRouteParamsSig);
-
-  private trancheIdSig = createParamsIdSig('trancheId', this.allRouteParamsSig);
 
   private routeParamsFallIdSig = createParamsIdSig(
     'fallId',
@@ -121,9 +111,7 @@ export class SozialdienstAppPatternMainLayoutComponent {
       // Read allRouteParamsSig to re-run on every navigation
       this.allRouteParamsSig();
       const fallId = this.fallIdSig();
-      const gesuchId = this.gesuchIdSig();
       const rolesMap = this.permissionStore.rolesMapSig();
-      const originStep = this.originStepSig();
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
@@ -178,19 +166,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
         },
       ];
 
-      const tab = decodeURI(originStep ?? '') || TRANCHE.route;
-      const tabSegments = tab.split('/').filter(Boolean);
-
-      const gesuchNav = buildGesuchNavItems(
-        gesuchId,
-        this.gesuchHeaderStore.viewSig().currentTranches ?? [],
-        tabSegments,
-        this.trancheIdSig(),
-      );
-
       const navItems: NavItem[] = [
         fallNav,
-        ...gesuchNav,
         fallDokumente,
         auszahlung,
         ...nachrichten,
