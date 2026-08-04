@@ -124,12 +124,16 @@ public class MailService {
         sendStandardNotificationEmails(name, vorname, language, List.of(receiver));
     }
 
-    public void sendBenutzerWelcomeEmail(WelcomeMailDto welcomeMailDto) {
+    public void sendBenutzerWelcomeEmail(
+        final WelcomeMailDto welcomeMailDto,
+        final WelcomeMailBenutzerTyp benutzerTyp
+    ) {
         String redirectURI = getWelcomeMailURI(
             tenantService.getConfigForCurrentTenant(),
             config,
             tenantService.getCurrentStringIdentifier(),
-            welcomeMailDto.getRedirectUri()
+            welcomeMailDto.getRedirectUri(),
+            getWelcomeMailClientId(benutzerTyp)
         );
 
         Templates.benutzerWelcome(welcomeMailDto.getName(), welcomeMailDto.getVorname(), redirectURI)
@@ -229,17 +233,28 @@ public class MailService {
         LOG.error("Failed to send email", failure);
     }
 
+    private String getWelcomeMailClientId(final WelcomeMailBenutzerTyp benutzerTyp) {
+        return switch (benutzerTyp) {
+            case SACHBEARBEITER -> config.welcomeMail().clientIdSachbearbeiter();
+            case SOZIALDIENST_BENUTZER -> config.welcomeMail().clientIdSozialdienst();
+        };
+    }
+
     private String getWelcomeMailURI(
         TenantConfig tenantConfig,
         StipConfig config,
         String tenantIdentifier,
-        String redirectUri
+        String redirectUri,
+        String clientId
     ) {
         return String.format(
             "%s%s%s%s",
             config.oidc().frontendUrl(),
             tenantConfig.welcomeMail().kcPath().replace("<TENANT>", tenantIdentifier),
-            tenantConfig.welcomeMail().kcQueryParameter().replace("<REDIRECT_URI>", redirectUri),
+            tenantConfig.welcomeMail()
+                .kcQueryParameter()
+                .replace("<CLIENT_ID>", clientId)
+                .replace("<REDIRECT_URI>", redirectUri),
             tenantConfig.welcomeMail().kcScope()
         );
     }

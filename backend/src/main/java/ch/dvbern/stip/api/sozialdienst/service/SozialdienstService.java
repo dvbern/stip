@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.WelcomeMailBenutzerTyp;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
 import ch.dvbern.stip.api.sozialdienstbenutzer.entity.SozialdienstBenutzer;
@@ -63,7 +64,8 @@ public class SozialdienstService {
                 admin.getVorname(),
                 admin.getEmail(),
                 dto.getRedirectUri()
-            )
+            ),
+            WelcomeMailBenutzerTyp.SOZIALDIENST_BENUTZER
         );
         sozialdienst.setSozialdienstAdmin(sozialdienstBenutzerService.getSozialdienstBenutzerById(admin.getId()));
         sozialdienst.getSozialdienstBenutzers().add(admin);

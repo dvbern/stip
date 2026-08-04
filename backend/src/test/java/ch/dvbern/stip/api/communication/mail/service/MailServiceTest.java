@@ -155,13 +155,13 @@ class MailServiceTest {
     }
 
     @Test
-    void sendWelcomeEmail() {
+    void sendWelcomeEmailSachbearbeiter() {
         WelcomeMailDto welcomeMailDto = new WelcomeMailDto()
             .name("WelcomeEmailTestName")
             .vorname("WelcomeEmailTestVorname")
             .email(TEST_EMAIL)
             .redirectUri("localhost:4200");
-        mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, WelcomeMailBenutzerTyp.SACHBEARBEITER);
         List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
         Assertions.assertEquals(1, sent.size());
         MailMessage actual = sent.get(0);
@@ -170,6 +170,28 @@ class MailServiceTest {
         assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
         assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUri());
+        assertThat(actual.getHtml()).contains("client_id=stip-sachbearbeitung-app");
+        assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
+    }
+
+    @Test
+    void sendWelcomeEmailSozialdienstBenutzer() {
+        WelcomeMailDto welcomeMailDto = new WelcomeMailDto()
+            .name("WelcomeEmailTestName")
+            .vorname("WelcomeEmailTestVorname")
+            .email(TEST_EMAIL)
+            .redirectUri("localhost:4200");
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, WelcomeMailBenutzerTyp.SOZIALDIENST_BENUTZER);
+        List<MailMessage> sent = mailbox.getMailMessagesSentTo(TEST_EMAIL);
+        Assertions.assertEquals(1, sent.size());
+        MailMessage actual = sent.get(0);
+        assertThat(actual.getTo()).contains(TEST_EMAIL);
+        assertThat(actual.getSubject()).isNotBlank();
+        assertThat(actual.getHtml()).contains(welcomeMailDto.getName());
+        assertThat(actual.getHtml()).contains(welcomeMailDto.getVorname());
+        assertThat(actual.getHtml()).contains(welcomeMailDto.getRedirectUri());
+        assertThat(actual.getHtml()).contains("client_id=stip-sozialdienst-app");
+        assertThat(actual.getHtml()).doesNotContain("<CLIENT_ID>");
     }
 
     @Test

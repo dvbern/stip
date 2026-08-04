@@ -8,6 +8,9 @@ old:
 kstip:
   oidc:
     url: ${STIP_OIDC_AUTH_SERVER}
+  welcome-mail:
+    client-id-sachbearbeiter: '${STIP_WELCOME_MAIL_CLIENT_ID_SACHBEARBEITER:stip-sachbearbeitung-app}'
+    client-id-sozialdienst: '${STIP_WELCOME_MAIL_CLIENT_ID_SOZIALDIENST:stip-sozialdienst-app}'
   s3:
     bucket-name: '${bucket.name}'
 

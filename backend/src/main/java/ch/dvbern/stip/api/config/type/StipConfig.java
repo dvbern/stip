@@ -43,6 +43,8 @@ public interface StipConfig {
 
     OIDC oidc();
 
+    WelcomeMail welcomeMail();
+
     S3 s3();
 
     Upload upload();
@@ -72,6 +74,12 @@ public interface StipConfig {
 
         @WithDefault("stip-api")
         String clientId();
+    }
+
+    interface WelcomeMail {
+        String clientIdSachbearbeiter();
+
+        String clientIdSozialdienst();
     }
 
     interface S3 {

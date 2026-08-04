@@ -27,6 +27,7 @@ import ch.dvbern.stip.api.benutzereinstellungen.entity.Benutzereinstellungen;
 import ch.dvbern.stip.api.common.exception.AppFailureMessage;
 import ch.dvbern.stip.api.common.util.OidcConstants;
 import ch.dvbern.stip.api.communication.mail.service.MailService;
+import ch.dvbern.stip.api.communication.mail.service.WelcomeMailBenutzerTyp;
 import ch.dvbern.stip.api.delegieren.repo.DelegierungRepository;
 import ch.dvbern.stip.api.sozialdienst.entity.Sozialdienst;
 import ch.dvbern.stip.api.sozialdienst.repo.SozialdienstRepository;
@@ -138,7 +139,7 @@ public class SozialdienstBenutzerService {
         );
 
         createdEvent.fire(new SozialdienstBenutzerCreated(keycloakId));
-        mailService.sendBenutzerWelcomeEmail(welcomeMailDto);
+        mailService.sendBenutzerWelcomeEmail(welcomeMailDto, WelcomeMailBenutzerTyp.SOZIALDIENST_BENUTZER);
 
         sozialdienstBenutzer.setKeycloakId(keycloakId);
 
