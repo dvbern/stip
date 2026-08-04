@@ -26,7 +26,6 @@
       "@dv/demo-data-app/ui/adv-transloco-directive": ["libs/demo-data-app/ui/adv-transloco-directive/src/index.ts"],
       "@dv/gesuch-app/assets/i18n": ["libs/gesuch-app/assets/i18n/src/index.ts"],
       "@dv/gesuch-app/dialog/delegieren": ["./libs/gesuch-app/dialog/delegieren/src/index.ts"],
-      "@dv/gesuch-app/dialog/sozialdienst-select": ["./libs/gesuch-app/dialog/sozialdienst-select/src/index.ts"],
       "@dv/gesuch-app/feature/auszahlung": ["libs/gesuch-app/feature/auszahlung/src/index.ts"],
       "@dv/gesuch-app/pattern/main-layout": ["libs/gesuch-app/pattern/main-layout/src/index.ts"],
       "@dv/gesuch-app/ui/adv-transloco-directive": ["libs/gesuch-app/ui/adv-transloco-directive/src/index.ts"],
