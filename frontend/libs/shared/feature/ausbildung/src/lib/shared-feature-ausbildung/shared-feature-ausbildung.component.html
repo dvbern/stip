@@ -179,14 +179,14 @@
         ></dv-shared-ui-select-search>
       } @else {
         <div
-          class="tw:flex tw:gap-4"
+          class="tw:flex tw:gap-4 tw:flex-wrap"
           dvPlzOrtAutocomplete
           [autocompleteSig]="plzAutocomplete"
           [plzFormSig]="form.controls.ausbildungsortPlzOrt"
           (plzLookupValuesSig)="plzValues = $event"
         >
           <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:basis-32" [subscriptSizing]="subscriptSizingSig()">
+          <mat-form-field dvSharedUiFormField class="tw:w-full tw:lg:basis-32" [subscriptSizing]="subscriptSizingSig()">
             <mat-label>{{ t('shared.form.shared.address.zipcode.label') }}</mat-label>
             <input
               type="text"

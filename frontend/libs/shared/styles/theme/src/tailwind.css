@@ -131,7 +131,7 @@
 }
 
 @utility dv-page-title {
-  @apply tw:text-3xl tw:font-bold tw:mb-8;
+  @apply tw:text-2xl tw:font-bold  tw:lg:text-3xl tw:mb-4 tw:lg:mb-8;
 }
 
 @utility dv-page-title-mobile {
@@ -166,7 +166,7 @@
 }
 
 @utility dv-form-title {
-  @apply tw:xl:col-span-2 tw:text-2xl tw:font-semibold tw:mt-6;
+  @apply tw:xl:col-span-2 tw:text-xl tw:lg:text-2xl tw:font-semibold tw:mt-6;
 }
 
 @utility dv-form-half {

@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  computed,
   input,
 } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
@@ -28,7 +29,12 @@ import { NavItem } from '@dv/shared/util/navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNavItemsComponent {
-  @HostBinding('class') klass = 'tw:flex tw:grow tw:items-center tw:gap-4';
+  isMobile = input<boolean>(false);
+  @HostBinding('class') klass = computed(() =>
+    this.isMobile()
+      ? 'tw:flex tw:flex-col tw:gap-2'
+      : 'tw:flex tw:grow tw:items-center tw:gap-4',
+  );
 
   navItemsSig = input.required<NavItem[]>();
 }

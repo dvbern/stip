@@ -11,11 +11,11 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <h1 class="tw:text-3xl tw:font-semibold">
+  <h1 class="tw:dv-page-title tw:mb-4">
     {{ t('shared.user.consent.dialog.title') }}
   </h1>
 
-  <div class="tw:mt-4" [innerHTML]="t('shared.user.consent.dialog.text')"></div>
+  <div [innerHTML]="t('shared.user.consent.dialog.text')"></div>
 
   <div class="tw:mt-5 tw:flex tw:justify-between">
     <button type="button" class="tw:dv-button-outline" (click)="cancel()">

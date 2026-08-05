@@ -28,7 +28,7 @@ import { NavMenuItem } from '@dv/shared/util/navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNavMenuItemsComponent {
-  @HostBinding('class') klass = 'tw:flex tw:grow tw:items-center tw:gap-4';
+  @HostBinding('class') klass = 'tw:flex tw:flex-col';
 
   navMenuItemsSig = input.required<NavMenuItem[]>();
 }

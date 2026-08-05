@@ -64,32 +64,7 @@
         </button>
 
         <mat-menu #profileMenu="matMenu" xPosition="before">
-          <!-- Profile -->
-          <button type="button" data-testid="button-profile" mat-menu-item>
-            {{ t('shared.menu.profile') }}
-          </button>
-
           <dv-shared-ui-nav-menu-items [navMenuItemsSig]="menuItemsSig()"></dv-shared-ui-nav-menu-items>
-
-          <!-- Allgemeine Informationen -->
-          <button
-            type="button"
-            data-testid="button-allgemeine-informationen"
-            mat-menu-item
-            (click)="showAllgemeineInformationen()"
-          >
-            {{ t('shared.menu.allgemeine-informationen') }}
-          </button>
-
-          <!-- Nutzungsbedingungen -->
-          <button
-            type="button"
-            data-testid="button-nutzungsbedingungen"
-            mat-menu-item
-            (click)="showNutzungsbedingungen()"
-          >
-            {{ t('shared.menu.nutzungsbedingungen') }}
-          </button>
 
           <!-- Logout -->
           <button type="button" data-testid="button-logout" mat-menu-item (click)="logout()">
