@@ -253,7 +253,7 @@ export class TwoColumnTimeline {
     // nach Startdatum sortieren: dadurch kommen die spaeteren Boxen ueber die frueheren
     output.sort((a, b) => (isBefore(a.von, b.von) ? -1 : 1));
 
-    const endDate = addMonths(output[output.length - 1].bis, 1);
+    const endDate = addMonths(this.getLatestEnddate(output), 1);
     if (isBefore(endDate, plannedAusbildung.von)) {
       output.push({
         col: 'BOTH',

@@ -79,12 +79,14 @@ public class LebenslaufLuckenlosConstraintValidator
             LOG.warn("Lebenslauf Item start bevor {}", start);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-        final var firstRange = dateRanges.getFirst().getGueltigAb();
+        final var firstRange =
+            dateRanges.stream().min(Comparator.comparing(DateRange::getGueltigAb)).get().getGueltigAb();
         if (firstRange.isAfter(start)) {
             LOG.warn("Lebenslauf Lücke found between {} and {}", firstRange, start);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-        final var lastRange = dateRanges.getLast().getGueltigBis();
+        final var lastRange =
+            dateRanges.stream().max(Comparator.comparing(DateRange::getGueltigBis)).get().getGueltigBis();
         if (lastRange.plusDays(1).isBefore(stop)) {
             LOG.warn("Lebenslauf Lücke found between {} and {}", lastRange, stop);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
