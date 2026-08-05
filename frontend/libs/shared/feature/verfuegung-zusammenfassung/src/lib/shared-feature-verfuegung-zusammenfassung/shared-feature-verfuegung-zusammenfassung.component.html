@@ -180,6 +180,18 @@
             </div>
           </div>
 
+          @if (zusammenfassung.berechnungStipendium < (zusammenfassung.stammdaten?.stipLimiteMinimalstipendium ?? 0)) {
+            <div class="tw:flex tw:justify-between tw:mb-4">
+              <div>
+                {{
+                  t('shared.verfuegung.zusammenfassung.limit', {
+                    limit: zusammenfassung.stammdaten?.stipLimiteMinimalstipendium,
+                  })
+                }}
+              </div>
+            </div>
+          }
+
           @if (hasKuerzungenNachEinreichefrist || hasKuerzungenUnterbruch) {
             <ng-container *ngTemplateOutlet="kuerzungUndInfoTemplate"></ng-container>
           }

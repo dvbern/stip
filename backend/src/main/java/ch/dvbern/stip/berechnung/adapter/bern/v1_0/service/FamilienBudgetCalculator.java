@@ -42,7 +42,6 @@ import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDto;
 import ch.dvbern.stip.generated.dto.FamilienBudgetresultatKostenDtoBuilder;
 import lombok.experimental.UtilityClass;
 
-import static ch.dvbern.stip.berechnung.domain.util.InputUtils.toJahresWert;
 import static java.lang.Math.max;
 
 @UtilityClass
@@ -213,8 +212,7 @@ public class FamilienBudgetCalculator {
         final int andereEinnahmen = BernCalculatorUtil.intOrZero(steuererklaerung.getAndereEinnahmen());
 
         final int eigenmietwert = BernCalculatorUtil.intOrZero(steuerdaten.getEigenmietwert());
-        final int unterhaltsbeitraege =
-            toJahresWert(BernCalculatorUtil.intOrZero(steuererklaerung.getUnterhaltsbeitraege()));
+        final int unterhaltsbeitraege = BernCalculatorUtil.intOrZero(steuererklaerung.getUnterhaltsbeitraege());
         final int saeule3a = BernCalculatorUtil.getSaeule3a(steuerdaten, gesuchsperiode);
         final int saeule2 = BernCalculatorUtil.getSaeule2(steuerdaten);
 
@@ -279,7 +277,7 @@ public class FamilienBudgetCalculator {
 
         final int grundbedarf = BernCalculatorUtil.getGrundbedarf(gesuchsperiode, anzahlPersonenImHaushalt, false);
         final int effektiveWohnkosten = BernCalculatorUtil.getEffektiveWohnkostenFamilie(
-            InputUtils.toJahresWert(elterns.getFirst().getWohnkosten()),
+            elterns.getFirst().getWohnkosten(),
             gesuchsperiode,
             anzahlPersonenImHaushalt
         );

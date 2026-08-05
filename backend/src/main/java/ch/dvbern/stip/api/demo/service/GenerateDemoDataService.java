@@ -182,8 +182,8 @@ public class GenerateDemoDataService {
         }
     }
 
-    private LocalDate getGeburtsdatum(DemoData demoData, String geburtsdatum, int alter) {
-        final var targetYear = demoData.getGesuchsjahr() - alter;
+    private LocalDate getGeburtsdatum(String geburtsdatum, int alter) {
+        final var targetYear = LocalDate.now().getYear() - alter;
         return LocalDate.parse("%s.%d".formatted(geburtsdatum, targetYear), ParseDemoDataUtil.dmyFormatter);
     }
 
@@ -302,7 +302,7 @@ public class GenerateDemoDataService {
             AbstractPersonBuilder.abstractPerson()
                 .nachname(piaDto.getNachname())
                 .vorname(piaDto.getNachname())
-                .geburtsdatum(getGeburtsdatum(demoData, piaDto.getGeburtsdatum(), piaDto.getAlter()))
+                .geburtsdatum(getGeburtsdatum(piaDto.getGeburtsdatum(), piaDto.getAlter()))
         );
         // </editor-fold>
 
@@ -369,7 +369,7 @@ public class GenerateDemoDataService {
                     .nachname(demoPartnerDto.getNachname())
                     .vorname(demoPartnerDto.getVorname())
                     .geburtsdatum(
-                        getGeburtsdatum(demoData, demoPartnerDto.getGeburtsdatum(), demoPartnerDto.getAlter())
+                        getGeburtsdatum(demoPartnerDto.getGeburtsdatum(), demoPartnerDto.getAlter())
                     )
             );
         }
@@ -393,7 +393,7 @@ public class GenerateDemoDataService {
                 AbstractPersonBuilder.abstractPerson()
                     .nachname(kindDto.getNachname())
                     .vorname(kindDto.getVorname())
-                    .geburtsdatum(getGeburtsdatum(demoData, kindDto.getGeburtsdatum(), kindDto.getAlter()))
+                    .geburtsdatum(getGeburtsdatum(kindDto.getGeburtsdatum(), kindDto.getAlter()))
             );
             kinds.add(kind);
         }
@@ -520,7 +520,7 @@ public class GenerateDemoDataService {
                     AbstractPersonBuilder.abstractPerson()
                         .nachname(elternDto.getNachname())
                         .vorname(elternDto.getVorname())
-                        .geburtsdatum(getGeburtsdatum(demoData, elternDto.getGeburtsdatum(), elternDto.getAlter()))
+                        .geburtsdatum(getGeburtsdatum(elternDto.getGeburtsdatum(), elternDto.getAlter()))
                 )
             );
         }
@@ -620,7 +620,7 @@ public class GenerateDemoDataService {
                         .nachname(geschwisterDto.getNachname())
                         .vorname(geschwisterDto.getVorname())
                         .geburtsdatum(
-                            getGeburtsdatum(demoData, geschwisterDto.getGeburtsdatum(), geschwisterDto.getAlter())
+                            getGeburtsdatum(geschwisterDto.getGeburtsdatum(), geschwisterDto.getAlter())
                         )
                 )
             );

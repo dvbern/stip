@@ -399,7 +399,7 @@ public class BernCalculatorUtil {
         final List<AbstractFamilieEntity> teilzeitKindsDerElternInHaushalten = kindsDerElternInHaushalten.stream()
             .filter(
                 abstractFamilieEntity -> intOrZero(abstractFamilieEntity.getWohnsitzAnteilVater()) < 100
-                || intOrZero(abstractFamilieEntity.getWohnsitzAnteilMutter()) < 100
+                && intOrZero(abstractFamilieEntity.getWohnsitzAnteilMutter()) < 100
             )
             .toList();
         return teilzeitKindsDerElternInHaushalten;
@@ -475,6 +475,11 @@ public class BernCalculatorUtil {
                 2,
                 RoundingMode.HALF_UP
             );
+
+            if (!teilzeitStiefHalbGeschwistersBeiElternAnrechnen) {
+                berechnungsanteilStiefHalbKindsDerEltern =
+                    BigDecimal.valueOf(100).subtract(berechnungsanteilStiefHalbKindsDerEltern);
+            }
         }
         return berechnungsanteilStiefHalbKindsDerEltern;
 
