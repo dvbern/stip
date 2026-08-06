@@ -105,9 +105,13 @@
     --mat-badge-text-size: 0.875rem;
     --mat-badge-container-size: 1.25rem;
     --mat-badge-line-height: var(--mat-badge-container-size);
+    --mat-form-field-container-height: 56px;
 
     @media (min-width: theme('screens.lg')) {
       --header-size: 110px;
+    }
+    @media (max-width: theme('screens.lg')) {
+      --mat-form-field-container-height: 45px;
     }
   }
 }
@@ -131,16 +135,17 @@
 }
 
 @utility dv-container {
-  @apply tw:max-w-xl tw:sm:max-w-3xl tw:md:max-w-240 tw:lg:max-w-285 tw:xl:max-w-330 tw:w-full tw:px-6 tw:mx-auto;
+  @apply tw:w-full tw:p-3 tw:lg:p-6 tw:mx-auto;
+}
+
+@utility dv-scroll-space {
+  @apply tw:pb-6 tw:lg:pb-12;
 }
 
 @utility dv-max-w-half {
   max-width: min(45vw, 547px);
 }
 
-/* @utility dv-page-title {
-  @apply tw:text-2xl tw:font-bold  tw:lg:text-3xl tw:mb-4 tw:lg:mb-8;
-} */
 @utility dv-page-title {
   @apply tw:text-3xl tw:font-bold tw:mb-8;
 }

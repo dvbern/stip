@@ -7,7 +7,6 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
@@ -41,7 +40,6 @@ const NOTIFICATION_TIME = 5000;
 export class GlobalNotificationsComponent {
   store = inject(GlobalNotificationStore);
 
-  private router = inject(Router);
   private snackbar = inject(MatSnackBar);
 
   @ViewChild('notificationTemplate')

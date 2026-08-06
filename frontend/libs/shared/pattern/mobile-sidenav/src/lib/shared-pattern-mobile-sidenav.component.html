@@ -13,11 +13,13 @@
   </div>
 
   <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
-  <dv-shared-ui-nav-items
-    [isMobile]="true"
-    [navItemsSig]="navItemsSig()"
-    (click)="closeSidenav.emit()"
-  ></dv-shared-ui-nav-items>
+  <div class="tw:px-4">
+    <dv-shared-ui-nav-items
+      [isMobile]="true"
+      [navItemsSig]="navItemsSig()"
+      (click)="closeSidenav.emit()"
+    ></dv-shared-ui-nav-items>
+  </div>
 
   @if (navigationStore.portalSig()) {
     <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
@@ -28,11 +30,18 @@
   }
 
   <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
-  <dv-shared-ui-nav-menu-items [navMenuItemsSig]="menuItemsSig()"></dv-shared-ui-nav-menu-items>
+  <dv-shared-ui-nav-menu-items
+    [isMobile]="true"
+    [navMenuItemsSig]="menuItemsSig()"
+    (click)="closeSidenav.emit()"
+  ></dv-shared-ui-nav-menu-items>
+
   <!-- Logout -->
-  <button type="button" mat-menu-item data-testid="button-logout" (click)="logout()">
-    {{ t('shared.menu.logout') }}
-  </button>
+  <div class="tw:ml-4">
+    <button type="button" mat-menu-item data-testid="button-logout" (click)="logout()">
+      {{ t('shared.menu.logout') }}
+    </button>
+  </div>
 
   <hr class="tw:my-1 tw:border-t tw:border-dv-border" />
 

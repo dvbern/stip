@@ -88,7 +88,7 @@
     <dv-shared-pattern-gesuch-step-nav [stepsSig]="stepsSig()" />
   </div>
 
-  <div class="tw:dv-pass-height tw:dv-container tw:bg-white tw:p-6 tw:pb-32">
+  <div class="tw:dv-pass-height tw:dv-container tw:bg-white tw:dv-scroll-space">
     @if (currentStepSig(); as step) {
       <!-- step header (mobile) -->
       <div
@@ -97,7 +97,8 @@
         <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
           <h1 class="tw:dv-page-title-mobile" data-testid="step-title">
-            {{ t(step.translationKey) }}
+            {{ t(step.titleTranslationKey) }}
+            <ng-container *ngTemplateOutlet="headerService.suffixSig()"></ng-container>
           </h1>
           @if (step.nextStep?.translationKey; as nextStepKey) {
             <p class="fst-italic tw:mb-0">

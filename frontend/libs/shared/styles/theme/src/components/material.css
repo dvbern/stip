@@ -27,6 +27,7 @@
     --mat-form-field-outlined-input-text-placeholder-color: var(
       --tw-color-dv-gray
     );
+    --mat-form-field-container-vertical-padding: 1rem;
 
     /* Radio & Checkboxes */
     --mat-checkbox-label-text-size: var(--tw-text-base);
@@ -52,5 +53,8 @@
     --mat-tab-label-text-size: var(--tw-text-base);
     --mat-tab-label-text-weight: var(--tw-font-weight-medium);
     --mat-tab-inactive-label-text-color: var(--tw-color-dv-gray);
+
+    /* Side Navigation */
+    --mat-sidenav-container-width: 320px;
   }
 }

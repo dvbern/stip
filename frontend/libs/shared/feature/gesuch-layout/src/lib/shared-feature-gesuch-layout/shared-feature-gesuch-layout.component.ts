@@ -47,7 +47,6 @@ import {
 } from '@dv/shared/model/ui';
 import { notGesuchRoute } from '@dv/shared/model/ui-constants';
 import { SharedPatternGesuchInfoBarComponent } from '@dv/shared/pattern/gesuch-info-bar';
-import { SharedPatternGlobalHeaderPartsDirective } from '@dv/shared/pattern/global-header';
 import { SharedPatternInfoBarActionsComponent } from '@dv/shared/pattern/info-bar-actions';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
@@ -70,7 +69,6 @@ import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
     MatTooltipModule,
     MatIconModule,
     SharedPatternGesuchInfoBarComponent,
-    SharedPatternGlobalHeaderPartsDirective,
     SharedUiVersionenMenuComponent,
     SharedUiAdvTranslocoDirective,
     SharedPatternInfoBarActionsComponent,
@@ -81,7 +79,7 @@ import { isInOneOfGivenStatus } from '@dv/shared/util-fn/gesuch-util';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureGesuchLayoutComponent {
-  @HostBinding('class') klass = 'tw:px-6 tw:dv-pass-height';
+  @HostBinding('class') klass = 'tw:dv-pass-height tw:dv-container';
 
   private router = inject(Router);
   private route = inject(ActivatedRoute);

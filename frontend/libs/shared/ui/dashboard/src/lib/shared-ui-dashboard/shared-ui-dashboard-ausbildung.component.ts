@@ -38,5 +38,5 @@ export class SharedUiDashboardAusbildungComponent {
   output = output<GsDashboardActions>();
 
   @HostBinding('class') defaultClasses =
-    'tw:block tw:bg-white tw:py-8 tw:px-6 tw:rounded-lg';
+    'tw:block tw:bg-white tw:dv-container tw:rounded-lg';
 }

@@ -29,7 +29,7 @@ import { SharedUiNotificationsComponent } from '@dv/shared/ui/notifications';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedFeatureNotificationsComponent implements OnDestroy {
-  @HostBinding('class') class = 'tw:dv-pass-height tw:p-6';
+  @HostBinding('class') class = 'tw:dv-pass-height tw:dv-container';
 
   notificationStore = inject(NotificationStore);
   private router = inject(Router);

@@ -24,5 +24,5 @@ export class SharedUiDashboardGesuchComponent {
   gesuchSig = input.required<SharedModelGsGesuchView>();
   output = output<GsDashboardActions>();
   @HostBinding('class') defaultClasses =
-    'tw:flex tw:w-full tw:flex-col tw:rounded-lg tw:p-6';
+    'tw:flex tw:flex-col tw:rounded-lg tw:dv-container';
 }
