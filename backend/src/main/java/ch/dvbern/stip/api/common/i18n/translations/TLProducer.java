@@ -82,6 +82,12 @@ public class TLProducer {
         return translator::translate;
     }
 
+    public TL forAppLanguageJson(AppLanguage appLanguage) {
+        Translator translator = JsonTranslatorStrategy.create(appLanguage);
+
+        return translator::translate;
+    }
+
     ResourceBundle loadBundle(AppLanguage appLanguage) {
         return bundleMap.computeIfAbsent(appLanguage, this::initBundle);
     }

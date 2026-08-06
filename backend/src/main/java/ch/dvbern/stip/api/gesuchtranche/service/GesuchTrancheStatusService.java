@@ -25,7 +25,6 @@ import ch.dvbern.stip.api.common.statemachines.gesuchtranche.GesuchTrancheStatus
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatusChangeEvent;
-import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.transaction.Transactional;
@@ -63,13 +62,13 @@ public class GesuchTrancheStatusService {
     public void triggerStateMachineEventWithComment(
         final GesuchTranche gesuchTranche,
         final GesuchTrancheStatusChangeEvent event,
-        final KommentarDto kommentarDto
+        final String kommentar
     ) {
         final var sm = createStateMachine(gesuchTranche);
         sm.fire(
             GesuchTrancheStatusChangeEventTrigger.createTrigger(event),
             gesuchTranche,
-            kommentarDto.getText()
+            kommentar
         );
 
         // TODO: KSTIP-XXXX - Save kommentarDto.getText() in Nachricht and Protokoll

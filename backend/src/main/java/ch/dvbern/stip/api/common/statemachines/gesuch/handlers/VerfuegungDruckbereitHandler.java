@@ -41,7 +41,7 @@ public class VerfuegungDruckbereitHandler implements GesuchStatusChangeHandler {
     private final VerfuegungService verfuegungService;
 
     @Override
-    public void handle(Gesuch gesuch) {
+    public void handle(Gesuch gesuch, String comment) {
         BerechnungsresultatDto stipendien = null;
         final var latestVerfuegung = verfuegungService.getLatestVerfuegung(gesuch);
         if (!latestVerfuegung.getVerfuegungStatus().isNegativ()) {

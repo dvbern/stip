@@ -400,6 +400,15 @@
     </dependency>
   </dependencies>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
@@ -511,6 +520,30 @@
               <consoleOutputReporter>
                 <disable>${ci.disableConsole}</disable>
               </consoleOutputReporter>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-openapi-contract-translations-to-quarkus</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/src/main/resources/contract/translations/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/../contract/translations/</directory>
+                  <includes>
+                    <include>*.json</include>
+                  </includes>
+                </resource>
+              </resources>
+              <changeDetection>always</changeDetection>
             </configuration>
           </execution>
         </executions>
@@ -644,7 +677,6 @@
           </plugin>
           <plugin>
             <artifactId>maven-resources-plugin</artifactId>
-            <version>3.0.2</version>
             <executions>
               <execution>
                 <id>copy-openapi-contract-to-quarkus</id>

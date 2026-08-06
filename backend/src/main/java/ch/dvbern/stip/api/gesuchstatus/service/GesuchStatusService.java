@@ -19,6 +19,7 @@ package ch.dvbern.stip.api.gesuchstatus.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.benutzer.service.BenutzerService;
@@ -79,7 +80,7 @@ public class GesuchStatusService {
     @Transactional
     @WithSpan
     public void triggerStateMachineEvent(final Gesuch gesuch, final GesuchStatusChangeEvent event) {
-        triggerStateMachineEventWithComment(gesuch, event, null, false);
+        baseTriggerStateMachineEventWithComments(gesuch, event, null, null);
     }
 
     @Transactional
@@ -89,12 +90,37 @@ public class GesuchStatusService {
         final KommentarDto kommentarDto,
         final boolean sendNotificationIfPossible
     ) {
-        final var sm = createStateMachine(gesuch, kommentarDto);
-        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
+        final String kommentar = Objects.nonNull(kommentarDto) ? kommentarDto.getText() : null;
+        baseTriggerStateMachineEventWithComments(gesuch, event, kommentar, kommentar);
 
-        if (kommentarDto != null && sendNotificationIfPossible) {
-            notificationService.createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentarDto);
+        if (kommentar != null && sendNotificationIfPossible) {
+            notificationService.createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentar);
         }
+    }
+
+    @Transactional
+    public void triggerStateMachineEventWithStatusProtokoll(
+        final Gesuch gesuch,
+        final GesuchStatusChangeEvent event,
+        final String statusProtokollKommentar,
+        final boolean sendNotificationIfPossible
+    ) {
+        baseTriggerStateMachineEventWithComments(gesuch, event, null, statusProtokollKommentar);
+
+        if (statusProtokollKommentar != null && sendNotificationIfPossible) {
+            notificationService
+                .createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, statusProtokollKommentar);
+        }
+    }
+
+    private void baseTriggerStateMachineEventWithComments(
+        final Gesuch gesuch,
+        final GesuchStatusChangeEvent event,
+        final String gesuchKommentar,
+        final String statusProtokollKommentar
+    ) {
+        final var sm = createStateMachine(gesuch, gesuchKommentar);
+        sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch, statusProtokollKommentar);
     }
 
     public void bulkTriggerStateMachineEvent(
@@ -172,7 +198,7 @@ public class GesuchStatusService {
 
     private StateMachine<Gesuchstatus, GesuchStatusChangeEvent> createStateMachine(
         final Gesuch gesuch,
-        final KommentarDto kommentarDto
+        final String kommentar
     ) {
         final var config = configProducer.createStateMachineConfig();
 
@@ -187,7 +213,7 @@ public class GesuchStatusService {
             gesuch::getGesuchStatus,
             status -> gesuch.setGesuchStatus(status)
                 .setGesuchStatusAenderungDatum(LocalDateTime.now())
-                .setComment(kommentarDto == null ? "" : kommentarDto.getText()),
+                .setComment(Objects.isNull(kommentar) ? "" : kommentar),
             config
         );
     }

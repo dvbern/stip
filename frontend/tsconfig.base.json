@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDirs": [".", "../contract/translations"],
     "sourceMap": true,
     "resolveJsonModule": true,
     "declaration": false,
@@ -20,6 +20,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@dv/contract/translations": ["../contract/translations/index.ts"],
       "@dv/demo-data-app/assets/i18n": ["libs/demo-data-app/assets/i18n/src/index.ts"],
       "@dv/demo-data-app/data-access/demo-data": ["libs/demo-data-app/data-access/demo-data/src/index.ts"],
       "@dv/demo-data-app/feature/demo-data-overview": ["libs/demo-data-app/feature/demo-data-overview/src/index.ts"],

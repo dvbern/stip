@@ -17,6 +17,8 @@
 
 package ch.dvbern.stip.api.common.util;
 
+import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Set;
 
 import ch.dvbern.stip.api.ausbildung.util.AusbildungUnterbruchAntragUtil;
@@ -27,6 +29,13 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class GesuchUtil {
+    public void setDefaultNachfristDokumente(Gesuch gesuch) {
+        if (Objects.isNull(gesuch.getNachfristDokumente())) {
+            gesuch.setNachfristDokumente(
+                LocalDate.now().plusDays(gesuch.getGesuchsperiode().getFristNachreichenDokumente())
+            );
+        }
+    }
 
     public boolean openAenderungAlreadyExists(final Gesuch gesuch) {
         final var allowedStates = Set.of(
