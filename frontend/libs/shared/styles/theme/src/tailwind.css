@@ -55,6 +55,14 @@
 }
 
 @layer base {
+  html {
+    font-size: 100%;
+  }
+  @media (max-width: theme('screens.md')) {
+    html {
+      font-size: 87.5%;
+    }
+  }
   * {
     border-style: none;
   }
@@ -65,7 +73,7 @@
     @apply tw:transition-opacity!;
   }
   :root {
-    --dv-base-font-size: 16px;
+    --dv-base-font-size: 1rem;
     --content-max-width: 1440px;
     --header-size: 76px;
     --header-sub-size: 180px;
@@ -130,8 +138,11 @@
   max-width: min(45vw, 547px);
 }
 
-@utility dv-page-title {
+/* @utility dv-page-title {
   @apply tw:text-2xl tw:font-bold  tw:lg:text-3xl tw:mb-4 tw:lg:mb-8;
+} */
+@utility dv-page-title {
+  @apply tw:text-3xl tw:font-bold tw:mb-8;
 }
 
 @utility dv-page-title-mobile {
@@ -224,4 +235,8 @@
 
 @utility dv-icon-chip-info {
   @apply tw:bg-dv-blue-subtle tw:text-dv-blue;
+}
+
+dv-shared-pattern-mobile-sidenav dv-shared-pattern-gesuch-step-nav {
+  @apply tw:p-0;
 }
