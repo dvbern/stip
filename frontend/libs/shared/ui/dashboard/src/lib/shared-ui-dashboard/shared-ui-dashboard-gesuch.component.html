@@ -1,25 +1,27 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<div class="tw:relative tw:@container" *dvTranslocoShared="let t">
-  <div
-    class="tw:absolute tw:right-0 tw:top-0 tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
-  >
-    {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
-  </div>
+<div class="tw:@container" *dvTranslocoShared="let t">
   <div class="tw:flex tw:flex-col tw:gap-8">
     <dl class="tw:flex tw:flex-col">
-      <dt class="tw:font-bold tw:text-xl">
-        {{ t('shared.dashboard.gesuch.title', { yearRange: gesuch.yearRange }) }}
-        -
-        {{
-          t(
-            gesuch.isErstgesuch
-              ? 'shared.dashboard.gesuch.order.erstgesuch'
-              : 'shared.dashboard.gesuch.order.folgegesuch'
-          )
-        }}
-      </dt>
-      <dd class="tw:mt-1">
+      <div class="tw:flex tw:flex-wrap tw:justify-between tw:items-start tw:gap-2">
+        <dt class="tw:font-bold tw:text-xl">
+          {{ t('shared.dashboard.gesuch.title', { yearRange: gesuch.yearRange }) }}
+          -
+          {{
+            t(
+              gesuch.isErstgesuch
+                ? 'shared.dashboard.gesuch.order.erstgesuch'
+                : 'shared.dashboard.gesuch.order.folgegesuch'
+            )
+          }}
+        </dt>
+        <div
+          class="tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle tw:shrink-0"
+        >
+          {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
+        </div>
+      </div>
+      <dd class="tw:mt-2">
         {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
       </dd>
 
