@@ -437,6 +437,7 @@
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.AKZEPTIERT": "Akzeptiert",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.ABGELEHNT": "Abgelehnt",
   "sachbearbeitung-app.gesuch.status.tranche.from.UEBERPRUEFEN.to.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
+  "sachbearbeitung-app.gesuch.status.tranche.from.FEHLENDE_DOKUMENTE.to.FEHLENDE_DOKUMENTE": "Fehlende Dokumente",
 
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.null.to.IN_BEARBEITUNG_GS": "Erstellt",
   "sachbearbeitung-app.gesuch.status.freiwilligdarlehen.from.IN_BEARBEITUNG_GS.to.null": "Gelöscht",

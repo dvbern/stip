@@ -1002,6 +1002,26 @@ public class GesuchService {
         }
         var gesuch = gesuchRepository.requireById(gesuchId);
         gesuch.setNachfristDokumente(nachfristDokumente);
+
+        final var comment = GesuchUtil.getNachfristVerlaengerungKommentar(gesuch);
+        gesuchTrancheRepository.findFehlendeDokumenteAenderung(gesuch.getId())
+            .ifPresentOrElse((aenderung) -> {
+                statusprotokollService.createStatusprotokoll(
+                    aenderung.getStatus().toString(),
+                    aenderung.getStatus().toString(),
+                    StatusprotokollEntryTyp.AENDERUNG,
+                    comment,
+                    gesuch
+                );
+            }, () -> {
+                statusprotokollService.createStatusprotokoll(
+                    gesuch.getGesuchStatus().toString(),
+                    gesuch.getGesuchStatus().toString(),
+                    StatusprotokollEntryTyp.GESUCH,
+                    comment,
+                    gesuch
+                );
+            });
         notificationService.createGesuchNachfristDokumenteChangedNotificationAndSendStdMail(gesuch);
     }
 
