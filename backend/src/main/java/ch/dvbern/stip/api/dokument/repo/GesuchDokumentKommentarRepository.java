@@ -36,7 +36,9 @@ import lombok.RequiredArgsConstructor;
 public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchDokumentKommentar> {
     private static QGesuchDokumentKommentar gesuchDokumentKommentar = QGesuchDokumentKommentar.gesuchDokumentKommentar;
 
-    public record GesuchDokumentKommentarSlim(DokumentTyp typ, String customDokumentTyp, String kommentar) {
+    public record GesuchDokumentKommentarSlim(
+    DokumentTyp typ, String kommentar, String customDokumentTyp, String description
+    ) {
     }
 
     @Transactional
@@ -49,22 +51,31 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
 
     @Transactional
     public List<GesuchDokumentKommentarSlim> getAllNewestAbgelehntKommentarOfGesuch(final UUID gesuchId) {
-        return getEntityManager().createQuery("""
-            select gesuchDokument.dokumentTyp, customDokumentTyp.type, latestKommentar.kommentar
-            from GesuchDokument gesuchDokument
-            join lateral (
-                select kommentar.kommentar as kommentar
-                from GesuchDokumentKommentar kommentar
-                where gesuchDokument = kommentar.gesuchDokument
-                order by kommentar.timestampErstellt DESC
-                limit 1
-            ) latestKommentar
-            left join gesuchDokument.customDokumentTyp customDokumentTyp
-            where gesuchDokument.status = :status
-                and gesuchDokument.gesuchTranche.gesuch.id = :gesuchId
-                and gesuchDokument.gesuchTranche.typ = :typ
-        """, GesuchDokumentKommentarSlim.class)
-            .setParameter("status", GesuchDokumentStatus.ABGELEHNT)
+        return getEntityManager()
+            .createQuery(
+                """
+                    select gesuchDokument.dokumentTyp, latestKommentar.kommentar, customDokumentTyp.type, customDokumentTyp.description
+                    from GesuchDokument gesuchDokument
+                    left join lateral (
+                        select kommentar.kommentar as kommentar
+                        from GesuchDokumentKommentar kommentar
+                        where gesuchDokument = kommentar.gesuchDokument
+                        order by kommentar.timestampErstellt DESC
+                        limit 1
+                    ) latestKommentar
+                    left join gesuchDokument.customDokumentTyp customDokumentTyp
+                    where
+                        (
+                            gesuchDokument.status = :abgelehntStatus
+                            or (customDokumentTyp is not null and gesuchDokument.status = :createdStatus)
+                        )
+                        and gesuchDokument.gesuchTranche.gesuch.id = :gesuchId
+                        and gesuchDokument.gesuchTranche.typ = :typ
+                """,
+                GesuchDokumentKommentarSlim.class
+            )
+            .setParameter("abgelehntStatus", GesuchDokumentStatus.ABGELEHNT)
+            .setParameter("createdStatus", GesuchDokumentStatus.AUSSTEHEND)
             .setParameter("typ", GesuchTrancheTyp.TRANCHE)
             .setParameter("gesuchId", gesuchId)
             .getResultList();
@@ -72,22 +83,31 @@ public class GesuchDokumentKommentarRepository implements BaseRepository<GesuchD
 
     @Transactional
     public List<GesuchDokumentKommentarSlim> getAllNewestAbgelehntKommentarOfAenderung(final UUID aenderungId) {
-        return getEntityManager().createQuery("""
-            select gesuchDokument.dokumentTyp, customDokumentTyp.type, latestKommentar.kommentar
-            from GesuchDokument gesuchDokument
-            join lateral (
-                select kommentar.kommentar as kommentar
-                from GesuchDokumentKommentar kommentar
-                where gesuchDokument = kommentar.gesuchDokument
-                order by kommentar.timestampErstellt DESC
-                limit 1
-            ) latestKommentar
-            left join gesuchDokument.customDokumentTyp customDokumentTyp
-            where gesuchDokument.status = :status
-                and gesuchDokument.gesuchTranche.id = :aenderungId
-                and gesuchDokument.gesuchTranche.typ = :typ
-        """, GesuchDokumentKommentarSlim.class)
-            .setParameter("status", GesuchDokumentStatus.ABGELEHNT)
+        return getEntityManager()
+            .createQuery(
+                """
+                    select gesuchDokument.dokumentTyp, latestKommentar.kommentar, customDokumentTyp.type, customDokumentTyp.description
+                    from GesuchDokument gesuchDokument
+                    left join lateral (
+                        select kommentar.kommentar as kommentar
+                        from GesuchDokumentKommentar kommentar
+                        where gesuchDokument = kommentar.gesuchDokument
+                        order by kommentar.timestampErstellt DESC
+                        limit 1
+                    ) latestKommentar
+                    left join gesuchDokument.customDokumentTyp customDokumentTyp
+                    where
+                        (
+                            gesuchDokument.status = :abgelehntStatus
+                            or (customDokumentTyp is not null and gesuchDokument.status = :createdStatus)
+                        )
+                        and gesuchDokument.gesuchTranche.id = :aenderungId
+                        and gesuchDokument.gesuchTranche.typ = :typ
+                """,
+                GesuchDokumentKommentarSlim.class
+            )
+            .setParameter("abgelehntStatus", GesuchDokumentStatus.ABGELEHNT)
+            .setParameter("createdStatus", GesuchDokumentStatus.AUSSTEHEND)
             .setParameter("typ", GesuchTrancheTyp.AENDERUNG)
             .setParameter("aenderungId", aenderungId)
             .getResultList();

@@ -204,17 +204,20 @@ public class GesuchDokumentKommentarService {
         final List<GesuchDokumentKommentarRepository.GesuchDokumentKommentarSlim> kommentarSlims
     ) {
         final Locale locale = LocaleUtil.getLocale(gesuch);
-        final TL translator = TLProducer.defaultBundle().forAppLanguageJson(AppLanguages.fromLocale(locale));
+        final TL translator = TLProducer.defaultBundle().forAppLanguage(AppLanguages.fromLocale(locale));
+        final TL translatorJson = TLProducer.defaultBundle().forAppLanguageJson(AppLanguages.fromLocale(locale));
 
         return kommentarSlims.stream()
             .map(
                 dokument -> {
                     final String dokumentName = Optional.ofNullable(dokument.customDokumentTyp())
-                        .orElseGet(() -> translator.translate("contract.file.%s".formatted(dokument.typ())));
+                        .orElseGet(() -> translatorJson.translate("contract.file.%s".formatted(dokument.typ())));
                     return "%s: %s"
                         .formatted(
                             dokumentName,
-                            dokument.kommentar().trim()
+                            Optional.ofNullable(dokument.kommentar())
+                                .orElse(translator.translate("stip.dokument.fehlendeDokumente.new"))
+                                .trim()
                         );
                 }
             )
