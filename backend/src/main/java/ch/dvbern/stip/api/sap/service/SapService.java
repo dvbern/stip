@@ -373,7 +373,7 @@ public class SapService {
                     final var vendorPostingCreateResponse =
                         sapEndpointService.createVendorPosting(
                             gesuch.getAusbildung().getFall(),
-                            buchhaltung.getBetrag(),
+                            buchhaltung.getSaldo(),
                             deliveryid,
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
@@ -517,9 +517,9 @@ public class SapService {
             final var lastBuchhaltungEntry =
                 buchhaltungService.getLatestNotFailedBuchhaltungEntry(gesuch.getAusbildung().getFall().getId());
 
-            var auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag() / 2;
+            var auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo() / 2;
             if (isPastSecondPaymentDate(gesuch)) {
-                auszahlungsBetrag = relevantStipendienBuchhaltung.getBetrag();
+                auszahlungsBetrag = relevantStipendienBuchhaltung.getSaldo();
             }
 
             auszahlungsBetrag = Integer.min(auszahlungsBetrag, lastBuchhaltungEntry.getSaldo());
