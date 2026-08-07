@@ -34,7 +34,7 @@
 }
 
 @utility dv-nav-button {
-  @apply tw:dv-button tw:justify-start tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
+  @apply tw:dv-button tw:w-fit tw:justify-start tw:text-dv-gray tw:[&.active]:bg-dv-red! tw:[&.isActive]:bg-dv-red tw:hover:bg-dv-red! tw:hover:text-white tw:[&.active]:text-white! tw:[&.isActive]:text-white tw:border-0;
 
   --mat-tab-active-label-text-color: white;
   --mat-tab-active-focus-label-text-color: white;

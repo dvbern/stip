@@ -94,7 +94,10 @@
       <div
         class="tw:flex tw:items-center tw:justify-between tw:border-b tw:border-dv-border tw:pb-4 tw:mt-4 tw:mb-6 tw:lg:hidden"
       >
-        <dv-shared-ui-progress-bar [currentSig]="currentStepProgressSig()"></dv-shared-ui-progress-bar>
+        <dv-shared-ui-progress-bar
+          class="tw:flex-none"
+          [currentSig]="currentStepProgressSig()"
+        ></dv-shared-ui-progress-bar>
         <div class="tw:text-end">
           <h1 class="tw:dv-page-title-mobile" data-testid="step-title">
             {{ t(step.titleTranslationKey) }}

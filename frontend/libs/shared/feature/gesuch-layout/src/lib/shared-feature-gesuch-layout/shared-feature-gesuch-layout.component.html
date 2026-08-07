@@ -32,7 +32,10 @@
       }
     </div>
 
-    <div dvGesuchNavItems class="tw:flex tw:items-center tw:gap-4">
+    <div
+      dvGesuchNavItems
+      class="tw:flex tw:[flex-wrap:balance] tw:not-supports-[flex-wrap:balance]:flex-wrap tw:items-center tw:gap-4"
+    >
       <!-- Versionen Menu -->
       <dv-shared-ui-versionen-menu
         [versionenSig]="headerViewSig().versions ?? []"

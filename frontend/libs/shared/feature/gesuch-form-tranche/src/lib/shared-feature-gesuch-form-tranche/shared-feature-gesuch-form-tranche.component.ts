@@ -35,6 +35,7 @@ import { SharedDialogTrancheErstellenComponent } from '@dv/shared/dialog/tranche
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { SharedModelCompileTimeConfig } from '@dv/shared/model/config';
 import { SharedModelGesuch } from '@dv/shared/model/gesuch';
+import { TRANCHE } from '@dv/shared/model/gesuch-form';
 import { isDefined } from '@dv/shared/model/type-util';
 import { SharedUiAdvTranslocoDirective } from '@dv/shared/ui/adv-transloco-directive';
 import {
@@ -42,6 +43,7 @@ import {
   SharedUiFormReadonlyDirective,
 } from '@dv/shared/ui/form';
 import { SharedUiHeaderSuffixDirective } from '@dv/shared/ui/header-suffix';
+import { SharedUiStepFormButtonsComponent } from '@dv/shared/ui/step-form-buttons';
 import { getLatestTrancheIdFromGesuchOnUpdate$ } from '@dv/shared/util/gesuch';
 import {
   dateFromMonthYearString,
@@ -63,6 +65,7 @@ import { selectSharedFeatureGesuchFormTrancheView } from './shared-feature-gesuc
     SharedUiHeaderSuffixDirective,
     SharedUiFormReadonlyDirective,
     SharedUiAdvTranslocoDirective,
+    SharedUiStepFormButtonsComponent,
   ],
   templateUrl: './shared-feature-gesuch-form-tranche.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -241,6 +244,17 @@ export class SharedFeatureGesuchFormTrancheComponent {
     })
       .afterClosed()
       .subscribe();
+  }
+
+  handleContinue() {
+    const { gesuch } = this.viewSig();
+    if (gesuch?.id)
+      this.store.dispatch(
+        SharedDataAccessGesuchEvents.nextTriggered({
+          id: gesuch.id,
+          origin: TRANCHE,
+        }),
+      );
   }
 
   changeGesuchsperiode(gesuchTrancheId: string | undefined) {

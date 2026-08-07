@@ -138,6 +138,14 @@
   @apply tw:w-full tw:p-3 tw:lg:p-6 tw:mx-auto;
 }
 
+@utility dv-dialog-container {
+  @apply tw:p-3 tw:lg:p-6;
+}
+
+@utility dv-button-container {
+  @apply tw:flex tw:flex-wrap tw:gap-3 tw:mt-6;
+}
+
 @utility dv-scroll-space {
   @apply tw:pb-6 tw:lg:pb-12;
 }
@@ -151,7 +159,7 @@
 }
 
 @utility dv-page-subtitle {
-  @apply tw:text-2xl tw:font-bold tw:mb-4 tw:max-[400px]:break-all;
+  @apply tw:text-2xl tw:font-bold tw:mb-4;
 }
 
 @utility dv-page-title-mobile {

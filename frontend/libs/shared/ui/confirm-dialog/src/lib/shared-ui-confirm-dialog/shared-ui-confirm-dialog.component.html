@@ -6,7 +6,7 @@
 >
   <span class="material-symbols-rounded">close</span>
 </button>
-<div class="tw:flex tw:flex-col tw:p-6">
+<div class="tw:flex tw:flex-col tw:dv-dialog-container">
   <h3 class="tw:mb-3 tw:font-semibold tw:text-2xl">
     {{ dialogData?.title ?? 'shared.ui.confirmDialog.title' | transloco: dialogData?.translationObject ?? {} }}
   </h3>
@@ -15,11 +15,11 @@
       dialogData?.message ?? 'shared.ui.confirmDialog.message' | transloco: dialogData?.translationObject ?? {}
     "
   ></div>
-  <div class="tw:flex tw:mt-6 tw:justify-end">
+  <div class="tw:dv-button-container tw:justify-end">
     <button type="button" class="tw:dv-button-outline" (click)="cancel()" data-testid="dialog-cancel">
       {{ dialogData?.cancelText ?? 'shared.ui.confirmDialog.cancel' | transloco }}
     </button>
-    <button type="button" class="tw:dv-button-main-primary tw:ml-2" (click)="confirm()" data-testid="dialog-confirm">
+    <button type="button" class="tw:dv-button-main-primary" (click)="confirm()" data-testid="dialog-confirm">
       {{ dialogData?.confirmText ?? 'shared.ui.confirmDialog.confirm' | transloco }}
     </button>
   </div>

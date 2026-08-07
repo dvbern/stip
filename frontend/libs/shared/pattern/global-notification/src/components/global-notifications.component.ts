@@ -13,6 +13,7 @@ import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 import { GlobalNotificationStore } from '@dv/shared/global/notification';
 import { StatusColor } from '@dv/shared/model/gesuch';
 import { NotificationType } from '@dv/shared/model/global-notification';
+import { DVBreakpoints } from '@dv/shared/model/ui-constants';
 
 const PANEL_MAP: Record<NotificationType, `mat-${StatusColor}`> = {
   SEVERE: 'mat-danger',
@@ -63,7 +64,8 @@ export class GlobalNotificationsComponent {
              * @see `material.overrides.scss`
              */
             this.snackbar.openFromTemplate(this.notificationTemplate, {
-              verticalPosition: 'bottom',
+              verticalPosition:
+                window.innerWidth >= DVBreakpoints.SM ? 'bottom' : 'top',
               horizontalPosition: 'right',
               panelClass: PANEL_MAP[notification.type],
             });
