@@ -373,7 +373,7 @@ public class SapService {
                     final var vendorPostingCreateResponse =
                         sapEndpointService.createVendorPosting(
                             gesuch.getAusbildung().getFall(),
-                            buchhaltung.getSaldo(),
+                            buchhaltung.getBetrag(),
                             deliveryid,
                             getQrIbanAddlInfoString(gesuch),
                             String.valueOf(Math.abs(newSapDelivery.getId().getMostSignificantBits()))
