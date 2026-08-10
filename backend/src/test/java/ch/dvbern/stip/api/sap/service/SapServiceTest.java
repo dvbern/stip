@@ -45,7 +45,7 @@ import ch.dvbern.stip.api.gesuchsperioden.entity.Gesuchsperiode;
 import ch.dvbern.stip.api.gesuchtranche.entity.GesuchTranche;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheTyp;
 import ch.dvbern.stip.api.land.entity.Land;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.personinausbildung.entity.PersonInAusbildung;
 import ch.dvbern.stip.api.personinausbildung.type.Sprache;
 import ch.dvbern.stip.api.sap.entity.SapDelivery;
@@ -99,7 +99,7 @@ public class SapServiceTest {
     SapDeliveryRepository sapDeliveryRepositoryMock;
 
     @InjectMock
-    NotificationService notificationServiceMock;
+    GesuchNotificationService gesuchNotificationServiceMock;
 
     @InjectMock
     MailService mailServiceMock;
@@ -112,7 +112,7 @@ public class SapServiceTest {
         QuarkusMock.installMockForType(gesuchRepositoryMock, GesuchRepository.class);
         QuarkusMock.installMockForType(fallRepositoryMock, FallRepository.class);
         QuarkusMock.installMockForType(zahlungsverbindungRepositoryMock, ZahlungsverbindungRepository.class);
-        QuarkusMock.installMockForType(notificationServiceMock, NotificationService.class);
+        QuarkusMock.installMockForType(gesuchNotificationServiceMock, GesuchNotificationService.class);
         QuarkusMock.installMockForType(mailServiceMock, MailService.class);
     }
 
@@ -267,8 +267,8 @@ public class SapServiceTest {
         sapService.createInitialAuszahlungOrGetStatus(UUID.randomUUID());
 
         // Assert
-        Mockito.verify(notificationServiceMock, Mockito.times(1))
-            .createFailedAuszahlungBuchhaltungNotificationAndSendStdMail(any());
+        Mockito.verify(gesuchNotificationServiceMock, Mockito.times(1))
+            .createAuszahlungFailedNotificationAndSendStdMail(any());
         assertThat(relevantBuchhaltung.getSapDeliverys().size(), Matchers.greaterThanOrEqualTo(3));
         assertThat(relevantBuchhaltung.getSapStatus(), Matchers.equalTo(SapStatus.FAILURE));
         assertThrows(

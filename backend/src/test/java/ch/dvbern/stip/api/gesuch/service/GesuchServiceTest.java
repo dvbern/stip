@@ -82,7 +82,7 @@ import ch.dvbern.stip.api.lebenslauf.entity.LebenslaufItem;
 import ch.dvbern.stip.api.lebenslauf.service.LebenslaufItemMapper;
 import ch.dvbern.stip.api.notification.entity.Notification;
 import ch.dvbern.stip.api.notification.repo.NotificationRepository;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.pdf.service.VerfuegungPdfService;
 import ch.dvbern.stip.api.personinausbildung.type.Zivilstand;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
@@ -205,7 +205,7 @@ class GesuchServiceTest {
     MailService mailService;
 
     @InjectSpy
-    NotificationService notificationService;
+    GesuchNotificationService gesuchNotificationService;
 
     @InjectMock
     NotificationRepository notificationRepository;
@@ -1133,7 +1133,8 @@ class GesuchServiceTest {
         gesuchService.gesuchFehlendeDokumenteUebermitteln(gesuch.getId());
 
         // assert
-        Mockito.verify(notificationService).createMissingDocumentNotificationAndSendStdMail(any());
+        Mockito.verify(gesuchNotificationService)
+            .createStatusChangeToFehlendeDokumenteNotificationAndSendStdMail(any());
 
         // TODO KSTIP-1652: Deduplicate mail sending
         Mockito.verify(mailService, Mockito.atMost(2)).sendStandardNotificationEmail(any(), any(), any(), any());
