@@ -301,8 +301,7 @@ public class SapService {
             );
     }
 
-    @Transactional
-    public void getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
+    private void getVendorPostingCreateStatus(final Buchhaltung buchhaltung) {
         final var sapDeliveryOpt = buchhaltung.getSapDeliverys()
             .stream()
             .filter(
@@ -322,8 +321,7 @@ public class SapService {
 
     }
 
-    @Transactional
-    public void createVendorPostingOrGetStatus(
+    private void createVendorPostingOrGetStatus(
         final Gesuch gesuch,
         final Auszahlung auszahlung,
         final Buchhaltung buchhaltung
@@ -462,8 +460,7 @@ public class SapService {
             );
     }
 
-    @Transactional
-    public void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
+    private void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
         final PersonInAusbildung pia = SapMapperUtil.getPia(gesuch.getAusbildung().getFall());
         BUSINESSPARTNER businesspartner = null;
         try {
