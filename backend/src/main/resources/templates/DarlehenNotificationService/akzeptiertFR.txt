@@ -1,0 +1,9 @@
+Bonjour {vorname} {nachname}
+
+Votre demande de prêt a été approuvée.
+
+Vous trouverez de plus amples informations dans la décision. Vous pouvez télécharger la décision. Vous la recevrez également par courrier.
+
+Meilleures salutations
+
+Section des subsides de formation

@@ -35,7 +35,7 @@ import ch.dvbern.stip.api.gesuchhistory.repo.GesuchHistoryRepository;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
 import ch.dvbern.stip.api.gesuchvalidation.service.GesuchValidatorService;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.steuerdaten.validation.SteuerdatenPageValidation;
 import ch.dvbern.stip.generated.dto.KommentarDto;
 import com.github.oxo42.stateless4j.StateMachine;
@@ -51,7 +51,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class GesuchStatusService {
     private final GesuchValidatorService validationService;
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
     private final Validator validator;
     private final GesuchStatusConfigProducer configProducer;
     private final BenutzerService benutzerService;
@@ -93,7 +93,7 @@ public class GesuchStatusService {
         sm.fire(GesuchStatusChangeEventTrigger.createTrigger(event), gesuch);
 
         if (kommentarDto != null && sendNotificationIfPossible) {
-            notificationService.createGesuchStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentarDto);
+            gesuchNotificationService.createStatusChangeWithCommentNotificationAndSendStdMail(gesuch, kommentarDto);
         }
     }
 

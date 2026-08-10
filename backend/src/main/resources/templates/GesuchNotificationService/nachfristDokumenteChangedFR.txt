@@ -1,0 +1,13 @@
+Bonjour {vorname} {nachname}
+
+Le délai pour remettre les documents/informations manquants a été prolongé. Le nouveau délai expire le {fristende}.
+
+Veuillez remettre l'ensemble des documents/informations demandés au plus tard à cette date. Sans les documents/informations manquants, nous ne pouvons pas examiner votre demande.
+
+Si les documents/informations demandés sont remis dans le délai, mais de manière incomplète, à la Section des subsides de formation (SSF), la SSF refuse la demande faute d'éléments suffisants pour effectuer le calcul.
+
+Si les documents/informations demandés ne sont pas remis à la SSF dans le délai imparti, la demande est considérée comme retirée.
+
+Meilleures salutations
+
+Section des subsides de formation

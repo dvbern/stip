@@ -1,0 +1,13 @@
+Guten Tag {vorname} {nachname}
+
+Die Frist für die Einreichung der fehlenden Dokumente/Angaben wurde verlängert. Die neue Frist endet am {fristende}.
+
+Bitte reichen Sie die geforderten Dokumente/Angaben bis zu diesem Datum vollständig ein. Ohne die fehlenden Dokumente/Angaben können wir Ihr Gesuch nicht prüfen.
+
+Werden die geforderten Dokumente/Angaben zwar fristgerecht, jedoch unvollständig bei der Abteilung Ausbildungsbeiträge (AAB) eingereicht, lehnt die AAB das Gesuch mangels Berechnungsgrundlage ab.
+
+Werden die geforderten Dokumente/Angaben nicht fristgerecht bei der AAB eingereicht, gilt das Gesuch als zurückgezogen.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

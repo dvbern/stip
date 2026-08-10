@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Ihr Antrag für ein Darlehen wurde bewilligt.
+
+Weitere Informationen finden Sie in der Verfügung. Sie können die Verfügung herunterladen. Zusätzlich erhalten sie diese per Post.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

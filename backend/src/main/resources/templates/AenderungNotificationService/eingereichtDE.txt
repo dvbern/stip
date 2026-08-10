@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Ihre Änderungsmeldung wurde erfolgreich eingereicht.
+
+Sie erhalten eine Nachricht, sobald die Prüfung abgeschlossen ist.
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

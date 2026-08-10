@@ -1,0 +1,9 @@
+Guten Tag {vorname} {nachname}
+
+Ihre Änderungsmeldung wurde abgelehnt. Begründung:
+
+{kommentar}
+
+Freundliche Grüsse
+
+Abteilung Ausbildungsbeiträge

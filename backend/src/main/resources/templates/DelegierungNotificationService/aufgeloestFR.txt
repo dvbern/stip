@@ -1,0 +1,13 @@
+Bonjour {vorname} {nachname}
+
+La délégation à {sozialdienst} a été révoquée.
+
+Vous êtes à nouveau responsable de votre demande.
+
+Veuillez vérifier vos coordonnées de paiement et les corriger si nécessaire. Vous vous assurez ainsi que les subsides de formation seront versés sur le bon compte.
+
+Si une autre institution est désormais responsable de votre dossier, vous pouvez lui déléguer votre demande.
+
+Meilleures salutations
+
+Section des subsides de formation

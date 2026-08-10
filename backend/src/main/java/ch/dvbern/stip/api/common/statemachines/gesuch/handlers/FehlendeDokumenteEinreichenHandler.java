@@ -19,7 +19,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchtranche.type.GesuchTrancheStatus;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +28,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class FehlendeDokumenteEinreichenHandler implements GesuchStatusChangeHandler {
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
 
     @Override
     public void handle(Gesuch gesuch) {
         gesuch.getTranchenTranchen()
             .filter(tranche -> tranche.getStatus() == GesuchTrancheStatus.IN_BEARBEITUNG_GS)
             .forEach(tranche -> tranche.setStatus(GesuchTrancheStatus.UEBERPRUEFEN));
-        notificationService.createGesuchFehlendeDokumenteEinreichenNotificationAndSendStdMail(gesuch);
+        gesuchNotificationService.createFehlendeDokumenteEingereichtNotificationAndSendStdMail(gesuch);
     }
 }

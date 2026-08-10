@@ -39,7 +39,7 @@ import ch.dvbern.stip.api.gesuch.entity.Gesuch;
 import ch.dvbern.stip.api.gesuchstatus.service.GesuchStatusService;
 import ch.dvbern.stip.api.gesuchstatus.type.GesuchStatusChangeEvent;
 import ch.dvbern.stip.api.gesuchstatus.type.Gesuchstatus;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.AusbildungNotificationService;
 import ch.dvbern.stip.api.sozialdienst.service.SozialdienstService;
 import ch.dvbern.stip.api.statusprotokoll.service.StatusprotokollService;
 import ch.dvbern.stip.api.statusprotokoll.type.StatusprotokollEntryTyp;
@@ -72,7 +72,7 @@ public class AusbildungUnterbruchAntragService {
     private final DokumentDownloadService dokumentDownloadService;
     private final BenutzerService benutzerService;
     private final SozialdienstService sozialdienstService;
-    private final NotificationService notificationService;
+    private final AusbildungNotificationService ausbildungNotificationService;
     private final GesuchStatusService gesuchStatusService;
     private final AusbildungService ausbildungService;
     private final StatusprotokollService statusprotokollService;
@@ -210,7 +210,7 @@ public class AusbildungUnterbruchAntragService {
         final var antrag = requireById(ausbildungUnterbruchAntragId);
         final var previousStatus = antrag.getStatus();
         ausbildungUnterbruchAntragMapper.antragEinreichen(updateAusbildungUnterbruchAntragGSDto, antrag);
-        notificationService.createAusbildungUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
+        ausbildungNotificationService.createUnterbruchAntragEingereichtNotificationAndSendStdMail(antrag);
         createStatusprotokollEntry(
             antrag,
             AusbildungUnterbruchAntragStatus.EINGEGEBEN.toString(),
@@ -243,7 +243,7 @@ public class AusbildungUnterbruchAntragService {
         antrag = ausbildungUnterbruchAntragMapper.partialUpdate(updateAusbildungUnterbruchAntragSBDto, antrag);
         createStatusprotokollEntry(antrag, statusFrom.toString(), antrag.getKommentarSB());
         if (AusbildungUnterbruchAntragStatus.IS_CLOSED.contains(antrag.getStatus())) {
-            notificationService.createAusbildungUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
+            ausbildungNotificationService.createUnterbruchAntragAkzeptiertAbgelehntNotificationAndSendStdMail(antrag);
             if (
                 Objects.nonNull(antrag.getMonateOhneAnspruch())
                 && antrag.getMonateOhneAnspruch() > 0

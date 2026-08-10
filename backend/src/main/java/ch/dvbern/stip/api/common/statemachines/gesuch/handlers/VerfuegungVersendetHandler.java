@@ -20,7 +20,7 @@ package ch.dvbern.stip.api.common.statemachines.gesuch.handlers;
 import java.util.Comparator;
 
 import ch.dvbern.stip.api.gesuch.entity.Gesuch;
-import ch.dvbern.stip.api.notification.service.NotificationService;
+import ch.dvbern.stip.api.notification.service.GesuchNotificationService;
 import ch.dvbern.stip.api.verfuegung.entity.Verfuegung;
 import jakarta.enterprise.context.ApplicationScoped;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 public class VerfuegungVersendetHandler implements GesuchStatusChangeHandler {
-    private final NotificationService notificationService;
+    private final GesuchNotificationService gesuchNotificationService;
 
     @Override
     public void handle(Gesuch gesuch) {
@@ -39,6 +39,6 @@ public class VerfuegungVersendetHandler implements GesuchStatusChangeHandler {
         final var latestVerfuegung =
             gesuch.getVerfuegungs().stream().max(Comparator.comparing(Verfuegung::getTimestampErstellt));
 
-        latestVerfuegung.ifPresent(notificationService::createNeueVerfuegungNotificationAndSendStdMail);
+        latestVerfuegung.ifPresent(gesuchNotificationService::createNeueVerfuegungNotificationAndSendStdMail);
     }
 }

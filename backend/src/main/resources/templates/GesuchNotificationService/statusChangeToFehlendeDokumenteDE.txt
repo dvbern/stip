@@ -1,0 +1,15 @@
+Guten Tag {vorname} {nachname}
+
+Für Ihr Gesuch um Ausbildungsbeiträge fehlen noch Dokumente/Angaben.
+Laden Sie die fehlenden Dokumente/Angaben bis am {nachreichefrist} im Dashboard hoch. Ohne die fehlenden Dokumente/Angaben können wir Ihr Gesuch nicht prüfen.
+
+Werden die geforderten Dokumente/Angaben zwar fristgerecht, jedoch unvollständig bei der Abteilung Ausbildungsbeiträge (AAB) eingereicht, lehnt die AAB das Gesuch mangels Berechnungsgrundlage ab.
+
+Werden die geforderten Dokumente/Angaben nicht fristgerecht bei der AAB eingereicht, gilt das Gesuch als zurückgezogen.
+
+Benötigen Sie mehr Zeit? Dann können Sie vor Ablauf der Frist per E-Mail eine Fristverlängerung beantragen. Teilen Sie uns dabei mit, wie viel zusätzliche Zeit Sie benötigen.
+
+Freundliche Grüsse
+
+{sbVorname} {sbNachname}
+{sbEmail}
