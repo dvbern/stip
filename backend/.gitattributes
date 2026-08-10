@@ -10,3 +10,5 @@ Dockerfile text eol=lf
 *.bat      text eol=crlf
 *.ps1      text eol=crlf
 <
+
+src/main/java/generated/** gitlab-generated
