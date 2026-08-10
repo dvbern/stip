@@ -773,6 +773,18 @@ export class SharedFeatureAusbildungComponent implements OnInit {
     this.form.markAsPristine();
   }
 
+  handleContinue() {
+    const { gesuchId } = this.gesuchViewSig();
+    if (gesuchId) {
+      this.store.dispatch(
+        SharedDataAccessGesuchEvents.nextTriggered({
+          id: gesuchId,
+          origin: AUSBILDUNG,
+        }),
+      );
+    }
+  }
+
   isActive(obj: { aktiv: boolean }) {
     return obj.aktiv;
   }

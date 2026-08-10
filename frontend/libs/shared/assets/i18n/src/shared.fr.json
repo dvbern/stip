@@ -324,8 +324,8 @@
   "shared.user.consent.dialog.accept": "Accepter",
 
   "shared.dashboard.title": "Cockpit",
-  "shared.dashboard.welcome.title": "Bonjour, {{name}}",
-  "shared.dashboard.welcome.secondaryTitle": "Aperçu des cas de {{name}}",
+  "shared.dashboard.welcome.title": "Aperçu des programmes de formation, {{name}}",
+  "shared.dashboard.welcome.secondaryTitle": "Aperçu des programmes de formation, {{name}}",
   "shared.dashboard.ausbildung.create": "Demander une bourse",
   "shared.dashboard.fall.delegated.title": "Aucune formation enregistrée",
   "shared.dashboard.fall.delegated.message": "Le dossier a été délégué à votre service social. La formation peut être créée par l'employé du service social qui vous a été assigné.",

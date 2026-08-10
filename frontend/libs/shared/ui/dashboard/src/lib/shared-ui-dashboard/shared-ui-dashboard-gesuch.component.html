@@ -1,27 +1,29 @@
 @let gesuch = gesuchSig();
 @let periode = gesuch.gesuchsperiode;
-<div class="tw:relative tw:@container" *dvTranslocoShared="let t">
-  <div
-    class="tw:absolute tw:right-0 tw:top-0 tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
-  >
-    {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
-  </div>
+<div class="tw:@container" *dvTranslocoShared="let t">
   <div class="tw:flex tw:flex-col tw:gap-8">
     <dl class="tw:flex tw:flex-col">
-      <dt class="tw:font-bold tw:text-xl">
-        {{ t('shared.dashboard.gesuch.title', { yearRange: gesuch.yearRange }) }}
-        -
-        {{
-          t(
-            gesuch.isErstgesuch
-              ? 'shared.dashboard.gesuch.order.erstgesuch'
-              : 'shared.dashboard.gesuch.order.folgegesuch'
-          )
-        }}
-      </dt>
-      <dd class="tw:mt-1">
-        {{ periode.gesuchsperiodeStart | date: 'MM.yyyy' }} - {{ periode.gesuchsperiodeStopp | date: 'MM.yyyy' }}
-      </dd>
+      <div class="tw:flex tw:flex-wrap tw:justify-between">
+        <div class="tw:flex tw:flex-col">
+          <dt class="tw:font-bold">
+            {{
+              t(
+                gesuch.isErstgesuch
+                  ? 'shared.dashboard.gesuch.order.erstgesuch'
+                  : 'shared.dashboard.gesuch.order.folgegesuch'
+              )
+            }}
+          </dt>
+          <dd class="tw:text-sm tw:mt-1">
+            {{ gesuch.startDate | date: 'MM.yyyy' }} - {{ gesuch.endDate | date: 'MM.yyyy' }}
+          </dd>
+        </div>
+        <div
+          class="tw:self-start tw:font-bold tw:bg-white tw:rounded-lg tw:px-2 tw:py-1 tw:leading-[normal] tw:border tw:border-dv-gray-subtle"
+        >
+          {{ t(`gesuch-app.gesuch.status.contract.${gesuch.gesuchStatus}`) }}
+        </div>
+      </div>
 
       @let missingDocTrancheId = gesuch.missingDocuments?.trancheId;
       @if (gesuch.isActive) {
@@ -35,7 +37,7 @@
             <dt class="tw:mt-6 tw:font-bold">
               {{ t('shared.dashboard.periode.einreichefrist.text') }}
             </dt>
-            <dd class="tw:mt-1">
+            <dd class="tw:text-sm tw:mt-1">
               {{
                 (gesuch.reduzierterBeitrag ? periode.einreichefristReduziert : periode.einreichefristNormal)
                   | date: 'dd.MM.yyyy'
@@ -53,19 +55,19 @@
           <dt class="tw:mt-8 tw:font-bold">
             {{ t('shared.dashboard.periode.einreichefrist.abgelaufen.warning') }}
           </dt>
-          <dd class="tw:mt-1">{{ t('shared.dashboard.periode.einreichefrist.abgelaufen.text') }}</dd>
+          <dd class="tw:text-sm tw:mt-1">{{ t('shared.dashboard.periode.einreichefrist.abgelaufen.text') }}</dd>
         }
         @if (missingDocTrancheId && gesuch.nachfristDokumente) {
           <dt class="tw:mt-6 tw:font-bold">
             {{ t('shared.dashboard.periode.nachfrist.text') }}
           </dt>
-          <dd class="tw:mt-1">
+          <dd class="tw:text-sm tw:mt-1">
             {{ gesuch.nachfristDokumente | date: 'dd.MM.yyyy' }}
           </dd>
         }
       }
     </dl>
-    <div class="tw:flex tw:gap-3">
+    <div class="tw:flex tw:gap-3 tw:flex-wrap">
       @if (gesuch.id) {
         @if (gesuch.isActive) {
           @if (gesuch.canEdit) {
