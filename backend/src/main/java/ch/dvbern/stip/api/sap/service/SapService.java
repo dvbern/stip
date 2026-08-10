@@ -129,8 +129,7 @@ public class SapService {
         return false;
     }
 
-    @Transactional
-    public BUSINESSPARTNER searchBusinessPartner(final Fall fall, final String sozialversicherungsnummer) {
+    private BUSINESSPARTNER searchBusinessPartner(final Fall fall, final String sozialversicherungsnummer) {
         final var businessPartnerSearchResponse =
             sapEndpointService.searchBusinessPartner(fall, sozialversicherungsnummer);
 
@@ -140,8 +139,7 @@ public class SapService {
         return businessPartnerSearchResponse.getBUSINESSPARTNER().get(0);
     }
 
-    @Transactional
-    public void getBusinessPartnerActionStatus(final UUID auszahlungId) {
+    private void getBusinessPartnerActionStatus(final UUID auszahlungId) {
         final var auszahlung = auszahlungRepository.requireById(auszahlungId);
         final var buchhaltung = auszahlung.getBuchhaltung();
         final SapDelivery sapDelivery = buchhaltung.getLatestSapDelivery();
@@ -467,8 +465,14 @@ public class SapService {
     @Transactional
     public void getUpdateOrCreateBusinessPartner(final Gesuch gesuch) {
         final PersonInAusbildung pia = SapMapperUtil.getPia(gesuch.getAusbildung().getFall());
-        final BUSINESSPARTNER businesspartner =
-            searchBusinessPartner(gesuch.getAusbildung().getFall(), pia.getSozialversicherungsnummer());
+        BUSINESSPARTNER businesspartner = null;
+        try {
+            businesspartner =
+                searchBusinessPartner(gesuch.getAusbildung().getFall(), pia.getSozialversicherungsnummer());
+        } catch (Exception e) {
+            LOG.error(String.format("Failed to searchBusinessPartner"), e);
+        }
+
         if (Objects.nonNull(businesspartner)) {
             gesuch.getAusbildung()
                 .getFall()
