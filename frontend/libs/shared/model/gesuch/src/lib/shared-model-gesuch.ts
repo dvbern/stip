@@ -75,3 +75,10 @@ export type TrancheSetting = {
   gesuchUrlTyp: GesuchUrlType;
   routesSuffix: string[];
 };
+
+export type GesuchState =
+  | 'expired'
+  | 'inactive'
+  | 'in-bearbeitung'
+  | 'in-ueberpruefung'
+  | 'verfuegt';

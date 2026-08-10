@@ -1,5 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { SharedTranslationKey } from '@dv/shared/assets/i18n';
@@ -22,6 +26,16 @@ export interface InfoDialogData {
 export class SharedUiInfoDialogComponent {
   dialogData = inject<InfoDialogData>(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef);
+
+  static open(dialog: MatDialog, data: InfoDialogData) {
+    return dialog.open<SharedUiInfoDialogComponent, InfoDialogData, void>(
+      SharedUiInfoDialogComponent,
+      {
+        panelClass: 'dv-info-dialog',
+        data,
+      },
+    );
+  }
 
   close() {
     this.dialogRef.close();

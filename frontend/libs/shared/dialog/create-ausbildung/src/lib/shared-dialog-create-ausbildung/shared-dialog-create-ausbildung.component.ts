@@ -13,6 +13,11 @@ export type CreateAusbildungData = {
   minAusbildungEnd: string | undefined;
 };
 
+export type CreateAusbildungResult = {
+  gesuchId: string;
+  gesuchTrancheId: string;
+} | null;
+
 @Component({
   selector: 'dv-shared-dialog-create-ausbildung',
   imports: [TranslocoPipe, SharedFeatureAusbildungComponent],
@@ -20,15 +25,21 @@ export type CreateAusbildungData = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedDialogCreateAusbildungComponent {
-  private dialogRef = inject(MatDialogRef);
+  private dialogRef =
+    inject<
+      MatDialogRef<
+        SharedDialogCreateAusbildungComponent,
+        CreateAusbildungResult
+      >
+    >(MatDialogRef);
   dialogData = inject<CreateAusbildungData>(MAT_DIALOG_DATA);
 
   cancel() {
-    this.dialogRef.close(false);
+    this.dialogRef.close(null);
   }
 
-  savedSuccess() {
-    this.dialogRef.close(true);
+  savedSuccess(result: { gesuchId: string; gesuchTrancheId: string }) {
+    this.dialogRef.close(result);
   }
 
   static open(
@@ -38,7 +49,8 @@ export class SharedDialogCreateAusbildungComponent {
   ) {
     return matDialog.open<
       SharedDialogCreateAusbildungComponent,
-      CreateAusbildungData
+      CreateAusbildungData,
+      CreateAusbildungResult
     >(SharedDialogCreateAusbildungComponent, {
       panelClass: 'dv-dialog-formular',
       data: { fallId, minAusbildungEnd },

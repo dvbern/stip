@@ -11,7 +11,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslocoDirective } from '@jsverse/transloco';
 
-import { SharedUiBadgeComponent } from '@dv/shared/ui/badge';
 import { NavItem } from '@dv/shared/util/navigation';
 
 @Component({
@@ -23,7 +22,6 @@ import { NavItem } from '@dv/shared/util/navigation';
     MatMenuModule,
     MatButtonModule,
     TranslocoDirective,
-    SharedUiBadgeComponent,
     MatBadgeModule,
   ],
   templateUrl: './shared-ui-nav-items.component.html',

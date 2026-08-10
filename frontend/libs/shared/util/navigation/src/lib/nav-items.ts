@@ -8,6 +8,9 @@ export const sozialdienstBaseMenuItems: NavItem[] = [
     icon: 'list',
     route: ['/dashboard'],
   },
+];
+
+export const sozialdienstAdminMenuItems: NavItem[] = [
   {
     type: 'link',
     id: 'administration',

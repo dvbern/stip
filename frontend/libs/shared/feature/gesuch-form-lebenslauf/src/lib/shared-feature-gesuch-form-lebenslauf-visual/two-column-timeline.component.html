@@ -16,7 +16,7 @@
         class="tw:group tw:relative tw:border tw:rounded-lg tw:p-4"
         [ngClass]="{
           'tw:border-dv-blue tw:bg-dv-blue-subtle': item.col === 'LEFT' && !item.invalid,
-          'tw:border-dv-gray-light tw:bg-white': item.col === 'RIGHT' && !item.invalid,
+          'tw:border-dv-gray-dark tw:bg-white': item.col === 'RIGHT' && !item.invalid,
           'tw:border-dv-red tw:bg-dv-red-subtle': item.col === 'BOTH' || item.invalid,
         }"
         [class.tw:group/both]="isTimelineGapBlock(item)"
@@ -56,22 +56,22 @@
                       </h5>
                       @if (child.label.subTitle; as subTitle) {
                         <small
-                          class="tw:text-sm tw:text-dv-gray-light tw:block"
+                          class="tw:text-sm tw:text-dv-gray-dark tw:block"
                           data-testid="two-column-timeline-sub-label"
                         >
                           {{ subTitle.key | transloco }}: {{ subTitle.value }}
                         </small>
                       }
                       @if (child.wohnsitz) {
-                        <small class="tw:text-sm tw:text-dv-gray-light tw:block">
+                        <small class="tw:text-sm tw:text-dv-gray-dark tw:block">
                           {{ 'shared.kanton.' + child.wohnsitz | transloco }}
                         </small>
                       }
-                      <small class="tw:text-sm tw:text-dv-gray-light tw:block">
+                      <small class="tw:text-sm tw:text-dv-gray-dark tw:block">
                         {{ printDateAsMonthYear(child.von) + ' - ' + printDateAsMonthYear(child.bis) }}
                       </small>
                       @if (child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="tw:text-sm tw:text-dv-gray-light tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                        <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
@@ -80,7 +80,7 @@
                           <span aria-hidden="true">{{ 'shared.form.lebenslauf.item.abgeschlossen' | transloco }}</span>
                         </small>
                       } @else if (!child.ausbildungAbgeschlossen && item.col === 'LEFT' && !last) {
-                        <small class="tw:text-sm tw:text-dv-gray-light tw:flex tw:items-center tw:mt-2 tw:gap-1">
+                        <small class="tw:text-sm tw:text-dv-gray-dark tw:flex tw:items-center tw:mt-2 tw:gap-1">
                           <i
                             [attr.aria-label]="'shared.form.lebenslauf.item.nicht-abgeschlossen' | transloco"
                             class="material-symbols-rounded fs-6"
@@ -112,7 +112,7 @@
           <div class="tw:relative tw:flex tw:justify-between" data-testid="timeline-gap-block">
             <div class="tw:group-hover/both:opacity-0 tw:transition-opacity">
               <h5 class="tw:text-lg tw:font-semibold">{{ 'shared.form.lebenslauf.missingEntries' | transloco }}</h5>
-              <small class="tw:text-sm tw:text-dv-gray-light">{{
+              <small class="tw:text-sm tw:text-dv-gray-dark">{{
                 printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis)
               }}</small>
             </div>
