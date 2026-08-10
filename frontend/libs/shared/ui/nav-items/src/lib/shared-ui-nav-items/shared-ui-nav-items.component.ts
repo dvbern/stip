@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -14,6 +9,10 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { NavItem } from '@dv/shared/util/navigation';
 
 @Component({
+  host: {
+    '[class]':
+      'this.isMobile() ? "tw:flex tw:flex-col tw:items-start tw:gap-1" : "tw:flex tw:grow tw:items-center tw:gap-4"',
+  },
   selector: 'dv-shared-ui-nav-items',
   imports: [
     CommonModule,
@@ -28,7 +27,7 @@ import { NavItem } from '@dv/shared/util/navigation';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUiNavItemsComponent {
-  @HostBinding('class') klass = 'tw:flex tw:grow tw:items-center tw:gap-4';
+  isMobile = input<boolean>(false);
 
   navItemsSig = input.required<NavItem[]>();
 }

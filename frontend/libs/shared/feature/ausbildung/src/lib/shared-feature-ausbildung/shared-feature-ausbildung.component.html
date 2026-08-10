@@ -23,7 +23,7 @@
       {{ t('shared.form.ausbildung.place.title') }}
     </h2>
 
-    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-form-item">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2 tw:sm:gap-4 tw:dv-form-item">
       @if (!form.value['ausbildungNichtGefunden']) {
         <!-- STAETTE -->
         <dv-shared-ui-select-search
@@ -74,7 +74,7 @@
     ></div>
 
     <!-- GANG -->
-    <div class="testing-library-fix tw:flex tw:w-full tw:gap-4 tw:dv-form-item">
+    <div class="testing-library-fix tw:flex tw:w-full tw:gap-2 tw:sm:gap-4 tw:dv-form-item">
       @if (!form.value['ausbildungNichtGefunden']) {
         <div class="testing-library-fix tw:w-full">
           <dv-shared-ui-select-search
@@ -179,14 +179,14 @@
         ></dv-shared-ui-select-search>
       } @else {
         <div
-          class="tw:flex tw:gap-4"
+          class="tw:flex tw:gap-4 tw:flex-wrap"
           dvPlzOrtAutocomplete
           [autocompleteSig]="plzAutocomplete"
           [plzFormSig]="form.controls.ausbildungsortPlzOrt"
           (plzLookupValuesSig)="plzValues = $event"
         >
           <!-- PLZ -->
-          <mat-form-field dvSharedUiFormField class="tw:basis-32" [subscriptSizing]="subscriptSizingSig()">
+          <mat-form-field dvSharedUiFormField class="tw:w-full tw:lg:basis-32" [subscriptSizing]="subscriptSizingSig()">
             <mat-label>{{ t('shared.form.shared.address.zipcode.label') }}</mat-label>
             <input
               type="text"
@@ -234,7 +234,7 @@
       >{{ t('shared.form.ausbildung.isAusbildungAusland.label') }}</mat-checkbox
     >
 
-    <div class="testing-library-fix tw:flex tw:flex-col tw:gap-4 tw:dv-form-item">
+    <div class="testing-library-fix tw:flex tw:flex-col tw:gap-2 tw:sm:gap-4 tw:dv-form-item">
       <!-- MANUELL -->
       <mat-checkbox
         formControlName="ausbildungNichtGefunden"

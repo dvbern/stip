@@ -12,7 +12,9 @@
         >
           <i class="material-symbols-rounded tw:text-2xl">school</i>
         </dv-shared-ui-icon-chip>
-        {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
+        <span class="tw:w-full tw:min-w-0 tw:wrap-break-word">
+          {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
+        </span>
       </h2>
     </div>
 
@@ -21,7 +23,7 @@
         @if (ausbildung.canDelete) {
           <button
             type="button"
-            class="tw:dv-button-outline tw:ml-3 tw:h-min"
+            class="tw:dv-button-outline tw:h-min"
             (click)="output.emit({ typ: 'delete ausbildung', id: ausbildung.gesuchs[0].id })"
           >
             {{ t('shared.dashboard.ausbildung.delete') }}
@@ -33,7 +35,7 @@
         ) {
           <button
             type="button"
-            class="tw:dv-button-main-primary tw:ml-3 tw:h-min"
+            class="tw:dv-button-main-primary tw:h-min"
             (click)="output.emit({ typ: 'ausbildung unterbrechen', id: ausbildung.id })"
           >
             @if (!ausbildung.openAusbildungUnterbruchAntragId) {
@@ -112,7 +114,7 @@
                   </dd>
                 </dl>
               </div>
-              <div dvItemActions class="tw:flex tw:gap-4">
+              <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
                 <a
                   class="tw:flex tw:grow tw:dv-button-main-primary"
                   data-testid="cockpit-gesuch-edit"
@@ -165,7 +167,7 @@
                 </dd>
               </dl>
             </div>
-            <div dvItemActions class="tw:flex tw:gap-4">
+            <div dvItemActions class="tw:flex tw:flex-wrap tw:gap-3">
               <a
                 class="tw:flex tw:grow tw:dv-button-main-primary"
                 data-testid="cockpit-gesuch-edit"

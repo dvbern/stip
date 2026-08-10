@@ -6,24 +6,33 @@ import {
   effect,
   inject,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 
+import {
+  SharedDataAccessBenutzerApiEvents,
+  selectSharedDataAccessBenutzer,
+} from '@dv/shared/data-access/benutzer';
 import { FallStore } from '@dv/shared/data-access/fall';
 import { FallHeaderStore } from '@dv/shared/data-access/fall-header';
 import { selectSharedDataAccessGesuchCache } from '@dv/shared/data-access/gesuch';
 import { GesuchHeaderStore } from '@dv/shared/data-access/gesuch-header';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
+import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { PermissionStore } from '@dv/shared/global/permission';
 import { SharedPatternGlobalHeaderComponent } from '@dv/shared/pattern/global-header';
 import { SharedPatternMobileSidenavComponent } from '@dv/shared/pattern/mobile-sidenav';
+import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import {
   NavItem,
+  NavMenuItem,
   createAllRouteParamsSig,
   createParamsIdSig,
-  sozialdienstAdminMenuItems,
+  sozialdienstAdminNavItems,
   sozialdienstBaseMenuItems,
+  sozialdienstBaseNavItems,
 } from '@dv/shared/util/navigation';
 
 /**
@@ -41,13 +50,16 @@ import {
   ],
   template: `<mat-sidenav-container>
     <mat-sidenav #sidenav mode="over" position="end">
-      <dv-shared-pattern-mobile-sidenav (closeSidenav)="sidenav.close()">
+      <dv-shared-pattern-mobile-sidenav
+        [staticNavItemsSig]="baseNavItems"
+        [staticMenuItemsSig]="baseMenuItems"
+        (closeSidenav)="sidenav.close()"
+      >
       </dv-shared-pattern-mobile-sidenav>
     </mat-sidenav>
     <mat-sidenav-content class="tw:flex tw:flex-col">
       <dv-shared-pattern-global-header
-        [staticNavItemsSig]="baseMenuItems"
-        (closeSidenav)="sidenav.close()"
+        [staticNavItemsSig]="baseNavItems"
         (openSidenav)="sidenav.open()"
       ></dv-shared-pattern-global-header>
 
@@ -62,11 +74,14 @@ export class SozialdienstAppPatternMainLayoutComponent {
   private fallStore = inject(FallStore);
   private navigationStore = inject(NavigationStore);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   private gesuchHeaderStore = inject(GesuchHeaderStore);
   private permissionStore = inject(PermissionStore);
   private store = inject(Store);
   private fallHeaderStore = inject(FallHeaderStore);
+  private benutzerSig = this.store.selectSignal(selectSharedDataAccessBenutzer);
 
+  baseNavItems = sozialdienstBaseNavItems;
   baseMenuItems = sozialdienstBaseMenuItems;
 
   @HostBinding('class')
@@ -115,9 +130,10 @@ export class SozialdienstAppPatternMainLayoutComponent {
       const fallHeader = this.fallHeaderStore.fallHeaderViewSig();
 
       if (!fallId) {
+        // todo: also filter for roles here!
         this.navigationStore.setNavigationItems([
-          ...sozialdienstBaseMenuItems,
-          ...sozialdienstAdminMenuItems,
+          ...sozialdienstBaseNavItems,
+          ...sozialdienstAdminNavItems,
         ]);
         return;
       }
@@ -171,7 +187,8 @@ export class SozialdienstAppPatternMainLayoutComponent {
         fallDokumente,
         auszahlung,
         ...nachrichten,
-        ...sozialdienstBaseMenuItems,
+        ...sozialdienstBaseNavItems,
+        ...sozialdienstAdminNavItems,
       ].filter((item) => {
         if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
           return true;
@@ -181,6 +198,73 @@ export class SozialdienstAppPatternMainLayoutComponent {
       });
 
       this.navigationStore.setNavigationItems(navItems);
+    });
+
+    // menuItems items effect
+    effect(() => {
+      const fallId = this.fallStore.currentFallViewSig()?.id;
+      const rolesMap = this.permissionStore.rolesMapSig();
+
+      if (!fallId) {
+        return;
+      }
+
+      const allgemeineInformationen: NavMenuItem = {
+        type: 'action',
+        id: 'allgemeine-informationen',
+        label: { key: 'shared.menu.allgemeine-informationen' },
+        action: () => {
+          SharedUiInfoDialogComponent.open(this.dialog, {
+            titleKey: 'shared.allgemeine-informationen.title',
+            messageKey: 'shared.allgemeine-informationen.message',
+          });
+        },
+      };
+
+      const nutzungsbedingungen: NavMenuItem = {
+        type: 'action',
+        id: 'nutzungsbedingungen',
+        label: { key: 'shared.menu.nutzungsbedingungen' },
+        action: () => {
+          const benutzer = this.benutzerSig();
+          const nutzungsbedingungenAkzeptiert =
+            benutzer?.nutzungsbedingungenAkzeptiert;
+          const benutzerId = benutzer?.id;
+
+          if (!benutzerId) return;
+
+          SharedDialogNutzungsbedingungenComponent.open(
+            this.dialog,
+            nutzungsbedingungenAkzeptiert ?? false,
+          )
+            .afterClosed()
+            .subscribe((result) => {
+              if (result && benutzerId) {
+                this.store.dispatch(
+                  SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren(
+                    {
+                      benutzerId,
+                    },
+                  ),
+                );
+              }
+            });
+        },
+      };
+
+      const menuItems: NavMenuItem[] = [
+        ...sozialdienstBaseMenuItems,
+        allgemeineInformationen,
+        nutzungsbedingungen,
+      ].filter((item) => {
+        if (!item.rolesAllowed || item.rolesAllowed.length === 0) {
+          return true;
+        }
+
+        return item.rolesAllowed.some((role) => rolesMap[role]);
+      });
+
+      this.navigationStore.setMenuItems(menuItems);
     });
 
     effect(() => {

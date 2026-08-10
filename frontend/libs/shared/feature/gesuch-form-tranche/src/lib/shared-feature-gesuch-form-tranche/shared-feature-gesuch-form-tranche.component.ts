@@ -246,6 +246,18 @@ export class SharedFeatureGesuchFormTrancheComponent {
       .subscribe();
   }
 
+  handleContinue() {
+    const { gesuchId } = this.viewSig();
+    if (gesuchId) {
+      this.store.dispatch(
+        SharedDataAccessGesuchEvents.nextTriggered({
+          id: gesuchId,
+          origin: TRANCHE,
+        }),
+      );
+    }
+  }
+
   changeGesuchsperiode(gesuchTrancheId: string | undefined) {
     const { gesuchId, trancheSetting } = this.viewSig();
     const gesuchFormular =
@@ -263,17 +275,5 @@ export class SharedFeatureGesuchFormTrancheComponent {
     })
       .afterClosed()
       .subscribe();
-  }
-
-  handleContinue() {
-    const { gesuchId } = this.viewSig();
-    if (gesuchId) {
-      this.store.dispatch(
-        SharedDataAccessGesuchEvents.nextTriggered({
-          id: gesuchId,
-          origin: TRANCHE,
-        }),
-      );
-    }
   }
 }

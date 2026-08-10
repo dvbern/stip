@@ -1,4 +1,7 @@
-<section class="tw:relative tw:flex tw:w-full tw:max-w-175 tw:flex-col tw:rounded-lg tw:p-6" *dvTranslocoGs="let t">
+<section
+  class="tw:relative tw:flex tw:w-full tw:max-w-175 tw:flex-col tw:rounded-lg tw:dv-dialog-container tw:dv-scroll-space"
+  *dvTranslocoGs="let t"
+>
   <button
     type="button"
     (click)="cancel()"
@@ -8,7 +11,7 @@
     <span class="material-symbols-rounded">close</span>
   </button>
 
-  <form [formGroup]="form" data-testid="form-delegieren-form" class="tw:mt-6 tw:dv-form-grid-one-col" novalidate>
+  <form [formGroup]="form" data-testid="form-delegieren-form" class="tw:dv-form-grid-one-col" novalidate>
     <h1 class="tw:dv-page-title">
       {{ t('shared.menu.delegieren') }}
     </h1>
@@ -29,7 +32,7 @@
       </mat-select>
     </mat-form-field>
 
-    <h2 class="tw:text-xl tw:font-semibold">
+    <h2 class="tw:dv-form-title">
       {{ t('shared.form.shared.section.personal-details') }}
     </h2>
     <!-- Anrede -->
@@ -169,11 +172,11 @@
       </mat-checkbox>
     </div>
 
-    <div class="tw:dv-form-action tw:flex tw:justify-between">
+    <div class="tw:dv-form-action tw:flex tw:justify-between tw:dv-button-container">
       <button type="button" data-testid="dialog-cancel" class="tw:dv-button-outline" (click)="cancel()">
         {{ t('shared.cancel') }}
       </button>
-      <button type="submit" data-testid="dialog-submit" class="tw:dv-button-main-primary tw:ml-2" (click)="confirm()">
+      <button type="submit" data-testid="dialog-submit" class="tw:dv-button-main-primary" (click)="confirm()">
         {{ t('gesuch-app.delegieren-dialog.submit') }}
       </button>
     </div>

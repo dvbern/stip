@@ -21,19 +21,14 @@ import { TranslocoDirective } from '@jsverse/transloco';
 import { Store } from '@ngrx/store';
 import { OAuthService } from 'angular-oauth2-oidc';
 
-import {
-  SharedDataAccessBenutzerApiEvents,
-  selectSharedDataAccessBenutzer,
-} from '@dv/shared/data-access/benutzer';
+import { selectSharedDataAccessBenutzer } from '@dv/shared/data-access/benutzer';
 import {
   SharedDataAccessLanguageEvents,
   selectLanguage,
 } from '@dv/shared/data-access/language';
 import { NavigationStore } from '@dv/shared/data-access/navigation';
-import { SharedDialogNutzungsbedingungenComponent } from '@dv/shared/dialog/nutzungsbedingungen';
 import { Language } from '@dv/shared/model/language';
 import { capitalized } from '@dv/shared/model/type-util';
-import { SharedUiInfoDialogComponent } from '@dv/shared/ui/info-dialog';
 import { SharedUiLanguageSelectorComponent } from '@dv/shared/ui/language-selector';
 import { SharedUiNavItemsComponent } from '@dv/shared/ui/nav-items';
 import { SharedUiNavMenuItemsComponent } from '@dv/shared/ui/nav-menu-items';
@@ -69,11 +64,11 @@ export class SharedPatternGlobalHeaderComponent {
   @Input() isScroll = false;
   @Input() breakpointCompactHeader = '(max-width: 992px)';
   @Input() compactHeader = false;
+
   staticNavItemsSig = input<NavItem[]>([]);
   staticMenuItemsSig = input<NavMenuItem[]>([]);
 
   @Output() openSidenav = new EventEmitter<void>();
-  @Output() closeSidenav = new EventEmitter<void>();
 
   protected breakpointObserver = inject(BreakpointObserver);
   private oauthService = inject(OAuthService);
@@ -88,20 +83,20 @@ export class SharedPatternGlobalHeaderComponent {
   tenantSig = this.tenantCacheService.tenantInfoSig;
 
   navItemsSig = computed(() => {
-    const dynamicItems = this.navigationStore.navigationViewSig();
+    const navigationItems = this.navigationStore.navigationViewSig();
 
-    if (dynamicItems.length) {
-      return dynamicItems;
+    if (navigationItems.length) {
+      return navigationItems;
     }
 
     return this.staticNavItemsSig() ?? [];
   });
 
   menuItemsSig = computed(() => {
-    const dynamicItems = this.navigationStore.menuItemsViewSig();
+    const menuItems = this.navigationStore.menuItemsViewSig();
 
-    if (dynamicItems.length) {
-      return dynamicItems;
+    if (menuItems.length) {
+      return menuItems;
     }
 
     return this.staticMenuItemsSig() ?? [];
@@ -144,36 +139,5 @@ export class SharedPatternGlobalHeaderComponent {
     this.store.dispatch(
       SharedDataAccessLanguageEvents.headerMenuSelectorChange({ language }),
     );
-  }
-
-  showNutzungsbedingungen() {
-    const benutzer = this.benutzerSig();
-    const nutzungsbedingungenAkzeptiert =
-      benutzer?.nutzungsbedingungenAkzeptiert;
-    const benutzerId = benutzer?.id;
-
-    if (!benutzerId) return;
-
-    SharedDialogNutzungsbedingungenComponent.open(
-      this.dialog,
-      nutzungsbedingungenAkzeptiert ?? false,
-    )
-      .afterClosed()
-      .subscribe((result) => {
-        if (result && benutzerId) {
-          this.store.dispatch(
-            SharedDataAccessBenutzerApiEvents.nutzungsbedingungenAkzeptieren({
-              benutzerId,
-            }),
-          );
-        }
-      });
-  }
-
-  showAllgemeineInformationen() {
-    SharedUiInfoDialogComponent.open(this.dialog, {
-      titleKey: 'shared.allgemeine-informationen.title',
-      messageKey: 'shared.allgemeine-informationen.message',
-    });
   }
 }

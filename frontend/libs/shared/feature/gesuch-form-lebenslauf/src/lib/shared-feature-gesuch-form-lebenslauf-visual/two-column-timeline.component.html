@@ -19,7 +19,6 @@
           'tw:border-dv-gray-dark tw:bg-white': item.col === 'RIGHT' && !item.invalid,
           'tw:border-dv-red tw:bg-dv-red-subtle': item.col === 'BOTH' || item.invalid,
         }"
-        [class.tw:group/both]="isTimelineGapBlock(item)"
         [style]="
           'grid-column: ' +
           item.positionStartCol +
@@ -39,11 +38,11 @@
             @if (busyItem.children; as children) {
               <div class="tw:flex tw:flex-col tw:gap-3">
                 @for (child of children; track child) {
-                  <div>
+                  <div class="">
                     <ng-template #content>
                       <h5
                         data-testid="two-column-timeline-label"
-                        class="tw:font-semibold tw:text-lg tw:mb-2 tw:group-hover:underline"
+                        class="tw:sm:font-semibold tw:sm:text-lg tw:mb-2 tw:group-hover:underline tw:wrap-break-word"
                       >
                         @if (child.label.type === 'TEXT') {
                           {{ child.label.title }}
@@ -93,7 +92,7 @@
                     @if (child.editable) {
                       <button
                         type="button"
-                        class="tw:group tw:dv-button tw:block tw:w-full tw:border-0 tw:p-0 tw:text-left"
+                        class="tw:group tw:dv-button tw:block tw:w-full tw:border-0 tw:p-0 tw:text-left tw:whitespace-normal"
                         (click)="handleEditItem(child)"
                       >
                         <ng-container *ngTemplateOutlet="content"></ng-container>
@@ -109,9 +108,14 @@
           }
         } @else if (isTimelineGapBlock(item)) {
           <!-- gap -->
-          <div class="tw:relative tw:flex tw:justify-between" data-testid="timeline-gap-block">
-            <div class="tw:group-hover/both:opacity-0 tw:transition-opacity">
-              <h5 class="tw:text-lg tw:font-semibold">{{ 'shared.form.lebenslauf.missingEntries' | transloco }}</h5>
+          <div class="tw:relative tw:flex tw:justify-between tw:group/gap" data-testid="timeline-gap-block">
+            <div
+              class="tw:transition-opacity tw:group-hover/gap:opacity-0"
+              [class.tw:opacity-0]="expandedGapItems.has(asGapBlock(item))"
+            >
+              <h5 class="tw:sm:text-lg tw:font-semibold tw:wrap-break-word">
+                {{ 'shared.form.lebenslauf.missingEntries' | transloco }}
+              </h5>
               <small class="tw:text-sm tw:text-dv-gray-dark">{{
                 printDateAsMonthYear(item.von) + ' - ' + printDateAsMonthYear(item.bis)
               }}</small>
@@ -119,7 +123,8 @@
             <div class="tw:flex tw:justify-end tw:items-center tw:gap-3">
               <div class="tw:relative tw:overflow-hidden">
                 <div
-                  class="tw:relative tw:opacity-0 tw:group-hover/both:right-0 tw:group-hover/both:opacity-100 tw:transition-[opacity_right] tw:-right-full tw:flex tw:items-center tw:gap-3"
+                  class="tw:relative tw:opacity-0 tw:-right-full tw:transition-[opacity,right] tw:flex tw:items-center tw:gap-3 tw:group-hover/gap:opacity-100 tw:group-hover/gap:right-0"
+                  [ngClass]="expandedGapItems.has(asGapBlock(item)) ? 'tw:opacity-100! tw:right-0!' : ''"
                 >
                   <button
                     type="button"
@@ -146,8 +151,11 @@
               <button
                 type="button"
                 class="tw:dv-button-main-danger tw:flex tw:items-center tw:justify-center tw:z-10 tw:shrink-0 tw:rounded-full tw:w-10 tw:h-10"
+                (click)="toggleGapActions(asGapBlock(item))"
               >
-                <i class="material-symbols-rounded tw:text-3xl! tw:transition-transform tw:group-hover:rotate-45"
+                <i
+                  class="material-symbols-rounded tw:text-3xl! tw:transition-transform tw:group-hover/gap:rotate-45"
+                  [class.tw:rotate-45]="expandedGapItems.has(asGapBlock(item))"
                   >add</i
                 >
               </button>

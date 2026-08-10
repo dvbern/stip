@@ -25,7 +25,7 @@ export class SharedUiInfoContainerComponent {
     alias: 'type',
   });
   @HostBinding('class') defaultClasses =
-    'tw:flex tw:rounded-lg tw:p-4 tw:mb-4 tw:border-1';
+    'tw:flex tw:rounded-lg tw:p-4 tw:gap-4 tw:mb-4 tw:border-1';
 
   private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);
