@@ -61,11 +61,7 @@ public class GesuchTrancheStatusConfigProducer {
         }
 
         config.configure(GesuchTrancheStatus.IN_BEARBEITUNG_GS)
-            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN)
-            .onEntryFrom(
-                triggers.get(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS),
-                gesuchTrancheFehlendeDokumenteNichtEingereichtHandler::handle
-            );
+            .permit(GesuchTrancheStatusChangeEvent.UEBERPRUEFEN, GesuchTrancheStatus.UEBERPRUEFEN);
 
         config.configure(GesuchTrancheStatus.UEBERPRUEFEN)
             .permit(GesuchTrancheStatusChangeEvent.ABLEHNEN, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
@@ -75,6 +71,10 @@ public class GesuchTrancheStatusConfigProducer {
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN),
                 gesuchTrancheFehlendeDokumenteEinreichenHandler::handle
+            )
+            .onEntryFrom(
+                triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT),
+                gesuchTrancheFehlendeDokumenteNichtEingereichtHandler::handle
             );
 
         config.configure(GesuchTrancheStatus.MANUELLE_AENDERUNG)
@@ -90,7 +90,10 @@ public class GesuchTrancheStatusConfigProducer {
 
         config.configure(GesuchTrancheStatus.FEHLENDE_DOKUMENTE)
             .permit(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_EINREICHEN, GesuchTrancheStatus.UEBERPRUEFEN)
-            .permit(GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS, GesuchTrancheStatus.IN_BEARBEITUNG_GS)
+            .permit(
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT,
+                GesuchTrancheStatus.UEBERPRUEFEN
+            )
             .onEntryFrom(
                 triggers.get(GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE),
                 gesuchTrancheFehlendeDokumenteHandler::handle

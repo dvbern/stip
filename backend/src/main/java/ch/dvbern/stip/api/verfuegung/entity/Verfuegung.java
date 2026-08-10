@@ -43,12 +43,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.envers.Audited;
-
-import static ch.dvbern.stip.api.common.util.Constants.DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH;
 
 @Audited
 @Entity
@@ -89,8 +86,7 @@ public class Verfuegung extends AbstractTenantEntity {
     private List<VerfuegungDokument> dokumente = new ArrayList<>();
 
     @Nullable
-    @Size(max = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
-    @Column(name = "berechnung_json_data", nullable = true, length = DB_DEFAULT_STRING_BERECHNUNG_JSON_DATA_LENGTH)
+    @Column(columnDefinition = "text", name = "berechnung_json_data", nullable = true)
     private String berechnungJsonData;
 
     @Transient

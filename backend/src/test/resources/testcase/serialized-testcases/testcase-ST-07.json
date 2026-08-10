@@ -441,7 +441,7 @@
             "tenant": null,
             "nettoerwerbseinkommen": 0,
             "fahrkosten": 800,
-            "wohnkosten": 1600,
+            "wohnkosten": 19200,
             "wgWohnend": false,
             "wgAnzahlPersonen": null,
             "alternativeWohnformWohnend": false,
@@ -668,7 +668,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 1650,
+              "wohnkosten": 19800,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             },
@@ -730,7 +730,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 1650,
+              "wohnkosten": 19800,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             }
@@ -754,7 +754,7 @@
               "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
               "wohnsitzAnteilPia": 100,
               "ergaenzungsleistungen": null,
-              "kinderUndAusbildungszulagen": 250,
+              "kinderUndAusbildungszulagen": 3000,
               "renten": null,
               "andereEinnahmen": null,
               "fullName": "kinds-vorname kinds-nachname"
@@ -777,7 +777,7 @@
               "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
               "wohnsitzAnteilPia": 100,
               "ergaenzungsleistungen": null,
-              "kinderUndAusbildungszulagen": 250,
+              "kinderUndAusbildungszulagen": 3000,
               "renten": null,
               "andereEinnahmen": null,
               "fullName": "kinds-vorname kinds-nachname"
@@ -1202,7 +1202,7 @@
           "tenant": null,
           "nettoerwerbseinkommen": 0,
           "fahrkosten": 800,
-          "wohnkosten": 1600,
+          "wohnkosten": 19200,
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
@@ -1429,7 +1429,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1650,
+            "wohnkosten": 19800,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -1491,7 +1491,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1650,
+            "wohnkosten": 19800,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1515,7 +1515,7 @@
             "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
             "wohnsitzAnteilPia": 100,
             "ergaenzungsleistungen": null,
-            "kinderUndAusbildungszulagen": 250,
+            "kinderUndAusbildungszulagen": 3000,
             "renten": null,
             "andereEinnahmen": null,
             "fullName": "kinds-vorname kinds-nachname"
@@ -1538,7 +1538,7 @@
             "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
             "wohnsitzAnteilPia": 100,
             "ergaenzungsleistungen": null,
-            "kinderUndAusbildungszulagen": 250,
+            "kinderUndAusbildungszulagen": 3000,
             "renten": null,
             "andereEinnahmen": null,
             "fullName": "kinds-vorname kinds-nachname"
@@ -1947,7 +1947,7 @@
           "tenant": null,
           "nettoerwerbseinkommen": 0,
           "fahrkosten": 800,
-          "wohnkosten": 1600,
+          "wohnkosten": 19200,
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
@@ -2174,7 +2174,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1650,
+            "wohnkosten": 19800,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -2236,7 +2236,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 1650,
+            "wohnkosten": 19800,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -2260,7 +2260,7 @@
             "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
             "wohnsitzAnteilPia": 100,
             "ergaenzungsleistungen": null,
-            "kinderUndAusbildungszulagen": 250,
+            "kinderUndAusbildungszulagen": 3000,
             "renten": null,
             "andereEinnahmen": null,
             "fullName": "kinds-vorname kinds-nachname"
@@ -2283,7 +2283,7 @@
             "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
             "wohnsitzAnteilPia": 100,
             "ergaenzungsleistungen": null,
-            "kinderUndAusbildungszulagen": 250,
+            "kinderUndAusbildungszulagen": 3000,
             "renten": null,
             "andereEinnahmen": null,
             "fullName": "kinds-vorname kinds-nachname"
@@ -2695,7 +2695,7 @@
         "tenant": null,
         "nettoerwerbseinkommen": 0,
         "fahrkosten": 800,
-        "wohnkosten": 1600,
+        "wohnkosten": 19200,
         "wgWohnend": false,
         "wgAnzahlPersonen": null,
         "alternativeWohnformWohnend": false,
@@ -2922,7 +2922,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 1650,
+          "wohnkosten": 19800,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         },
@@ -2984,7 +2984,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 1650,
+          "wohnkosten": 19800,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         }
@@ -3008,7 +3008,7 @@
           "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
           "wohnsitzAnteilPia": 100,
           "ergaenzungsleistungen": null,
-          "kinderUndAusbildungszulagen": 250,
+          "kinderUndAusbildungszulagen": 3000,
           "renten": null,
           "andereEinnahmen": null,
           "fullName": "kinds-vorname kinds-nachname"
@@ -3031,7 +3031,7 @@
           "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
           "wohnsitzAnteilPia": 100,
           "ergaenzungsleistungen": null,
-          "kinderUndAusbildungszulagen": 250,
+          "kinderUndAusbildungszulagen": 3000,
           "renten": null,
           "andereEinnahmen": null,
           "fullName": "kinds-vorname kinds-nachname"
@@ -3426,7 +3426,7 @@
       "tenant": null,
       "nettoerwerbseinkommen": 0,
       "fahrkosten": 800,
-      "wohnkosten": 1600,
+      "wohnkosten": 19200,
       "wgWohnend": false,
       "wgAnzahlPersonen": null,
       "alternativeWohnformWohnend": false,
@@ -3653,7 +3653,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 1650,
+        "wohnkosten": 19800,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       },
@@ -3715,7 +3715,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 1650,
+        "wohnkosten": 19800,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       }
@@ -3739,7 +3739,7 @@
         "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
         "wohnsitzAnteilPia": 100,
         "ergaenzungsleistungen": null,
-        "kinderUndAusbildungszulagen": 250,
+        "kinderUndAusbildungszulagen": 3000,
         "renten": null,
         "andereEinnahmen": null,
         "fullName": "kinds-vorname kinds-nachname"
@@ -3762,7 +3762,7 @@
         "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
         "wohnsitzAnteilPia": 100,
         "ergaenzungsleistungen": null,
-        "kinderUndAusbildungszulagen": 250,
+        "kinderUndAusbildungszulagen": 3000,
         "renten": null,
         "andereEinnahmen": null,
         "fullName": "kinds-vorname kinds-nachname"
@@ -4364,7 +4364,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 1650,
+      "wohnkosten": 19800,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     },
@@ -4426,7 +4426,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 1650,
+      "wohnkosten": 19800,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     }
@@ -4451,7 +4451,7 @@
       "entryId": "a205561a-f1ed-43ab-b60b-1d80f7e99a22",
       "wohnsitzAnteilPia": 100,
       "ergaenzungsleistungen": null,
-      "kinderUndAusbildungszulagen": 250,
+      "kinderUndAusbildungszulagen": 3000,
       "renten": null,
       "andereEinnahmen": null,
       "fullName": "kinds-vorname kinds-nachname"
@@ -4474,7 +4474,7 @@
       "entryId": "b7076a9d-47a4-45a3-943f-5c389fa9ea2f",
       "wohnsitzAnteilPia": 100,
       "ergaenzungsleistungen": null,
-      "kinderUndAusbildungszulagen": 250,
+      "kinderUndAusbildungszulagen": 3000,
       "renten": null,
       "andereEinnahmen": null,
       "fullName": "kinds-vorname kinds-nachname"
@@ -4601,7 +4601,7 @@
     "tenant": null,
     "nettoerwerbseinkommen": 0,
     "fahrkosten": 800,
-    "wohnkosten": 1600,
+    "wohnkosten": 19200,
     "wgWohnend": false,
     "wgAnzahlPersonen": null,
     "alternativeWohnformWohnend": false,

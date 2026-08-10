@@ -360,8 +360,8 @@
       </mat-error>
     </mat-form-field>
 
-    @if (isEditableSig()) {
-      <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+    <dv-shared-ui-step-form-buttons class="tw:dv-form-action">
+      @if (isEditableSig()) {
         <button
           type="submit"
           class="tw:dv-button-main-primary"
@@ -374,7 +374,11 @@
             {{ t('shared.form.save-and-continue') }}
           }
         </button>
-      </dv-shared-ui-step-form-buttons>
-    }
+      } @else {
+        <button type="button" data-testid="button-next" class="tw:dv-button-main-primary" (click)="handleContinue()">
+          {{ t('shared.form.gonext') }}
+        </button>
+      }
+    </dv-shared-ui-step-form-buttons>
   </form>
 }

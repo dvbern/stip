@@ -324,8 +324,8 @@
   "shared.user.consent.dialog.accept": "Zustimmen",
 
   "shared.dashboard.title": "Dashboard",
-  "shared.dashboard.welcome.title": "Guten Tag {{name}}",
-  "shared.dashboard.welcome.secondaryTitle": "Fall Übersicht von {{name}}",
+  "shared.dashboard.welcome.title": "Übersicht Ausbildungen, {{name}}",
+  "shared.dashboard.welcome.secondaryTitle": "Übersicht Ausbildungen, {{name}}",
   "shared.dashboard.ausbildung.create": "Stipendium beantragen",
   "shared.dashboard.fall.delegated.title": "Keine Ausbildung erfasst",
   "shared.dashboard.fall.delegated.message": "Der Fall wurde Ihrem Sozialdienst delegiert. Die Ausbildung kann duch den Ihnen zugewiesenen Sozialdienst-Mitarbeiter erstellt werden.",
@@ -568,6 +568,7 @@
   "shared.verfuegung.zusammenfassung.resultat.abgelehnt": "Stipendium abgelehnt",
   "shared.verfuegung.zusammenfassung.title": "Zusammenfassung",
   "shared.verfuegung.zusammenfassung.total": "Total",
+  "shared.verfuegung.zusammenfassung.limit": "Beträge von weniger als {{ limit }} Franken werden nicht gewährt",
   "shared.verfuegung.zusammenfassung.berechnungen": "Berechnungen",
   "shared.verfuegung.zusammenfassung.item.link": "Detail",
   "shared.verfuegung.zusammenfassung.item.title": "Tranche für {anzahlMonate, plural, one {1 Monat} other {# Monate}}",

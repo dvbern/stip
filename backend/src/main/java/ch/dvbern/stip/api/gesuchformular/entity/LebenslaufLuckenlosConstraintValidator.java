@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.gesuch.util.GesuchValidatorUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import static ch.dvbern.stip.api.common.util.BusinessDateConstants.PIA_GEBURTSDATUM_STICHTAG_DAY;
 import static ch.dvbern.stip.api.common.util.BusinessDateConstants.PIA_GEBURTSDATUM_STICHTAG_MIN_AGE;
@@ -61,47 +62,54 @@ public class LebenslaufLuckenlosConstraintValidator
             return true;
         }
 
-        List<DateRange> dateRanges = new ArrayList<>();
-        gesuchFormular.getLebenslaufItems()
-            .forEach(
-                lebenslaufItem -> dateRanges.add(
-                    new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis())
-                )
-            );
-        // Sort the Lebenslaufsitem Daterange
-        Collections.sort(dateRanges, Comparator.comparing(DateRange::getGueltigAb));
+        final ArrayList<DateRange> merged = new ArrayList<>();
+        final var dateRanges = gesuchFormular
+            .getLebenslaufItems()
+            .stream()
+            .map(lebenslaufItem -> new DateRange(lebenslaufItem.getVon(), lebenslaufItem.getBis()))
+            .sorted(Comparator.comparing(DateRange::getGueltigAb))
+            .toList();
 
         if (dateRanges.isEmpty()) {
             LOG.warn("No Lebenslauf Items present");
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-        // Check if first Lebenslaufitem is After birth
+        // Check if first Lebenslaufitem is before birth
         if (gesuchFormular.getPersonInAusbildung().getGeburtsdatum().isAfter(dateRanges.get(0).getGueltigAb())) {
-            LOG.warn("Lebenslauf Item start bevor " + start);
+            LOG.warn("Lebenslauf Item start bevor {}", start);
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        }
+        final var firstRange =
+            dateRanges.stream().min(Comparator.comparing(DateRange::getGueltigAb)).get().getGueltigAb();
+        if (firstRange.isAfter(start)) {
+            LOG.warn("Lebenslauf Lücke found between {} and {}", firstRange, start);
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        }
+        final var lastRange =
+            dateRanges.stream().max(Comparator.comparing(DateRange::getGueltigBis)).get().getGueltigBis();
+        if (lastRange.plusDays(1).isBefore(stop)) {
+            LOG.warn("Lebenslauf Lücke found between {} and {}", lastRange, stop);
+            return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        }
+        if (lastRange.isAfter(stop)) {
+            LOG.warn("Lebenslauf nach Ausbildung start found {} and {}", lastRange, stop);
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
 
-        LocalDate currentDate = start;
-        for (DateRange range : dateRanges) {
-            if (range.getGueltigAb().isAfter(currentDate)) {
-                LOG.warn("Lebenslauf Lücke found between " + currentDate + " and " + range.getGueltigAb());
-                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
+        merged.add(dateRanges.getFirst());
+        dateRanges.forEach(range -> {
+            final DateRange lastMerged = merged.getLast();
+            if (lastMerged.getGueltigBis().isAfter(range.getGueltigAb().minusDays(2))) {
+                lastMerged.setGueltigBis(Collections.max(List.of(range.getGueltigBis(), lastMerged.getGueltigBis())));
+            } else {
+                merged.add(range);
             }
-            if (range.getGueltigBis().isAfter(stop)) {
-                LOG.warn("Lebenslauf Item end after " + currentDate);
-                return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
-            }
-            currentDate = range.getGueltigBis().plusDays(1);
-            if (currentDate.isAfter(stop)) {
-                break;
-            }
-        }
+        });
 
-        if (currentDate.isBefore(stop)) {
-            LOG.warn("Lebenslauf Lücke found between " + currentDate + " and " + stop);
+        if (merged.size() > 1) {
+            LOG.warn("Lebenslauf Lücke found, {}", StringUtils.joinWith(", ", merged));
             return GesuchValidatorUtil.addProperty(constraintValidatorContext, property);
         }
-
         return true;
     }
 }

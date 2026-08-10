@@ -1169,10 +1169,11 @@ public class GesuchService {
             .stream()
             .filter(gesuchTranche -> gesuchTranche.getGesuch().getNachfristDokumente().isBefore(LocalDate.now()))
             .toList();
+
         if (!toUpdate.isEmpty()) {
             gesuchTrancheStatusService.bulkTriggerStateMachineEvent(
                 toUpdate,
-                GesuchTrancheStatusChangeEvent.IN_BEARBEITUNG_GS
+                GesuchTrancheStatusChangeEvent.FEHLENDE_DOKUMENTE_NICHT_EINGEREICHT
             );
         }
     }

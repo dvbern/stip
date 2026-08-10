@@ -44,7 +44,9 @@ import ch.dvbern.stip.generated.dto.PersonenHaushaltGruppeDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.TranchenBerechnungsresultatDtoBuilder;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @UtilityClass
 public class TranchenSubBerechnungsresultatCalculator {
     public TranchenBerechnungsresultatDto getTranchenSubBerechnungsresultat(

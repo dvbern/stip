@@ -247,14 +247,15 @@ export class SharedFeatureGesuchFormTrancheComponent {
   }
 
   handleContinue() {
-    const { gesuch } = this.viewSig();
-    if (gesuch?.id)
+    const { gesuchId } = this.viewSig();
+    if (gesuchId) {
       this.store.dispatch(
         SharedDataAccessGesuchEvents.nextTriggered({
-          id: gesuch.id,
+          id: gesuchId,
           origin: TRANCHE,
         }),
       );
+    }
   }
 
   changeGesuchsperiode(gesuchTrancheId: string | undefined) {

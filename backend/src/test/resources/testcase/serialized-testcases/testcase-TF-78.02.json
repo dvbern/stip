@@ -495,7 +495,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 500,
+              "wohnkosten": 6000,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             },
@@ -557,7 +557,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 500,
+              "wohnkosten": 6000,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             }
@@ -1036,7 +1036,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 500,
+            "wohnkosten": 6000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -1098,7 +1098,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 500,
+            "wohnkosten": 6000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1561,7 +1561,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 500,
+            "wohnkosten": 6000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -1623,7 +1623,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 500,
+            "wohnkosten": 6000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -2089,7 +2089,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 500,
+          "wohnkosten": 6000,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         },
@@ -2151,7 +2151,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 500,
+          "wohnkosten": 6000,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         }
@@ -2600,7 +2600,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 500,
+        "wohnkosten": 6000,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       },
@@ -2662,7 +2662,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 500,
+        "wohnkosten": 6000,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       }
@@ -3264,7 +3264,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 500,
+      "wohnkosten": 6000,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     },
@@ -3326,7 +3326,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 500,
+      "wohnkosten": 6000,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     }

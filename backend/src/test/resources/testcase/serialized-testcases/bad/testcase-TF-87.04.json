@@ -392,7 +392,7 @@
             "wgWohnend": false,
             "wgAnzahlPersonen": null,
             "alternativeWohnformWohnend": false,
-            "unterhaltsbeitraege": 700,
+            "unterhaltsbeitraege": 8400,
             "zulagen": null,
             "renten": null,
             "eoLeistungen": null,
@@ -495,7 +495,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": true,
-              "wohnkosten": 1500,
+              "wohnkosten": 18000,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             }
@@ -871,7 +871,7 @@
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
-          "unterhaltsbeitraege": 700,
+          "unterhaltsbeitraege": 8400,
           "zulagen": null,
           "renten": null,
           "eoLeistungen": null,
@@ -974,7 +974,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": true,
-            "wohnkosten": 1500,
+            "wohnkosten": 18000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1334,7 +1334,7 @@
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
-          "unterhaltsbeitraege": 700,
+          "unterhaltsbeitraege": 8400,
           "zulagen": null,
           "renten": null,
           "eoLeistungen": null,
@@ -1437,7 +1437,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": true,
-            "wohnkosten": 1500,
+            "wohnkosten": 18000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1800,7 +1800,7 @@
         "wgWohnend": false,
         "wgAnzahlPersonen": null,
         "alternativeWohnformWohnend": false,
-        "unterhaltsbeitraege": 700,
+        "unterhaltsbeitraege": 8400,
         "zulagen": null,
         "renten": null,
         "eoLeistungen": null,
@@ -1903,7 +1903,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": true,
-          "wohnkosten": 1500,
+          "wohnkosten": 18000,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         }
@@ -2249,7 +2249,7 @@
       "wgWohnend": false,
       "wgAnzahlPersonen": null,
       "alternativeWohnformWohnend": false,
-      "unterhaltsbeitraege": 700,
+      "unterhaltsbeitraege": 8400,
       "zulagen": null,
       "renten": null,
       "eoLeistungen": null,
@@ -2352,7 +2352,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": true,
-        "wohnkosten": 1500,
+        "wohnkosten": 18000,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       }
@@ -2954,7 +2954,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": true,
-      "wohnkosten": 1500,
+      "wohnkosten": 18000,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     }
@@ -3000,7 +3000,7 @@
     "wgWohnend": false,
     "wgAnzahlPersonen": null,
     "alternativeWohnformWohnend": false,
-    "unterhaltsbeitraege": 700,
+    "unterhaltsbeitraege": 8400,
     "zulagen": null,
     "renten": null,
     "eoLeistungen": null,

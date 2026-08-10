@@ -20,7 +20,9 @@ package ch.dvbern.stip.integration.pdf.adapter.typst.service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class TypstPdfService implements PdfPort {
     private static final String FONTS_PATH = "/fonts";
     private static final String TYPST_PATH = "/typst";
     private static final String MAIN_TEMPLATE_NAME = "main.typ";
+    private static final String DATA_PLACEHOLDER = "__TYPST_DATA__";
     private static final int BUFFER_SIZE = FileUtils.ONE_KB_BI.intValueExact() * 8;
 
     private final StipConfig config;
@@ -85,10 +88,12 @@ public class TypstPdfService implements PdfPort {
         Process process = null;
 
         try {
-            ProcessBuilder pb = new ProcessBuilder(buildCommand(pdfPayload));
+            ProcessBuilder pb = new ProcessBuilder(buildCommand());
             pb.redirectErrorStream(false);
 
             process = pb.start();
+
+            writeMainTemplateToStdin(process, pdfPayload);
 
             Process finalProcess = process;
 
@@ -137,76 +142,85 @@ public class TypstPdfService implements PdfPort {
         }
     }
 
-    private List<String> buildCommand(final PdfPayload<?> pdfPayload) {
+    private void writeMainTemplateToStdin(final Process process, final PdfPayload<?> pdfPayload) {
+        final var tenantConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
+
+        try (OutputStream stdin = process.getOutputStream()) {
+            final var jsonPayload = pdfPayload.toJson(objectMapper, tenantConfig);
+            final var escapedJson = jsonPayload.replace("\\", "\\\\").replace("\"", "\\\"");
+
+            final var mainTemplate = Files.readString(Path.of(getMainTemplatePath()), StandardCharsets.UTF_8);
+            final var source = mainTemplate.replace(DATA_PLACEHOLDER, escapedJson);
+
+            stdin.write(source.getBytes(StandardCharsets.UTF_8));
+        } catch (JsonProcessingException e) {
+            throw new PdfGenerationException("Failed to parse pdf payload to json", e);
+        } catch (IOException e) {
+            throw new PdfGenerationException("Failed to write main template to Typst stdin", e);
+        }
+    }
+
+    private String getMainTemplatePath() {
         final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
         final var tenantConfig = tenantService.getConfigForCurrentTenant().adapter().pdf().get(PdfAdapterType.TYPST);
+
+        return Path.of(
+            adapterConfig.rootPath(),
+            tenantConfig.rootTemplatePath()
+                .orElseThrow(
+                    () -> new PdfGenerationException(
+                        "Root template path is not set for tenant " + tenantService.getCurrentTenantIdentifier()
+                    )
+                ),
+            MAIN_TEMPLATE_NAME
+        ).toString();
+    }
+
+    private List<String> buildCommand() {
+        final var adapterConfig = config.globalAdapter().pdf().get(PdfAdapterType.TYPST);
 
         final var fontsPath = adapterConfig.fontsPath();
         final var typstPath = adapterConfig.rootPath();
 
-        final var mainTemplatePath =
-            Path.of(
-                typstPath,
-                tenantConfig.rootTemplatePath()
-                    .orElseThrow(
-                        () -> new PdfGenerationException(
-                            "Root template path is not set for tenant " + tenantService.getCurrentTenantIdentifier()
-                        )
-                    ),
-                MAIN_TEMPLATE_NAME
-            ).toString();
+        List<String> command = new ArrayList<>();
 
-        try {
-            final var jsonPayload = pdfPayload.toJson(objectMapper, tenantConfig);
-
-            List<String> command = new ArrayList<>();
-
-            if (adapterConfig.dockerEnabled()) {
-                command.add("docker");
-                command.add("run");
-                command.add("--rm");
-                command.add("-v");
-                command.add(typstPath + ":" + TYPST_PATH);
-                command.add("-v");
-                command.add(fontsPath + ":" + FONTS_PATH);
-                command.add(
-                    adapterConfig.dockerImage()
-                        .orElseThrow(() -> new IllegalStateException("Docker image not configured for Typst adapter"))
-                );
-            } else {
-                command.add(adapterConfig.binary());
-            }
-
-            command.add("compile");
-
-            command.add("--format");
-            command.add("pdf");
-
-            command.add("--jobs");
-            command.add("1");
-
-            command.add("--root");
-            command.add(adapterConfig.dockerEnabled() ? TYPST_PATH : typstPath);
-
-            command.add("--font-path");
-            command.add(adapterConfig.dockerEnabled() ? FONTS_PATH : fontsPath);
-
-            command.add("--input");
-            command.add("data=" + jsonPayload);
-
-            command.add("--ignore-system-fonts");
-
+        if (adapterConfig.dockerEnabled()) {
+            command.add("docker");
+            command.add("run");
+            command.add("--rm");
+            command.add("-i");
+            command.add("-v");
+            command.add(typstPath + ":" + TYPST_PATH);
+            command.add("-v");
+            command.add(fontsPath + ":" + FONTS_PATH);
             command.add(
-                adapterConfig.dockerEnabled()
-                    ? mainTemplatePath.replace(typstPath, TYPST_PATH)
-                    : mainTemplatePath
+                adapterConfig.dockerImage()
+                    .orElseThrow(() -> new IllegalStateException("Docker image not configured for Typst adapter"))
             );
-            command.add("-");
-
-            return command;
-        } catch (JsonProcessingException e) {
-            throw new PdfGenerationException("Failed to parse pdf payload to json", e);
+        } else {
+            command.add(adapterConfig.binary());
         }
+
+        command.add("compile");
+
+        command.add("--format");
+        command.add("pdf");
+
+        command.add("--jobs");
+        command.add("1");
+
+        command.add("--root");
+        command.add(adapterConfig.dockerEnabled() ? TYPST_PATH : typstPath);
+
+        command.add("--font-path");
+        command.add(adapterConfig.dockerEnabled() ? FONTS_PATH : fontsPath);
+
+        command.add("--ignore-system-fonts");
+
+        command.add("-");
+        command.add("-");
+
+        return command;
     }
 
     private CompletableFuture<ByteArrayOutputStream> createStreamFuture(

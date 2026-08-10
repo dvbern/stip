@@ -388,7 +388,7 @@
             "tenant": null,
             "nettoerwerbseinkommen": 26000,
             "fahrkosten": 558,
-            "wohnkosten": 960,
+            "wohnkosten": 11520,
             "wgWohnend": false,
             "wgAnzahlPersonen": null,
             "alternativeWohnformWohnend": false,
@@ -495,7 +495,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 2000,
+              "wohnkosten": 24000,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             },
@@ -557,7 +557,7 @@
               "identischerZivilrechtlicherWohnsitzPLZ": null,
               "copyOfId": null,
               "sozialhilfebeitraege": false,
-              "wohnkosten": 2000,
+              "wohnkosten": 24000,
               "wiederverheiratet": false,
               "fullName": "elterns-vorname elterns-nachname"
             }
@@ -929,7 +929,7 @@
           "tenant": null,
           "nettoerwerbseinkommen": 26000,
           "fahrkosten": 558,
-          "wohnkosten": 960,
+          "wohnkosten": 11520,
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
@@ -1036,7 +1036,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 2000,
+            "wohnkosten": 24000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -1098,7 +1098,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 2000,
+            "wohnkosten": 24000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1454,7 +1454,7 @@
           "tenant": null,
           "nettoerwerbseinkommen": 26000,
           "fahrkosten": 558,
-          "wohnkosten": 960,
+          "wohnkosten": 11520,
           "wgWohnend": false,
           "wgAnzahlPersonen": null,
           "alternativeWohnformWohnend": false,
@@ -1561,7 +1561,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 2000,
+            "wohnkosten": 24000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           },
@@ -1623,7 +1623,7 @@
             "identischerZivilrechtlicherWohnsitzPLZ": null,
             "copyOfId": null,
             "sozialhilfebeitraege": false,
-            "wohnkosten": 2000,
+            "wohnkosten": 24000,
             "wiederverheiratet": false,
             "fullName": "elterns-vorname elterns-nachname"
           }
@@ -1982,7 +1982,7 @@
         "tenant": null,
         "nettoerwerbseinkommen": 26000,
         "fahrkosten": 558,
-        "wohnkosten": 960,
+        "wohnkosten": 11520,
         "wgWohnend": false,
         "wgAnzahlPersonen": null,
         "alternativeWohnformWohnend": false,
@@ -2089,7 +2089,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 2000,
+          "wohnkosten": 24000,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         },
@@ -2151,7 +2151,7 @@
           "identischerZivilrechtlicherWohnsitzPLZ": null,
           "copyOfId": null,
           "sozialhilfebeitraege": false,
-          "wohnkosten": 2000,
+          "wohnkosten": 24000,
           "wiederverheiratet": false,
           "fullName": "elterns-vorname elterns-nachname"
         }
@@ -2493,7 +2493,7 @@
       "tenant": null,
       "nettoerwerbseinkommen": 26000,
       "fahrkosten": 558,
-      "wohnkosten": 960,
+      "wohnkosten": 11520,
       "wgWohnend": false,
       "wgAnzahlPersonen": null,
       "alternativeWohnformWohnend": false,
@@ -2600,7 +2600,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 2000,
+        "wohnkosten": 24000,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       },
@@ -2662,7 +2662,7 @@
         "identischerZivilrechtlicherWohnsitzPLZ": null,
         "copyOfId": null,
         "sozialhilfebeitraege": false,
-        "wohnkosten": 2000,
+        "wohnkosten": 24000,
         "wiederverheiratet": false,
         "fullName": "elterns-vorname elterns-nachname"
       }
@@ -3264,7 +3264,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 2000,
+      "wohnkosten": 24000,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     },
@@ -3326,7 +3326,7 @@
       "identischerZivilrechtlicherWohnsitzPLZ": null,
       "copyOfId": null,
       "sozialhilfebeitraege": false,
-      "wohnkosten": 2000,
+      "wohnkosten": 24000,
       "wiederverheiratet": false,
       "fullName": "elterns-vorname elterns-nachname"
     }
@@ -3368,7 +3368,7 @@
     "tenant": null,
     "nettoerwerbseinkommen": 26000,
     "fahrkosten": 558,
-    "wohnkosten": 960,
+    "wohnkosten": 11520,
     "wgWohnend": false,
     "wgAnzahlPersonen": null,
     "alternativeWohnformWohnend": false,

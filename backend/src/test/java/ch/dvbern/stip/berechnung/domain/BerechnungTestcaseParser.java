@@ -28,6 +28,7 @@ import ch.dvbern.stip.api.ausbildung.entity.Abschluss;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildung;
 import ch.dvbern.stip.api.ausbildung.entity.Ausbildungsgang;
 import ch.dvbern.stip.api.ausbildung.type.Bildungskategorie;
+import ch.dvbern.stip.api.ausbildung.type.FerienTyp;
 import ch.dvbern.stip.api.common.service.EntityCopyMapper;
 import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding;
 import ch.dvbern.stip.api.common.service.seeding.GesuchsperiodeSeeding.Season;
@@ -48,7 +49,6 @@ import ch.dvbern.stip.api.land.entity.Land;
 import ch.dvbern.stip.api.land.repo.LandRepository;
 import ch.dvbern.stip.berechnung.adapter.bern.v1_0.service.BernBerechnungAdapterV1_0;
 import ch.dvbern.stip.berechnung.domain.service.BerechnungsStammdatenMapper;
-import ch.dvbern.stip.generated.dto.BerechnungsresultatDto;
 import ch.dvbern.stip.generated.dto.DemoAusbildungDto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,7 +61,7 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 public class BerechnungTestcaseParser {
-    static final String OUTPUT_DIR = "testcase/serialized-testcases-2";
+    static final String OUTPUT_DIR = "testcase/serialized-testcases-old";
 
     LandRepository landRepository = Mockito.mock(LandRepository.class);
 
@@ -114,14 +114,19 @@ public class BerechnungTestcaseParser {
                 invocation -> {
                     final DemoAusbildungDto input =
                         (DemoAusbildungDto) Arrays.stream(invocation.getArguments()).findFirst().get();
+                    final var abschluss = new Abschluss();
                     if (
                         input.getAusbildungsgang().contains("Bachelor") || input.getAusbildungsgang().contains("Master")
                     ) {
-                        return new Ausbildungsgang()
-                            .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B));
+                        abschluss.setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B);
+                        return new Ausbildungsgang().setAbschluss(abschluss);
                     }
-                    return new Ausbildungsgang()
-                        .setAbschluss(new Abschluss().setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II));
+                    abschluss.setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II);
+                    if (input.getAusbildungsgang().contains("EFZ") || input.getAusbildungsgang().contains("EBA")) {
+                        abschluss.setFerien(FerienTyp.LEHRE);
+                    }
+
+                    return new Ausbildungsgang().setAbschluss(abschluss);
                 }
             );
 
@@ -130,10 +135,19 @@ public class BerechnungTestcaseParser {
                 invocation -> {
                     final String input =
                         (String) Arrays.stream(invocation.getArguments()).findFirst().get();
-                    if (input.contains("Bachelor") || input.contains("Master")) {
-                        return new Abschluss().setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B);
+                    final var abschluss = new Abschluss();
+                    if (
+                        input.contains("Bachelor") || input.contains("Master")
+                    ) {
+                        abschluss.setBildungskategorie(Bildungskategorie.TERTIAERSTUFE_B);
+                        return abschluss;
                     }
-                    return new Abschluss().setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II);
+                    abschluss.setBildungskategorie(Bildungskategorie.SEKUNDARSTUFE_II);
+                    if (input.contains("EFZ") || input.contains("EBA")) {
+                        abschluss.setFerien(FerienTyp.LEHRE);
+                    }
+
+                    return abschluss;
                 }
             );
 
@@ -170,36 +184,21 @@ public class BerechnungTestcaseParser {
             final ObjectMapper mapper = createObjectMapper();
 
             final GesuchTranche gesuchTranche = gesuch.getLatestGesuchTranche();
-            final GesuchFormular gesuchFormular = gesuchTranche.getGesuchFormular();
 
             gesuch.setEinreichedatum(LocalDate.parse(demoData.getGesuchseingang(), ParseDemoDataUtil.dmyFormatter));
 
-            final BerechnungsresultatDto berechnungsresultat = berechnungAdapter.getBerechnungsresultat(gesuch);
+            berechnungAdapter.getBerechnungsresultat(gesuch);
 
             final ObjectNode root = mapper.createObjectNode();
 
             root.put("testcaseId", demoData.getTestFall());
             root.set("gesuch", mapper.valueToTree(gesuch));
             root.set("gesuchTranche", mapper.valueToTree(gesuchTranche));
-            root.set("gesuchFormular", mapper.valueToTree(gesuchFormular));
-            root.set("ausbildung", mapper.valueToTree(gesuch.getAusbildung()));
-            root.set("gesuchsperiode", mapper.valueToTree(gesuch.getGesuchsperiode()));
-            root.set("personInAusbildung", mapper.valueToTree(gesuchFormular.getPersonInAusbildung()));
-            root.set("familiensituation", mapper.valueToTree(gesuchFormular.getFamiliensituation()));
-            root.set("elterns", mapper.valueToTree(gesuchFormular.getElterns()));
-            root.set("geschwisters", mapper.valueToTree(gesuchFormular.getGeschwisters()));
-            root.set("kinds", mapper.valueToTree(gesuchFormular.getKinds()));
-            root.set("lebenslaufItems", mapper.valueToTree(gesuchFormular.getLebenslaufItems()));
-            root.set("einnahmenKosten", mapper.valueToTree(gesuchFormular.getEinnahmenKosten()));
-            root.set("einnahmenKostenPartner", mapper.valueToTree(gesuchFormular.getEinnahmenKostenPartner()));
-            root.set("partner", mapper.valueToTree(gesuchFormular.getPartner()));
-            root.set("steuererklaerung", mapper.valueToTree(gesuchFormular.getSteuererklaerung()));
-            root.set("steuerdaten", mapper.valueToTree(gesuchFormular.getSteuerdaten()));
 
-            root.put("stipendien", berechnungsresultat.getBerechnungStipendium());
+            root.put("stipendien", demoData.getDemoDataDto().getBerechnungValues().getStipendien());
             root.put(
                 "darlehen",
-                berechnungsresultat.getBerechnungDarlehen() == null ? 0 : berechnungsresultat.getBerechnungDarlehen()
+                demoData.getDemoDataDto().getBerechnungValues().getDarlehen()
             );
 
             mapper.writerWithDefaultPrettyPrinter().writeValue(outputFile.toFile(), root);
@@ -236,8 +235,7 @@ public class BerechnungTestcaseParser {
 
     @JsonIgnoreProperties(
         {
-            "gesuch",
-            "gesuchFormular"
+            "gesuch"
         }
     )
     private abstract static class GesuchTrancheMixin {

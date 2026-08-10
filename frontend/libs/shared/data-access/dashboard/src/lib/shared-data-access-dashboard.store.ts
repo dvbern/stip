@@ -251,7 +251,10 @@ const toGesuchDashboardItemView =
         isDarlehenInitialized,
       ),
       hasPendingAusbildungUnterbruchAntrag,
-      einreichefristAbgelaufen: true,
+      einreichefristAbgelaufen: isAfter(
+        new Date(),
+        endOfDay(new Date(gesuch.gesuchsperiode.einreichefristReduziert)),
+      ),
       reduzierterBeitrag,
       einreichefristDays,
       yearRange,

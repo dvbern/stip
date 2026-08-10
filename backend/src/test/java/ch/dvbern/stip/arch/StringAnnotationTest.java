@@ -20,6 +20,7 @@ package ch.dvbern.stip.arch;
 import java.util.Set;
 
 import ch.dvbern.stip.arch.util.ArchTestUtil;
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -51,9 +52,18 @@ class StringAnnotationTest {
             .and()
             .haveRawType(String.class)
             .should()
-            .beAnnotatedWith(Size.class)
+            .beAnnotatedWith(Column.class)
             .andShould()
-            .beAnnotatedWith(Column.class);
+            .beAnnotatedWith(
+                DescribedPredicate.describe(
+                    "Has columnDefinition=text Annotation",
+                    t -> t.getType().toErasure().isEquivalentTo(Column.class)
+                    && t.hasExplicitlyDeclaredProperty("columnDefinition")
+                    && t.getExplicitlyDeclaredProperty("columnDefinition").equals("text")
+                )
+            )
+            .orShould()
+            .beAnnotatedWith(Size.class);
 
         rule.check(ArchTestUtil.API_CLASSES);
     }

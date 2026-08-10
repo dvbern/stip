@@ -1,8 +1,8 @@
 @let ausbildung = ausbildungSig();
 <ng-container *dvTranslocoShared="let t">
-  <div class="tw:flex tw:flex-wrap tw:gap-6 tw:mb-6">
-    <div class="tw:w-full tw:flex tw:flex-1 tw:flex-col tw:gap-6">
-      <h2 class="tw:flex tw:items-center tw:gap-4 tw:dv-page-subtitle">
+  <div class="tw:md:grid tw:md:grid-cols-[1fr_auto] tw:flex-wrap">
+    <div>
+      <h2 class="tw:mb-4 tw:flex tw:items-center tw:gap-4 tw:text-2xl tw:font-bold">
         <dv-shared-ui-icon-chip
           class="tw:text-base"
           [ngClass]="{
@@ -16,36 +16,10 @@
           {{ t('shared.dashboard.ausbildung.title', ausbildung) }}
         </span>
       </h2>
-
-      <div class="tw:flex tw:flex-wrap tw:gap-2 tw:text-sm">
-        <!-- ausbildungsbeginn -->
-        <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
-          <span class="tw:font-semibold"> {{ t('shared.dashboard.ausbildung.start') }}: </span>
-          <span>
-            {{ ausbildung.ausbildungBegin | date: 'MM.yyyy' }}
-          </span>
-        </div>
-
-        <!-- ausbildungsende -->
-        <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
-          <span class="tw:font-semibold">
-            {{
-              t(
-                ausbildung.status === 'AKTIV'
-                  ? 'shared.dashboard.ausbildung.voraussichtlichesEnde'
-                  : 'shared.dashboard.ausbildung.ende'
-              )
-            }}:
-          </span>
-          <span>
-            {{ ausbildung.ausbildungEnd | date: 'MM.yyyy' }}
-          </span>
-        </div>
-      </div>
     </div>
 
     @if (ausbildung.status === 'AKTIV') {
-      <div class="tw:flex tw:flex-1 tw:sm:flex-0 tw:flex-col tw:gap-2">
+      <div class="tw:flex tw:flex-col tw:gap-2 tw:md:w-full tw:justify-self-end tw:mb-4">
         @if (ausbildung.canDelete) {
           <button
             type="button"
@@ -75,9 +49,38 @@
     }
   </div>
 
+  <div class="tw:flex tw:mb-6 tw:gap-2 tw:text-sm">
+    <!-- ausbildungsbeginn -->
+    <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
+      <span class="tw:font-semibold"> {{ t('shared.dashboard.ausbildung.start') }}: </span>
+      <span>
+        {{ ausbildung.ausbildungBegin | date: 'MM.yyyy' }}
+      </span>
+    </div>
+
+    <!-- ausbildungsende -->
+    <div class="tw:bg-dv-gray-light tw:rounded-lg tw:p-2">
+      <span class="tw:font-semibold">
+        {{
+          t(
+            ausbildung.status === 'AKTIV'
+              ? 'shared.dashboard.ausbildung.voraussichtlichesEnde'
+              : 'shared.dashboard.ausbildung.ende'
+          )
+        }}:
+      </span>
+      <span>
+        {{ ausbildung.ausbildungEnd | date: 'MM.yyyy' }}
+      </span>
+    </div>
+  </div>
+
   <div class="tw:flex tw:flex-col tw:gap-6">
     @for (gesuch of ausbildung.gesuchs; track gesuch.id) {
       <div class="tw:flex tw:flex-col tw:gap-2">
+        <h2 class="tw:font-bold tw:text-2xl tw:mt-4">
+          {{ t('shared.dashboard.gesuch.title', { yearRange: gesuch.yearRange }) }}
+        </h2>
         <dv-shared-ui-dashboard-gesuch
           [gesuchSig]="gesuch"
           [ngClass]="{
@@ -93,7 +96,7 @@
         @if (gesuch.isActive) {
           @if (gesuch.offeneAenderung; as aenderung) {
             <dv-shared-ui-dashboard-gesuch-subitem
-              class="tw:bg-dv-blue-light tw:ml-10"
+              class="tw:bg-dv-blue-light"
               [statusSig]="t(`shared.gesuch.status.tranche.${aenderung.status}`)"
               [ngClass]="{
                 'tw:bg-dv-orange':
@@ -102,10 +105,10 @@
             >
               <div dvItemInfo>
                 <dl class="tw:flex tw:flex-col">
-                  <dt class="tw:font-bold tw:text-xl">
+                  <dt class="tw:font-bold">
                     {{ t('shared.dashboard.aenderung.title') }}
                   </dt>
-                  <dd class="tw:mt-1">
+                  <dd class="tw:text-sm tw:mt-1">
                     {{ aenderung.gueltigAb | date: 'dd.MM.yyyy' }} -
                     {{ aenderung.gueltigBis | date: 'dd.MM.yyyy' }}
                   </dd>
@@ -141,7 +144,7 @@
         }
         @for (darlehen of gesuch.freiwilligeDarlehenList; track darlehen.id) {
           <dv-shared-ui-dashboard-gesuch-subitem
-            class="tw:bg-dv-blue-light tw:ml-10"
+            class="tw:bg-dv-blue-light"
             [statusSig]="t(`shared.darlehen.status.${darlehen.status}`)"
             [ngClass]="{
               'tw:bg-dv-orange': darlehen.status === 'IN_BEARBEITUNG_GS',
@@ -150,10 +153,10 @@
           >
             <div dvItemInfo>
               <dl class="tw:flex tw:flex-col">
-                <dt class="tw:font-bold tw:text-xl">
+                <dt class="tw:font-bold">
                   {{ t('shared.dashboard.darlehen.title') }}
                 </dt>
-                <dd class="tw:mt-1">
+                <dd class="tw:text-sm tw:mt-1">
                   @if (darlehen.gruende.length) {
                     {{
                       t('shared.dashboard.darlehen.timestampErstellt', {

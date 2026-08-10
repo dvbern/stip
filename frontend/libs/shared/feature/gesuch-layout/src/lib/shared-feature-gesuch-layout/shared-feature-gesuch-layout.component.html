@@ -138,7 +138,7 @@
   }
 
   <div class="tw:flex tw:justify-between">
-    <nav mat-tab-nav-bar [tabPanel]="tabPanel" [disablePagination]="true" [class.tw:h-[48px]]="!isGesuchRouteSig()">
+    <nav mat-tab-nav-bar [tabPanel]="tabPanel" [class.tw:h-[48px]]="!isGesuchRouteSig()">
       @for (tab of tabsSig(); track tab.key) {
         <a
           mat-tab-link
